@@ -53,7 +53,7 @@
 "4320p 8K Ultra HD" = "4320p 8K Ultra HD";
 
 /* Destination same as source alert -> message
-   File already exists alert -> message */
+File already exists alert -> message */
 "A file already exists at the selected destination." = "파일이 이미 대상 위치에 있습니다.";
 
 /* Queue Window Action Toolbar Item */
@@ -81,7 +81,7 @@
 "Add Titles To Queue…" = "대기열에 제목 추가...";
 
 /* Main Window Add Toolbar Item
-   Touch bar */
+Touch bar */
 "Add To Queue" = "대기열에 추가";
 
 /* Preferences Advanced Toolbar Item */
@@ -100,24 +100,25 @@
 "Average speed:" = "평균 속도:";
 
 /* Copy Protection Alert -> second button
-   Delete preset alert -> second button
-   File already exists alert -> first button
-   File already exists in queue alert -> first button
-   Preview -> live preview alert alternate button
-   Touch bar */
+Delete preset alert -> second button
+File already exists alert -> first button
+File already exists in queue alert -> first button
+Preview -> live preview alert alternate button
+Touch bar */
 "Cancel" = "취소";
 
 /* Touch bar */
 "Cancel Encoding" = "인코딩 취소";
 
 /* Toolbar Open/Cancel Item
-   Touch bar */
+Touch bar */
 "Cancel Scan" = "스캔 취소";
 
 /* Toolbar Open/Cancel Item */
 "Cancel Scanning Source" = "소스 스캔 취소";
 
-/* Preferences -> Output Name Token */
+/* HBRange -> display name
+Preferences -> Output Name Token */
 "Chapters" = "챕터";
 
 /* Main Window -> Destination open panel */
@@ -160,7 +161,7 @@
 "Do Nothing" = "아무것도 안 함";
 
 /* File already exists alert -> informative text
-   File already exists in queue alert -> informative text */
+File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "%@을/를 덮어쓰시겠습니까?";
 
 /* Touch bar */
@@ -173,7 +174,7 @@
 "Encode complete" = "인코딩 완료";
 
 /* HBQueueItemView -> Encode state accessibility label
-   Queue done notification failed message */
+Queue done notification failed message */
 "Encode failed" = "인코딩 실패";
 
 /* HBQueueItemView -> Encode state accessibility label */
@@ -200,6 +201,9 @@
 /* File already exists alert -> message */
 "File already exists." = "이미 파일이 있습니다.";
 
+/* HBRange -> display name */
+"Frames" = "프레임";
+
 /* Preferences General Toolbar Item */
 "General" = "일반";
 
@@ -225,7 +229,7 @@
 "Invalid chapters CSV file" = "잘못된 챕터 CSV파일";
 
 /* Queue Edit Alert -> stop and edit first button
-   Queue Stop Alert -> stop and remove first button */
+Queue Stop Alert -> stop and remove first button */
 "Keep Encoding" = "인코딩 유지";
 
 /* Touch bar */
@@ -250,32 +254,32 @@
 "None" = "없음";
 
 /* Queue Done Alert -> shut down first button
-   Queue Done Alert -> sleep first button */
+Queue Done Alert -> sleep first button */
 "OK" = "확인";
 
 /* Preview -> live preview alert default button */
 "Open in external player" = "외부 플레이어에서 열기";
 
 /* Main Window Open Toolbar Item
-   Toolbar Open/Cancel Item
-   Touch bar */
+Toolbar Open/Cancel Item
+Touch bar */
 "Open Source" = "원본 열기";
 
 /* File already exists alert -> second button
-   File already exists in queue alert -> second button */
+File already exists in queue alert -> second button */
 "Overwrite" = "덮어쓰기";
 
 /* Main Window Pause Toolbar Item
-   Toolbar Pause Item */
+Toolbar Pause Item */
 "Pause" = "일시중지";
 
 /* Queue -> pause/resume menu
-   Toolbar Pause Item
-   Touch bar */
+Toolbar Pause Item
+Touch bar */
 "Pause Encoding" = "인코딩 일시중지";
 
 /* Main Window Pause Toolbar Item
-   Touch bar */
+Touch bar */
 "Pause/Resume Encoding" = "인코딩 일시중지/이어하기";
 
 /* Job statistics */
@@ -288,11 +292,11 @@
 "Play/Pause" = "재생/일시중지";
 
 /* Add preset window -> name alert informative text
-   Rename preset window -> name alert informative text */
+Rename preset window -> name alert informative text */
 "Please enter a name." = "이름을 넣어주세요.";
 
 /* Queue Done Alert -> shut down second button
-   Queue Done Alert -> sleep second button */
+Queue Done Alert -> sleep second button */
 "Preferences…" = "환경설정...";
 
 /* Main Window Presets Toolbar Item */
@@ -302,14 +306,11 @@
 "preview" = "미리보기";
 
 /* Main Window Preview Toolbar Item
-   Preview -> window title */
+Preview -> window title */
 "Preview" = "미리보기";
 
 /* Preview -> window title format */
 "Preview - %@ %@" = "미리보기 - %1$@ %2$@";
-
-/* Touch bar */
-"Previews" = "미리보기";
 
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "컴퓨터를 잠자기 상태로 변경";
@@ -318,8 +319,8 @@
 "Quality/Bitrate" = "품질/비트레이트";
 
 /* Main Window Presets Toolbar Item
-   Preferences Queue Toolbar Item
-   Queue window title */
+Preferences Queue Toolbar Item
+Queue window title */
 "Queue" = "대기열";
 
 /* Queue window title */
@@ -362,7 +363,7 @@
 "Resume" = "이어하기";
 
 /* Queue -> pause/resume men
-   Toolbar Pause Item */
+Toolbar Pause Item */
 "Resume Encoding" = "인코딩 이어하기";
 
 /* Job statistics */
@@ -372,8 +373,11 @@
 "Save" = "저장";
 
 /* Picture HUD -> scale button
-   Touch bar */
+Touch bar */
 "Scale To Screen" = "화면에 맞추기";
+
+/* HBRange -> display name */
+"Seconds" = "초";
 
 /* Titles selection sheet -> informative text */
 "Select the titles to add to the queue using the %@ preset:" = "%@ 사전설정을 사용하는 대기열에 추가할 영상 선택:";
@@ -382,14 +386,14 @@
 "Show" = "표시";
 
 /* Main Window Activity Toolbar Item
-   Touch bar */
+Touch bar */
 "Show Activity Window" = "작업 창 표시";
 
 /* Main Window Presets Toolbar Item */
 "Show Presets List" = "사전설정 목록 표시";
 
 /* Main Window Preview Toolbar Item
-   Touch bar */
+Touch bar */
 "Show Preview Window" = "미리보기 창 표시";
 
 /* Main Window Presets Toolbar Item */
@@ -411,26 +415,26 @@
 "Source" = "원본";
 
 /* Main Window Start Toolbar Item
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Start" = "시작";
 
 /* Menu Start/Stop Item
-   Queue -> start/stop menu
-   Toolbar Start/Stop Item */
+Queue -> start/stop menu
+Toolbar Start/Stop Item */
 "Start Encoding" = "인코딩 시작";
 
 /* Toolbar Start/Stop Item */
 "Start Queue" = "대기열 시작";
 
 /* Main Window Start Toolbar Item
-   Touch bar */
+Touch bar */
 "Start/Stop Encoding" = "인코딩 시작/중지";
 
 /* Job statistics */
 "Started at:" = "시작 시간:";
 
 /* Queue -> Stop action
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Stop" = "중지";
 
 /* Queue -> Stop action */
@@ -443,7 +447,7 @@
 "Stop All" = "모두 중지";
 
 /* Queue -> start/stop menu
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Stop Encoding" = "인코딩 중지";
 
 /* Queue Stop Alert -> stop and remove second button */
@@ -471,7 +475,7 @@
 "The CSV file is not a valid chapters CSV file." = "올바른 챕터 CSV 파일이 아닙니다.";
 
 /* Add preset window -> name alert message
-   Rename preset window -> name alert message */
+Rename preset window -> name alert message */
 "The preset name cannot be empty." = "사전설정 이름은 비워 둘 수 없습니다.";
 
 /* Invalid destination alert -> informative text */
@@ -517,6 +521,6 @@
 "Your encode %@ is done!" = "%@ 인코딩이 완료되었습니다!";
 
 /* Queue Edit Alert -> stop and edit informative text
-   Queue Stop Alert -> stop and remove informative text */
+Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "인코딩을 계속하지 않으면 영상이 손실됩니다.";
 

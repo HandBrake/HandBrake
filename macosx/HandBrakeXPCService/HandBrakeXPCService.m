@@ -156,14 +156,15 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     });
 }
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder keepDuplicateTitles:(BOOL)keepDuplicateTitles withReply:(void (^)(HBCoreResult))reply
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)minSeconds maxDuration:(NSUInteger)maxSeconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder keepDuplicateTitles:(BOOL)keepDuplicateTitles withReply:(void (^)(HBCoreResult))reply
 {
     dispatch_sync(_queue, ^{
         self.reply = reply;
 
         [self.core scanURLs:@[url] titleIndex:index
                    previews:previewsNum
-                minDuration:seconds
+                minDuration:minSeconds
+                maxDuration:maxSeconds
                keepPreviews:keepPreviews
             hardwareDecoder:hardwareDecoder
             keepDuplicateTitles:keepDuplicateTitles

@@ -1118,14 +1118,8 @@ Consell: El comportament de la sobreescriptura de fitxers es pot modificar a «P
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Metadades</value>
   </data>
-  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Permet l'ús dels codificadors Nvidia NVENC</value>
-  </data>
-  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Permet l'ús dels codificadors Intel QuickSync</value>
-  </data>
-  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Permet l'ús dels codificadors VCN d'AMD</value>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Permet l'ús del descodificador DirectX</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>El format del fitxer que heu introduït conté caràcters no vàlids i s'han eliminat.</value>
@@ -1222,6 +1216,9 @@ Consell: El comportament de la sobreescriptura de fitxers es pot modificar a «P
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>Durada mínima dels títols DVD i Blu-ray en segons. S'ometran els títols massa curts:</value>
+  </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Mantén els títols duplicats dels fitxers Blu-ray (cal reiniciar)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>Extensió de fitxer MP4:</value>
@@ -1912,8 +1909,8 @@ Arrossegueu/deixeu anar o introduïu el text superior.</value>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Ajustament d'antiblocs</value>
   </data>
-  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>L'elecció del codificador estarà disponible a la pestanya «Vídeo».</value>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Nota: No tots els codificadors de maquinari tenen preferències addicionals. Tots els codificadors que siguin compatibles i estiguin disponibles en aquest sistema es podran trobar a la pestanya de vídeo dins el menú desplegable de codificador de vídeo.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>El HandBrake ha detectat múltiples fitxers inacabats a la cua, els quals són de diverses instàncies del HandBrake en execució. Voleu recuperar totes les tasques inacabades?</value>
@@ -2319,7 +2316,7 @@ Seleccioneu una configuració predefinida diferent.</value>
     <value>Avisa quan el disc tingui poc espai a partir de:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Alerta: Has arribat al límit superior de tasques simultànies. Es poden produir limitacions de maquinari que disminueixin el nombre de tasques simultànies actuals durant la codificació. Aquest paràmetre tindrà efecte a partir del següent lot de la cua o quan es reiniciï el programa.</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(No disponible)</value>
@@ -2816,30 +2813,105 @@ Si voleu permetre múltiples codificacions simultànies, activeu "Aïllament de 
     <value>Només codificació sense pèrdua.</value>
   </data>
   <data name="MainView_HideClassicMenu" xml:space="preserve">
-    <value>Hide Classic Menu</value>
+    <value>Amaga el menú clàssic</value>
   </data>
   <data name="MainView_ShowClassicMenu" xml:space="preserve">
-    <value>Show Classic Menu</value>
+    <value>Mostra el menú clàssic</value>
   </data>
   <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
-    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+    <value>(Advertiment: S'ha detectat un controlador no compatible. Es recomana actualitzar-lo)</value>
   </data>
   <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
-    <value>Range Limits:</value>
+    <value>Límits de rang:</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
-    <value>Limit the length of the titles added to the queue.</value>
+    <value>Limita la llargada dels títols afegits a la cua.</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
-    <value>Enable Range Limits</value>
+    <value>Activa els límits de rang</value>
   </data>
   <data name="AddToQueue_RangeLimitError" xml:space="preserve">
-    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+    <value>No s'han pogut afegir alguns títols a la cua perquè estan fora dels límits del rang seleccionat.</value>
   </data>
   <data name="QueueView_StartAtTime" xml:space="preserve">
-    <value>Start Later</value>
+    <value>Inicia més tard</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>Queue Start Time:</value>
+    <value>Temps d'inici de la cua:</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>S'està aturant la codificació...</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Allow Upscaling</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimal Size</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Està disponible en aquest sistema.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>No està disponible en aquest sistema.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Please wait ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Cancel·la</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Open Log Window</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Personalitzat</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>Cap</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Automàtic</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>Desactivat</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>Personalitzat</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>Per defecte</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>Desactivat</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>Desactivat</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>Desactivat</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>Per defecte</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>Personalitzat</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>Desactivat</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
   </data>
 </root>

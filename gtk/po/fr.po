@@ -10,6 +10,8 @@
 # Alexis DESMONS, 2022
 # Nicolas Moignot <nicolas@moignot.net>, 2024
 # Tof Bouf, 2024
+# DJ Dakta <djdakta@gmail.com>, 2024
+# Baptiste D <baptiste+transifex@darthenay.fr>, 2024
 # 
 #, fuzzy
 msgid ""
@@ -18,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-16 19:10+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Tof Bouf, 2024\n"
+"Last-Translator: Baptiste D <baptiste+transifex@darthenay.fr>, 2024\n"
 "Language-Team: French (https://app.transifex.com/HandBrakeProject/teams/92423/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +34,7 @@ msgstr "_Fichier"
 
 #: src/ui/menu.ui:10 src/ui/menu.ui:462
 msgid "_Open Source…"
-msgstr "_Ouvrir un fichier"
+msgstr "_Ouvrir Source"
 
 #: src/ui/menu.ui:14 src/ui/menu.ui:466
 msgid "Open _Directory…"
@@ -2219,8 +2221,8 @@ msgstr "Débit binaire : %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
-msgstr "<small>Recopie</small>"
+msgid "<small>Passthru</small>"
+msgstr ""
 
 #: src/audiohandler.c:790
 #, c-format
@@ -2507,7 +2509,7 @@ msgstr "Annuler l'actuel, commencer le suivant"
 
 #: src/callbacks.c:4100
 msgid "Finish Current and Stop"
-msgstr "Terminer l'actuel, commencer le suivant"
+msgstr ""
 
 #: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
 msgid "Continue Encoding"
@@ -2532,17 +2534,17 @@ msgstr[2] ""
 #: src/callbacks.c:4349 src/callbacks.c:4417
 #, c-format
 msgid "job %d of %d, "
-msgstr "tâche %d de %d, "
+msgstr "tâche %d sur %d, "
 
 #: src/callbacks.c:4359
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
-msgstr "passe %d (balayage des sous-titres) de %d, "
+msgstr "passe %d (balayage des sous-titres) sur %d, "
 
 #: src/callbacks.c:4364
 #, c-format
 msgid "pass %d of %d, "
-msgstr "passe %d de %d, "
+msgstr "passe %d sur %d, "
 
 #: src/callbacks.c:4377
 #, c-format
@@ -2568,12 +2570,12 @@ msgstr "Recherche de l'heure de début,"
 #: src/callbacks.c:4498
 #, c-format
 msgid "Scanning title %d of %d..."
-msgstr "Vérification titre %d de %d ..."
+msgstr "Vérification titre %d sur %d ..."
 
 #: src/callbacks.c:4502
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
-msgstr "Vérification titre %d de %d aperçu %d ..."
+msgstr "Vérification titre %d sur %d aperçu %d …"
 
 #: src/callbacks.c:4589
 msgid "Paused"
@@ -3562,8 +3564,8 @@ msgid "Burned Into Video"
 msgstr "Incrusté dans la vidéo"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
-msgstr "Recopie"
+msgid "Passthru"
+msgstr ""
 
 #: src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"

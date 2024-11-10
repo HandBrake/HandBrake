@@ -2915,4 +2915,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="Sharpen_Off" xml:space="preserve">
     <value>Off</value>
   </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
+  </data>
 </root>

@@ -308,7 +308,7 @@ HB_OBJC_DIRECT_MEMBERS
     return YES;
 }
 
-- (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder keepDuplicateTitles:(BOOL)keepDuplicateTitles progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
+- (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)minSeconds maxDuration:(NSUInteger)maxSeconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder keepDuplicateTitles:(BOOL)keepDuplicateTitles progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
     NSAssert(self.state == HBStateIdle, @"[HBCore scanURL:] called while another scan or encode already in progress");
     NSAssert(urls, @"[HBCore scanURL:] called with nil url.");
@@ -335,7 +335,8 @@ HB_OBJC_DIRECT_MEMBERS
     self.state = HBStateScanning;
 
     // convert minTitleDuration from seconds to the internal HB time
-    uint64_t min_title_duration_ticks = 90000LL * seconds;
+    uint64_t min_title_duration_ticks = 90000LL * minSeconds;
+    uint64_t max_title_duration_ticks = 90000LL * maxSeconds;
 
     // If there is no title number passed to scan, we use 0
     // which causes the default behavior of a full source scan
@@ -343,11 +344,11 @@ HB_OBJC_DIRECT_MEMBERS
     {
         [HBUtilities writeToActivityLog:"%s scanning specifically for title: %d", self.name.UTF8String, index];
     }
-    else
+    else if (minSeconds > 0)
     {
         // minimum title duration doesn't apply to title-specific scan
         // it doesn't apply to batch scan either, but we can't tell it apart from DVD & BD folders here
-        [HBUtilities writeToActivityLog:"%s scanning titles with a duration of %d seconds or more", self.name.UTF8String, seconds];
+        [HBUtilities writeToActivityLog:"%s scanning titles with a duration of %d seconds or more", self.name.UTF8String, minSeconds];
     }
 
     [self preventAutoSleep];
@@ -360,7 +361,7 @@ HB_OBJC_DIRECT_MEMBERS
 
     hb_scan(_hb_handle, files_list,
               (int)index, (int)previewsNum,
-              keepPreviews, min_title_duration_ticks,
+              keepPreviews, min_title_duration_ticks, max_title_duration_ticks,
               0, 0, NULL, hardwareDecoder ? HB_DECODE_SUPPORT_VIDEOTOOLBOX : 0, keepDuplicateTitles);
 
     hb_list_close(&files_list);

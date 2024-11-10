@@ -2222,8 +2222,8 @@ msgstr "Flussu binariu : %.4g kbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
-msgstr "<small>Ricopia</small>"
+msgid "<small>Passthru</small>"
+msgstr ""
 
 #: src/audiohandler.c:790
 #, c-format
@@ -2505,7 +2505,7 @@ msgstr "Abbandunà l’attuale, principià u seguente"
 
 #: src/callbacks.c:4100
 msgid "Finish Current and Stop"
-msgstr "Piantà l’attuale, principià u seguente"
+msgstr ""
 
 #: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
 msgid "Continue Encoding"
@@ -3559,8 +3559,8 @@ msgid "Burned Into Video"
 msgstr "Intarsiatu in a video"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
-msgstr "Ricopia"
+msgid "Passthru"
+msgstr ""
 
 #: src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"

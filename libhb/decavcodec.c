@@ -612,6 +612,9 @@ static void closePrivData( hb_work_private_t ** ppv )
         {
             free(pv->reordered_hash[ii]);
         }
+
+        hb_list_close(&pv->list_subtitle);
+
         free(pv);
     }
     *ppv = NULL;
@@ -1569,6 +1572,14 @@ int reinit_video_filters(hb_work_private_t * pv)
                     break;
                 default:
                     hb_log("reinit_video_filters: Unknown rotation, failed");
+            }
+
+            const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
+            if (desc->log2_chroma_w != desc->log2_chroma_h)
+            {
+                settings = hb_dict_init();
+                hb_dict_set(settings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
+                hb_avfilter_append_dict(filters, "format", settings);
             }
         }
     }

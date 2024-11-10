@@ -1,0 +1,45 @@
+/* Class = "NSButtonCell"; title = "Range:"; ObjectID = "4nB-36-clJ"; */
+"4nB-36-clJ.title" = "Промежуток:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in seconds"; ObjectID = "5mE-y0-UqZ"; */
+"5mE-y0-UqZ.ibExternalAccessibilityDescription" = "Начальное время в секундах";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "First second to encode."; ObjectID = "5mE-y0-UqZ"; */
+"5mE-y0-UqZ.ibShadowedToolTip" = "Первая секунда для кодирования.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in seconds"; ObjectID = "7ug-HX-q9j"; */
+"7ug-HX-q9j.ibExternalAccessibilityDescription" = "Конечное время в секундах";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "7ug-HX-q9j"; */
+"7ug-HX-q9j.ibShadowedToolTip" = "Последняя секунда для кодирования.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "aeA-ul-8yt"; */
+"aeA-ul-8yt.ibExternalAccessibilityDescription" = "Конечное время в кадрах";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "aeA-ul-8yt"; */
+"aeA-ul-8yt.ibShadowedToolTip" = "Последний кадр для кодирования.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Range Selection"; ObjectID = "aM2-P8-m4w"; */
+"aM2-P8-m4w.ibExternalAccessibilityDescription" = "Выбор диапазона";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "aM2-P8-m4w"; */
+"aM2-P8-m4w.ibShadowedToolTip" = "Выбор промежутка исходного файла. По умолчанию выбираются все главы и кодируется весь исходный файл.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "eoO-dc-hc3"; */
+"eoO-dc-hc3.ibExternalAccessibilityDescription" = "Начальная глава";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "eoO-dc-hc3"; */
+"eoO-dc-hc3.ibShadowedToolTip" = "Первая глава для кодирования.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "guU-KE-TeY"; */
+"guU-KE-TeY.ibExternalAccessibilityDescription" = "Начальное время в кадрах";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "First frame to encode."; ObjectID = "guU-KE-TeY"; */
+"guU-KE-TeY.ibShadowedToolTip" = "Первый кадр для кодирования.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "End Chapter"; ObjectID = "OHn-dK-gFi"; */
+"OHn-dK-gFi.ibExternalAccessibilityDescription" = "Конечная глава";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "OHn-dK-gFi"; */
+"OHn-dK-gFi.ibShadowedToolTip" = "Последняя глава для кодирования.";
+

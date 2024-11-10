@@ -10,16 +10,26 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/extradata.h"
-#include "libavutil/bswap.h"
 #include <ass/ass.h>
 
 #define ABS(a) ((a) > 0 ? (a) : (-(a)))
+
+typedef struct hb_box_s
+{
+    int x1, y1, x2, y2;
+} hb_box_t;
+
+typedef struct hb_box_vec_s
+{
+    hb_box_t *boxes;
+    int count;
+    int size;
+} hb_box_vec_t;
 
 struct hb_filter_private_s
 {
     // Common
     int                pix_fmt_alpha;
-    int                depth;
     int                hshift;
     int                wshift;
     int                crop[4];
@@ -28,21 +38,23 @@ struct hb_filter_private_s
     int                sws_width;
     int                sws_height;
 
+    hb_buffer_list_t   rendered_sub_list;
+
     // VOBSUB && PGSSUB
-    hb_list_t         *sub_list; // List of active subs
+    hb_buffer_list_t   sub_list; // List of active subs
 
     // SSA
     ASS_Library       *ssa;
     ASS_Renderer      *renderer;
     ASS_Track         *ssa_track;
     uint8_t            script_initialized;
-    hb_buffer_t       *last_render;
+    hb_box_vec_t       boxes;
 
     // SRT
     int                line;
     hb_buffer_t       *current_sub;
 
-    void (*blend)(const struct hb_filter_private_s *pv, hb_buffer_t *dst, const hb_buffer_t *src, const int shift);
+    hb_blend_object_t *blend;
     unsigned           chroma_coeffs[2][4];
 
     hb_filter_init_t   input;
@@ -115,365 +127,113 @@ hb_filter_object_t hb_filter_render_sub =
     .close         = hb_rendersub_close,
 };
 
-static void blend8on1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb_buffer_t *src, const int shift)
+static void hb_box_vec_resize(hb_box_vec_t *vec, int size)
 {
-    int x0, y0, x0c, y0c;
-    int xx, yy, ox, oy;
-    int width, height;
-    uint8_t *y_in, *u_in, *v_in, *a_in;
-    uint16_t *y_out, *u_out, *v_out;
-    const unsigned max_val = (256 << shift) - 1;
-
-    const int left = x0 = src->f.x;
-    const int top  = y0 = src->f.y;
-
-    // Coordinates of the first chroma sample affected by the overlay
-    x0c = x0 & ~((1 << pv->wshift) - 1);
-    y0c = y0 & ~((1 << pv->hshift) - 1);
-
-    width  = (src->f.width  - x0 <= dst->f.width - left) ? src->f.width  : (dst->f.width - left + x0);
-    height = (src->f.height - y0 <= dst->f.height - top) ? src->f.height : (dst->f.height - top + y0);
-
-    const unsigned int ovVertShift = NULL == pv->ssa ? 0 : pv->hshift;
-    const unsigned int ovHorzShift = NULL == pv->ssa ? 0 : pv->wshift;
-
-    // This is setting the pointer outside of the array range if y0c < y0
-    oy = y0c - y0;
-
-    unsigned is_chroma_line, resU, resV, alpha;
-    unsigned accuA, accuB, accuC, coeff;
-    for (yy = y0c; oy < height; oy = ++yy - y0)
+    hb_box_t *boxes = realloc(vec->boxes, size * sizeof(hb_box_t));
+    if (boxes == NULL)
     {
-        y_out = (uint16_t*)(dst->plane[0].data + yy * dst->plane[0].stride);
-        u_out = (uint16_t*)(dst->plane[1].data + (yy >> pv->hshift) * dst->plane[1].stride);
-        v_out = (uint16_t*)(dst->plane[2].data + (yy >> pv->hshift) * dst->plane[2].stride);
+        return; // Error. Should never happen.
+    }
+    vec->boxes = boxes;
+    vec->size = size;
+}
 
-        y_in = src->plane[0].data + oy * src->plane[0].stride;
-        u_in = src->plane[1].data + (oy >> ovVertShift) * src->plane[1].stride;
-        v_in = src->plane[2].data + (oy >> ovVertShift) * src->plane[2].stride;
-        a_in = src->plane[3].data + oy * src->plane[3].stride;
+static inline int hb_box_intersect(const hb_box_t *a, const hb_box_t *b, int offset)
+{
+    return ((FFMIN(a->x2, b->x2) + offset - FFMAX(a->x1, b->x1)) >= 0) &&
+           ((FFMIN(a->y2, b->y2) + offset - FFMAX(a->y1, b->y1)) >= 0);
+}
 
-        ox = x0c - x0;
-        is_chroma_line = yy == (yy & ~((1 << pv->hshift) - 1));
-        for (xx = x0c; ox < width; ox = ++xx - x0)
+static inline void hb_box_union(hb_box_t *a, const hb_box_t *b)
+{
+    if (a->x1 > b->x1) { a->x1 = b->x1; }
+    if (a->y1 > b->y1) { a->y1 = b->y1; }
+    if (a->x2 < b->x2) { a->x2 = b->x2; }
+    if (a->y2 < b->y2) { a->y2 = b->y2; }
+}
+
+static inline void hb_box_clear(hb_box_t *box)
+{
+    box->x1 = box->y1 = box->x2 = box->y2 = 0;
+}
+
+static void hb_box_vec_merge(hb_box_vec_t *vec)
+{
+    if (vec->count < 2)
+    {
+        return;
+    }
+
+    for (int i = 0; i < vec->count - 1; i++)
+    {
+        hb_box_t *a = &vec->boxes[i];
+        for (int j = i + 1; j < vec->count; j++)
         {
-            if (ox >= 0 && oy >= 0)
+            hb_box_t *b = &vec->boxes[j];
+            if (hb_box_intersect(a, b, 8))
             {
-                alpha = a_in[ox] << shift;
-                y_out[xx] = ((uint32_t)y_out[xx] * (max_val - alpha) + ((uint32_t)y_in[ox] << shift) * alpha + (max_val >> 1)) / max_val;
-            }
-
-            if (is_chroma_line && xx == (xx & ~((1 << pv->wshift) - 1)))
-            {
-                // Perform chromaloc-aware subsampling and blending
-                accuA = accuB = accuC = 0;
-                for (int yz = 0, oyz = oy; yz < (1 << (pv->hshift - ovVertShift)) && oy + yz < height; yz++, oyz++)
-                {
-                    for (int xz = 0, oxz = ox; xz < (1 << (pv->wshift - ovHorzShift)) && ox + xz < width; xz++, oxz++)
-                    {
-                        // Weight of the current chroma sample
-                        coeff = pv->chroma_coeffs[0][xz] * pv->chroma_coeffs[1][yz];
-                        resU = u_out[xx >> pv->wshift];
-                        resV = v_out[xx >> pv->wshift];
-
-                        // Chroma sampled area overlap with bitmap
-                        if (oxz >= 0 && oyz >= 0 && ox + xz < width && oy + yz < height)
-                        {
-                            alpha = (uint32_t)a_in[oxz + yz * src->plane[3].stride] << shift;
-                            resU *= (max_val - alpha);
-                            resU = (resU + ((uint32_t)(u_in + (yz >> ovVertShift) * src->plane[1].stride)[oxz >> ovHorzShift] << shift) * alpha + (max_val>>1)) / max_val;
-
-                            resV *= (max_val - alpha);
-                            resV = (resV + ((uint32_t)(v_in + (yz >> ovVertShift) * src->plane[2].stride)[oxz >> ovHorzShift] << shift) * alpha + (max_val>>1)) / max_val;
-                        }
-
-                        // Accumulate
-                        accuA += coeff * resU;
-                        accuB += coeff * resV;
-                        accuC += coeff;
-                    }
-                }
-                if (accuC)
-                {
-                    u_out[xx >> pv->wshift] = (accuA + (accuC>>1))/accuC;
-                    v_out[xx >> pv->wshift] = (accuB + (accuC>>1))/accuC;
-                }
+                hb_box_union(a, b);
+                hb_box_clear(b);
             }
         }
     }
 }
 
-static void blend8onbi1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb_buffer_t *src, const int shift)
+static void hb_box_vec_compact(hb_box_vec_t *vec)
 {
-    int x0, y0, x0c, y0c;
-    int xx, yy, ox, oy;
-    int width, height;
-    uint8_t *y_in, *u_in, *v_in, *a_in;
-    uint16_t *y_out, *u_out, *v_out;
-    const unsigned max_val = (256 << shift) - 1;
-
-    const int left = x0 = src->f.x;
-    const int top  = y0 = src->f.y;
-
-    // Coordinates of the first chroma sample affected by the overlay
-    x0c = x0 & ~((1 << pv->wshift) - 1);
-    y0c = y0 & ~((1 << pv->hshift) - 1);
-
-    width  = (src->f.width  - x0 <= dst->f.width - left) ? src->f.width  : (dst->f.width - left + x0);
-    height = (src->f.height - y0 <= dst->f.height - top) ? src->f.height : (dst->f.height - top + y0);
-
-    const unsigned int ovVertShift = NULL == pv->ssa ? 0 : pv->hshift;
-    const unsigned int ovHorzShift = NULL == pv->ssa ? 0 : pv->wshift;
-
-    // This is setting the pointer outside of the array range if y0c < y0
-    oy = y0c - y0;
-
-    unsigned is_chroma_line, resU, resV, alpha;
-    unsigned accuA, accuB, accuC, coeff;
-    for (yy = y0c; oy < height; oy = ++yy - y0)
+    int j = 0, i = 0;
+    while (i < vec->count)
     {
-        y_out = (uint16_t*)(dst->plane[0].data + yy * dst->plane[0].stride);
-        u_out = (uint16_t*)(dst->plane[1].data + (yy >> pv->hshift) * dst->plane[1].stride);
-        v_out = u_out;
-
-        y_in = src->plane[0].data + oy * src->plane[0].stride;
-        u_in = src->plane[1].data + (oy >> ovVertShift) * src->plane[1].stride;
-        v_in = src->plane[2].data + (oy >> ovVertShift) * src->plane[2].stride;
-        a_in = src->plane[3].data + oy * src->plane[3].stride;
-
-        ox = x0c - x0;
-        is_chroma_line = yy == (yy & ~((1 << pv->hshift) - 1));
-        for (xx = x0c; ox < width; ox = ++xx - x0)
+        hb_box_t a = vec->boxes[i];
+        if (a.x2 != 0 || a.y2 != 0)
         {
-            if (ox >= 0 && oy >= 0)
-            {
-                alpha = a_in[ox] << shift;
-                y_out[xx] = ((uint32_t)y_out[xx] * (max_val - alpha) + av_bswap16(y_in[ox]) * alpha + (max_val >> 1)) / max_val;
-            }
-
-            if (is_chroma_line && xx == (xx & ~((1 << pv->wshift) - 1)))
-            {
-                // Perform chromaloc-aware subsampling and blending
-                accuA = accuB = accuC = 0;
-                for (int yz = 0, oyz = oy; yz < (1 << (pv->hshift - ovVertShift)) && oy + yz < height; yz++, oyz++)
-                {
-                    for (int xz = 0, oxz = ox; xz < (1 << (pv->wshift - ovHorzShift)) && ox + xz < width; xz++, oxz++)
-                    {
-                        // Weight of the current chroma sample
-                        coeff = pv->chroma_coeffs[0][xz] * pv->chroma_coeffs[1][yz];
-                        resU = u_out[(xx >> pv->wshift) * 2 + 0];
-                        resV = v_out[(xx >> pv->wshift) * 2 + 1];
-
-                        // Chroma sampled area overlap with bitmap
-                        if (oxz >= 0 && oyz >= 0 && ox + xz < width && oy + yz < height)
-                        {
-                            alpha = a_in[oxz + yz*src->plane[3].stride] << shift;
-                            resU *= (max_val - alpha);
-                            resU = (resU + av_bswap16((u_in + (yz >> ovVertShift) * src->plane[1].stride)[oxz >> ovHorzShift]) * alpha + (max_val>>1)) / max_val;
-
-                            resV *= (max_val - alpha);
-                            resV = (resV + av_bswap16((v_in + (yz >> ovVertShift) * src->plane[2].stride)[oxz >> ovHorzShift]) * alpha + (max_val>>1)) / max_val;
-                        }
-
-                        // Accumulate
-                        accuA += coeff * resU;
-                        accuB += coeff * resV;
-                        accuC += coeff;
-                    }
-                }
-                if (accuC)
-                {
-                    u_out[(xx >> pv->wshift) * 2 + 0] = (accuA + (accuC>>1))/accuC;
-                    v_out[(xx >> pv->wshift) * 2 + 1] = (accuB + (accuC>>1))/accuC;
-                }
-            }
+            vec->boxes[j] = a;
+            j++;
         }
+        i++;
     }
+    vec->count = j;
 }
 
-static void blend8on8(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb_buffer_t *src, const int shift)
+static void hb_box_vec_append(hb_box_vec_t *vec, int x1, int y1, int x2, int y2)
 {
-    int x0, y0, x0c, y0c;
-    int xx, yy, ox, oy;
-    int width, height;
-    uint8_t *y_in, *y_out;
-    uint8_t *u_in, *u_out;
-    uint8_t *v_in, *v_out;
-    uint8_t *a_in;
-
-    const int left = x0 = src->f.x;
-    const int top  = y0 = src->f.y;
-
-    // Coordinates of the first chroma sample affected by the overlay
-    x0c = x0 & ~((1 << pv->wshift) - 1);
-    y0c = y0 & ~((1 << pv->hshift) - 1);
-
-    width  = (src->f.width  - x0 <= dst->f.width - left) ? src->f.width  : (dst->f.width - left + x0);
-    height = (src->f.height - y0 <= dst->f.height - top) ? src->f.height : (dst->f.height - top + y0);
-
-    // This is setting the pointer outside of the array range if y0c < y0
-    oy = y0c - y0;
-
-    // ASS overlays are already subsampled to the video pixel format
-    // Adapt condition below to support other formats that are also subsampled.
-    const unsigned int ovVertShift = NULL == pv->ssa ? 0 : pv->hshift;
-    const unsigned int ovHorzShift = NULL == pv->ssa ? 0 : pv->wshift;
-
-    unsigned is_chroma_line, resU, resV, alpha;
-    unsigned accuA, accuB, accuC, coeff;
-    for (yy = y0c; oy < height; oy = ++yy - y0)
+    if (x1 == x2 || y1 == y2)
     {
-        y_out = dst->plane[0].data + yy * dst->plane[0].stride;
-        u_out = dst->plane[1].data + (yy >> pv->hshift) * dst->plane[1].stride;
-        v_out = dst->plane[2].data + (yy >> pv->hshift) * dst->plane[2].stride;
-
-        y_in = src->plane[0].data + oy * src->plane[0].stride;
-        u_in = src->plane[1].data + (oy >> ovVertShift) * src->plane[1].stride;
-        v_in = src->plane[2].data + (oy >> ovVertShift) * src->plane[2].stride;
-        a_in = src->plane[3].data + oy * src->plane[3].stride;
-
-        ox = x0c - x0;
-        is_chroma_line = yy == (yy & ~((1 << pv->hshift) - 1));
-        for (xx = x0c; ox < width; ox = ++xx - x0)
-        {
-            if (ox >= 0 && oy >= 0)
-            {
-                y_out[xx] = (y_out[xx] * (255 - a_in[ox]) + y_in[ox] * a_in[ox] + 127) / 255;
-            }
-
-            if (is_chroma_line && xx == (xx & ~((1 << pv->wshift) - 1)))
-            {
-                // Perform chromaloc-aware subsampling and blending
-                accuA = accuB = accuC = 0;
-                for (int yz = 0, oyz = oy; yz < (1 << (pv->hshift - ovVertShift)) && oy + yz < height; yz++, oyz++)
-                {
-                    for (int xz = 0, oxz = ox; xz < (1 << (pv->wshift - ovHorzShift)) && ox + xz < width; xz++, oxz++)
-                    {
-                        // Weight of the current chroma sample
-                        coeff = pv->chroma_coeffs[0][xz] * pv->chroma_coeffs[1][yz];
-                        resU = u_out[xx >> pv->wshift];
-                        resV = v_out[xx >> pv->wshift];
-
-                        // Chroma sampled area overlap with bitmap
-                        if (oxz >= 0 && oyz >= 0 && ox + xz < width && oy + yz < height)
-                        {
-                            alpha = a_in[oxz + yz*src->plane[3].stride];
-                            resU *= (255 - alpha);
-                            resU = (resU + (u_in + (yz >> ovVertShift) * src->plane[1].stride)[oxz >> ovHorzShift] * alpha + 127) / 255;
-
-                            resV *= (255 - alpha);
-                            resV = (resV + (v_in + (yz >> ovVertShift) * src->plane[2].stride)[oxz >> ovHorzShift] * alpha + 127) / 255;
-                        }
-
-                        // Accumulate
-                        accuA += coeff * resU;
-                        accuB += coeff * resV;
-                        accuC += coeff;
-                    }
-                }
-                if (accuC)
-                {
-                    u_out[xx >> pv->wshift] = (accuA + (accuC>>1)) / accuC;
-                    v_out[xx >> pv->wshift] = (accuB + (accuC>>1)) / accuC;
-                }
-            }
-        }
+        return; // Empty box
     }
+
+    if (vec->size < vec->count + 1)
+    {
+        hb_box_vec_resize(vec, vec->count + 10);
+    }
+
+    if (vec->size < vec->count + 1)
+    {
+        return; // Error. Should never happen.
+    }
+
+    vec->boxes[vec->count].x1 = x1;
+    vec->boxes[vec->count].y1 = y1;
+    vec->boxes[vec->count].x2 = x2;
+    vec->boxes[vec->count].y2 = y2;
+    vec->count += 1;
+
+    hb_box_vec_merge(vec);
+    hb_box_vec_compact(vec);
 }
 
-static void blend8onbi8(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb_buffer_t *src, const int shift)
+static void hb_box_vec_clear(hb_box_vec_t *vec)
 {
-    int x0, y0, x0c, y0c;
-    int xx, yy, ox, oy;
-    int width, height;
-    uint8_t *y_in, *y_out;
-    uint8_t *u_in, *u_out;
-    uint8_t *v_in, *v_out;
-    uint8_t *a_in;
-
-    const int left = x0 = src->f.x;
-    const int top = y0 = src->f.y;
-
-    // Coordinates of the first chroma sample affected by the overlay
-    x0c = x0 & ~((1 << pv->wshift) - 1);
-    y0c = y0 & ~((1 << pv->hshift) - 1);
-
-    width  = (src->f.width  - x0 <= dst->f.width - left) ? src->f.width  : (dst->f.width - left + x0);
-    height = (src->f.height - y0 <= dst->f.height - top) ? src->f.height : (dst->f.height - top + y0);
-
-    const unsigned int ovVertShift = NULL == pv->ssa ? 0 : pv->hshift;
-    const unsigned int ovHorzShift = NULL == pv->ssa ? 0 : pv->wshift;
-
-    // This is setting the pointer outside of the array range if y0c < y0
-    oy = y0c - y0;
-
-    unsigned is_chroma_line, resU, resV, alpha;
-    unsigned accuA, accuB, accuC, coeff;
-    for (yy = y0c; oy < height; oy = ++yy - y0)
-    {
-        y_out = dst->plane[0].data + yy * dst->plane[0].stride;
-        u_out = dst->plane[1].data + (yy >> pv->hshift) * dst->plane[1].stride;
-        v_out = u_out;
-
-        y_in = src->plane[0].data + oy * src->plane[0].stride;
-        u_in = src->plane[1].data + (oy >> ovVertShift) * src->plane[1].stride;
-        v_in = src->plane[2].data + (oy >> ovVertShift) * src->plane[2].stride;
-        a_in = src->plane[3].data + oy * src->plane[3].stride;
-
-        ox = x0c - x0;
-        is_chroma_line = yy == (yy & ~((1 << pv->hshift) - 1));
-        for (xx = x0c; ox < width; ox = ++xx - x0)
-        {
-            if (ox >= 0 && oy >= 0)
-            {
-                y_out[xx] = (y_out[xx] * (255 - a_in[ox]) + y_in[ox] * a_in[ox] + 127) / 255;
-            }
-
-            if (is_chroma_line && xx == (xx & ~((1 << pv->wshift) - 1)))
-            {
-                // Perform chromaloc-aware subsampling and blending
-                accuA = accuB = accuC = 0;
-                for (int yz = 0, oyz = oy; yz < (1 << (pv->hshift - ovVertShift)); yz++, oyz++)
-                {
-                    for (int xz = 0, oxz = ox; xz < (1 << (pv->wshift - ovHorzShift)); xz++, oxz++)
-                    {
-                        // Weight of the current chroma sample
-                        coeff = pv->chroma_coeffs[0][xz] * pv->chroma_coeffs[1][yz];
-                        resU = u_out[(xx >> pv->wshift) * 2 + 0];
-                        resV = v_out[(xx >> pv->wshift) * 2 + 1];
-
-                        // Chroma sampled area overlap with bitmap
-                        if (oxz >= 0 && oyz >= 0 && ox + xz < width && oy + yz < height)
-                        {
-                            alpha = a_in[oxz + yz*src->plane[3].stride];
-                            resU *= (255 - alpha);
-                            resU = (resU + (u_in + (yz >> ovVertShift) * src->plane[1].stride)[oxz >> ovHorzShift] * alpha + 127) / 255;
-
-                            resV *= (255 - alpha);
-                            resV = (resV + (v_in + (yz >> ovVertShift) * src->plane[2].stride)[oxz >> ovHorzShift] * alpha + 127) / 255;
-                        }
-
-                        // Accumulate
-                        accuA += coeff*resU;
-                        accuB += coeff*resV;
-                        accuC += coeff;
-                    }
-                }
-                if (accuC)
-                {
-                    u_out[(xx >> pv->wshift) * 2 + 0] = (accuA + (accuC>>1)) / accuC;
-                    v_out[(xx >> pv->wshift) * 2 + 1] = (accuB + (accuC>>1)) / accuC;
-                }
-            }
-        }
-    }
+    memset(vec->boxes, 0, sizeof(hb_box_t) * vec->size);
+    vec->count = 0;
 }
 
-// Assumes that the input destination buffer has the same dimensions
-// as the original title dimensions
-static void apply_sub(const hb_filter_private_t *pv, hb_buffer_t *buf, const hb_buffer_t *sub)
+static void hb_box_vec_close(hb_box_vec_t *vec)
 {
-    pv->blend(pv, buf, sub, pv->depth - 8);
+    free(vec->boxes);
+    vec->boxes = NULL;
+    vec->count = 0;
+    vec->size = 0;
 }
 
 static hb_buffer_t * scale_subtitle(hb_filter_private_t *pv,
@@ -615,47 +375,36 @@ static hb_buffer_t * scale_subtitle(hb_filter_private_t *pv,
 
 // Assumes that the input buffer has the same dimensions
 // as the original title dimensions
-static void apply_vobsubs(hb_filter_private_t *pv, hb_buffer_t *buf)
+static void render_vobsubs(hb_filter_private_t *pv, hb_buffer_t *buf)
 {
     hb_buffer_t *sub, *next;
 
     // Note that VOBSUBs can overlap in time.
     // I.e. more than one may be rendered to the screen at once.
-    for (int ii = 0; ii < hb_list_count(pv->sub_list);)
+    for (sub = hb_buffer_list_head(&pv->sub_list); sub; sub = next)
     {
-        sub = hb_list_item(pv->sub_list, ii);
-        if (ii + 1 < hb_list_count(pv->sub_list))
-        {
-            next = hb_list_item(pv->sub_list, ii + 1);
-        }
-        else
-        {
-            next = NULL;
-        }
+        next = sub->next;
 
         if ((sub->s.stop != AV_NOPTS_VALUE && sub->s.stop <= buf->s.start) ||
             (next != NULL && sub->s.stop == AV_NOPTS_VALUE && next->s.start <= buf->s.start))
         {
             // Subtitle stop is in the past, delete it
-            hb_list_rem(pv->sub_list, sub);
+            hb_buffer_list_rem(&pv->sub_list, sub);
             hb_buffer_close(&sub);
         }
         else if (sub->s.start <= buf->s.start)
         {
             // The subtitle has started before this frame and ends
-            // after it.  Render the subtitle into the frame.
-            while (sub)
+            // after it. Render the subtitle into the frame.
+            hb_buffer_t *scaled = scale_subtitle(pv, sub, buf);
+            if (scaled)
             {
-                hb_buffer_t *scaled = scale_subtitle(pv, sub, buf);
-                apply_sub(pv, buf, scaled);
-                hb_buffer_close(&scaled);
-                sub = sub->next;
+                hb_buffer_list_append(&pv->rendered_sub_list, scaled);
             }
-            ii++;
         }
         else
         {
-            // The subtitle starts in the future.  No need to continue.
+            // The subtitle starts in the future. No need to continue.
             break;
         }
     }
@@ -663,10 +412,7 @@ static void apply_vobsubs(hb_filter_private_t *pv, hb_buffer_t *buf)
 
 static int vobsub_post_init(hb_filter_object_t *filter, hb_job_t *job)
 {
-    hb_filter_private_t *pv = filter->private_data;
-
-    pv->sub_list = hb_list_init();
-
+    filter->private_data->pix_fmt_alpha = AV_PIX_FMT_YUVA444P;
     return 0;
 }
 
@@ -679,10 +425,7 @@ static void vobsub_close(hb_filter_object_t *filter)
         return;
     }
 
-    if (pv->sub_list)
-    {
-        hb_list_empty(&pv->sub_list);
-    }
+    hb_buffer_list_close(&pv->sub_list);
 
     free(pv);
     filter->private_data = NULL;
@@ -712,12 +455,15 @@ static int vobsub_work(hb_filter_object_t *filter,
             hb_buffer_close(&sub);
             break;
         }
-        hb_list_add(pv->sub_list, sub);
+        hb_buffer_list_append(&pv->sub_list, sub);
     }
 
-    apply_vobsubs(pv, in);
+    render_vobsubs(pv, in);
+
     *buf_in = NULL;
-    *buf_out = in;
+    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list);
+
+    hb_buffer_list_close(&pv->rendered_sub_list);
 
     return HB_FILTER_OK;
 }
@@ -751,7 +497,9 @@ static hb_buffer_t * compose_subsample_ass(hb_filter_private_t *pv, const ASS_Im
 
     while (frame)
     {
-        if (frame->w && frame->h)
+        if (frame->w && frame->h &&
+            x <= frame->dst_x && x + width >= frame->dst_x + frame->w &&
+            y <= frame->dst_y && y + height >= frame->dst_y + frame->h)
         {
             const int yuv = hb_rgb2yuv_bt709(frame->color >> 8);
 
@@ -860,66 +608,55 @@ static hb_buffer_t * compose_subsample_ass(hb_filter_private_t *pv, const ASS_Im
     return sub;
 }
 
-static hb_buffer_t * render_ssa_subs(hb_filter_private_t *pv, int64_t start)
+static void clear_ssa_rendered_sub_cache(hb_filter_private_t *pv)
 {
-    ASS_Image *frame_list;
-    int changed;
+    if (hb_buffer_list_count(&pv->rendered_sub_list))
+    {
+        hb_buffer_list_close(&pv->rendered_sub_list);
+        hb_box_vec_clear(&pv->boxes);
+    }
+}
 
-    frame_list = ass_render_frame(pv->renderer, pv->ssa_track,
-                                  start / 90, &changed);
+static void render_ssa_subs(hb_filter_private_t *pv, int64_t start)
+{
+    int changed;
+    ASS_Image *frame_list = ass_render_frame(pv->renderer, pv->ssa_track,
+                                             start / 90, &changed);
     if (!frame_list)
     {
-        return NULL;
+        clear_ssa_rendered_sub_cache(pv);
     }
-
-    // Re-use cached overlay, whenever possible
-    if (changed)
+    else if (changed)
     {
-        if (pv->last_render)
-        {
-            hb_buffer_close(&pv->last_render);
-        }
+        // Re-use cached overlays, whenever possible
+        clear_ssa_rendered_sub_cache(pv);
 
-        unsigned int x1, y1, x2, y2;
-        x1 = y1 = (unsigned)(-1);
-        x2 = y2 = 0;
-
-        // Find overlay size and pos (faster than composing at the video dimensions)
+        // Find overlay size and pos of non overlapped boxes
+        // (faster than composing at the video dimensions)
         for (ASS_Image *frame = frame_list; frame; frame = frame->next)
         {
-            if (frame->w && frame->h)
-            {
-                x2 = FFMAX(x2, frame->dst_x + frame->w);
-                y2 = FFMAX(y2, frame->dst_y + frame->h);
-                x1 = FFMIN(x1, frame->dst_x);
-                y1 = FFMIN(y1, frame->dst_y);
-            }
+            hb_box_vec_append(&pv->boxes,
+                               frame->dst_x, frame->dst_y,
+                               frame->w + frame->dst_x, frame->h + frame->dst_y);
         }
 
-        // Don't process empty framelist
-        if (x2 > 0)
+        for (int i = 0; i < pv->boxes.count; i++)
         {
             // Overlay must be aligned to the chroma plane, pad as needed.
-            x1 -= (x1 + pv->crop[2]) & ((1 << pv->wshift) - 1);
-            y1 -= (y1 + pv->crop[0]) & ((1 << pv->hshift) - 1);
+            hb_box_t box = pv->boxes.boxes[i];
+            int x = box.x1 - ((box.x1 + pv->crop[2]) & ((1 << pv->wshift) - 1));
+            int y = box.y1 - ((box.y1 + pv->crop[0]) & ((1 << pv->hshift) - 1));
+            int width  = box.x2 - x;
+            int height = box.y2 - y;
 
-            pv->last_render = compose_subsample_ass(pv, frame_list, x2 - x1, y2 - y1, x1, y1);
-
-            if (pv->last_render)
+            hb_buffer_t *sub = compose_subsample_ass(pv, frame_list, width, height, x, y);
+            if (sub)
             {
-                pv->last_render->f.x += pv->crop[2];
-                pv->last_render->f.y += pv->crop[0];
+                sub->f.x += pv->crop[2];
+                sub->f.y += pv->crop[0];
+                hb_buffer_list_append(&pv->rendered_sub_list, sub);
             }
         }
-    }
-
-    if (pv->last_render)
-    {
-        return pv->last_render;
-    }
-    else
-    {
-        return NULL;
     }
 }
 
@@ -934,6 +671,41 @@ static void ssa_log(int level, const char *fmt, va_list args, void *data)
 static int ssa_post_init(hb_filter_object_t *filter, hb_job_t *job)
 {
     hb_filter_private_t *pv = filter->private_data;
+
+    switch (pv->input.pix_fmt)
+    {
+        case AV_PIX_FMT_NV12:
+        case AV_PIX_FMT_P010:
+        case AV_PIX_FMT_P012:
+        case AV_PIX_FMT_P016:
+        case AV_PIX_FMT_YUV420P:
+        case AV_PIX_FMT_YUV420P10:
+        case AV_PIX_FMT_YUV420P12:
+        case AV_PIX_FMT_YUV420P16:
+            pv->pix_fmt_alpha = AV_PIX_FMT_YUVA420P;
+            break;
+        case AV_PIX_FMT_NV16:
+        case AV_PIX_FMT_P210:
+        case AV_PIX_FMT_P212:
+        case AV_PIX_FMT_P216:
+        case AV_PIX_FMT_YUV422P:
+        case AV_PIX_FMT_YUV422P10:
+        case AV_PIX_FMT_YUV422P12:
+        case AV_PIX_FMT_YUV422P16:
+            pv->pix_fmt_alpha = AV_PIX_FMT_YUVA422P;
+            break;
+        case AV_PIX_FMT_NV24:
+        case AV_PIX_FMT_P410:
+        case AV_PIX_FMT_P412:
+        case AV_PIX_FMT_P416:
+        case AV_PIX_FMT_YUV444P:
+        case AV_PIX_FMT_YUV444P10:
+        case AV_PIX_FMT_YUV444P12:
+        case AV_PIX_FMT_YUV444P16:
+        default:
+            pv->pix_fmt_alpha = AV_PIX_FMT_YUVA444P;
+            break;
+    }
 
     pv->ssa = ass_library_init();
     if (!pv->ssa)
@@ -1004,12 +776,6 @@ static int ssa_post_init(hb_filter_object_t *filter, hb_job_t *job)
     ass_set_frame_size(pv->renderer, width, height);
     ass_set_storage_size(pv->renderer, width, height);
 
-    if (pv->last_render)
-    {
-        hb_buffer_close(&pv->last_render);
-        pv->last_render = NULL;
-    }
-
     return 0;
 }
 
@@ -1034,10 +800,7 @@ static void ssa_close(hb_filter_object_t *filter)
     {
         ass_library_done(pv->ssa);
     }
-    if (pv->last_render)
-    {
-        hb_buffer_close(&pv->last_render);
-    }
+    hb_box_vec_close(&pv->boxes);
 
     free(pv);
     filter->private_data = NULL;
@@ -1049,9 +812,7 @@ static int ssa_work(hb_filter_object_t *filter,
 {
     hb_filter_private_t *pv = filter->private_data;
     hb_buffer_t *in = *buf_in;
-    hb_buffer_t *out = in;
     hb_buffer_t *sub;
-    hb_buffer_t *rendered_subs;
 
     if (!pv->script_initialized)
     {
@@ -1091,23 +852,10 @@ static int ssa_work(hb_filter_object_t *filter,
         hb_buffer_close(&sub);
     }
 
-    rendered_subs = render_ssa_subs(pv, in->s.start);
+    render_ssa_subs(pv, in->s.start);
 
-    if (rendered_subs && hb_buffer_is_writable(in) == 0)
-    {
-        out = hb_buffer_dup(in);
-    }
-    else
-    {
-        *buf_in = NULL;
-    }
-
-    if (rendered_subs)
-    {
-        apply_sub(pv, out, rendered_subs);
-    }
-
-    *buf_out = out;
+    *buf_in  = NULL;
+    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list);
 
     return HB_FILTER_OK;
 }
@@ -1154,9 +902,7 @@ static int textsub_work(hb_filter_object_t *filter,
 {
     hb_filter_private_t *pv = filter->private_data;
     hb_buffer_t *in = *buf_in;
-    hb_buffer_t *out = in;
     hb_buffer_t *sub;
-    hb_buffer_t *rendered_subs;
 
     if (!pv->script_initialized)
     {
@@ -1246,77 +992,64 @@ static int textsub_work(hb_filter_object_t *filter,
         process_sub(pv, pv->current_sub);
     }
 
-    rendered_subs = render_ssa_subs(pv, in->s.start);
+    render_ssa_subs(pv, in->s.start);
 
-    if (rendered_subs && hb_buffer_is_writable(in) == 0)
-    {
-        out = hb_buffer_dup(in);
-    }
-    else
-    {
-        *buf_in = NULL;
-    }
-
-    if (rendered_subs)
-    {
-        apply_sub(pv, out, rendered_subs);
-    }
-
-    *buf_out = out;
+    *buf_in  = NULL;
+    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list);
 
     return HB_FILTER_OK;
 }
 
-static void apply_pgs_subs(hb_filter_private_t *pv, hb_buffer_t *buf)
+static void render_pgs_subs(hb_filter_private_t *pv, hb_buffer_t *buf)
 {
-    int index;
-    hb_buffer_t *old_sub;
-    hb_buffer_t *sub;
+    hb_buffer_t *sub, *next, *active = NULL;
 
     // Each PGS subtitle supersedes anything that preceded it.
     // Find the active subtitle (if there is one), and delete
     // everything before it.
-    for (index = hb_list_count(pv->sub_list) - 1; index > 0; index--)
+    for (sub = hb_buffer_list_head(&pv->sub_list); sub; sub = sub->next)
     {
-        sub = hb_list_item(pv->sub_list, index);
-        if (sub->s.start <= buf->s.start)
+        if (sub->s.start > buf->s.start)
         {
-            while (index > 0)
-            {
-                old_sub = hb_list_item(pv->sub_list, index - 1);
-                hb_list_rem(pv->sub_list, old_sub);
-                hb_buffer_close(&old_sub);
-                index--;
-            }
+            break;
         }
+        active = sub;
+    }
+
+    for (sub = hb_buffer_list_head(&pv->sub_list); sub; sub = next)
+    {
+        if (active == NULL || sub == active)
+        {
+            break;
+        }
+        next = sub->next;
+        hb_buffer_list_rem(&pv->sub_list, sub);
+        hb_buffer_close(&sub);
     }
 
     // Some PGS subtitles have no content and only serve to clear
     // the screen. If any of these are at the front of our list,
     // we can now get rid of them.
-    while (hb_list_count(pv->sub_list) > 0)
+    for (sub = hb_buffer_list_head(&pv->sub_list); sub; sub = next)
     {
-        sub = hb_list_item(pv->sub_list, 0);
         if (sub->f.width != 0 && sub->f.height != 0)
         {
             break;
         }
-
-        hb_list_rem(pv->sub_list, sub);
+        next = sub->next;
+        hb_buffer_list_rem(&pv->sub_list, sub);
         hb_buffer_close(&sub);
     }
 
     // Check to see if there's an active subtitle, and apply it.
-    if (hb_list_count(pv->sub_list) > 0)
+    for (sub = hb_buffer_list_head(&pv->sub_list); sub; sub = sub->next)
     {
-        sub = hb_list_item(pv->sub_list, 0);
         if (sub->s.start <= buf->s.start)
         {
             hb_buffer_t *scaled = scale_subtitle(pv, sub, buf);
             if (scaled)
             {
-                apply_sub(pv, buf, scaled);
-                hb_buffer_close(&scaled);
+                hb_buffer_list_append(&pv->rendered_sub_list, scaled);
             }
         }
     }
@@ -1324,10 +1057,7 @@ static void apply_pgs_subs(hb_filter_private_t *pv, hb_buffer_t *buf)
 
 static int pgssub_post_init(hb_filter_object_t *filter, hb_job_t *job)
 {
-    hb_filter_private_t *pv = filter->private_data;
-
-    pv->sub_list = hb_list_init();
-
+    filter->private_data->pix_fmt_alpha = AV_PIX_FMT_YUVA444P;
     return 0;
 }
 
@@ -1340,10 +1070,7 @@ static void pgssub_close(hb_filter_object_t *filter)
         return;
     }
 
-    if (pv->sub_list)
-    {
-        hb_list_empty(&pv->sub_list);
-    }
+    hb_buffer_list_close(&pv->sub_list);
 
     free(pv);
     filter->private_data = NULL;
@@ -1373,14 +1100,57 @@ static int pgssub_work(hb_filter_object_t *filter,
             hb_buffer_close(&sub);
             break;
         }
-        hb_list_add(pv->sub_list, sub);
+        hb_buffer_list_append(&pv->sub_list, sub);
     }
 
-    apply_pgs_subs(pv, in);
+    render_pgs_subs(pv, in);
+
     *buf_in = NULL;
-    *buf_out = in;
+    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list);
+
+    hb_buffer_list_close(&pv->rendered_sub_list);
 
     return HB_FILTER_OK;
+}
+
+static hb_blend_object_t * hb_blend_init(int hw_pixfmt, int in_pix_fmt, int in_chroma_location, int sub_pix_fmt)
+{
+    hb_blend_object_t *blend;
+    switch (hw_pixfmt)
+    {
+        default:
+            blend = &hb_blend;
+            break;
+    }
+
+    hb_blend_object_t *blend_copy = malloc(sizeof(hb_blend_object_t));
+    if (blend_copy == NULL)
+    {
+        hb_error("render_sub: blend malloc failed");
+        return NULL;
+    }
+
+    memcpy(blend_copy, blend, sizeof(hb_blend_object_t));
+    if (blend_copy->init(blend_copy, in_pix_fmt, in_chroma_location, sub_pix_fmt))
+    {
+        free(blend_copy);
+        hb_error("render_sub: blend init failed");
+        return NULL;
+    }
+
+    return blend_copy;
+}
+
+void hb_blend_close(hb_blend_object_t **_b)
+{
+    hb_blend_object_t *b = *_b;
+    if (b == NULL)
+    {
+        return;
+    }
+    b->close(b);
+    free(b);
+    *_b = NULL;
 }
 
 static int hb_rendersub_init(hb_filter_object_t *filter,
@@ -1398,105 +1168,12 @@ static int hb_rendersub_init(hb_filter_object_t *filter,
     pv->input = *init;
 
     const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(init->pix_fmt);
-    pv->depth      = desc->comp[0].depth;
-    pv->wshift     = desc->log2_chroma_w;
-    pv->hshift     = desc->log2_chroma_h;
+    pv->wshift = desc->log2_chroma_w;
+    pv->hshift = desc->log2_chroma_h;
 
-    //Compute chroma smoothing coefficients wrt video chroma location
-    int wX, wY;
-    wX = 4 - (1 << desc->log2_chroma_w);
-    wY = 4 - (1 << desc->log2_chroma_h);
-
-    switch (init->chroma_location)
-    {
-        case AVCHROMA_LOC_TOPLEFT:
-            wX += (1 << desc->log2_chroma_w) - 1;
-        case AVCHROMA_LOC_TOP:
-            wY += (1 << desc->log2_chroma_h) - 1;
-            break;
-        case AVCHROMA_LOC_LEFT:
-            wX += (1 << desc->log2_chroma_w) - 1;
-            break;
-        case AVCHROMA_LOC_BOTTOMLEFT:
-            wX += (1 << desc->log2_chroma_w) - 1;
-        case AVCHROMA_LOC_BOTTOM:
-            wY += (1 << desc->log2_chroma_h) - 1;
-        case AVCHROMA_LOC_CENTER:
-        default: // Center chroma value for unknown/unsupported
-            break;
-    }
-
-    const unsigned base_coefficients[] = {1, 3, 9, 27, 9, 3, 1};
-    // If wZ is even, an intermediate value is interpolated for symmetry.
-    for (int x = 0; x < 4; x++)
-    {
-        pv->chroma_coeffs[0][x] = (base_coefficients[x + wX] +
-                                   base_coefficients[x + wX + !(wX & 0x1)]) >> 1;
-        pv->chroma_coeffs[1][x] = (base_coefficients[x + wY] +
-                                   base_coefficients[x + wY + !(wY & 0x1)]) >> 1;
-    }
-
-    switch (init->pix_fmt)
-    {
-        case AV_PIX_FMT_NV12:
-        case AV_PIX_FMT_P010:
-        case AV_PIX_FMT_P012:
-        case AV_PIX_FMT_P016:
-        case AV_PIX_FMT_YUV420P:
-        case AV_PIX_FMT_YUV420P10:
-        case AV_PIX_FMT_YUV420P12:
-        case AV_PIX_FMT_YUV420P16:
-            pv->pix_fmt_alpha = AV_PIX_FMT_YUVA420P;
-            break;
-        case AV_PIX_FMT_NV16:
-        case AV_PIX_FMT_P210:
-        case AV_PIX_FMT_P212:
-        case AV_PIX_FMT_P216:
-        case AV_PIX_FMT_YUV422P:
-        case AV_PIX_FMT_YUV422P10:
-        case AV_PIX_FMT_YUV422P12:
-        case AV_PIX_FMT_YUV422P16:
-            pv->pix_fmt_alpha = AV_PIX_FMT_YUVA422P;
-            break;
-        case AV_PIX_FMT_NV24:
-        case AV_PIX_FMT_P410:
-        case AV_PIX_FMT_P412:
-        case AV_PIX_FMT_P416:
-        case AV_PIX_FMT_YUV444P:
-        case AV_PIX_FMT_YUV444P10:
-        case AV_PIX_FMT_YUV444P12:
-        case AV_PIX_FMT_YUV444P16:
-        default:
-            pv->pix_fmt_alpha = AV_PIX_FMT_YUVA444P;
-            break;
-    }
-
-    const int planes_count = av_pix_fmt_count_planes(init->pix_fmt);
-
-    switch (pv->depth)
-    {
-        case 8:
-            switch (planes_count)
-            {
-                case 2:
-                    pv->blend = blend8onbi8;
-                    break;
-                default:
-                    pv->blend = blend8on8;
-                    break;
-            }
-            break;
-        default:
-            switch (planes_count)
-            {
-                case 2:
-                    pv->blend = blend8onbi1x;
-                    break;
-                default:
-                    pv->blend = blend8on1x;
-                    break;
-            }
-    }
+    hb_compute_chroma_smoothing_coefficient(pv->chroma_coeffs,
+                                            init->pix_fmt,
+                                            init->chroma_location);
 
     // Find the subtitle we need
     for (int ii = 0; ii < hb_list_count(init->job->list_subtitle); ii++)
@@ -1522,6 +1199,7 @@ static int hb_rendersub_init(hb_filter_object_t *filter,
 
 static int hb_rendersub_post_init(hb_filter_object_t *filter, hb_job_t *job)
 {
+    int ret = 0;
     hb_filter_private_t *pv = filter->private_data;
 
     pv->crop[0] = job->crop[0];
@@ -1533,12 +1211,14 @@ static int hb_rendersub_post_init(hb_filter_object_t *filter, hb_job_t *job)
     {
         case VOBSUB:
         {
-            return vobsub_post_init(filter, job);
+            ret = vobsub_post_init(filter, job);
+            break;
         }
 
         case SSASUB:
         {
-            return ssa_post_init(filter, job);
+            ret =  ssa_post_init(filter, job);
+            break;
         }
 
         case IMPORTSRT:
@@ -1546,18 +1226,21 @@ static int hb_rendersub_post_init(hb_filter_object_t *filter, hb_job_t *job)
         case UTF8SUB:
         case TX3GSUB:
         {
-            return textsub_post_init(filter, job);
+            ret = textsub_post_init(filter, job);
+            break;
         }
 
         case CC608SUB:
         {
-            return cc608sub_post_init(filter, job);
+            ret = cc608sub_post_init(filter, job);
+            break;
         }
 
         case DVBSUB:
         case PGSSUB:
         {
-            return pgssub_post_init(filter, job);
+            ret = pgssub_post_init(filter, job);
+            break;
         }
 
         default:
@@ -1566,6 +1249,23 @@ static int hb_rendersub_post_init(hb_filter_object_t *filter, hb_job_t *job)
             return 1;
         }
     }
+
+    if (ret > 0)
+    {
+        return 1;
+    }
+
+    pv->blend = hb_blend_init(pv->input.hw_pix_fmt,
+                              pv->input.pix_fmt, pv->input.chroma_location,
+                              pv->pix_fmt_alpha);
+
+    if (pv->blend == NULL)
+    {
+        hb_log("rendersub: blend initialization failed");
+        return 1;
+    }
+
+    return 0;
 }
 
 static int hb_rendersub_work(hb_filter_object_t *filter,
@@ -1612,10 +1312,19 @@ static void hb_rendersub_close(hb_filter_object_t *filter)
 {
     hb_filter_private_t *pv = filter->private_data;
 
+    if (pv == NULL)
+    {
+        return;
+    }
+
     if (pv->sws != NULL)
     {
         sws_freeContext(pv->sws);
     }
+
+    hb_buffer_list_close(&pv->rendered_sub_list);
+    hb_blend_close(&pv->blend);
+
     switch (pv->type)
     {
         case VOBSUB:

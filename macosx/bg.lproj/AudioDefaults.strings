@@ -1,6 +1,3 @@
-/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "0HY-xB-cvO"; */
-"0HY-xB-cvO.ibShadowedToolTip" = "Изберете това, ако устройството поддържа FLAC. Това позволява подаване на FLAC да бъде избрано, когато автоматичното подаване е включено.";
-
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
 "0kT-0J-3k2.headerCell.title" = "Смесване";
 
@@ -70,6 +67,9 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "E93-Md-aWa"; */
 "E93-Md-aWa.ibShadowedToolTip" = "Изберете това, ако устройството поддържа DTS. Това позволява подаване на DTS да бъде избрано, когато автоматичното подаване е включено.";
 
+/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "eA6-za-Up0"; */
+"eA6-za-Up0.title" = "Opus";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fgl-Ev-ELt"; */
 "fgl-Ev-ELt.ibShadowedToolTip" = "Изберете това, ако устройството поддържа AC3. Това позволява подаване на AC3 да бъде избрано, когато автоматичното подаване е включено.";
 
@@ -84,6 +84,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
 "GHJ-25-kZl.ibShadowedToolTip" = "Изберете това, ако устройството поддържа MP2. Това позволява подаване на MP2 да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "gOm-E9-8K7"; */
+"gOm-E9-8K7.ibShadowedToolTip" = "Изберете това, ако устройството поддържа FLAC. Това позволява подаване на FLAC да бъде избрано, когато автоматичното подаване е включено.";
 
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
 "GZP-q7-SYy.title" = "Всички отговарящи избрани езици";
@@ -133,9 +136,6 @@
 /* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "N7h-CJ-quV"; */
 "N7h-CJ-quV.headerCell.title" = "Усилване";
 
-/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "naS-No-CdV"; */
-"naS-No-CdV.title" = "FLAC";
-
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports TrueHD. This permits TrueHD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "os0-Jl-OXF"; */
 "os0-Jl-OXF.ibShadowedToolTip" = "Изберете това, ако устройството поддържа TrueHD. Това позволява подаване на TrueHD да бъде избрано, когато автоматичното подаване е включено.";
 
@@ -148,6 +148,9 @@
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
 "OVr-Jm-VrK.title" = "0";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "OWh-gZ-JcF"; */
+"OWh-gZ-JcF.ibShadowedToolTip" = "Изберете това, ако устройството поддържа Opus. Това позволява подаване на Opus да бъде избрано, когато автоматичното подаване е включено.";
+
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Кодек";
 
@@ -157,14 +160,14 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibShadowedToolTip" = "Честота на дискретизация на аудиото в килохерци (kHz). Автоматично е препоръчително.";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "Ry1-gA-ns4"; */
-"Ry1-gA-ns4.ibShadowedToolTip" = "Изберете това, ако устройството поддържа Opus. Това позволява подаване на Opus да бъде избрано, когато автоматичното подаване е включено.";
-
 /* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
 "s6s-EH-5CB.title" = "Автоматично подаване";
 
 /* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
 "sdZ-Rx-JoG.title" = "MP3";
+
+/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "sJU-xA-Jo1"; */
+"sJU-xA-Jo1.title" = "FLAC";
 
 /* Class = "NSButtonCell"; title = "E-AC3"; ObjectID = "u9h-dn-wcK"; */
 "u9h-dn-wcK.title" = "E-AC3";
@@ -186,9 +189,6 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
 "vUx-OV-W5T.ibShadowedToolTip" = "Изберете това, ако устройството поддържа MP3. Това позволява подаване на MP3 да бъде избрано, когато автоматичното подаване е включено.";
-
-/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "wAh-LS-JzG"; */
-"wAh-LS-JzG.title" = "Opus";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Клетка от табличен изглед";

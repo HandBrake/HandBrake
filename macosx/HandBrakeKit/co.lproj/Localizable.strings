@@ -8,7 +8,7 @@
 " (%.2f fps, avg %.2f fps)" = " (%1$.2f fps, mez. %2$.2f fps)";
 
 /* HBStateFormatter -> search time format
-   HBStateFormatter -> work time format */
+HBStateFormatter -> work time format */
 " (ETA %@)" = " (trascorsu %@)";
 
 /* HBJob -> video short description framerate */
@@ -117,7 +117,7 @@
 "Bwdif" = "Bwdif";
 
 /* Title -> chapter name
-   Title description */
+Title description */
 "Chapter %d" = "Capitulu %d";
 
 /* HBJob -> chapters short description */
@@ -130,11 +130,11 @@
 "Chapters %d through %d" = "Capituli da %1$d fin’à %2$d";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Chroma Smooth" = "Allisciata cromatica";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Colorspace" = "Spaziu culorimetricu";
 
 /* HBJob -> filters short description */
@@ -147,18 +147,18 @@
 "CRF" = "CRF";
 
 /* HBFilters -> custom display name
-   HBPicture -> summary */
+HBPicture -> summary */
 "Custom" = "Persunalizatu";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Deblock" = "Sblucchime";
 
 /* HBFilters -> filter display name */
 "Decomb" = "Dipettinera";
 
 /* HBFilters -> default display name
-   Subtitles description */
+Subtitles description */
 "Default" = "Predefinitu";
 
 /* Video description */
@@ -174,7 +174,7 @@
 "Destination:" = "Destinazione :";
 
 /* Dimensions description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Detelecine" = "Detelesinema";
 
 /* Dimensions description */
@@ -220,7 +220,7 @@
 "Gain: %.2f" = "Guadagnu : %.2f";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Grayscale" = "Scala di grisgiu";
 
 /* HBFilters -> filter display name */
@@ -302,13 +302,13 @@
 "none" = "nisunu";
 
 /* HBAudio -> Mixdown
-   HBAudio -> none track name
-   HBJob -> filters short description
-   HBSubtitles -> none track name */
+HBAudio -> none track name
+HBJob -> filters short description
+HBSubtitles -> none track name */
 "None" = "Nisunu";
 
 /* HBFilters -> filter display name
-   HBFilters -> off display name */
+HBFilters -> off display name */
 "Off" = "Nò";
 
 /* Video description */
@@ -411,14 +411,14 @@
 "Title %d, %@, %@" = "Titulu %1$d, %2$@, %3$@";
 
 /* Audio track title description
-   Subtitles track title description */
+Subtitles track title description */
 "Title: %@" = "Titulu : %@";
 
 /* Video description */
 "Tune: " = "Rigatura : ";
 
 /* HBJob -> video short description encoder name
-   Video description */
+Video description */
 "Unknown" = "Scunnisciutu";
 
 /* HBFilters -> filter display name */

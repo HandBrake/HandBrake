@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# arrakala EuskalEncodings, 2023
+# arrakala EuskalEncodings, 2024
 # 
 #, fuzzy
 msgid ""
@@ -13,6 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-16 19:10+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
+"Last-Translator: arrakala EuskalEncodings, 2024\n"
 "Language-Team: Basque (https://app.transifex.com/HandBrakeProject/teams/92423/eu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,7 +35,7 @@ msgstr "Ireki _Direktorioa…"
 
 #: src/ui/menu.ui:18 src/ui/menu.ui:176
 msgid "_Set Destination…"
-msgstr ""
+msgstr "_Ezarri helmuga..."
 
 #: src/ui/menu.ui:26 src/ui/menu.ui:196
 msgid "_Preferences"
@@ -55,7 +56,7 @@ msgstr "_Gehitu"
 
 #: src/ui/menu.ui:43 src/ui/menu.ui:449
 msgid "Add _Multiple…"
-msgstr ""
+msgstr "Gehitu _Anitz…"
 
 #: src/ui/menu.ui:47 src/ui/menu.ui:453
 msgid "Add A_ll"
@@ -121,11 +122,11 @@ msgstr "_Ezabatu…"
 
 #: src/ui/menu.ui:121 src/ui/menu.ui:243
 msgid "_Import Preset…"
-msgstr ""
+msgstr "_Inportatu Aurrezarpena…"
 
 #: src/ui/menu.ui:125 src/ui/menu.ui:247 src/ui/menu.ui:282
 msgid "_Export Preset…"
-msgstr ""
+msgstr "_Esportatu Aurrezarpena…"
 
 #: src/ui/menu.ui:131 src/ui/menu.ui:253
 msgid "Reset _Built-in Presets"
@@ -137,7 +138,7 @@ msgstr "_Laguntza"
 
 #: src/ui/menu.ui:144
 msgid "_Online Documentation"
-msgstr ""
+msgstr "_Online Dokumentazioa"
 
 #: src/ui/menu.ui:148
 msgid "_About"
@@ -149,7 +150,7 @@ msgstr "HandBrake mozoloentzat"
 
 #: src/ui/menu.ui:204
 msgid "A_bout HandBrake"
-msgstr ""
+msgstr "HandBrake-ri buruz"
 
 #: src/ui/menu.ui:290 src/ui/menu.ui:369
 msgid "_Play File"
@@ -165,31 +166,31 @@ msgstr "Ireki helmugako direktorioa"
 
 #: src/ui/menu.ui:304 src/ui/menu.ui:382
 msgid "Open Encode _Log"
-msgstr ""
+msgstr "Ireki kodetzearen erregistroa"
 
 #: src/ui/menu.ui:308 src/ui/menu.ui:386
 msgid "Open _Encode Log Directory"
-msgstr ""
+msgstr "Ireki kodetze erregistroaren direktorioa"
 
 #: src/ui/menu.ui:316
 msgid "Reset _Failed Jobs"
-msgstr ""
+msgstr "Berrezarri _Huts egindako lanak"
 
 #: src/ui/menu.ui:320
 msgid "_Reset All Jobs"
-msgstr ""
+msgstr "_Berrezarri lan guztiak"
 
 #: src/ui/menu.ui:324
 msgid "_Clear Completed Jobs"
-msgstr ""
+msgstr "_Garbitu amaitutako lanak"
 
 #: src/ui/menu.ui:328
 msgid "Clear _All Jobs"
-msgstr ""
+msgstr "Garbitu _Lan Guztiak"
 
 #: src/ui/menu.ui:346
 msgid "_Add Track"
-msgstr ""
+msgstr "_Gehitu Pista"
 
 #: src/ui/menu.ui:350 src/ui/menu.ui:425 src/ui/menu.ui:437
 msgid "Add A_ll Tracks"
@@ -201,7 +202,7 @@ msgstr ""
 
 #: src/ui/menu.ui:360
 msgid "Add External Subtitle File"
-msgstr ""
+msgstr "Gehitu kanpoko azpititulu fitxategia"
 
 #: src/ui/menu.ui:393
 msgid "Move to _Top"
@@ -225,7 +226,7 @@ msgstr "Kendu"
 
 #: src/ui/menu.ui:421 src/ui/menu.ui:433
 msgid "_Add New Track"
-msgstr ""
+msgstr "_Gehitu Pista Berria"
 
 #: src/ui/ghb.ui:93
 msgid ""
@@ -337,7 +338,7 @@ msgstr "Aurrezarpenak"
 
 #: src/ui/ghb.ui:157
 msgid "Save as new preset"
-msgstr ""
+msgstr "Gorde aurrezarpen berri gisa"
 
 #: src/ui/ghb.ui:166 src/ui/ghb.ui:430
 msgid "Actions"
@@ -385,7 +386,7 @@ msgstr "Amaitzerakoan:"
 
 #: src/ui/ghb.ui:335
 msgid "Show/hide the queue details panel"
-msgstr ""
+msgstr "Erakutsi/ezkutatu ilararen xehetasunen panela"
 
 #: src/ui/ghb.ui:364 src/ui/ghb.ui:1733
 msgid "Summary"
@@ -488,10 +489,12 @@ msgid ""
 "Copyright © 2008-2024 John Stebbins\n"
 "Copyright © 2004-2024, HandBrake Devs"
 msgstr ""
+"Copyright © 2008-2024 John Stebbins\n"
+"Copyright © 2004-2024, HandBrake Devs"
 
 #: src/ui/ghb.ui:1305
 msgid "Multithreaded video transcoder"
-msgstr ""
+msgstr "Prozesu anitzeko bideo transkodifikatzailea"
 
 #: src/ui/ghb.ui:1334 data/fr.handbrake.ghb.desktop.in:3
 msgid "HandBrake"
@@ -701,7 +704,7 @@ msgstr "Tamaina:"
 
 #: src/ui/ghb.ui:1987 src/ui/ghb.ui:2006 src/ui/ghb.ui:6229
 msgid "Video Preview"
-msgstr ""
+msgstr "Bideoaren Aurrebista"
 
 #: src/ui/ghb.ui:2022
 msgid "Dimensions"
@@ -859,7 +862,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:2485 src/ui/ghb.ui:2749
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: src/ui/ghb.ui:2496
 msgid ""
@@ -1323,7 +1326,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:3616
 msgid "Encoder Preset"
-msgstr ""
+msgstr "Kodetzailearen aurrezarpena"
 
 #: src/ui/ghb.ui:3653
 msgid ""
@@ -1403,7 +1406,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:3753
 msgid "Additional Options:"
-msgstr ""
+msgstr "Aukera gehigarriak:"
 
 #: src/ui/ghb.ui:3793
 msgid "Audio"
@@ -1411,11 +1414,11 @@ msgstr "Audio"
 
 #: src/ui/ghb.ui:3822
 msgid "Show audio default selection options"
-msgstr ""
+msgstr "Erakutsi audioaren hautapen aukera lehenetsiak"
 
 #: src/ui/ghb.ui:3836 src/ui/ghb.ui:3990
 msgid "Selection Behavior…"
-msgstr ""
+msgstr "Hautapen portaera..."
 
 #: src/ui/ghb.ui:3845
 msgid "Reload all audio settings from defaults"
@@ -1427,7 +1430,7 @@ msgstr "Kendu"
 
 #: src/ui/ghb.ui:3911 src/ui/ghb.ui:4065
 msgid "Clear"
-msgstr ""
+msgstr "Garbitu"
 
 #: src/ui/ghb.ui:3947
 msgid "Subtitles"
@@ -1435,11 +1438,11 @@ msgstr "Azpitituluak"
 
 #: src/ui/ghb.ui:3963
 msgid "Tracks"
-msgstr ""
+msgstr "Pistak"
 
 #: src/ui/ghb.ui:3976
 msgid "Show subtitle default selection options"
-msgstr ""
+msgstr "Erakutsi azpitituluen hautapen aukera lehenetsiak"
 
 #: src/ui/ghb.ui:4101
 msgid "Chapters"
@@ -1535,15 +1538,15 @@ msgstr "Helburuaren direktorioa"
 
 #: src/ui/ghb.ui:4564
 msgid "Subtitle Selection Behavior"
-msgstr ""
+msgstr "Azpitituluak hautatzeko portaera"
 
 #: src/ui/ghb.ui:4833
 msgid "Audio Selection Behavior"
-msgstr ""
+msgstr "Audioa hautatzeko portaera"
 
 #: src/ui/ghb.ui:4863
 msgid "Track Selection Behavior:"
-msgstr ""
+msgstr "Pista hautatzeko portaera:"
 
 #: src/ui/ghb.ui:4874
 msgid "Choose which audio tracks of the source media are used."
@@ -1741,7 +1744,7 @@ msgstr "DRC"
 
 #: src/ui/ghb.ui:5253
 msgid "Add Track"
-msgstr ""
+msgstr "Gehitu Pista"
 
 #: src/ui/ghb.ui:5254
 msgid ""
@@ -1790,7 +1793,7 @@ msgstr "Desmarkatu titulu guztiak"
 
 #: src/ui/ghb.ui:5328
 msgid "Invert Selection"
-msgstr ""
+msgstr "Alderantzikatu hautaketa"
 
 #: src/ui/ghb.ui:5361 src/title-add.c:351
 msgid "Destination files OK.  No duplicates detected."
@@ -1840,7 +1843,7 @@ msgstr "Aurrebista kopurua"
 
 #: src/ui/ghb.ui:5510
 msgid "Minimum DVD/Blu-ray title duration (seconds)"
-msgstr ""
+msgstr "DVD/Blu-ray tituluaren gutxieneko iraupena (segunduak)"
 
 #: src/ui/ghb.ui:5518
 msgid "Use the same settings for all titles in a batch"
@@ -1872,7 +1875,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5542
 msgid "Excluded File Extensions:"
-msgstr ""
+msgstr "Baztertutako fitxategi-luzapenak:"
 
 #: src/ui/ghb.ui:5551
 msgid ""
@@ -1887,11 +1890,11 @@ msgstr "Ilara"
 
 #: src/ui/ghb.ui:5574
 msgid "Pause queue if disk space is lower than:"
-msgstr ""
+msgstr "Pausatu ilara diskoko espazioa hau baino txikiagoa bada:"
 
 #: src/ui/ghb.ui:5590
 msgid "Disk Free Space Limit"
-msgstr ""
+msgstr "Diskoko espazio librearen muga"
 
 #: src/ui/ghb.ui:5598 src/queuehandler.c:803 src/queuehandler.c:1293
 msgid "GB"
@@ -1899,7 +1902,7 @@ msgstr "GB"
 
 #: src/ui/ghb.ui:5608
 msgid "Clear completed jobs after an encode completes"
-msgstr ""
+msgstr "Garbitu amaitutako lanak kodetze bat amaitu ondoren"
 
 #: src/ui/ghb.ui:5610
 msgid ""
@@ -1955,19 +1958,19 @@ msgstr ""
 
 #: src/ui/ghb.ui:5672
 msgid "When Done"
-msgstr ""
+msgstr "Bukatzean"
 
 #: src/ui/ghb.ui:5684
 msgid "Default action when queue is completed:"
-msgstr ""
+msgstr "Ekintza lehenetsia ilara amaitzean:"
 
 #: src/ui/ghb.ui:5697
 msgid "Show notification when queue is completed"
-msgstr ""
+msgstr "Erakutsi jakinarazpena ilara amaitzean"
 
 #: src/ui/ghb.ui:5705
 msgid "Show notification when each item is completed"
-msgstr ""
+msgstr "Erakutsi jakinarazpena lan bakoitza amaitzean"
 
 #: src/ui/ghb.ui:5717
 msgid "Advanced"
@@ -2088,11 +2091,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:6301
 msgid "Preview Video Position"
-msgstr ""
+msgstr "Aurrikusi bideoaren posizioa"
 
 #: src/ui/ghb.ui:6314
 msgid "Preview Encode Progress"
-msgstr ""
+msgstr "Aurrikusi kodetzearen aurrerapena"
 
 #: src/ui/ghb.ui:6323
 msgid "Click to toggle full screen mode"
@@ -2116,23 +2119,23 @@ msgstr "Berrezarri aurrebista leihoa iturburuko bideoaren bereizmenera"
 
 #: src/ui/ghb-chapter-row.ui:38
 msgid "Chapter Title"
-msgstr ""
+msgstr "Kapituluaren Izenburua"
 
 #: src/ui/ghb-file-button.ui:23 src/ghb-file-button.c:293
 msgid "(None)"
-msgstr ""
+msgstr "(Batere ez)"
 
 #: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:265 src/ghb-queue-row.c:281
 msgid "Pending Queue Item"
-msgstr ""
+msgstr "Lanak ilaran zain"
 
 #: src/ui/ghb-queue-row.ui:31
 msgid "Delete this item"
-msgstr ""
+msgstr "Ezabatu elementu hau"
 
 #: src/ui/ghb-queue-row.ui:52
 msgid "Encode Progress"
-msgstr ""
+msgstr "Kodetzearen Aurrerapena"
 
 #. Audio DRC Label
 #: src/audiohandler.c:419 src/audiohandler.c:764 src/audiohandler.c:1175
@@ -2175,8 +2178,8 @@ msgstr "Bit-tasa: %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
-msgstr "<small>Pasabidea</small>"
+msgid "<small>Passthru</small>"
+msgstr ""
 
 #: src/audiohandler.c:790
 #, c-format
@@ -2476,8 +2479,8 @@ msgstr "Utzi guztiak eta irten"
 #, c-format
 msgid "%d encode pending"
 msgid_plural "%d encodes pending"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d kodetze geratzen dira"
+msgstr[1] "%d kodetze geratzen dira"
 
 #: src/callbacks.c:4349 src/callbacks.c:4417
 #, c-format
@@ -2572,11 +2575,11 @@ msgstr "Kapituluak (*.xml)"
 
 #: src/ghb-file-button.c:72
 msgid "Select a File"
-msgstr ""
+msgstr "Hautatu fitxategi bat"
 
 #: src/ghb-file-button.c:217
 msgid "_Select"
-msgstr ""
+msgstr "_Aukeratu"
 
 #: src/ghb-queue-row.c:260
 msgid "Running Queue Item"
@@ -3148,24 +3151,24 @@ msgstr "Kodetzea osatu da"
 
 #: src/notifications.c:116
 msgid "Encode Failed"
-msgstr ""
+msgstr "Kodetzeak huts egin du"
 
 #: src/notifications.c:140
 msgid "Battery level is low."
-msgstr ""
+msgstr "Bateria maila baxua da."
 
 #: src/notifications.c:143
 msgid "Charger has been disconnected."
-msgstr ""
+msgstr "Kargagailua deskonektatu da."
 
 #: src/notifications.c:146
 msgid "Power Saver mode has been activated."
-msgstr ""
+msgstr "Bateria-aurrezle modua aktibatu da"
 
 #: src/notifications.c:153
 #, c-format
 msgid "%d.%d GB free space remaining."
-msgstr ""
+msgstr "%d.%d GB geratzen dira libre."
 
 #: src/notifications.c:165 src/queuehandler.c:1176
 msgid "Encoding Paused"
@@ -3227,10 +3230,12 @@ msgid ""
 "Are you sure you want to delete “%s”?\n"
 "Deleted items cannot be recovered."
 msgstr ""
+"Ziur “%s” ezabatu nahi duzula?\n"
+"Ezabatutako elementuak ezingo dira berreskuratu."
 
 #: src/preview.c:154
 msgid "Pause Preview"
-msgstr ""
+msgstr "Aurrebista pausatu"
 
 #: src/preview.c:158
 msgid "Stop Encoding Preview"
@@ -3238,11 +3243,11 @@ msgstr ""
 
 #: src/preview.c:162
 msgid "Play Preview"
-msgstr ""
+msgstr "Aurrebista erreproduzitu"
 
 #: src/preview.c:288
 msgid "Playback Error"
-msgstr ""
+msgstr "Erreprodukzio errorea"
 
 #: src/preview.c:291
 msgid "The video could not be played. For more details, see the Activity Log."
@@ -3501,8 +3506,8 @@ msgid "Burned Into Video"
 msgstr "Bideoan erreta"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
-msgstr "Pasabidea"
+msgid "Passthru"
+msgstr ""
 
 #: src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"
@@ -3548,7 +3553,7 @@ msgstr ""
 #: src/title-add.c:113
 #, c-format
 msgid "“%s” is not a writable directory."
-msgstr ""
+msgstr "“%s” direktorioak ez du balio."
 
 #: src/title-add.c:124 src/title-add.c:134
 msgid "Overwrite"
@@ -3625,11 +3630,11 @@ msgstr ""
 
 #: src/videohandler.c:227
 msgid "The full list of encoder parameters:"
-msgstr ""
+msgstr "Kodetze parametroen zerrenda osoa:"
 
 #: src/videohandler.c:345
 msgid "Warning: lossless"
-msgstr ""
+msgstr "Kontuz: galera gabea"
 
 #: data/fr.handbrake.ghb.desktop.in:4
 msgid "Media Transcoder"

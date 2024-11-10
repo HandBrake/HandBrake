@@ -6,7 +6,7 @@
 # Translators:
 # JinHee Kim <sinnanjini@gmail.com>, 2019
 # nayoon <belloyv@gmail.com>, 2023
-# JungHee Lee <daemul72@gmail.com>, 2024
+# Junghee Lee <daemul72@gmail.com>, 2024
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-16 19:10+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: JungHee Lee <daemul72@gmail.com>, 2024\n"
+"Last-Translator: Junghee Lee <daemul72@gmail.com>, 2024\n"
 "Language-Team: Korean (https://app.transifex.com/HandBrakeProject/teams/92423/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2119,8 +2119,8 @@ msgstr "비트레이트: %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
-msgstr "<small>패스트루</small>"
+msgid "<small>Passthru</small>"
+msgstr ""
 
 #: src/audiohandler.c:790
 #, c-format
@@ -3435,8 +3435,8 @@ msgid "Burned Into Video"
 msgstr "비디오로 굽기"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
-msgstr "패스스루"
+msgid "Passthru"
+msgstr ""
 
 #: src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"

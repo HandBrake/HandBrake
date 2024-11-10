@@ -9,6 +9,9 @@
 
 #include "handbrake/handbrake.h"
 
+#if defined (__aarch64__) && !defined(__APPLE__)
+    #include <arm_neon.h>
+#endif
 struct hb_motion_metric_private_s
 {
     unsigned *gamma_lut;
@@ -49,6 +52,69 @@ static void build_gamma_lut(hb_motion_metric_private_t *pv)
 // Compute the sum of squared errors for a 16x16 block
 // Gamma adjusts pixel values so that less visible differences
 // count less.
+#if defined (__aarch64__) && !defined(__APPLE__)
+static
+float motion_metric_neon_8(hb_motion_metric_private_t *pv,
+                                     hb_buffer_t *a, hb_buffer_t *b)
+{
+    int bw = a->f.width / 16;
+    int bh = a->f.height / 16;
+    int stride_a = a->plane[0].stride / pv->bps;
+    int stride_b = b->plane[0].stride / pv->bps;
+    const uint8_t *pa = (const uint8_t *)a->plane[0].data;
+    const uint8_t *pb = (const uint8_t *)b->plane[0].data;
+    uint64_t sum = 0;
+    for (int y = 0; y < bh; y++)
+    {
+        for (int x = 0; x < bw; x++)
+        {
+            const uint8_t *ra = pa + y * 16 * stride_a + x * 16;
+            const uint8_t *rb = pb + y * 16 * stride_b + x * 16;
+
+            for (int yy = 0; yy < 16; yy++)
+            {
+                uint32_t arrga[16];
+                uint32_t arrgb[16];
+
+                for (int xx = 0; xx < 16; xx++)
+                {
+                    arrga[xx] = pv->gamma_lut[ra[xx]];
+                    arrgb[xx] = pv->gamma_lut[rb[xx]];
+                }
+
+                uint32x4_t vga0 = vld1q_u32(arrga);
+                uint32x4_t vga1 = vld1q_u32(arrga + 4);
+                uint32x4_t vga2 = vld1q_u32(arrga + 8);
+                uint32x4_t vga3 = vld1q_u32(arrga + 12);
+
+                uint32x4_t vgb0 = vld1q_u32(arrgb);
+                uint32x4_t vgb1 = vld1q_u32(arrgb + 4);
+                uint32x4_t vgb2 = vld1q_u32(arrgb + 8);
+                uint32x4_t vgb3 = vld1q_u32(arrgb + 12);
+                uint32x4_t vdf0 = vsubq_u32(vga0, vgb0);
+                uint32x4_t vdf1 = vsubq_u32(vga1, vgb1);
+                uint32x4_t vdf2 = vsubq_u32(vga2, vgb2);
+                uint32x4_t vdf3 = vsubq_u32(vga3, vgb3);
+
+                uint32x4_t vsq0 = vmulq_u32(vdf0, vdf0);
+                uint32x4_t vsq1 = vmulq_u32(vdf1, vdf1);
+                uint32x4_t vsq2 = vmulq_u32(vdf2, vdf2);
+                uint32x4_t vsq3 = vmulq_u32(vdf3, vdf3);
+
+                sum += vaddvq_u32(vsq0);
+                sum += vaddvq_u32(vsq1);
+                sum += vaddvq_u32(vsq2);
+                sum += vaddvq_u32(vsq3);
+
+                ra += stride_a;
+                rb += stride_b;
+            }
+        }
+    }
+    return (float)sum / (a->f.width * a->f.height);
+}
+#endif
+
 #define DEF_SSE_BLOCK16(nbits)                                                         \
 static inline unsigned sse_block16##_##nbits(unsigned *gamma_lut,                      \
                                    const uint##nbits##_t *a, const uint##nbits##_t *b, \
@@ -68,7 +134,10 @@ static inline unsigned sse_block16##_##nbits(unsigned *gamma_lut,               
     return sum;                                                                        \
 }                                                                                      \
 
+#if !(defined (__aarch64__) && !defined(__APPLE__))
 DEF_SSE_BLOCK16(8)
+#endif
+
 DEF_SSE_BLOCK16(16)
 
 // Sum of squared errors.  Computes and sums the SSEs for all
@@ -98,7 +167,10 @@ static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,         \
     return (float)sum / (a->f.width * a->f.height);                          \
 }                                                                            \
 
+#if !(defined (__aarch64__) && !defined(__APPLE__))
 DEF_MOTION_METRIC(8)
+#endif
+
 DEF_MOTION_METRIC(16)
 
 static int hb_motion_metric_init(hb_motion_metric_object_t *metric,
@@ -137,7 +209,11 @@ static float hb_motion_metric_work(hb_motion_metric_object_t *metric,
     switch (pv->depth)
     {
         case 8:
+#if defined (__aarch64__) && !defined(__APPLE__)
+            return motion_metric_neon_8(metric->private_data, buf_a, buf_b);
+#else
             return motion_metric_8(metric->private_data, buf_a, buf_b);
+#endif
         default:
             return motion_metric_16(metric->private_data, buf_a, buf_b);
     }

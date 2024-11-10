@@ -106,15 +106,6 @@
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
 "399.title" = "Utiliser libdvdnav (au lieu de libdvdread)";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped."; ObjectID = "463"; */
-"463.ibShadowedToolTip" = "Durée minimale du titre DVD ou Blu-ray en secondes. Les titres plus courts seront ignorés.";
-
-/* Class = "NSTextFieldCell"; title = "Ignore DVD and Blu-ray titles shorter than:"; ObjectID = "464"; */
-"464.title" = "Ignorer les titres DVD et Blu-ray plus court que :";
-
-/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
-"480.ibShadowedToolTip" = "Durée minimale du titre en secondes. Les titres plus courts seront ignorés.";
-
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
 
@@ -279,6 +270,9 @@
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "Y9B-ue-3sE"; */
 "Y9B-ue-3sE.title" = "Changer la casse pour la casse de titre";
+
+/* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "zOc-PA-WQr"; */
+"zOc-PA-WQr.title" = "secondes";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "zot-Bx-Ch3"; */
 "zot-Bx-Ch3.title" = "Parcourir…";

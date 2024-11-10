@@ -2,7 +2,7 @@
 " (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, 평균 %2$.2f fps, 예상시간 %3$@)";
 
 /* HBStateFormatter -> search time format
-   HBStateFormatter -> work time format */
+HBStateFormatter -> work time format */
 " (ETA %@)" = " (예상시간 %@)";
 
 /* Title short description -> audio format */
@@ -84,7 +84,7 @@
 "Burned In" = "영상에 입히기";
 
 /* Title -> chapter name
-   Title description */
+Title description */
 "Chapter %d" = "챕터 %d";
 
 /* HBJob -> chapters short description */
@@ -97,7 +97,7 @@
 "Chapters %d through %d" = "챕터 %1$d 부터 %2$d";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Colorspace" = "색공간";
 
 /* HBJob -> filters short description */
@@ -107,15 +107,15 @@
 "Constant Quality: %.2f %s" = "품질고정: %1$.2f %2$s";
 
 /* HBFilters -> custom display name
-   HBPicture -> summary */
+HBPicture -> summary */
 "Custom" = "사용자 지정";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Deblock" = "블록제거";
 
 /* HBFilters -> default display name
-   Subtitles description */
+Subtitles description */
 "Default" = "기본값";
 
 /* Video description */
@@ -131,7 +131,7 @@
 "Destination:" = "대상:";
 
 /* Dimensions description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Detelecine" = "텔레시네 제거";
 
 /* Dimensions description */
@@ -174,7 +174,7 @@
 "Gain: %.2f" = "볼륨: %.2f";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Grayscale" = "회색조";
 
 /* HBFilters -> filter display name */
@@ -229,13 +229,13 @@
 "none" = "없음";
 
 /* HBAudio -> Mixdown
-   HBAudio -> none track name
-   HBJob -> filters short description
-   HBSubtitles -> none track name */
+HBAudio -> none track name
+HBJob -> filters short description
+HBSubtitles -> none track name */
 "None" = "없음";
 
 /* HBFilters -> filter display name
-   HBFilters -> off display name */
+HBFilters -> off display name */
 "Off" = "끔";
 
 /* Video description */

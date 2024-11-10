@@ -263,12 +263,11 @@ Diğer tüm ayarları geçersiz kılar.</value>
     <value>Kare hızı ayarıyla belirlenen, en yüksek hızda değişken kare hızı çıkışını etkinleştirir.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Kodlama hızına karşı sıkıştırma verimliliğini dengelemek için kodlayıcı ayarlarını yapar.
+    <value>Kodlayıcı ayarlarını sıkıştırma verimliliği ile kodlama hızı arasında dengelemek için kodlayıcı ayarlarını yapar.
 
 Bu, varsayılan kodlayıcı ayarlarınızı belirler.
-Ezgiler, profiller, seviyeler ve gelişmiş seçenek dizgisi buna uygulanacaktır.
-Daha yavaş ayarlar daha iyi kalitede veya daha küçük dosyalar elde edeceğinden, bu seçeneği
-genellikle taşıyabileceğiniz en yavaş değere ayarlamanız gerekir.</value>
+İnce ayarlar, profiller, seviyeler ve gelişmiş seçenek dizgisi buna uygulanacaktır.
+Daha yavaş olduğundan genellikle bu seçeneği dayanabileceğiniz en yavaş değere ayarlamanız gerekir. Ayarların yapılması daha kaliteli veya daha küçük dosyalara yol açacaktır.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Belirtilen profile uygunluğu ayarlar ve sağlar.
@@ -395,7 +394,7 @@ EEDI2, Ayrıştırma için daha yavaş, daha kaliteli bir enterpolasyon algoritm
 Bob, algılanan çözünürlüğe hafif bir vuruş için hareketi daha iyi korumaya çalışır.</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
-    <value>Yatay eksende resmi döndürür (aynalar).</value>
+    <value>Yatay eksende resmi döndürür (aynalama).</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
     <value>Geçmeli Algılama, etkin olduğunda Ayrıştırma filtresinin yalnızca geçmeli video karelerini işlemesine izin verir.</value>
@@ -557,5 +556,8 @@ Bit hızı kaynaktan kaynağa değişecektir.</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>https://handbrake.fr/docs adresinde bulunan belgeler web sitesini başlatır</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Tire (-), Nokta (.) ve Virgül (,)</value>
   </data>
 </root>

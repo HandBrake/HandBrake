@@ -28,12 +28,17 @@ NSString * const HBAutoNamingISODateFormat       = @"HBAutoNamingISODateFormat";
 NSString * const HBDefaultMpegExtension          = @"DefaultMpegExtension";
 
 NSString * const HBCqSliderFractional            = @"HBx264CqSliderFractional";
-NSString * const HBUseDvdNav                     = @"UseDvdNav";
 NSString * const HBUseHardwareDecoder            = @"HBUseHardwareDecoder";
 NSString * const HBAlwaysUseHardwareDecoder      = @"HBAlwaysUseHardwareDecoder";
-NSString * const HBMinTitleScanSeconds           = @"MinTitleScanSeconds";
+
 NSString * const HBPreviewsNumber                = @"PreviewsNumber";
+
+NSString * const HBMinTitleScan                  = @"HBMinTitleScan";
+NSString * const HBMinTitleScanSeconds           = @"HBMinTitleScanSeconds";
+NSString * const HBMaxTitleScan                  = @"HBMaxTitleScan";
+NSString * const HBMaxTitleScanSeconds           = @"HBMaxTitleScanSeconds";
 NSString * const HBKeepDuplicateTitles           = @"HBKeepDuplicateTitles";
+NSString * const HBUseDvdNav                     = @"UseDvdNav";
 
 NSString * const HBLoggingLevel                  = @"LoggingLevel";
 NSString * const HBEncodeLogLocation             = @"EncodeLogLocation";
@@ -216,8 +221,11 @@ static BOOL _hardwareDecoderSupported = NO;
         HBLoggingLevel:                     @1,
         HBClearOldLogs:                     @YES,
         HBEncodeLogLocation:                @NO,
-        HBMinTitleScanSeconds:              @10,
         HBPreviewsNumber:                   @10,
+        HBMinTitleScan:                     @YES,
+        HBMinTitleScanSeconds:              @10,
+        HBMaxTitleScan:                     @NO,
+        HBMaxTitleScanSeconds:              @3600,
         HBCqSliderFractional:               @2,
         HBQueuePauseIfLowSpace:             @YES,
         HBQueueMinFreeSpace:                @"2",

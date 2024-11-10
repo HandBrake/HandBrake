@@ -8,7 +8,7 @@
 " (%.2f fps, avg %.2f fps)" = " (%1$.2f fps, avg %2$.2f fps)";
 
 /* HBStateFormatter -> search time format
-   HBStateFormatter -> work time format */
+HBStateFormatter -> work time format */
 " (ETA %@)" = " (ETA %@)";
 
 /* HBJob -> video short description framerate */
@@ -117,7 +117,7 @@
 "Bwdif" = "Bwdif";
 
 /* Title -> chapter name
-   Title description */
+Title description */
 "Chapter %d" = "Capítulo %d";
 
 /* HBJob -> chapters short description */
@@ -130,11 +130,11 @@
 "Chapters %d through %d" = "Capítulos %1$d até %2$d";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Chroma Smooth" = "Suavização do croma";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Colorspace" = "Espaço de cor";
 
 /* HBJob -> filters short description */
@@ -147,18 +147,18 @@
 "CRF" = "CRF";
 
 /* HBFilters -> custom display name
-   HBPicture -> summary */
+HBPicture -> summary */
 "Custom" = "Personalizado";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Deblock" = "Deblock";
 
 /* HBFilters -> filter display name */
 "Decomb" = "Decomb";
 
 /* HBFilters -> default display name
-   Subtitles description */
+Subtitles description */
 "Default" = "Padrão";
 
 /* Video description */
@@ -174,7 +174,7 @@
 "Destination:" = "Destino:";
 
 /* Dimensions description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Detelecine" = "Detelecina";
 
 /* Dimensions description */
@@ -220,7 +220,7 @@
 "Gain: %.2f" = "Ganho: %.2f";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Grayscale" = "Escala de cinzas";
 
 /* HBFilters -> filter display name */
@@ -296,13 +296,13 @@
 "none" = "nenhum";
 
 /* HBAudio -> Mixdown
-   HBAudio -> none track name
-   HBJob -> filters short description
-   HBSubtitles -> none track name */
+HBAudio -> none track name
+HBJob -> filters short description
+HBSubtitles -> none track name */
 "None" = "Nenhum";
 
 /* HBFilters -> filter display name
-   HBFilters -> off display name */
+HBFilters -> off display name */
 "Off" = "Desligado";
 
 /* Video description */
@@ -405,14 +405,14 @@
 "Title %d, %@, %@" = "Título %1$d, %2$@, %3$@";
 
 /* Audio track title description
-   Subtitles track title description */
+Subtitles track title description */
 "Title: %@" = "Título: %@";
 
 /* Video description */
 "Tune: " = "Ajuste:";
 
 /* HBJob -> video short description encoder name
-   Video description */
+Video description */
 "Unknown" = "Desconhecido";
 
 /* HBFilters -> filter display name */

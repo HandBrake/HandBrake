@@ -490,7 +490,7 @@ static void process_frame(hb_filter_private_t *pv)
         pv->ref[1]->s.combed == HB_COMB_NONE)
     {
         // Input buffer is not combed.  Just make a dup of it.
-        hb_buffer_t *buf = hb_buffer_dup(pv->ref[1]);
+        hb_buffer_t *buf = hb_buffer_shallow_dup(pv->ref[1]);
         hb_buffer_list_append(&pv->out_list, buf);
         pv->frames++;
         pv->unfiltered++;
@@ -571,7 +571,7 @@ static int hb_decomb_work(hb_filter_object_t *filter,
         if (pv->ref[2] != NULL)
         {
             // Duplicate last frame and process refs
-            store_ref(pv, hb_buffer_dup(pv->ref[2]));
+            store_ref(pv, hb_buffer_shallow_dup(pv->ref[2]));
             process_frame(pv);
         }
         hb_buffer_list_append(&pv->out_list, in);
@@ -584,7 +584,7 @@ static int hb_decomb_work(hb_filter_object_t *filter,
     if (!pv->ready)
     {
         // If yadif is not ready, store another ref and return HB_FILTER_DELAY
-        store_ref(pv, hb_buffer_dup(in));
+        store_ref(pv, hb_buffer_shallow_dup(in));
         store_ref(pv, in);
         pv->ready = 1;
         // Wait for next

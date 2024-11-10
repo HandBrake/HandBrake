@@ -53,7 +53,7 @@
 "4320p 8K Ultra HD" = "4320p 8K Ultra HD";
 
 /* Destination same as source alert -> message
-   File already exists alert -> message */
+File already exists alert -> message */
 "A file already exists at the selected destination." = "Вече съществува файл в избраната изходна директория.";
 
 /* Queue Window Action Toolbar Item */
@@ -84,7 +84,7 @@
 "Add Titles To Queue…" = "Добави заглавия на опашката...";
 
 /* Main Window Add Toolbar Item
-   Touch bar */
+Touch bar */
 "Add To Queue" = "Добави на опашката";
 
 /* Preferences Advanced Toolbar Item */
@@ -112,24 +112,25 @@
 "Average speed:" = "Средна скорост:";
 
 /* Copy Protection Alert -> second button
-   Delete preset alert -> second button
-   File already exists alert -> first button
-   File already exists in queue alert -> first button
-   Preview -> live preview alert alternate button
-   Touch bar */
+Delete preset alert -> second button
+File already exists alert -> first button
+File already exists in queue alert -> first button
+Preview -> live preview alert alternate button
+Touch bar */
 "Cancel" = "Отмяна";
 
 /* Touch bar */
 "Cancel Encoding" = "Отмени кодиране";
 
 /* Toolbar Open/Cancel Item
-   Touch bar */
+Touch bar */
 "Cancel Scan" = "Отмени сканиране";
 
 /* Toolbar Open/Cancel Item */
 "Cancel Scanning Source" = "Отмени сканиране на източник";
 
-/* Preferences -> Output Name Token */
+/* HBRange -> display name
+Preferences -> Output Name Token */
 "Chapters" = "Глави";
 
 /* Main Window -> Destination open panel */
@@ -169,7 +170,7 @@
 "Do Nothing" = "Не прави нищо";
 
 /* File already exists alert -> informative text
-   File already exists in queue alert -> informative text */
+File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "Искате ли да презапишете %@?";
 
 /* Quit Alert -> second button */
@@ -185,7 +186,7 @@
 "Encode complete" = "Кодирането е завършено";
 
 /* HBQueueItemView -> Encode state accessibility label
-   Queue done notification failed message */
+Queue done notification failed message */
 "Encode failed" = "Кодирането се провали";
 
 /* HBQueueItemView -> Encode state accessibility label */
@@ -212,6 +213,9 @@
 /* File already exists alert -> message */
 "File already exists." = "Файлът вече съществува.";
 
+/* HBRange -> display name */
+"Frames" = "Кадри";
+
 /* Preferences General Toolbar Item */
 "General" = "Основни";
 
@@ -234,7 +238,7 @@
 "Incorrect line count" = "Неправилен брой редове";
 
 /* Queue Edit Alert -> stop and edit first button
-   Queue Stop Alert -> stop and remove first button */
+Queue Stop Alert -> stop and remove first button */
 "Keep Encoding" = "Продължавай да кодираш";
 
 /* Touch bar */
@@ -268,7 +272,7 @@
 "None" = "Няма";
 
 /* Queue Done Alert -> shut down first button
-   Queue Done Alert -> sleep first button */
+Queue Done Alert -> sleep first button */
 "OK" = "ОК";
 
 /* File already exists alert -> informative text */
@@ -278,25 +282,25 @@
 "Open in external player" = "Отвори във външен плеър";
 
 /* Main Window Open Toolbar Item
-   Toolbar Open/Cancel Item
-   Touch bar */
+Toolbar Open/Cancel Item
+Touch bar */
 "Open Source" = "Отвори източник";
 
 /* File already exists alert -> second button
-   File already exists in queue alert -> second button */
+File already exists in queue alert -> second button */
 "Overwrite" = "Презапиши";
 
 /* Main Window Pause Toolbar Item
-   Toolbar Pause Item */
+Toolbar Pause Item */
 "Pause" = "Пауза";
 
 /* Queue -> pause/resume menu
-   Toolbar Pause Item
-   Touch bar */
+Toolbar Pause Item
+Touch bar */
 "Pause Encoding" = "Паузирай кодиране";
 
 /* Main Window Pause Toolbar Item
-   Touch bar */
+Touch bar */
 "Pause/Resume Encoding" = "Пауза/Продължи кодиране";
 
 /* Job statistics */
@@ -309,14 +313,14 @@
 "Play/Pause" = "Възпроизвеждане/Пауза";
 
 /* Add preset window -> name alert informative text
-   Rename preset window -> name alert informative text */
+Rename preset window -> name alert informative text */
 "Please enter a name." = "Моля, въведете име.";
 
 /* Copy Protection Alert -> informative text */
 "Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "HandBrake не поддържа премахването на защитите на копие. Ако желаете, може да използвате друг софтуер за тази задача. Това предупреждение ще се показва само веднъж при всяко изпълнение на HandBrake.";
 
 /* Queue Done Alert -> shut down second button
-   Queue Done Alert -> sleep second button */
+Queue Done Alert -> sleep second button */
 "Preferences…" = "Предпочитания...";
 
 /* Main Window Presets Toolbar Item */
@@ -326,7 +330,7 @@
 "preview" = "визуализация";
 
 /* Main Window Preview Toolbar Item
-   Preview -> window title */
+Preview -> window title */
 "Preview" = "Визуализация";
 
 /* Preview -> window title format */
@@ -334,9 +338,6 @@
 
 /* Preview -> accessibility label */
 "Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Изображение за визуализация, размери: %1$zux%2$zu, мащаб: %3$.0f%%";
-
-/* Touch bar */
-"Previews" = "Визуализации";
 
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "Заспиване на компютъра";
@@ -348,8 +349,8 @@
 "Quality/Bitrate" = "Качество/Побитова скорост";
 
 /* Main Window Presets Toolbar Item
-   Preferences Queue Toolbar Item
-   Queue window title */
+Preferences Queue Toolbar Item
+Queue window title */
 "Queue" = "Опашка";
 
 /* Queue window title */
@@ -395,7 +396,7 @@
 "Resume" = "Продължи";
 
 /* Queue -> pause/resume men
-   Toolbar Pause Item */
+Toolbar Pause Item */
 "Resume Encoding" = "Продължи кодиране";
 
 /* Job statistics */
@@ -405,8 +406,11 @@
 "Save" = "Запази";
 
 /* Picture HUD -> scale button
-   Touch bar */
+Touch bar */
 "Scale To Screen" = "Мащабиране до екран";
+
+/* HBRange -> display name */
+"Seconds" = "Секунди";
 
 /* Preferences -> send to app destination open panel */
 "Select the desired external application" = "Изберете желаното външно приложение";
@@ -418,14 +422,14 @@
 "Show" = "Покажи";
 
 /* Main Window Activity Toolbar Item
-   Touch bar */
+Touch bar */
 "Show Activity Window" = "Покажи прозорец на дейностите";
 
 /* Main Window Presets Toolbar Item */
 "Show Presets List" = "Покажи списък с шаблони";
 
 /* Main Window Preview Toolbar Item
-   Touch bar */
+Touch bar */
 "Show Preview Window" = "Покажи прозорец на визуализация";
 
 /* Main Window Presets Toolbar Item */
@@ -447,26 +451,26 @@
 "Source" = "Източник";
 
 /* Main Window Start Toolbar Item
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Start" = "Начало";
 
 /* Menu Start/Stop Item
-   Queue -> start/stop menu
-   Toolbar Start/Stop Item */
+Queue -> start/stop menu
+Toolbar Start/Stop Item */
 "Start Encoding" = "Започни кодиране";
 
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Начало на опашката";
 
 /* Main Window Start Toolbar Item
-   Touch bar */
+Touch bar */
 "Start/Stop Encoding" = "Стартиране/Спиране на кодирането";
 
 /* Job statistics */
 "Started at:" = "Започнало в:";
 
 /* Queue -> Stop action
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Stop" = "Спиране";
 
 /* Queue -> Stop action */
@@ -479,7 +483,7 @@
 "Stop All" = "Спиране на всички";
 
 /* Queue -> start/stop menu
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Stop Encoding" = "Спиране на кодиране";
 
 /* Queue Stop Alert -> stop and remove second button */
@@ -507,7 +511,7 @@
 "The CSV file is not a valid chapters CSV file." = "CSV файлът не е валиден CSV файл.";
 
 /* Add preset window -> name alert message
-   Rename preset window -> name alert message */
+Rename preset window -> name alert message */
 "The preset name cannot be empty." = "Името на шаблона не може да е празно.";
 
 /* File already exists in queue alert -> message */
@@ -562,6 +566,6 @@
 "Your encode %@ is done!" = "Вашето кодиране %@ е готово!";
 
 /* Queue Edit Alert -> stop and edit informative text
-   Queue Stop Alert -> stop and remove informative text */
+Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "Филмът ви ще бъде загубен, ако не продължите да кодирате.";
 

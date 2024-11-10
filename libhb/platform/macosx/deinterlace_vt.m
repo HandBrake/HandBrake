@@ -11,6 +11,7 @@
 #include "handbrake/decomb.h"
 #include "cv_utils.h"
 #include "metal_utils.h"
+#include "vt_common.h"
 
 extern char hb_yadif_vt_metallib_data[];
 extern unsigned int hb_yadif_vt_metallib_len;
@@ -325,7 +326,7 @@ static void process_frame(hb_filter_private_t *pv)
          pv->ref[CURR]->s.combed == HB_COMB_NONE)
     {
         // Input buffer is not combed, just make a dup of it
-        hb_buffer_t *buf = hb_buffer_dup(pv->ref[CURR]);
+        hb_buffer_t *buf = hb_vt_buffer_dup(pv->ref[CURR]);
         hb_buffer_list_append(&pv->out_list, buf);
     }
     else

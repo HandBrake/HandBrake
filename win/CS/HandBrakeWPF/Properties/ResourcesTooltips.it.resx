@@ -553,4 +553,7 @@ Il Bitrate cambierà da sorgente a sorgente.</value>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>Apre il sito web della documentazione su https://handbrake.fr/docs</value>
   </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
 </root>

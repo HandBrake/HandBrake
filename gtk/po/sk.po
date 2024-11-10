@@ -11,6 +11,7 @@ msgstr ""
 "Project-Id-Version: ghb 20240416-git-d9791800c\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-16 19:10+0100\n"
+"PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Language-Team: Slovak (https://app.transifex.com/HandBrakeProject/teams/92423/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1962,7 +1963,7 @@ msgstr "Bitový tok: %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
+msgid "<small>Passthru</small>"
 msgstr ""
 
 #: src/audiohandler.c:790
@@ -3250,7 +3251,7 @@ msgid "Burned Into Video"
 msgstr ""
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
+msgid "Passthru"
 msgstr ""
 
 #: src/subtitlehandler.c:116

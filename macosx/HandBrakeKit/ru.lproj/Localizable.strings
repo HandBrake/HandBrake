@@ -5,7 +5,7 @@
 " (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f к/с, сред. %2$.2f к/с, ост. %3$@)";
 
 /* HBStateFormatter -> search time format
-   HBStateFormatter -> work time format */
+HBStateFormatter -> work time format */
 " (ETA %@)" = " (ост. %@)";
 
 /* HBJob -> video short description framerate */
@@ -102,7 +102,7 @@
 "Burned In" = "Вшитые";
 
 /* Title -> chapter name
-   Title description */
+Title description */
 "Chapter %d" = "Глава %d";
 
 /* HBJob -> chapters short description */
@@ -124,18 +124,18 @@
 "CRF" = "CRF";
 
 /* HBFilters -> custom display name
-   HBPicture -> summary */
+HBPicture -> summary */
 "Custom" = "Пользовательское";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Deblock" = "Деблокинг";
 
 /* HBFilters -> filter display name */
 "Decomb" = "Удаление гребенки";
 
 /* HBFilters -> default display name
-   Subtitles description */
+Subtitles description */
 "Default" = "По умолчанию";
 
 /* Video description */
@@ -148,7 +148,7 @@
 "Destination:" = "Путь назначения:";
 
 /* Dimensions description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Detelecine" = "Удаление гребенки";
 
 /* Dimensions description */
@@ -194,7 +194,7 @@
 "Gain: %.2f" = "Усиление:%.2f";
 
 /* Filters description
-   HBJob -> filters short description */
+HBJob -> filters short description */
 "Grayscale" = "Оттенки серого";
 
 /* HBFilters -> filter display name */
@@ -261,13 +261,13 @@
 "none" = "нет";
 
 /* HBAudio -> Mixdown
-   HBAudio -> none track name
-   HBJob -> filters short description
-   HBSubtitles -> none track name */
+HBAudio -> none track name
+HBJob -> filters short description
+HBSubtitles -> none track name */
 "None" = "Ничего";
 
 /* HBFilters -> filter display name
-   HBFilters -> off display name */
+HBFilters -> off display name */
 "Off" = "Выкл.";
 
 /* Video description */
@@ -373,7 +373,7 @@
 "Tune: " = "Настройка:";
 
 /* HBJob -> video short description encoder name
-   Video description */
+Video description */
 "Unknown" = "Неизвестно";
 
 /* HBFilters -> filter display name */

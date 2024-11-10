@@ -1,0 +1,65 @@
+name: 'Close stale issues and PRs'
+on:
+  schedule:
+    - cron: '*/720 * * * *'
+
+  workflow_dispatch:
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v9
+        with:
+          debug-only: false # Set to true to log only.
+          operations-per-run: 200
+          days-before-issue-stale: 30
+          days-before-pr-stale: 90
+          days-before-issue-close: 5
+          days-before-pr-close: 10
+          exempt-issue-labels: 'Enhancement,Bug,Upstream Issue,Upstream Enhancement,LinuxUI,MacUI,WinUI'
+          exempt-pr-labels: 'Enhancement,Bug,Upstream Issue,Upstream Enhancement,LinuxUI,MacUI,WinUI'
+          exempt-assignees: galad87,sr55,jstebbins,bradleysepos
+          stale-issue-message: |- 
+           Hello, 
+                       
+            >[!WARNING]
+            > This issue appears to be inactive and will be automatically closed within 5 days if no further activity is detected. 
+            > If you wish this issue to remain open, please request the stale label to be removed and an appropriate label assigned. 
+
+            >[!TIP]
+            > If this ticket is awaiting feedback, please make sure the requested information is provided. This may be a sample file, log files etc.
+
+           Thank You,
+           The HandBrake Bot
+          stale-pr-message:  |- 
+           Hello, 
+                       
+            >[!WARNING]
+            > This pull request appears to be inactive and will be automatically closed within 10 days if no further activity is detected. 
+            > If you wish this issue to remain open, please request the stale label to be removed and an appropriate label assigned. 
+
+           Thank You,
+           The HandBrake Bot
+          close-issue-message:  |- 
+           Hello, 
+                       
+            >[!NOTE]
+            > This ticket has now been closed due to inactivity.
+            > If you believe this is in error, please leave a comment and we can re-open it. 
+
+           Thank You,
+           The HandBrake Bot
+          close-pr-message:  |- 
+           Hello, 
+                       
+            >[!NOTE]
+            > This pull request has now been closed due to inactivity.
+            > If you believe this is in error, please leave a comment and we can re-open it. 
+
+           Thank You,
+           The HandBrake Bot
+

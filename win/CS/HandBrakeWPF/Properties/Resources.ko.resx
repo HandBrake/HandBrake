@@ -1121,14 +1121,8 @@ Encoding 1 Job</value>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>메타데이터</value>
   </data>
-  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Nvidia NVENC 인코더 사용 가능</value>
-  </data>
-  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Intel QuickSync 인코더 사용 가능</value>
-  </data>
-  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>AMD VCN 인코더 사용 허용하기</value>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Allow use of DirectX Decoding</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>입력한 파일 형식에 잘못된 문자가 포함되어 있습니다. 제거되었습니다.</value>
@@ -1225,6 +1219,9 @@ Encoding 1 Job</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>최소 DVD 와 Blu-ray 제목 초 단위 지속 시간. 짧은 제목 건너뛰기:</value>
+  </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Keep duplicate titles on Blu-ray sources (Requires Restart)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4 파일 확장자:</value>
@@ -1915,8 +1912,8 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Deblock  조정</value>
   </data>
-  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>인코더 선택은 '비디오' 탭에서 이용 가능합니다.</value>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake가 여러 개의 미완료 대기열 파일을 발견하였습니다. 이는 HandBrake가 실행 중인 여러 인스턴스에서 발생하였습니다. 모든 미완료 작업들을 복구하시겠습니까?</value>
@@ -2322,7 +2319,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>디스크 공간 부족 경고가 표시하는 수준:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>주의: 이 값은 동시 작업의 상한입니다. 인코딩 중 실제 동시 작업 수를 줄이는 하드웨어 제한이 적용될 수 있습니다. 설정은 다음 대기열 일괄 처리 또는 앱 재시작 시에만 적용됩니다.</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(사용할 수 없음)</value>
@@ -2844,5 +2841,80 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
     <value>Queue Start Time:</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Shutting Down Encode ...</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Allow Upscaling</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimal Size</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Available on this system.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>Not available on this system.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Please wait ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Open Log Window</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>사용자 설정</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>없음</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>자동</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>끄기</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>사용자 설정</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>기본값</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>끄기</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>끄기</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>끄기</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>기본값</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>사용자 설정</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>끄기</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
   </data>
 </root>

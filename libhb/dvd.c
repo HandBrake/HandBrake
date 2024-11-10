@@ -21,7 +21,7 @@ static hb_dvd_t    * hb_dvdread_init( hb_handle_t * h, const char * path );
 static void          hb_dvdread_close( hb_dvd_t ** _d );
 static char        * hb_dvdread_name( char * path );
 static int           hb_dvdread_title_count( hb_dvd_t * d );
-static hb_title_t  * hb_dvdread_title_scan( hb_dvd_t * d, int t, uint64_t min_duration );
+static hb_title_t  * hb_dvdread_title_scan( hb_dvd_t * d, int t, uint64_t min_duration, uint64_t max_duration );
 static int           hb_dvdread_start( hb_dvd_t * d, hb_title_t *title, int chapter );
 static void          hb_dvdread_stop( hb_dvd_t * d );
 static int           hb_dvdread_seek( hb_dvd_t * d, float f );
@@ -295,7 +295,7 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
 /***********************************************************************
  * hb_dvdread_title_scan
  **********************************************************************/
-static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_duration )
+static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_duration, uint64_t max_duration)
 {
 
     hb_dvdread_t *d = &(e->dvdread);
@@ -438,6 +438,12 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
     if( title->duration < min_duration )
     {
         hb_log( "scan: ignoring title (too short)" );
+        goto fail;
+    }
+    
+    if( max_duration > 0 && title->duration > max_duration )
+    {
+        hb_log( "scan: ignoring title (too long)" );
         goto fail;
     }
 
@@ -1393,9 +1399,9 @@ int hb_dvd_title_count( hb_dvd_t * d )
     return dvd_methods->title_count(d);
 }
 
-hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t, uint64_t min_duration )
+hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t, uint64_t min_duration, uint64_t max_duration )
 {
-    return dvd_methods->title_scan(d, t, min_duration);
+    return dvd_methods->title_scan(d, t, min_duration, max_duration);
 }
 
 int hb_dvd_start( hb_dvd_t * d, hb_title_t *title, int chapter )

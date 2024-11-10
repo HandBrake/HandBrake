@@ -553,4 +553,7 @@ HB_EXIT_CODE
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>Открывает веб-сайт документации по адресу https://handbrake.fr/docs</value>
   </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
 </root>

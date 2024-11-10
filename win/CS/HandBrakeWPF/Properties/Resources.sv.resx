@@ -1,0 +1,2921 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Video_EncoderExtraArgs" xml:space="preserve">
+    <value>Fullständig lista över enkodningsparametrar: 
+{0}</value>
+  </data>
+  <data name="Video_x264FastDecode" xml:space="preserve">
+    <value>Minska CPU-användning för dekodare.
+
+Ställ in denna om din enhet kämpar med att spela upp utdata. (t.ex. tappar bildrutor)</value>
+  </data>
+  <data name="Video_LosslessWarning" xml:space="preserve">
+    <value>Varning: RF 0 är förlustfri!</value>
+  </data>
+  <data name="Video_LosslessWarningTooltip" xml:space="preserve">
+    <value>Ett värde på 0 betyder förlustfri och kommer att resultera i en filstorlek som är större än den ursprungliga källan, oavsett om källan också var förlustfri.
+
+Skalan för x264 och x265 är logaritmisk och lägre värden motsvarar en högre kvalitet.
+
+Därför resulterar små ökningar i värdet en progressivt större ökning i den resulterande filstorleken.</value>
+  </data>
+  <data name="AddPreset_PictureSizeMode" xml:space="preserve">
+    <value>Du kan valfritt lagra bildinställningarna med detta förval. Det finns tre lägen:
+
+Ingen: Bildinställningar lagras inte i förvalet. När en källa läses in så kommer de vara som de är inom gränsen för källans upplösning. Detta påverkar även Anamorfisk, modulus, beskäring etc.
+
+Anpassad: Du kan valfritt ange en Maximal bredd och Höjd. När detta görs kommer en enkodning att vara mindre eller samma som dessa värden. Behåll bildförhållande kommer automatiskt aktiveras.
+
+Maximal källa: Enkoda alltid med källans upplösning där möjligt.</value>
+  </data>
+  <data name="About_GPL" xml:space="preserve">
+    <value>Detta program är fri programvara; du kan dela ut det och/eller 
+ändra den under villkoren i GNU General Public License enligt 
+Free Software Foundation; antingen version 2 Licensen, eller 
+(efter eget val) någon senare version. 
+
+Detta program distribueras i hopp om att det kommer att vara 
+användbart, men utan någon garanti, utan ens den underförstådda 
+garantin för HANDLIGHET eller lämplighet för ett särskilt ändamål. 
+Se även GNU General Public License för mer information. 
+
+Du borde ha fått en kopia av GNU General Public License 
+tillsammans med detta program; om inte, skriv till 
+Free Software Foundation, Inc., 51 Franklin Street, fFifth Floor, 
+Boston, MA 02110-1301, USA.</value>
+  </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>VARNING: Du har inte automatiska filnamnsändringar aktiverat. Aktivera detta i inställningarna.</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>VARNING: Du har inte konfigurerat automatiska spårval för ljud och undertexter. Du kan ställa in standardbeteendet för spårval i inställningarna.</value>
+  </data>
+  <data name="Presets_ResetComplete" xml:space="preserve">
+    <value>De inbyggda förvalen har nollställts.</value>
+  </data>
+  <data name="Presets_ResetHeader" xml:space="preserve">
+    <value>Nollställning färdig</value>
+  </data>
+  <data name="Video_HigherQuality" xml:space="preserve">
+    <value>Högre kvalitet |</value>
+  </data>
+  <data name="Video_LowQuality" xml:space="preserve">
+    <value>| Lägre kvalitet</value>
+  </data>
+  <data name="Video_PlaceboQuality" xml:space="preserve">
+    <value>Placebo-kvalitet |</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Fel</value>
+  </data>
+  <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
+    <value>Du måste aktivera automatiska filnamnsändringar OCH ange en standardsökväg i inställningarna innan du kan lägga till i kön.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Varning</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Är du säker?</value>
+  </data>
+  <data name="HandBrake_Title" xml:space="preserve">
+    <value>HandBrake</value>
+  </data>
+  <data name="Main_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake enkodar redan.</value>
+  </data>
+  <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
+    <value>Det finns jobb i kön med samma målsökväg. Välj en annan sökväg för detta jobb.
+
+Du kanske vill konfigurera alternativet för automatiska filnamn i "Verktygsmenyn -&gt; Inställningar -&gt; Utdatafiler"
+</value>
+  </data>
+  <data name="Main_JobsPending_addon" xml:space="preserve">
+    <value>Jobb som väntar {0}</value>
+  </data>
+  <data name="Main_NewDefaultPreset" xml:space="preserve">
+    <value>Ny standardgrupp för förval: {0}</value>
+  </data>
+  <data name="Main_NewUpdate" xml:space="preserve">
+    <value>En ny uppdatering finns tillgänglig. Gå till Verktygsmenyn &gt; Inställningar för att installera</value>
+  </data>
+  <data name="Main_NoPresetSelected" xml:space="preserve">
+    <value>Inget förval valt.</value>
+  </data>
+  <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
+    <value>Du kan inte ändra inbyggda förval. Välj ett av dina egna förval.</value>
+  </data>
+  <data name="Main_PleaseSelectFolder" xml:space="preserve">
+    <value>Välj en mapp.</value>
+  </data>
+  <data name="Main_PreparingToEncode" xml:space="preserve">
+    <value>Förbereder att börja enkoda ...</value>
+  </data>
+  <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
+    <value>Du kan inte importera ett förval med samma namn som ett inbyggt förval.</value>
+  </data>
+  <data name="Main_PresetOverwriteWarning" xml:space="preserve">
+    <value>Förvalet "{0}" finns redan. Vill du skriva över det?</value>
+  </data>
+  <data name="Main_Presets" xml:space="preserve">
+    <value>Förval</value>
+  </data>
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
+    <value>Är du säker på att du vill uppdatera valt förval?</value>
+  </data>
+  <data name="Main_PresetUpdated" xml:space="preserve">
+    <value>Förvalet har nu uppdaterats med dina aktuella inställningar.</value>
+  </data>
+  <data name="Main_PresetUpdateNotification" xml:space="preserve">
+    <value>HandBrake har märkt att dina inbyggda förval är utdaterade... Dessa förval kommer nu att uppdateras.
+Dina anpassade förval har inte uppdaterats så du kanske måste återskapa dessa genom att ta bort och lägg till dem igen.
+Den tidigare filen user_presets.xml har säkerhetskopierats.</value>
+  </data>
+  <data name="Main_QueueFinished" xml:space="preserve">
+    <value>Kön är färdig</value>
+  </data>
+  <data name="Main_ScanCancelled" xml:space="preserve">
+    <value>Sökningen avbröts.</value>
+  </data>
+  <data name="Main_ScanCompleted" xml:space="preserve">
+    <value>Sökningen färdig</value>
+  </data>
+  <data name="Main_ScanFailed_NoReason" xml:space="preserve">
+    <value>Sökningen misslyckades:</value>
+  </data>
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
+    <value>Inläsning misslyckades... titta i aktivitetsloggen för mer information.</value>
+  </data>
+  <data name="Main_ScanningPleaseWait" xml:space="preserve">
+    <value>Söker igenom källan, vänta...</value>
+  </data>
+  <data name="Main_ScanningTitleXOfY" xml:space="preserve">
+    <value>Söker igenom titel {0} av {1} ({2}%)</value>
+  </data>
+  <data name="Main_ScanSource" xml:space="preserve">
+    <value>Du måste först läsa in en källa och ställa in ditt jobb innan en enkodning kan startas. Klicka på "Källa"-knappen i verktygsraden för att fortsätta.</value>
+  </data>
+  <data name="Main_SelectPreset" xml:space="preserve">
+    <value>Försäkra dig om att du har valt ett av dina egna förval. Observera att du inte kan exportera inbyggda förval.</value>
+  </data>
+  <data name="Main_SelectPresetForUpdate" xml:space="preserve">
+    <value>Välj ett förval att uppdatera.</value>
+  </data>
+  <data name="Main_SelectSource" xml:space="preserve">
+    <value>Välj 'Källa' för att fortsätta</value>
+  </data>
+  <data name="Main_XEncodesPending" xml:space="preserve">
+    <value>{0} jobb väntar</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Observera</value>
+  </data>
+  <data name="Overwrite" xml:space="preserve">
+    <value>Skriv över</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Fråga</value>
+  </data>
+  <data name="State_Ready" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Uppdaterad</value>
+  </data>
+  <data name="Preset_OldVersion_Header" xml:space="preserve">
+    <value>Förvalsversion</value>
+  </data>
+  <data name="Preset_OldVersion_Message" xml:space="preserve">
+    <value>Förvalet som du försöker att importera är från en annan version av HandBrake.
+Det kanske inte är möjligt att importera alla värden från detta förval.
+
+Vill du fortsätta?</value>
+  </data>
+  <data name="Preset_UnableToImport_Header" xml:space="preserve">
+    <value>Kunde inte importera förval!</value>
+  </data>
+  <data name="Preset_UnableToImport_Message" xml:space="preserve">
+    <value>Kunde inte importera förvalen då de verkar vara skadade eller från en äldre version av HandBrake.</value>
+  </data>
+  <data name="Main_SetDestination" xml:space="preserve">
+    <value>Du måste första ställa in målsökvägen för utdatafilen innan du lägger till i kön.</value>
+  </data>
+  <data name="Main_InvalidDestination" xml:space="preserve">
+    <value>Den angivna målsökvägen innehåller felaktiga tecken och kommer inte att uppdateras.</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Förhandsgranska {0}</value>
+  </data>
+  <data name="Preview_Scaled" xml:space="preserve">
+    <value>Förhandsvisning (skalad)</value>
+  </data>
+  <data name="PictureSettings_OutputResolution" xml:space="preserve">
+    <value>Utdata: {0}</value>
+  </data>
+  <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
+    <value>Du kan inte enkoda till en fil med samma sökväg och filnamn som källfilen. Uppdatera målfilnamnet så att det inte matchar källfilen.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
+    <value>Ditt system förhindrade HandBrake från att starta en webbläsare.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
+    <value>Du kan fortfarande komma åt hjälpsidorna genom att besöka webbsidan direkt på: https://handbrake.fr</value>
+  </data>
+  <data name="Main_PresetImportFailed" xml:space="preserve">
+    <value>Kunde inte importera vald förval.</value>
+  </data>
+  <data name="Main_PresetImportFailedSolution" xml:space="preserve">
+    <value>Detta förval kan vara skadat eller från en äldre version av HandBrake som inte stöds.
+Förval från äldre versioner måste återskapas i den aktuella versionen.</value>
+  </data>
+  <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
+    <value>Ytterligare avancerade argument som kan skickas till videoenkodaren.</value>
+  </data>
+  <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
+    <value>Ingen - Endast spår där containern inte har stöd för formatet kommer att brännas in.
+Utländskt ljudspår - Det utländska ljudspåret kommer att brännas in om möjligt.
+Första spår - Det första spåret kommer att brännas in.
+Utländskt ljud föredras, annars första - Om det utländska ljudspåret finns så kommer det brännas in, annars kommer första spåret att väljas.</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>Kompatibilitet för WebM-undertexter</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>WebM i HandBrake har endast stöd för inbrända undertexter.
+
+Du bör ändra dina inställningar för undertexter.
+
+Om du vill fortsätta så kommer dina icke-inbrända undertexter att försvinna.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFound" xml:space="preserve">
+    <value>Ingen giltig källa eller titlar hittades.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
+    <value>HandBrake kommer inte kunna enkoda den valda källan eftersom den inte hittade en giltig källa med titlar att enkoda. Detta kan bero på en av följande orsaker:
+
+- Längden för varje källfil är mindre än tröskelvärdet för alternativet "Minsta titellängd" i 'Inställningar -&gt; Avancerat'.
+- Källfilen är inte en giltig videofil eller är i ett format som HandBrake inte har stöd för.
+- Du kanske inte har läsrättigheter till filen eller ett annan program kanske har låst filen.
+- Källan kan vara kopieringsskyddad eller inkludera DRM. Observera att HandBrake inte har stöd för att ta bort kopieringsskydd.
+
+Aktivitetsloggen kan innehålla ytterligare information.</value>
+  </data>
+  <data name="Main_QueueLabel" xml:space="preserve">
+    <value>Kö{0}</value>
+  </data>
+  <data name="Main_Start" xml:space="preserve">
+    <value>Starta enkodning</value>
+  </data>
+  <data name="Main_StartQueue" xml:space="preserve">
+    <value>Starta kö</value>
+  </data>
+  <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
+    <value>Du kan inte ta bort standardförvalet. Ställ in ett annat förval som standard först.</value>
+  </data>
+  <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort förvalet:</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Enkodar: Pass {0} av {1},  {2:00.00}%, Bilder/s: {3:000.0},  Genomsnitt bilder/s: {4:000.0},  Återstående tid: {5},  Förlupen: {6} {7}</value>
+  </data>
+  <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
+    <value>Ett förval måste ha ett namn. Fyll i fältet för Förvalsnamn.</value>
+  </data>
+  <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
+    <value>Ett förval med detta namn finns redan. Vill du skriva över det?</value>
+  </data>
+  <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
+    <value>Du måste först läsa in en källa för att använda alternativet 'Maximal källa'.</value>
+  </data>
+  <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
+    <value>Fälten för Anpassad bredd eller höjd måste anges i inställningen 'Anpassad'.</value>
+  </data>
+  <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
+    <value>Kunde inte lägga till förval</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Okänt fel</value>
+  </data>
+  <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
+    <value>Ljudstandarder</value>
+  </data>
+  <data name="AudioViewModel_AudioTracks" xml:space="preserve">
+    <value>Ljudspår</value>
+  </data>
+  <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Valbeteende ...</value>
+  </data>
+  <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
+    <value>Växla tillbaka till spår</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
+    <value>Kunde inte spara fil för kapitelmarkörer!</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
+    <value>Namn för kapitelmarkörer kommer INTE att sparas i din enkodning.</value>
+  </data>
+  <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
+    <value>Följande åtgärd '{0}' kommer att ske om {1} sekunder.</value>
+  </data>
+  <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
+    <value>Prova att starta om HandBrake om problemet kvarstår.</value>
+  </data>
+  <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
+    <value>Det finns ingen ytterligare information om detta fel.</value>
+  </data>
+  <data name="ErrorViewModel_UnknownError" xml:space="preserve">
+    <value>Ett okänt fel har inträffat.</value>
+  </data>
+  <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
+    <value>En ny uppdatering finns tillgänglig! Besök webbsidan för mer information.</value>
+  </data>
+  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
+    <value>Ditt system har stöd för 64-bitarsversionen av HandBrake! Detta erbjuder förbättringar i prestanda och stabilitet över denna 32-bitarsversion.
+ Besök webbsidan för mer information.</value>
+  </data>
+  <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
+    <value>Det finns inga nya uppdateringar just nu.</value>
+  </data>
+  <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
+    <value>Uppdatering hämtad</value>
+  </data>
+  <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
+    <value>Uppdateringstjänsten är inte tillgänglig. Du kan prova att hämta uppdateringen från https://handbrake.fr</value>
+  </data>
+  <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
+    <value>Uppdateringen misslyckades. Du kan prova att hämta uppdateringen från https://handbrake.fr</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Lagringsstorlek: {0}x{1}</value>
+  </data>
+  <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
+    <value>Lägg till i kö</value>
+  </data>
+  <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
+    <value>Inga enkodningar väntar</value>
+  </data>
+  <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
+    <value>Det finns inga jobb som ska enkodas</value>
+  </data>
+  <data name="QueueViewModel_Queue" xml:space="preserve">
+    <value>Kö</value>
+  </data>
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
+    <value>Är du säker på att du vill tömma kön?</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Bekräfta</value>
+  </data>
+  <data name="QueueViewModel_JobsPending" xml:space="preserve">
+    <value>{0} jobb väntar</value>
+  </data>
+  <data name="QueueViewModel_QueuePending" xml:space="preserve">
+    <value>Kö pausad</value>
+  </data>
+  <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort de valda jobben?
+Inga enkodade filer kommer att tas bort med denna åtgärd.</value>
+  </data>
+  <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
+    <value>Denna enkodning pågår för närvarande. Om du tar bort den så kommer enkodningen att stoppas. Är du säker på att du vill fortsätta?</value>
+  </data>
+  <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
+    <value>Det finns inga väntande jobb.</value>
+  </data>
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
+    <value>Är du säker på att du vill redigera detta jobb? Det kommer att tas bort från kön och skickas till huvudfönstret.</value>
+  </data>
+  <data name="QueueViewModel_QueueReady" xml:space="preserve">
+    <value>Kön är redo</value>
+  </data>
+  <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
+    <value>Kön körs inte</value>
+  </data>
+  <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
+    <value>Kön är färdig</value>
+  </data>
+  <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
+    <value>Sista köjobbet är färdigt</value>
+  </data>
+  <data name="QueueViewModel_QueueStarted" xml:space="preserve">
+    <value>Kö startad</value>
+  </data>
+  <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
+    <value>Enkodning: Pass {0} av {1},  {2:00.00}%, Bilder/s: {3:000.0},  Genomsnitt bilder/s: {4:000.0},  Återstående tid: {5},  Förlupen: {6:d\:hh\:mm\:ss}</value>
+  </data>
+  <data name="ShellViewModel_CanClose" xml:space="preserve">
+    <value>En enkodning körs för närvarande. Om du avslutar HandBrake så stoppas denna enkodning.
+Är du säker på att du vill avsluta HandBrake?</value>
+  </data>
+  <data name="StaticPreviewViewModel_Title" xml:space="preserve">
+    <value>Bildförhandsvisning</value>
+  </data>
+  <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
+    <value>Kunde inte ta bort föregående förhandsvisningsfil. Du kan fortfarande ha en förhandsvisning öppen i din mediaspelare. Stäng den först.</value>
+  </data>
+  <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
+    <value>Du måste för läsa in en källa och ställa in din enkodning innan en förhandsvisning kan skapas.</value>
+  </data>
+  <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
+    <value>Kunde inte hitta förhandsvisningsfilen. Antingen har filen tagits bort eller att enkodningen misslyckades. Titta i aktivitetsloggen för mer information.</value>
+  </data>
+  <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
+    <value>Handbrake enkodar redan en video! Endast en fil kan enkodas åt gången.</value>
+  </data>
+  <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
+    <value>Undertextstandarder</value>
+  </data>
+  <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
+    <value>Undertextspår</value>
+  </data>
+  <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
+    <value>Växla tillbaka till spår</value>
+  </data>
+  <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Valbeteende ...</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>Arkiverad fil:</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>Kunde inte läsa in förval.</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>HandBrake kunde inte läsa in din förvalsfil. Den kan ha kommit från en äldre version av HandBrake som inte stöds eller kan vara skadad.
+
+Din gamla förvalsfil arkiverades till:</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value> med {0} fel upptäcktes. Titta i Kö-fönstret för mer information.</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>Lågt diskutrymme</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>Varning, du håller på att få lågt ledigt diskutrymme. HandBrake kommer inte kunna färdigställa denna enkodning om du får slut på diskutrymme.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>Rad {0} är ogiltig. Ingenting kommer att importeras.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>Kunde inte importera kapitelfil</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>Alla rader i kapitelfilen måste ha minst 2 kolumner med data</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>Första kolumnen i kapitelfilen får endast innehålla ett heltalsvärde högre än noll (0).</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>Kapitelfiler av typen '{0}' stöds för närvarande inte.</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>Kapitelfilens typ stöds inte</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>Ogiltig kapitelinformation för detta källmedia</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>Antalet kapitel på ditt källmedia och antalet
+kapitel i inmatningsfilen stämmer inte överens ({0} vs {1}).
+
+Vill du fortfarande importera kapitelnamnen?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>Antalet kapitel på ditt källmedia och antalet
+kapitel i inmatningsfilen stämmer inte överens ({0} vs {1}).
+
+Vill du fortfarande importera kapitelnamnen?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>Kapitelantal matchar inte mellan källa och inmatningsfil</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>Den rapporterade längden för kapitlen för detta källmedia
+och längden för kapitlen i indatafilen skiljer sig väldigt mycket.
+
+Det är mycket sannolikt så att denna kapitelfil skapades från ett annat källmedia.
+
+Är du säker på att du vill importera kapitelnamnen?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>Kapitellängden matchar inte mellan käll- och indatafilen</value>
+  </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>Ett fel inträffade vid försök att stoppa inläsningen. Starta om HandBrake.</value>
+  </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>HandBrake kunde inte uppgradera din förvalsfil till ett nytt versionsformat.
+Din förvalsfil kommer att arkiveras och en ny skapas. Du kommer att behöva återskapa dina egna förval.</value>
+  </data>
+  <data name="SettingService_SaveErrorReset" xml:space="preserve">
+    <value>Alla inställningar som du ändrar kan behöva nollställas nästa gång HandBrake startas.</value>
+  </data>
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
+    <value>Ett fel inträffade när dina inställningar sparades.</value>
+  </data>
+  <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
+    <value>Varning, dina inställningar har nollställts!</value>
+  </data>
+  <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
+    <value>Din fil för användarinställningar var skadad eller gick inte att komma åt. Inställningarna har nollställts till standardvärden.</value>
+  </data>
+  <data name="UserSettings_UnableToLoad" xml:space="preserve">
+    <value>Kunde inte läsa in fil för användarinställningar: {0}</value>
+  </data>
+  <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
+    <value>Din fil för användarinställningar verkar vara skadad eller inte möjlig att komma åt. Du kan behöva ta bort filen och låta HandBrake generera en ny fil.</value>
+  </data>
+  <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
+    <value>Utdatakatalogen som du har valt finns inte eller så har du inte rättigheter att skriva filer till den.</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
+    <value>Skapa mapp?</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
+    <value>Mappen som du försöker att skriva till finns inte. Vill du att HandBrake ska skapa följande mapp?
+{0}</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
+    <value>Kunde inte öppna målkatalogen.</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
+    <value>Kontrollera att du har en giltig målkatalog.</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
+    <value>Behandlar pass {0} av {1}, (undertextinläsning)  {2:00.00}%, Inläsningstid kvar: {3},  Förlupen: {4}</value>
+  </data>
+  <data name="NoAdditionalInformation" xml:space="preserve">
+    <value>Ingen ytterligare information</value>
+  </data>
+  <data name="WindowTitleStatus" xml:space="preserve">
+    <value>{0} - ({1}%, Pass {2} av {3})</value>
+  </data>
+  <data name="TaskTrayStatusTitle" xml:space="preserve">
+    <value>{0}
+Enkodar 1 jobb</value>
+  </data>
+  <data name="PauseOnLowDiskspace" xml:space="preserve">
+    <value>Kön är pausad. Varning, enheten som du enkodar till har lågt diskutrymme. Frigör lite plats och tryck på starta för att fortsätta. Du kan även justera minsta utrymmesnivå i inställningarna.</value>
+  </data>
+  <data name="Main_QueuePaused" xml:space="preserve">
+    <value>Kö pausad</value>
+  </data>
+  <data name="QueueViewModel_QueuePaused" xml:space="preserve">
+    <value>Kö pausad</value>
+  </data>
+  <data name="Main_LowDiskspace" xml:space="preserve">
+    <value>Din målkatalog börjar få slut på diskutrymme.
+
+Du kan konfigurera nivån vid vilken denna avisering dyker upp i inställningarna.
+
+Vill du fortsätta?</value>
+  </data>
+  <data name="Queue_UnableToResetJob" xml:space="preserve">
+    <value>Kunde inte nollställa jobbstatus eftersom det inte är i tillståndet Fel eller Färdigt</value>
+  </data>
+  <data name="Queue_UnableToRestoreFile" xml:space="preserve">
+    <value>Kunde inte återskapa köfilen.</value>
+  </data>
+  <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
+    <value>Filen kan vara skadad eller från en äldre inkompatibel version av HandBrake</value>
+  </data>
+  <data name="Queue_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake enkodar redan en fil.</value>
+  </data>
+  <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
+    <value>Stoppa den aktuella enkodningen. Starta om HandBrake om problemet kvarstår.</value>
+  </data>
+  <data name="StaticPreviewView_Title" xml:space="preserve">
+    <value>Förhandsvisning ({0}% faktisk storlek)</value>
+  </data>
+  <data name="OsBitnessWarning" xml:space="preserve">
+    <value>HandBrake kräver en 64 bitars-version av Windows 10 eller senare för att köras.</value>
+  </data>
+  <data name="OsVersionWarning" xml:space="preserve">
+    <value>HandBrake kräver Windows 10 eller senare för att starta. Version 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 och 8.x) var de sista versionerna att ha stöd för dessa äldre operativsystem.</value>
+  </data>
+  <data name="Main_ContinueAddingToQueue" xml:space="preserve">
+    <value>Vill du försöka att lägga till resten?</value>
+  </data>
+  <data name="Main_QueueOverwritePrompt" xml:space="preserve">
+    <value>Filen '{0}' finns redan!
+Vill du skriva över den?
+
+Tips: Beteendet för filöverskrivning kan styras i inställningarna.</value>
+  </data>
+  <data name="Clipboard_Unavailable" xml:space="preserve">
+    <value>Systemets urklipp är för närvarande inte tillgängligt.</value>
+  </data>
+  <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
+    <value>Detta kan bero på ett annat program som övervakar eller låser urklipp för sin egen skull. Du kommer inte kunna använda urklipp tills detta har låsts upp.</value>
+  </data>
+  <data name="AboutView_License" xml:space="preserve">
+    <value>Licens: </value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>Version: </value>
+  </data>
+  <data name="AddPresetView_AddNewCategory" xml:space="preserve">
+    <value>-- Lägg till ny kategori --</value>
+  </data>
+  <data name="AddPresetView_AddPreset" xml:space="preserve">
+    <value>Lägg till förval</value>
+  </data>
+  <data name="AddPresetView_Category" xml:space="preserve">
+    <value>Kategori:</value>
+  </data>
+  <data name="AddPresetView_Description" xml:space="preserve">
+    <value>Beskrivning:</value>
+  </data>
+  <data name="AddPresetView_Name" xml:space="preserve">
+    <value>Namn:</value>
+  </data>
+  <data name="AddPresetView_SavePictureSize" xml:space="preserve">
+    <value>Dimensioner:</value>
+  </data>
+  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
+    <value>Val av källspår</value>
+  </data>
+  <data name="AudioView_AllowPassThruOf" xml:space="preserve">
+    <value>Tillåt genomströmning av:</value>
+  </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>Konfigurera hur ljudspår automatiskt väljs och konfigureras när du väljer en ny titel eller källvideo.</value>
+  </data>
+  <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
+    <value>Beteende för 'Auto Passthru'</value>
+  </data>
+  <data name="AudioView_Bitrate" xml:space="preserve">
+    <value>Bithastighet</value>
+  </data>
+  <data name="AudioView_Codec" xml:space="preserve">
+    <value>Kodek</value>
+  </data>
+  <data name="AudioView_DRC" xml:space="preserve">
+    <value>DRC</value>
+  </data>
+  <data name="AudioView_Gain" xml:space="preserve">
+    <value>Gain</value>
+  </data>
+  <data name="AudioView_Hide" xml:space="preserve">
+    <value>Dölj</value>
+  </data>
+  <data name="AudioView_Mixdown" xml:space="preserve">
+    <value>Mixa om</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>Enkodare att falla tillbaka på:</value>
+  </data>
+  <data name="AudioView_ReloadDefaults" xml:space="preserve">
+    <value>Läs om</value>
+  </data>
+  <data name="AudioView_Samplerate" xml:space="preserve">
+    <value>Samplingsfrekvens</value>
+  </data>
+  <data name="AudioView_Show" xml:space="preserve">
+    <value>Visa</value>
+  </data>
+  <data name="AudioView_TrackName" xml:space="preserve">
+    <value>Spårnamn</value>
+  </data>
+  <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Beteende för spårval:</value>
+  </data>
+  <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
+    <value>För ytterligare spår:</value>
+  </data>
+  <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
+    <value>När 'Auto Passthru' har valts som ljudkodeken.</value>
+  </data>
+  <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
+    <value>Kapitelmarkörer</value>
+  </data>
+  <data name="ChaptersView_ChapterName" xml:space="preserve">
+    <value>Kapitelnamn</value>
+  </data>
+  <data name="ChaptersView_ChapterNumber" xml:space="preserve">
+    <value>Kapitel</value>
+  </data>
+  <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
+    <value>Skapa kapitelmarkörer</value>
+  </data>
+  <data name="ChaptersView_Duration" xml:space="preserve">
+    <value>Speltid</value>
+  </data>
+  <data name="ChaptersView_Export" xml:space="preserve">
+    <value>Exportera</value>
+  </data>
+  <data name="ChaptersView_Import" xml:space="preserve">
+    <value>Importera</value>
+  </data>
+  <data name="ChapterView_ExportNames" xml:space="preserve">
+    <value>Exportera namn</value>
+  </data>
+  <data name="ChapterView_ImportNames" xml:space="preserve">
+    <value>Importera namn</value>
+  </data>
+  <data name="ChapterView_ResetChapterNames" xml:space="preserve">
+    <value>Nollställ kapitelnamn</value>
+  </data>
+  <data name="CountdownAlterView_CancelAction" xml:space="preserve">
+    <value>Avbryt åtgärd</value>
+  </data>
+  <data name="CountdownAlterView_Proceed" xml:space="preserve">
+    <value>Fortsätt</value>
+  </data>
+  <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
+    <value>Åtgärd när färdig</value>
+  </data>
+  <data name="ErrorView_ErrorDetails" xml:space="preserve">
+    <value>Felinformation:</value>
+  </data>
+  <data name="FiltersView_Custom" xml:space="preserve">
+    <value>Anpassad:</value>
+  </data>
+  <data name="FiltersView_Deblock" xml:space="preserve">
+    <value>Deblock:</value>
+  </data>
+  <data name="FiltersView_Decomb" xml:space="preserve">
+    <value>Decomb</value>
+  </data>
+  <data name="FiltersView_Deinterlace" xml:space="preserve">
+    <value>Deinterlace:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
+    <value>Förval:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
+    <value>Deinterlace-förval</value>
+  </data>
+  <data name="FiltersView_Denoise" xml:space="preserve">
+    <value>Denoise:</value>
+  </data>
+  <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
+    <value>Denoise-förval</value>
+  </data>
+  <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
+    <value>Justera denoise</value>
+  </data>
+  <data name="FiltersView_Detelecine" xml:space="preserve">
+    <value>Detelecine:</value>
+  </data>
+  <data name="FiltersView_Filters" xml:space="preserve">
+    <value>Filter:</value>
+  </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>Horisontell</value>
+  </data>
+  <data name="FiltersView_Grayscale" xml:space="preserve">
+    <value>Gråskala</value>
+  </data>
+  <data name="FiltersView_InterlaceDetection" xml:space="preserve">
+    <value>Identifiera interlace:</value>
+  </data>
+  <data name="FiltersView_Preset" xml:space="preserve">
+    <value>Förval:</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>Rotering:</value>
+  </data>
+  <data name="FiltersView_Sharpen" xml:space="preserve">
+    <value>Sharpen:</value>
+  </data>
+  <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
+    <value>Sharpen-förval</value>
+  </data>
+  <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
+    <value>Justera sharpen</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Justering:</value>
+  </data>
+  <data name="Generic_Add" xml:space="preserve">
+    <value>Lägg till</value>
+  </data>
+  <data name="Generic_Cancel" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
+  <data name="Generic_Clear" xml:space="preserve">
+    <value>Töm</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>Stäng</value>
+  </data>
+  <data name="Generic_CopyToClipboard" xml:space="preserve">
+    <value>Kopiera till urklipp</value>
+  </data>
+  <data name="Generic_MoveLeft" xml:space="preserve">
+    <value>Flytta vänster</value>
+  </data>
+  <data name="Generic_MoveRight" xml:space="preserve">
+    <value>Flytta höger</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>Spara</value>
+  </data>
+  <data name="LogView_CopyClipboard" xml:space="preserve">
+    <value>Kopiera till urklipp</value>
+  </data>
+  <data name="LogView_EncodeLog" xml:space="preserve">
+    <value>Enkodningslogg</value>
+  </data>
+  <data name="LogView_OpenLogDir" xml:space="preserve">
+    <value>Öppna loggkatalog</value>
+  </data>
+  <data name="LogView_ScanLog" xml:space="preserve">
+    <value>Inläsningslogg</value>
+  </data>
+  <data name="MainView_ActivityLog" xml:space="preserve">
+    <value>Aktivitetslogg</value>
+  </data>
+  <data name="MainView_AddAll" xml:space="preserve">
+    <value>Lägg till alla</value>
+  </data>
+  <data name="MainView_AddCurrent" xml:space="preserve">
+    <value>Lägg till aktuell</value>
+  </data>
+  <data name="MainView_AddSelection" xml:space="preserve">
+    <value>Lägg till markering</value>
+  </data>
+  <data name="MainView_AddToQueue" xml:space="preserve">
+    <value>Lägg till i kö</value>
+  </data>
+  <data name="MainView_AdvancedTab" xml:space="preserve">
+    <value>Avancerat</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Justera ljud-/videostart</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Vinkel:</value>
+  </data>
+  <data name="MainView_AudioTab" xml:space="preserve">
+    <value>Ljud</value>
+  </data>
+  <data name="MainView_AudioTrackCount" xml:space="preserve">
+    <value>Ljudspår</value>
+  </data>
+  <data name="MainView_Browser" xml:space="preserve">
+    <value>Bläddra</value>
+  </data>
+  <data name="MainView_ChaptersTab" xml:space="preserve">
+    <value>Kapitel</value>
+  </data>
+  <data name="MainView_Container" xml:space="preserve">
+    <value>Container</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Mål</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Speltid:</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>Spara som:</value>
+  </data>
+  <data name="MainView_FiltersTab" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="MainView_Format" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>Hjälp</value>
+  </data>
+  <data name="MainView_iPod5G" xml:space="preserve">
+    <value>iPod 5G-stöd</value>
+  </data>
+  <data name="MainView_MetaDataTab" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
+  <data name="MainView_ModifiedPreset" xml:space="preserve">
+    <value>(ändrad)</value>
+  </data>
+  <data name="MainView_Muxing" xml:space="preserve">
+    <value>Muxar: Detta kan ta en stund...</value>
+  </data>
+  <data name="MainView_Options" xml:space="preserve">
+    <value>Inställningar</value>
+  </data>
+  <data name="MainView_OutputSettings" xml:space="preserve">
+    <value>Inställningar för utdata</value>
+  </data>
+  <data name="MainView_Pause" xml:space="preserve">
+    <value>Paus</value>
+  </data>
+  <data name="MainView_PictureTab" xml:space="preserve">
+    <value>Dimensioner</value>
+  </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>Redigera förval</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Kontextmeny för förvalsval</value>
+  </data>
+  <data name="MainView_PresetRemove" xml:space="preserve">
+    <value>Ta bort förval</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Förval</value>
+  </data>
+  <data name="MainView_Preview" xml:space="preserve">
+    <value>Förhandsvisa</value>
+  </data>
+  <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
+    <value>Enkodar: {0}, {1:00.00}%, Återstående tid: {2}, {3}</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Omfång:</value>
+  </data>
+  <data name="MainView_Reload" xml:space="preserve">
+    <value>Läs om</value>
+  </data>
+  <data name="MainView_Remove" xml:space="preserve">
+    <value>Ta bort</value>
+  </data>
+  <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
+    <value>Nollställ inbyggda förval</value>
+  </data>
+  <data name="MainView_SaveNewPreset" xml:space="preserve">
+    <value>Spara nytt förval</value>
+  </data>
+  <data name="MainView_Searching" xml:space="preserve">
+    <value>Söker efter starttid</value>
+  </data>
+  <data name="MainView_SetDefault" xml:space="preserve">
+    <value>Ange som standard</value>
+  </data>
+  <data name="MainView_ShowPreview" xml:space="preserve">
+    <value>Förhandsvisa</value>
+  </data>
+  <data name="MainView_ShowQueue" xml:space="preserve">
+    <value>Kö</value>
+  </data>
+  <data name="MainView_Source" xml:space="preserve">
+    <value>Källa:</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>Öppna källa</value>
+  </data>
+  <data name="MainView_StartEncode" xml:space="preserve">
+    <value>Starta enkodning</value>
+  </data>
+  <data name="MainView_StartQueue" xml:space="preserve">
+    <value>Starta kö</value>
+  </data>
+  <data name="MainView_Stop" xml:space="preserve">
+    <value>Stoppa</value>
+  </data>
+  <data name="MainView_StopEncode" xml:space="preserve">
+    <value>Stoppa enkodning</value>
+  </data>
+  <data name="MainView_StopEncodeConfirm" xml:space="preserve">
+    <value>Är du säker på att du vill stoppa denna enkodning?</value>
+  </data>
+  <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
+    <value>Välj en källa att enkoda innan du försöker att importera en undertextfil.</value>
+  </data>
+  <data name="MainView_SubtitlesTab" xml:space="preserve">
+    <value>Undertexter</value>
+  </data>
+  <data name="MainView_SubtitleTracksCount" xml:space="preserve">
+    <value>Undertextspår</value>
+  </data>
+  <data name="MainView_SummaryTab" xml:space="preserve">
+    <value>Sammandrag</value>
+  </data>
+  <data name="MainView_through" xml:space="preserve">
+    <value> - </value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Titel:</value>
+  </data>
+  <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
+    <value>Uppdatera aktuellt förval</value>
+  </data>
+  <data name="MainView_VideoTab" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="MainView_WebOptimized" xml:space="preserve">
+    <value>Webboptimerad</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>Hantera förval</value>
+  </data>
+  <data name="MetaDataView_Title" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Tillåt användning av DirectX Decoding</value>
+  </data>
+  <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
+    <value>Filformatet som angavs innehåller ogiltiga tecken. Dessa har nu tagits bort.</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
+    <value>Spela upp ett ljud varje gång en enkodning är färdig</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
+    <value>Spela upp ett ljud när kön är färdig</value>
+  </data>
+  <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
+    <value>Visa förhandsvisningar i sammandragsfliken.</value>
+  </data>
+  <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
+    <value>Visa enkodningsstatus i programmets titelrad.</value>
+  </data>
+  <data name="Options_7DayLogClear" xml:space="preserve">
+    <value>Töm loggfiler äldre än 7 dagar</value>
+  </data>
+  <data name="Options_About" xml:space="preserve">
+    <value>Om HandBrake</value>
+  </data>
+  <data name="Options_Advanced" xml:space="preserve">
+    <value>Avancerat</value>
+  </data>
+  <data name="Options_AdvancedOptions" xml:space="preserve">
+    <value>Avancerade inställningar</value>
+  </data>
+  <data name="Options_Arguments" xml:space="preserve">
+    <value>Argument:</value>
+  </data>
+  <data name="Options_AutomaticFileNaming" xml:space="preserve">
+    <value>Automatisk filnamngivning</value>
+  </data>
+  <data name="Options_AutoNameOutput" xml:space="preserve">
+    <value>Namnge automatiskt utdatafiler</value>
+  </data>
+  <data name="Options_CheckForUpdates" xml:space="preserve">
+    <value>Leta efter uppdateringar</value>
+  </data>
+  <data name="Options_ClearCompleted" xml:space="preserve">
+    <value>Töm alltid färdiga köobjekt efter att en enkodning färdigställts</value>
+  </data>
+  <data name="Options_ClearLogs" xml:space="preserve">
+    <value>Töm logghistorik</value>
+  </data>
+  <data name="Options_CopyLogToDir" xml:space="preserve">
+    <value>Lägg en kopia av individuella enkodningsloggar i en angiven plats:</value>
+  </data>
+  <data name="Options_CopyLogToEncDir" xml:space="preserve">
+    <value>Lägg en kopia av individuella enkodningsloggar i samma plats som den enkodade videon</value>
+  </data>
+  <data name="Options_CurVersion" xml:space="preserve">
+    <value>Aktuell version</value>
+  </data>
+  <data name="Options_Decoding" xml:space="preserve">
+    <value>Avkodar</value>
+  </data>
+  <data name="Options_DefaultPath" xml:space="preserve">
+    <value>Standardsökväg:</value>
+  </data>
+  <data name="Options_DownloadUpdates" xml:space="preserve">
+    <value>Hämta uppdatering</value>
+  </data>
+  <data name="Options_DVD" xml:space="preserve">
+    <value>Dvd-läsning</value>
+  </data>
+  <data name="Options_DvdRead" xml:space="preserve">
+    <value>Inaktivera LibDVDNav. (libdvdread kommer att användas istället)</value>
+  </data>
+  <data name="Options_Encoding" xml:space="preserve">
+    <value>Enkodar</value>
+  </data>
+  <data name="Options_Format" xml:space="preserve">
+    <value>Filformat:</value>
+  </data>
+  <data name="Options_General" xml:space="preserve">
+    <value>Allmänt</value>
+  </data>
+  <data name="Options_Logging" xml:space="preserve">
+    <value>Loggning</value>
+  </data>
+  <data name="Options_LogLevel" xml:space="preserve">
+    <value>Nivå för loggverbositet:</value>
+  </data>
+  <data name="Options_LogPath" xml:space="preserve">
+    <value>Sökväg:</value>
+  </data>
+  <data name="Options_LowDiskspaceSize" xml:space="preserve">
+    <value>Pausa kö om diskutrymmet är lågt</value>
+  </data>
+  <data name="Options_MinimiseTray" xml:space="preserve">
+    <value>Minimera till aktivitetsfältet (kräver omstart)</value>
+  </data>
+  <data name="Options_MinTitleScanLength" xml:space="preserve">
+    <value>Minsta speltid i sekunder för dvd och Bluray. Kortare titlar kommer att hoppas över:</value>
+  </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Behåll dubbletter av titlar på Blu-ray-källor (kräver omstart)</value>
+  </data>
+  <data name="Options_MP4FileExtension" xml:space="preserve">
+    <value>Filändelse för MP4:</value>
+  </data>
+  <data name="Options_OnStartup" xml:space="preserve">
+    <value>Vid uppstart</value>
+  </data>
+  <data name="Options_Output" xml:space="preserve">
+    <value>Utdatafiler</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>Sökväg:</value>
+  </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Sökväg till mediaspelare</value>
+  </data>
+  <data name="Options_PreventSleep" xml:space="preserve">
+    <value>Förhindra att systemet går i sömnläge vid enkodning</value>
+  </data>
+  <data name="Options_PreviewScanCount" xml:space="preserve">
+    <value>Antal bildförhandsvisningar att läsa in:</value>
+  </data>
+  <data name="Options_PriorityLevel" xml:space="preserve">
+    <value>Prioritetsnivå för arbete:</value>
+  </data>
+  <data name="Options_QsvDecode" xml:space="preserve">
+    <value>Föredra att använda Intel QuickSync för att dekoda videor när QuickSync-enkodaren och hårdvaran finns tillgängliga för användning.</value>
+  </data>
+  <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
+    <value>Använd även QuickSync-dekodning när inte en QuickSync-enkoder används. (t.ex. x265)</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Ta bort vanliga skiljetecken</value>
+  </data>
+  <data name="Options_ReplaceUnderscores" xml:space="preserve">
+    <value>Ersätt understreck med ett blanksteg</value>
+  </data>
+  <data name="Options_ResetDoNothing" xml:space="preserve">
+    <value>Nollställ till 'Gör ingenting' när programmet startas igen.</value>
+  </data>
+  <data name="Options_Scaler" xml:space="preserve">
+    <value>Välj skalare:</value>
+  </data>
+  <data name="Options_Scaling" xml:space="preserve">
+    <value>Skalning</value>
+  </data>
+  <data name="Options_SendFileTo" xml:space="preserve">
+    <value>Skicka filen till:</value>
+  </data>
+  <data name="Options_TitleCase" xml:space="preserve">
+    <value>Ändra skiftläge till titelns skiftläge</value>
+  </data>
+  <data name="Options_Updates" xml:space="preserve">
+    <value>Uppdateringar</value>
+  </data>
+  <data name="Options_UserInterface" xml:space="preserve">
+    <value>Användargränssnitt</value>
+  </data>
+  <data name="Options_Version" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="Options_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="Options_VideoPreviewPath" xml:space="preserve">
+    <value>Denna sökväg används endast för funktionen för videoförhandsvisning.
+VLC och MPC-HC stöds. Övriga uppspelare kan också fungera men har inte testats.</value>
+  </data>
+  <data name="Options_ViewLogDirectory" xml:space="preserve">
+    <value>Visa loggkatalog</value>
+  </data>
+  <data name="Options_WhenDone" xml:space="preserve">
+    <value>När färdig</value>
+  </data>
+  <data name="Options_x264" xml:space="preserve">
+    <value>Inställningar för x264/5</value>
+  </data>
+  <data name="Options_x264Granularity" xml:space="preserve">
+    <value>Fraktionell granuläritet för konstant kvalitet:</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorfisk:</value>
+  </data>
+  <data name="PictureSettingsView_Automatic" xml:space="preserve">
+    <value>Automatisk</value>
+  </data>
+  <data name="PictureSettingsView_Bottom" xml:space="preserve">
+    <value>Nederst</value>
+  </data>
+  <data name="PictureSettingsView_Cropping" xml:space="preserve">
+    <value>Beskärning:</value>
+  </data>
+  <data name="PictureSettingsView_Custom" xml:space="preserve">
+    <value>Anpassad</value>
+  </data>
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
+    <value>Visningsstorlek:</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Höjd:</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Automatisk</value>
+  </data>
+  <data name="PictureSettingsView_Left" xml:space="preserve">
+    <value>Vänster</value>
+  </data>
+  <data name="PictureSettingsView_Output" xml:space="preserve">
+    <value>Slutgiltiga dimensioner:</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Bildpunktsförhållande:</value>
+  </data>
+  <data name="PictureSettingsView_Right" xml:space="preserve">
+    <value>Höger</value>
+  </data>
+  <data name="PictureSettingsView_Size" xml:space="preserve">
+    <value>Storlek</value>
+  </data>
+  <data name="PictureSettingsView_Top" xml:space="preserve">
+    <value>Överst</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Skalad storlek:</value>
+  </data>
+  <data name="Preset_Custom" xml:space="preserve">
+    <value>Anpassad</value>
+  </data>
+  <data name="Preset_Export" xml:space="preserve">
+    <value>Exportera till fil</value>
+  </data>
+  <data name="Preset_Import" xml:space="preserve">
+    <value>Importera från fil</value>
+  </data>
+  <data name="Preset_Official" xml:space="preserve">
+    <value>Officiell</value>
+  </data>
+  <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
+    <value>Välj titlar:</value>
+  </data>
+  <data name="QueueSelectionView_Title" xml:space="preserve">
+    <value>Lägg till i kö</value>
+  </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>De valda titlarna kommer att läggas till med förvalet "{0}".</value>
+  </data>
+  <data name="QueueView_Advanced" xml:space="preserve">
+    <value>Videoinställningar:</value>
+  </data>
+  <data name="QueueView_Audio" xml:space="preserve">
+    <value>Ljud:</value>
+  </data>
+  <data name="QueueView_ClearAll" xml:space="preserve">
+    <value>Töm allt</value>
+  </data>
+  <data name="QueueView_ClearCompleted" xml:space="preserve">
+    <value>Töm färdiga</value>
+  </data>
+  <data name="QueueView_ClearQueue" xml:space="preserve">
+    <value>Töm kö</value>
+  </data>
+  <data name="QueueView_ClearSelected" xml:space="preserve">
+    <value>Töm valda</value>
+  </data>
+  <data name="QueueView_Delete" xml:space="preserve">
+    <value>Ta bort</value>
+  </data>
+  <data name="QueueView_Destination" xml:space="preserve">
+    <value>Mål:</value>
+  </data>
+  <data name="WhenDone_DoNothing" xml:space="preserve">
+    <value>Gör ingenting</value>
+  </data>
+  <data name="QueueView_Duration" xml:space="preserve">
+    <value>Enkodningslängd:</value>
+  </data>
+  <data name="QueueView_Edit" xml:space="preserve">
+    <value>Redigera</value>
+  </data>
+  <data name="QueueView_EndTime" xml:space="preserve">
+    <value>Sluttid:</value>
+  </data>
+  <data name="QueueView_Export" xml:space="preserve">
+    <value>Exportera kö</value>
+  </data>
+  <data name="QueueView_FileSize" xml:space="preserve">
+    <value>Filstorlek för utdata:</value>
+  </data>
+  <data name="WhenDone_Hibernate" xml:space="preserve">
+    <value>Viloläge</value>
+  </data>
+  <data name="WhenDone_LockSystem" xml:space="preserve">
+    <value>Lås systemet</value>
+  </data>
+  <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
+    <value>Loggen kommer att finnas tillgänglig efter att enkodningen är färdig.</value>
+  </data>
+  <data name="WhenDone_Logoff" xml:space="preserve">
+    <value>Logga ut</value>
+  </data>
+  <data name="QueueView_OpenDestDir" xml:space="preserve">
+    <value>Öppna målkatalog</value>
+  </data>
+  <data name="QueueView_OpenSourceDir" xml:space="preserve">
+    <value>Öppna källkatalog</value>
+  </data>
+  <data name="QueueView_Options" xml:space="preserve">
+    <value>Inställningar</value>
+  </data>
+  <data name="QueueView_Pause" xml:space="preserve">
+    <value>Paus</value>
+  </data>
+  <data name="QueueView_PausedDuration" xml:space="preserve">
+    <value>Pausad tidslängd:</value>
+  </data>
+  <data name="QueueView_PictureSettings" xml:space="preserve">
+    <value>Bildinställningar:</value>
+  </data>
+  <data name="WhenDone_QuitHandBrake" xml:space="preserve">
+    <value>Avsluta HandBrake</value>
+  </data>
+  <data name="QueueView_ResetAllJobs" xml:space="preserve">
+    <value>Starta om alla jobb igen</value>
+  </data>
+  <data name="QueueView_ResetFailed" xml:space="preserve">
+    <value>Starta om misslyckade</value>
+  </data>
+  <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
+    <value>Starta om valda jobb</value>
+  </data>
+  <data name="QueueView_Reset" xml:space="preserve">
+    <value>Återställ</value>
+  </data>
+  <data name="WhenDone_Shutdown" xml:space="preserve">
+    <value>Stäng av</value>
+  </data>
+  <data name="QueueView_Source" xml:space="preserve">
+    <value>Källa:</value>
+  </data>
+  <data name="QueueView_Start" xml:space="preserve">
+    <value>Starta kö</value>
+  </data>
+  <data name="QueueView_StartTime" xml:space="preserve">
+    <value>Starttid:</value>
+  </data>
+  <data name="QueueView_Statistics" xml:space="preserve">
+    <value>Statistik</value>
+  </data>
+  <data name="QueueView_Subtitles" xml:space="preserve">
+    <value>Undertexter:</value>
+  </data>
+  <data name="QueueView_Summary" xml:space="preserve">
+    <value>Sammandrag</value>
+  </data>
+  <data name="WhenDone_Suspend" xml:space="preserve">
+    <value>Sov</value>
+  </data>
+  <data name="QueueView_Video" xml:space="preserve">
+    <value>Video:</value>
+  </data>
+  <data name="QueueView_WhenDone" xml:space="preserve">
+    <value>När färdig:</value>
+  </data>
+  <data name="Shared_AddAllForSelected" xml:space="preserve">
+    <value>Lägg till alla återstående valda språk</value>
+  </data>
+  <data name="Shared_AddAllRemaining" xml:space="preserve">
+    <value>Lägg till alla återstående spår</value>
+  </data>
+  <data name="Shared_AddNewTrack" xml:space="preserve">
+    <value>Lägg till nytt spår</value>
+  </data>
+  <data name="Shared_AddTrack" xml:space="preserve">
+    <value>Spår</value>
+  </data>
+  <data name="Shared_AvailableLanguages" xml:space="preserve">
+    <value>Tillgängliga språk:</value>
+  </data>
+  <data name="Shared_ChooseLanguages" xml:space="preserve">
+    <value>Välj språk:</value>
+  </data>
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
+    <value>Valda språk:</value>
+  </data>
+  <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
+    <value>Konfigurera standardbeteenden</value>
+  </data>
+  <data name="Shared_ReloadDefaults" xml:space="preserve">
+    <value>Läs om</value>
+  </data>
+  <data name="SourceSelection_ChooseDisc" xml:space="preserve">
+    <value>Välj skiva att läsa in</value>
+  </data>
+  <data name="SourceSelection_ChooseFile" xml:space="preserve">
+    <value>Välj fil att läsa in</value>
+  </data>
+  <data name="SourceSelection_ChooseFolder" xml:space="preserve">
+    <value>Välj mapp att läsa in</value>
+  </data>
+  <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
+    <value>Välj valfri specifik titel:</value>
+  </data>
+  <data name="SourceSelection_ChooseVideo" xml:space="preserve">
+    <value>Välj sedan den video som du önskar att enkoda:</value>
+  </data>
+  <data name="SourceSelection_File" xml:space="preserve">
+    <value>Fil</value>
+  </data>
+  <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
+    <value>Mapp (läs in flera)</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>Öppna denna dvd eller Bluray-enhet</value>
+  </data>
+  <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
+    <value>Öppna en mapp med en eller flera filer.</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
+    <value>Återskapa köfiler</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
+    <value>Ett föregående köarkiv finns tillgängligt.</value>
+  </data>
+  <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
+    <value>Öppna videofil(er).</value>
+  </data>
+  <data name="SourceSelection_SourceSelection" xml:space="preserve">
+    <value>Källval</value>
+  </data>
+  <data name="StaticPreviewView_Duration" xml:space="preserve">
+    <value>Speltid:</value>
+  </data>
+  <data name="StaticPreviewView_LivePreview" xml:space="preserve">
+    <value>Enkoda förhandsvisning</value>
+  </data>
+  <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
+    <value>Välj en förhandsbild</value>
+  </data>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Använd extern uppspelare</value>
+  </data>
+  <data name="SubtitlesView_AddCC" xml:space="preserve">
+    <value>Lägg till dold bildtext när möjligt</value>
+  </data>
+  <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
+    <value>Lägg till 'Utländsk ljudsökning'</value>
+  </data>
+  <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
+    <value>Beteende för inbränning:</value>
+  </data>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>Importera undertext</value>
+  </data>
+  <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Beteende för spårval:</value>
+  </data>
+  <data name="SubtitleView_AddAllCC" xml:space="preserve">
+    <value>Lägg till alla återstående dolda bildtexter</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
+    <value>Konfigurera hur undertextspår automatiskt väljs och konfigureras när du väljer en ny titel eller källvideo.</value>
+  </data>
+  <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
+    <value>Ytterligare ljudspår</value>
+  </data>
+  <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
+    <value>Ytterligare undertextspår</value>
+  </data>
+  <data name="SummaryView_Burned" xml:space="preserve">
+    <value>Inbränd</value>
+  </data>
+  <data name="SummaryView_Chapters" xml:space="preserve">
+    <value>Kapitelmarkörer</value>
+  </data>
+  <data name="SummaryView_Deblock" xml:space="preserve">
+    <value>Deblock</value>
+  </data>
+  <data name="SummaryView_Detelecine" xml:space="preserve">
+    <value>Detelecine</value>
+  </data>
+  <data name="SummaryView_display" xml:space="preserve">
+    <value>skärm</value>
+  </data>
+  <data name="SummaryView_Grayscale" xml:space="preserve">
+    <value>Gråskala</value>
+  </data>
+  <data name="SummaryView_NoAudioTracks" xml:space="preserve">
+    <value>Inga ljudspår</value>
+  </data>
+  <data name="SummaryView_NoChapters" xml:space="preserve">
+    <value>Inga kapitelmarkörer</value>
+  </data>
+  <data name="SummaryView_NoFilters" xml:space="preserve">
+    <value>Inga filter</value>
+  </data>
+  <data name="SummaryView_NoSource" xml:space="preserve">
+    <value>Ingen källa</value>
+  </data>
+  <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
+    <value>Inga undertextspår</value>
+  </data>
+  <data name="SummaryView_NoTracks" xml:space="preserve">
+    <value>Inga spår</value>
+  </data>
+  <data name="SummaryView_PreviewInfo" xml:space="preserve">
+    <value>Förhandsvisning {0} av {1}</value>
+  </data>
+  <data name="SummaryView_Rotation" xml:space="preserve">
+    <value>Rotering</value>
+  </data>
+  <data name="SummaryView_storage" xml:space="preserve">
+    <value>lagring</value>
+  </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass-enkodning</value>
+  </data>
+  <data name="VideoView_AverageBitrate" xml:space="preserve">
+    <value>Genomsnitt bitfrekvens (kbps):</value>
+  </data>
+  <data name="VideoView_Codec" xml:space="preserve">
+    <value>Videoenkodare:</value>
+  </data>
+  <data name="VideoView_ConstantFramerate" xml:space="preserve">
+    <value>Konstant bildfrekvens</value>
+  </data>
+  <data name="VideoView_ConstantQuality" xml:space="preserve">
+    <value>Konstant kvalitet:</value>
+  </data>
+  <data name="VideoView_EncoderLevel" xml:space="preserve">
+    <value>Enkodningsnivå:</value>
+  </data>
+  <data name="VideoView_EncoderPreset" xml:space="preserve">
+    <value>Förval för enkodare:</value>
+  </data>
+  <data name="VideoView_EncoderProfile" xml:space="preserve">
+    <value>Enkodningsprofil:</value>
+  </data>
+  <data name="VideoView_EncodeTune" xml:space="preserve">
+    <value>Justera enkoder:</value>
+  </data>
+  <data name="VideoView_ExtraOptions" xml:space="preserve">
+    <value>Avancerade inställningar:</value>
+  </data>
+  <data name="VideoView_FastDecode" xml:space="preserve">
+    <value>Snabb enkodning</value>
+  </data>
+  <data name="VideoView_Framerate" xml:space="preserve">
+    <value>Bildfrekvens (bilder/s):</value>
+  </data>
+  <data name="VideoView_OptimiseVideo" xml:space="preserve">
+    <value>Alternativ för enkodare:</value>
+  </data>
+  <data name="VideoView_PeakFramerate" xml:space="preserve">
+    <value>Högsta bildfrekvens</value>
+  </data>
+  <data name="VideoView_Quality" xml:space="preserve">
+    <value>Kvalitet:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turboanalyspass</value>
+  </data>
+  <data name="VideoView_VariableFramerate" xml:space="preserve">
+    <value>Variabel bildfrekvens</value>
+  </data>
+  <data name="VideoView_Video" xml:space="preserve">
+    <value>Video: </value>
+  </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>Språk:</value>
+  </data>
+  <data name="Language_UseSystem" xml:space="preserve">
+    <value>Använd systemets språk</value>
+  </data>
+  <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
+    <value>Om HandBrake</value>
+  </data>
+  <data name="SourceSelection_DropFileHere" xml:space="preserve">
+    <value>Eller släpp en fil, ett antal filer eller mapp här ...</value>
+  </data>
+  <data name="SourceSelection_Help" xml:space="preserve">
+    <value>Hjälp</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Inställningar</value>
+  </data>
+  <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
+    <value>Lägg till spår</value>
+  </data>
+  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
+    <value>Inställningar för ljudenkodning för varje valt spår:</value>
+  </data>
+  <data name="AudioDefaultsView_Clear" xml:space="preserve">
+    <value>Töm</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Inbränd</value>
+  </data>
+  <data name="SubtitlesView_Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
+    <value>Endast tvingad</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>_Om...</value>
+  </data>
+  <data name="MainView_ActivityLogMenu" xml:space="preserve">
+    <value>Aktivitets_logg</value>
+  </data>
+  <data name="MainView_CheckForUpdates" xml:space="preserve">
+    <value>_Leta efter uppdateringar</value>
+  </data>
+  <data name="MainView_Exit" xml:space="preserve">
+    <value>A_vsluta</value>
+  </data>
+  <data name="MainView_ExportToFile" xml:space="preserve">
+    <value>_Exportera till fil</value>
+  </data>
+  <data name="MainView_FileMenu" xml:space="preserve">
+    <value>_Arkiv</value>
+  </data>
+  <data name="MainView_HandBrakeDocs" xml:space="preserve">
+    <value>Dokumentation för _HandBrake (HTTPS)</value>
+  </data>
+  <data name="MainView_HelpMenu" xml:space="preserve">
+    <value>_Hjälp</value>
+  </data>
+  <data name="MainView_ImportFromFile" xml:space="preserve">
+    <value>_Importera från fil</value>
+  </data>
+  <data name="MainView_PreferencesMenu" xml:space="preserve">
+    <value>_Inställningar</value>
+  </data>
+  <data name="MainView_PresetsMenu" xml:space="preserve">
+    <value>_Förval</value>
+  </data>
+  <data name="MainView_QueueMenu" xml:space="preserve">
+    <value>_Kö</value>
+  </data>
+  <data name="MainView_ResetPresets" xml:space="preserve">
+    <value>_Nollställ inbyggda förval</value>
+  </data>
+  <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
+    <value>An_ge aktuell som standard</value>
+  </data>
+  <data name="MainView_ShowPresetPanel" xml:space="preserve">
+    <value>Vi_sa förvalspanel</value>
+  </data>
+  <data name="MainView_ShowQueueMenu" xml:space="preserve">
+    <value>Visa _kö</value>
+  </data>
+  <data name="MainView_ToolsMenu" xml:space="preserve">
+    <value>_Verktyg</value>
+  </data>
+  <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
+    <value>Letar efter uppdateringar ...</value>
+  </data>
+  <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
+    <value>Är du säker på att du vill tömma loggfilskatalogen?</value>
+  </data>
+  <data name="OptionsView_ClearLogs" xml:space="preserve">
+    <value>Töm loggar</value>
+  </data>
+  <data name="OptionsView_Downloading" xml:space="preserve">
+    <value>Hämtar...</value>
+  </data>
+  <data name="OptionsView_LogsCleared" xml:space="preserve">
+    <value>HandBrakes loggfilskatalog har tömts!</value>
+  </data>
+  <data name="OptionsView_Notice" xml:space="preserve">
+    <value>Observera</value>
+  </data>
+  <data name="OptionsView_PreparingUpdate" xml:space="preserve">
+    <value>Förbereder uppdatering ...</value>
+  </data>
+  <data name="OptionsView_SelectFolder" xml:space="preserve">
+    <value>Välj en mapp.</value>
+  </data>
+  <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
+    <value>Klicka 'Bläddra' för att ange standardplats</value>
+  </data>
+  <data name="MainView_Hide" xml:space="preserve">
+    <value>Dölj</value>
+  </data>
+  <data name="MainView_Show" xml:space="preserve">
+    <value>Visa</value>
+  </data>
+  <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
+    <value>'Lägg till alla' till kö</value>
+  </data>
+  <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
+    <value>'Lägg till val' till kö</value>
+  </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>Spela upp fil</value>
+  </data>
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
+    <value>Programmets verktygsrad</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>Visa 'Lägg till alla till kö' i verktygsraden</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>Visa 'Lägg till val till kö' i verktygsraden</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>Hårdvarustöd för enkodning är inaktiverat för stunden. Om du inte startade HandBrake med alternativet "--no-hardware" bör du försäkra dig om att du kör uppdaterade drivrutiner för alla grafikkort på detta system.
+
+Detta kommer inte påverka några enkodare som använder bara programvara.</value>
+  </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>Korrigera dina undertextinställningar innan du fortsätter.</value>
+  </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>Verkställ</value>
+  </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>Återuppta enkodning</value>
+  </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>Åtgärder</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Importera kö</value>
+  </data>
+  <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Enkodning: Pass {0} av {1},  {2:00.00}%, Bilder/s: {3:000.0},  genomsnitt bilder/s: {4:000.0}
+Återstående tid: {5},  Förlupen: {6} {7}</value>
+  </data>
+  <data name="QueueView_DeleteSelected" xml:space="preserve">
+    <value>Ta bort vald</value>
+  </data>
+  <data name="Portable_TmpNotWritable" xml:space="preserve">
+    <value>Portabelt läge: Kunde inte skapa temporärkatalog. Kontrollera att sökvägen är korrekt och är skrivbar.</value>
+  </data>
+  <data name="Portable_StorageNotWritable" xml:space="preserve">
+    <value>Portabelt läge: Kunde inte skapa lagringskatalog. Kontrollera att sökvägen är korrekt och är skrivbar.</value>
+  </data>
+  <data name="Portable_IniFileError" xml:space="preserve">
+    <value>Portabelt läge: Kunde inte läsa portable.ini. Det kan finnas ett fel i denna fil. Försök igen att använda mallen för portable.ini som en guide.</value>
+  </data>
+  <data name="OptionsView_FormatOptions" xml:space="preserve">
+    <value>Ersättningsalternativ:
+Du kan dra/släppa eller ange texten ovan.</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
+    <value>Fråga om att skriva över fil</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
+    <value>Försök att automatiskt byta namn på filen</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
+    <value>Skriv över filen</value>
+  </data>
+  <data name="Options_UIBehaviour" xml:space="preserve">
+    <value>Beteende för användargränssnitt</value>
+  </data>
+  <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
+    <value>Beteende för filöverskrivning:</value>
+  </data>
+  <data name="Options_EncodeCompleted" xml:space="preserve">
+    <value>Enkodningen är färdig</value>
+  </data>
+  <data name="Options_Notifications" xml:space="preserve">
+    <value>Ljudaviseringar</value>
+  </data>
+  <data name="Options_QueueCompleted" xml:space="preserve">
+    <value>Kön är färdig</value>
+  </data>
+  <data name="Options_WhenDoneColon" xml:space="preserve">
+    <value>När färdig:</value>
+  </data>
+  <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
+    <value>Beteende vid filnamnskollisioner:</value>
+  </data>
+  <data name="CollisionBehaviour_Post" xml:space="preserve">
+    <value>Lägg till efter</value>
+  </data>
+  <data name="CollisionBehaviour_Pre" xml:space="preserve">
+    <value>Lägg till före</value>
+  </data>
+  <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
+    <value>Lägg till nummer</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
+    <value>FiltersView_DeblockPreset</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
+    <value>Justera deblock</value>
+  </data>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Observera: Inte alla hårdvaruenkodare har extra inställningar. Alla tillgängliga hårdvaruenkodare som stöds på detta system kommer att finnas tillgängliga att väljas på videofliken under rullgardinsmenyn för videoenkodare.</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
+    <value>HandBrake har upptäckt flera ofärdiga köfiler. Dessa kommer från ett flertal körande instanser av HandBrake. Vill du återskapa alla ofärdiga jobb?</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
+    <value>HandBrake har upptäckt ofärdiga objekt i kön från senaste gången som programmet kördes. Vill du återskapa dem nu?</value>
+  </data>
+  <data name="Queue_RecoveryPossible" xml:space="preserve">
+    <value>Återskapande av kö är möjlig</value>
+  </data>
+  <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
+    <value>Din förvalsfil innehåller inbyggda förval. Importfunktionen har inte stöd för att importera dessa. Använd 'Förvalsmenyn -&gt; Nollställ inbyggda förval' för att återskapa standardförvalen.
+
+Alla andra användarförval som stöds har importerats.</value>
+  </data>
+  <data name="Options_PromptBeforeAction" xml:space="preserve">
+    <value>Genomför åtgärden direkt. (detta inaktiverar bekräftelsedialogen på 60 sekunder)</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Bläddra</value>
+  </data>
+  <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
+    <value>Ingen ljudfil har angivits. Klicka på 'Bläddra' för att välja en wav eller mp3-fil för uppspelning.</value>
+  </data>
+  <data name="OptionsView_Play" xml:space="preserve">
+    <value>Spela upp</value>
+  </data>
+  <data name="QueueView_ExportCLI" xml:space="preserve">
+    <value>Exportera kö (endast CLI)</value>
+  </data>
+  <data name="Options_DarkTheme" xml:space="preserve">
+    <value>Använd mörka temat. (kräver omstart, endast Windows 10)</value>
+  </data>
+  <data name="QueueView_NotAvailable" xml:space="preserve">
+    <value>Inte tillgänglig</value>
+  </data>
+  <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
+    <value>GB</value>
+  </data>
+  <data name="SystemService_ACMains" xml:space="preserve">
+    <value>Strömadapter ansluten. Återupptar enkodningen... ({0} %)</value>
+  </data>
+  <data name="SystemService_CriticalBattery" xml:space="preserve">
+    <value>Systemets batteri kritiskt lågt! ({0} %)</value>
+  </data>
+  <data name="SystemService_LowBatteryLog" xml:space="preserve">
+    <value>Systemets batteri lågt! ({0} %). Din enkodning har pausats.</value>
+  </data>
+  <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
+    <value>Återstående enhetslagring har gått under {0}GB på målenheten. Pausar enkodningen...</value>
+  </data>
+  <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Automatiskt ljudval</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Automatiskt val av undertexter</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Skådespelare:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Kommentarer:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Beskrivning:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Regissör:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Genre:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Handling:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Lanseringsdatum:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Titel:</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Loggvisare</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Förhållande:</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Filter:</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>Storlek:</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Spår:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>Allmänt</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>Klicka på 'Leta efter uppdateringar' för att leta efter nya versioner</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt; Tillbaka</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>Pausad för stunden</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Utdatafiler</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Kapitel</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Bildrutor</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Förhandsvisa</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Sekunder</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Alla matchande valda språk</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>Första matchande valda språk</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Första spåret</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Utländskt ljud föredras, annars första</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Utländskt ljudspår</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Utländsk ljudsökning</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Utländsk ljudsökning</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Alla matchande valda språk</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Använd alla spår som mallar</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>Första matchande valda språk</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Använd första spåret som mall</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>Inget ljud</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Kapitel {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Automatisk</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Använd alltid M4V</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Använd alltid MP4</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Anpassad</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Använd alltid källupplösningen</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Över normalt</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Under normalt</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>Hög</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Låg</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Månadsvis</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Veckovis</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Använd alltid standardsökvägen för varje nytt namn som genereras.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Portomfånget måste vara mellan 5000 och 32767</value>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>En ny version finns tillgänglig!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Copyright (C) 2003-2024 HandBrake-teamet</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Låg batterinivå:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Pausa alla körande jobb när batterinivån blir för låg.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Lägg till alla återstående dolda bildtexter</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>Dubbletta jobb hittades i köfilen som du försöker att importera. Vill du skriva över befintliga poster?
+Detta kommer även stoppa alla för närvarande körande jobb.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>Dubbletter hittades</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Aktivera Low Power QuickSync Hardware (där det stöds).</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Välj ett jobb för att visa sammandragsinformation.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Kör varje köjobb i en separat arbetsprocess.</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Nätverksport som standard för arbetsprocess:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>Det förval som du har valt finns inte tillgängligt att använda på detta system.
+
+Detta är vanligtvis en indikation på att ditt system inte har stöd för den hårdvara som krävs för att använda det.
+
+Välj ett annat förval.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Processisolering</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Observera att denna funktion kommer att starta en HTTP-server som binds till 127.0.0.1 på angiven port.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>Om angiven port redan används så kommer den hitta första lediga porten inom +100 från definierad port.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Maximalt antal samtidiga enkodningar:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Förval:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Samma som källa</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Nollställ inställningar</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Är du säker på att du vill nollställa HandBrake till dess standardinställningar?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Anpassad (inte begränsad)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Fyll (Surround)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Höjd (Pillarbox)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Bredd (Letterbox)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Fyll:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Färg:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Sorgkanter:</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Upplösning och skalning:</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Orientering och beskärning:</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Filter:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Tvingad</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Anpassad</value>
+  </data>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Maximal storlek:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Upplösningsgräns:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Hantera förval</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Ta bort inbyggda förval</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Exportera valt förval</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Importera förval från fil</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Förvalsinformation:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Inbyggda förval kan inte ändras.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Ange valt förval som standard</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Ta bort förval</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(stöds inte på detta system)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Stoppa</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>Kategorinamnet du angav finns redan. Välj ett annat namn.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>Kategorinamnet var tomt. Ange ett namn.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Ange ett namn:</value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>Det finns inget förval valt.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Exportera alla användarförval</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Nivå vid vilken larm om lågt diskutrymme ska visas:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Observera: Detta är den övre gränsen av samtidiga jobb. Hårdvarubegränsningar kan ha effekt vilket sänker det faktiska antalet samtidiga jobb under enkodningar. Inställningen tar effekt vid nästa kökörning eller omstart av programmet.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(inte tillgänglig)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Är standard:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nej</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Inställningar för finjustering</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Visa kontroller för beskärningsjustering.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Använd mörkt tema</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Använd ljust tema</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Samma som systemet</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(kräver omstart)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Färgrymd:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Färgrymd</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Öppna förhandsvisning</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Förhandsvisa källa:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Jobbstatus:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Avbruten</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Färdig</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Ogiltiga inställningar. Titta i loggen för mer information.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Ogiltig inmatning. Titta i loggen för mer information.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Status okänd. Titta i loggen för mer information.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Fel inträffade vid försök att läsa källan.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Okänt fel. Titta i loggen för mer information.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Arbetsprocessen kraschade. Titta i loggen för mer information.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Saknar filen "hb.dll". Installera om.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Varning: Observera att detta är ett byggversion med "Säkert läge" av HandBrake som inte inkluderar stöd för hårdvaruenkodare. Om du önskar att använda stöd för hårdvaruenkodare så hämta en version utan Säkert läge från webbsidan.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Svart</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Anpassad</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>Vit</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>RGB-värde:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(utfylld)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Vänd:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Källans dimensioner:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Lagringsstorlek: {0}x{1}     Visningsstorlek: {2}x{3}      Bildförhållande: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>Ett fel inträffade i filbläddrardialogen.
+
+- Observera att långa filsökvägar inte helt stöds. Håll filsökvägar kortare än 255 tecken.
+- Senast använda katalog för detta fönster har nollställts för att förhindra fel nästa gång du försöker söka av en fil.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Max höjd:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Max bredd:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Bildförhållande: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Skicka igenom vanlig metadata</value>
+  </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>Standardsökvägen för automatiska namn är inte giltig. {0}får inte vara före {1}</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>Vill du tillåta att HandBrake automatiskt letar efter uppdateringar?
+
+Du kan ändra ditt val senare genom att ändra alternativet i Inställningar -&gt; Allmänt -&gt; Leta efter uppdateringar</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>Leta efter uppdateringar?</value>
+  </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>Innan du uppdaterar:
+- Försäkra dig om att det inte finns några väntande enkodningar i kön.
+- Säkerhetskopiera eller gör en anteckning av anpassade förval som du skapat eftersom de kanske inte är fullt kompatibla med nyare versioner.</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>(standard)</value>
+  </data>
+  <data name="PresetDisplayMode_Category" xml:space="preserve">
+    <value>Kategorier</value>
+  </data>
+  <data name="PresetDisplayMode_Flat" xml:space="preserve">
+    <value>Platta</value>
+  </data>
+  <data name="PresetDisplayMode_Partial" xml:space="preserve">
+    <value>Delvis platta</value>
+  </data>
+  <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
+    <value>Välj hur förval ska visas i menyer:</value>
+  </data>
+  <data name="QueueView_SelectedPresets" xml:space="preserve">
+    <value>Förval:</value>
+  </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[Färdig]</value>
+  </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>Redigera jobb?</value>
+  </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>Utdatans speltid:</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>Flytta nederst</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>Flytta överst</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>Bitfrekvens för utdata:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>Genomsnittlig enkodningshastighet:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value> av källfilen</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>Inte tillgänglig</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>Källans speltid:</value>
+  </data>
+  <data name="Options_Reset" xml:space="preserve">
+    <value>Återställ</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
+    <value>Är du säker på att du vill nollställa alla inbyggda förval?</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
+    <value>Nollställ alla inbyggda förval till HandBrakes standardvärden:</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
+    <value>(användarens förval kommer inte nollställas)</value>
+  </data>
+  <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
+    <value>Nollställ alla HandBrake-inställningar till standardvärden:</value>
+  </data>
+  <data name="Options_BuiltInPresets" xml:space="preserve">
+    <value>Inbyggda förval</value>
+  </data>
+  <data name="Options_UserSettings" xml:space="preserve">
+    <value>Användarinställningar</value>
+  </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>Flytande trädvy</value>
+  </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>Försäkra dig om att du har lämpliga filassociationer konfigurerade i Windows för att kunna öppna denna fil med en videospelare som stöds.</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Kunde inte läsa köfilen.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>Filen kan vara skadad eller från en tidigare version av HandBrake.
+Endast köfiler från den aktuella versionen stöds.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>Din HandBrake-enkodning är färdig!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>Din HandBrake-kö är färdig!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>Detta kommer även inaktivera alternativet för visning av aviseringar från Windows aktivitetsfält på 'När färdig'-fliken. Återaktivera dessa om du vill återaktivera denna funktion.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Ta bort HandBrake från kontrollpanelen för Windows-aviseringar.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Avinstallerad</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Aviseringsinställningar har tagits bort.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Töm och avinstallera</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Skicka en avisering till Windows aktivitetsfält.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Windows-aviseringar</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} jobb färdiga. {1}Jobbar på {2} jobb samt {3} väntar på att behandlas.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Återgenerera (automatiska namn)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Öppna denna katalog</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Fäll in allt</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Fäll ut allt</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Visningsläge för höger till vänster:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Av</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Endast text</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Hela användargränssnittet</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>Den aktuella utvecklingsversionen du använder börjar bli gammal. Du borde uppdatera!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Hämta via Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Hämta utvecklingsversioner (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>Aktivera QuickSync Deep Link Hyper Encode</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Föredrar användningen av flera mediamotorer som stöds för att snabba upp en enstaka enkodning. Inaktivera för att tillåta lastbalansering av parallella enkodningar mellan mediamotorer.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>Öppna HandBrake</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>Stöd för hårdvaruenkodning har inaktiverats eftersom det är en vanlig orsak till uppstartsproblem.
+- Prova att starta om HandBrake.
+ - Om problemet kvarstår, kan det bero på gamla utdaterade drivrutiner för grafikkort som orsakar problemet.
+
+Stöd för hårdvaruenkodning kan återaktiveras i inställningarna.</value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake kunde inte startas.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Återställ säkert läge</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Starta om HandBrake.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Exportera köstatistik (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Exportering färdig!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>Du måste först läsa in en källa och ha en initial målkatalog angiven</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Endast när filen redan finns på disken.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>Det fanns lades inte till några undertextspår.
+
+Detta kan bero på begränsningar i filcontainern som du har valt. Ta en titt på dokumentationen för undertexter för mer information.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>Inget</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Uppdatera nu!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>Automatisk</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Konservativ</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>Anpassad</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>Föredra att använda Nvidia NVDec för avkodning av video när du använder NVEnc-enkodaren och hårdvaran finns tillgänglig för användning.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>Hårdvarustöd</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>Systemet kunde inte spela upp denna fil.
+
+Observera att vissa kodekar såsom AV1 eller HEVC kräver att Microsofts AV1 eller HEVC-kodekar installeras från Microsoft Store för att kunna spelas upp.
+Alternativt, välj kryssrutan 'Använd extern uppspelare' nedan.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Välj uppspelare</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Spela upp</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Förhandsvisa video</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>Inbyggda förvalet finns inte tillgängligt för denna WebM-container. En extern uppspelare måste användas.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Enkodar förhandsvisning ...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Förhandsvisningar:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volym: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Återställ</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Använd ISO-datumformat (YYYY-MM-DD) istället för systemets format.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Pass {0} av {1}, {2:00.00}%, {3:000.0} bilder/s, genomsnitt {4:000.0} bilder/s, Klar om: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Söker efter undertexter {0:00.00}%, Klar om: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Utöka köinfo</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Minimera köinfo</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Utdata: {0}, genomsnitt {1} bilder/s</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Förvalsbeskrivning:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Dölj beskrivning av förval</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Visa förvalsbeskrivning</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Enkodar {1} jobb</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Kunde inte enkoda en förhandsvisning. Programmet är för närvarande upptaget med att enkoda en annan fil.
+
+För att tillåta flera samtidiga enkodningar, aktivera "Processisolering" i Verktygsmenyn -&gt; Inställningar -&gt; Avancerat -&gt; Processisolering -&gt; "Kör varje köjobb i en separat arbetsprocess"-</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Kvalitet</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Källa</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Dokumentation:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>Felhantering via GitHub:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Webbsida: </value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Klona förval</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Flytta neråt</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Flytta längst ner</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Flytta överst</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Flytta uppåt</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>Det finns jobb som körs för närvarande. Vill du färdigställa de aktuella jobben innan kön stoppas?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Lägg till filändelse</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Exkludera filändelser:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>Följande filändelser kommer att ignoreras när en mapp söks igenom. Listan är skiftlägeskänslig. "." behövs inte.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>Denna filändelse finns redan i listan.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>Filhantering (inläsning)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Sök igenom kataloger rekursivt när mappsökningsläget används.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Kvalitet för ljudspår</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Namn för ljudspår</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Bitfrekvens för ljudspår</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Ta bort detta ljudspår</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Kvalitetsläge för ljudenkodare</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Använd avancerad kövisning</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Använd enkel kövisning</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Endast förlustfri enkodning.</value>
+  </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Dölj klassisk meny</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Visa klassisk meny</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Varning: Hittade en drivrutin som inte stöds! - Uppdatering rekommenderas)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Omfångsgränser:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Begränsa längden för titlarna som läggs till i kön.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Aktivera omfångsgränser</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Några titlar kunde inte läggas till i kön på grund av att de var utanför de valda omfångsgränserna.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Starta senare</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Köns starttid:</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Stänger ner enkodning ...</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Tillåt uppskalning</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimal storlek</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Tillgängligt på detta system.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>Inte tillgängligt på detta system.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Vänta ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Öppna loggfönstret</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Anpassad</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Automatisk</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>Av</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>Anpassad</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>Av</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>Av</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>Av</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>Anpassad</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>Av</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximal längd i sekunder för dvd och blu-ray-titlar. Längre titlar kommer att hoppas över:</value>
+  </data>
+</root>

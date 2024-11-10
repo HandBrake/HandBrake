@@ -15,6 +15,9 @@
 #   define FUNC(name) name##_##8
 #endif
 
+#if defined (__aarch64__) && !defined(__APPLE__)
+    #include <arm_neon.h>
+#endif
 #include "handbrake/eedi2.h"
 
 static void FUNC(init_crop_table)(void **crop_table_out, const int max_value)
@@ -103,6 +106,176 @@ static inline void FUNC(cubic_interpolate_line)(pixel *dst,
     }
 }
 
+#if defined (__aarch64__) && !defined(__APPLE__)
+#if BIT_DEPTH > 8
+static void FUNC(blend_filter_line)(const filter_param_t *filter,
+                                    const pixel *crop_table,
+                                    pixel *dst,
+                                    const pixel *cur,
+                                    const int width,
+                                    const int height,
+                                    const int stride,
+                                    const int y)
+{
+    int up1, up2, down1, down2;
+    if (y > 1 && y < (height - 2))
+    {
+        up1 = -1 * stride;
+        up2 = -2 * stride;
+        down1 = 1 * stride;
+        down2 = 2 * stride;
+    }
+    else if (y == 0)
+    {
+        up1 = up2 = 0;
+        down1 = 1 * stride;
+        down2 = 2 * stride;
+    }
+    else if (y == 1)
+    {
+        up1 = up2 = -1 * stride;
+        down1 = 1 * stride;
+        down2 = 2 * stride;
+    }
+    else if (y == (height - 2))
+    {
+        up1 = -1 * stride;
+        up2 = -2 * stride;
+        down1 = down2 = 1 * stride;
+    }
+    else if (y == (height - 1))
+    {
+        up1 = -1 * stride;
+        up2 = -2 * stride;
+        down1 = down2 = 0;
+    }
+    else
+    {
+        hb_error("Invalid value y %d height %d", y, height);
+        return;
+    }
+
+    int32x4_t tap0 = vdupq_n_s32(filter->tap[0]);
+    int32x4_t tap1 = vdupq_n_s32(filter->tap[1]);
+    int32x4_t tap2 = vdupq_n_s32(filter->tap[2]);
+    int32x4_t tap3 = vdupq_n_s32(filter->tap[3]);
+    int32x4_t tap4 = vdupq_n_s32(filter->tap[4]);
+
+    int32x4_t filter_norm_vec = vdupq_n_s32(-filter->normalize);
+    int32x4_t offset = vdupq_n_s32(1024);
+    for (int x = 0; x < width; x += 4)
+    {
+        uint32_t cr_table_vec[4];
+        int32x4_t up2_pixels = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(cur + x + up2)));
+        int32x4_t up1_pixels = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(cur + x + up1)));
+        int32x4_t current_pixels = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(cur + x )));
+        int32x4_t down1_pixels = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(cur + x + down1)));
+        int32x4_t down2_pixels = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(cur + x + down2)));
+
+        int32x4_t result = vmulq_s32(up2_pixels, tap0);
+        result = vmlaq_s32(result, up1_pixels, tap1);
+        result = vmlaq_s32(result, current_pixels, tap2);
+        result = vmlaq_s32(result, down1_pixels, tap3);
+        result = vmlaq_s32(result, down2_pixels, tap4);
+
+        result = vshrq_n_s32(result, 3);
+
+        uint32x4_t result_u32 = vreinterpretq_u32_s32(vaddq_s32(result, offset));
+        vst1q_u32(&cr_table_vec, result_u32);
+        dst[x+0] = crop_table[cr_table_vec[0]];
+        dst[x+1] = crop_table[cr_table_vec[1]];
+        dst[x+2] = crop_table[cr_table_vec[2]];
+        dst[x+3] = crop_table[cr_table_vec[3]];
+    }
+}
+#else
+
+static void FUNC(blend_filter_line)(const filter_param_t *filter,
+                                    const pixel *crop_table,
+                                    pixel *dst,
+                                    const pixel *cur,
+                                    const int width,
+                                    const int height,
+                                    const int stride,
+                                    const int y)
+{
+    int up1, up2, down1, down2;
+    if (y > 1 && y < (height - 2))
+    {
+        up1 = -1 * stride;
+        up2 = -2 * stride;
+        down1 = 1 * stride;
+        down2 = 2 * stride;
+    }
+    else if (y == 0)
+    {
+        up1 = up2 = 0;
+        down1 = 1 * stride;
+        down2 = 2 * stride;
+    }
+    else if (y == 1)
+    {
+        up1 = up2 = -1 * stride;
+        down1 = 1 * stride;
+        down2 = 2 * stride;
+    }
+    else if (y == (height - 2))
+    {
+        up1 = -1 * stride;
+        up2 = -2 * stride;
+        down1 = down2 = 1 * stride;
+    }
+    else if (y == (height - 1))
+    {
+        up1 = -1 * stride;
+        up2 = -2 * stride;
+        down1 = down2 = 0;
+    }
+    else
+    {
+        hb_error("Invalid value y %d height %d", y, height);
+        return;
+    }
+
+    int16x8_t tap0 = vdupq_n_s16(filter->tap[0]);
+    int16x8_t tap1 = vdupq_n_s16(filter->tap[1]);
+    int16x8_t tap2 = vdupq_n_s16(filter->tap[2]);
+    int16x8_t tap3 = vdupq_n_s16(filter->tap[3]);
+    int16x8_t tap4 = vdupq_n_s16(filter->tap[4]);
+
+    int16x8_t filter_norm_vec = vdupq_n_s16(-filter->normalize);
+    int16x8_t offset = vdupq_n_s16(1024);
+    for (int x = 0; x < width; x += 8)
+    {
+        uint16_t cr_table_vec[8];
+        int16x8_t up2_pixels = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(cur + x + up2)));
+        int16x8_t up1_pixels = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(cur + x + up1)));
+        int16x8_t current_pixels = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(cur + x )));
+        int16x8_t down1_pixels = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(cur + x + down1)));
+        int16x8_t down2_pixels = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(cur + x + down2)));
+
+        int16x8_t result = vmulq_s16(up2_pixels, tap0);
+        result = vmlaq_s16(result, up1_pixels, tap1);
+        result = vmlaq_s16(result, current_pixels, tap2);
+        result = vmlaq_s16(result, down1_pixels, tap3);
+        result = vmlaq_s16(result, down2_pixels, tap4);
+
+        result = vshrq_n_s16(result, 3);
+
+        uint16x8_t result_u16 = vreinterpretq_u16_s16(vaddq_s16(result, offset));
+        vst1q_u16(&cr_table_vec, result_u16);
+        dst[x+0] = crop_table[cr_table_vec[0]];
+        dst[x+1] = crop_table[cr_table_vec[1]];
+        dst[x+2] = crop_table[cr_table_vec[2]];
+        dst[x+3] = crop_table[cr_table_vec[3]];
+        dst[x+4] = crop_table[cr_table_vec[4]];
+        dst[x+5] = crop_table[cr_table_vec[5]];
+        dst[x+6] = crop_table[cr_table_vec[6]];
+        dst[x+7] = crop_table[cr_table_vec[7]];
+    }
+}
+#endif
+#else
 static inline int FUNC(blend_filter_pixel)(const filter_param_t *filter,
                                            const pixel *crop_table,
                                            const int up2, const int up1,
@@ -186,6 +359,7 @@ static void FUNC(blend_filter_line)(const filter_param_t *filter,
         cur++;
     }
 }
+#endif
 
 /// This function calls all the eedi2 filters in sequence for a given plane.
 /// It outputs the final interpolated image to pv->eedi_full[DST2PF].
