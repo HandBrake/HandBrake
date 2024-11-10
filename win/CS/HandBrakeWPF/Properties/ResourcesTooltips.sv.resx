@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>L'antiblocs redueix els artefactes causats per una compressió de vídeo de baixa qualitat.</value>
+    <value>Deblock minskar blockiga artifakter som orsakas av videokomprimering av låg kvalitet.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
     <value>Choose decomb or deinterlace filter options.
@@ -141,26 +141,26 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
     <value>Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Grayscale removes the color component of the video. Often referred to as Black &amp; White video.</value>
+    <value>Gråskala tar bort färgkomponenten för videon. Ofta refererad till som svartvit video.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>Destination path, including directory and file name. This is where your new video will be created, and what it will be named.</value>
+    <value>Målsökväg, inklusive katalog och filnamn. Detta är där din nya video kommer att skapas och vad den ska ha för namn.</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
-    <value>Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility.</value>
+    <value>Lägg till en speciell MP4-markör för att tillåta uppspelning på uråldriga iPod-enheter av femte generationen från cirka 2006. Andra inställningar kan påverka kompatibiliteten.</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
-    <value>Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility.</value>
+    <value>Containerformat. Video, ljud och andra spår kombineras till en enda fil av denna typ. Påverkar kompatibiliteten.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
-    <value>Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</value>
+    <value>Optimera MP4 för progressive hämtning. After enkodningen är färdig kommer datat att organiseras om och skrivas om för att tillåta omedelbar uppspelning över ett nätverk, utan att behöva hämta ner hela filen.</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>Source range selection. By default, all chapters are selected and the entire source is encoded.</value>
+    <value>Omfångsval av källa. Alla kapitel väljs och hela källan enkodas som standard.</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>Title, or video clip, to encode.
-Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature</value>
+    <value>Titel eller videoklipp att enkoda.
+Blu-ray och dvd-källor har ofta flera titlar, den längsta av dessa är oftast själva filmen</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
     <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
@@ -174,32 +174,32 @@ Loose is similar to Auto, but attempts to preserve the storage aspect ratio. Thi
 Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
-    <value>Automatically crop black borders around edges of the video.</value>
+    <value>Beskär automatiskt svarta sorgkanter runt kanten för videon.</value>
   </data>
   <data name="PictureSettingsView_CropBottom" xml:space="preserve">
-    <value>Escapça el vídeo per sota.</value>
+    <value>Beskär videon från botten.</value>
   </data>
   <data name="PictureSettingsView_CropLeft" xml:space="preserve">
-    <value>Escapça el vídeo per l'esquerra.</value>
+    <value>Beskär videon från vänstra sidan.</value>
   </data>
   <data name="PictureSettingsView_CropRight" xml:space="preserve">
-    <value>Escapça el vídeo per la dreta.</value>
+    <value>Beskär videon från högra sidan.</value>
   </data>
   <data name="PictureSettingsView_CropTop" xml:space="preserve">
-    <value>Escapça el vídeo per dalt.</value>
+    <value>Beskär videon från toppen.</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>This is the height that the video will be stored at.
-The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</value>
+    <value>Detta är höjden som videon kommer att lagras med.
+De faktiska storleksdimensionerna kommer att skilja sig om bildpunkternas förhållande inte är 1:1.</value>
   </data>
   <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
-    <value>Escapça manualment el vídeo.</value>
+    <value>Beskär videon manuellt.</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Align storage dimensions to multiples of this value.
+    <value>Justera lagringsdimensioner efter multiplar av detta värde.
 
-This setting is only necessary for compatibility with some devices.
-You should use 2 unless you experience compatibility issues.</value>
+Denna inställning är endast nödvändig för kompatibilitet med vissa enheter.
+Du bör använda 2 såvida inte du upplever kompatibilitetsproblem.</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
     <value>Pixel aspect defines the shape of the pixels.
@@ -207,17 +207,17 @@ A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
 Players will scale the image in order to achieve the specified aspect.</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>This is the width that the video will be stored at.
-The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</value>
+    <value>Detta är bredden som videon kommer att lagras med.
+De faktiska storleksdimensionerna kommer att skilja sig om bildpunkternas förhållande inte är 1:1.</value>
   </data>
   <data name="QueueView_DeleteJob" xml:space="preserve">
-    <value>Elimina la tasca de la cua.</value>
+    <value>Ta bort jobbet från kön.</value>
   </data>
   <data name="QueueView_ResetJobStatus" xml:space="preserve">
-    <value>Reset job status to Waiting.</value>
+    <value>Nollställ jobbstatus till Väntande.</value>
   </data>
   <data name="QueueView_SendJobBack" xml:space="preserve">
-    <value>Send the job back to the main window for editing.</value>
+    <value>Skicka jobbet tillbaka till huvudfönstret för redigering.</value>
   </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
     <value>Set the average bitrate.
@@ -227,10 +227,10 @@ But the average over a long duration will be the value set here.  If you need
 to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
-    <value>Enables constant framerate output.</value>
+    <value>Aktiverar utdata med konstant bildfrekvens.</value>
   </data>
   <data name="Video_Encoders" xml:space="preserve">
-    <value>Codificadors de vídeo disponibles.</value>
+    <value>Tillgängliga videoenkodare.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
     <value>Tune settings to optimize for common scenarios.
@@ -240,14 +240,14 @@ characteristics of the output file.  Changes will be applied after the
 preset but before all other parameters.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
-    <value>Additional encoder settings.
+    <value>Ytterligare enkodningsinställningar.
 
-Colon separated list of encoder options.</value>
+Kolonseparerad lista med enkoderalternativ.</value>
   </data>
   <data name="Video_FastDecode" xml:space="preserve">
-    <value>Reduce decoder CPU usage.
+    <value>Minska dekodarens CPU-användning.
 
-Set this if your device is struggling to play the output (dropped frames).</value>
+Ställ in denna om din enhet kämpar med att spela upp utdata (förlorade bildrutor).</value>
   </data>
   <data name="Video_Framerate" xml:space="preserve">
     <value>Output framerate.
@@ -260,7 +260,7 @@ Set this if your device is struggling to play the output (dropped frames).</valu
 Overrides all other settings.</value>
   </data>
   <data name="Video_PeakFramerate" xml:space="preserve">
-    <value>Enables variable framerate output with a peak rate determined by the framerate setting.</value>
+    <value>Aktiverar utdata med variabel bildfrekvens med högsta frekvensen bestämd av inställningen bildfrekvens.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
     <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
@@ -306,19 +306,19 @@ to make bitrate allocation decisions.</value>
 VFR is not compatible with some players.</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
-    <value>When HandBrake has finished the current queue or encode it will perform this action.</value>
+    <value>När HandBrake har färdigställt den aktuella kön eller enkodning så kommer denna åtgärd att genomföras.</value>
   </data>
   <data name="MainView_Browse" xml:space="preserve">
-    <value>Browse to select a new destination path and file name for your encode.</value>
+    <value>Bläddra för att välja en ny målsökväg och filnamn för din enkodning.</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Video angle to encode. Only applicable to multi-angle DVD and Blu-ray.</value>
+    <value>Videovinkel att enkoda. Endast tillämpningsbar på flervinkliga dvd och Blu-ray.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
-    <value>Afegeix una nova configuració predefinida.</value>
+    <value>Lägg till nytt förval.</value>
   </data>
   <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
-    <value>Opcions addicionals de les configuracions predefinides.</value>
+    <value>Ytterligare förvalsalternativ.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
     <value>Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
@@ -326,7 +326,7 @@ VFR is not compatible with some players.</value>
  Overrides all encode settings. Settings may be further adjusted after selecting a preset.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>Remove the selected preset.</value>
+    <value>Ta bort valt förval.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
     <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
@@ -345,7 +345,7 @@ HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:
 HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>Denoise filter preset. Sets the strength of the filter.</value>
+    <value>Förval för filtret denoise. Anger styrkan för filtret.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
     <value>Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
@@ -394,7 +394,7 @@ EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful f
 Bob attempts to better preserve motion for a slight penalty to perceived resolution.</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
-    <value>Flips (mirrors) the picture on the horizontal axis.</value>
+    <value>Vänder (speglar) bilden på den horisontella axeln.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
     <value>Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames.</value>
@@ -407,13 +407,13 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
  Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
   </data>
   <data name="FilterView_Rotate" xml:space="preserve">
-    <value>Rotate the picture clockwise in 90 degree increments.</value>
+    <value>Rotera bilden inkrementellt 90 grader medurs.</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>Duration of the selected source range in Hours:Minutes:Seconds</value>
+    <value>Längden för valt källomfång i Timmar:Minuter:Sekunder</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Keep Aspect Ratio maintains the original display aspect of the source. Disabling this may result in a stretched or squeezed picture.</value>
+    <value>Behåll bildförhållande upprätthåller det ursprungliga skärmförhållandet för källan. Inaktivering av detta kan resultera i utdragen eller ihoptryckt bild.</value>
   </data>
   <data name="FilterView_CustomSharpenParams" xml:space="preserve">
     <value>Custom Sharpen parameters.
@@ -434,7 +434,7 @@ Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, th
 Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
-    <value>Sharpen filter preset. Sets the strength of the filter.</value>
+    <value>Förval för filtret sharpen. Anger styrkan för filtret.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
     <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
@@ -455,23 +455,23 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
     <value>Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Options to control presets.</value>
+    <value>Alternativ för att kontrollera förval.</value>
   </data>
   <data name="MainView_EndPoint" xml:space="preserve">
-    <value>The end point for this range.</value>
+    <value>Slutpunkten för detta omfång.</value>
   </data>
   <data name="MainView_StartPoint" xml:space="preserve">
-    <value>The start point for this range.</value>
+    <value>Startpunkten för detta omfång.</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>When enabled the auto name system will always use the default path. 
 When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path.</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>Filtre d'espai de color.</value>
+    <value>Colourspace-filter.</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Filtre de suavització cromàtica</value>
+    <value>Chroma Smooth-filter</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
     <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
@@ -489,13 +489,13 @@ Partially Flat - The last 8 user presets are displayed as a flat list followed b
 Categories - All presets are shown under a sub menu per category.</value>
   </data>
   <data name="AudioView_AudioDefaults" xml:space="preserve">
-    <value>Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title.</value>
+    <value>Konfigurera beteendet som bestämmer hur denna flik automatiskt lägger till ljudspår när en ny källa eller titel väljs</value>
   </data>
   <data name="BehavioursReload" xml:space="preserve">
-    <value>Refresh the list below based on the behaviours configured. </value>
+    <value>Uppdatera listan nedan baserat på konfigurerade beteenden.</value>
   </data>
   <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
-    <value>Setup behaviours that dictate how this tab automatically adds subtitle tracks when selecting a new source or title.</value>
+    <value>Konfigurera beteendet som bestämmer hur denna flik automatiskt lägger till undertextspår när en ny källa eller titel väljs</value>
   </data>
   <data name="OptionsView_SendFileToArguments" xml:space="preserve">
     <value>The following environment variables are always set:
@@ -555,9 +555,9 @@ Bitrate will vary source to source.</value>
 {source} - The name of the source file.</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
-    <value>Launches the documentation website located at https://handbrake.fr/docs</value>
+    <value>Startar upp webbsidan för dokumentation på https://handbrake.fr/docs</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Dash (-), Period (.) and Comma (,)</value>
+    <value>Streck (-), Punkt (.) och Komma (,)</value>
   </data>
 </root>

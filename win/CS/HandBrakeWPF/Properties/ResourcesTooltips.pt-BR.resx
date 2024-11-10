@@ -556,4 +556,7 @@ A taxa de bits varia de acordo com a fonte.</value>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>Abre o site da documentação localizado em https://handbrake.fr/docs</value>
   </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
 </root>

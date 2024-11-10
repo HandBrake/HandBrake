@@ -2312,7 +2312,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>显示磁盘空间不足警报的级别。</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>提示：这是同时运行任务的上限。在编码时，硬件限制将会降低实际的同时运行任务数量。此设置只会在下一个队列批次或者程序重启后生效。</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>（不可用）</value>
@@ -2879,5 +2879,35 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   </data>
   <data name="AnamorphicMode_Automatic" xml:space="preserve">
     <value>自动</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
   </data>
 </root>
