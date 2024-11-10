@@ -112,7 +112,7 @@
       "handbrake.app.core": {
         "type": "Project",
         "dependencies": {
-          "HandBrake.Interop": "[1.8.1, )"
+          "HandBrake.Interop": "[1.9.0, )"
         }
       },
       "handbrake.interop": {
@@ -121,7 +121,7 @@
       "handbrake.worker": {
         "type": "Project",
         "dependencies": {
-          "HandBrake.Interop": "[1.8.1, )"
+          "HandBrake.Interop": "[1.9.0, )"
         }
       }
     }
