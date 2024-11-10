@@ -100,9 +100,6 @@
 /* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "N7h-CJ-quV"; */
 "N7h-CJ-quV.headerCell.title" = "볼륨 설정";
 
-/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "naS-No-CdV"; */
-"naS-No-CdV.title" = "FLAC";
-
 /* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[0] = "Add Audio Track"; ObjectID = "otA-K4-TxM"; */
 "otA-K4-TxM.ibShadowedToolTips[0]" = "오디오 트랙 추가";
 
@@ -126,6 +123,9 @@
 
 /* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
 "sdZ-Rx-JoG.title" = "MP3";
+
+/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "sJU-xA-Jo1"; */
+"sJU-xA-Jo1.title" = "FLAC";
 
 /* Class = "NSButtonCell"; title = "E-AC3"; ObjectID = "u9h-dn-wcK"; */
 "u9h-dn-wcK.title" = "E-AC3";

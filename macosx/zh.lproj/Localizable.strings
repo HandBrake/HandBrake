@@ -53,7 +53,7 @@
 "4320p 8K Ultra HD" = "4320p 8K 超高清";
 
 /* Destination same as source alert -> message
-   File already exists alert -> message */
+File already exists alert -> message */
 "A file already exists at the selected destination." = "所选目标上已存在文件。";
 
 /* Queue Window Action Toolbar Item */
@@ -84,7 +84,7 @@
 "Add Titles To Queue…" = "添加标题到队列...";
 
 /* Main Window Add Toolbar Item
-   Touch bar */
+Touch bar */
 "Add To Queue" = "添加到队列";
 
 /* Preferences Advanced Toolbar Item */
@@ -118,24 +118,25 @@
 "Bit Depth" = "位深度";
 
 /* Copy Protection Alert -> second button
-   Delete preset alert -> second button
-   File already exists alert -> first button
-   File already exists in queue alert -> first button
-   Preview -> live preview alert alternate button
-   Touch bar */
+Delete preset alert -> second button
+File already exists alert -> first button
+File already exists in queue alert -> first button
+Preview -> live preview alert alternate button
+Touch bar */
 "Cancel" = "取消";
 
 /* Touch bar */
 "Cancel Encoding" = "取消编码";
 
 /* Toolbar Open/Cancel Item
-   Touch bar */
+Touch bar */
 "Cancel Scan" = "取消扫描";
 
 /* Toolbar Open/Cancel Item */
 "Cancel Scanning Source" = "取消扫描源";
 
-/* Preferences -> Output Name Token */
+/* HBRange -> display name
+Preferences -> Output Name Token */
 "Chapters" = "章节";
 
 /* Main Window -> Destination open panel */
@@ -178,7 +179,7 @@
 "Do Nothing" = "无操作";
 
 /* File already exists alert -> informative text
-   File already exists in queue alert -> informative text */
+File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "您是否确认覆盖 %@？";
 
 /* Quit Alert -> second button */
@@ -194,7 +195,7 @@
 "Encode complete" = "编码完成";
 
 /* HBQueueItemView -> Encode state accessibility label
-   Queue done notification failed message */
+Queue done notification failed message */
 "Encode failed" = "编码失败";
 
 /* HBQueueItemView -> Encode state accessibility label */
@@ -230,6 +231,9 @@
 /* Preferences Output File Name Toolbar Item */
 "File name" = "文件名称";
 
+/* HBRange -> display name */
+"Frames" = "帧";
+
 /* Preferences General Toolbar Item */
 "General" = "通用";
 
@@ -261,7 +265,7 @@
 "Invalid chapters CSV file" = "无效的章节 CSV 文件";
 
 /* Queue Edit Alert -> stop and edit first button
-   Queue Stop Alert -> stop and remove first button */
+Queue Stop Alert -> stop and remove first button */
 "Keep Encoding" = "继续编码";
 
 /* Touch bar */
@@ -301,7 +305,7 @@
 "None" = "无";
 
 /* Queue Done Alert -> shut down first button
-   Queue Done Alert -> sleep first button */
+Queue Done Alert -> sleep first button */
 "OK" = "确定";
 
 /* File already exists alert -> informative text */
@@ -311,25 +315,25 @@
 "Open in external player" = "在外部播放器中打开";
 
 /* Main Window Open Toolbar Item
-   Toolbar Open/Cancel Item
-   Touch bar */
+Toolbar Open/Cancel Item
+Touch bar */
 "Open Source" = "打开源";
 
 /* File already exists alert -> second button
-   File already exists in queue alert -> second button */
+File already exists in queue alert -> second button */
 "Overwrite" = "覆盖";
 
 /* Main Window Pause Toolbar Item
-   Toolbar Pause Item */
+Toolbar Pause Item */
 "Pause" = "暂停";
 
 /* Queue -> pause/resume menu
-   Toolbar Pause Item
-   Touch bar */
+Toolbar Pause Item
+Touch bar */
 "Pause Encoding" = "暂停编码";
 
 /* Main Window Pause Toolbar Item
-   Touch bar */
+Touch bar */
 "Pause/Resume Encoding" = "暂停/继续编码";
 
 /* Job statistics */
@@ -342,14 +346,14 @@
 "Play/Pause" = "播放/暂停";
 
 /* Add preset window -> name alert informative text
-   Rename preset window -> name alert informative text */
+Rename preset window -> name alert informative text */
 "Please enter a name." = "请输入一个名称。";
 
 /* Copy Protection Alert -> informative text */
 "Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "请注意，HandBrake 不支持去除 DVD 光盘的防拷贝保护。如果您愿意，您可以使用任何其他第三方软件来实现这一功能。这个警告在每次运行 HandBrake 时只显示一次。";
 
 /* Queue Done Alert -> shut down second button
-   Queue Done Alert -> sleep second button */
+Queue Done Alert -> sleep second button */
 "Preferences…" = "偏好设置…";
 
 /* Preferences -> Output Name Token */
@@ -362,7 +366,7 @@
 "preview" = "预览";
 
 /* Main Window Preview Toolbar Item
-   Preview -> window title */
+Preview -> window title */
 "Preview" = "预览";
 
 /* Preview -> window title format */
@@ -370,9 +374,6 @@
 
 /* Preview -> accessibility label */
 "Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "预览图，大小：%1$zu x %2$zu，缩放：%3$.0f%%";
-
-/* Touch bar */
-"Previews" = "预览";
 
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "让电脑进入睡眠状态";
@@ -387,8 +388,8 @@
 "Quality/Bitrate" = "质量/码率";
 
 /* Main Window Presets Toolbar Item
-   Preferences Queue Toolbar Item
-   Queue window title */
+Preferences Queue Toolbar Item
+Queue window title */
 "Queue" = "队列";
 
 /* Queue window title */
@@ -434,7 +435,7 @@
 "Resume" = "继续";
 
 /* Queue -> pause/resume men
-   Toolbar Pause Item */
+Toolbar Pause Item */
 "Resume Encoding" = "继续编码";
 
 /* HBQueueItemView -> Reveal button accessibility label */
@@ -447,8 +448,11 @@
 "Save" = "保存";
 
 /* Picture HUD -> scale button
-   Touch bar */
+Touch bar */
 "Scale To Screen" = "缩放到屏幕";
+
+/* HBRange -> display name */
+"Seconds" = "秒";
 
 /* Queue Alert -> cancel rip informative text */
 "Select Continue Encoding to dismiss this dialog without making changes." = "选择“继续编码”，可以在不做任何修改的情况下关闭这个对话框。";
@@ -463,14 +467,14 @@
 "Show" = "显示";
 
 /* Main Window Activity Toolbar Item
-   Touch bar */
+Touch bar */
 "Show Activity Window" = "显示活动窗口";
 
 /* Main Window Presets Toolbar Item */
 "Show Presets List" = "显示预设列表";
 
 /* Main Window Preview Toolbar Item
-   Touch bar */
+Touch bar */
 "Show Preview Window" = "显示预览窗口";
 
 /* Main Window Presets Toolbar Item */
@@ -492,26 +496,26 @@
 "Source" = "来源";
 
 /* Main Window Start Toolbar Item
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Start" = "开始";
 
 /* Menu Start/Stop Item
-   Queue -> start/stop menu
-   Toolbar Start/Stop Item */
+Queue -> start/stop menu
+Toolbar Start/Stop Item */
 "Start Encoding" = "开始编码";
 
 /* Toolbar Start/Stop Item */
 "Start Queue" = "开始队列";
 
 /* Main Window Start Toolbar Item
-   Touch bar */
+Touch bar */
 "Start/Stop Encoding" = "开始/停止编码";
 
 /* Job statistics */
 "Started at:" = "开始于：";
 
 /* Queue -> Stop action
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Stop" = "停止";
 
 /* Queue -> Stop action */
@@ -524,7 +528,7 @@
 "Stop All" = "全部停止";
 
 /* Queue -> start/stop menu
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Stop Encoding" = "停止编码";
 
 /* Queue Stop Alert -> stop and remove second button */
@@ -558,7 +562,7 @@
 "The line count in the chapters CSV file does not match the number of chapters in the movie." = "章节 CSV 文件中的行数与视频中的章节数不一致。";
 
 /* Add preset window -> name alert message
-   Rename preset window -> name alert message */
+Rename preset window -> name alert message */
 "The preset name cannot be empty." = "预设名称不能为空。";
 
 /* File already exists in queue alert -> message */
@@ -616,7 +620,7 @@
 "Your encode %@ is done!" = "您的编码 %@ 已完成！";
 
 /* Queue Edit Alert -> stop and edit informative text
-   Queue Stop Alert -> stop and remove informative text */
+Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "如果不继续编码您的视频将会丢失。";
 
 /* Queue done notification message */

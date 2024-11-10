@@ -7,6 +7,9 @@
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
 "5.title" = "Einstellungen";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Maximum title duration in seconds. Longer titles will be skipped"; ObjectID = "5AX-Hp-nby"; */
+"5AX-Hp-nby.ibShadowedToolTip" = "Maximale Titeldauer in Sekunden. Längere Titel werden übersprungen.";
+
 /* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "6Sg-su-vLd"; */
 "6Sg-su-vLd.title" = "Änderungen an Voreinstellungen bei Auswahl eines neuen Titels beibehalten";
 
@@ -106,14 +109,8 @@
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
 "399.title" = "Libdvdnav verwenden (anstelle von libdvdread)";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped."; ObjectID = "463"; */
-"463.ibShadowedToolTip" = "Minimale Dauer des DVD- und Blu-ray-Titels in Sekunden. Kürzere Titel werden übersprungen.";
-
-/* Class = "NSTextFieldCell"; title = "Ignore DVD and Blu-ray titles shorter than:"; ObjectID = "464"; */
-"464.title" = "DVD- und Blu-ray-Titel ignorieren, falls kürzer als:";
-
-/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
-"480.ibShadowedToolTip" = "Minimale Dauer des Titels in Sekunden. Kürzere Titel werden übersprungen.";
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped"; ObjectID = "480"; */
+"480.ibShadowedToolTip" = "Mindestdauer des Titels in Sekunden. Kürzere Titel werden übersprungen.";
 
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
@@ -135,6 +132,12 @@
 
 /* Class = "NSTableView"; ibShadowedToolTip = "The following file extensions will be ignored when scanning a folder. The list is case insensitive"; ObjectID = "ax0-hR-WPq"; */
 "ax0-hR-WPq.ibShadowedToolTip" = "Die folgenden Dateierweiterungen werden beim Einlesen eines Ordners ignoriert. Die Groß- und Kleinschreibung wird hierbei nicht berücksichtigt.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Keep all the titles to match the titles numbers of a Blu-ray player"; ObjectID = "AYI-kG-it2"; */
+"AYI-kG-it2.ibShadowedToolTip" = "Behalte alle Titel, damit sie mit den Titelnummern eines Blu-ray-Players übereinstimmen.";
+
+/* Class = "NSTextFieldCell"; title = "DVD and Blu-ray:"; ObjectID = "bG9-Tu-YsZ"; */
+"bG9-Tu-YsZ.title" = "DVD und Blu-ray:";
 
 /* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
 "BHK-QU-DwS.title" = "VideoToolbox-Hardwaredecoder aktivieren";
@@ -175,6 +178,9 @@
 /* Class = "NSButtonCell"; title = "Show notification when each job is completed"; ObjectID = "fdI-zP-r7j"; */
 "fdI-zP-r7j.title" = "Mitteilung nach jeder abgeschlossenen Aufgabe anzeigen";
 
+/* Class = "NSButtonCell"; title = "Keep duplicate titles"; ObjectID = "FOr-iY-GVl"; */
+"FOr-iY-GVl.title" = "Doppelte Titel behalten";
+
 /* Class = "NSButtonCell"; title = "Play notification sound"; ObjectID = "GFD-Ju-1n9"; */
 "GFD-Ju-1n9.title" = "Hinweiston spielen";
 
@@ -186,6 +192,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Decoder:"; ObjectID = "j6w-xf-tC0"; */
 "j6w-xf-tC0.title" = "Decoder:";
+
+/* Class = "NSButtonCell"; title = "Ignore titles shorter than:"; ObjectID = "jNT-vQ-h0c"; */
+"jNT-vQ-h0c.title" = "Ignoriere Titel kürzer als:";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "JZb-Vz-cY4"; */
 "JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "Ohne";
@@ -222,6 +231,9 @@
 
 /* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "phv-oU-WnC"; */
 "phv-oU-WnC.title" = ".m4v";
+
+/* Class = "NSButtonCell"; title = "Ignore titles longer than:"; ObjectID = "PoY-PD-tSq"; */
+"PoY-PD-tSq.title" = "Ignoriere Titel länger als:";
 
 /* Class = "NSButtonCell"; title = "Show notification when queue is completed"; ObjectID = "Qdg-Tw-rlf"; */
 "Qdg-Tw-rlf.title" = "Mitteilung anzeigen, sobald die Warteschlange abgeschlossen ist";
@@ -279,6 +291,9 @@
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "Y9B-ue-3sE"; */
 "Y9B-ue-3sE.title" = "Großbuchstaben korrigieren";
+
+/* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "zOc-PA-WQr"; */
+"zOc-PA-WQr.title" = "Sekunden";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "zot-Bx-Ch3"; */
 "zot-Bx-Ch3.title" = "Auswählen …";
