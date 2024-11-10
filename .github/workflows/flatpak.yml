@@ -23,7 +23,6 @@ jobs:
           ~/.cargo/bin/cargo-cinstall
         key: linux-cargo-c-toolchain
      
-    # Please remember to update HandBrake-Snapshots repository as well!
     - name: Setup Environment
       run: |
         sudo apt-get update
@@ -33,10 +32,7 @@ jobs:
         sudo python -m pip install meson
         sudo apt-get install flatpak flatpak-builder
         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        sudo flatpak install -y flathub org.freedesktop.Sdk//24.08
-        sudo flatpak install -y flathub org.freedesktop.Platform//24.08
-        sudo flatpak install -y flathub org.gnome.Platform//47
-        sudo flatpak install -y flathub org.gnome.Sdk//47
+        sudo flatpak install -y flathub org.freedesktop.Sdk//24.08 org.freedesktop.Platform//24.08 org.gnome.Platform//47 org.gnome.Sdk//47
         sudo flatpak install -y org.freedesktop.Sdk.Extension.llvm18//24.08
         sudo flatpak install -y org.freedesktop.Sdk.Extension.rust-stable//24.08
         sudo apt-get upgrade -y
@@ -52,3 +48,9 @@ jobs:
         ./configure --launch-jobs=1 --flatpak --enable-qsv --enable-vce --enable-nvdec
         cd build
         nice make pkg.create.flatpak
+        
+    - name: Upload Package
+      uses: actions/upload-artifact@v4
+      with:
+        name: HandBrakeCLI
+        path: ./build/pkg/flatpak/*.flatpak
