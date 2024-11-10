@@ -39,13 +39,13 @@ Download available from Microsoft:
   - FFmpeg 7.1 (decoding and filters)
   - FreeType 2.13.3 (subtitles)
   - Fribidi 1.0.16 (subtitles)
-  - HarfBuzz 10.0.1 (subtitles)
+  - HarfBuzz 10.1.0 (subtitles)
   - libdav1d 1.5.0 (AV1 video decoding)
   - libdovi 3.3.1 (Dolby Vision dynamic metadata)
   - libjpeg-turbo 3.0.4 (preview image compression)
   - nv-codec-headers 12.2.72.0 (Nvidia NVENC encoding)
   - oneVPL 2.13.0 (Intel QSV video encoding/decoding)
-  - SVT-AV1 2.2.1 (AV1 video encoding)
+  - SVT-AV1 2.3.0 (AV1 video encoding)
   - x265 4.0 (H.265/HEVC video encoding)
 
 ### Linux
@@ -57,14 +57,21 @@ Download available from Microsoft:
 ### Mac
 
 - Add Range Limit controls to the "Add to Queue" selection window (#4146)
+- Added support for Max Duration of Scan titles for disc based sources (#6304)
 - Miscellaneous bug fixes and improvements
 
 ### Windows
 
-- Added Range Limit controls to the "Add to Queue" selection window (#4146)
+- Added Range Limit controls to the "Add to Queue" "Add Selection" window (#4146)
+- Added support for Max Duration of Scan titles for disc based sources (#6304)
 - Added support for DirectX based video decoding when using the Media Foundation encoder on ARM devices
 - Added support for the AV1 Media Foundation encoder on ARM devices
+- Added a "Start Later" option to the Queue Window.
+- Performance Improvements in the filter pipeline for ARM devices.
 - Miscellaneous bug fixes and improvements
+- Updated existing translations
+- Added new translations
+  - Sweedish
 
 
 ## HandBrake 1.8.2
