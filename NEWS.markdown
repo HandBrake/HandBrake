@@ -43,6 +43,7 @@ Download available from Microsoft:
   - libdav1d 1.5.0 (AV1 video decoding)
   - libdovi 3.3.1 (Dolby Vision dynamic metadata)
   - libjpeg-turbo 3.0.4 (preview image compression)
+  - libvpx 1.15.0 (VP8/VP9 video encoding)
   - nv-codec-headers 12.2.72.0 (Nvidia NVENC encoding)
   - oneVPL 2.13.0 (Intel QSV video encoding/decoding)
   - SVT-AV1 2.3.0 (AV1 video encoding)
