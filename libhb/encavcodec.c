@@ -703,23 +703,60 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
         av_dict_set(&av_opts, "forced_idr", "1", 0);
     }
-    else if (job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
-             job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 ||
-             job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT ||
-             job->vcodec == HB_VCODEC_FFMPEG_NVENC_AV1 ||
-             job->vcodec == HB_VCODEC_FFMPEG_NVENC_AV1_10BIT)
+    else if (job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264)
     {
         // Force IDR frames when we force a new keyframe for chapters
         av_dict_set( &av_opts, "forced-idr", "1", 0 );
 
+        context->profile = AV_PROFILE_UNKNOWN;
         if (job->encoder_profile != NULL && *job->encoder_profile)
         {
             if (!strcasecmp(job->encoder_profile, "baseline"))
-                av_dict_set(&av_opts, "profile", "baseline", 0);
+                context->profile = AV_PROFILE_H264_BASELINE;
             else if (!strcasecmp(job->encoder_profile, "main"))
-                av_dict_set(&av_opts, "profile", "main", 0);
+                context->profile = AV_PROFILE_H264_MAIN;
             else if (!strcasecmp(job->encoder_profile, "high"))
-                av_dict_set(&av_opts, "profile", "high", 0);
+                context->profile = AV_PROFILE_H264_HIGH;
+        }
+
+        // Disable unhandled SEI
+        // These might be present in the source video
+        // and passed through in side_data, but we
+        // don't want to automatically preserve them
+        av_dict_set(&av_opts, "a53cc", "0", 0);
+        av_dict_set(&av_opts, "s12m_tc", "0", 0);
+    }
+    else if (job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 || job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT)
+    {
+        // Force IDR frames when we force a new keyframe for chapters
+        av_dict_set( &av_opts, "forced-idr", "1", 0 );
+
+        context->profile = AV_PROFILE_UNKNOWN;
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if (!strcasecmp(job->encoder_profile, "main"))
+                context->profile = AV_PROFILE_HEVC_MAIN;
+            else if (!strcasecmp(job->encoder_profile, "main10"))
+                context->profile = AV_PROFILE_HEVC_MAIN_10;
+        }
+
+        // Disable unhandled SEI
+        // These might be present in the source video
+        // and passed through in side_data, but we
+        // don't want to automatically preserve them
+        av_dict_set(&av_opts, "a53cc", "0", 0);
+        av_dict_set(&av_opts, "s12m_tc", "0", 0);
+    }
+    else if (job->vcodec == HB_VCODEC_FFMPEG_NVENC_AV1 || job->vcodec == HB_VCODEC_FFMPEG_NVENC_AV1_10BIT)
+    {
+        // Force IDR frames when we force a new keyframe for chapters
+        av_dict_set( &av_opts, "forced-idr", "1", 0 );
+
+        context->profile = AV_PROFILE_UNKNOWN;
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if (!strcasecmp(job->encoder_profile, "main"))
+                context->profile = AV_PROFILE_AV1_MAIN;
         }
 
         // Disable unhandled SEI
