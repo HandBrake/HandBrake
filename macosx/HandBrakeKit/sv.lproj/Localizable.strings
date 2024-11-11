@@ -1,0 +1,417 @@
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f bilder/s, genomsnitt %2$.2f bilder/s, Klar om %3$@)";
+
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps)" = " (%1$.2f bilder/s, genomsnitt %2$.2f bilder/s)";
+
+/* HBStateFormatter -> search time format
+HBStateFormatter -> work time format */
+" (ETA %@)" = " (Klar om %@)";
+
+/* HBJob -> video short description framerate */
+" FPS CFR" = " FPS CFR";
+
+/* HBJob -> video short description framerate */
+" FPS PFR" = " FPS PFR";
+
+/* Title short description -> audio format */
+", %d audio tracks" = ", %d ljudspår";
+
+/* Title short description -> subtitles format */
+", %d subtitles tracks" = ", %d undertextspår";
+
+/* Title short description -> audio format */
+", 1 audio track" = ", 1 ljudspår";
+
+/* Title short description -> subtitles format */
+", 1 subtitles track" = ", 1 undertextspår";
+
+/* Format description */
+", Align A/V Start" = ", Justera ljud-/videostart";
+
+/* HBPicture -> summary */
+", Border: %d/%d/%d/%d" = ", Sorgkant: %1$d/%2$d/%3$d/%4$d";
+
+/* HBJob -> subtitles short description */
+", Burned" = ", Inbränd";
+
+/* Format description */
+", Chapter Markers" = ", Kapitelmarkörer";
+
+/* HBPicture -> summary */
+", Crop: %@ %d/%d/%d/%d" = ", Beskär: %1$@ %2$d/%3$d/%4$d/%5$d";
+
+/* Format description */
+", iPod 5G Support" = ", iPod 5G-stöd";
+
+/* Format description */
+", Web Optimized" = ", Webboptimerad";
+
+/* Title short description -> video format */
+"%.6g FPS" = "%.6g bilder/s";
+
+/* Audio description */
+"%@ ▸ Encoder: %@" = "%1$@ ▸ Enkodare: %2$@";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d" = "%1$@Utdata: %2$dx%3$d";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d, Anamorphic: %dx%d Automatic" = "%1$@Utdata: %2$dx%3$d, Anamorfisk: %4$dx%5$d Automatisk";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Utdata: %2$dx%3$d, Anamorfisk: %4$dx%5$d Anpassad";
+
+/* HBPicture -> short non anamorphic info */
+"%dx%d" = "%1$dx%2$d";
+
+/* HBPicture -> short info */
+"%dx%d Storage, %dx%d Display" = "%1$dx%2$d Lagring, %3$dx%4$d Skärm";
+
+/* HBJob -> audio short description */
+"+ %lu additional audio tracks" = "+ %lu ytterligare ljudspår";
+
+/* HBJob -> subtitles short description */
+"+ %lu additional subtitles tracks" = "+ %lu ytterligare undertextspår";
+
+/* HBJob -> audio short description */
+"+ 1 additional audio track" = "+ 1 ytterligare ljudspår";
+
+/* HBJob -> subtitles short description */
+"+ 1 additional subtitles track" = "+ 1 ytterligare undertextspår";
+
+/* HBAudio -> Mixdown */
+"5.1 Channels" = "5.1 kanaler";
+
+/* HBAudio -> Mixdown */
+"6.1 Channels" = "6.1 kanaler";
+
+/* HBAudio -> Mixdown */
+"7.1 (5F/2R/LFE)" = "7.1 (5F/2R/LFE)";
+
+/* HBAudio -> Mixdown */
+"7.1 Channels" = "7.1 kanaler";
+
+/* Audio description */
+"Audio:" = "Ljud:";
+
+/* HBPicture -> summary */
+"Automatic" = "Automatisk";
+
+/* Video description */
+"Bitrate: %d kbps" = "Bitfrekvens: %d kbps";
+
+/* Subtitles description */
+"Burned In" = "Inbränd";
+
+/* HBFilters -> filter display name */
+"Bwdif" = "Bwdif";
+
+/* Title -> chapter name
+Title description */
+"Chapter %d" = "Kapitel %d";
+
+/* HBJob -> chapters short description */
+"Chapter Markers" = "Kapitelmarkörer";
+
+/* HBRange -> display name */
+"Chapters" = "Kapitel";
+
+/* Title description */
+"Chapters %d through %d" = "Kapitel %1$d till %2$d";
+
+/* Filters description
+HBJob -> filters short description */
+"Chroma Smooth" = "Chroma Smooth";
+
+/* Filters description
+HBJob -> filters short description */
+"Colorspace" = "Färgrymd";
+
+/* HBJob -> filters short description */
+"Comb Detect" = "Comb Detect";
+
+/* Video description */
+"Constant Quality: %.2f %s" = "Konstant kvalitet: %1$.2f %2$s";
+
+/* HBJob -> video short description framerate */
+"CRF" = "CRF";
+
+/* HBFilters -> custom display name
+HBPicture -> summary */
+"Custom" = "Anpassad";
+
+/* Filters description
+HBJob -> filters short description */
+"Deblock" = "Deblock";
+
+/* HBFilters -> filter display name */
+"Decomb" = "Decomb";
+
+/* HBFilters -> default display name
+Subtitles description */
+"Default" = "Standard";
+
+/* Video description */
+"default settings" = "standardinställningar";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Default: " = "Standard:";
+
+/* Filters description */
+"Denoise" = "Denoise";
+
+/* Destination description */
+"Destination:" = "Mål:";
+
+/* Dimensions description
+HBJob -> filters short description */
+"Detelecine" = "Detelecine";
+
+/* Dimensions description */
+"Dimensions:" = "Dimensioner:";
+
+/* HBAudio -> Mixdown */
+"Dolby Pro Logic II" = "Dolby Pro Logic II";
+
+/* HBAudio -> Mixdown */
+"Dolby Surround" = "Dolby Surround";
+
+/* Audio description */
+"DRC: %.2f" = "DRC: %.2f";
+
+/* Video description */
+"Encoder: %@, " = "Enkodare: %@, ";
+
+/* HBStateFormatter -> work pass display name */
+"Encoding %@ " = "Enkodar %@ ";
+
+/* Filters description */
+"Filters:" = "Filter:";
+
+/* Subtitles description */
+"Forced Only" = "Endast tvingad";
+
+/* HBSubtitles -> search pass name */
+"Foreign Audio Search" = "Utländsk ljudsökning";
+
+/* Format description */
+"Format:" = "Format:";
+
+/* Video description */
+"Framerate: " = "Bildfrekvens:";
+
+/* HBRange -> display name */
+"Frames" = "Bildrutor";
+
+/* Title description */
+"Frames %d through %d" = "Bildrutor %1$d till %2$d";
+
+/* Audio description */
+"Gain: %.2f" = "Gain: %.2f";
+
+/* Filters description
+HBJob -> filters short description */
+"Grayscale" = "Gråskala";
+
+/* HBFilters -> filter display name */
+"HQDN3D" = "HQDN3D";
+
+/* HBFilters -> invalid Bwdif custom string description */
+"Invalid Bwdif custom settings." = "Ogiltiga anpassade inställningar för Bwdif.";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid chroma smooth custom settings." = "Ogiltiga anpassade inställningar för chroma smooth.";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid colorspace custom settings." = "Ogiltiga anpassade inställningar för färgrymd.";
+
+/* HBFilters -> invalid comb detect custom string description */
+"Invalid custom comb detect settings." = "Ogiltiga anpassade inställningar för comb.";
+
+/* HBFilters -> invalid detelecine custom string description */
+"Invalid custom detelecine settings." = "Ogiltiga anpassade inställningar för detelecine.";
+
+/* HBFilters -> invalid denoise custom string description */
+"Invalid custom HQDN3D settings" = "Ogiltiga anpassade inställningar för HQDN3D.";
+
+/* HBFilters -> invalid denoise custom string description */
+"Invalid custom NLMeans settings" = "Ogiltiga anpassade inställningar för NLMeans.";
+
+/* HBFilters -> invalid deblock custom string description */
+"Invalid deblock custom settings." = "Ogiltiga anpassade inställningar för deblock.";
+
+/* HBFilters -> invalid Decomb custom string description */
+"Invalid Decomb custom settings." = "Ogiltiga anpassade inställningar för Decomb.";
+
+/* HBFilters -> invalid lapsharp custom string description */
+"Invalid lapsharp custom settings." = "Ogiltiga anpassade inställningar för lapsharp.";
+
+/* HBJob -> invalid name error description */
+"Invalid name" = "Ogiltigt namn";
+
+/* HBJob -> invalid preset */
+"Invalid preset" = "Ogiltigt förval";
+
+/* HBFilters -> invalid unsharp custom string description */
+"Invalid unsharp custom settings." = "Ogiltiga anpassade inställningar för unsharp.";
+
+/* HBFilters -> invalid Yadif custom string description */
+"Invalid Yadif custom settings." = "Ogiltiga anpassade inställningar för Yadif.";
+
+/* HBFilters -> filter display name */
+"Lapsharp" = "Lapsharp";
+
+/* Video description */
+"Level: %@" = "Nivå: %@";
+
+/* Audio description */
+"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Mixa om: %1$@, Samplingsfrekvens: %2$@, Bifrekvens: %3$d kbps";
+
+/* HBAudio -> Mixdown */
+"Mono" = "Mono";
+
+/* HBAudio -> Mixdown */
+"Mono (Left Only)" = "Mono (endast vänster)";
+
+/* HBAudio -> Mixdown */
+"Mono (Right Only)" = "Mono (endast höger)";
+
+/* HBStateFormatter -> pass display name */
+"Muxing…" = "Muxar…";
+
+/* HBFilters -> filter display name */
+"NLMeans" = "NLMeans";
+
+/* HBVideo -> tune */
+"none" = "ingen";
+
+/* HBAudio -> Mixdown
+HBAudio -> none track name
+HBJob -> filters short description
+HBSubtitles -> none track name */
+"None" = "Ingen";
+
+/* HBFilters -> filter display name
+HBFilters -> off display name */
+"Off" = "Av";
+
+/* Video description */
+"Options: %@" = "Alternativ: %@";
+
+/* HBStateFormatter -> work pass number format */
+"Pass %d %@ of %d, %.2f %%" = "Pass %1$d %2$@ av %3$d, %4$.2f %%";
+
+/* HBStateFormatter -> work pass number format */
+"Pass %d of %d, %.2f %%" = "Pass %1$d av %2$d, %3$.2f %%";
+
+/* HBStateFormatter -> work first pass number format */
+"Pass 1" = "Pass 1";
+
+/* HBStateFormatter -> pass display name */
+"Paused" = "Pausad";
+
+/* Preset description */
+"Preset:" = "Förval:";
+
+/* Video description */
+"Preset: %@" = "Förval: %@";
+
+/* Video description */
+"Profile: %@" = "Profil: %@";
+
+/* Range description */
+"Range:" = "Omfång:";
+
+/* HBVideo -> frame rates display name */
+"Same as source" = "Samma som källa";
+
+/* Video description */
+"Same as source (constant)" = "Samma som källa (konstant)";
+
+/* Video description */
+"Same as source (variable)" = "Samma som källa (variabel)";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d, preview %d…" = "Läs in titel %1$d av %2$d, förhandsvisning %3$d…";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d…" = "Läser in titel %1$d av %2$d…";
+
+/* HBStateFormatter -> search pass display name */
+"Searching for start point:  %.2f %%" = "Letar efter startpunkt:  %.2f %%";
+
+/* HBRange -> display name */
+"Seconds" = "Sekunder";
+
+/* Title description */
+"Seconds %d through %d" = "Sekunder %1$d till %2$d";
+
+/* Filters description */
+"Sharpen" = "Sharpen";
+
+/* Source description */
+"Source:" = "Källa:";
+
+/* HBPicture -> short info */
+"Source: %dx%d, " = "Källa: %1$dx%2$d, ";
+
+/* HBAudio -> Mixdown */
+"Stereo" = "Stereo";
+
+/* Subtitles description */
+"Subtitles:" = "Undertexter:";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Syntax: " = "Syntax: ";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't be empty." = "Filnamnet får inte vara tomt.";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't contain the / character." = "Filnamnet får inte innehålla /-tecknet.";
+
+/* Preset -> import error description */
+"The preset \"%@\" could not be imported." = "Förvalet \"%@\" kunde inte importeras.";
+
+/* Job preset -> invalid preset recovery suggestion */
+"The preset is not a valid, try to select a different one." = "Förvalet är inte giltigt. Prova att välja ett annat.";
+
+/* Preset -> import error reason */
+"The selected preset is invalid." = "Det valda förvalet är inte giltigt.";
+
+/* Preset -> import error reason */
+"The selected preset was created with a newer version of HandBrake." = "Det valda förvalet skapades med en nyare version av HandBrake.";
+
+/* Title description */
+"Title %d, %@" = "Titel %1$d, %2$@";
+
+/* Title description */
+"Title %d, %@, %@" = "Titel %1$d, %2$@, %3$@";
+
+/* Audio track title description
+Subtitles track title description */
+"Title: %@" = "Titel: %@";
+
+/* Video description */
+"Tune: " = "Justera:";
+
+/* HBJob -> video short description encoder name
+Video description */
+"Unknown" = "Okänt";
+
+/* HBFilters -> filter display name */
+"Unsharp" = "Unsharp";
+
+/* HBJob -> video short description framerate */
+"VFR" = "VFR";
+
+/* Video description */
+"Video Options:" = "Videoalternativ:";
+
+/* Video description */
+"Video:" = "Video:";
+
+/* HBFilters -> filter display name */
+"Yadif" = "Yadif";
+

@@ -1,0 +1,9 @@
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "eBw-qE-Hyb"; */
+"eBw-qE-Hyb.title" = "Namn:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Track name"; ObjectID = "FpM-Jx-vLD"; */
+"FpM-Jx-vLD.ibExternalAccessibilityDescription" = "Spårnamn";
+
+/* Class = "NSButtonCell"; title = "Done"; ObjectID = "Vzr-yd-VKe"; */
+"Vzr-yd-VKe.title" = "Färdig";
+

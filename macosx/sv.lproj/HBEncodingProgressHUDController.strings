@@ -1,0 +1,9 @@
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "Ha0-iE-RLa"; */
+"Ha0-iE-RLa.title" = "Avbryt";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Cancel Live Preview Encode"; ObjectID = "SEa-H6-T26"; */
+"SEa-H6-T26.ibShadowedToolTip" = "Avbryt enkodning av direkt förhandsvisning";
+
+/* Class = "NSTextFieldCell"; title = "Preparing Preview"; ObjectID = "tM8-gj-kBo"; */
+"tM8-gj-kBo.title" = "Förbereder förhandsvisning";
+
