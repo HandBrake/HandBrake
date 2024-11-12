@@ -455,7 +455,8 @@ static GhbBinding widget_bindings[] =
     {"CustomTmpEnable", "active", NULL, "CustomTmpDir", "sensitive"},
     {"PresetCategory", "active-id", "new", "PresetCategoryName", "visible"},
     {"PresetCategory", "active-id", "new", "PresetCategoryEntryLabel", "visible"},
-    {"DiskFreeCheck", "active", NULL, "DiskFreeLimitGB", "sensitive"}
+    {"DiskFreeCheck", "active", NULL, "DiskFreeLimitGB", "sensitive"},
+    {"LimitMaxDuration", "active", NULL, "MaxTitleDuration", "sensitive"}
 };
 
 void
@@ -1493,8 +1494,10 @@ start_scan (signal_user_data_t *ud, const char *path, int title_id, int preview_
     gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
     widget = ghb_builder_widget("sourcetoolmenubutton");
     gtk_widget_set_sensitive(widget, false);
+    gboolean limit_max_duration = ghb_dict_get_bool(ud->prefs, "LimitMaxDuration");
     ghb_backend_scan(path, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"),
+            limit_max_duration ? 90000L * ghb_dict_get_int(ud->prefs, "MaxTitleDuration") : 0,
             ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
 }
 
@@ -1514,8 +1517,10 @@ start_scan_list (signal_user_data_t *ud, GListModel *files, int title_id, int pr
     gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
     widget = ghb_builder_widget("sourcetoolmenubutton");
     gtk_widget_set_sensitive(widget, false);
+    gboolean limit_max_duration = ghb_dict_get_bool(ud->prefs, "LimitMaxDuration");
     ghb_backend_scan_list(files, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"),
+            limit_max_duration ? 90000L * ghb_dict_get_int(ud->prefs, "MaxTitleDuration") : 0,
             ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
 }
 
