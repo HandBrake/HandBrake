@@ -1,0 +1,303 @@
+/* Class = "NSButtonCell"; title = "Allow Upscaling"; ObjectID = "0kU-Uy-P4P"; */
+"0kU-Uy-P4P.title" = "Tillåt uppskalning";
+
+/* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "1AB-bM-qTs"; */
+"1AB-bM-qTs.title" = "Visningsstorlek:";
+
+/* Class = "NSMenuItem"; title = "Off"; ObjectID = "1O3-th-4M5"; */
+"1O3-th-4M5.title" = "Av";
+
+/* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "1Pn-6x-bhx"; */
+"1Pn-6x-bhx.title" = "Konservativ";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
+"1Z0-JT-vst.ibExternalAccessibilityDescription" = "Beskär botten";
+
+/* Class = "NSMenuItem"; title = "2160p 4K Ultra HD"; ObjectID = "1Zm-mM-8Tb"; */
+"1Zm-mM-8Tb.title" = "2160p 4K Ultra HD";
+
+/* Class = "NSMenuItem"; title = "180°"; ObjectID = "1zy-53-Bvd"; */
+"1zy-53-Bvd.title" = "180°";
+
+/* Class = "NSMenuItem"; title = "1440p 2.5K Quad HD"; ObjectID = "2ax-HE-Amt"; */
+"2ax-HE-Amt.title" = "1440p 2.5K Quad HD";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "2fq-yE-LSA"; */
+"2fq-yE-LSA.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "2jg-kg-z9e"; */
+"2jg-kg-z9e.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "2s0-5k-fjU"; */
+"2s0-5k-fjU.ibExternalAccessibilityDescription" = "Lagringshöjd";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "3HN-8C-yAS"; */
+"3HN-8C-yAS.ibExternalAccessibilityDescription" = "Lagringshöjd";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "3Ze-5A-gL3"; */
+"3Ze-5A-gL3.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "5Tj-xw-QuU"; */
+"5Tj-xw-QuU.title" = "x";
+
+/* Class = "NSTextFieldCell"; title = "Aspect Ratio:"; ObjectID = "5Vi-N9-9kM"; */
+"5Vi-N9-9kM.title" = "Bildförhållande:";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "6Qy-ik-hiE"; */
+"6Qy-ik-hiE.title" = "Ingen";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6W6-RI-fBx"; */
+"6W6-RI-fBx.ibExternalAccessibilityDescription" = "Beskär botten";
+
+/* Class = "NSTextFieldCell"; title = "Anamorphic:"; ObjectID = "8vS-Mw-bny"; */
+"8vS-Mw-bny.title" = "Anamorfisk:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Scaled Width"; ObjectID = "9hH-As-JSa"; */
+"9hH-As-JSa.ibExternalAccessibilityDescription" = "Skalad bredd";
+
+/* Class = "NSMenuItem"; title = "480p NTSC SD"; ObjectID = "21C-Hg-mk4"; */
+"21C-Hg-mk4.title" = "480p NTSC SD";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "41c-48-2XJ"; */
+"41c-48-2XJ.ibExternalAccessibilityDescription" = "Beskär toppen";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom border color"; ObjectID = "aby-WS-tzS"; */
+"aby-WS-tzS.ibExternalAccessibilityDescription" = "Anpassad ramfärg";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom border color"; ObjectID = "aby-WS-tzS"; */
+"aby-WS-tzS.ibShadowedToolTip" = "Anpassad ramfärg";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "Ag1-Tk-hCm"; */
+"Ag1-Tk-hCm.ibExternalAccessibilityDescription" = "Visningsbredd";
+
+/* Class = "NSTextFieldCell"; title = "Resolution & Scaling"; ObjectID = "aVx-b3-2AK"; */
+"aVx-b3-2AK.title" = "Upplösning och skalning";
+
+/* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "byr-LI-ap5"; */
+"byr-LI-ap5.title" = "0 x 0";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "C6R-PR-3gu"; */
+"C6R-PR-3gu.title" = "x";
+
+/* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "c9F-IW-Rln"; */
+"c9F-IW-Rln.title" = "0 x 0";
+
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "d0T-QG-WXU"; */
+"d0T-QG-WXU.title" = "Upplösningsgräns:";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "Ddg-4D-el9"; */
+"Ddg-4D-el9.ibExternalAccessibilityDescription" = "Beskär höger";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "DN4-KZ-LRc"; */
+"DN4-KZ-LRc.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextFieldCell"; title = "1:1"; ObjectID = "dnG-b9-LQR"; */
+"dnG-b9-LQR.title" = "1:1";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "E5O-kn-GYm"; */
+"E5O-kn-GYm.ibExternalAccessibilityDescription" = "ceaa80fca5ba3e8646366fa50fbb4322_tr";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display height"; ObjectID = "eEF-b3-4o9"; */
+"eEF-b3-4o9.ibExternalAccessibilityDescription" = "Visningshöjd";
+
+/* Class = "NSMenuItem"; title = "Black"; ObjectID = "EM5-tR-x3U"; */
+"EM5-tR-x3U.title" = "Svart";
+
+/* Class = "NSButtonCell"; title = "Automatic"; ObjectID = "eOi-50-jLK"; */
+"eOi-50-jLK.title" = "Automatisk";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "ePc-i4-vPZ"; */
+"ePc-i4-vPZ.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSButtonCell"; title = "Horizontal"; ObjectID = "EqJ-eR-Fz7"; */
+"EqJ-eR-Fz7.title" = "Horisontell";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "f12-Dh-fDw"; */
+"f12-Dh-fDw.title" = "Anpassad";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "fau-iA-M1E"; */
+"fau-iA-M1E.title" = "Ingen";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum height"; ObjectID = "FGm-oJ-FVW"; */
+"FGm-oJ-FVW.ibExternalAccessibilityDescription" = "Maximal höjd";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Use highest resolution permitted by above settings"; ObjectID = "fjj-ZH-nqb"; */
+"fjj-ZH-nqb.ibShadowedToolTip" = "Använd högsta upplösningen som tillåts med ovanstående inställningar";
+
+/* Class = "NSMenuItem"; title = "White"; ObjectID = "fQM-vV-sUg"; */
+"fQM-vV-sUg.title" = "Vit";
+
+/* Class = "NSButtonCell"; title = "Optimal Size"; ObjectID = "FUA-5p-imC"; */
+"FUA-5p-imC.title" = "Optimal storlek";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "FwZ-6T-zJe"; */
+"FwZ-6T-zJe.ibExternalAccessibilityDescription" = "Lagringsbredd";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "gWL-mx-RIK"; */
+"gWL-mx-RIK.title" = "Ingen";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "Hkl-7Z-J2e"; */
+"Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "Lagringshöjd";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
+"hN1-S9-zl8.title" = "x";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "hTi-U4-PGY"; */
+"hTi-U4-PGY.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSTextFieldCell"; title = "Fill:"; ObjectID = "iqM-GW-fCe"; */
+"iqM-GW-fCe.title" = "Fyll:";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "iuc-JG-bhU"; */
+"iuc-JG-bhU.ibExternalAccessibilityDescription" = "Lagringsbredd";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "jru-UG-Rf6"; */
+"jru-UG-Rf6.ibExternalAccessibilityDescription" = "Visningsbredd";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "JyN-AK-Hae"; */
+"JyN-AK-Hae.title" = "Automatisk";
+
+/* Class = "NSMenuItem"; title = "Gray"; ObjectID = "K6n-ea-Zty"; */
+"K6n-ea-Zty.title" = "Grå";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "Kay-sv-ssX"; */
+"Kay-sv-ssX.title" = "Automatisk";
+
+/* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "kOg-k4-0N2"; */
+"kOg-k4-0N2.title" = "Lagringsstorlek:";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "krD-da-wuz"; */
+"krD-da-wuz.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextFieldCell"; title = "Scaled Size:"; ObjectID = "L7V-2e-qf9"; */
+"L7V-2e-qf9.title" = "Skalad storlek:";
+
+/* Class = "NSTextFieldCell"; title = "1:1"; ObjectID = "lIt-eN-Uyd"; */
+"lIt-eN-Uyd.title" = "1:1";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "LQm-LK-6tr"; */
+"LQm-LK-6tr.title" = "Anpassad";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "LTu-ic-Ty9"; */
+"LTu-ic-Ty9.ibExternalAccessibilityDescription" = "Beskär vänster";
+
+/* Class = "NSTextFieldCell"; title = "Aspect Ratio:"; ObjectID = "Lz1-Cx-d30"; */
+"Lz1-Cx-d30.title" = "Bildförhållande:";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Mke-9L-LvB"; */
+"Mke-9L-LvB.ibExternalAccessibilityDescription" = "Beskär toppen";
+
+/* Class = "NSMenuItem"; title = "Width & Height"; ObjectID = "N5d-nG-TZV"; */
+"N5d-nG-TZV.title" = "Bredd och höjd";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum width"; ObjectID = "NRy-vc-8qX"; */
+"NRy-vc-8qX.ibExternalAccessibilityDescription" = "Maximal bredd";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "ob5-QF-mOC"; */
+"ob5-QF-mOC.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "OCX-n7-THw"; */
+"OCX-n7-THw.title" = "Färg:";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "owa-gb-koC"; */
+"owa-gb-koC.title" = "Anpassad";
+
+/* Class = "NSMenuItem"; title = "Height (Letterbox)"; ObjectID = "p7U-Ee-kt4"; */
+"p7U-Ee-kt4.title" = "Höjd (Letterbox)";
+
+/* Class = "NSMenuItem"; title = "Dark Gray"; ObjectID = "pWs-NL-FVO"; */
+"pWs-NL-FVO.title" = "Mörkgrå";
+
+/* Class = "NSMenuItem"; title = "0°"; ObjectID = "qsi-r7-kNQ"; */
+"qsi-r7-kNQ.title" = "0°";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "QSp-61-LWu"; */
+"QSp-61-LWu.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSMenuItem"; title = "1080p HD"; ObjectID = "qzy-K8-2tY"; */
+"qzy-K8-2tY.title" = "1080p HD";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "r9l-cH-pFW"; */
+"r9l-cH-pFW.ibExternalAccessibilityDescription" = "Beskär vänster";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sg1-tR-fnw"; */
+"sg1-tR-fnw.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "SGn-b9-JVZ"; */
+"SGn-b9-JVZ.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sut-JO-hwX"; */
+"sut-JO-hwX.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSMenuItem"; title = "270°"; ObjectID = "tIU-4H-3Xm"; */
+"tIU-4H-3Xm.title" = "270°";
+
+/* Class = "NSTextFieldCell"; title = "Source Dimensions"; ObjectID = "Trk-C5-Npx"; */
+"Trk-C5-Npx.title" = "Källans dimensioner";
+
+/* Class = "NSTextFieldCell"; title = "Orientation & Cropping"; ObjectID = "u2U-SJ-szy"; */
+"u2U-SJ-szy.title" = "Orientering och beskäring";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "uqQ-uA-3xF"; */
+"uqQ-uA-3xF.ibExternalAccessibilityDescription" = "0b36a71978ca057bf0594fec41410ec0_tr";
+
+/* Class = "NSTextFieldCell"; title = ":"; ObjectID = "uuL-JR-73C"; */
+"uuL-JR-73C.title" = ":";
+
+/* Class = "NSTextFieldCell"; title = "Final Dimensions"; ObjectID = "Ux1-Pc-XSD"; */
+"Ux1-Pc-XSD.title" = "Slutgiltiga dimensioner";
+
+/* Class = "NSMenuItem"; title = "90°"; ObjectID = "V1G-sQ-eqd"; */
+"V1G-sQ-eqd.title" = "90°";
+
+/* Class = "NSTextFieldCell"; title = "Rotation:"; ObjectID = "vb2-DA-Pgr"; */
+"vb2-DA-Pgr.title" = "Rotering:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "How to apply crop settings"; ObjectID = "vfx-ON-9ys"; */
+"vfx-ON-9ys.ibShadowedToolTip" = "Hur man tillämpar beskäringsinställningar";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Add a border around the video"; ObjectID = "vKr-fn-Ujh"; */
+"vKr-fn-Ujh.ibShadowedToolTip" = "Lägg till en sorgkant runt videon";
+
+/* Class = "NSMenuItem"; title = "4320p 8K Ultra HD"; ObjectID = "Vrx-BH-ry2"; */
+"Vrx-BH-ry2.title" = "4320p 8K Ultra HD";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "vzz-ej-1nx"; */
+"vzz-ej-1nx.title" = "Anpassad";
+
+/* Class = "NSMenuItem"; title = "Width (Pillarbox)"; ObjectID = "W5p-nd-4WK"; */
+"W5p-nd-4WK.title" = "Bredd (Pillarbox)";
+
+/* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "WBD-tH-x3h"; */
+"WBD-tH-x3h.title" = "Visningsstorlek:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "wsq-TS-cC6"; */
+"wsq-TS-cC6.ibExternalAccessibilityDescription" = "Beskär höger";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "x0H-9t-WiF"; */
+"x0H-9t-WiF.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSMenuItem"; title = "720p HD"; ObjectID = "Xao-1P-xPT"; */
+"Xao-1P-xPT.title" = "720p HD";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Flips (mirrors) the picture on the horizontal axis"; ObjectID = "xNB-9k-4uD"; */
+"xNB-9k-4uD.ibShadowedToolTip" = "Vänder (speglar) bilder på den horisontella axeln.";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "Xun-U2-N6F"; */
+"Xun-U2-N6F.title" = "Anpassad";
+
+/* Class = "NSMenuItem"; title = "576p PAL SD"; ObjectID = "yue-jq-T1X"; */
+"yue-jq-T1X.title" = "576p PAL SD";
+
+/* Class = "NSTextFieldCell"; title = "Borders"; ObjectID = "ywF-EG-IYr"; */
+"ywF-EG-IYr.title" = "Sorgkanter";
+
+/* Class = "NSTextFieldCell"; title = "Cropping:"; ObjectID = "zsq-Le-41g"; */
+"zsq-Le-41g.title" = "Beskärning:";
+
+/* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "ZTy-fJ-cDa"; */
+"ZTy-fJ-cDa.title" = "0 x 0";
+
+/* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "ZZ9-XW-Uib"; */
+"ZZ9-XW-Uib.title" = "Lagringsstorlek:";
+

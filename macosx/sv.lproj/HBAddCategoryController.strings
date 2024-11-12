@@ -1,0 +1,15 @@
+/* Class = "NSWindow"; title = "New Category"; ObjectID = "C4G-OG-ksc"; */
+"C4G-OG-ksc.title" = "Ny kategori";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "N2f-jz-YyX"; */
+"N2f-jz-YyX.title" = "Avbryt";
+
+/* Class = "NSTextFieldCell"; title = "untitled category"; ObjectID = "NQn-fS-Rbd"; */
+"NQn-fS-Rbd.title" = "kategori utan namn";
+
+/* Class = "NSTextFieldCell"; title = "Name of the new category:"; ObjectID = "Pe0-gr-Yv4"; */
+"Pe0-gr-Yv4.title" = "Namn för nya kategorin:";
+
+/* Class = "NSButtonCell"; title = "Create"; ObjectID = "Z9M-dc-5Ml"; */
+"Z9M-dc-5Ml.title" = "Skapa";
+

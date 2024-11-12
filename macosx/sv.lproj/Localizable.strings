@@ -1,0 +1,574 @@
+/* Job statistics */
+" (%@ %% of the source file)" = " (%@ %% av källfilen)";
+
+/* Preview -> size info label */
+" Scaled To Screen" = "Skalad till skärm";
+
+/* No comment provided by engineer. */
+"- --:--" = "- --:--";
+
+/* No comment provided by engineer. */
+"--:--" = "--:--";
+
+/* Preview -> size info label */
+"(%.0f%% actual size)" = "(%.0f%% faktisk storlek)";
+
+/* Preview -> size info label */
+"(Actual size)" = "(faktisk storlek)";
+
+/* Main Window -> preset modified */
+"(Modified)" = "(ändrad)";
+
+/* Job statistics */
+"%@ fps" = "%@ bilder/s";
+
+/* Queue status */
+"%lu encode pending" = "%lu enkodning väntar";
+
+/* Queue status */
+"%lu encodes pending" = "%lu enkodningar väntar";
+
+/* No comment provided by engineer. */
+"%lu jobs selected" = "%lu jobb valt";
+
+/* Add preset window -> picture setting */
+"480p NTSC SD" = "480p NTSC SD";
+
+/* Add preset window -> picture setting */
+"576p PAL SD" = "576p PAL SD";
+
+/* Add preset window -> picture setting */
+"720p HD" = "720p HD";
+
+/* Add preset window -> picture setting */
+"1080p HD" = "1080p HD";
+
+/* Add preset window -> picture setting */
+"1440p 2.5K Quad HD" = "1440p 2.5K Quad HD";
+
+/* Add preset window -> picture setting */
+"2160p 4K Ultra HD" = "2160p 4K Ultra HD";
+
+/* Add preset window -> picture setting */
+"4320p 8K Ultra HD" = "4320p 8K Ultra HD";
+
+/* Destination same as source alert -> message
+File already exists alert -> message */
+"A file already exists at the selected destination." = "En fil finns redan i valt mål.";
+
+/* Queue Window Action Toolbar Item */
+"Action" = "Åtgärd";
+
+/* Main Window Activity Toolbar Item */
+"Activity" = "Aktivitet";
+
+/* Picture HUD -> scale button */
+"Actual Scale" = "Faktisk skala";
+
+/* Main Window Add Toolbar Item */
+"Add All Titles To Queue" = "Lägg till alla titlar i kö";
+
+/* Queue undo action name */
+"Add Job To Queue" = "Lägg till jobb i kö";
+
+/* Queue undo action name */
+"Add Jobs To Queue" = "Lägg till jobb i kö";
+
+/* Touch bar */
+"Add Preset" = "Lägg till förval";
+
+/* Touch bar */
+"Add Titles To Queue" = "Lägg till titlar i kö";
+
+/* Main Window Add Toolbar Item */
+"Add Titles To Queue…" = "Lägg till titlar i kö...";
+
+/* Main Window Add Toolbar Item
+Touch bar */
+"Add To Queue" = "Lägg till i kö";
+
+/* Preferences Advanced Toolbar Item */
+"Advanced" = "Avancerat";
+
+/* Main Window -> Same as source destination open panel */
+"Allow" = "Tillåt";
+
+/* HBLanguage -> Any language */
+"Any" = "Alla";
+
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected preset?" = "Är du säker på att du vill permanent ta bort valt förval?";
+
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected presets?" = "Är du säker på att du vill permanent ta bort valda förval?";
+
+/* Quit Alert -> message */
+"Are you sure you want to quit HandBrake?" = "Är du säker på att du vill avsluta HandBrake?";
+
+/* Copy Protection Alert -> first button */
+"Attempt Scan Anyway" = "Försök läsa in ändå";
+
+/* Player HUD -> audio menu */
+"Audio" = "Ljud";
+
+/* Job statistics */
+"Average speed:" = "Genomsnittlig hastighet:";
+
+/* Preferences -> Output Name Token */
+"Bit Depth" = "Bitdjup";
+
+/* Copy Protection Alert -> second button
+Delete preset alert -> second button
+File already exists alert -> first button
+File already exists in queue alert -> first button
+Preview -> live preview alert alternate button
+Touch bar */
+"Cancel" = "Avbryt";
+
+/* Touch bar */
+"Cancel Encoding" = "Avbryt enkodning";
+
+/* Toolbar Open/Cancel Item
+Touch bar */
+"Cancel Scan" = "Avbryt inläsning";
+
+/* Toolbar Open/Cancel Item */
+"Cancel Scanning Source" = "Avbryt inläsning av källa";
+
+/* HBRange -> display name
+Preferences -> Output Name Token */
+"Chapters" = "Kapitel";
+
+/* Main Window -> Destination open panel */
+"Choose" = "Välj";
+
+/* Preferences -> Output Name Token */
+"Codec" = "Kodek";
+
+/* Queue Alert -> cancel rip first button */
+"Continue Encoding" = "Fortsätt enkodning";
+
+/* Copy Protection Alert -> message */
+"Copy-Protected sources are not supported." = "Kopieringsskyddade källor stöds inte.";
+
+/* Touch bar */
+"Current Time" = "Aktuell tid";
+
+/* Add preset window -> picture setting */
+"Custom" = "Anpassad";
+
+/* Preferences -> Output Name Token */
+"Date" = "Datum";
+
+/* Delete preset alert -> first button */
+"Delete Preset" = "Ta bort förval";
+
+/* Delete preset alert -> first button */
+"Delete Presets" = "Ta bort förval";
+
+/* Queue Window Details Toolbar Item */
+"Details" = "Information";
+
+/* Queue Window When Done Toolbar Item */
+"Do Nothing" = "Gör ingenting";
+
+/* File already exists alert -> informative text
+File already exists in queue alert -> informative text */
+"Do you want to overwrite %@?" = "Vill du skriva över %@?";
+
+/* Quit Alert -> second button */
+"Don't Quit" = "Avsluta inte";
+
+/* Touch bar */
+"Done" = "Färdig";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode canceled" = "Enkodning avbröts";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode complete" = "Enkodning färdig";
+
+/* HBQueueItemView -> Encode state accessibility label
+Queue done notification failed message */
+"Encode failed" = "Enkodning misslyckades";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode ready" = "Enkodningen är färdig";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode working" = "Enkodningen pågår";
+
+/* Preferences -> Output Name Token */
+"Encoder" = "Enkodare";
+
+/* No comment provided by engineer. */
+"Encoding %lu Jobs" = "Enkodar %lu jobb";
+
+/* No comment provided by engineer. */
+"Encoding Job: %@" = "Enkodar jobb: %@";
+
+/* Export presets save panel title */
+"Export preset" = "Exportera förval";
+
+/* Export presets save panel title */
+"Export presets" = "Exportera förval";
+
+/* Default name for a newly added excluded file extension */
+"extension" = "filändelse";
+
+/* File already exists alert -> message */
+"File already exists." = "Filen finns redan.";
+
+/* Preferences Output File Name Toolbar Item */
+"File name" = "Filnamn";
+
+/* HBRange -> display name */
+"Frames" = "Bildrutor";
+
+/* Preferences General Toolbar Item */
+"General" = "Allmänt";
+
+/* Main Window -> title */
+"HandBrake" = "HandBrake";
+
+/* Preview -> live preview alert message */
+"HandBrake can't open the preview." = "HandBrake kan inte öppna förhandsvisningen.";
+
+/* Preferences -> Output Name Token */
+"Height" = "Höjd";
+
+/* Import preset open panel title */
+"Import presets" = "Importera förval";
+
+/* Chapters import -> invalid CSV line count description */
+"Incorrect line count" = "Felaktigt radantal";
+
+/* Chapters import -> invalid CSV description */
+"Invalid chapters CSV file" = "Ogiltiga kapitel i CSV-filen";
+
+/* Queue Edit Alert -> stop and edit first button
+Queue Stop Alert -> stop and remove first button */
+"Keep Encoding" = "Fortsätt enkodning";
+
+/* Preferences -> Output Name Token */
+"Modification-Date" = "Ändringsdatum";
+
+/* Preferences -> Output Name Token */
+"Modification-Time" = "Ändringstid";
+
+/* Queue undo action name */
+"Move Job in Queue" = "Flytta jobb i kö";
+
+/* Queue undo action name */
+"Move Jobs in Queue" = "Flytta jobb i kö";
+
+/* Add preset window -> My Presets */
+"My Presets" = "Mina förval";
+
+/* Queue status */
+"No encode pending" = "Ingen enkodning väntar";
+
+/* Preview -> accessibility label */
+"No image" = "Ingen bild";
+
+/* No comment provided by engineer. */
+"No job selected" = "Inget jobb valt";
+
+/* Main Window -> Info text */
+"No Valid Preset" = "Inget giltigt förval";
+
+/* Main Window -> Info text */
+"No Valid Source Found" = "Ingen giltig källa hittades";
+
+/* Add preset window -> picture setting */
+"None" = "Ingen";
+
+/* Queue Done Alert -> shut down first button
+Queue Done Alert -> sleep first button */
+"OK" = "Ok";
+
+/* File already exists alert -> informative text */
+"One or more file already exists. Do you want to overwrite?" = "En eller flera filer finns redan. Vill du skriva över?";
+
+/* Preview -> live preview alert default button */
+"Open in external player" = "Öppna i extern uppspelare";
+
+/* Main Window Open Toolbar Item
+Toolbar Open/Cancel Item
+Touch bar */
+"Open Source" = "Öppna källa";
+
+/* File already exists alert -> second button
+File already exists in queue alert -> second button */
+"Overwrite" = "Skriv över";
+
+/* Main Window Pause Toolbar Item
+Toolbar Pause Item */
+"Pause" = "Paus";
+
+/* Queue -> pause/resume menu
+Toolbar Pause Item
+Touch bar */
+"Pause Encoding" = "Pausa enkodning";
+
+/* Main Window Pause Toolbar Item
+Touch bar */
+"Pause/Resume Encoding" = "Pausa/Återuppta enkodningen";
+
+/* Job statistics */
+"Paused time:" = "Pausad tid:";
+
+/* Touch bar */
+"Play/Pause" = "Spela upp/Paus";
+
+/* Add preset window -> name alert informative text
+Rename preset window -> name alert informative text */
+"Please enter a name." = "Ange ett namn.";
+
+/* Queue Done Alert -> shut down second button
+Queue Done Alert -> sleep second button */
+"Preferences…" = "Inställningar...";
+
+/* Preferences -> Output Name Token */
+"Preset" = "Förval";
+
+/* Main Window Presets Toolbar Item */
+"Presets" = "Förval";
+
+/* Preview -> progress formatter title */
+"preview" = "förhandsvisa";
+
+/* Main Window Preview Toolbar Item
+Preview -> window title */
+"Preview" = "Förhandsvisning";
+
+/* Preview -> window title format */
+"Preview - %@ %@" = "Förhandsvisning - %1$@ %2$@";
+
+/* Preview -> accessibility label */
+"Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Förhandsvisa bild, Storlek: %1$zu x %2$zu, Skala: %3$.0f%%";
+
+/* Queue Window When Done Toolbar Item */
+"Put Computer to Sleep" = "Försätt datorn i sömnläge";
+
+/* Queue notification alert message */
+"Put down that cocktail…" = "Ställ ner din cocktail...";
+
+/* Preferences -> Output Name Token */
+"Quality Type" = "Kvalitetstyp";
+
+/* Preferences -> Output Name Token */
+"Quality/Bitrate" = "Kvalitet/Bitfrekvens";
+
+/* Main Window Presets Toolbar Item
+Preferences Queue Toolbar Item
+Queue window title */
+"Queue" = "Kö";
+
+/* Queue window title */
+"Queue (%@)" = "Kö (%@)";
+
+/* Quit Alert -> first button */
+"Quit" = "Avsluta";
+
+/* Queue Window When Done Toolbar Item */
+"Quit HandBrake" = "Avsluta HandBrake";
+
+/* Touch bar */
+"Remaining Time" = "Återstående tid";
+
+/* Queue Window Action Toolbar Item */
+"Remove All Jobs" = "Ta bort alla jobb";
+
+/* Queue Window Action Toolbar Item */
+"Remove Completed Jobs" = "Ta bort färdiga jobb";
+
+/* HBQueueItemView -> Remove button accessibility label */
+"Remove job" = "Ta bort jobb";
+
+/* Queue undo action name */
+"Remove Job From Queue" = "Ta bort jobb från kö";
+
+/* Queue undo action name */
+"Remove Jobs From Queue" = "Ta bort jobb från kö";
+
+/* Queue Window Action Toolbar Item */
+"Reset All Jobs" = "Nollställ alla jobb";
+
+/* Queue Window Action Toolbar Item */
+"Reset Failed Jobs" = "Nollställ misslyckade jobb";
+
+/* Toolbar Pause Item */
+"Resume" = "Återuppta";
+
+/* Queue -> pause/resume men
+Toolbar Pause Item */
+"Resume Encoding" = "Återuppta enkodning";
+
+/* HBQueueItemView -> Reveal button accessibility label */
+"Reveal destination in Finder" = "Visa målet i Finder";
+
+/* Job statistics */
+"Run time:" = "Speltid:";
+
+/* Export presets panel prompt */
+"Save" = "Spara";
+
+/* Picture HUD -> scale button
+Touch bar */
+"Scale To Screen" = "Skala till skärm";
+
+/* HBRange -> display name */
+"Seconds" = "Sekunder";
+
+/* Preferences -> send to app destination open panel */
+"Select the desired external application" = "Välj önskat externt program";
+
+/* Notification -> Show in Finder */
+"Show" = "Visa";
+
+/* Main Window Activity Toolbar Item
+Touch bar */
+"Show Activity Window" = "Visa aktivitetsfönster";
+
+/* Main Window Presets Toolbar Item */
+"Show Presets List" = "Visa förvalslista";
+
+/* Main Window Preview Toolbar Item
+Touch bar */
+"Show Preview Window" = "Visa förhandsvisningsfönstret";
+
+/* Main Window Presets Toolbar Item */
+"Show Queue Window" = "Visa köfönstret";
+
+/* Queue Window When Done Toolbar Item */
+"Shut Down Computer" = "Stäng av datorn";
+
+/* Job statistics */
+"Size:" = "Storlek:";
+
+/* Queue Alert -> cancel rip second button */
+"Skip Current Job" = "Hoppa över aktuellt jobb";
+
+/* Touch bar */
+"Slider" = "Draglist";
+
+/* Preferences -> Output Name Token */
+"Source" = "Källa";
+
+/* Main Window Start Toolbar Item
+Toolbar Start/Stop Item */
+"Start" = "Starta";
+
+/* Menu Start/Stop Item
+Queue -> start/stop menu
+Toolbar Start/Stop Item */
+"Start Encoding" = "Starta enkodning";
+
+/* Toolbar Start/Stop Item */
+"Start Queue" = "Starta kö";
+
+/* Main Window Start Toolbar Item
+Touch bar */
+"Start/Stop Encoding" = "Starta/Stoppa enkodning";
+
+/* Queue -> Stop action
+Toolbar Start/Stop Item */
+"Stop" = "Stoppa";
+
+/* Queue -> Stop action */
+"Stop action." = "Stoppa åtgärd.";
+
+/* Queue Alert -> cancel rip third button */
+"Stop After Current Job" = "Stoppa efter aktuellt jobb";
+
+/* Queue Alert -> cancel rip fourth button */
+"Stop All" = "Stoppa alla";
+
+/* Queue -> start/stop menu
+Toolbar Start/Stop Item */
+"Stop Encoding" = "Stoppa enkodning";
+
+/* Queue Stop Alert -> stop and remove second button */
+"Stop Encoding and Delete" = "Stoppa enkodning och ta bort";
+
+/* Queue Edit Alert -> stop and edit second button */
+"Stop Encoding and Edit" = "Stoppa enkodning och redigera";
+
+/* Queue Edit Alert -> stop and edit message */
+"Stop This Encode and Edit It?" = "Stoppa denna enkodning och redigera den?";
+
+/* Queue Stop Alert -> stop and remove message */
+"Stop This Encode and Remove It?" = "Stoppa denna enkodning och ta bort den?";
+
+/* Player HUD -> subtitles menu */
+"Subtitles" = "Undertexter";
+
+/* Queue Done Alert -> shut down message */
+"The computer will shut down after encoding is done." = "Datorn kommer att stängas av efter att enkodningen är färdig.";
+
+/* Queue Done Alert -> sleep message */
+"The computer will sleep after encoding is done." = "Denna datorn kommer att försättas i sömnläge efter enkodningen är färdig.";
+
+/* Destination same as source alert -> informative text */
+"The destination is the same as the source, you can not overwrite your source file!" = "Målet är samma som källan. Du kan inte skriva över din källfil!";
+
+/* Add preset window -> name alert message
+Rename preset window -> name alert message */
+"The preset name cannot be empty." = "Förvalsnamnet får inte vara tomt.";
+
+/* File already exists in queue alert -> message */
+"There is already a queue item for this destination." = "Det finns redan ett köobjekt för detta mål.";
+
+/* Invalid destination alert -> informative text */
+"This is not a valid destination directory!" = "Detta är inte en giltig målkatalog!";
+
+/* Preferences -> Output Name Token */
+"Time" = "Tid";
+
+/* Preferences -> Output Name Token */
+"Title" = "Titel";
+
+/* HBLanguage -> Unknown language */
+"Unknown" = "Okänt";
+
+/* Video -> Framerate */
+"Variable Framerate" = "Variabel bildfrekvens";
+
+/* Invalid destination alert -> message */
+"Warning!" = "Varning!";
+
+/* Queue Window When Done Toolbar Item */
+"When Done" = "När färdig";
+
+/* Preferences -> Output Name Token */
+"Width" = "Bredd";
+
+/* No comment provided by engineer. */
+"Working" = "Arbetar";
+
+/* Queue Alert -> cancel rip message */
+"You are currently encoding. What would you like to do?" = "Du enkodar för tillfället. Vad vill du göra?";
+
+/* Delete preset alert -> informative text */
+"You can't undo this action." = "Du kan inte ångra denna åtgärd.";
+
+/* Queue -> disk almost full alert informative text */
+"You need to make more space available on your destination disk." = "Du behöver frigöra mer plats på din måldisk.";
+
+/* Queue -> disk almost full alert message */
+"Your destination disk is almost full." = "Din måldisk är nästan full.";
+
+/* Queue done notification message */
+"Your encode %@ couldn't be completed." = "Din enkodning %@ kunde inte färdigställas.";
+
+/* Queue done notification message */
+"Your encode %@ is done!" = "Din enkodning %@ är färdig!";
+
+/* Queue Edit Alert -> stop and edit informative text
+Queue Stop Alert -> stop and remove informative text */
+"Your movie will be lost if you don't continue encoding." = "Din film kommer att gå förlorad om du inte fortsätter enkodningen.";
+
+/* Queue done notification message */
+"Your queue is done!" = "Din kö är färdig!";
+

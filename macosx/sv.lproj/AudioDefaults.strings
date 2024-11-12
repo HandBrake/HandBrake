@@ -1,0 +1,192 @@
+/* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
+"0kT-0J-3k2.headerCell.title" = "Mixa om";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
+"1XC-VS-X3g.title" = "Textcell";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "3o5-Gn-Vao"; */
+"3o5-Gn-Vao.title" = "Textcell";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "6lx-af-rBL"; */
+"6lx-af-rBL.ibExternalAccessibilityDescription" = "Kodek";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "6lx-af-rBL"; */
+"6lx-af-rBL.ibShadowedToolTip" = "Ljudenkodare.";
+
+/* Class = "NSTextFieldCell"; title = "Audio encoder settings for each selected track:"; ObjectID = "007-WM-RmC"; */
+"007-WM-RmC.title" = "Inställningar för ljudenkodare för varje valt spår:";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
+"7sl-o7-pUh.title" = "Textcell";
+
+/* Class = "NSButtonCell"; title = "DTS"; ObjectID = "8mC-Wx-myL"; */
+"8mC-Wx-myL.title" = "DTS";
+
+/* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
+"66v-2g-DHn.title" = "Använd endast första enkodaren för sekundärt ljud";
+
+/* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Audio Track Languages"; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibExternalAccessibilityDescription" = "Språk för ljudspår";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "BaY-Lo-8xn"; */
+"BaY-Lo-8xn.ibExternalAccessibilityDescription" = "DRC";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports E-AC3. This permits E-AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "BK7-c4-kkk"; */
+"BK7-c4-kkk.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för E-AC3. Detta tillåter att E-AC3-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
+
+/* Class = "NSButtonCell"; title = "AAC"; ObjectID = "cUX-iP-UAs"; */
+"cUX-iP-UAs.title" = "AAC";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "DbI-6O-BzA"; */
+"DbI-6O-BzA.ibExternalAccessibilityDescription" = "Gain";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "DGi-Dl-5nh"; */
+"DGi-Dl-5nh.ibExternalAccessibilityDescription" = "DRC";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
+"dpw-He-8eZ.title" = "Textcell";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "DxT-bF-prJ"; */
+"DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "Auto";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "E93-Md-aWa"; */
+"E93-Md-aWa.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för DTS. Detta tillåter att DTS-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
+
+/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "eA6-za-Up0"; */
+"eA6-za-Up0.title" = "Opus";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fgl-Ev-ELt"; */
+"fgl-Ev-ELt.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för AC3. Detta tillåter att AC3-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
+"fH9-oV-QdJ.title" = "Textcell";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fzd-MO-xaB"; */
+"fzd-MO-xaB.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för AAC. Detta tillåter att AAC-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
+
+/* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
+"GbM-vm-RC2.title" = "Beteende för spårval:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
+"GHJ-25-kZl.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för MP2. Detta tillåter att MP2-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "gOm-E9-8K7"; */
+"gOm-E9-8K7.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för FLAC. Detta tillåter att FLAC-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
+
+/* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
+"GZP-q7-SYy.title" = "Alla matchande valda språk";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Bitrate"; ObjectID = "hHP-dw-nba"; */
+"hHP-dw-nba.ibExternalAccessibilityDescription" = "Bitfrekvens";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
+"igm-hS-rrD.ibExternalAccessibilityDescription" = "Mixa om";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "IxI-o9-jMs"; */
+"IxI-o9-jMs.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för DTS-HD. Detta tillåter att DTS-HD-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
+
+/* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
+"jDd-Ji-7Sm.title" = "Första matchande valda språken";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "Jn4-1L-J1g"; */
+"Jn4-1L-J1g.title" = "Avbryt";
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "kDe-1L-VkD"; */
+"kDe-1L-VkD.title" = "Ok";
+
+/* Class = "NSWindow"; title = "Audio Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
+"kwM-lz-5lG.title" = "Beteende för ljudval";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder to use when a track suitable for passthru is unavailable."; ObjectID = "LdN-Cx-ZJY"; */
+"LdN-Cx-ZJY.ibShadowedToolTip" = "Ljudenkodare att använda när ett spår inte hittas som är lämpligt för genomströmning.";
+
+/* Class = "NSButtonCell"; title = "DTS-HD"; ObjectID = "LX6-kc-5vq"; */
+"LX6-kc-5vq.title" = "DTS-HD";
+
+/* Class = "NSTableColumn"; headerCell.title = "Samplerate"; ObjectID = "LxC-Qx-psh"; */
+"LxC-Qx-psh.headerCell.title" = "Samplingsfrekvens";
+
+/* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
+"mAT-Jp-SG1.title" = "Språk:";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "MiI-OV-waZ"; */
+"MiI-OV-waZ.title" = "0";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
+"mvw-Hg-JFM.title" = "Ingen";
+
+/* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "N7h-CJ-quV"; */
+"N7h-CJ-quV.headerCell.title" = "Gain";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports TrueHD. This permits TrueHD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "os0-Jl-OXF"; */
+"os0-Jl-OXF.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för TrueHD. Detta tillåter att TrueHD-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
+
+/* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[0] = "Add Audio Track"; ObjectID = "otA-K4-TxM"; */
+"otA-K4-TxM.ibShadowedToolTips[0]" = "Lägg till ljudspår";
+
+/* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[1] = "Remove Selected Audio Track"; ObjectID = "otA-K4-TxM"; */
+"otA-K4-TxM.ibShadowedToolTips[1]" = "Ta bort valt ljudspår";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
+"OVr-Jm-VrK.title" = "0";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "OWh-gZ-JcF"; */
+"OWh-gZ-JcF.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för Opus. Detta tillåter att Opus-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
+
+/* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
+"pR9-d4-SNf.headerCell.title" = "Kodek";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
+"r80-yv-59n.ibExternalAccessibilityDescription" = "Samplingsfrekvens";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
+"r80-yv-59n.ibShadowedToolTip" = "Samplingsfrekvens för ljud i kilohertz (kHz). Auto är rekommenderat.";
+
+/* Class = "NSButtonCell"; title = "Vorbis"; ObjectID = "rXl-qc-MHk"; */
+"rXl-qc-MHk.title" = "Vorbis";
+
+/* Class = "NSButtonCell"; title = "ALAC"; ObjectID = "S0X-gJ-f6A"; */
+"S0X-gJ-f6A.title" = "ALAC";
+
+/* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
+"s6s-EH-5CB.title" = "Auto genomström:";
+
+/* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
+"sdZ-Rx-JoG.title" = "MP3";
+
+/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "sJU-xA-Jo1"; */
+"sJU-xA-Jo1.title" = "FLAC";
+
+/* Class = "NSButtonCell"; title = "E-AC3"; ObjectID = "u9h-dn-wcK"; */
+"u9h-dn-wcK.title" = "E-AC3";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
+"uFK-z7-8Yj.title" = "Textcell";
+
+/* Class = "NSMenuItem"; title = "Item"; ObjectID = "UJy-A2-Bb1"; */
+"UJy-A2-Bb1.title" = "Objekt";
+
+/* Class = "NSTableColumn"; headerCell.title = "Bitrate"; ObjectID = "vhn-7C-4aZ"; */
+"vhn-7C-4aZ.headerCell.title" = "Bitfrekvens";
+
+/* Class = "NSButtonCell"; title = "AC3"; ObjectID = "VnE-3R-bUf"; */
+"VnE-3R-bUf.title" = "AC3";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
+"vUx-OV-W5T.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för MP3. Detta tillåter att MP3-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
+"XKL-2e-Dlv.title" = "Tabellvycell";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
+"xnA-03-Bul.ibExternalAccessibilityDescription" = "Gain";
+
+/* Class = "NSButtonCell"; title = "MP2"; ObjectID = "Z8O-AS-UdA"; */
+"Z8O-AS-UdA.title" = "MP2";
+
+/* Class = "NSButtonCell"; title = "TrueHD"; ObjectID = "z9d-P3-6UP"; */
+"z9d-P3-6UP.title" = "TrueHD";
+
+/* Class = "NSTableColumn"; headerCell.title = "DRC"; ObjectID = "zX9-T9-wKy"; */
+"zX9-T9-wKy.headerCell.title" = "DRC";
+

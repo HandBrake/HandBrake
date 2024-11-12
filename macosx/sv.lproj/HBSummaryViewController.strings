@@ -1,0 +1,48 @@
+/* Class = "NSTextFieldCell"; title = "Tracks:"; ObjectID = "3mF-Bb-Gon"; */
+"3mF-Bb-Gon.title" = "Spår:";
+
+/* Class = "NSTextFieldCell"; title = "Size:"; ObjectID = "B4a-co-0ly"; */
+"B4a-co-0ly.title" = "Storlek:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Filters summary"; ObjectID = "BHq-Mt-3eA"; */
+"BHq-Mt-3eA.ibExternalAccessibilityDescription" = "Sammandrag av filter";
+
+/* Class = "NSButtonCell"; title = "Passthru Common Metadata"; ObjectID = "CZZ-bW-jZc"; */
+"CZZ-bW-jZc.title" = "Skicka igenom vanliga metadata";
+
+/* Class = "NSButtonCell"; title = "Align A/V Start"; ObjectID = "De0-Je-MAm"; */
+"De0-Je-MAm.title" = "Justera ljud-/videostart";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Copy metadata from source to output"; ObjectID = "eJx-BO-rhL"; */
+"eJx-BO-rhL.ibShadowedToolTip" = "Kopiera metadata från källa till utdata";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
+"Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Sammandrag av storlek";
+
+/* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
+"m5a-0z-QQ4.ibExternalAccessibilityDescription" = "Förhandsvisning";
+
+/* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
+"OCw-f6-uA0.title" = "Filter:";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "RIB-ME-Yhh"; */
+"RIB-ME-Yhh.title" = "Ingen";
+
+/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "RXJ-DZ-4mh"; */
+"RXJ-DZ-4mh.title" = "Format:";
+
+/* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "wcc-5d-Dgj"; */
+"wcc-5d-Dgj.title" = "Webboptimerad";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "xmy-Jl-mR4"; */
+"xmy-Jl-mR4.title" = "Ingen";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "xzc-qg-AMn"; */
+"xzc-qg-AMn.title" = "Ingen";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Tracks summary"; ObjectID = "yRE-5c-FhX"; */
+"yRE-5c-FhX.ibExternalAccessibilityDescription" = "Spårsammandrag";
+
+/* Class = "NSButtonCell"; title = "iPod 5G Support"; ObjectID = "zz5-qY-GSA"; */
+"zz5-qY-GSA.title" = "iPod 5G-stöd";
+

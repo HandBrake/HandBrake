@@ -1,0 +1,114 @@
+/* Class = "NSTableView"; ibExternalAccessibilityDescription = "Subtitles tracks"; ObjectID = "0yM-wE-D2x"; */
+"0yM-wE-D2x.ibExternalAccessibilityDescription" = "Undertextspår";
+
+/* Class = "NSTableColumn"; headerCell.title = "Encoding"; ObjectID = "1Qg-We-ltR"; */
+"1Qg-We-ltR.headerCell.title" = "Enkodning";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "4PX-In-DpF"; */
+"4PX-In-DpF.title" = "Lägg till alla spår";
+
+/* Class = "NSTableColumn"; headerCell.title = "Language"; ObjectID = "9ka-9O-WDj"; */
+"9ka-9O-WDj.headerCell.title" = "Språk";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "SRT/SSA-justering";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "dap-ee-kor"; */
+"dap-ee-kor.title" = "Objekt 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "fAW-To-EeP"; */
+"fAW-To-EeP.title" = "Objekt 3";
+
+/* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
+"fIe-Fg-ufj.headerCell.title" = "Inbränd";
+
+/* Class = "NSTableColumn"; headerCell.title = "Default"; ObjectID = "fvq-pE-sOC"; */
+"fvq-pE-sOC.headerCell.title" = "Standard";
+
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "fXD-7h-jMl"; */
+"fXD-7h-jMl.title" = "Lägg till externt undertextspår...";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "g4b-FM-qX4"; */
+"g4b-FM-qX4.title" = "Objekt 2";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "gHY-6m-ASb"; */
+"gHY-6m-ASb.title" = "Objekt 2";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "gYk-0C-2tR"; */
+"gYk-0C-2tR.title" = "Textcell";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Forced subtitles only"; ObjectID = "HC5-ql-Vcr"; */
+"HC5-ql-Vcr.ibExternalAccessibilityDescription" = "Tvingade undertexter endast";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hhH-c3-gD0"; */
+"hhH-c3-gD0.title" = "0";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "HQq-Mp-4sI"; */
+"HQq-Mp-4sI.title" = "Objekt 2";
+
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Add new SRT/SSA subtitle to the list."; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.ibShadowedToolTip" = "Lägg till ny SRT/SSA-undertext till listan.";
+
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.title" = "Lägg till externt undertextspår...";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Language"; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibExternalAccessibilityDescription" = "SRT/SSA-språk";
+
+/* Class = "NSMenuItem"; title = "Reload"; ObjectID = "jcM-HL-QJ6"; */
+"jcM-HL-QJ6.title" = "Läs om";
+
+/* Class = "NSButtonCell"; title = "Reload"; ObjectID = "jG8-uo-1tv"; */
+"jG8-uo-1tv.title" = "Läs om";
+
+/* Class = "NSTableColumn"; headerCell.title = "Forced Only"; ObjectID = "klV-Gy-igk"; */
+"klV-Gy-igk.headerCell.title" = "Endast tvingad";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Default"; ObjectID = "mdO-Qu-3Pb"; */
+"mdO-Qu-3Pb.ibExternalAccessibilityDescription" = "Standard";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "mVi-zH-KUq"; */
+"mVi-zH-KUq.title" = "Ta bort alla spår";
+
+/* Class = "NSTableColumn"; headerCell.title = "Track"; ObjectID = "N3S-st-yGv"; */
+"N3S-st-yGv.headerCell.title" = "Spår";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
+"oxg-bs-1si.title" = "Valbeteende...";
+
+/* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "pwm-PV-1x4"; */
+"pwm-PV-1x4.title" = "Valbeteende...";
+
+/* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
+"QRj-KI-a03.title" = "Text";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Character Encoding"; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibExternalAccessibilityDescription" = "Teckenkodning för SRT/SSA";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "R8a-qg-ASg"; */
+"R8a-qg-ASg.title" = "Ta bort alla spår";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "Rj8-KI-k4L"; */
+"Rj8-KI-k4L.title" = "Objekt 1";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
+"S2I-Jd-Lyg.title" = "Lägg till alla spår";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Selected track"; ObjectID = "Tf3-cP-TGw"; */
+"Tf3-cP-TGw.ibExternalAccessibilityDescription" = "Valt spår";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "ThR-Cn-Vfr"; */
+"ThR-Cn-Vfr.title" = "Objekt 3";
+
+/* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "TJO-RZ-jgb"; */
+"TJO-RZ-jgb.title" = "Spår";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "yDg-DK-z5D"; */
+"yDg-DK-z5D.title" = "Objekt 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "yEC-jb-q8b"; */
+"yEC-jb-q8b.title" = "Objekt 3";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Burned In"; ObjectID = "zpm-9Z-Hsq"; */
+"zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "Inbränd";
+
