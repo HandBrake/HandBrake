@@ -4551,6 +4551,12 @@ Overrides all other settings.</property>
     <property name="step-increment">5</property>
     <property name="page-increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="max_title_adj">
+    <property name="upper">36000</property>
+    <property name="value">10</property>
+    <property name="step-increment">5</property>
+    <property name="page-increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="preview_count_adj">
     <property name="lower">5</property>
     <property name="upper">60</property>
@@ -5499,6 +5505,12 @@ Each selected source track will be encoded with all selected encoders.</property
                           <object class="GtkBox" id="hbox66">
                             <property name="spacing">4</property>
                             <child>
+                              <object class="GtkLabel" id="preview_count_label">
+                                <property name="label" translatable="yes">Number of previews</property>
+                                <property name="use-markup">1</property>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkSpinButton" id="preview_count">
                                 <property name="focusable">1</property>
                                 <property name="width-chars">6</property>
@@ -5510,17 +5522,17 @@ Each selected source track will be encoded with all selected encoders.</property
                                 </accessibility>
                               </object>
                             </child>
-                            <child>
-                              <object class="GtkLabel" id="preview_count_label">
-                                <property name="label" translatable="yes">Number of previews</property>
-                                <property name="use-markup">1</property>
-                              </object>
-                            </child>
                           </object>
                         </child>
                         <child>
                           <object class="GtkBox" id="hbox60">
                             <property name="spacing">4</property>
+                            <child>
+                              <object class="GtkLabel" id="min_title_duration_label">
+                                <property name="label" translatable="yes">Minimum DVD/Blu-ray title duration (seconds)</property>
+                                <property name="use-markup">1</property>
+                              </object>
+                            </child>
                             <child>
                               <object class="GtkSpinButton" id="MinTitleDuration">
                                 <property name="focusable">1</property>
@@ -5533,10 +5545,27 @@ Each selected source track will be encoded with all selected encoders.</property
                                 </accessibility>
                               </object>
                             </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">4</property>
                             <child>
-                              <object class="GtkLabel" id="min_title_duration_label">
-                                <property name="label" translatable="yes">Minimum DVD/Blu-ray title duration (seconds)</property>
-                                <property name="use-markup">1</property>
+                              <object class="GtkCheckButton" id="LimitMaxDuration">
+                                <property name="label" translatable="yes">Maximum DVD/Blu-ray title duration (seconds)</property>
+                                <signal name="toggled" handler="pref_changed_cb" swapped="no" />
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="MaxTitleDuration">
+                                <property name="focusable">1</property>
+                                <property name="width-chars">6</property>
+                                <property name="adjustment">max_title_adj</property>
+                                <property name="numeric">1</property>
+                                <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
+                                <accessibility>
+                                  <relation name="labelled-by">LimitMaxDuration</relation>
+                                </accessibility>
                               </object>
                             </child>
                           </object>
