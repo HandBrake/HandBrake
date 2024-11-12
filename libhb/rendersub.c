@@ -49,6 +49,7 @@ struct hb_filter_private_s
     ASS_Track         *ssa_track;
     uint8_t            script_initialized;
     hb_box_vec_t       boxes;
+    hb_csp_convert_f   rgb2yuv_fn;
 
     // SRT
     int                line;
@@ -501,7 +502,7 @@ static hb_buffer_t * compose_subsample_ass(hb_filter_private_t *pv, const ASS_Im
             x <= frame->dst_x && x + width >= frame->dst_x + frame->w &&
             y <= frame->dst_y && y + height >= frame->dst_y + frame->h)
         {
-            const int yuv = hb_rgb2yuv_bt709(frame->color >> 8);
+            const int yuv = pv->rgb2yuv_fn(frame->color >> 8);
 
             const unsigned frame_y = (yuv >> 16) & 0xff;
             const unsigned frame_v = (yuv >> 8 ) & 0xff;
@@ -806,6 +807,40 @@ static void ssa_close(hb_filter_object_t *filter)
     filter->private_data = NULL;
 }
 
+static void ssa_work_init(hb_filter_private_t *pv, const hb_data_t *sub_data)
+{
+    // NOTE: The codec extradata is expected to be in MKV format
+    // I would like to initialize this in ssa_post_init, but when we are
+    // transcoding text subtitles to SSA, the extradata does not
+    // get initialized until the decoder is initialized.  Since
+    // decoder initialization happens after filter initialization,
+    // we need to postpone this.
+    ass_process_codec_private(pv->ssa_track, (const char *)sub_data->bytes, sub_data->size);
+
+    switch(pv->ssa_track->YCbCrMatrix)
+    {
+    case YCBCR_DEFAULT: //No YCbCrMatrix header: VSFilter default
+    case YCBCR_FCC_TV:  //FCC is almost the same as 601
+    case YCBCR_FCC_PC:
+    case YCBCR_BT601_TV:
+    case YCBCR_BT601_PC:
+        pv->rgb2yuv_fn = hb_rgb2yuv;
+        break;
+    case YCBCR_BT709_TV:
+    case YCBCR_BT709_PC:
+    case YCBCR_SMPTE240M_TV:
+    case YCBCR_SMPTE240M_PC:  //240M is almost the same as 709
+        pv->rgb2yuv_fn = hb_rgb2yuv_bt709;
+        break;
+    //use video csp
+    case YCBCR_UNKNOWN://cannot parse
+    case YCBCR_NONE:   //explicitely requested no override
+    default:
+        pv->rgb2yuv_fn = hb_get_rgb2yuv_function(pv->input.color_matrix);
+        break;
+    }
+}
+
 static int ssa_work(hb_filter_object_t *filter,
                     hb_buffer_t **buf_in,
                     hb_buffer_t **buf_out)
@@ -816,15 +851,7 @@ static int ssa_work(hb_filter_object_t *filter,
 
     if (!pv->script_initialized)
     {
-        // NOTE: The codec extradata is expected to be in MKV format
-        // I would like to initialize this in ssa_post_init, but when we are
-        // transcoding text subtitles to SSA, the extradata does not
-        // get initialized until the decoder is initialized.  Since
-        // decoder initialization happens after filter initialization,
-        // we need to postpone this.
-        ass_process_codec_private(pv->ssa_track,
-                                  (char *)filter->subtitle->extradata->bytes,
-                                  filter->subtitle->extradata->size);
+        ssa_work_init(pv, filter->subtitle->extradata);
         pv->script_initialized = 1;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -906,9 +933,7 @@ static int textsub_work(hb_filter_object_t *filter,
 
     if (!pv->script_initialized)
     {
-        ass_process_codec_private(pv->ssa_track,
-                                  (char *)filter->subtitle->extradata->bytes,
-                                  filter->subtitle->extradata->size);
+        ssa_work_init(pv, filter->subtitle->extradata);
         pv->script_initialized = 1;
     }
 

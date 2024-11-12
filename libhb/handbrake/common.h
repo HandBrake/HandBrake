@@ -1628,6 +1628,9 @@ int hb_rgb2yuv(int rgb);
 int hb_rgb2yuv_bt709(int rgb);
 int hb_rgb2yuv_bt2020(int rgb);
 
+typedef int (*hb_csp_convert_f)(int);
+hb_csp_convert_f hb_get_rgb2yuv_function(int color_matrix);
+
 void hb_compute_chroma_smoothing_coefficient(unsigned chroma_coeffs[2][4],
                                              int pix_fmt, int chroma_location);
 

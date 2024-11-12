@@ -6236,6 +6236,23 @@ int hb_rgb2yuv_bt2020(int rgb)
     return (y << 16) | (Cr << 8) | Cb;
 }
 
+hb_csp_convert_f hb_get_rgb2yuv_function(int color_matrix)
+{
+    switch (color_matrix)
+    {
+    case HB_COLR_MAT_BT470BG:
+    case HB_COLR_MAT_SMPTE170M:
+    case HB_COLR_MAT_FCC:
+        return hb_rgb2yuv;
+    case HB_COLR_MAT_BT2020_NCL:
+    case HB_COLR_MAT_BT2020_CL: //wrong
+        return hb_rgb2yuv_bt2020;
+    default: //assume 709 for the rest
+        break;
+    }
+    return hb_rgb2yuv_bt709;
+}
+
 void hb_compute_chroma_smoothing_coefficient(unsigned chroma_coeffs[2][4], int pix_fmt, int chroma_location)
 {
     const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
