@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -315,6 +315,17 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="yua-nt-2OC"/>
+                            <menuItem title="Actual Size" keyEquivalent="0" id="dhI-xk-VkB">
+                                <connections>
+                                    <action selector="actualSize:" target="-1" id="lM7-3K-Dqb"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Scale to Screen" keyEquivalent="9" id="xXN-Ui-Jyv">
+                                <connections>
+                                    <action selector="scaleToScreen:" target="-1" id="J4L-9Q-Sot"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="hUK-Og-yP5"/>
                             <menuItem title="Show Toolbar" keyEquivalent="t" id="IsV-5A-bqx">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
@@ -435,21 +446,20 @@
                                     <action selector="showQueueWindow:" target="6lr-Yy-GMc" id="WFe-Tm-3XP"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="2519">
-                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                            </menuItem>
-                            <menuItem title="Presets View" keyEquivalent="t" id="1884">
-                                <connections>
-                                    <action selector="togglePresets:" target="-1" id="xcD-h2-Mhe"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Preview Window" id="5157">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Preview" keyEquivalent="3" id="5157">
                                 <connections>
                                     <action selector="showPreviewWindow:" target="-1" id="b7R-uV-KeA"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Activity Window" keyEquivalent="D" id="2295">
+                            <menuItem isSeparatorItem="YES" id="2519">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Presets" keyEquivalent="t" id="1884">
+                                <connections>
+                                    <action selector="togglePresets:" target="-1" id="xcD-h2-Mhe"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Activity" keyEquivalent="D" id="2295">
                                 <connections>
                                     <action selector="showOutputPanel:" target="6lr-Yy-GMc" id="mEr-6M-u1q"/>
                                 </connections>
@@ -479,7 +489,7 @@
                     </menu>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="-169" y="-21"/>
+            <point key="canvasLocation" x="-245" y="-168"/>
         </menu>
         <customObject id="4963" customClass="SPUStandardUpdaterController"/>
         <customObject id="6lr-Yy-GMc" customClass="HBAppDelegate">

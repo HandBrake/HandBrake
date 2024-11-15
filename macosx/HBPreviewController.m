@@ -317,9 +317,9 @@
     }
 }
 
-- (void)toggleScaleToScreen
+- (void)setScaleToScreen:(BOOL)scaleToScreen
 {
-    self.previewView.fitToView = !self.previewView.fitToView;
+    self.previewView.fitToView = scaleToScreen;
     [self resizeIfNeeded:YES];
 }
 
