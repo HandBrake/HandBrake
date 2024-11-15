@@ -1650,9 +1650,12 @@ int encvt_init(hb_work_object_t *w, hb_job_t *job)
                 pv->settings.vbv.bufsize = 0;
                 hb_log("encvt_Init: data rate limits not supported in CQ mode, Dolby Vision file might be out of specs");
             }
+            // Data limits are poorly supported in average mode too, disabling for now
             else
             {
-                hb_log("encvt_Init: encoding Dolby Vision with automatic data rate limits: %d kbit/s", pv->settings.vbv.maxrate);
+                pv->settings.vbv.maxrate = 0;
+                pv->settings.vbv.bufsize = 0;
+                hb_log("encvt_Init: data rate limits not supported in ABR mode, Dolby Vision file might be out of specs");
             }
         }
 
