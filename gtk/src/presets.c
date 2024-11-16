@@ -1252,10 +1252,11 @@ G_MODULE_EXPORT void
 preset_select_action_cb(GSimpleAction *action, GVariant *param,
                         signal_user_data_t *ud)
 {
-    const char * preset_path = g_variant_get_string(param, NULL);
-    int          type        = preset_path[0] - '0';
+    char *preset_path = g_uri_unescape_string(g_variant_get_string(param, NULL), NULL);
+    int   type        = preset_path[0] - '0';
 
     ghb_select_preset(ud, &preset_path[1], type);
+    g_free(preset_path);
 }
 
 G_MODULE_EXPORT void
@@ -1360,17 +1361,18 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                     {
                         continue;
                     }
-                    g_string_append_printf(preset_str, "/%s", name);
+                    g_string_append(preset_str, "/");
+                    g_string_append_uri_escaped(preset_str, name, NULL, TRUE);
 
                     char * preset_path;
                     char * detail_action;
 
                     preset_path = g_string_free(preset_str, FALSE);
-                    detail_action = g_strdup_printf("app.preset-select(\"%s\")",
+                    detail_action = g_strdup_printf("app.preset-select('%s')",
                                                     preset_path);
                     g_menu_append(submenu, name, detail_action);
-                    free(preset_path);
-                    free(detail_action);
+                    g_free(preset_path);
+                    g_free(detail_action);
                 }
                 if (type == HB_PRESET_TYPE_CUSTOM &&
                     g_strv_contains((const char**)official_names, folder_name))
