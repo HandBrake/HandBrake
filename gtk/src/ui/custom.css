@@ -172,3 +172,9 @@ toolbar
     padding-left: 1px;
     padding-right: 1px;
 }
+
+.ghb-preview-window
+{
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
