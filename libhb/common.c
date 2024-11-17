@@ -4351,6 +4351,8 @@ void hb_title_close( hb_title_t ** _t )
     hb_subtitle_t * subtitle;
     hb_attachment_t * attachment;
 
+    hb_data_close(&t->initial_rpu);
+
     while( ( chapter = hb_list_item( t->list_chapter, 0 ) ) )
     {
         hb_list_rem( t->list_chapter, chapter );

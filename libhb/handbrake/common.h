@@ -1224,7 +1224,11 @@ struct hb_title_s
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t     coll;
     hb_ambient_viewing_environment_metadata_t ambient;
+
     hb_dovi_conf_t  dovi;
+    hb_data_t      *initial_rpu;
+    int             initial_rpu_type;
+
     int             hdr_10_plus;
 
     hb_rational_t   vrate;
