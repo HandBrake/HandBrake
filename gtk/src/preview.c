@@ -228,7 +228,7 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
     else
     {
         gtk_window_unmaximize(window);
-        gtk_window_set_default_size(window, width, height);
+        gtk_window_set_default_size(window, width, -1);
     }
     gtk_widget_set_size_request(widget, -1, -1);
 
