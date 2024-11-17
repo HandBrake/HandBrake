@@ -6269,6 +6269,7 @@ battery is charged.</property>
     <property name="icon-name">fr.handbrake.ghb</property>
     <property name="default-width">854</property>
     <property name="default-height">480</property>
+    <property name="css-classes">ghb-preview-window</property>
     <signal name="notify::fullscreened" handler="preview_notify_fullscreen_cb" swapped="no"/>
     <signal name="close-request" handler="preview_close_request_cb" swapped="no"/>
     <property name="child">
