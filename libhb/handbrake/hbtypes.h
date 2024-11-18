@@ -42,6 +42,8 @@ typedef struct hb_filter_private_s hb_filter_private_t;
 typedef struct hb_filter_object_s  hb_filter_object_t;
 typedef struct hb_motion_metric_private_s  hb_motion_metric_private_t;
 typedef struct hb_motion_metric_object_s  hb_motion_metric_object_t;
+typedef struct hb_blend_private_s  hb_blend_private_t;
+typedef struct hb_blend_object_s  hb_blend_object_t;
 typedef struct hb_buffer_settings_s hb_buffer_settings_t;
 typedef struct hb_image_format_s hb_image_format_t;
 typedef struct hb_fifo_s hb_fifo_t;

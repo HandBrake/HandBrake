@@ -5,6 +5,7 @@
 # 
 # Translators:
 # AlphaKodi, 2024
+# Yuichiro Naito, 2024
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-16 19:10+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: AlphaKodi, 2024\n"
+"Last-Translator: Yuichiro Naito, 2024\n"
 "Language-Team: Japanese (https://app.transifex.com/HandBrakeProject/teams/92423/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -150,7 +151,7 @@ msgstr "サルでもわかるHandbrake"
 
 #: src/ui/menu.ui:204
 msgid "A_bout HandBrake"
-msgstr ""
+msgstr "HandBrakeについて"
 
 #: src/ui/menu.ui:290 src/ui/menu.ui:369
 msgid "_Play File"
@@ -190,19 +191,19 @@ msgstr "_全ジョブクリア"
 
 #: src/ui/menu.ui:346
 msgid "_Add Track"
-msgstr ""
+msgstr "トラックを追加"
 
 #: src/ui/menu.ui:350 src/ui/menu.ui:425 src/ui/menu.ui:437
 msgid "Add A_ll Tracks"
-msgstr ""
+msgstr "全トラックを追加"
 
 #: src/ui/menu.ui:354 src/ui/menu.ui:441
 msgid "Add _Foreign Audio Scan"
-msgstr ""
+msgstr "吹き替え字幕スキャンの追加"
 
 #: src/ui/menu.ui:360
 msgid "Add External Subtitle File"
-msgstr ""
+msgstr "外部字幕ファイルを追加"
 
 #: src/ui/menu.ui:393
 msgid "Move to _Top"
@@ -226,7 +227,7 @@ msgstr "_削除"
 
 #: src/ui/menu.ui:421 src/ui/menu.ui:433
 msgid "_Add New Track"
-msgstr ""
+msgstr "新しいトラックを追加"
 
 #: src/ui/ghb.ui:93
 msgid ""
@@ -1181,6 +1182,10 @@ msgid ""
 "\n"
 "    VFR is not compatible with some players."
 msgstr ""
+"可変フレームレートを有効にします。\n"
+"最大値はフレームレート設定によって決められます。\n"
+"\n"
+"これはいくつかのプレーヤーでは互換性がありません。"
 
 #: src/ui/ghb.ui:3400
 msgid "Variable Framerate"
@@ -1192,6 +1197,9 @@ msgid ""
 "\n"
 "    VFR is not compatible with some players."
 msgstr ""
+"可変フレームレートを有効にします。\n"
+"\n"
+"これは一部のプレーヤーと互換性がありません。"
 
 #: src/ui/ghb.ui:3427
 msgid "Constant Quality:"
@@ -1399,11 +1407,11 @@ msgstr "オーディオ"
 
 #: src/ui/ghb.ui:3822
 msgid "Show audio default selection options"
-msgstr ""
+msgstr "既定の音声選択オプションを表示する"
 
 #: src/ui/ghb.ui:3836 src/ui/ghb.ui:3990
 msgid "Selection Behavior…"
-msgstr ""
+msgstr "選択の振る舞い..."
 
 #: src/ui/ghb.ui:3845
 msgid "Reload all audio settings from defaults"
@@ -1427,7 +1435,7 @@ msgstr "トラック"
 
 #: src/ui/ghb.ui:3976
 msgid "Show subtitle default selection options"
-msgstr ""
+msgstr "既定の字幕選択オプションを表示する"
 
 #: src/ui/ghb.ui:4101
 msgid "Chapters"
@@ -1725,7 +1733,7 @@ msgstr "DRC"
 
 #: src/ui/ghb.ui:5253
 msgid "Add Track"
-msgstr ""
+msgstr "トラック追加"
 
 #: src/ui/ghb.ui:5254
 msgid ""
@@ -1744,6 +1752,8 @@ msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "  All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
+"先頭の音声トラックのみ全エンコーダーリストでエンコードされます。\n"
+"2つ目以降の音声出力トラックは先頭のエンコーダーのみでエンコードされます。"
 
 #: src/ui/ghb.ui:5276
 msgid "Add Multiple Titles"
@@ -1852,7 +1862,7 @@ msgstr "除外するファイル拡張子:"
 msgid ""
 "The following file extensions will be ignored when scanning a folder. The "
 "list is case insensitive."
-msgstr ""
+msgstr "次のファイル拡張子はフォルダスキャン時に無視されます。大文字小文字は関係ありません。"
 
 #: src/ui/ghb.ui:5561
 msgctxt "Queue tab in Preferences window"
@@ -1861,7 +1871,7 @@ msgstr "キュー"
 
 #: src/ui/ghb.ui:5574
 msgid "Pause queue if disk space is lower than:"
-msgstr ""
+msgstr "ディスク空き容量が次の値以下になったらキューを一時停止:"
 
 #: src/ui/ghb.ui:5590
 msgid "Disk Free Space Limit"
@@ -2067,11 +2077,11 @@ msgstr "現在のプレビューポジションからの短いシーケンスを
 
 #: src/ui/ghb.ui:6301
 msgid "Preview Video Position"
-msgstr ""
+msgstr "プレビュービデオ位置"
 
 #: src/ui/ghb.ui:6314
 msgid "Preview Encode Progress"
-msgstr ""
+msgstr "プレビューエンコード進捗"
 
 #: src/ui/ghb.ui:6323
 msgid "Click to toggle full screen mode"
@@ -2103,15 +2113,15 @@ msgstr "(なし)"
 
 #: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:265 src/ghb-queue-row.c:281
 msgid "Pending Queue Item"
-msgstr ""
+msgstr "待機中のキューアイテム"
 
 #: src/ui/ghb-queue-row.ui:31
 msgid "Delete this item"
-msgstr ""
+msgstr "このアイテムを削除"
 
 #: src/ui/ghb-queue-row.ui:52
 msgid "Encode Progress"
-msgstr ""
+msgstr "エンコード進捗"
 
 #. Audio DRC Label
 #: src/audiohandler.c:419 src/audiohandler.c:764 src/audiohandler.c:1175
@@ -2154,8 +2164,8 @@ msgstr "ビットレート: %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
-msgstr "<small>パススルー</small>"
+msgid "<small>Passthru</small>"
+msgstr ""
 
 #: src/audiohandler.c:790
 #, c-format
@@ -2241,7 +2251,7 @@ msgstr "このオーディオエンコーダーを削除します"
 
 #: src/callbacks.c:296
 msgid "An encode is in progress."
-msgstr ""
+msgstr "エンコードが実行中。"
 
 #: src/callbacks.c:1124 src/callbacks.c:1135 src/callbacks.c:1785
 msgid "Not Selected"
@@ -2410,7 +2420,7 @@ msgstr "HandBrakeを再起動する必要があります。"
 #: src/callbacks.c:3920
 #, c-format
 msgid "%s in %d seconds…"
-msgstr "%d秒で%s"
+msgstr "%sまで後 %d 秒"
 
 #: src/callbacks.c:4097
 msgid "Stop Encoding?"
@@ -2430,7 +2440,7 @@ msgstr "現在のエンコードをキャンセルして次を開始"
 
 #: src/callbacks.c:4100
 msgid "Finish Current and Stop"
-msgstr "現在のエンコードを完了して次を開始"
+msgstr ""
 
 #: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
 msgid "Continue Encoding"
@@ -2448,7 +2458,7 @@ msgstr "全てキャンセルして終了"
 #, c-format
 msgid "%d encode pending"
 msgid_plural "%d encodes pending"
-msgstr[0] ""
+msgstr[0] "%d個のエンコードが待機中"
 
 #: src/callbacks.c:4349 src/callbacks.c:4417
 #, c-format
@@ -2521,15 +2531,15 @@ msgstr "エンコードが完了しました。"
 
 #: src/callbacks.c:5479
 msgid "Quitting HandBrake"
-msgstr "HandBrakeを閉じています"
+msgstr "HandBrakeを修了する"
 
 #: src/callbacks.c:5486
 msgid "Putting computer to sleep"
-msgstr "コンピューターをスリープします"
+msgstr "コンピューターをスリープする"
 
 #: src/callbacks.c:5494
 msgid "Shutting down the computer"
-msgstr "コンピューターをシャットダウンします"
+msgstr "コンピューターをシャットダウンする"
 
 #. Add filters
 #: src/callbacks.c:5608 src/chapters.c:458 src/chapters.c:487
@@ -2551,27 +2561,27 @@ msgstr ""
 
 #: src/ghb-queue-row.c:260
 msgid "Running Queue Item"
-msgstr ""
+msgstr "実行中のキューアイテム"
 
 #: src/ghb-queue-row.c:269
 msgid "Failed Queue Item"
-msgstr ""
+msgstr "失敗したキューアイテム"
 
 #: src/ghb-queue-row.c:273
 msgid "Cancelled Queue Item"
-msgstr ""
+msgstr "キャンセルしたキューアイテム"
 
 #: src/ghb-queue-row.c:277
 msgid "Completed Queue Item"
-msgstr ""
+msgstr "完了したキューアイテム"
 
 #: src/hb-backend.c:55 src/hb-backend.c:80
 msgid "First Matching Selected Languages"
-msgstr ""
+msgstr "選択した言語と一致する最初のもの"
 
 #: src/hb-backend.c:56 src/hb-backend.c:81
 msgid "All Matching Selected Languages"
-msgstr ""
+msgstr "選択した言語と一致するすべてのもの"
 
 #: src/hb-backend.c:67
 msgid "Foreign Audio Subtitle Track"
@@ -3099,17 +3109,17 @@ msgstr "色空間"
 #, c-format
 msgid "%d item complete, %d failed"
 msgid_plural "%d items complete, %d failed"
-msgstr[0] ""
+msgstr[0] "%d個が完了、 %d 個が失敗"
 
 #: src/notifications.c:60
 #, c-format
 msgid "%d item has finished encoding"
 msgid_plural "%d items have finished encoding"
-msgstr[0] ""
+msgstr[0] "%d個のアイテムがエンコード完了"
 
 #: src/notifications.c:106
 msgid "Put down that cocktail…"
-msgstr ""
+msgstr "カクテルを置いて..."
 
 #: src/notifications.c:116
 msgid "Encode Complete"
@@ -3201,19 +3211,19 @@ msgstr ""
 
 #: src/preview.c:154
 msgid "Pause Preview"
-msgstr ""
+msgstr "プレビュー一時停止"
 
 #: src/preview.c:158
 msgid "Stop Encoding Preview"
-msgstr ""
+msgstr "エンコードプレビュー停止"
 
 #: src/preview.c:162
 msgid "Play Preview"
-msgstr ""
+msgstr "プレビュー再生"
 
 #: src/preview.c:288
 msgid "Playback Error"
-msgstr ""
+msgstr "再生エラー"
 
 #: src/preview.c:291
 msgid "The video could not be played. For more details, see the Activity Log."
@@ -3475,8 +3485,8 @@ msgid "Burned Into Video"
 msgstr "映像に焼き込む"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
-msgstr "パススルー"
+msgid "Passthru"
+msgstr ""
 
 #: src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"

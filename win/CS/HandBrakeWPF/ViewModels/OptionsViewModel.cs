@@ -65,6 +65,7 @@ namespace HandBrakeWPF.ViewModels
         private string logDirectory;
         private BindingList<int> logVerbosityOptions = new BindingList<int>();
         private long minLength;
+        private long maxLength;
         private bool minimiseToTray;
         private bool preventSleep;
         private BindingList<int> previewPicturesToScan = new BindingList<int>();
@@ -121,6 +122,8 @@ namespace HandBrakeWPF.ViewModels
         private BindingList<string> excludedFileExtensions;
         private bool recursiveFolderScan;
         private bool keepDuplicateTitles;
+
+        private bool maxDurationEnabled;
 
         public OptionsViewModel(
             IUserSettingService userSettingService,
@@ -826,6 +829,37 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public long MaxLength
+        {
+            get => this.maxLength;
+
+            set
+            {
+                this.maxLength = value;
+                this.NotifyOfPropertyChange(() => this.MaxLength);
+            }
+        }
+
+        public bool MaxDurationEnabled
+        {
+            get => this.maxDurationEnabled;
+            set
+            {
+                if (value == this.maxDurationEnabled)
+                {
+                    return;
+                }
+
+                if (!value)
+                {
+                    MaxLength = 0;
+                }
+
+                this.maxDurationEnabled = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public bool MinimiseToTray
         {
             get => this.minimiseToTray;
@@ -1507,6 +1541,11 @@ namespace HandBrakeWPF.ViewModels
 
             // Min Title Length
             this.MinLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration);
+            this.MaxLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MaxScanDuration);
+            if (this.MaxLength > 0)
+            {
+                this.MaxDurationEnabled = true;
+            }
 
             // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
@@ -1685,6 +1724,12 @@ namespace HandBrakeWPF.ViewModels
             if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))
             {
                 this.userSettingService.SetUserSetting(UserSettingConstants.MinScanDuration, value);
+            }
+
+            int maxValue;
+            if (int.TryParse(this.MaxLength.ToString(CultureInfo.InvariantCulture), out maxValue))
+            {
+                this.userSettingService.SetUserSetting(UserSettingConstants.MaxScanDuration, maxValue);
             }
 
             this.userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);

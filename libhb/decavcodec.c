@@ -612,6 +612,9 @@ static void closePrivData( hb_work_private_t ** ppv )
         {
             free(pv->reordered_hash[ii]);
         }
+
+        hb_list_close(&pv->list_subtitle);
+
         free(pv);
     }
     *ppv = NULL;
@@ -1349,6 +1352,28 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
             pv->title->coll.max_fall = coll->MaxFALL;
         }
 
+        // Check for Dolby Vision and store the first RPU found
+        // eventually to attach to the the initial black buffer
+        if (pv->title->initial_rpu == NULL)
+        {
+            int type = AV_FRAME_DATA_DOVI_RPU_BUFFER;
+            sd = av_frame_get_side_data(pv->frame, type);
+
+            if (sd == NULL)
+            {
+                type = AV_FRAME_DATA_DOVI_RPU_BUFFER_T35;
+                sd = av_frame_get_side_data(pv->frame, type);
+            }
+
+            if (sd != NULL && sd->size > 0)
+            {
+                hb_data_t *rpu = hb_data_init(sd->size);
+                memcpy(rpu->bytes, sd->data, sd->size);
+                pv->title->initial_rpu = rpu;
+                pv->title->initial_rpu_type = type;
+            }
+        }
+
         // Check for HDR Plus dynamic metadata
         sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
         if (sd != NULL && sd->size > 0)
@@ -1569,6 +1594,14 @@ int reinit_video_filters(hb_work_private_t * pv)
                     break;
                 default:
                     hb_log("reinit_video_filters: Unknown rotation, failed");
+            }
+
+            const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
+            if (desc->log2_chroma_w != desc->log2_chroma_h)
+            {
+                settings = hb_dict_init();
+                hb_dict_set(settings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
+                hb_avfilter_append_dict(filters, "format", settings);
             }
         }
     }

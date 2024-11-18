@@ -557,4 +557,7 @@ Le débit variera d'une source à une autre.</value>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>Ouvre le site internet de documentation à l'adresse https://handbrake.fr/docs</value>
   </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
 </root>

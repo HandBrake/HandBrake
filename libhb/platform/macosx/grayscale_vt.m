@@ -103,6 +103,7 @@ static int grayscale_vt_init(hb_filter_object_t *filter,
 
     if (hb_metal_add_pipeline(pv->mtl, "monochrome", constant_values, pv->mtl->pipelines_count))
     {
+        [constant_values release];
         return -1;
     }
 
@@ -111,6 +112,7 @@ static int grayscale_vt_init(hb_filter_object_t *filter,
 
     if (hb_metal_add_pipeline(pv->mtl, "monochrome", constant_values, pv->mtl->pipelines_count))
     {
+        [constant_values release];
         return -1;
     }
 

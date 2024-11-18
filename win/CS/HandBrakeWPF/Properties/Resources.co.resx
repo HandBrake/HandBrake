@@ -1117,14 +1117,8 @@ Indiziu : Ciò ch’ella ci vole à fà in casu di rimpiazzamentu di schedariu p
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Metadati</value>
   </data>
-  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Permette l’adopru di i cudificatori Nvidia NVENC</value>
-  </data>
-  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Permette l’adopru di i cudificatori Intel QuickSync</value>
-  </data>
-  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Permette l’iusu di i cudificatori VCN d’AMD</value>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Allow use of DirectX Decoding</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>U furmatu di schedariu pruvistu cuntene caratteri inaccettevule. Quelli sò stati cacciati. </value>
@@ -1221,6 +1215,9 @@ Indiziu : Ciò ch’ella ci vole à fà in casu di rimpiazzamentu di schedariu p
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>Durata minima in seconde di i tituli DVD è Blu-ray. I tituli più corti seranu tralasciati :</value>
+  </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Keep duplicate titles on Blu-ray sources (Requires Restart)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>Estensione di schedariu MP4 :</value>
@@ -1911,8 +1908,8 @@ Pudete sguillà è depone o stampittà u testu insù.</value>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Rigatura di sblucchime</value>
   </data>
-  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>A scelta di u cudificatore serà dispunibule in l’unghjetta « Video ».</value>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake hà trovu parechji schedarii di fila d’attesa micca compii. Quelli venenu da parechje instanze d’HandBrake. Vulete ricuperà tutti sti travagli micca compii ?</value>
@@ -2318,7 +2315,7 @@ Ci vole à sceglie una prerigatura sfarente.</value>
     <value>Livellu quandu l’alerte nant’à u spaziu discu debule s’affissenu :</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Nota : Ghjè a limitazione alta di i travagli simultanei. Certe limitazioni materiale ponu fà diminuisce u numeru attuale di travagli simultanei durante a cudificazione. E preferenze seranu pigliate in contu à u prossimu trattamentu da lottu di a fila d’attesa o à u rilanciu di l’appiecazione.</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Micca dispunibule)</value>
@@ -2840,5 +2837,80 @@ Per permette parechje cudificazioni simultanee, attivate st’ozzione in u listi
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
     <value>Ora di principiu :</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Shutting Down Encode ...</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Allow Upscaling</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimal Size</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Available on this system.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>Not available on this system.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Please wait ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Abbandunà</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Open Log Window</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Persunalizata</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>Nisuna</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Autumatica</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>Nò</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>Persunalizata</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>Predefinitu</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>Nò</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>Nò</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>Nò</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>Predefinitu</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>Persunalizata</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>Nò</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
   </data>
 </root>

@@ -1122,14 +1122,8 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Metadati</value>
   </data>
-  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Permetti l'uso del codificatore Nvidia NVENC</value>
-  </data>
-  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Permetti l'uso del codificatore Intel QuickSync</value>
-  </data>
-  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Permetti l'uso del codificatore AMD VCN</value>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Allow use of DirectX Decoding</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Il formato del file inserito contieneva caratteri non validi che sono stati rimossi.</value>
@@ -1226,6 +1220,9 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>Durata minima in secondi dei titoli DVD e Blu-ray. Titoli più brevi verranno ignorati</value>
+  </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Keep duplicate titles on Blu-ray sources (Requires Restart)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>Estensione MP4:</value>
@@ -1916,8 +1913,8 @@ Puoi trascinare/rilasciare o inserire del testo sopra.</value>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Regolazione Deblock</value>
   </data>
-  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>La scelta del codificatore sarà disponibile nella sezione 'Video'</value>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake ha rilevato multipli file di code non terminate. Questi dovrebbero essere stati formati da multiple istanze di HandBrake avviate. Vuoi riprendere i processi non terminati?</value>
@@ -2323,7 +2320,7 @@ Scegliere una preimpostazione differente.</value>
     <value>Livello al quale viene mostrato l'avviso di spazio su disco in esaurimento:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Nota: questo è il numero massimo di processi simultanei. Limitazioni hardware potrebbero ridurre il numero effettivo di processi simultanei durante la codifica. L'impostazione sarà applicata solo dalla prossima coda o al riavvio del programma.</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Non Disponibile)</value>
@@ -2845,5 +2842,80 @@ Per permettere più codifiche simultanee, attivare "Isolamento del Processo" nel
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
     <value>Queue Start Time:</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Shutting Down Encode ...</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Allow Upscaling</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimal Size</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Available on this system.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>Not available on this system.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Please wait ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Open Log Window</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Personalizzata</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>Nessuna</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Automatico</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>Personalizzata</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>Predefinito</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>Predefinito</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>Personalizzata</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
   </data>
 </root>

@@ -230,12 +230,28 @@ static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     }
     if (trans != NULL)
     {
+        hb_value_array_t * avfilters = hb_value_array_init();
+
         hb_dict_t * avfilter = hb_dict_init();
         hb_dict_t * avsettings = hb_dict_init();
 
         hb_dict_set(avsettings, "dir", hb_value_string(trans));
         hb_dict_set(avfilter, "transpose", avsettings);
-        pv->avfilters = avfilter;
+
+        hb_value_array_append(avfilters, avfilter);
+
+        const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(init->pix_fmt);
+        if (desc->log2_chroma_w != desc->log2_chroma_h)
+        {
+            avfilter = hb_dict_init();
+            avsettings = hb_dict_init();
+            hb_dict_set(avsettings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(init->pix_fmt)));
+            hb_dict_set(avfilter, "format", avsettings);
+
+            hb_value_array_append(avfilters, avfilter);
+        }
+
+        pv->avfilters = avfilters;
     }
     else if (hflip || vflip)
     {

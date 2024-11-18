@@ -5542,6 +5542,12 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
             audio->config.in.codec = HB_ACODEC_AC3;
             break;
 
+        case AV_CODEC_ID_ALAC:
+        {
+            hb_set_extradata(&audio->priv.extradata, codecpar->extradata, codecpar->extradata_size);
+            audio->config.in.codec = HB_ACODEC_FFALAC;
+        } break;
+
         case AV_CODEC_ID_EAC3:
             audio->config.in.codec = HB_ACODEC_FFEAC3;
             break;
@@ -5586,6 +5592,12 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
         case AV_CODEC_ID_MP3:
             audio->config.in.codec = HB_ACODEC_MP3;
             break;
+
+        case AV_CODEC_ID_VORBIS:
+        {
+            hb_set_extradata(&audio->priv.extradata, codecpar->extradata, codecpar->extradata_size);
+            audio->config.in.codec = HB_ACODEC_VORBIS;
+        } break;
 
         case AV_CODEC_ID_OPUS:
         {

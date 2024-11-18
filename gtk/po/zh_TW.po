@@ -4,8 +4,8 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# pan93412 <pan93412@gmail.com>, 2021
 # toto6038 <toto6038@gmail.com>, 2024
+# Kisaragi Hiu <flyingfeather1501@gmail.com>, 2024
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-16 19:10+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: toto6038 <toto6038@gmail.com>, 2024\n"
+"Last-Translator: Kisaragi Hiu <flyingfeather1501@gmail.com>, 2024\n"
 "Language-Team: Chinese (Taiwan) (https://app.transifex.com/HandBrakeProject/teams/92423/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,126 +24,126 @@ msgstr ""
 
 #: src/ui/menu.ui:6
 msgid "_File"
-msgstr "檔案 (F)"
+msgstr "檔案(_F)"
 
 #: src/ui/menu.ui:10 src/ui/menu.ui:462
 msgid "_Open Source…"
-msgstr ""
+msgstr "開啟來源(_O)…"
 
 #: src/ui/menu.ui:14 src/ui/menu.ui:466
 msgid "Open _Directory…"
-msgstr ""
+msgstr "開啟目錄(_D)…"
 
 #: src/ui/menu.ui:18 src/ui/menu.ui:176
 msgid "_Set Destination…"
-msgstr ""
+msgstr "設定目的地(_S)…"
 
 #: src/ui/menu.ui:26 src/ui/menu.ui:196
 msgid "_Preferences"
-msgstr "偏好設定 (P)"
+msgstr "偏好設定(_P)"
 
 #. Toss up a warning dialog
 #: src/ui/menu.ui:30 src/ui/menu.ui:210 src/callbacks.c:3814
 msgid "_Quit"
-msgstr "退出 (Q)"
+msgstr "離開(_Q)"
 
 #: src/ui/menu.ui:35 src/ui/menu.ui:80
 msgid "_Queue"
-msgstr "佇列 (Q)"
+msgstr "佇列(_Q)"
 
 #: src/ui/menu.ui:39
 msgid "_Add"
-msgstr "新增 (A)"
+msgstr "新增(_A)"
 
 #: src/ui/menu.ui:43 src/ui/menu.ui:449
 msgid "Add _Multiple…"
-msgstr ""
+msgstr "新增多個(_M)…"
 
 #: src/ui/menu.ui:47 src/ui/menu.ui:453
 msgid "Add A_ll"
-msgstr ""
+msgstr "新增全部(_L)"
 
 #: src/ui/menu.ui:53 src/queuehandler.c:1877
 msgid "_Start Encoding"
-msgstr "開始編碼 (S)"
+msgstr "開始編碼(_S)"
 
 #: src/ui/menu.ui:57 src/queuehandler.c:1920
 msgid "_Pause Encoding"
-msgstr "暫停編碼 (P)"
+msgstr "暫停編碼(_P)"
 
 #: src/ui/menu.ui:63 src/ui/menu.ui:182 src/ui/menu.ui:334
 msgid "_Import Queue…"
-msgstr ""
+msgstr "匯入佇列(_I)…"
 
 #: src/ui/menu.ui:67 src/ui/menu.ui:186 src/ui/menu.ui:338
 msgid "_Export Queue…"
-msgstr ""
+msgstr "匯出佇列(_E)…"
 
 #: src/ui/menu.ui:72
 msgid "_View"
-msgstr "檢視 (V)"
+msgstr "檢視(_V)"
 
 #: src/ui/menu.ui:76
 msgid "Presets _List"
-msgstr "預設檔清單 (L)"
+msgstr "預設檔清單(_L)"
 
 #: src/ui/menu.ui:84
 msgid "_Preview"
-msgstr "預覽 (P)"
+msgstr "預覽(_P)"
 
 #: src/ui/menu.ui:88 src/ui/menu.ui:192
 msgid "_Activity Window"
-msgstr ""
+msgstr "活動視窗(_A)"
 
 #: src/ui/menu.ui:93
 msgid "_Presets"
-msgstr "預設檔 (_P)"
+msgstr "預設檔(_P)"
 
 #: src/ui/menu.ui:97 src/ui/menu.ui:219 src/ui/menu.ui:262
 msgid "Set De_fault"
-msgstr "設成預設 (_F)"
+msgstr "設成預設(_F)"
 
 #: src/ui/menu.ui:103 src/ui/menu.ui:225
 msgid "_New Preset…"
-msgstr ""
+msgstr "新增預設檔(_N)…"
 
 #: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:5975
 #: src/ui/ghb.ui:6065 src/callbacks.c:2135 src/chapters.c:455
 #: src/ghb-file-button.c:219 src/presets.c:2229 src/queuehandler.c:1391
 msgid "_Save"
-msgstr "儲存 (_S)"
+msgstr "儲存(_S)"
 
 #: src/ui/menu.ui:111 src/ui/menu.ui:233 src/ui/menu.ui:272
 msgid "_Rename…"
-msgstr ""
+msgstr "重新命名(_R)…"
 
 #: src/ui/menu.ui:115 src/ui/menu.ui:237 src/ui/menu.ui:276
 msgid "_Delete…"
-msgstr ""
+msgstr "刪除(_D)…"
 
 #: src/ui/menu.ui:121 src/ui/menu.ui:243
 msgid "_Import Preset…"
-msgstr ""
+msgstr "匯入預設檔(_I)…"
 
 #: src/ui/menu.ui:125 src/ui/menu.ui:247 src/ui/menu.ui:282
 msgid "_Export Preset…"
-msgstr ""
+msgstr "匯出預設檔(_E)…"
 
 #: src/ui/menu.ui:131 src/ui/menu.ui:253
 msgid "Reset _Built-in Presets"
-msgstr "重置內建預設檔 (_B)"
+msgstr "重設內建預設檔(_B)"
 
 #: src/ui/menu.ui:140 src/ui/menu.ui:200
 msgid "_Help"
-msgstr "協助 (H)"
+msgstr "說明(_H)"
 
 #: src/ui/menu.ui:144
 msgid "_Online Documentation"
-msgstr ""
+msgstr "線上說明文件(_O)"
 
 #: src/ui/menu.ui:148
 msgid "_About"
-msgstr "關於 (A)"
+msgstr "關於(_A)"
 
 #: src/ui/menu.ui:158
 msgid "HandBrake For _Dummies"
@@ -151,83 +151,83 @@ msgstr ""
 
 #: src/ui/menu.ui:204
 msgid "A_bout HandBrake"
-msgstr ""
+msgstr "關於 HandBrake(_B)"
 
 #: src/ui/menu.ui:290 src/ui/menu.ui:369
 msgid "_Play File"
-msgstr ""
+msgstr "播放檔案(_P)"
 
 #: src/ui/menu.ui:294 src/ui/menu.ui:373
 msgid "Open _Source Directory"
-msgstr ""
+msgstr "開啟來源目錄(_S)"
 
 #: src/ui/menu.ui:298 src/ui/menu.ui:377
 msgid "Open _Destination Directory"
-msgstr ""
+msgstr "開啟目的地目錄(_D)"
 
 #: src/ui/menu.ui:304 src/ui/menu.ui:382
 msgid "Open Encode _Log"
-msgstr ""
+msgstr "開啟編碼歷史(_L)"
 
 #: src/ui/menu.ui:308 src/ui/menu.ui:386
 msgid "Open _Encode Log Directory"
-msgstr ""
+msgstr "開啟編碼歷史目錄(_E)"
 
 #: src/ui/menu.ui:316
 msgid "Reset _Failed Jobs"
-msgstr ""
+msgstr "重設失敗的工作(_F)"
 
 #: src/ui/menu.ui:320
 msgid "_Reset All Jobs"
-msgstr ""
+msgstr "重設所有工作(_R)"
 
 #: src/ui/menu.ui:324
 msgid "_Clear Completed Jobs"
-msgstr ""
+msgstr "清除已完成的工作(_C)"
 
 #: src/ui/menu.ui:328
 msgid "Clear _All Jobs"
-msgstr ""
+msgstr "清除所有工作(_A)"
 
 #: src/ui/menu.ui:346
 msgid "_Add Track"
-msgstr ""
+msgstr "新增軌道(_A)"
 
 #: src/ui/menu.ui:350 src/ui/menu.ui:425 src/ui/menu.ui:437
 msgid "Add A_ll Tracks"
-msgstr ""
+msgstr "新增所有軌道(_A)"
 
 #: src/ui/menu.ui:354 src/ui/menu.ui:441
 msgid "Add _Foreign Audio Scan"
-msgstr ""
+msgstr "新增外來的音訊掃描(_F)"
 
 #: src/ui/menu.ui:360
 msgid "Add External Subtitle File"
-msgstr ""
+msgstr "新增外部字幕檔"
 
 #: src/ui/menu.ui:393
 msgid "Move to _Top"
-msgstr ""
+msgstr "移到最上方(_T)"
 
 #: src/ui/menu.ui:397
 msgid "Move to _Bottom"
-msgstr ""
+msgstr "移到最下方(_B)"
 
 #: src/ui/menu.ui:403
 msgid "_Edit"
-msgstr ""
+msgstr "編輯(_E)"
 
 #: src/ui/menu.ui:407
 msgid "_Reset"
-msgstr ""
+msgstr "重設(_R)"
 
 #: src/ui/menu.ui:413
 msgid "Re_move"
-msgstr ""
+msgstr "移除(_M)"
 
 #: src/ui/menu.ui:421 src/ui/menu.ui:433
 msgid "_Add New Track"
-msgstr ""
+msgstr "新增軌道(_A)"
 
 #: src/ui/ghb.ui:93
 msgid ""
@@ -235,9 +235,9 @@ msgid ""
 "\n"
 "The subtitle will be part of the video and can not be disabled."
 msgstr ""
-"在影片中算繪字幕。\n"
+"將字幕繪製到影片當中。\n"
 "\n"
-"字幕將會成為影片的一部分，且無法關閉。"
+"字幕將會成為影片的一部分，而無法關閉。"
 
 #: src/ui/ghb.ui:96
 msgid "<b>Burned In</b>"
@@ -253,10 +253,16 @@ msgid ""
 "This is useful for creating a \"forced\" track\n"
 "in your output."
 msgstr ""
+"設定預設輸出字幕軌道。\n"
+"\n"
+"大部分播放器會在播放影片時自動顯示\n"
+"這個字幕軌道。\n"
+"\n"
+"這可以用來在輸出建立「強制」的軌道。"
 
 #: src/ui/ghb.ui:107
 msgid "<b>Default</b>"
-msgstr ""
+msgstr "<b>預設</b>"
 
 #: src/ui/ghb.ui:111
 msgid ""
@@ -270,7 +276,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:117
 msgid "<b>Forced Only</b>"
-msgstr ""
+msgstr "<b>僅強制的</b>"
 
 #: src/ui/ghb.ui:121
 msgid ""
@@ -303,7 +309,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:142
 msgid "<b>Track</b>"
-msgstr ""
+msgstr "<b>軌道</b>"
 
 #: src/ui/ghb.ui:146 src/ui/ghb.ui:1440
 msgid "Presets"
@@ -311,15 +317,15 @@ msgstr "預設檔"
 
 #: src/ui/ghb.ui:157
 msgid "Save as new preset"
-msgstr ""
+msgstr "儲存為新的預設檔"
 
 #: src/ui/ghb.ui:166 src/ui/ghb.ui:430
 msgid "Actions"
-msgstr ""
+msgstr "動作"
 
 #: src/ui/ghb.ui:205
 msgid "HandBrake Queue"
-msgstr ""
+msgstr "HandBrake 佇列"
 
 #: src/ui/ghb.ui:212 src/ui/ghb.ui:1416 src/queuehandler.c:1850
 #: src/queuehandler.c:1863
@@ -347,33 +353,35 @@ msgstr "佇列"
 
 #: src/ui/ghb.ui:241
 msgid "0 jobs pending"
-msgstr ""
+msgstr "0 個待處理的工作"
 
 #: src/ui/ghb.ui:251
 msgid "Options"
-msgstr ""
+msgstr "選項"
 
 #: src/ui/ghb.ui:322 src/ui/ghb.ui:4540
 msgid "When Done:"
-msgstr ""
+msgstr "完成時："
 
 #: src/ui/ghb.ui:335
 msgid "Show/hide the queue details panel"
-msgstr ""
+msgstr "顯示/隱藏佇列詳細資訊面板"
 
 #: src/ui/ghb.ui:364 src/ui/ghb.ui:1733
 msgid "Summary"
-msgstr ""
+msgstr "摘要"
 
 #: src/ui/ghb.ui:382
 msgid ""
 "Mark selected queue entry as pending.\n"
 "Resets the queue job to pending and ready to run again."
 msgstr ""
+"將所選的佇列項目標記為待處理。\n"
+"會將佇列工作重設為待處理且可重新執行。"
 
 #: src/ui/ghb.ui:397
 msgid "Reset"
-msgstr ""
+msgstr "重設"
 
 #: src/ui/ghb.ui:419
 msgid "Edit"
@@ -388,35 +396,35 @@ msgstr "預設檔："
 
 #: src/ui/ghb.ui:483
 msgid "Source:"
-msgstr ""
+msgstr "來源："
 
 #: src/ui/ghb.ui:515 src/ui/ghb.ui:4205
 msgid "Title:"
-msgstr ""
+msgstr "標題："
 
 #: src/ui/ghb.ui:546
 msgid "Destination:"
-msgstr ""
+msgstr "目的地："
 
 #: src/ui/ghb.ui:578
 msgid "Dimensions:"
-msgstr ""
+msgstr "尺寸："
 
 #: src/ui/ghb.ui:605
 msgid "Video:"
-msgstr ""
+msgstr "影片："
 
 #: src/ui/ghb.ui:632
 msgid "Audio:"
-msgstr ""
+msgstr "音訊："
 
 #: src/ui/ghb.ui:659
 msgid "Subtitles:"
-msgstr ""
+msgstr "字幕："
 
 #: src/ui/ghb.ui:691
 msgid "Statistics"
-msgstr ""
+msgstr "統計"
 
 #: src/ui/ghb.ui:720
 msgid "Pass:"
@@ -424,32 +432,32 @@ msgstr ""
 
 #: src/ui/ghb.ui:748
 msgid "Start Time:"
-msgstr ""
+msgstr "開始時間："
 
 #: src/ui/ghb.ui:775
 msgid "End Time:"
-msgstr ""
+msgstr "結束時間："
 
 #: src/ui/ghb.ui:806
 msgid "Paused Duration:"
-msgstr ""
+msgstr "暫停時長："
 
 #: src/ui/ghb.ui:837
 msgid "Encode Time:"
-msgstr ""
+msgstr "編碼時間："
 
 #: src/ui/ghb.ui:864
 msgid "File Size:"
-msgstr ""
+msgstr "檔案大小：\t"
 
 #: src/ui/ghb.ui:891
 msgid "Status:"
-msgstr ""
+msgstr "狀態："
 
 #: src/ui/ghb.ui:923 src/ui/ghb.ui:958 src/ui/ghb.ui:980 src/ui/ghb.ui:1008
 #: src/ui/ghb.ui:1040
 msgid "Activity Log"
-msgstr ""
+msgstr "活動歷史"
 
 #: src/ui/ghb.ui:1300
 msgid "About HandBrake"
@@ -460,10 +468,12 @@ msgid ""
 "Copyright © 2008-2024 John Stebbins\n"
 "Copyright © 2004-2024, HandBrake Devs"
 msgstr ""
+"Copyright © 2008-2024 John Stebbins\n"
+"Copyright © 2004-2024, HandBrake 開發團隊"
 
 #: src/ui/ghb.ui:1305
 msgid "Multithreaded video transcoder"
-msgstr ""
+msgstr "多執行緒影片轉碼器"
 
 #: src/ui/ghb.ui:1334 data/fr.handbrake.ghb.desktop.in:3
 msgid "HandBrake"
@@ -475,7 +485,7 @@ msgstr "選擇影片來源"
 
 #: src/ui/ghb.ui:1364 src/callbacks.c:1866 src/callbacks.c:4520
 msgid "Open Source"
-msgstr "打開來源"
+msgstr "開啟來源"
 
 #: src/ui/ghb.ui:1391
 msgid "Add to Queue"
@@ -503,11 +513,11 @@ msgstr "顯示佇列"
 
 #: src/ui/ghb.ui:1463
 msgid "Show Activity Window"
-msgstr ""
+msgstr "顯示活動視窗"
 
 #: src/ui/ghb.ui:1464
 msgid "Activity"
-msgstr ""
+msgstr "活動"
 
 #: src/ui/ghb.ui:1482
 msgid "<b>Source:</b>"
@@ -527,7 +537,7 @@ msgstr "掃描中..."
 
 #: src/ui/ghb.ui:1546
 msgid "<b>Title:</b>"
-msgstr ""
+msgstr "<b>標題：</b>"
 
 #: src/ui/ghb.ui:1564
 msgid ""
@@ -535,6 +545,9 @@ msgid ""
 "By default the longest title is chosen.\n"
 "This is often the feature title of a DVD."
 msgstr ""
+"設定要編碼的標題。\n"
+"預設會選擇最長的標題。\n"
+"通常這會是一個 DVD 的主要標題。"
 
 #: src/ui/ghb.ui:1580
 msgid "<b>Angle:</b>"
@@ -546,7 +559,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:1599
 msgid "<b>Range:</b>"
-msgstr ""
+msgstr "<b>範圍：</b>"
 
 #: src/ui/ghb.ui:1605
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
@@ -637,7 +650,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:1817
 msgid "Copy metadata from source to output."
-msgstr ""
+msgstr "從來源複製中繼資料到輸出。"
 
 #: src/ui/ghb.ui:1850
 msgid "Duration:"
@@ -657,11 +670,11 @@ msgstr "濾鏡："
 
 #: src/ui/ghb.ui:1940
 msgid "Size:"
-msgstr ""
+msgstr "大小："
 
 #: src/ui/ghb.ui:1987 src/ui/ghb.ui:2006 src/ui/ghb.ui:6229
 msgid "Video Preview"
-msgstr ""
+msgstr "影片預覽"
 
 #: src/ui/ghb.ui:2022
 msgid "Dimensions"
@@ -673,15 +686,15 @@ msgstr ""
 
 #: src/ui/ghb.ui:2051 src/ui/ghb.ui:2699
 msgid "Storage Size:"
-msgstr ""
+msgstr "儲存大小："
 
 #: src/ui/ghb.ui:2074 src/ui/ghb.ui:2726
 msgid "Display Size:"
-msgstr ""
+msgstr "顯示大小："
 
 #: src/ui/ghb.ui:2097 src/ui/ghb.ui:2793
 msgid "Aspect Ratio:"
-msgstr ""
+msgstr "寬高比："
 
 #: src/ui/ghb.ui:2129
 msgid "<b>Orientation &amp; Cropping</b>"
@@ -689,19 +702,19 @@ msgstr ""
 
 #: src/ui/ghb.ui:2148
 msgid "Flipping:"
-msgstr ""
+msgstr "翻轉："
 
 #: src/ui/ghb.ui:2157
 msgid "Horizontal ⇌"
-msgstr ""
+msgstr "水平 ⇌"
 
 #: src/ui/ghb.ui:2159
 msgid "Flip video horizontally."
-msgstr ""
+msgstr "水平翻轉影片。"
 
 #: src/ui/ghb.ui:2172
 msgid "Rotation:"
-msgstr ""
+msgstr "旋轉："
 
 #: src/ui/ghb.ui:2183
 msgid "Rotate the video clockwise in 90 degree increments."
@@ -709,7 +722,7 @@ msgstr "將影片旋轉順時鐘 90 度"
 
 #: src/ui/ghb.ui:2195
 msgid "Cropping:"
-msgstr ""
+msgstr "裁剪："
 
 #: src/ui/ghb.ui:2206
 msgid "How to apply crop settings."
@@ -717,43 +730,43 @@ msgstr ""
 
 #: src/ui/ghb.ui:2220
 msgid "Left Crop"
-msgstr ""
+msgstr "左側裁剪"
 
 #: src/ui/ghb.ui:2234
 msgid "Top Crop"
-msgstr ""
+msgstr "上方裁剪"
 
 #: src/ui/ghb.ui:2248
 msgid "Bottom Crop"
-msgstr ""
+msgstr "下方裁剪"
 
 #: src/ui/ghb.ui:2262
 msgid "Right Crop"
-msgstr ""
+msgstr "右側裁剪"
 
 #: src/ui/ghb.ui:2293
 msgid "<b>Resolution &amp; Scaling</b>"
-msgstr ""
+msgstr "<b>解析度與縮放</b>"
 
 #: src/ui/ghb.ui:2311
 msgid "Resolution Limit:"
-msgstr ""
+msgstr "解析度限制："
 
 #: src/ui/ghb.ui:2321
 msgid "Resolution limits for common video formats."
-msgstr ""
+msgstr "常用影片格式的解析度限制。"
 
 #: src/ui/ghb.ui:2334
 msgid "Maximum Size:"
-msgstr ""
+msgstr "最大大小："
 
 #: src/ui/ghb.ui:2346
 msgid "This is the maximum width that the video will be stored at."
-msgstr ""
+msgstr "這是影片會儲存的最大寬度。"
 
 #: src/ui/ghb.ui:2371
 msgid "This is the maximum height that the video will be stored at."
-msgstr ""
+msgstr "這是影片會儲存的最大高度。"
 
 #: src/ui/ghb.ui:2383
 msgid "Anamorphic:"
@@ -771,7 +784,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:2410
 msgid "Pixel Aspect:"
-msgstr ""
+msgstr "像素寬高比："
 
 #: src/ui/ghb.ui:2421
 msgid ""
@@ -780,6 +793,10 @@ msgid ""
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
+"像素寬高比定義像素的形狀。\n"
+"\n"
+"1:1 的寬高比代表像素是正方形的。其他寬高比會定義長方形的像素。\n"
+"播放器會縮放影像來達到指定的寬高比。"
 
 #: src/ui/ghb.ui:2436
 msgid ":"
@@ -791,10 +808,13 @@ msgid ""
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
+"像素寬高比定義像素的形狀。\n"
+"1:1 的寬高比代表像素是正方形的。其他寬高比會定義長方形的像素。\n"
+"播放器會縮放影像來達到指定的寬高比。"
 
 #: src/ui/ghb.ui:2461
 msgid "Scaled Size:"
-msgstr ""
+msgstr "縮放後大小："
 
 #: src/ui/ghb.ui:2472
 msgid ""
@@ -804,7 +824,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:2485 src/ui/ghb.ui:2749
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: src/ui/ghb.ui:2496
 msgid ""
@@ -814,11 +834,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:2508
 msgid "Optimal Size"
-msgstr ""
+msgstr "最佳大小"
 
 #: src/ui/ghb.ui:2510
 msgid "Use highest resolution permitted by above settings."
-msgstr ""
+msgstr "使用上方設定所允許的最高解析度。"
 
 #: src/ui/ghb.ui:2522
 msgid "Allow Upscaling"
@@ -831,15 +851,15 @@ msgstr ""
 
 #: src/ui/ghb.ui:2548
 msgid "<b>Borders</b>"
-msgstr ""
+msgstr "<b>邊框</b>"
 
 #: src/ui/ghb.ui:2568
 msgid "Fill:"
-msgstr ""
+msgstr "填滿："
 
 #: src/ui/ghb.ui:2580
 msgid "Add a border around the video."
-msgstr ""
+msgstr "在影片周圍加上邊框。"
 
 #: src/ui/ghb.ui:2594
 msgid "Left Pad"
@@ -859,15 +879,15 @@ msgstr ""
 
 #: src/ui/ghb.ui:2649
 msgid "Color:"
-msgstr ""
+msgstr "色彩："
 
 #: src/ui/ghb.ui:2661
 msgid "Color of border added around video."
-msgstr ""
+msgstr "影片周圍邊框的色彩。"
 
 #: src/ui/ghb.ui:2685
 msgid "<b>Final Dimensions</b>"
-msgstr ""
+msgstr "<b>最終解析度</b>"
 
 #: src/ui/ghb.ui:2737 src/ui/ghb.ui:2760 src/ui/ghb.ui:2773
 msgid "Changing the display size will stretch the video."
@@ -876,7 +896,7 @@ msgstr ""
 #: src/ui/ghb.ui:2771 src/hb-backend.c:116 src/hb-backend.c:219
 #: src/hb-backend.c:291
 msgid "Automatic"
-msgstr ""
+msgstr "自動"
 
 #: src/ui/ghb.ui:2822
 msgid "Filters"
@@ -1198,7 +1218,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:3616
 msgid "Encoder Preset"
-msgstr ""
+msgstr "編碼器預設檔"
 
 #: src/ui/ghb.ui:3653
 msgid ""
@@ -1307,35 +1327,35 @@ msgstr ""
 
 #: src/ui/ghb.ui:4101
 msgid "Chapters"
-msgstr "章節："
+msgstr "章節"
 
 #: src/ui/ghb.ui:4112 src/callbacks.c:2533 src/queuehandler.c:220
 msgid "Chapter Markers"
-msgstr ""
+msgstr "章節標記"
 
 #: src/ui/ghb.ui:4114
 msgid "Add chapter markers to output file."
-msgstr ""
+msgstr "將章節標記加入輸出檔。"
 
 #: src/ui/ghb.ui:4121
 msgid "Import Chapters"
-msgstr ""
+msgstr "匯入章節"
 
 #: src/ui/ghb.ui:4123
 msgid "Import chapter list from an XML file"
-msgstr ""
+msgstr "從 XML 檔案匯入章節列表"
 
 #: src/ui/ghb.ui:4131
 msgid "Export Chapters"
-msgstr ""
+msgstr "匯出章節"
 
 #: src/ui/ghb.ui:4133
 msgid "Export chapter list as an XML file"
-msgstr ""
+msgstr "將章節列表匯出至 XML 檔案"
 
 #: src/ui/ghb.ui:4149
 msgid "Index"
-msgstr ""
+msgstr "索引"
 
 #: src/ui/ghb.ui:4163
 msgid "Duration"
@@ -1343,11 +1363,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:4169
 msgid "Title"
-msgstr ""
+msgstr "標題"
 
 #: src/ui/ghb.ui:4195
 msgid "Tags"
-msgstr ""
+msgstr "標籤"
 
 #: src/ui/ghb.ui:4233
 msgid "Actors:"
@@ -1363,7 +1383,7 @@ msgstr "釋出日期："
 
 #: src/ui/ghb.ui:4317
 msgid "Comment:"
-msgstr ""
+msgstr "備註："
 
 #: src/ui/ghb.ui:4345
 msgid "Genre:"
@@ -1383,7 +1403,7 @@ msgstr "<b>另存為：</b>"
 
 #: src/ui/ghb.ui:4464
 msgid "Destination filename for your encode."
-msgstr ""
+msgstr "您的編碼工作的目的地檔案名稱。"
 
 #: src/ui/ghb.ui:4478
 msgid "<b>To:</b>"
@@ -1391,11 +1411,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:4489
 msgid "Destination directory for your encode."
-msgstr ""
+msgstr "您的編碼工作的目的地目錄。"
 
 #: src/ui/ghb.ui:4491 src/title-add.c:474
 msgid "Destination Directory"
-msgstr ""
+msgstr "目的地目錄"
 
 #: src/ui/ghb.ui:4564
 msgid "Subtitle Selection Behavior"
@@ -1407,7 +1427,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:4863
 msgid "Track Selection Behavior:"
-msgstr ""
+msgstr "軌道選取行為："
 
 #: src/ui/ghb.ui:4874
 msgid "Choose which audio tracks of the source media are used."
@@ -1579,7 +1599,7 @@ msgstr "DRC"
 
 #: src/ui/ghb.ui:5253
 msgid "Add Track"
-msgstr ""
+msgstr "新增軌道"
 
 #: src/ui/ghb.ui:5254
 msgid ""
@@ -1626,7 +1646,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5328
 msgid "Invert Selection"
-msgstr ""
+msgstr "反轉選取"
 
 #: src/ui/ghb.ui:5361 src/title-add.c:351
 msgid "Destination files OK.  No duplicates detected."
@@ -1646,7 +1666,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5427
 msgid "Create destination filename from source filename or volume label"
-msgstr ""
+msgstr "從來源檔案名稱或是卷宗標記建立目的地檔案名稱"
 
 #: src/ui/ghb.ui:5442
 msgid "Auto-Name Template"
@@ -1661,11 +1681,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:5464
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
-msgstr ""
+msgstr "為 MP4 使用 iPod/iTunes 所預期的 (.m4v) 副檔名"
 
 #: src/ui/ghb.ui:5487
 msgid "Number of previews"
-msgstr ""
+msgstr "預覽數量"
 
 #: src/ui/ghb.ui:5510
 msgid "Minimum DVD/Blu-ray title duration (seconds)"
@@ -1685,23 +1705,23 @@ msgstr ""
 
 #: src/ui/ghb.ui:5530
 msgid "Show preview image in Summary tab"
-msgstr ""
+msgstr "在摘要分頁中顯示預覽圖"
 
 #: src/ui/ghb.ui:5533
 msgid ""
 "Uncheck this if you want to hide the video preview image on the Summary tab "
 "for privacy reasons."
-msgstr ""
+msgstr "如果您因為隱私原因需要隱藏摘要分頁中的影片預覽圖，請取消勾選此選項。"
 
 #: src/ui/ghb.ui:5542
 msgid "Excluded File Extensions:"
-msgstr ""
+msgstr "排除的副檔名："
 
 #: src/ui/ghb.ui:5551
 msgid ""
 "The following file extensions will be ignored when scanning a folder. The "
 "list is case insensitive."
-msgstr ""
+msgstr "以下副檔名會在掃描資料夾時跳過。此列表是不分大小寫的。"
 
 #: src/ui/ghb.ui:5561
 msgctxt "Queue tab in Preferences window"
@@ -1710,19 +1730,19 @@ msgstr "佇列"
 
 #: src/ui/ghb.ui:5574
 msgid "Pause queue if disk space is lower than:"
-msgstr ""
+msgstr "硬碟空間低於多少時暫停佇列："
 
 #: src/ui/ghb.ui:5590
 msgid "Disk Free Space Limit"
-msgstr ""
+msgstr "磁碟可用空間限制"
 
 #: src/ui/ghb.ui:5598 src/queuehandler.c:803 src/queuehandler.c:1293
 msgid "GB"
-msgstr ""
+msgstr "GB"
 
 #: src/ui/ghb.ui:5608
 msgid "Clear completed jobs after an encode completes"
-msgstr ""
+msgstr "編碼完成後清除已完成的工作"
 
 #: src/ui/ghb.ui:5610
 msgid ""
@@ -1732,11 +1752,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:5618
 msgid "Power Saving"
-msgstr ""
+msgstr "省電模式"
 
 #: src/ui/ghb.ui:5632
 msgid "Pause encoding when in Power Saver mode"
-msgstr ""
+msgstr "進入省電模式時暫停編碼"
 
 #: src/ui/ghb.ui:5636
 msgid ""
@@ -1747,7 +1767,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5644
 msgid "Pause encoding when on battery power"
-msgstr ""
+msgstr "使用電池電力時暫停編碼"
 
 #: src/ui/ghb.ui:5648
 msgid ""
@@ -1758,7 +1778,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5656
 msgid "Pause encoding when battery is low"
-msgstr ""
+msgstr "電池電量偏低時暫停編碼"
 
 #: src/ui/ghb.ui:5660
 msgid ""
@@ -1769,27 +1789,27 @@ msgstr ""
 
 #: src/ui/ghb.ui:5672
 msgid "When Done"
-msgstr ""
+msgstr "完成時"
 
 #: src/ui/ghb.ui:5684
 msgid "Default action when queue is completed:"
-msgstr ""
+msgstr "佇列完成時的預設動作："
 
 #: src/ui/ghb.ui:5697
 msgid "Show notification when queue is completed"
-msgstr ""
+msgstr "佇列完成時顯示通知"
 
 #: src/ui/ghb.ui:5705
 msgid "Show notification when each item is completed"
-msgstr ""
+msgstr "各個項目完成時顯示通知"
 
 #: src/ui/ghb.ui:5717
 msgid "Advanced"
-msgstr ""
+msgstr "進階"
 
 #: src/ui/ghb.ui:5733
 msgid "Set a custom directory for Handbrake temporary files"
-msgstr ""
+msgstr "設定 Handbrake 暫存檔所用的自訂目錄"
 
 #: src/ui/ghb.ui:5735 src/ui/ghb.ui:5751
 msgid ""
@@ -1820,11 +1840,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:5833
 msgid "Activity Log Verbosity Level"
-msgstr ""
+msgstr "活動歷史詳細度"
 
 #: src/ui/ghb.ui:5852
 msgid "Activity Log Longevity"
-msgstr ""
+msgstr "活動歷史保留時間"
 
 #: src/ui/ghb.ui:5865
 msgid "Scale down High Definition previews"
@@ -1840,7 +1860,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5906
 msgid "Activity Window Font Size"
-msgstr ""
+msgstr "活動視窗字型大小"
 
 #: src/ui/ghb.ui:5924
 msgid "Allow Tweaks"
@@ -1852,7 +1872,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5961
 msgid "Rename Preset"
-msgstr ""
+msgstr "重新命名預設檔"
 
 #: src/ui/ghb.ui:6005 src/ui/ghb.ui:6139
 msgid "Preset Name:"
@@ -1860,7 +1880,7 @@ msgstr "預設檔名稱："
 
 #: src/ui/ghb.ui:6051
 msgid "New Preset"
-msgstr ""
+msgstr "新增預設檔"
 
 #: src/ui/ghb.ui:6094
 msgid "Category:"
@@ -1876,15 +1896,15 @@ msgstr "類別名稱："
 
 #: src/ui/ghb.ui:6164
 msgid "Default Preset"
-msgstr ""
+msgstr "預設使用的預設檔"
 
 #: src/ui/ghb.ui:6166
 msgid "Make this the default Preset when HandBrake starts"
-msgstr ""
+msgstr "將此預設檔設為 HandBrake 啟動時預設使用的"
 
 #: src/ui/ghb.ui:6205
 msgid "HandBrake Preview"
-msgstr ""
+msgstr "HandBrake 預覽"
 
 #: src/ui/ghb.ui:6273
 msgid "Select preview frames."
@@ -1898,11 +1918,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:6301
 msgid "Preview Video Position"
-msgstr ""
+msgstr "預覽影片位置"
 
 #: src/ui/ghb.ui:6314
 msgid "Preview Encode Progress"
-msgstr ""
+msgstr "預覽編碼進度"
 
 #: src/ui/ghb.ui:6323
 msgid "Click to toggle full screen mode"
@@ -1914,7 +1934,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:6346
 msgid "Set the duration of the live preview in seconds."
-msgstr ""
+msgstr "設定即時預覽的長度，以秒為單位。"
 
 #: src/ui/ghb.ui:6356
 msgid "Source Resolution"
@@ -1922,27 +1942,27 @@ msgstr ""
 
 #: src/ui/ghb.ui:6359
 msgid "Reset preview window to the source video's resolution"
-msgstr ""
+msgstr "將預覽視窗重設至來源影片的解析度"
 
 #: src/ui/ghb-chapter-row.ui:38
 msgid "Chapter Title"
-msgstr ""
+msgstr "章節標題"
 
 #: src/ui/ghb-file-button.ui:23 src/ghb-file-button.c:293
 msgid "(None)"
-msgstr ""
+msgstr "（無）"
 
 #: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:265 src/ghb-queue-row.c:281
 msgid "Pending Queue Item"
-msgstr ""
+msgstr "待處理的佇列項目"
 
 #: src/ui/ghb-queue-row.ui:31
 msgid "Delete this item"
-msgstr ""
+msgstr "刪除此項目"
 
 #: src/ui/ghb-queue-row.ui:52
 msgid "Encode Progress"
-msgstr ""
+msgstr "編碼進度"
 
 #. Audio DRC Label
 #: src/audiohandler.c:419 src/audiohandler.c:764 src/audiohandler.c:1175
@@ -1985,7 +2005,7 @@ msgstr "位元速率：%.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
+msgid "<small>Passthru</small>"
 msgstr ""
 
 #: src/audiohandler.c:790
@@ -2010,11 +2030,11 @@ msgstr ""
 
 #: src/audiohandler.c:1401
 msgid "Add Audio Track"
-msgstr ""
+msgstr "新增音訊軌道"
 
 #: src/audiohandler.c:1493
 msgid "Edit Audio Track"
-msgstr ""
+msgstr "編輯音訊軌道"
 
 #: src/audiohandler.c:1766
 msgid "Set the audio codec to encode this track with."
@@ -2067,11 +2087,11 @@ msgstr "刪除此音訊編碼器"
 
 #: src/callbacks.c:296
 msgid "An encode is in progress."
-msgstr ""
+msgstr "編碼進行中。"
 
 #: src/callbacks.c:1124 src/callbacks.c:1135 src/callbacks.c:1785
 msgid "Not Selected"
-msgstr ""
+msgstr "未選取"
 
 #: src/callbacks.c:1133
 msgid "Detected DVD devices:"
@@ -2090,22 +2110,22 @@ msgstr "停止掃描"
 
 #: src/callbacks.c:1866
 msgid "Open Source Directory"
-msgstr ""
+msgstr "開啟來源目錄"
 
 #: src/callbacks.c:1869 src/chapters.c:484 src/ghb-file-button.c:222
 #: src/presets.c:2113 src/queuehandler.c:1479
 msgid "_Open"
-msgstr "開啟 (O)"
+msgstr "開啟(_O)"
 
 #: src/callbacks.c:1870 src/callbacks.c:2136 src/chapters.c:456
 #: src/chapters.c:485 src/presets.c:2114 src/presets.c:2230
 #: src/queuehandler.c:1392 src/queuehandler.c:1480
 msgid "_Cancel"
-msgstr "取消 (C)"
+msgstr "取消(_C)"
 
 #: src/callbacks.c:1877
 msgid "Recursively scan directories"
-msgstr ""
+msgstr "遞迴掃描目錄"
 
 #: src/callbacks.c:1889
 msgid "Single Title"
@@ -2113,7 +2133,7 @@ msgstr ""
 
 #: src/callbacks.c:2247 src/callbacks.c:2391
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
 #: src/callbacks.c:2251
 #, c-format
@@ -2168,18 +2188,18 @@ msgstr ""
 #, c-format
 msgid "+ %d more audio track"
 msgid_plural "+ %d more audio tracks"
-msgstr[0] ""
+msgstr[0] "+ 另外 %d 個音訊軌道"
 
 #: src/callbacks.c:2476 src/queuehandler.c:592 src/queuehandler.c:1027
 #: src/subtitlehandler.c:415 src/subtitlehandler.c:1292
 msgid "Foreign Audio Scan"
-msgstr ""
+msgstr "外來音訊掃描"
 
 #: src/callbacks.c:2479 src/callbacks.c:2511 src/queuehandler.c:595
 #: src/queuehandler.c:632
 #, c-format
 msgid ", Forced Only"
-msgstr ""
+msgstr "，僅強制的"
 
 #: src/callbacks.c:2483 src/callbacks.c:2515 src/queuehandler.c:599
 #: src/queuehandler.c:636
@@ -2191,29 +2211,29 @@ msgstr ""
 #: src/queuehandler.c:640
 #, c-format
 msgid ", Default"
-msgstr ""
+msgstr "，預設"
 
 #: src/callbacks.c:2525
 #, c-format
 msgid "+ %d more subtitle track"
 msgid_plural "+ %d more subtitle tracks"
-msgstr[0] ""
+msgstr[0] "+ 另外 %d 個字幕軌道"
 
 #: src/callbacks.c:2680
 msgid "storage"
-msgstr ""
+msgstr "儲存"
 
 #: src/callbacks.c:2681
 msgid "display"
-msgstr ""
+msgstr "顯示"
 
 #: src/callbacks.c:2682
 msgid "Pixel Aspect Ratio"
-msgstr ""
+msgstr "像素寬高比"
 
 #: src/callbacks.c:2683
 msgid "Display Aspect Ratio"
-msgstr ""
+msgstr "顯示寬高比"
 
 #: src/callbacks.c:2818 src/hb-backend.c:2206 src/hb-backend.c:2327
 #: src/hb-backend.c:2339
@@ -2240,7 +2260,7 @@ msgstr ""
 
 #: src/callbacks.c:4097
 msgid "Stop Encoding?"
-msgstr ""
+msgstr "停止編碼？"
 
 #: src/callbacks.c:4098 src/callbacks.c:4123 src/queuehandler.c:1702
 msgid "Your movie will be lost if you don't continue encoding."
@@ -2264,17 +2284,17 @@ msgstr "繼續編碼"
 
 #: src/callbacks.c:4122
 msgid "Quit HandBrake?"
-msgstr ""
+msgstr "離開 HandBrake？"
 
 #: src/callbacks.c:4124
 msgid "Cancel All and Quit"
-msgstr ""
+msgstr "取消全部並離開"
 
 #: src/callbacks.c:4290
 #, c-format
 msgid "%d encode pending"
 msgid_plural "%d encodes pending"
-msgstr[0] ""
+msgstr[0] "%d 個待處理的編碼"
 
 #: src/callbacks.c:4349 src/callbacks.c:4417
 #, c-format
@@ -2361,7 +2381,7 @@ msgstr "關機"
 #: src/callbacks.c:5608 src/chapters.c:458 src/chapters.c:487
 #: src/presets.c:2116 src/queuehandler.c:1483
 msgid "All Files"
-msgstr ""
+msgstr "所有檔案"
 
 #: src/chapters.c:459 src/chapters.c:488
 msgid "Chapters (*.xml)"
@@ -2373,23 +2393,23 @@ msgstr ""
 
 #: src/ghb-file-button.c:217
 msgid "_Select"
-msgstr ""
+msgstr "選取(_S)"
 
 #: src/ghb-queue-row.c:260
 msgid "Running Queue Item"
-msgstr ""
+msgstr "執行中的佇列項目"
 
 #: src/ghb-queue-row.c:269
 msgid "Failed Queue Item"
-msgstr ""
+msgstr "已失敗的佇列項目"
 
 #: src/ghb-queue-row.c:273
 msgid "Cancelled Queue Item"
-msgstr ""
+msgstr "已取消的佇列項目"
 
 #: src/ghb-queue-row.c:277
 msgid "Completed Queue Item"
-msgstr ""
+msgstr "已完成的佇列項目"
 
 #: src/hb-backend.c:55 src/hb-backend.c:80
 msgid "First Matching Selected Languages"
@@ -2401,7 +2421,7 @@ msgstr ""
 
 #: src/hb-backend.c:67
 msgid "Foreign Audio Subtitle Track"
-msgstr ""
+msgstr "外來音訊字幕軌道"
 
 #: src/hb-backend.c:68
 msgid "First Selected Track"
@@ -2417,7 +2437,7 @@ msgstr "章節："
 
 #: src/hb-backend.c:92
 msgid "Seconds:"
-msgstr ""
+msgstr "秒："
 
 #: src/hb-backend.c:93 src/queuehandler.c:188
 msgid "Frames:"
@@ -2429,7 +2449,7 @@ msgstr "什麼都不做"
 
 #: src/hb-backend.c:104
 msgid "Quit Handbrake"
-msgstr "退出 HandBrake"
+msgstr "離開 HandBrake"
 
 #: src/hb-backend.c:105
 msgid "Put Computer To Sleep"
@@ -2442,19 +2462,19 @@ msgstr "關機"
 #: src/hb-backend.c:118 src/hb-backend.c:220 src/hb-backend.c:251
 #: src/hb-backend.c:265 src/hb-backend.c:376
 msgid "Custom"
-msgstr ""
+msgstr "自訂"
 
 #: src/hb-backend.c:154
 msgid "Week"
-msgstr ""
+msgstr "週"
 
 #: src/hb-backend.c:155
 msgid "Month"
-msgstr ""
+msgstr "月"
 
 #: src/hb-backend.c:156
 msgid "Year"
-msgstr ""
+msgstr "年"
 
 #: src/hb-backend.c:157
 msgid "Immortal"
@@ -2674,7 +2694,7 @@ msgstr "全部"
 
 #: src/hb-backend.c:387
 msgid "Encode only"
-msgstr ""
+msgstr "僅編碼"
 
 #: src/hb-backend.c:388
 msgid "Always"
@@ -2737,7 +2757,7 @@ msgstr ""
 #: src/hb-backend.c:4309 src/hb-backend.c:4340 src/hb-backend.c:4376
 #: src/hb-backend.c:4413 src/hb-backend.c:4438
 msgid "Custom:"
-msgstr ""
+msgstr "自訂："
 
 #: src/hb-backend.c:4337 src/hb-backend.c:4345
 msgid "Invalid Comb Detect Settings"
@@ -2750,7 +2770,7 @@ msgstr ""
 #: src/hb-backend.c:4374 src/hb-backend.c:4383 src/hb-backend.c:4410
 #: src/hb-backend.c:4435
 msgid "Filter:"
-msgstr ""
+msgstr "濾鏡："
 
 #: src/hb-backend.c:4408
 msgid "Invalid Denoise Settings"
@@ -2915,11 +2935,11 @@ msgstr "編碼完畢"
 
 #: src/notifications.c:116
 msgid "Encode Failed"
-msgstr ""
+msgstr "編碼失敗"
 
 #: src/notifications.c:140
 msgid "Battery level is low."
-msgstr ""
+msgstr "電池電量偏低。"
 
 #: src/notifications.c:143
 msgid "Charger has been disconnected."
@@ -2944,7 +2964,7 @@ msgstr "預設檔名稱"
 
 #: src/presets.c:1281
 msgid "ghb_presets_menu_init: Failed to find presets folder."
-msgstr ""
+msgstr "ghb_presets_menu_init：找不到預設檔資料夾。"
 
 #: src/presets.c:1443
 msgid "Failed to find parent folder when adding child."
@@ -2952,7 +2972,7 @@ msgstr ""
 
 #: src/presets.c:1927
 msgid "Load backup presets"
-msgstr ""
+msgstr "載入備份預設檔"
 
 #: src/presets.c:1927
 msgid "Get me out of here!"
@@ -2975,15 +2995,15 @@ msgstr "匯出預設檔"
 
 #: src/presets.c:2583
 msgid "_Delete"
-msgstr "刪除 (_D)"
+msgstr "刪除(_D)"
 
 #: src/presets.c:2584
 msgid "Delete Folder?"
-msgstr ""
+msgstr "刪除資料夾？"
 
 #: src/presets.c:2584
 msgid "Delete Preset?"
-msgstr ""
+msgstr "刪除預設檔？"
 
 #: src/presets.c:2585
 #, c-format
@@ -2994,23 +3014,23 @@ msgstr ""
 
 #: src/preview.c:154
 msgid "Pause Preview"
-msgstr ""
+msgstr "暫停預覽"
 
 #: src/preview.c:158
 msgid "Stop Encoding Preview"
-msgstr ""
+msgstr "停止編碼預覽"
 
 #: src/preview.c:162
 msgid "Play Preview"
-msgstr ""
+msgstr "播放預覽"
 
 #: src/preview.c:288
 msgid "Playback Error"
-msgstr ""
+msgstr "播放錯誤"
 
 #: src/preview.c:291
 msgid "The video could not be played. For more details, see the Activity Log."
-msgstr ""
+msgstr "影片無法播放。更多細節請見活動歷史。"
 
 #: src/queuehandler.c:133
 #, c-format
@@ -3019,7 +3039,7 @@ msgstr ""
 
 #: src/queuehandler.c:181
 msgid "Time:"
-msgstr ""
+msgstr "時間："
 
 #: src/queuehandler.c:225
 msgid "Align A/V"
@@ -3100,15 +3120,15 @@ msgstr "kbps"
 
 #: src/queuehandler.c:684 src/queuehandler.c:709
 msgid "Pending"
-msgstr ""
+msgstr "待處理"
 
 #: src/queuehandler.c:696 src/queuehandler.c:1187
 msgid "Completed"
-msgstr ""
+msgstr "已完成"
 
 #: src/queuehandler.c:700 src/queuehandler.c:1191
 msgid "Canceled"
-msgstr ""
+msgstr "已取消"
 
 #: src/queuehandler.c:704 src/queuehandler.c:1195
 msgid "Failed"
@@ -3148,7 +3168,7 @@ msgstr ""
 
 #: src/queuehandler.c:1143
 msgid "Encode"
-msgstr ""
+msgstr "編碼"
 
 #: src/queuehandler.c:1147
 msgid "Encode Analysis Pass"
@@ -3176,7 +3196,7 @@ msgstr ""
 
 #: src/queuehandler.c:1180
 msgid "Encoding In Progress"
-msgstr ""
+msgstr "編碼進行中"
 
 #. Should never happen
 #: src/queuehandler.c:1200
@@ -3185,15 +3205,15 @@ msgstr ""
 
 #: src/queuehandler.c:1388
 msgid "Export Queue"
-msgstr ""
+msgstr "匯出佇列"
 
 #: src/queuehandler.c:1476
 msgid "Import Queue"
-msgstr ""
+msgstr "匯入佇列"
 
 #: src/queuehandler.c:1627
 msgid "Low Disk Space: Encoding Paused"
-msgstr ""
+msgstr "磁碟空間不足：編碼已暫停"
 
 #: src/queuehandler.c:1629
 #, c-format
@@ -3202,46 +3222,49 @@ msgid ""
 "Destination: %s\n"
 "Encode may be incomplete if you proceed."
 msgstr ""
+"目的地檔案系統已經快滿了：剩餘 %<PRId64> MB。\n"
+"目的地：%s\n"
+"若還是要繼續，編碼可能會不完全。"
 
 #: src/queuehandler.c:1634
 msgid "Resume, I've fixed the problem"
-msgstr ""
+msgstr "繼續，我已經解決該問題了"
 
 #: src/queuehandler.c:1635
 msgid "Resume, Don't tell me again"
-msgstr ""
+msgstr "繼續，不要再提醒我"
 
 #: src/queuehandler.c:1701
 msgid "Remove Item in Progress?"
-msgstr ""
+msgstr "要移除進行中的項目嗎？"
 
 #: src/queuehandler.c:1703
 msgid "Cancel and Remove"
-msgstr ""
+msgstr "取消並移除"
 
 #: src/queuehandler.c:1843 src/queuehandler.c:1856
 msgid "Stop"
-msgstr ""
+msgstr "停止"
 
 #: src/queuehandler.c:1844 src/queuehandler.c:1857
 msgid "Stop Encoding"
-msgstr ""
+msgstr "停止編碼"
 
 #: src/queuehandler.c:1869
 msgid "S_top Encoding"
-msgstr ""
+msgstr "停止編碼(_T)"
 
 #: src/queuehandler.c:1887 src/queuehandler.c:1900
 msgid "Resume"
-msgstr ""
+msgstr "繼續"
 
 #: src/queuehandler.c:1888 src/queuehandler.c:1901
 msgid "Resume Encoding"
-msgstr ""
+msgstr "繼續編碼"
 
 #: src/queuehandler.c:1912
 msgid "_Resume Encoding"
-msgstr "繼續編碼 (R)"
+msgstr "繼續編碼(_R)"
 
 #: src/subtitlehandler.c:107
 #, c-format
@@ -3253,7 +3276,7 @@ msgid "Burned Into Video"
 msgstr ""
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
+msgid "Passthru"
 msgstr ""
 
 #: src/subtitlehandler.c:116
@@ -3289,25 +3312,25 @@ msgstr ""
 
 #: src/title-add.c:103 src/title-add.c:112
 msgid "Invalid Destination"
-msgstr ""
+msgstr "無效目的地"
 
 #: src/title-add.c:104
 #, c-format
 msgid "“%s” is is not a valid directory."
-msgstr ""
+msgstr "「%s」不是有效的目錄。"
 
 #: src/title-add.c:113
 #, c-format
 msgid "“%s” is not a writable directory."
-msgstr ""
+msgstr "「%s」不是可寫入的目錄。"
 
 #: src/title-add.c:124 src/title-add.c:134
 msgid "Overwrite"
-msgstr ""
+msgstr "覆寫"
 
 #: src/title-add.c:124 src/title-add.c:134
 msgid "Overwrite File?"
-msgstr ""
+msgstr "要覆寫檔案嗎？"
 
 #: src/title-add.c:125
 #, c-format
@@ -3315,6 +3338,8 @@ msgid ""
 "The file “%s” already exists.\n"
 "Do you want to overwrite it?"
 msgstr ""
+"檔案「%s」已存在。\n"
+"您要覆寫它嗎？"
 
 #: src/title-add.c:135
 #, c-format
@@ -3324,12 +3349,16 @@ msgid ""
 "Another queued job has specified the same destination.\n"
 "Do you want to overwrite?"
 msgstr ""
+"目的地：%s\n"
+"\n"
+"另一個佇列中的工作已指定了同一個動作。\n"
+"您要覆寫它嗎？"
 
 #: src/title-add.c:346
 msgid ""
 "Duplicate destination files detected. Duplicates will not be added to the "
 "queue."
-msgstr ""
+msgstr "偵測到重複的目的地檔案。重複項目不會被加入佇列。"
 
 #: src/title-add.c:439
 msgid "Select this title for adding to the queue.\n"
@@ -3338,7 +3367,7 @@ msgstr ""
 #. Title label
 #: src/title-add.c:447
 msgid "No Title"
-msgstr ""
+msgstr "無標題"
 
 #: src/title-add.c:457
 msgid ""
@@ -3360,27 +3389,29 @@ msgid ""
 "The filenames are not unique. Please choose\n"
 "a unique destination filename for each title."
 msgstr ""
+"檔案名稱有重複。請為每個標題選擇不同的\n"
+"目的地檔案名稱。"
 
 #: src/videohandler.c:154
 msgid "Additional advanced arguments that can be passed to the video encoder."
-msgstr ""
+msgstr "額外傳遞給影片編碼器的進階參數。"
 
 #: src/videohandler.c:227
 msgid "The full list of encoder parameters:"
-msgstr ""
+msgstr "編碼器參數完整清單："
 
 #: src/videohandler.c:345
 msgid "Warning: lossless"
-msgstr ""
+msgstr "警告：無損"
 
 #: data/fr.handbrake.ghb.desktop.in:4
 msgid "Media Transcoder"
-msgstr ""
+msgstr "媒體轉碼器"
 
 #: data/fr.handbrake.ghb.desktop.in:5
 msgid "Transcodes DVD, Blu-ray, and other media"
-msgstr ""
+msgstr "轉碼 DVD、Blu-ray 及其他媒體"
 
 #: data/fr.handbrake.ghb.desktop.in:11
 msgid "Format Converter;Video Encoder;"
-msgstr ""
+msgstr "Format Converter;Video Encoder;格式轉碼器;影片編碼器;"

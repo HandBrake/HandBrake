@@ -389,6 +389,24 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
             buf->f.color_matrix = stream->common->job->title->color_matrix;
             buf->f.color_range = stream->common->job->color_range;
             buf->f.chroma_location = stream->common->job->chroma_location;
+
+            // Dolby Vision requires a RPU on every buffer, attach the first
+            // found during scan in the absence of something better
+            if (stream->common->job->title->initial_rpu)
+            {
+                hb_data_t *rpu = stream->common->job->title->initial_rpu;
+                AVBufferRef *ref = av_buffer_alloc(rpu->size);
+                memcpy(ref->data, rpu->bytes, rpu->size);
+
+                AVFrameSideData *sd_dst = NULL;
+                sd_dst = hb_buffer_new_side_data_from_buf(buf, stream->common->job->title->initial_rpu_type, ref);
+
+                if (!sd_dst)
+                {
+                    av_buffer_unref(&ref);
+                }
+            }
+
 #if HB_PROJECT_FEATURE_QSV
             if (hb_qsv_get_memory_type(stream->common->job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
             {

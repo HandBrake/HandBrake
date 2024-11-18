@@ -1,0 +1,63 @@
+/* Class = "NSButtonCell"; title = "Range:"; ObjectID = "4nB-36-clJ"; */
+"4nB-36-clJ.title" = "Bereich:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in seconds"; ObjectID = "5mE-y0-UqZ"; */
+"5mE-y0-UqZ.ibExternalAccessibilityDescription" = "Startzeit in Sekunden";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "First second to encode."; ObjectID = "5mE-y0-UqZ"; */
+"5mE-y0-UqZ.ibShadowedToolTip" = "Erste Sekunden zum Encodieren.";
+
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "6gI-bi-QlH"; */
+"6gI-bi-QlH.title" = "Bis";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in seconds"; ObjectID = "7ug-HX-q9j"; */
+"7ug-HX-q9j.ibExternalAccessibilityDescription" = "Endzeit in Sekunden";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "7ug-HX-q9j"; */
+"7ug-HX-q9j.ibShadowedToolTip" = "Letzte Sekunden zum Encodieren.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "9A3-Zn-guz"; */
+"9A3-Zn-guz.title" = "Ende trimmen";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "aeA-ul-8yt"; */
+"aeA-ul-8yt.ibExternalAccessibilityDescription" = "Endzeit in Einzelbildern";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "aeA-ul-8yt"; */
+"aeA-ul-8yt.ibShadowedToolTip" = "Letzte Einzelbilder zum Encodieren.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Range Selection"; ObjectID = "aM2-P8-m4w"; */
+"aM2-P8-m4w.ibExternalAccessibilityDescription" = "Bereichsauswahl";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "aM2-P8-m4w"; */
+"aM2-P8-m4w.ibShadowedToolTip" = "Bereichsauswahl der Quelle. Standardmäßig werden alle Kapitel ausgewählt und die gesamte Quelle encodiert.";
+
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "eap-Rn-0qW"; */
+"eap-Rn-0qW.title" = "Bis";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "eoO-dc-hc3"; */
+"eoO-dc-hc3.ibExternalAccessibilityDescription" = "Erstes Kapitel";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "eoO-dc-hc3"; */
+"eoO-dc-hc3.ibShadowedToolTip" = "Erstes Kapitel zum Encodieren.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "gKJ-mm-7Zy"; */
+"gKJ-mm-7Zy.title" = "Ende trimmen";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "guU-KE-TeY"; */
+"guU-KE-TeY.ibExternalAccessibilityDescription" = "Startzeit in Einzelbildern";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "First frame to encode."; ObjectID = "guU-KE-TeY"; */
+"guU-KE-TeY.ibShadowedToolTip" = "Erstes Einzelbilder zum Encodieren.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "End Chapter"; ObjectID = "OHn-dK-gFi"; */
+"OHn-dK-gFi.ibExternalAccessibilityDescription" = "Letztes Kapitel";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "OHn-dK-gFi"; */
+"OHn-dK-gFi.ibShadowedToolTip" = "Letztes Kapitel zum Encodieren.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "tOX-Dr-TiC"; */
+"tOX-Dr-TiC.title" = "Ende trimmen";
+
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "YpG-jj-qV2"; */
+"YpG-jj-qV2.title" = "Bis";
+

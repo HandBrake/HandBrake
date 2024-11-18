@@ -110,11 +110,15 @@
         self.scaleToScreenButton.title = NSLocalizedString(@"Actual Scale", @"Picture HUD -> scale button");
     }
     [self _touchBar_updateFitToView:fitToView];
+    [self.delegate setScaleToScreen:fitToView];
 }
 
 - (BOOL)validateUserIterfaceItemForAction:(SEL)action
 {
-    if (action == @selector(createMoviePreview:) || action == @selector(toggleScaleToScreen:))
+    if (action == @selector(createMoviePreview:) ||
+        action == @selector(scaleToScreen:) ||
+        action == @selector(actualSize:) ||
+        action == @selector(toggleScaleToScreen:))
     {
         return self.generator != nil;
     }
@@ -132,9 +136,18 @@
     self.selectedIndex = index;
 }
 
+- (IBAction)scaleToScreen:(id)sender
+{
+    self.fitToView = YES;
+}
+
+- (IBAction)actualSize:(id)sender
+{
+    self.fitToView = NO;
+}
+
 - (IBAction)toggleScaleToScreen:(id)sender
 {
-    [self.delegate toggleScaleToScreen];
     self.fitToView = !self.fitToView;
 }
 

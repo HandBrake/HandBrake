@@ -3,18 +3,17 @@
     "branch": "1",
     "runtime": "fr.handbrake.ghb",
     "runtime-version": "development",
-    "sdk": "org.gnome.Sdk//46",
+    "sdk": "org.gnome.Sdk//47",
     "build-extension": true,
     "separate-locales": false,
-    "appstream-compose": false,
     "modules": [
         {
             "name": "intel-gmmlib",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.3.19.tar.gz",
-                    "sha256": "ea9c418b0fd84a982850f230cb2d783dfe2e1f9923065f54b2fcaad1e9b33417"
+                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.5.2.tar.gz",
+                    "sha256": "dbf7cc401de7ff386306a23c1c61b3cf7bd86a4d9001b3a1d16a81e6b0e3ab2b"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -38,8 +37,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva/archive/refs/tags/2.21.0.tar.gz",
-                    "sha256": "f7c3fffef3f04eb146e036dad2587d852bfb70e4926d014bf437244915ef7425"
+                    "url": "https://github.com/intel/libva/archive/refs/tags/2.22.0.tar.gz",
+                    "sha256": "467c418c2640a178c6baad5be2e00d569842123763b80507721ab87eb7af8735"
                 }
             ],
             "no-autogen": false,
@@ -54,8 +53,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.21.0.tar.gz",
-                    "sha256": "15ca12bd11c7001c04af5079512754fea6ba8d79151b9f07908c99b27622714e"
+                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.22.0.tar.gz",
+                    "sha256": "7b57615c130427ec134bb5d2b80af516ce5bb19a40e89b1dab46a0d59760d96c"
                 }
             ],
             "no-autogen": false,
@@ -70,8 +69,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-23.4.3.tar.gz",
-                    "sha256": "83b95eefe86c9d58d92c2a77793541ea3cb643dff419599ffa87899fd58738cd"
+                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-24.3.4.tar.gz",
+                    "sha256": "58978f9ee4981532e60be2f2768673b1f3825db09971ebb98fbd7e8819cab6eb"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -105,8 +104,7 @@
                 "strip": true
             },
             "post-install": [
-                "install -Dp -m 644 ${FLATPAK_BUILDER_BUILDDIR}/fr.handbrake.ghb.Plugin.IntelMediaSDK.metainfo.xml --target-directory=${FLATPAK_DEST}/share/metainfo",
-                "appstream-compose --basename=fr.handbrake.ghb.Plugin.IntelMediaSDK --prefix=${FLATPAK_DEST} --origin=flatpak fr.handbrake.ghb.Plugin.IntelMediaSDK"
+                "install -Dp -m 644 ${FLATPAK_BUILDER_BUILDDIR}/fr.handbrake.ghb.Plugin.IntelMediaSDK.metainfo.xml --target-directory=${FLATPAK_DEST}/share/metainfo"
             ],
             "sources": [
                 {
@@ -139,8 +137,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/vpl-gpu-rt/archive/refs/tags/intel-onevpl-23.4.3.tar.gz",
-                    "sha256": "d4d54637bae1e00b977bb9a865c1787b2c88c4102099d73daa18f82598d94b77"
+                    "url": "https://github.com/intel/vpl-gpu-rt/archive/refs/tags/intel-onevpl-24.3.4.tar.gz",
+                    "sha256": "978672104e6767223fbfb34fa9a0c0d954dcff9109891dc4911413dbc553ed71"
                 },
                 {
                     "type": "file",

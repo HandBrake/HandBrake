@@ -1,6 +1,3 @@
-/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "0HY-xB-cvO"; */
-"0HY-xB-cvO.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает FLAC.  Это включает FLAC в проход для выбора, когда проход выбора активен.";
-
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
 "0kT-0J-3k2.headerCell.title" = "Микширование";
 
@@ -82,6 +79,9 @@
 /* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
 "GbM-vm-RC2.title" = "Поведение выбора дорожек:";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "gOm-E9-8K7"; */
+"gOm-E9-8K7.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает FLAC.  Это включает FLAC в проход для выбора, когда проход выбора активен.";
+
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
 "GZP-q7-SYy.title" = "Все совпадающие с выбранными языками";
 
@@ -133,9 +133,6 @@
 /* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "N7h-CJ-quV"; */
 "N7h-CJ-quV.headerCell.title" = "Усиление";
 
-/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "naS-No-CdV"; */
-"naS-No-CdV.title" = "FLAC";
-
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
 "oiD-QI-wly.ibShadowedToolTip" = "Поведение выбора дорожек.\n\n'Нет' не будет выбирать никакую дорожку аудио по умолчанию.\n\n'Первая совпадающая с выбранным языком' добавит первую дорожку, которая совпадает с каждым из выбранных языков в исходном файле.\n\n'Все совпадающие с выбранным языком' добавит все дорожки, которые совпадают с каждым из выбранных языков в исходном файле.";
 
@@ -165,6 +162,9 @@
 
 /* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
 "sdZ-Rx-JoG.title" = "MP3";
+
+/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "sJU-xA-Jo1"; */
+"sJU-xA-Jo1.title" = "FLAC";
 
 /* Class = "NSButtonCell"; title = "E-AC3"; ObjectID = "u9h-dn-wcK"; */
 "u9h-dn-wcK.title" = "E-AC3";

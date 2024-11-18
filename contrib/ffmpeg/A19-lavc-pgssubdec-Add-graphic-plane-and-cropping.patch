@@ -1,0 +1,793 @@
+From 2a2fdb2c75d74e37840597cf88578d43ab2f5f70 Mon Sep 17 00:00:00 2001
+From: cubicibo <55701024+cubicibo@users.noreply.github.com>
+Date: Thu, 22 Aug 2024 22:57:54 +0200
+Subject: [PATCH] lavc/pgssubdec: Add graphic plane and cropping.
+
+---
+ libavcodec/pgssubdec.c | 554 ++++++++++++++++++++++++++---------------
+ 1 file changed, 353 insertions(+), 201 deletions(-)
+
+diff --git a/libavcodec/pgssubdec.c b/libavcodec/pgssubdec.c
+index 5f76f12615..973a264105 100644
+--- a/libavcodec/pgssubdec.c
++++ b/libavcodec/pgssubdec.c
+@@ -34,9 +34,11 @@
+ #include "libavutil/opt.h"
+ 
+ #define RGBA(r,g,b,a) (((unsigned)(a) << 24) | ((r) << 16) | ((g) << 8) | (b))
+-#define MAX_EPOCH_PALETTES 8   // Max 8 allowed per PGS epoch
+-#define MAX_EPOCH_OBJECTS  64  // Max 64 allowed per PGS epoch
+-#define MAX_OBJECT_REFS    2   // Max objects per display set
++#define MAX_EPOCH_PALETTES 8    // Max 8 allowed per PGS epoch
++#define MAX_EPOCH_OBJECTS  64   // Max 64 allowed per PGS epoch
++#define MAX_OBJECT_REFS    2    // Max objects per display set
++#define MAX_OBJECT_WH      4096 // Max object width/height
++
+ 
+ enum SegmentType {
+     PALETTE_SEGMENT      = 0x14,
+@@ -47,57 +49,80 @@ enum SegmentType {
+ };
+ 
+ typedef struct PGSSubObjectRef {
+-    int     id;
+-    int     window_id;
+-    uint8_t composition_flag;
+-    int     x;
+-    int     y;
+-    int     crop_x;
+-    int     crop_y;
+-    int     crop_w;
+-    int     crop_h;
++    uint16_t id;
++    uint8_t  window_id;
++    uint8_t  composition_flag;
++    uint16_t x;
++    uint16_t y;
++    uint16_t crop_x;
++    uint16_t crop_y;
++    uint16_t crop_w;
++    uint16_t crop_h;
+ } PGSSubObjectRef;
+ 
+ typedef struct PGSSubPresentation {
+-    int id_number;
+-    int palette_id;
+-    int object_count;
++    uint8_t         palette_flag;
++    uint8_t         palette_id;
++    uint8_t         object_count;
+     PGSSubObjectRef objects[MAX_OBJECT_REFS];
+-    int64_t pts;
++    int64_t         pts;
+ } PGSSubPresentation;
+ 
+ typedef struct PGSSubObject {
+-    int          id;
+-    int          w;
+-    int          h;
+-    uint8_t      *rle;
+-    unsigned int rle_buffer_size, rle_data_len;
+-    unsigned int rle_remaining_len;
++    uint16_t  id;
++    uint16_t  w;
++    uint16_t  h;
++    uint8_t   *rle;
++    uint8_t   *bitmap;
++    uint32_t  rle_buffer_size;
++    uint32_t  rle_data_len;
++    uint32_t  rle_remaining_len;
++    uint32_t  bitmap_buffer_size;
++    uint32_t  bitmap_size;
+ } PGSSubObject;
+ 
+ typedef struct PGSSubObjects {
+-    int          count;
++    uint8_t      count;
+     PGSSubObject object[MAX_EPOCH_OBJECTS];
+ } PGSSubObjects;
+ 
+ typedef struct PGSSubPalette {
+-    int         id;
+-    uint32_t    clut[256];
++    uint8_t     id;
++    uint32_t    clut[AVPALETTE_COUNT];
+ } PGSSubPalette;
+ 
+ typedef struct PGSSubPalettes {
+-    int           count;
++    uint8_t       count;
+     PGSSubPalette palette[MAX_EPOCH_PALETTES];
+ } PGSSubPalettes;
+ 
++typedef struct PGSGraphicPlane {
++   uint8_t        count;
++   uint8_t        writable;
++   AVSubtitleRect visible_rect[MAX_OBJECT_REFS];
++} PGSGraphicPlane;
++
+ typedef struct PGSSubContext {
+     AVClass *class;
+     PGSSubPresentation presentation;
+     PGSSubPalettes     palettes;
+     PGSSubObjects      objects;
++    PGSGraphicPlane    plane;
+     int forced_subs_only;
+ } PGSSubContext;
+ 
++static void clear_graphic_plane(PGSSubContext *ctx)
++{
++    int i;
++
++    for (i = 0; i < ctx->plane.count; i++) {
++       av_freep(&ctx->plane.visible_rect[i].data[0]);
++       memset(&ctx->plane.visible_rect[i], 0, sizeof(ctx->plane.visible_rect[i]));
++    }
++    ctx->plane.writable = 0;
++    ctx->plane.count = 0;
++}
++
+ static void flush_cache(AVCodecContext *avctx)
+ {
+     PGSSubContext *ctx = avctx->priv_data;
+@@ -105,8 +130,11 @@ static void flush_cache(AVCodecContext *avctx)
+ 
+     for (i = 0; i < ctx->objects.count; i++) {
+         av_freep(&ctx->objects.object[i].rle);
+-        ctx->objects.object[i].rle_buffer_size  = 0;
++        ctx->objects.object[i].rle_buffer_size    = 0;
+         ctx->objects.object[i].rle_remaining_len  = 0;
++        av_freep(&ctx->objects.object[i].bitmap);
++        ctx->objects.object[i].bitmap_buffer_size = 0;
++        ctx->objects.object[i].bitmap_size        = 0;
+     }
+     ctx->objects.count = 0;
+     ctx->palettes.count = 0;
+@@ -143,6 +171,7 @@ static av_cold int init_decoder(AVCodecContext *avctx)
+ 
+ static av_cold int close_decoder(AVCodecContext *avctx)
+ {
++    clear_graphic_plane((PGSSubContext *)avctx->priv_data);
+     flush_cache(avctx);
+ 
+     return 0;
+@@ -158,48 +187,51 @@ static av_cold int close_decoder(AVCodecContext *avctx)
+  * @param buf pointer to the RLE data to process
+  * @param buf_size size of the RLE data to process
+  */
+-static int decode_rle(AVCodecContext *avctx, AVSubtitleRect *rect,
+-                      const uint8_t *buf, unsigned int buf_size)
++static int decode_object_rle(AVCodecContext *avctx, PGSSubObject *object)
+ {
+-    const uint8_t *rle_bitmap_end;
++    const uint8_t *rle_buf;
++    const uint8_t *rle_end;
+     int pixel_count, line_count;
++    rle_buf = object->rle;
++    rle_end = object->rle + object->rle_data_len;
+ 
+-    rle_bitmap_end = buf + buf_size;
++    object->bitmap_size = object->w * object->h;
++    av_fast_padded_malloc(&object->bitmap, &object->bitmap_buffer_size,
++                          object->bitmap_size);
+ 
+-    rect->data[0] = av_malloc_array(rect->w, rect->h);
+-
+-    if (!rect->data[0])
++    if (!object->bitmap)
+         return AVERROR(ENOMEM);
+ 
+     pixel_count = 0;
+     line_count  = 0;
+ 
+-    while (buf < rle_bitmap_end && line_count < rect->h) {
++    while (rle_buf < rle_end && line_count < object->h) {
+         uint8_t flags, color;
+         int run;
+ 
+-        color = bytestream_get_byte(&buf);
++        color = bytestream_get_byte(&rle_buf);
+         run   = 1;
+ 
+         if (color == 0x00) {
+-            flags = bytestream_get_byte(&buf);
++            flags = bytestream_get_byte(&rle_buf);
+             run   = flags & 0x3f;
+             if (flags & 0x40)
+-                run = (run << 8) + bytestream_get_byte(&buf);
+-            color = flags & 0x80 ? bytestream_get_byte(&buf) : 0;
++                run = (run << 8) + bytestream_get_byte(&rle_buf);
++            color = flags & 0x80 ? bytestream_get_byte(&rle_buf) : 0;
+         }
+ 
+-        if (run > 0 && pixel_count + run <= rect->w * rect->h) {
+-            memset(rect->data[0] + pixel_count, color, run);
++        if (run > 0 && pixel_count + run <= object->w * object->h) {
++            memset(object->bitmap + pixel_count, color, run);
+             pixel_count += run;
+         } else if (!run) {
+             /*
+              * New Line. Check if correct pixels decoded, if not display warning
+              * and adjust bitmap pointer to correct new line position.
+              */
+-            if (pixel_count % rect->w > 0) {
+-                av_log(avctx, AV_LOG_ERROR, "Decoded %d pixels, when line should be %d pixels\n",
+-                       pixel_count % rect->w, rect->w);
++            if (pixel_count % object->w > 0) {
++                av_log(avctx, AV_LOG_ERROR,
++                       "Decoded %d pixels, when object line should be %d pixels\n",
++                       pixel_count % object->w, object->w);
+                 if (avctx->err_recognition & AV_EF_EXPLODE) {
+                     return AVERROR_INVALIDDATA;
+                 }
+@@ -208,13 +240,11 @@ static int decode_rle(AVCodecContext *avctx, AVSubtitleRect *rect,
+         }
+     }
+ 
+-    if (pixel_count < rect->w * rect->h) {
+-        av_log(avctx, AV_LOG_ERROR, "Insufficient RLE data for subtitle\n");
++    if (pixel_count < object->w * object->h) {
++        av_log(avctx, AV_LOG_ERROR, "Insufficient RLE data for object\n");
+         return AVERROR_INVALIDDATA;
+     }
+-
+-    ff_dlog(avctx, "Pixel Count = %d, Area = %d\n", pixel_count, rect->w * rect->h);
+-
++    ff_dlog(avctx, "Pixel Count = %d, Area = %d\n", pixel_count, object->w * object->h);
+     return 0;
+ }
+ 
+@@ -236,7 +266,7 @@ static int parse_object_segment(AVCodecContext *avctx,
+ 
+     uint8_t sequence_desc;
+     unsigned int rle_bitmap_len, width, height;
+-    int id;
++    int id, ret;
+ 
+     if (buf_size <= 4)
+         return AVERROR_INVALIDDATA;
+@@ -259,57 +289,71 @@ static int parse_object_segment(AVCodecContext *avctx,
+     /* Read the Sequence Description to determine if start of RLE data or appended to previous RLE */
+     sequence_desc = bytestream_get_byte(&buf);
+ 
+-    if (!(sequence_desc & 0x80)) {
+-        /* Additional RLE data */
+-        if (buf_size > object->rle_remaining_len)
++    /* First in sequence object definition segment */
++    if (sequence_desc & 0x80) {
++        if (buf_size <= 7)
+             return AVERROR_INVALIDDATA;
++        buf_size -= 7;
+ 
+-        memcpy(object->rle + object->rle_data_len, buf, buf_size);
+-        object->rle_data_len += buf_size;
+-        object->rle_remaining_len -= buf_size;
+-
+-        return 0;
+-    }
+-
+-    if (buf_size <= 7)
+-        return AVERROR_INVALIDDATA;
+-    buf_size -= 7;
++        /* Decode rle bitmap length, stored size includes width/height data */
++        rle_bitmap_len = bytestream_get_be24(&buf) - 2*2;
+ 
+-    /* Decode rle bitmap length, stored size includes width/height data */
+-    rle_bitmap_len = bytestream_get_be24(&buf) - 2*2;
++        if (buf_size > rle_bitmap_len) {
++            av_log(avctx, AV_LOG_ERROR,
++                   "Buffer dimension %d larger than the expected RLE data %d\n",
++                   buf_size, rle_bitmap_len);
++            return AVERROR_INVALIDDATA;
++        }
+ 
+-    if (buf_size > rle_bitmap_len) {
+-        av_log(avctx, AV_LOG_ERROR,
+-               "Buffer dimension %d larger than the expected RLE data %d\n",
+-               buf_size, rle_bitmap_len);
+-        return AVERROR_INVALIDDATA;
+-    }
++        /* Get bitmap dimensions from data */
++        width  = bytestream_get_be16(&buf);
++        height = bytestream_get_be16(&buf);
+ 
+-    /* Get bitmap dimensions from data */
+-    width  = bytestream_get_be16(&buf);
+-    height = bytestream_get_be16(&buf);
++        /* Make sure the bitmap is not too large */
++        if (MAX_OBJECT_WH < width || MAX_OBJECT_WH < height || !width || !height) {
++            av_log(avctx, AV_LOG_ERROR, "Bitmap dimensions (%dx%d) invalid.\n", width, height);
++            return AVERROR_INVALIDDATA;
++        }
+ 
+-    /* Make sure the bitmap is not too large */
+-    if (avctx->width < width || avctx->height < height || !width || !height) {
+-        av_log(avctx, AV_LOG_ERROR, "Bitmap dimensions (%dx%d) invalid.\n", width, height);
+-        return AVERROR_INVALIDDATA;
+-    }
++        object->rle_data_len = 0;
++        object->w = width;
++        object->h = height;
++        /* Dimensions against video are checked at decode after cropping. */
++        av_fast_padded_malloc(&object->rle, &object->rle_buffer_size, rle_bitmap_len);
+ 
+-    object->w = width;
+-    object->h = height;
++        if (!object->rle) {
++            object->rle_remaining_len = 0;
++            return AVERROR(ENOMEM);
++        }
+ 
+-    av_fast_padded_malloc(&object->rle, &object->rle_buffer_size, rle_bitmap_len);
++        memcpy(object->rle, buf, buf_size);
++        object->rle_remaining_len = rle_bitmap_len;
++    } else {
++        /* Additional RLE data */
++        if (buf_size > object->rle_remaining_len)
++            return AVERROR_INVALIDDATA;
+ 
+-    if (!object->rle) {
+-        object->rle_data_len = 0;
+-        object->rle_remaining_len = 0;
+-        return AVERROR(ENOMEM);
++        memcpy(object->rle + object->rle_data_len, buf, buf_size);
++    }
++    object->rle_data_len += buf_size;
++    object->rle_remaining_len -= buf_size;
++
++    /* Last in sequence object definition (can be both first and last) */
++    if (sequence_desc & 0x40) {
++        /* Attempt decoding if data is valid */
++        if (0 == object->rle_remaining_len) {
++            ret = decode_object_rle(avctx, object);
++            if (ret < 0 && (avctx->err_recognition & AV_EF_EXPLODE || ret == AVERROR(ENOMEM))) {
++                return ret;
++            }
++        } else {
++            av_log(avctx, AV_LOG_ERROR,
++                "RLE data length %u is %u bytes shorter than expected\n",
++                object->rle_data_len, object->rle_remaining_len);
++            if (avctx->err_recognition & AV_EF_EXPLODE)
++                return AVERROR_INVALIDDATA;
++        }
+     }
+-
+-    memcpy(object->rle, buf, buf_size);
+-    object->rle_data_len = buf_size;
+-    object->rle_remaining_len = rle_bitmap_len - buf_size;
+-
+     return 0;
+ }
+ 
+@@ -317,7 +361,7 @@ static int parse_object_segment(AVCodecContext *avctx,
+  * Parse the palette segment packet.
+  *
+  * The palette segment contains details of the palette,
+- * a maximum of 256 colors can be defined.
++ * a maximum of 256 colors (AVPALETTE_COUNT) can be defined.
+  *
+  * @param avctx contains the current codec context
+  * @param buf pointer to the packet to process
+@@ -390,13 +434,17 @@ static int parse_presentation_segment(AVCodecContext *avctx,
+                                       int64_t pts)
+ {
+     PGSSubContext *ctx = avctx->priv_data;
+-    int i, state, ret;
++    int ret;
++    uint8_t i, state;
+     const uint8_t *buf_end = buf + buf_size;
+ 
+     // Video descriptor
+     int w = bytestream_get_be16(&buf);
+     int h = bytestream_get_be16(&buf);
+ 
++    // On a new display set, reset writability of the graphic plane
++    ctx->plane.writable = 0;
++
+     ctx->presentation.pts = pts;
+ 
+     ff_dlog(avctx, "Video Dimensions %dx%d\n",
+@@ -405,88 +453,121 @@ static int parse_presentation_segment(AVCodecContext *avctx,
+     if (ret < 0)
+         return ret;
+ 
+-    /* Skip 1 bytes of unknown, frame rate */
+-    buf++;
++    /* Skip 3 bytes: framerate (1), presentation id number (2) */
++    buf+=3;
+ 
+-    // Composition descriptor
+-    ctx->presentation.id_number = bytestream_get_be16(&buf);
+     /*
+-     * state is a 2 bit field that defines pgs epoch boundaries
++     * State is a 2 bit field that defines pgs epoch boundaries
+      * 00 - Normal, previously defined objects and palettes are still valid
+      * 01 - Acquisition point, previous objects and palettes can be released
+      * 10 - Epoch start, previous objects and palettes can be released
+      * 11 - Epoch continue, previous objects and palettes can be released
+      *
+-     * reserved 6 bits discarded
++     * Reserved 6 bits discarded
+      */
+     state = bytestream_get_byte(&buf) >> 6;
+     if (state != 0) {
++        /* Epoch start always wipes the graphic plane. Epoch continue does only if
++         * playback is not seamless, which should not happen with a proper stream.
++         */
++        if (0b10 == state)
++            clear_graphic_plane((PGSSubContext *)avctx->priv_data);
+         flush_cache(avctx);
+     }
+ 
++    /* Reserved 7 bits discarded. */
++    ctx->presentation.palette_flag = bytestream_get_byte(&buf) & 0x80;
++    ctx->presentation.palette_id = bytestream_get_byte(&buf);
++
+     /*
+-     * skip palette_update_flag (0x80),
++     * On palette update, don't parse the compositions references,
++     * just evaluate the existing graphic plane with the new palette.
+      */
+-    buf += 1;
+-    ctx->presentation.palette_id = bytestream_get_byte(&buf);
+-    ctx->presentation.object_count = bytestream_get_byte(&buf);
+-    if (ctx->presentation.object_count > MAX_OBJECT_REFS) {
+-        av_log(avctx, AV_LOG_ERROR,
+-               "Invalid number of presentation objects %d\n",
+-               ctx->presentation.object_count);
+-        ctx->presentation.object_count = 2;
+-        if (avctx->err_recognition & AV_EF_EXPLODE) {
+-            return AVERROR_INVALIDDATA;
++    if (!ctx->presentation.palette_flag) {
++        ctx->presentation.object_count = bytestream_get_byte(&buf);
++        if (ctx->presentation.object_count > MAX_OBJECT_REFS) {
++            av_log(avctx, AV_LOG_ERROR,
++                   "Invalid number of presentation objects %d\n",
++                   ctx->presentation.object_count);
++            ctx->presentation.object_count = 2;
++            if (avctx->err_recognition & AV_EF_EXPLODE) {
++                return AVERROR_INVALIDDATA;
++            }
+         }
+-    }
+ 
++        for (i = 0; i < ctx->presentation.object_count; i++) {
++            PGSSubObjectRef *const object = &ctx->presentation.objects[i];
+ 
+-    for (i = 0; i < ctx->presentation.object_count; i++)
+-    {
+-        PGSSubObjectRef *const object = &ctx->presentation.objects[i];
++            if (buf_end - buf < 8) {
++                av_log(avctx, AV_LOG_ERROR, "Insufficent space for object\n");
++                ctx->presentation.object_count = i;
++                return AVERROR_INVALIDDATA;
++            }
+ 
+-        if (buf_end - buf < 8) {
+-            av_log(avctx, AV_LOG_ERROR, "Insufficent space for object\n");
+-            ctx->presentation.object_count = i;
+-            return AVERROR_INVALIDDATA;
+-        }
++            object->id               = bytestream_get_be16(&buf);
++            object->window_id        = bytestream_get_byte(&buf);
++            object->composition_flag = bytestream_get_byte(&buf);
+ 
+-        object->id               = bytestream_get_be16(&buf);
+-        object->window_id        = bytestream_get_byte(&buf);
+-        object->composition_flag = bytestream_get_byte(&buf);
++            object->x = bytestream_get_be16(&buf);
++            object->y = bytestream_get_be16(&buf);
+ 
+-        object->x = bytestream_get_be16(&buf);
+-        object->y = bytestream_get_be16(&buf);
++            // If cropping
++            if (object->composition_flag & 0x80) {
++                object->crop_x = bytestream_get_be16(&buf);
++                object->crop_y = bytestream_get_be16(&buf);
++                object->crop_w = bytestream_get_be16(&buf);
++                object->crop_h = bytestream_get_be16(&buf);
++            }
+ 
+-        // If cropping
+-        if (object->composition_flag & 0x80) {
+-            object->crop_x = bytestream_get_be16(&buf);
+-            object->crop_y = bytestream_get_be16(&buf);
+-            object->crop_w = bytestream_get_be16(&buf);
+-            object->crop_h = bytestream_get_be16(&buf);
++            /* Placement is checked at decode after cropping. */
++            ff_dlog(avctx, "Subtitle Placement x=%d, y=%d\n",
++                    object->x, object->y);
+         }
++    }
++    return 0;
++}
+ 
+-        ff_dlog(avctx, "Subtitle Placement x=%d, y=%d\n",
+-                object->x, object->y);
++/**
++ * Parse the window segment packet.
++ *
++ * The window segment instructs the decoder to redraw the graphic plane
++ * with the composition references provided in the presentation segment
++ *
++ * @param avctx contains the current codec context
++ */
++static int parse_window_segment(AVCodecContext *avctx, const uint8_t *buf,
++                                int buf_size)
++{
++    PGSSubContext *ctx = (PGSSubContext *)avctx->priv_data;
+ 
+-        if (object->x > avctx->width || object->y > avctx->height) {
+-            av_log(avctx, AV_LOG_ERROR, "Subtitle out of video bounds. x = %d, y = %d, video width = %d, video height = %d.\n",
+-                   object->x, object->y,
+-                    avctx->width, avctx->height);
+-            object->y = object->x = 0;
+-            if (avctx->err_recognition & AV_EF_EXPLODE) {
+-                return AVERROR_INVALIDDATA;
+-            }
+-        }
++    // 1 byte: number of windows defined
++    if (bytestream_get_byte(&buf) > MAX_OBJECT_REFS) {
++        av_log(avctx, AV_LOG_ERROR, "Too many windows defined.\n");
++        return AVERROR_INVALIDDATA;
+     }
+ 
++    /* TODO: mask objects with windows when transfering to the graphic plane
++     * Window Segment Structure
++     *     {
++     *       1 byte : window id,
++     *       2 bytes: X position of window,
++     *       2 bytes: Y position of window,
++     *       2 bytes: Width of window,
++     *       2 bytes: Height of window.
++     *     }
++     */
++    // Flush the graphic plane, it will be redrawn.
++    clear_graphic_plane(ctx);
++    ctx->plane.writable = 1;
++    ctx->plane.count = ctx->presentation.object_count;
+     return 0;
+ }
+ 
+ /**
+  * Parse the display segment packet.
+  *
+- * The display segment controls the updating of the display.
++ * The display segment closes the display set. The inferred data is used
++ * to decide if the display should be updated.
+  *
+  * @param avctx contains the current codec context
+  * @param data pointer to the data pertaining the subtitle to display
+@@ -499,26 +580,33 @@ static int display_end_segment(AVCodecContext *avctx, AVSubtitle *sub,
+     PGSSubContext *ctx = avctx->priv_data;
+     int64_t pts;
+     PGSSubPalette *palette;
+-    int i, ret;
++    int i;
+ 
+     pts = ctx->presentation.pts != AV_NOPTS_VALUE ? ctx->presentation.pts : sub->pts;
+     memset(sub, 0, sizeof(*sub));
+     sub->pts = pts;
+     ctx->presentation.pts = AV_NOPTS_VALUE;
+-    sub->start_display_time = 0;
+     // There is no explicit end time for PGS subtitles.  The end time
+     // is defined by the start of the next sub which may contain no
+     // objects (i.e. clears the previous sub)
+     sub->end_display_time   = UINT32_MAX;
+-    sub->format             = 0;
+ 
+-    // Blank if last object_count was 0.
+-    if (!ctx->presentation.object_count)
++    // Object count is zero only on an epoch start with no WDS
++    // or the last DS with a WDS had no presentation object.
++    if (!ctx->plane.count) {
+         return 1;
+-    sub->rects = av_calloc(ctx->presentation.object_count, sizeof(*sub->rects));
+-    if (!sub->rects) {
+-        return AVERROR(ENOMEM);
+     }
++
++    if (!ctx->presentation.palette_flag && !ctx->plane.writable) {
++        // This display set does not perform a display update
++        // E.g. it only defines new objects or palettes for future usage.
++        return 0;
++    }
++
++    sub->rects = av_calloc(ctx->plane.count, sizeof(*sub->rects));
++    if (!sub->rects)
++        return AVERROR(ENOMEM);
++
+     palette = find_palette(ctx->presentation.palette_id, &ctx->palettes);
+     if (!palette) {
+         // Missing palette.  Should only happen with damaged streams.
+@@ -527,57 +615,128 @@ static int display_end_segment(AVCodecContext *avctx, AVSubtitle *sub,
+         avsubtitle_free(sub);
+         return AVERROR_INVALIDDATA;
+     }
+-    for (i = 0; i < ctx->presentation.object_count; i++) {
+-        AVSubtitleRect *const rect = av_mallocz(sizeof(*rect));
+-        PGSSubObject *object;
+ 
+-        if (!rect)
+-            return AVERROR(ENOMEM);
+-        sub->rects[sub->num_rects++] = rect;
+-        rect->type = SUBTITLE_BITMAP;
+-
+-        /* Process bitmap */
+-        object = find_object(ctx->presentation.objects[i].id, &ctx->objects);
+-        if (!object) {
+-            // Missing object.  Should only happen with damaged streams.
+-            av_log(avctx, AV_LOG_ERROR, "Invalid object id %d\n",
+-                   ctx->presentation.objects[i].id);
+-            if (avctx->err_recognition & AV_EF_EXPLODE)
+-                return AVERROR_INVALIDDATA;
+-            // Leaves rect empty with 0 width and height.
+-            continue;
+-        }
+-        if (ctx->presentation.objects[i].composition_flag & 0x40)
+-            rect->flags |= AV_SUBTITLE_FLAG_FORCED;
++    for (i = 0; i < ctx->plane.count; i++) {
++        const PGSSubObjectRef *sub_object = &ctx->presentation.objects[i];
++        AVSubtitleRect *const gp_rect = &ctx->plane.visible_rect[i];
++        AVSubtitleRect *rect;
++        gp_rect->type = SUBTITLE_BITMAP;
++
++        // Compose the graphic plane if a window segment has been provided
++        if (ctx->plane.writable) {
++            PGSSubObject *object;
++
++            // Process bitmap
++            object = find_object(sub_object->id, &ctx->objects);
++            if (!object) {
++                // Missing object.  Should only happen with damaged streams.
++                av_log(avctx, AV_LOG_ERROR, "Invalid object id %d\n", sub_object->id);
++                if (avctx->err_recognition & AV_EF_EXPLODE)
++                    return AVERROR_INVALIDDATA;
++                // Leaves rect empty with 0 width and height.
++                continue;
++            }
++            if (sub_object->composition_flag & 0x40)
++                gp_rect->flags |= AV_SUBTITLE_FLAG_FORCED;
++
++            gp_rect->x    = sub_object->x;
++            gp_rect->y    = sub_object->y;
++
++            if (object->rle) {
++                int out_of_picture = 0;
++                gp_rect->w = object->w;
++                gp_rect->h = object->h;
++
++                gp_rect->linesize[0] = object->w;
++
++                // Check for cropping.
++                if (sub_object->composition_flag & 0x80) {
++                    int out_of_object = 0;
++
++                    if (object->w < sub_object->crop_x + sub_object->crop_w)
++                        out_of_object = 1;
++                    if (object->h < sub_object->crop_y + sub_object->crop_h)
++                        out_of_object = 1;
++
++                    if (out_of_object) {
++                        av_log(avctx, AV_LOG_ERROR,
++                               "Subtitle cropping values are out of object. "
++                               "obj_w = %d, obj_h = %d, crop_x = %d, crop_y = %d, "
++                               "crop_w = %d, crop_h = %d.\n",
++                               object->w,
++                               object->h,
++                               sub_object->crop_x,
++                               sub_object->crop_y,
++                               sub_object->crop_w,
++                               sub_object->crop_h);
++                        if (avctx->err_recognition & AV_EF_EXPLODE)
++                            return AVERROR_INVALIDDATA;
++                    } else {
++                        // Replace subtitle dimensions with cropping ones.
++                        gp_rect->w = sub_object->crop_w;
++                        gp_rect->h = sub_object->crop_h;
++                        gp_rect->linesize[0] = sub_object->crop_w;
++                    }
++                }
++
++                /* Make sure the subtitle is not out of picture. */
++                if (avctx->width < gp_rect->x + gp_rect->w || !gp_rect->w)
++                    out_of_picture = 1;
++                if (avctx->height < gp_rect->y + gp_rect->h || !gp_rect->h)
++                    out_of_picture = 1;
++                if (out_of_picture) {
++                    av_log(avctx, AV_LOG_ERROR,
++                           "Subtitle out of video bounds. "
++                           "x = %d, y = %d, width = %d, height = %d.\n",
++                           gp_rect->x, gp_rect->y, gp_rect->w, gp_rect->h);
++                    if (avctx->err_recognition & AV_EF_EXPLODE)
++                        return AVERROR_INVALIDDATA;
++                    gp_rect->w = 0;
++                    gp_rect->h = 0;
++                    continue;
++                }
+ 
+-        rect->x    = ctx->presentation.objects[i].x;
+-        rect->y    = ctx->presentation.objects[i].y;
++                if (!object->bitmap_size || object->rle_remaining_len) {
++                    gp_rect->w = 0;
++                    gp_rect->h = 0;
++                    continue;
++                }
+ 
+-        if (object->rle) {
+-            rect->w    = object->w;
+-            rect->h    = object->h;
++                gp_rect->data[0] = av_malloc_array(gp_rect->w, gp_rect->h);
++                if (!gp_rect->data[0])
++                    return AVERROR(ENOMEM);
+ 
+-            rect->linesize[0] = object->w;
++                if (sub_object->composition_flag & 0x80) {
++                    /* Copy cropped bitmap. */
++                    int y;
+ 
+-            if (object->rle_remaining_len) {
+-                av_log(avctx, AV_LOG_ERROR, "RLE data length %u is %u bytes shorter than expected\n",
+-                       object->rle_data_len, object->rle_remaining_len);
+-                if (avctx->err_recognition & AV_EF_EXPLODE)
+-                    return AVERROR_INVALIDDATA;
+-            }
+-            ret = decode_rle(avctx, rect, object->rle, object->rle_data_len);
+-            if (ret < 0) {
+-                if ((avctx->err_recognition & AV_EF_EXPLODE) ||
+-                    ret == AVERROR(ENOMEM)) {
+-                    return ret;
++                    for (y = 0; y < sub_object->crop_h; y++) {
++                        memcpy(&gp_rect->data[0][y * sub_object->crop_w],
++                               &object->bitmap[(sub_object->crop_y + y) *
++                               object->w + sub_object->crop_x],
++                               sub_object->crop_w);
++                    }
++                }
++                else {
++                    /* copy full object */
++                    memcpy(gp_rect->data[0], object->bitmap, object->bitmap_size);
+                 }
+-                rect->w = 0;
+-                rect->h = 0;
+-                continue;
+             }
+         }
+-        /* Allocate memory for colors */
+-        rect->nb_colors = 256;
++        // Export graphic plane content with latest palette
++        rect = av_memdup(gp_rect, sizeof(*gp_rect));
++        if (!rect)
++            return AVERROR(ENOMEM);
++
++        sub->rects[sub->num_rects++] = rect;
++        if (gp_rect->data[0]) {
++            rect->data[0] = av_memdup(gp_rect->data[0], rect->w*rect->h);
++            if (!rect->data[0])
++                return AVERROR(ENOMEM);
++        }
++
++        // Allocate memory for colors
++        rect->nb_colors = AVPALETTE_COUNT;
+         rect->data[1]   = av_mallocz(AVPALETTE_SIZE);
+         if (!rect->data[1])
+             return AVERROR(ENOMEM);
+@@ -640,14 +799,7 @@ static int decode(AVCodecContext *avctx, AVSubtitle *sub,
+             ret = parse_presentation_segment(avctx, buf, segment_length, sub->pts);
+             break;
+         case WINDOW_SEGMENT:
+-            /*
+-             * Window Segment Structure (No new information provided):
+-             *     2 bytes: Unknown,
+-             *     2 bytes: X position of subtitle,
+-             *     2 bytes: Y position of subtitle,
+-             *     2 bytes: Width of subtitle,
+-             *     2 bytes: Height of subtitle.
+-             */
++            ret = parse_window_segment(avctx, buf, segment_length);
+             break;
+         case DISPLAY_SEGMENT:
+             if (*got_sub_ptr) {
+-- 
+2.32.0 (Apple Git-132)
+

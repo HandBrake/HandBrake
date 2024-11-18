@@ -562,4 +562,7 @@ Bitrate will vary source to source.</value>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>Launches the documentation website located at https://handbrake.fr/docs</value>
   </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
 </root>

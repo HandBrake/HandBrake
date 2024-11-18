@@ -361,6 +361,7 @@ void hb_remove_previews( hb_handle_t * h )
  * @param preview_count Number of preview images to generate.
  * @param store_previews Whether or not to write previews to disk.
  * @param min_duration Ignore titles below a given threshold
+ * @param max_duration Ignore titles longer than a given threshold
  * @param crop_threshold_frames The number of frames to trigger smart crop
  * @param crop_threshold_pixels The variance in pixels detected that are allowed for.
  * @param exclude_extensions A list of extensions to exclude for this scan.
@@ -368,7 +369,7 @@ void hb_remove_previews( hb_handle_t * h )
  * @param keep_duplicate_titles
  */
 void hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
-              int preview_count, int store_previews, uint64_t min_duration,
+              int preview_count, int store_previews, uint64_t min_duration, uint64_t max_duration,
               int crop_threshold_frames, int crop_threshold_pixels,
               hb_list_t * exclude_extensions, int hw_decode, int keep_duplicate_titles)
 {
@@ -456,7 +457,7 @@ void hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
     hb_log( "hb_scan: path=%s, title_index=%d", path_info, title_index );
     h->scan_thread = hb_scan_init( h, &h->scan_die, paths, title_index,
                                    &h->title_set, preview_count,
-                                   store_previews, min_duration,
+                                   store_previews, min_duration, max_duration,
                                    crop_threshold_frames, crop_threshold_pixels,
                                    exclude_extensions, hw_decode, keep_duplicate_titles);
 }

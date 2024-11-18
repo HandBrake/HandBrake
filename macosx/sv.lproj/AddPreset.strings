@@ -1,0 +1,54 @@
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "5Xb-gz-QEa"; */
+"5Xb-gz-QEa.title" = "Avbryt";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list."; ObjectID = "8kl-Sh-Gh7"; */
+"8kl-Sh-Gh7.ibShadowedToolTip" = "Ange en beskrivning av det nya förvalet. Beskrivningen kommer att visas när du hovrar med markören över förvalet i förvalslistan.";
+
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "75B-xq-Qbe"; */
+"75B-xq-Qbe.title" = "Upplösningsgräns:";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
+"a0j-nw-n23.title" = "Valbeteende...";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Enter a name for the new preset. This name will be displayed in the presets list."; ObjectID = "aKg-n4-OUS"; */
+"aKg-n4-OUS.ibShadowedToolTip" = "Ange ett namn för det nya förvalet. Detta namn kommer att visas i förvalslistan.";
+
+/* Class = "NSWindow"; title = "New Preset"; ObjectID = "dbZ-Wo-9nG"; */
+"dbZ-Wo-9nG.title" = "Nytt förval";
+
+/* Class = "NSButtonCell"; title = "Add"; ObjectID = "Deg-rS-mRc"; */
+"Deg-rS-mRc.title" = "Lägg till";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Width"; ObjectID = "gOg-oO-8ar"; */
+"gOg-oO-8ar.ibExternalAccessibilityDescription" = "Bildbredd";
+
+/* Class = "NSTextFieldCell"; title = "Description:"; ObjectID = "hc8-1h-Jye"; */
+"hc8-1h-Jye.title" = "Beskrivning:";
+
+/* Class = "NSTextFieldCell"; title = "Audio:"; ObjectID = "HKp-K9-MF4"; */
+"HKp-K9-MF4.title" = "Ljud:";
+
+/* Class = "NSTextFieldCell"; title = "Category:"; ObjectID = "IyE-Lz-32s"; */
+"IyE-Lz-32s.title" = "Kategori:";
+
+/* Class = "NSTextFieldCell"; title = "Preset Name:"; ObjectID = "jhj-Et-ncF"; */
+"jhj-Et-ncF.title" = "Förvalsnamn:";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
+"LPX-Rc-KLa.title" = "Valbeteende...";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Height"; ObjectID = "Mga-dS-8BF"; */
+"Mga-dS-8BF.ibExternalAccessibilityDescription" = "Bildhöjd";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "Nfk-ix-xIv"; */
+"Nfk-ix-xIv.title" = "x";
+
+/* Class = "NSTextFieldCell"; title = "Subtitles:"; ObjectID = "OYE-GG-Vo3"; */
+"OYE-GG-Vo3.title" = "Undertexter:";
+
+/* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "Sf8-HP-mhE"; */
+"Sf8-HP-mhE.title" = "Ny kategori...";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Resolution Limit allows you to set a maximum width and/or height."; ObjectID = "z6B-ig-ouq"; */
+"z6B-ig-ouq.ibShadowedToolTip" = "Upplösningsgräns tillåter dig att ange en maximal bredd och/eller höjd.";
+

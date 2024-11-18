@@ -556,4 +556,7 @@ Bit-tasa iturburu batetik bestera aldatu egiten da.</value>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>https://handbrake.fr/docs helbidean dagoen dokumentazioaren webgunea abiarazten du</value>
   </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
 </root>

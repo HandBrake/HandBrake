@@ -624,6 +624,7 @@ struct hb_job_s
 
 #define HB_VCODEC_FFMPEG_MF_H264    (0x00000020 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H264_MASK)
 #define HB_VCODEC_FFMPEG_MF_H265    (0x00000021 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_FFMPEG_MF_AV1     (0x00000022 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_AV1_MASK)
 
 #define HB_VCODEC_FFMPEG_NVENC_H264         (0x00000030 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H264_MASK)
 #define HB_VCODEC_FFMPEG_NVENC_H265         (0x00000031 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
@@ -869,7 +870,9 @@ struct hb_job_s
 /* Audio Codecs: Update win/CS/HandBrake.Interop/Interop/HbLib/NativeConstants.cs when changing these consts */
 #define HB_ACODEC_INVALID   0x00000000
 #define HB_ACODEC_NONE      0x00000001
-#define HB_ACODEC_MASK      0x0FFFFF01
+#define HB_ACODEC_MASK      0x0FFFFF81
+#define HB_ACODEC_FFALAC    0x00000080
+#define HB_ACODEC_FFALAC24  0x00000100
 #define HB_ACODEC_LAME      0x00000200
 #define HB_ACODEC_VORBIS    0x00000400
 #define HB_ACODEC_AC3       0x00000800
@@ -889,13 +892,14 @@ struct hb_job_s
 #define HB_ACODEC_FFEAC3    0x01000000
 #define HB_ACODEC_FFTRUEHD  0x02000000
 #define HB_ACODEC_OPUS      0x04000000
-#define HB_ACODEC_FF_MASK   0x0FFF2800
+#define HB_ACODEC_FF_MASK   0x0FFF2D80
 #define HB_ACODEC_PASS_FLAG 0x40000000
-#define HB_ACODEC_PASS_MASK   (HB_ACODEC_AC3 | HB_ACODEC_DCA | HB_ACODEC_DCA_HD | HB_ACODEC_FFAAC | HB_ACODEC_FFEAC3 | HB_ACODEC_FFFLAC | HB_ACODEC_MP2 | HB_ACODEC_MP3 | HB_ACODEC_FFTRUEHD | HB_ACODEC_OPUS)
+#define HB_ACODEC_PASS_MASK   (HB_ACODEC_AC3 | HB_ACODEC_DCA | HB_ACODEC_DCA_HD | HB_ACODEC_FFAAC | HB_ACODEC_FFEAC3 | HB_ACODEC_FFALAC | HB_ACODEC_FFFLAC | HB_ACODEC_MP2 | HB_ACODEC_MP3 | HB_ACODEC_FFTRUEHD | HB_ACODEC_VORBIS | HB_ACODEC_OPUS)
 #define HB_ACODEC_AUTO_PASS   (HB_ACODEC_PASS_FLAG | HB_ACODEC_PASS_MASK)
 #define HB_ACODEC_ANY         (HB_ACODEC_PASS_FLAG | HB_ACODEC_MASK)
 #define HB_ACODEC_AAC_PASS    (HB_ACODEC_PASS_FLAG | HB_ACODEC_FFAAC)
 #define HB_ACODEC_AC3_PASS    (HB_ACODEC_PASS_FLAG | HB_ACODEC_AC3)
+#define HB_ACODEC_ALAC_PASS   (HB_ACODEC_PASS_FLAG | HB_ACODEC_FFALAC)
 #define HB_ACODEC_DCA_PASS    (HB_ACODEC_PASS_FLAG | HB_ACODEC_DCA)
 #define HB_ACODEC_DCA_HD_PASS (HB_ACODEC_PASS_FLAG | HB_ACODEC_DCA_HD)
 #define HB_ACODEC_EAC3_PASS   (HB_ACODEC_PASS_FLAG | HB_ACODEC_FFEAC3)
@@ -903,6 +907,7 @@ struct hb_job_s
 #define HB_ACODEC_MP2_PASS    (HB_ACODEC_PASS_FLAG | HB_ACODEC_MP2)
 #define HB_ACODEC_MP3_PASS    (HB_ACODEC_PASS_FLAG | HB_ACODEC_MP3)
 #define HB_ACODEC_TRUEHD_PASS (HB_ACODEC_PASS_FLAG | HB_ACODEC_FFTRUEHD)
+#define HB_ACODEC_VORBIS_PASS (HB_ACODEC_PASS_FLAG | HB_ACODEC_VORBIS)
 #define HB_ACODEC_OPUS_PASS   (HB_ACODEC_PASS_FLAG | HB_ACODEC_OPUS)
 
 #define HB_SUBSTREAM_BD_TRUEHD  0x72
@@ -1219,7 +1224,11 @@ struct hb_title_s
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t     coll;
     hb_ambient_viewing_environment_metadata_t ambient;
+
     hb_dovi_conf_t  dovi;
+    hb_data_t      *initial_rpu;
+    int             initial_rpu_type;
+
     int             hdr_10_plus;
 
     hb_rational_t   vrate;
@@ -1506,20 +1515,6 @@ struct hb_filter_object_s
 #endif
 };
 
-struct hb_motion_metric_object_s
-{
-    char                * name;
-
-#ifdef __LIBHB__
-    int                (* init)       ( hb_motion_metric_object_t *, hb_filter_init_t * );
-    float              (* work)       ( hb_motion_metric_object_t *,
-                                        hb_buffer_t *, hb_buffer_t * );
-    void               (* close)      ( hb_motion_metric_object_t * );
-
-    hb_motion_metric_private_t * private_data;
-#endif
-};
-
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_filter_ids.cs when changing this enum
 enum
 {
@@ -1586,6 +1581,34 @@ char               * hb_filter_settings_string(int filter_id,
 char               * hb_filter_settings_string_json(int filter_id,
                                                     const char * json);
 
+struct hb_motion_metric_object_s
+{
+    char                * name;
+
+#ifdef __LIBHB__
+    int                (* init)       ( hb_motion_metric_object_t *, hb_filter_init_t * );
+    float              (* work)       ( hb_motion_metric_object_t *,
+                                        hb_buffer_t *, hb_buffer_t * );
+    void               (* close)      ( hb_motion_metric_object_t * );
+
+    hb_motion_metric_private_t * private_data;
+#endif
+};
+
+struct hb_blend_object_s
+{
+    char                * name;
+
+#ifdef __LIBHB__
+    int                (* init)       ( hb_blend_object_t *, int in_pix_fmt, int in_chroma_location, int sub_pix_fmt );
+    hb_buffer_t *      (* work)       ( hb_blend_object_t *,
+                                        hb_buffer_t *, hb_buffer_list_t * );
+    void               (* close)      ( hb_blend_object_t * );
+
+    hb_blend_private_t * private_data;
+#endif
+};
+
 typedef void hb_error_handler_t( const char *errmsg );
 
 extern void hb_register_error_handler( hb_error_handler_t * handler );
@@ -1608,6 +1631,12 @@ int hb_yuv2rgb(int yuv);
 int hb_rgb2yuv(int rgb);
 int hb_rgb2yuv_bt709(int rgb);
 int hb_rgb2yuv_bt2020(int rgb);
+
+typedef int (*hb_csp_convert_f)(int);
+hb_csp_convert_f hb_get_rgb2yuv_function(int color_matrix);
+
+void hb_compute_chroma_smoothing_coefficient(unsigned chroma_coeffs[2][4],
+                                             int pix_fmt, int chroma_location);
 
 const char * hb_subsource_name( int source );
 

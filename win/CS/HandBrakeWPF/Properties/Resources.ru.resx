@@ -529,7 +529,7 @@ The Activity log may have further information.</value>
     <value>Изображения предпросмотра</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
+    <value>Невозможно удалить предыдущий файл предпросмотра. Возможно, в вашем медиаплеере все еще открыт предпросмотр. Пожалуйста, закройте это.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Вы должны сперва сканировать источник и установить кодирование, прежде чем создавать предпросмотр.</value>
@@ -897,7 +897,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Поворот:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Sharpen:</value>
+    <value>Резкость:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
     <value>Шаблон увеличения резкости</value>
@@ -972,7 +972,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Аудио</value>
   </data>
   <data name="MainView_AudioTrackCount" xml:space="preserve">
-    <value>Аудио-дорожки</value>
+    <value>Аудиодорожки</value>
   </data>
   <data name="MainView_Browser" xml:space="preserve">
     <value>Выбрать</value>
@@ -1124,14 +1124,8 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Метаданные</value>
   </data>
-  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Разрешить использовать кодировщики Nvidia NVENC</value>
-  </data>
-  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Разрешить использовать кодировщики Intel QuickSync</value>
-  </data>
-  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Разрешить использование кодировщиков AMD VCN</value>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Allow use of DirectX Decoding</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Выбранный формат файла включает в себя недопустимые символы. Они были убраны.</value>
@@ -1229,6 +1223,9 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>Минимальная длительность заголовка DVD и Blu-ray. Заголовки меньшей длительности будут пропущены:</value>
   </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Сохранять повторяющиеся заголовки на источниках Blu-ray (необходим перезапуск)</value>
+  </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>Расширение файла MP4:</value>
   </data>
@@ -1278,7 +1275,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Отправить файл в:</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>Менять регистр в Регистр Заголовка</value>
+    <value>Менять регистр в Регистр заголовка</value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
     <value>Обновления</value>
@@ -1414,7 +1411,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Экспортировать очередь</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>Output Filesize: </value>
+    <value>Размер выходного файла:</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
     <value>Гибернация</value>
@@ -1917,8 +1914,8 @@ You can drag/drop or enter the text above.</value>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Настройка деблокинга</value>
   </data>
-  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>Выбор кодировщика будет доступен на вкладке 'Видео'.</value>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake обнаружил несколько незаконченных файлов в очереди. Это связано с несколькими запущенными экземплярами HandBrake. Вы хотите восстановить все незавершенные задания?</value>
@@ -2323,7 +2320,7 @@ You can drag/drop or enter the text above.</value>
     <value>Предупреждать при объёме памяти менее:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart.</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Not Available)</value>
@@ -2818,5 +2815,107 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
     <value>Lossless encoding only.</value>
+  </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Hide Classic Menu</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Show Classic Menu</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Range Limits:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Limit the length of the titles added to the queue.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Enable Range Limits</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Start Later</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Queue Start Time:</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Shutting Down Encode ...</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Allow Upscaling</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimal Size</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Available on this system.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>Not available on this system.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Please wait ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Open Log Window</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Пользовательский</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>(Нет)</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Автоматически</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>Выкл</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>Пользовательский</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>Выкл</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>Выкл</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>Выкл</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>Пользовательский</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>Выкл</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
   </data>
 </root>

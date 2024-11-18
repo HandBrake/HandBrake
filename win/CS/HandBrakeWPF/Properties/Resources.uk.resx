@@ -201,13 +201,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>HandBrake вже кодує.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
+    <value>У черзі є завдання з однаковим шляхом призначення. Будь ласка, виберіть інший шлях для цього завдання.
  
-You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+Ви можете налаштувати параметри автоматичного іменування файлів у «Інструменти -&gt; Параметри -&gt; Вихідні файли»
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>Pending Jobs {0}</value>
+    <value>Завдань очікує {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
     <value>Встановлено новий набір за замовчуванням: {0}</value>
@@ -367,14 +367,14 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
     <value>Не знайдено дійсного джерела чи заголовків.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. This could be due to one of the following reasons:
+    <value>HandBrake не зможе кодувати вибране джерело, оскільки не знайдено дійсного джерела із заголовками для кодування. Це може бути пов'язано з однією з наступних причин:
 
-- The duration of each source title is below the "Minimum Title Duration" threshold option in 'Preferences &gt; Advanced'. 
-- The source file is not a valid video file or is in a format that HandBrake does not support.
-- You may not have read access to the file or another application may have a lock on the file. 
-- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
+- Тривалість кожного заголовку джерела менша за порогове значення «Мінімальна тривалість заголовку» у «Параметри &gt; Додатково». 
+- Вхідний файл не є дійсним відеофайлом або має формат, який HandBrake не підтримує.
+- Можливо, ви не маєте доступу на читання до файлу або інша програма заблокувала файл. 
+- Джерело може бути захищене від копіювання або містити DRM. Зверніть увагу, що HandBrake не підтримує зняття захисту від копіювання.
 
-The Activity log may have further information.</value>
+Журнал активності може містити додаткову інформацію.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>Черга {0}</value>
@@ -489,8 +489,8 @@ The Activity log may have further information.</value>
     <value>Черга призупинена</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Are you sure you want to delete the selected jobs?
-No encoded files will be deleted with this operation. </value>
+    <value>Ви впевнені, що хочете видалити вибрані завдання?
+Ця операція не призведе до видалення кодованих файлів.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Наразі це кодування триває. Якщо його видалити – кодування буде зупинено. Дійсно хочете продовжити?</value>
@@ -669,7 +669,7 @@ No encoded files will be deleted with this operation. </value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+Кодування 1 завдання</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Черга призупинена. Попередження: бракує місця на накопичувачі, який ви використовуєте для призначення кодування. Щоб продовжити, звільніть місце і натисніть почати. Також можете задати значення мінімальної кількості вільного місця в налаштуваннях.</value>
@@ -706,19 +706,19 @@ Encoding 1 Job</value>
     <value>Попередній перегляд ({0}% фактичного розміру)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake requires a 64bit version of Windows 10 or later to run.</value>
+    <value>Для роботи HandBrake потрібна 64-розрядна версія Windows 10 або новіша.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake requires Windows 10 or later to run. Version 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 and 8.x) were the last versions to support these older operating systems.</value>
+    <value>Для роботи HandBrake потрібна Windows 10 або новіша версія. Версії 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 і 8.x) були останніми версіями, що підтримували ці старіші операційні системи.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
     <value>Хочете спробувати додати решту?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>The file '{0}' already exists!
-Would you like to overwrite it?
+    <value>Файл '{0}' вже існує!
+Ви хочете його перезаписати?
 
-Hint: File overwrite behaviour can be controlled in preferences. </value>
+Підказка: Поведінкою перезапису файлів можна керувати у налаштуваннях.</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>На цю мить системний буфер обміну недоступний.</value>
@@ -1122,14 +1122,8 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Метадані</value>
   </data>
-  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Дозволити використання кодувальників Nvidia NVENC</value>
-  </data>
-  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Дозволити використання кодувальників Intel QuickSync</value>
-  </data>
-  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Дозволити використовувати кодувальники AMD VCN</value>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Дозволити використання декодування DirectX</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Введений формат файлу містив недійсні символи. Вони були видалені.</value>
@@ -1227,6 +1221,9 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>Мінімальна тривалість заголовка DVD та Blu-ray у секундах. Коротші заголовки будуть пропущені:</value>
   </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Зберігати дублікати заголовків на джерелах Blu-ray (Потребує перезапуску)</value>
+  </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>Розширення файлу MP4:</value>
   </data>
@@ -1252,10 +1249,10 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Рівень пріоритету роботи:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
+    <value>Надавати перевагу використанню Intel QuickSync для декодування відео, якщо використовується кодувальник QuickSync і апаратне забезпечення доступне для використання.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>Also use QuickSync decoding when not using a QuickSync encoder. (i.e. x265) </value>
+    <value>Також використовувати декодування QuickSync, якщо не використовується кодувальник QuickSync. (тобто x265) </value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Видаляти поширені розділові знаки</value>
@@ -1400,7 +1397,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Нічого не робити</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>Encode Duration:</value>
+    <value>Тривалість кодування:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
     <value>Змінити</value>
@@ -1412,7 +1409,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Експортувати чергу</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>Output Filesize: </value>
+    <value>Вихідний розмір файлу: </value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
     <value>Режим глибокого сну</value>
@@ -1640,7 +1637,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>зберігання</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Multi-Pass Encoding</value>
+    <value>Багатопрохідне кодування</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Середній бітрейт (кбіт/с):</value>
@@ -1685,7 +1682,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Якість: </value>
   </data>
   <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
-    <value>Turbo analysis pass</value>
+    <value>Швидкий прохід аналізу</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Змінна частота кадрів</value>
@@ -1916,8 +1913,8 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Настроювання Deblock</value>
   </data>
-  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>Вибір кодувальника буде доступний на вкладці «Відео».</value>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake виявив декілька незавершених файлів черги. Вони з декількох запущених екземплярів HandBrake. Хочете відновити всі незакінчені завдання?</value>
@@ -2135,7 +2132,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Діапазон порту повинна бути від 5000 до 32767</value>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>A new version is available!</value>
+    <value>Доступна нова версія!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2024 The HandBrake Team</value>
@@ -2323,7 +2320,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Значення, коли показуються сповіщення про брак дискового простору:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Зауважте: Це верхня межа одночасних завдань. Можуть вступати в дію апаратні обмеження, які знижують фактичну кількість одночасних завдань під час кодування. Налаштування набуде чинності лише при обробці наступного елементу черги, або перезапуску програми.</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Недоступно)</value>
@@ -2460,9 +2457,9 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Шукати оновлення?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>Before Updating:
-- Make sure there are no pending encodes in the queue. 
-- Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions.</value>
+    <value>Перед оновленням:
+- Переконайтеся, що у черзі немає завдань кодування. 
+- Зробіть резервну копію або запишіть всі створені вами набори, оскільки вони можуть бути не повністю сумісними з новими версіями.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
     <value>(Стандартний)</value>
@@ -2492,16 +2489,16 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Output Length:</value>
   </data>
   <data name="QueueView_MoveToBottom" xml:space="preserve">
-    <value>Move To Bottom</value>
+    <value>Перемістити в низ</value>
   </data>
   <data name="QueueView_MoveToTop" xml:space="preserve">
-    <value>Move To Top</value>
+    <value>Перемістити нагору</value>
   </data>
   <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
     <value>Вихідний бітрейт:</value>
   </data>
   <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
-    <value>Average Encoding Speed:</value>
+    <value>Середня швидкість кодування:</value>
   </data>
   <data name="QueueViewModel_DifferenceText" xml:space="preserve">
     <value> of source file</value>
@@ -2516,13 +2513,13 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Скинути</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
-    <value>Are you sure you wish to reset all built-in presets?</value>
+    <value>Ви впевнені, що хочете скинути всі вбудовані набори?</value>
   </data>
   <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
     <value>Скинути всі вбудовані набори HandBrake до стандартних:</value>
   </data>
   <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
-    <value>(User presets will not be reset)</value>
+    <value>(Користувацькі набори не буде скинуто)</value>
   </data>
   <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
     <value>Скинути всі налаштування HandBrake до стандартних:</value>
@@ -2537,20 +2534,20 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Floating Treeview</value>
   </data>
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
-    <value>Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player</value>
+    <value>Будь ласка, переконайтеся, що у вас налаштовані відповідні асоціації файлів у Windows, щоб мати змогу відкрити цей файл за допомогою підтримуваного відеопрогравача.</value>
   </data>
   <data name="QueueViewModel_ImportFail" xml:space="preserve">
     <value>Не вдалося прочитати файл черги.</value>
   </data>
   <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
-    <value>The file may be corrupted or from an earlier version of HandBrake. 
-Only queue files from the current version are supported.</value>
+    <value>Файл може бути пошкодженим або з старішої версії HandBrake. 
+Підтримуються лише файли черги з поточної версії.</value>
   </data>
   <data name="Notifications_EncodeDone" xml:space="preserve">
-    <value>Your HandBrake encode is done!</value>
+    <value>Ваше кодування HandBrake готове!</value>
   </data>
   <data name="Notifications_QueueDone" xml:space="preserve">
-    <value>Your HandBrake queue is done!</value>
+    <value>Ваша черга на HandBrake завершена!</value>
   </data>
   <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
     <value>Це також вимкне опції показу сповіщень на панелі завдань на вкладці "Після завершення". Увімкніть знову, якщо ви хочете знову активувати цю функцію.</value>
@@ -2766,13 +2763,13 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Move Down</value>
   </data>
   <data name="PresetPane_MoveToBottom" xml:space="preserve">
-    <value>Move to Bottom</value>
+    <value>Перемістити в низ</value>
   </data>
   <data name="PresetPane_MoveToTop" xml:space="preserve">
-    <value>Move to Top</value>
+    <value>Перемістити нагору</value>
   </data>
   <data name="PresetPane_MoveUp" xml:space="preserve">
-    <value>Move Up</value>
+    <value>Перемістити вище</value>
   </data>
   <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
     <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
@@ -2845,5 +2842,80 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
     <value>Queue Start Time:</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Shutting Down Encode ...</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Allow Upscaling</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimal Size</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Available on this system.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>Not available on this system.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Please wait ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Open Log Window</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Власне</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>Немає</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Автоматично</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>Вимкнено</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>Власне</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>Стандартно</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>Вимкнено</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>Вимкнено</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>Вимкнено</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>Стандартно</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>Власне</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>Вимкнено</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
   </data>
 </root>

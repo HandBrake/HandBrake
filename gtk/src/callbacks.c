@@ -455,7 +455,8 @@ static GhbBinding widget_bindings[] =
     {"CustomTmpEnable", "active", NULL, "CustomTmpDir", "sensitive"},
     {"PresetCategory", "active-id", "new", "PresetCategoryName", "visible"},
     {"PresetCategory", "active-id", "new", "PresetCategoryEntryLabel", "visible"},
-    {"DiskFreeCheck", "active", NULL, "DiskFreeLimitGB", "sensitive"}
+    {"DiskFreeCheck", "active", NULL, "DiskFreeLimitGB", "sensitive"},
+    {"LimitMaxDuration", "active", NULL, "MaxTitleDuration", "sensitive"}
 };
 
 void
@@ -1493,8 +1494,10 @@ start_scan (signal_user_data_t *ud, const char *path, int title_id, int preview_
     gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
     widget = ghb_builder_widget("sourcetoolmenubutton");
     gtk_widget_set_sensitive(widget, false);
+    gboolean limit_max_duration = ghb_dict_get_bool(ud->prefs, "LimitMaxDuration");
     ghb_backend_scan(path, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"),
+            limit_max_duration ? 90000L * ghb_dict_get_int(ud->prefs, "MaxTitleDuration") : 0,
             ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
 }
 
@@ -1514,8 +1517,10 @@ start_scan_list (signal_user_data_t *ud, GListModel *files, int title_id, int pr
     gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
     widget = ghb_builder_widget("sourcetoolmenubutton");
     gtk_widget_set_sensitive(widget, false);
+    gboolean limit_max_duration = ghb_dict_get_bool(ud->prefs, "LimitMaxDuration");
     ghb_backend_scan_list(files, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"),
+            limit_max_duration ? 90000L * ghb_dict_get_int(ud->prefs, "MaxTitleDuration") : 0,
             ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
 }
 
@@ -3932,13 +3937,12 @@ ghb_countdown_dialog_show (const gchar *message, const gchar *action,
     gtk_widget_show(dialog);
 }
 
-gboolean
-ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
-                         const char *accept_button, const char *cancel_button,
-                         const char *title, const char *format, ...)
+G_GNUC_PRINTF(6, 0) static GtkMessageDialog *
+question_dialog_va (GtkWindow *parent, GhbActionStyle accept_style,
+                    const char *accept_button, const char *cancel_button,
+                    const char *title, const char *format, va_list va_args)
 {
     GtkWidget *dialog, *button;
-    GtkResponseType response;
 
     if (parent == NULL)
     {
@@ -3952,12 +3956,9 @@ ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
                                     "%s", title);
     if (format)
     {
-        va_list args;
         char *message;
 
-        va_start(args, format);
-        message = g_strdup_vprintf(format, args);
-        va_end(args);
+        message = g_strdup_vprintf(format, va_args);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
         g_free(message);
     }
@@ -3984,6 +3985,39 @@ ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
             break;
         }
     }
+    return GTK_MESSAGE_DIALOG(dialog);
+}
+
+GtkMessageDialog *
+ghb_question_dialog_new (GtkWindow *parent, GhbActionStyle accept_style,
+                         const char *accept_button, const char *cancel_button,
+                         const char *title, const char *format, ...)
+{
+    va_list args;
+    GtkMessageDialog *dialog;
+
+    va_start(args, format);
+    dialog = question_dialog_va(parent, accept_style, accept_button,
+                                cancel_button, title, format, args);
+    va_end(args);
+
+    return dialog;
+}
+
+gboolean
+ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
+                         const char *accept_button, const char *cancel_button,
+                         const char *title, const char *format, ...)
+{
+    va_list args;
+    GtkMessageDialog *dialog;
+    GtkResponseType response;
+
+    va_start(args, format);
+    dialog = question_dialog_va(parent, accept_style, accept_button,
+                                cancel_button, title, format, args);
+    va_end(args);
+
     response = ghb_dialog_run(GTK_DIALOG(dialog));
     gtk_window_destroy(GTK_WINDOW(dialog));
     if (response == GTK_RESPONSE_ACCEPT)
@@ -4648,7 +4682,7 @@ ghb_backend_events(signal_user_data_t *ud)
         if (ghb_dict_get_bool(ud->prefs, "RemoveFinishedJobs") &&
             status.queue.error == GHB_ERROR_NONE)
         {
-            ghb_queue_remove_row(ud, index);
+            ghb_queue_remove_row_at_index(index);
         }
         if (ghb_get_cancel_status() != GHB_CANCEL_ALL &&
             ghb_get_cancel_status() != GHB_CANCEL_FINISH)
@@ -5662,14 +5696,4 @@ log_directory_action_cb (GSimpleAction *action, GVariant *param, signal_user_dat
         return;
 
     ghb_browse_uri(uri);
-}
-
-G_MODULE_EXPORT void
-string_list_changed_cb (GtkStringList *self, guint position,
-                        guint removed, guint added, gpointer user_data)
-{
-    for (int i = 0; i < g_list_model_get_n_items(G_LIST_MODEL(self)); i++)
-    {
-         printf("String: %s\n", gtk_string_list_get_string(self, i));
-    }
 }

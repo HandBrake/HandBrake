@@ -2204,7 +2204,7 @@ msgstr "Bitrate: %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
+msgid "<small>Passthru</small>"
 msgstr "<small>Passthru</small>"
 
 #: src/audiohandler.c:790
@@ -2489,7 +2489,7 @@ msgstr "Breche aktuelle Aufgabe ab, starte nächsten"
 
 #: src/callbacks.c:4100
 msgid "Finish Current and Stop"
-msgstr "Momentanes fertigstellen, starte nächste"
+msgstr "Momentanes fertigstellen und stoppen"
 
 #: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
 msgid "Continue Encoding"
@@ -3541,8 +3541,8 @@ msgid "Burned Into Video"
 msgstr "In Video gebrannt"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
-msgstr "Durchschleifen"
+msgid "Passthru"
+msgstr "Passthru"
 
 #: src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"

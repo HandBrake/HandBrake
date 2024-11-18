@@ -2148,8 +2148,8 @@ msgstr "Taxa de bits: %.4g kbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
-msgstr "<small>Pas directe (passthrough)</small>"
+msgid "<small>Passthru</small>"
+msgstr ""
 
 #: src/audiohandler.c:790
 #, c-format
@@ -3478,8 +3478,8 @@ msgid "Burned Into Video"
 msgstr "Enregistrat al vídeo"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
-msgstr "Pas directe (passthrough)"
+msgid "Passthru"
+msgstr ""
 
 #: src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"

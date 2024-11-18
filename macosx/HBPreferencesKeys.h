@@ -35,12 +35,17 @@ extern NSString * const HBAutoNamingISODateFormat;
 extern NSString * const HBDefaultMpegExtension;
 
 extern NSString * const HBCqSliderFractional;
-extern NSString * const HBUseDvdNav;
 extern NSString * const HBUseHardwareDecoder;
 extern NSString * const HBAlwaysUseHardwareDecoder;
-extern NSString * const HBMinTitleScanSeconds;
+
 extern NSString * const HBPreviewsNumber;
+
+extern NSString * const HBMinTitleScan;
+extern NSString * const HBMinTitleScanSeconds;
+extern NSString * const HBMaxTitleScan;
+extern NSString * const HBMaxTitleScanSeconds;
 extern NSString * const HBKeepDuplicateTitles;
+extern NSString * const HBUseDvdNav;
 
 extern NSString * const HBLoggingLevel;
 extern NSString * const HBEncodeLogLocation;

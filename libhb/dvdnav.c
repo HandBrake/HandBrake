@@ -23,7 +23,7 @@
 static char        * hb_dvdnav_name( char * path );
 static hb_dvd_t    * hb_dvdnav_init( hb_handle_t * h, const char * path );
 static int           hb_dvdnav_title_count( hb_dvd_t * d );
-static hb_title_t  * hb_dvdnav_title_scan( hb_dvd_t * d, int t, uint64_t min_duration );
+static hb_title_t  * hb_dvdnav_title_scan( hb_dvd_t * d, int t, uint64_t min_duration, uint64_t max_duration );
 static int           hb_dvdnav_start( hb_dvd_t * d, hb_title_t *title, int chapter );
 static void          hb_dvdnav_stop( hb_dvd_t * d );
 static int           hb_dvdnav_seek( hb_dvd_t * d, float f );
@@ -437,7 +437,7 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
 /***********************************************************************
  * hb_dvdnav_title_scan
  **********************************************************************/
-static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_duration )
+static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_duration, uint64_t max_duration )
 {
 
     hb_dvdnav_t      * d = &(e->dvdnav);
@@ -534,6 +534,12 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     if (title->duration < min_duration)
     {
         hb_log( "scan: ignoring title (too short)" );
+        goto fail;
+    }
+    
+    if (max_duration > 0 && title->duration > max_duration )
+    {
+        hb_log( "scan: ignoring title (too long)" );
         goto fail;
     }
 

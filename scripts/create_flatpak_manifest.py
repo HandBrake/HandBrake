@@ -79,9 +79,9 @@ class FlatpakManifest:
         if nvenc:
             self.hbconfig.append("--enable-nvenc");
             self.hbconfig.append("--enable-nvdec");
-            self.extensions += ['org.freedesktop.Sdk.Extension.llvm16'];
-            self.build_path += ['/usr/lib/sdk/llvm16/bin'];
-            self.ld_path    += ['/usr/lib/sdk/llvm16/lib'];
+            self.extensions += ['org.freedesktop.Sdk.Extension.llvm18'];
+            self.build_path += ['/usr/lib/sdk/llvm18/bin'];
+            self.ld_path    += ['/usr/lib/sdk/llvm18/lib'];
 
         if vcn:
             self.hbconfig.append("--enable-vce");

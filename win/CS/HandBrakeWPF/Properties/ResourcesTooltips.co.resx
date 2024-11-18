@@ -559,4 +559,7 @@ U flussu binariu cambierà d’una fonte à l’altra.</value>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>Lancia u situ web di documentazione à l’indirizzu https://handbrake.fr/docs</value>
   </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
 </root>

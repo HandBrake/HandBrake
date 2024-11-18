@@ -1,6 +1,3 @@
-/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "0HY-xB-cvO"; */
-"0HY-xB-cvO.ibShadowedToolTip" = "Увімкніть, якщо ваш пристрій підтримує відтворення FLAC. Це дозволить вибрати FLAC, коли увімкнено автоматичний вибір.";
-
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
 "0kT-0J-3k2.headerCell.title" = "Мікшування";
 
@@ -70,6 +67,9 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "E93-Md-aWa"; */
 "E93-Md-aWa.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує DTS. Це дозволяє обирати передачу сигналу в DTS, якщо увімкнено автоматичний вибір передачі сигналу.";
 
+/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "eA6-za-Up0"; */
+"eA6-za-Up0.title" = "Opus";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fgl-Ev-ELt"; */
 "fgl-Ev-ELt.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує AC3. Це дозволяє обирати передачу сигналу в AC3, якщо увімкнено автоматичний вибір передачі сигналу.";
 
@@ -84,6 +84,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
 "GHJ-25-kZl.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує MP2. Це дозволяє обирати передачу сигналу в MP2, якщо увімкнено автоматичний вибір передачі сигналу.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "gOm-E9-8K7"; */
+"gOm-E9-8K7.ibShadowedToolTip" = "Увімкніть, якщо ваш пристрій підтримує відтворення FLAC. Це дозволить вибрати FLAC, коли увімкнено автоматичний вибір.";
 
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
 "GZP-q7-SYy.title" = "Усі Відповідні До Обраних Мов";
@@ -136,9 +139,6 @@
 /* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "N7h-CJ-quV"; */
 "N7h-CJ-quV.headerCell.title" = "Підсилення";
 
-/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "naS-No-CdV"; */
-"naS-No-CdV.title" = "FLAC";
-
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
 "oiD-QI-wly.ibShadowedToolTip" = "Поведінка Вибору Доріжки\n\nВідсутня не буде обирати жодного аудіо треку за замовчуванням.\n\nНайперша Відповідна До Обраних Мов додає найпершу звукову доріжку, що відповідає кожній з вибраних мов, які є у джерелі.\n\nУсі Відповідні До Обраних Мов додає всі звукові доріжки, що відповідають кожній з вибраних мов, які є у джерелі.";
 
@@ -154,6 +154,9 @@
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
 "OVr-Jm-VrK.title" = "0";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "OWh-gZ-JcF"; */
+"OWh-gZ-JcF.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує Opus. Це дозволяє вибирати пряму передачу Opus, коли включено автоматичний вибір прямої передачі.";
+
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Кодек";
 
@@ -163,14 +166,14 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibShadowedToolTip" = "Частота дискретизації аудіо в кілогерцах (кГц). Рекомендується опція 'Авто'.";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "Ry1-gA-ns4"; */
-"Ry1-gA-ns4.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує Opus. Це дозволяє вибирати пряму передачу Opus, коли включено автоматичний вибір прямої передачі.";
-
 /* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
 "s6s-EH-5CB.title" = "Автоматичне Passthru:";
 
 /* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
 "sdZ-Rx-JoG.title" = "MP3";
+
+/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "sJU-xA-Jo1"; */
+"sJU-xA-Jo1.title" = "FLAC";
 
 /* Class = "NSButtonCell"; title = "E-AC3"; ObjectID = "u9h-dn-wcK"; */
 "u9h-dn-wcK.title" = "E-AC3";
@@ -192,9 +195,6 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
 "vUx-OV-W5T.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує MP3. Це дозволяє обирати передачу сигналу в MP3, якщо увімкнено автоматичний вибір передачі сигналу.";
-
-/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "wAh-LS-JzG"; */
-"wAh-LS-JzG.title" = "Opus";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Table View Cell";

@@ -2030,9 +2030,10 @@ preset_category_opts_set(signal_user_data_t *ud, const char *opt_name,
         const char * name;
         hb_value_t * folder = hb_value_array_get(presets, ii);
 
-        if (!hb_value_get_bool(hb_dict_get(folder, "Folder")))
+        if (!hb_value_get_bool(hb_dict_get(folder, "Folder")) ||
+            hb_value_get_int(hb_dict_get(folder, "Type")) != 1)
         {
-            // Only list folders
+            // Only list custom folders
             continue;
         }
 
@@ -3545,11 +3546,11 @@ get_path_list(GListModel *files)
 }
 
 void
-ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uint64_t min_duration, gboolean keep_duplicate_titles)
+ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uint64_t min_duration, uint64_t max_duration, gboolean keep_duplicate_titles)
 {
     hb_list_t *path_list = get_path_list(files);
     hb_list_t *extensions = ghb_get_excluded_extensions_list();
-    hb_scan(h_scan, path_list, titleindex, preview_count, 1, min_duration,
+    hb_scan(h_scan, path_list, titleindex, preview_count, 1, min_duration, max_duration,
                  0, 0, extensions, 0, keep_duplicate_titles);
     ghb_free_list(path_list);
     ghb_free_list(extensions);
@@ -3564,12 +3565,12 @@ ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uin
 }
 
 void
-ghb_backend_scan (const char *path, int titleindex, int preview_count, uint64_t min_duration, gboolean keep_duplicate_titles)
+ghb_backend_scan (const char *path, int titleindex, int preview_count, uint64_t min_duration, uint64_t max_duration, gboolean keep_duplicate_titles)
 {
     hb_list_t *path_list = hb_list_init();
     hb_list_add(path_list, (void *)path);
     hb_list_t *extensions = ghb_get_excluded_extensions_list();
-    hb_scan(h_scan, path_list, titleindex, preview_count, 1, min_duration,
+    hb_scan(h_scan, path_list, titleindex, preview_count, 1, min_duration, max_duration,
                  0, 0, extensions, 0, keep_duplicate_titles);
     hb_list_close(&path_list);
     ghb_free_list(extensions);
