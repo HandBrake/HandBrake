@@ -1553,6 +1553,8 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
         return err;
     }
 
+    hb_log("encvt_Init: starting pass with time ranges: %ld", pv->timeRangeCount);
+
     err = VTCompressionSessionBeginPass(pv->session, kVTCompressionSessionBeginFinalPass, 0);
 
     if (err != noErr)
