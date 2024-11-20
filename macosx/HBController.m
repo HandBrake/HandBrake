@@ -754,8 +754,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
              self.destinationFolderToken = [HBSecurityAccessToken tokenWithAlreadyAccessedObject:panel.URL];
              if (self.job)
              {
-                 [self.job setDestinationFolderURL:self.destinationFolderURL
-                                      sameAsSource:[NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination]];
+                 [self.job setDestinationFolderURL:self.destinationFolderURL sameAsSource:YES];
                  [self.window.undoManager removeAllActions];
              }
          }
@@ -779,7 +778,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
         if (isDirectory.boolValue == YES)
         {
-            self.destinationFolderURL = sourceURL;
+            [self.job setDestinationFolderURL:self.destinationFolderURL sameAsSource:YES];
             self.destinationFolderToken = [HBSecurityAccessToken tokenWithObject:sourceURL];
             return;
         }
@@ -788,9 +787,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     if (![self.destinationFolderURL isEqualTo:destinationURLs.firstObject])
     {
 #ifdef __SANDBOX_ENABLED__
-            [self showOpenPanelForDestination:destinationURLs.firstObject];
+        [self showOpenPanelForDestination:destinationURLs.firstObject];
 #else
-            self.destinationFolderURL = destinationURLs.firstObject;
+        [self.job setDestinationFolderURL:destinationURLs.firstObject sameAsSource:YES];
 #endif
     }
 }
