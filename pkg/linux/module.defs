@@ -131,6 +131,11 @@ ifeq (1,$(FEATURE.qsv))
 endif
 
 PKG.plugins.flatpak = $(PKG.mediasdk.flatpak)
+ifneq (,$(shell flatpak run org.flatpak.Builder --version))
+	FLATPAK_BUILDER.exe = flatpak run org.flatpak.Builder
+else
+	FLATPAK_BUILDER.exe = flatpak-builder
+endif
 
 ifneq ($(HB_URL),)
 ifneq ($(HB_SHA256),)

@@ -81,7 +81,7 @@ $(PKG.gui.flatpak): GNUmakefile $(PKG.gui.template.flatpak) $(PKG.src.tar.bz2)
 	$(MKDIR.exe) -p $(STAGE.out.flatpak/)
 	$(MKDIR.exe) -p $(PKG.out.flatpak/)
 	$(SRC/)scripts/create_flatpak_manifest.py $(FPFLAGS) -a "$(abspath $(PKG.src.tar.bz2))" -t $(PKG.gui.template.flatpak) $(foreach m,$(CONTRIBS),-c "$(abspath $(CONTRIB.download/)$($m.FETCH.basename))") $(PKG.gui.manifest.flatpak)
-	flatpak-builder --default-branch=$(PKG.branch.flatpak) --disable-cache --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.gui.build.flatpak) $(PKG.gui.manifest.flatpak)
+	$(FLATPAK_BUILDER.exe) --default-branch=$(PKG.branch.flatpak) --disable-cache --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.gui.build.flatpak) $(PKG.gui.manifest.flatpak)
 	flatpak build-bundle $(PKG.repo.flatpak) $(PKG.gui.flatpak) $(PKG.gui.name.flatpak) $(PKG.branch.flatpak) --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
 
 $(PKG.gui.debug.flatpak): $(PKG.gui.flatpak)
@@ -92,7 +92,7 @@ $(PKG.cli.flatpak): GNUmakefile $(PKG.cli.template.flatpak) $(PKG.src.tar.bz2)
 	$(MKDIR.exe) -p $(STAGE.out.flatpak/)
 	$(MKDIR.exe) -p $(PKG.out.flatpak/)
 	$(SRC/)scripts/create_flatpak_manifest.py $(FPFLAGS) -a "$(abspath $(PKG.src.tar.bz2))" -t $(PKG.cli.template.flatpak) $(foreach m,$(CONTRIBS),-c "$(abspath $(CONTRIB.download/)$($m.FETCH.basename))") $(PKG.cli.manifest.flatpak)
-	flatpak-builder --default-branch=$(PKG.branch.flatpak) --disable-cache --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.cli.build.flatpak) $(PKG.cli.manifest.flatpak)
+	$(FLATPAK_BUILDER.exe) --default-branch=$(PKG.branch.flatpak) --disable-cache --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.cli.build.flatpak) $(PKG.cli.manifest.flatpak)
 	flatpak build-bundle $(PKG.repo.flatpak) $(PKG.cli.flatpak) $(PKG.cli.name.flatpak) $(PKG.branch.flatpak) --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
 
 $(PKG.cli.debug.flatpak): $(PKG.cli.flatpak)
@@ -106,7 +106,7 @@ $(PKG.mediasdk.flatpak): GNUmakefile $(PKG.mediasdk.template.flatpak) $(PKG.gui.
 	flatpak --user install --noninteractive $(PKG.gui.flatpak)
 	$(CP.exe) $(PKG.mediasdk.metainfo.flatpak) $(STAGE.out.flatpak/)
 	$(CP.exe) $(PKG.mediasdk.patch.flatpak) $(STAGE.out.flatpak/)
-	flatpak-builder --default-branch=$(PKG.branch.flatpak) --disable-cache --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.mediasdk.build.flatpak) $(PKG.mediasdk.manifest.flatpak)
+	$(FLATPAK_BUILDER.exe) --default-branch=$(PKG.branch.flatpak) --disable-cache --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.mediasdk.build.flatpak) $(PKG.mediasdk.manifest.flatpak)
 	flatpak build-bundle --runtime $(PKG.repo.flatpak) $(PKG.mediasdk.flatpak) $(PKG.mediasdk.name.flatpak) $(PKG.plugin.version.flatpak) --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
 	-flatpak --user remove --noninteractive $(PKG.gui.name.flatpak)//$(PKG.branch.flatpak)
 
