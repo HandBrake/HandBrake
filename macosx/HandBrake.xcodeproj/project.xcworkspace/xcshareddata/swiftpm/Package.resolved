@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/HandBrake/Sparkle",
       "state" : {
-        "revision" : "051133b6b234eb03f7e3e89718befa80b2b8bb9c",
-        "version" : "2.6.1-handbrake"
+        "revision" : "56908a629ed4f5ab81dac286c2791b6594d18613",
+        "version" : "2.6.4-handbrake"
       }
     }
   ],

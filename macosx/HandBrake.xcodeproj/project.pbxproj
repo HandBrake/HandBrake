@@ -2259,7 +2259,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = HB;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1610;
 				ORGANIZATIONNAME = HandBrake;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
@@ -5710,7 +5710,7 @@
 			repositoryURL = "https://github.com/HandBrake/Sparkle";
 			requirement = {
 				kind = exactVersion;
-				version = "2.6.1-handbrake";
+				version = "2.6.4-handbrake";
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
