@@ -1123,7 +1123,7 @@ Suggestion : Le comportement d'écrasement peut être réglé depuis les préfé
     <value>Métadonnées</value>
   </data>
   <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
-    <value>Allow use of DirectX Decoding</value>
+    <value>Autorisation du décodage DirectX</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Le format de fichier entré contient des caractères non valides. Ceux-ci ont été supprimés.</value>
@@ -1222,7 +1222,7 @@ Suggestion : Le comportement d'écrasement peut être réglé depuis les préfé
     <value>Durée minimale des titres DVD et Blu-ray en secondes. Les titres les plus courts seront ignorés :</value>
   </data>
   <data name="Options_KeepDuplicateTitles" xml:space="preserve">
-    <value>Keep duplicate titles on Blu-ray sources (Requires Restart)</value>
+    <value>Garder les titres en doublon sur les Blu-ray (Nécessite un redémarrage)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>Extension de fichier MP4 :</value>
@@ -1914,7 +1914,7 @@ Vous pouvez glisser/déposer ou entrer le texte ci-dessus.</value>
     <value>Réglage de l'anti-blocs</value>
   </data>
   <data name="OptionsView_EncodeNotes" xml:space="preserve">
-    <value>Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown.</value>
+    <value>Note: tous les encodeurs matériel n'ont pas forcément des réglages supplémentaires. Tous les encodeurs matériel disponibles et supportés sur ce système seront sélectionnable dans l'onglet Vidéo, dans la liste déroulante de choix d'encodeur vidéo.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake a détecté plusieurs fichiers de file d'attente inachevés. Ceux-ci proviennent de plusieurs instances d'HandBrake. Souhaitez-vous récupérer tous les tâches inachevées ?</value>
@@ -2320,7 +2320,7 @@ Veuillez choisir un autre préréglage.</value>
     <value>Niveau auquel les alertes de faible espace disque s'affichent :</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
+    <value>Information : Il s'agit de la limite supérieure de tâches simultanées. Des limitations matérielles peuvent s'appliquer, ce qui réduit alors le nombre effectif de tâches simultanées durant l'encodage. Ce paramètre ne prendra effet qu'à partir de la prochaine file d'attente ou au redémarrage de l'application.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Non disponible)</value>
@@ -2826,46 +2826,46 @@ Afin d'autoriser les encodages simultanés, activez l'option "Isolement des Proc
     <value>(Avertissement: Pilotes Non Compatible Détectés - Mise à jour Conseillée)</value>
   </data>
   <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
-    <value>Range Limits:</value>
+    <value>Limites de la plage:</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
-    <value>Limit the length of the titles added to the queue.</value>
+    <value>Limiter la longueur des titres ajoutés à la file d'attente.</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
-    <value>Enable Range Limits</value>
+    <value>Activer les limites de la plage</value>
   </data>
   <data name="AddToQueue_RangeLimitError" xml:space="preserve">
-    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+    <value>Certains titres n'ont pas pu être ajoutés à la file d'attente parce qu'ils se trouvaient en dehors des limites de la plage sélectionnée.</value>
   </data>
   <data name="QueueView_StartAtTime" xml:space="preserve">
-    <value>Start Later</value>
+    <value>Commencer plus tard</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>Queue Start Time:</value>
+    <value>Heure de début de la file d'attente :</value>
   </data>
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
-    <value>Shutting Down Encode ...</value>
+    <value>Arrêt de l'encodage...</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>Allow Upscaling</value>
+    <value>Permettre l'extrapolation</value>
   </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
-    <value>Optimal Size</value>
+    <value>Taille optimale</value>
   </data>
   <data name="OptionsView_Available" xml:space="preserve">
-    <value>Available on this system.</value>
+    <value>Disponible sur ce système.</value>
   </data>
   <data name="OptionsView_NotAvailable" xml:space="preserve">
-    <value>Not available on this system.</value>
+    <value>Non disponible sur ce système.</value>
   </data>
   <data name="MainView_ScanningStatus" xml:space="preserve">
-    <value>Please wait ...</value>
+    <value>Merci de patienter...</value>
   </data>
   <data name="MainView_Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
   <data name="MainView_OpenLog" xml:space="preserve">
-    <value>Open Log Window</value>
+    <value>Ouvrir la fenêtre du journal</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value/>
@@ -2916,6 +2916,6 @@ Afin d'autoriser les encodages simultanés, activez l'option "Isolement des Proc
     <value>Désactivé</value>
   </data>
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
-    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
+    <value>Durée maximale des titres DVD et Blu-ray en secondes. Les titres plus longs seront ignorés :</value>
   </data>
 </root>

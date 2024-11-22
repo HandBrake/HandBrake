@@ -1909,7 +1909,7 @@ You can drag/drop or enter the text above.</value>
     <value>Добавлять число</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>Шаблон деблокинга</value>
+    <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Настройка деблокинга</value>

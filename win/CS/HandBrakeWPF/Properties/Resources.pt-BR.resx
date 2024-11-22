@@ -2318,7 +2318,7 @@ Por favor, escolha uma predefinição diferente.</value>
     <value>O nível onde os alertas de pouco espaço em disco serão mostrados:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
+    <value>Observação: Esse é o limite máximo de trabalhos simultâneos. Podem ocorrer limitações de hardware que reduzam a quantidade real de trabalhos simultâneos durante a codificação. A configuração só terá efeito no próximo lote da fila ou na reinicialização do aplicativo.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Não está Disponível)</value>
@@ -2821,34 +2821,34 @@ Para permitir várias codificações simultâneas, ative o "Isolamento do proces
     <value>Mostrar o Menu Classico</value>
   </data>
   <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
-    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+    <value>(Aviso: foi detectado um driver não compatível - recomendamos uma atualização)</value>
   </data>
   <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
-    <value>Range Limits:</value>
+    <value>Limite:</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
-    <value>Limit the length of the titles added to the queue.</value>
+    <value>Limitar o tamanho dos títulos adicionados à fila.</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
-    <value>Enable Range Limits</value>
+    <value>Ativar limites</value>
   </data>
   <data name="AddToQueue_RangeLimitError" xml:space="preserve">
-    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+    <value>Alguns títulos não puderam ser adicionados à fila por estarem fora dos limites selecionados.</value>
   </data>
   <data name="QueueView_StartAtTime" xml:space="preserve">
     <value>Começar Depois</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>Queue Start Time:</value>
+    <value>Tempo de início da fila:</value>
   </data>
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
     <value>Encerrando codificação ...</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>Allow Upscaling</value>
+    <value>Permitir aumento da resolução</value>
   </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
-    <value>Optimal Size</value>
+    <value>Tamanho Ideal</value>
   </data>
   <data name="OptionsView_Available" xml:space="preserve">
     <value>Disponivel neste sistema.</value>
@@ -2857,13 +2857,13 @@ Para permitir várias codificações simultâneas, ative o "Isolamento do proces
     <value>Indisponivel neste sistema.</value>
   </data>
   <data name="MainView_ScanningStatus" xml:space="preserve">
-    <value>Please wait ...</value>
+    <value>Aguarde ...</value>
   </data>
   <data name="MainView_Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
   <data name="MainView_OpenLog" xml:space="preserve">
-    <value>Open Log Window</value>
+    <value>Abrir a janela de registros</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value/>
@@ -2914,6 +2914,6 @@ Para permitir várias codificações simultâneas, ative o "Isolamento do proces
     <value>Desligado</value>
   </data>
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
-    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
+    <value>Duração máxima dos títulos de DVD e Blu-ray em segundos. Os títulos mais longos serão ignorados:</value>
   </data>
 </root>

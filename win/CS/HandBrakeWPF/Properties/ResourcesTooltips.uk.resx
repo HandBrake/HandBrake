@@ -141,7 +141,7 @@ HQDN3D – адаптивний низькочастотний фільтр. В�
     <value>Зворотна телекінопроекція (detelecine) видаляє ефекти «гребінки», які є результатом кінопроекції, процесу перетворення частоти кадрів фільму в частоту кадрів телебачення.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Grayscale removes the color component of the video. Often referred to as Black &amp; White video.</value>
+    <value>Відтінки сірого видаляють кольорову складову відео. Часто згадується як чорно-біле відео.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>Шлях призначення, включаючи назву каталогу та файлу. Тут буде створено ваше нове відео з вказаною назвою.</value>
@@ -291,14 +291,12 @@ Custom (Власне) дозволяє вручну встановлювати �
 Ці кодувальники не мають режиму без втрат.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>Під час аналізу багатопрохідного коду використовуйте налаштування, які прискорюють роботу.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>Виконати багатопрохідне кодування.
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+Опція «Бітрейт» є обов'язковою. Під час проходів аналізу збирається статистика про відео. Потім під час останнього проходу ця статистика використовується для прийняття рішень щодо розподілу бітрейту.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Вмикає змінну частоту кадрів (variable framerate, VFR) для виводу.
@@ -329,9 +327,9 @@ VFR не сумісний з деякими програвачами.</value>
     <value>Вилучити вибраний набір.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+    <value>Деякі джерела можуть містити більше одного відеокліпу або колекцію епізодів. Джерела Blu-ray та DVD часто містять декілька титрів.
 
-If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank.</value>
+Якщо ви знаєте, яку саме назву ви хочете закодувати, ви можете ввести її тут, і HandBrake просканує лише цю назву, а не всі назви у вихідному файлі. В іншому випадку залиште поле порожнім.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Власні параметри усунення шумів.
@@ -365,22 +363,22 @@ If you know the specific title you wish to encode you can enter it here and Hand
 - Sprite (спрайт) корисний для 1-/4-/8-/16-бітних 2D-ігор. Sprite не призначений для відео високої чіткості.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace removes comb artifacts from the picture.
+    <value>Деінтерлейс видаляє артефакти гребінця з зображення.
 
-Bwdif and Yadif are two popular and fast deinterlacers.
+Bwdif та Yadif - два популярні та швидкі деінтерлейсери.
 
-Decomb switches between multiple interpolation algorithms for speed and quality.</value>
+Decomb перемикається між кількома алгоритмами інтерполяції для швидкості та якості.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Custom Deinterlace parameters.
- 
- Bwdif and Yadif syntax: mode=m:parity=p
- 
- Bwdif and Yadif default: mode=3
- 
- Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
- 
- Decomb default: mode=7</value>
+    <value>Користувацькі параметри Deinterlace.
+
+Синтаксис Bwdif та Yadif: mode=m:parity=p
+
+Bwdif та Yadif за замовчуванням: mode=3
+
+Синтаксис Decomb: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Декомб за замовчуванням: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>Набір фільтрів деінтерлейсингу.
@@ -437,19 +435,19 @@ Lapsharp збільшує різкість за допомогою ядер зг
     <value>Попередньо встановлений фільтр збільшення різкості. Встановлює потужність фільтра.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+    <value>Налаштування різкості. Додатково налаштовує попередньо встановлений параметр «Різкість» для оптимізації налаштувань для певних сценаріїв.
 
-None uses the default preset settings.
+У жодному з них не використовуються стандартні налаштування.
 
-Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+Unsharp можна налаштувати для надтонкого, тонкого, середнього, грубого або дуже грубого підвищення різкості. Виберіть один із цих режимів залежно від роздільної здатності вихідного зображення та чіткості деталей, які потрібно покращити.
 
-Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
+Налаштування «Фільм» від Lapsharp покращує налаштування для використання з більшістю матеріалів, що знімаються в реальному часі. Фільм використовує ізотропне ядро Лапласа для однакового підвищення різкості всіх країв, а дані про яскравість (освітленість) підвищуються більше, ніж дані про кольоровість (насиченість).
 
-Lapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.
+Lapsharp's Grain (Зернистість) схожий на Film (Плівка), але використовує ізотропний лапласіан ядра Гаусса, щоб зменшити вплив на шум і зернистість. Корисний для збереження зернистості та як загальна альтернатива тембру Film.
 
-Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
+Мелодія Lapsharp's Animation корисна для анімації, наприклад, аніме та мультфільмів. Анімація ідентична фільму, але загальна сила зменшена, щоб уникнути створення артефактів.
 
-Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</value>
+Мелодія Sprite від Lapsharp корисна для 1-/4-/8-/16-бітних двовимірних ігор. Sprite використовує 4-сусіднє ядро Laplacian, яке покращує вертикальні та горизонтальні краї більше, ніж діагональні.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
     <value>Вирівнює початкові часові позначки всіх аудіо та відеопотоків, вставляючи порожні або пропускаючи кадри. Може покращити синхронізацію аудіо/відео для зламаних плеєрів, які не шанують списки редагування MP4.</value>
@@ -471,17 +469,17 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
     <value>Фільтр колірного простору (colourspace)</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth Filter</value>
+    <value>Фільтр згладжування кольоровості</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
     <value>Це поле може приймати значення RGB, такі як: "0xFF0000" або назви кольорів, такі як "red" (червоний). Повний перелік назв кольорів дивіться у документації фільтру.</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Burn in subtitles to the video stream.
+    <value>Записати субтитри до відеопотоку.
 
-Note, this will be automatically selected if the source subtitle track format is not supported in the output file type.
+Зауважте, що цей параметр буде вибрано автоматично, якщо формат вихідної доріжки субтитрів не підтримується типом вихідного файлу.
 
-For example, PGS subtitles are not supported in MP4</value>
+Наприклад, субтитри PGS не підтримуються у форматі MP4</value>
   </data>
   <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
     <value>Список — набори показуються плоским списком.
@@ -489,75 +487,75 @@ For example, PGS subtitles are not supported in MP4</value>
 Категорії — усі набори показуються як підменю для кожної категорії.</value>
   </data>
   <data name="AudioView_AudioDefaults" xml:space="preserve">
-    <value>Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title.</value>
+    <value>Налаштуйте поведінку, яка визначає, як на цій вкладці автоматично додаватимуться звукові доріжки під час вибору нового джерела або назви.</value>
   </data>
   <data name="BehavioursReload" xml:space="preserve">
-    <value>Refresh the list below based on the behaviours configured. </value>
+    <value>Оновіть список нижче на основі налаштованої поведінки. </value>
   </data>
   <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
-    <value>Setup behaviours that dictate how this tab automatically adds subtitle tracks when selecting a new source or title.</value>
+    <value>Налаштуйте поведінку, яка визначає, як на цій вкладці автоматично додаватимуться доріжки субтитрів під час вибору нового джерела або назви.</value>
   </data>
   <data name="OptionsView_SendFileToArguments" xml:space="preserve">
-    <value>The following environment variables are always set:
+    <value>Наступні змінні оточення завжди встановлені:
 HB_SOURCE
 HB_DESTINATION
 HB_EXIT_CODE
 
-Possible Exit Codes are as follows:
-0 : Successful
-2 : Input Arguments Error
-3 : Failed to Initialise 
-4 : Unknown Error
-5 : Error reading source file.
+Можливі коди виходу наступні:
+0 : Успішно
+2 : Помилка вхідних аргументів
+3 : Не вдалося ініціалізувати 
+4 : Невідома помилка
+5 : Помилка читання вихідного файлу.
 
-Please note, errors codes are best effort and may not always be accurate.
-It is recommended the output file is validated before performing actions on it.</value>
+Зауважте, що коди помилок є найкращим варіантом і не завжди можуть бути точними.
+Рекомендується перевіряти вихідний файл перед виконанням дій з ним.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>Формат вихідного файлу. На додаток до будь-якого символу файлової системи, що підтримується, ви можете використовувати будь-який із символів-замінників, які буде замінено, коли ви зміните назву, відскануєте джерело або оновите певні налаштування.
 
-{source} - Name of the source file.
-{title} - Integer value. This is representative of a disc title number.
-{chapters} - The range of chapters selected.
-{creation-date} - The date that the source file was created on (if available).
-{creation-time} - The time that the source file was created on (if available).
-{modification-date} - The date that the source file was last modified on (if available).
-{modification-time} - The time that the source file was last modified on (if available).
-{date} - Today. Set at time of adding to the queue.
-{time} - Today. Set at time of adding to the queue.
-{quality_bitrate} - The RF/CQ number, or bitrate
-{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
-{preset} - Name of the preset selected.
-{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
-{width} - The output storage width
-{height} - The output storage height
-{codec} - Display the video format.
-{encoder} - Display the short format key of the encoder used.
+{source}- Назва файла-джерела.
+{title} - Ціле значення. Це значення відповідає номеру заголовка диска.
+{chapters} - Діапазон вибраних розділів.
+{creation-date} - Дата створення файла-джерела (якщо доступно).
+{creation-time} - Час створення файла-джерела (якщо доступно).
+{modification-date} - Дата останньої модифікації вихідного файлу (якщо доступно).
+{modification-time} - Час останньої модифікації вихідного файлу (якщо доступно).
+{date} - Сьогодні. Встановлюється під час додавання до черги.
+{time} - Сьогодні. Встановлюється під час додавання до черги.
+{quality_bitrate} - Номер RF/CQ або бітрейт
+{quality_type} - Виводить «kbps» або «Q» залежно від режиму якості, обраного на вкладці відео.
+{preset} - Назва вибраного пресету.
+{encode_bit_depth} - Цілочисельне значення, тобто 8, 10 або 12
+{width} - Ширина вихідного сховища
+{height} - Висота вихідного сховища
+{codec} - Відображати формат відео.
+ {encoder} - Показати короткий ключ формату використовуваного кодера.
 
-Any illegal path characters will be removed automatically.</value>
+Будь-які незаконні символи шляху буде вилучено автоматично.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
-    <value>For languages that are right to left, you can enable one of two modes.   "Text Only" will only render the text in right to left style.  "Entire User Interface" will render all controls in right to left.
+    <value>Для мов, які пишуться справа наліво, ви можете ввімкнути один з двох режимів. «Тільки текст» відображатиме лише текст у стилі праворуч-ліворуч. «Весь інтерфейс користувача» відображатиме всі елементи керування справа наліво.
 
-Please note, there may be inperfections in the UI layout when using these modes. Depending on the language, it may be worth trying both modes to find the best fit.</value>
+Зверніть увагу, що при використанні цих режимів можуть бути недосконалості в макеті інтерфейсу користувача. Залежно від мови, можливо, варто спробувати обидва режими, щоб знайти найкращий.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Target a specific quality level for audio.
-1 is lowest quality and 5 is highest quality.
+    <value>Встановіть певний рівень якості для аудіо.
+1 - найнижча якість, 5 - найвища якість.
 
-Bitrate will vary source to source.</value>
+Бітрейт залежить від джерела.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
-    <value>The following can be used singularly, or together to build up a destination path
+    <value>Для створення шляху призначення можна використовувати окремо або разом такі параметри
 
-{source_path} - In the same folder as the source path (if possible)
-{source_folder_name} – The name of the directory that the source file is in, without the full path.
-{source} - The name of the source file.</value>
+{source_path} - У тій самій теці, що і шлях до джерела (якщо це можливо)
+{source_folder_name} - Назва теки, у якій знаходиться файл-джерело, без повного шляху.
+{source} - Ім'я вихідного файлу</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
-    <value>Launches the documentation website located at https://handbrake.fr/docs</value>
+    <value>Запускає веб-сайт документації за адресою https://handbrake.fr/docs</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Dash (-), Period (.) and Comma (,)</value>
+    <value>Тире (-), крапка (.) і кома (,)</value>
   </data>
 </root>

@@ -1637,7 +1637,7 @@ VLC och MPC-HC stöds. Övriga uppspelare kan också fungera men har inte testat
     <value>lagring</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Multi-Pass-enkodning</value>
+    <value>Flerpassenkodning</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Genomsnitt bitfrekvens (kbps):</value>

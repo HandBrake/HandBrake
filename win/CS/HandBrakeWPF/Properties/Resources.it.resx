@@ -260,7 +260,7 @@ Le preimpostazioni personalizzate non sono state aggiornate, quindi potresti dov
     <value>Scansione non riuscita:</value>
   </data>
   <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
-    <value>Scansione non riuscita... Puoi controllare il registro delle attività per i dettagli.</value>
+    <value>Scansione non riuscita... Puoi controllare il resoconto delle attività per i dettagli.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
     <value>Scansione sorgente, attendi...</value>
@@ -374,7 +374,7 @@ Altrimenti, i sottotitoli non in sovraimpressione andranno perduti.</value>
 -È possibile che non si abbiano i permessi di lettura del file oppure che un'altra applicazione lo stia usando in questo momento.
 - La sorgente potrebbe essere protetta da copia oppure contenere DRM. Si ricorda che HandBrake non supporta la rimozione di sistemi di protezione copia.
 
-Il Registro delle Attività potrebbe fornire ulteriori informazioni.</value>
+Il Resoconto delle Attività potrebbe fornire ulteriori informazioni.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>Coda {0}</value>
@@ -934,16 +934,16 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Copia negli appunti</value>
   </data>
   <data name="LogView_EncodeLog" xml:space="preserve">
-    <value>Registro di codifica</value>
+    <value>Resoconto di codifica</value>
   </data>
   <data name="LogView_OpenLogDir" xml:space="preserve">
-    <value>Apri cartella Log</value>
+    <value>Apri cartella dei resoconti di attività</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
-    <value>Scansiona Log</value>
+    <value>Resoconto di scansione</value>
   </data>
   <data name="MainView_ActivityLog" xml:space="preserve">
-    <value>Registro delle attività</value>
+    <value>Resoconto delle attività</value>
   </data>
   <data name="MainView_AddAll" xml:space="preserve">
     <value>Aggiungi tutti</value>
@@ -1123,7 +1123,7 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Metadati</value>
   </data>
   <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
-    <value>Allow use of DirectX Decoding</value>
+    <value>Permetti l'uso dei decodificatori DirectX</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Il formato del file inserito contieneva caratteri non validi che sono stati rimossi.</value>
@@ -1141,7 +1141,7 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Mostra lo stato della codifica nella barra del titolo.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>Pulisci i registri più vecchi di 7 giorni</value>
+    <value>Pulisci i resoconti più vecchi di 7 giorni</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>Riguardo HandBrake</value>
@@ -1168,13 +1168,13 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Rimuovi sempre gli elementi completati dalla coda dopo la fine di una codifica.</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>Pulisci registro</value>
+    <value>Pulisci resoconto</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>Metti una copia del registro di ogni codifica in una posizione specifica:</value>
+    <value>Metti una copia del resoconto di ogni codifica in una posizione specifica:</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>Metti una copia del registro di ogni codifica nella stessa posizione del video codificato</value>
+    <value>Metti una copia del resoconto di ogni codifica nella stessa posizione del video codificato</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
     <value>Versione attuale</value>
@@ -1204,10 +1204,10 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Generale</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>Scrittura del Registro</value>
+    <value>Scrittura del resoconto</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>Livello verbosità del registro:</value>
+    <value>Livello verbosità del resoconto:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
     <value>Percorso:</value>
@@ -1222,7 +1222,7 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Durata minima in secondi dei titoli DVD e Blu-ray. Titoli più brevi verranno ignorati</value>
   </data>
   <data name="Options_KeepDuplicateTitles" xml:space="preserve">
-    <value>Keep duplicate titles on Blu-ray sources (Requires Restart)</value>
+    <value>Mantieni i titoli duplicati delle sorgenti Blu-ray (richiede il riavvio)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>Estensione MP4:</value>
@@ -1292,7 +1292,7 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
 Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzionare, ma non è garantito.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>Apri Cartella del Registro</value>
+    <value>Apri cartella dei resoconti</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
     <value>Al completamento</value>
@@ -1403,7 +1403,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Modifica</value>
   </data>
   <data name="QueueView_EndTime" xml:space="preserve">
-    <value>Tempo finale:</value>
+    <value>Completato il:</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
     <value>Esporta coda</value>
@@ -1418,7 +1418,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Blocca sistema</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
-    <value>Il registro sarà disponibile al termine della conversione.</value>
+    <value>Il resoconto sarà disponibile al termine della conversione.</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
     <value>Disconnetti</value>
@@ -1466,7 +1466,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Avvia coda</value>
   </data>
   <data name="QueueView_StartTime" xml:space="preserve">
-    <value>Avvia tempo:</value>
+    <value>Avviato il:</value>
   </data>
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>Statistiche</value>
@@ -1730,7 +1730,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>_Informazioni...</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
-    <value>_Log delle Attività</value>
+    <value>_Resconto delle attività</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
     <value>_Cerca Aggiornamenti</value>
@@ -1781,16 +1781,16 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Ricerca degli aggiornamenti...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>Sei sicuro di voler cancellare la directory dei file di registro?</value>
+    <value>Sei sicuro di voler cancellare la cartella dei resoconti?</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
-    <value>Pulisci Log</value>
+    <value>Pulisci resoconti</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
     <value>Scaricamento...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>La directory del file di registro di HandBrake è stata cancellata!</value>
+    <value>La cartella dei resoconti di HandBrake è stata cancellata!</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
     <value>Avviso</value>
@@ -1908,13 +1908,13 @@ Puoi trascinare/rilasciare o inserire del testo sopra.</value>
     <value>Aggiungi numero</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>VistaFiltri_PreimpostazioneDeblock</value>
+    <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Regolazione Deblock</value>
   </data>
   <data name="OptionsView_EncodeNotes" xml:space="preserve">
-    <value>Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown.</value>
+    <value>Nota: non tutti i codificatori hardware hanno preferenze aggiuntive. Tutti i codificatori hardware disponibili e supportati su questo sistema saranno disponibili per la selezione nella scheda video sotto il menu a tendina del codificatore video.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake ha rilevato multipli file di code non terminate. Questi dovrebbero essere stati formati da multiple istanze di HandBrake avviate. Vuoi riprendere i processi non terminati?</value>
@@ -2000,7 +2000,7 @@ Se supportata, ogni preimpostazione dell'utente verrà importata.</value>
     <value>Titolo:</value>
   </data>
   <data name="LogViewModel_Title" xml:space="preserve">
-    <value>Visualizzatore Registro</value>
+    <value>Visualizzatore resoconti</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
     <value>Aspetto:</value>
@@ -2320,7 +2320,7 @@ Scegliere una preimpostazione differente.</value>
     <value>Livello al quale viene mostrato l'avviso di spazio su disco in esaurimento:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
+    <value>Nota: questo è il numero massimo di processi simultanei. Limitazioni hardware potrebbero ridurre il numero effettivo di processi simultanei durante la codifica. L'impostazione sarà applicata solo dalla prossima coda o al riavvio del programma.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Non Disponibile)</value>
@@ -2380,22 +2380,22 @@ Scegliere una preimpostazione differente.</value>
     <value>Completato</value>
   </data>
   <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
-    <value>Impostazioni non valide. Controlla il registro per ulteriori dettagli.</value>
+    <value>Impostazioni non valide. Controlla il resoconto per ulteriori dettagli.</value>
   </data>
   <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
-    <value>Ingresso non valido. Controlla il registro per ulteriori dettagli.</value>
+    <value>Ingresso non valido. Controlla il resoconto per ulteriori dettagli.</value>
   </data>
   <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
-    <value>Stato Sconosciuto. Controlla il registro per ulteriori dettagli.</value>
+    <value>Stato Sconosciuto. Controlla il resoconto per ulteriori dettagli.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
     <value>Errori riscontrati durante la lettura della sorgente.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
-    <value>Errore sconosciuto. Controlla il registro per ulteriori dettagli.</value>
+    <value>Errore sconosciuto. Controlla il resoconto per ulteriori dettagli.</value>
   </data>
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
-    <value>Il processatore è andato in crash. Controlla il registro per ulteriori dettagli.</value>
+    <value>Il processatore è andato in crash. Controlla il resoconto per ulteriori dettagli.</value>
   </data>
   <data name="Startup_HbDllMissing" xml:space="preserve">
     <value>File "hb.dll" mancante. Si prega di reinstallare.</value>
@@ -2817,55 +2817,55 @@ Per permettere più codifiche simultanee, attivare "Isolamento del Processo" nel
     <value>Solo codifica senza perdita.</value>
   </data>
   <data name="MainView_HideClassicMenu" xml:space="preserve">
-    <value>Hide Classic Menu</value>
+    <value>Nasconti menu classico</value>
   </data>
   <data name="MainView_ShowClassicMenu" xml:space="preserve">
-    <value>Show Classic Menu</value>
+    <value>Mostra menu classico</value>
   </data>
   <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
-    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+    <value>(Attenzione: rilevato driver non supportato! Aggiornamento consigliato)</value>
   </data>
   <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
-    <value>Range Limits:</value>
+    <value>Limiti di intervallo:</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
-    <value>Limit the length of the titles added to the queue.</value>
+    <value>Limita la lunghezza dei titoli aggiunti alla coda.</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
-    <value>Enable Range Limits</value>
+    <value>Abilita limiti dell'intervallo</value>
   </data>
   <data name="AddToQueue_RangeLimitError" xml:space="preserve">
-    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+    <value>Alcuni titoli non sono stati aggiunti alla coda perché erano al di fuori dei limiti dell'intervallo selezionati.</value>
   </data>
   <data name="QueueView_StartAtTime" xml:space="preserve">
-    <value>Start Later</value>
+    <value>Avvia più tardi</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>Queue Start Time:</value>
+    <value>Orario di avvio coda:</value>
   </data>
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
-    <value>Shutting Down Encode ...</value>
+    <value>Interruzione della codifica…</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>Allow Upscaling</value>
+    <value>Consenti ampliamento</value>
   </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
-    <value>Optimal Size</value>
+    <value>Dimensione ottimale</value>
   </data>
   <data name="OptionsView_Available" xml:space="preserve">
-    <value>Available on this system.</value>
+    <value>Disponibile su questo sistema.</value>
   </data>
   <data name="OptionsView_NotAvailable" xml:space="preserve">
-    <value>Not available on this system.</value>
+    <value>Non disponibile su questo sistema</value>
   </data>
   <data name="MainView_ScanningStatus" xml:space="preserve">
-    <value>Please wait ...</value>
+    <value>Si prega di attendere...</value>
   </data>
   <data name="MainView_Cancel" xml:space="preserve">
     <value>Annulla</value>
   </data>
   <data name="MainView_OpenLog" xml:space="preserve">
-    <value>Open Log Window</value>
+    <value>Apri finestra Attività</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value/>
@@ -2916,6 +2916,6 @@ Per permettere più codifiche simultanee, attivare "Isolamento del Processo" nel
     <value>No</value>
   </data>
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
-    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
+    <value>Durata massima in secondi dei titoli DVD e Blu-ray. Titoli più lunghi verranno ignorati</value>
   </data>
 </root>

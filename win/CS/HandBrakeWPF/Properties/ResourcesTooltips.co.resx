@@ -131,7 +131,7 @@ Quelle chì ùn sò micca intricciate averanu una perdita di qualità.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
     <value>U filtru di riduzzione di trostu riduce o caccia l’aspettu di rumore è di granellu d’un filmu. Què pò megliurà u rendimentu di a cumpressione è creà una video di più bella qualità cù schedarii più chjuchi. 
-E preferenze troppu forte di riduzzione di trostu ponu dannighjà a qualità di a fiura scartendu i detaglii.
+I parametri troppu forte di riduzzione di trostu ponu dannighjà a qualità di a fiura scartendu i detaglii.
          
 - « NLMeans » hè un filtru di riduzzione di trostu d’alta qualità chì fà dinù cresce a vitezza di a cudificazione. Impiegatelu quandu a qualità hè più impurtante chè a vitezza.
          
@@ -147,7 +147,7 @@ E preferenze troppu forte di riduzzione di trostu ponu dannighjà a qualità di 
     <value>Chjassu di destinazione, inchjudendu u cartulare è u schedariu Ghjè induve a video serà creata è cumu serà chjamata.</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
-    <value>Aghjunghje un marcatore apposta per permette a lettura nant’à l’iPod di 5a generazione circa 2006. D’altre preferenze ponu affettà a cumpatibilità.</value>
+    <value>Aghjunghje un marcatore apposta per permette a lettura nant’à l’iPod di 5a generazione circa 2006. D’altri parametri ponu affettà a cumpatibilità.</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
     <value>Furmatu di u cuntenidore. E traccie video, audio è altre sò adunite in un schedariu unicu di stu tipu. Què affetta a cumpatibilità.</value>
@@ -156,7 +156,7 @@ E preferenze troppu forte di riduzzione di trostu ponu dannighjà a qualità di 
     <value>Perfezziunà u MP4 per u scaricamentu prugressivu. Dopu a cudificazione, i dati sò riorganizati è riscritti per permette una lettura istantanea nant’à una reta, senza avè à scaricà u schedariu sanu.</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>Selezzione di a stesa di fonte. Senza precisà, tutti i capituli sò selezziunati è a fonte hè cudificata sana sana.</value>
+    <value>Selezzione di l’intervallu di fonte. Senza precisà, tutti i capituli sò selezziunati è a fonte hè cudificata sana sana.</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
     <value>Titulu o video à cudificà.
@@ -171,7 +171,7 @@ I dischi di fonte Blu-ray è DVD anu aspessu parechji tituli ; da bona regula, u
 
 - « Loose » hè simile à « Automatic » ma prova di preservà e prupurzioni d’allucamentu. Què pò cagiunà una chjuca perdita di risuluzione d’allucamentu in pettu à « Automatic ».
 
-- « Custom » permette di definisce dapervoi tutte e preferenze. Ghjuvevule per currege un aspettu incurrettu d’affissera di a fonte è per i prufessiunali chì anu bisognu d’un cuntrollu espertu in post-pruduzzione.</value>
+- « Custom » permette di definisce dapervoi tutti i parametri. Ghjuvevule per currege un aspettu incurrettu d’affissera di a fonte è per i prufessiunali chì anu bisognu d’un cuntrollu espertu in post-pruduzzione.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Runzicà autumaticamente i bordi neri intornu à a video.</value>
@@ -198,7 +198,7 @@ E vere dimensioni d’affisera seranu sfarente s’è u raportu larghezza/altezz
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
     <value>Alineà e dimensioni d’allucamentu nant’à multipli di stu valore.
 
-Sta preferenza hè di primura per a cumpatibilità cù certi apparechji.
+Stu parametru hè di primura per a cumpatibilità cù certi apparechji.
 Duveriate impiegà 2 quandu ùn avete micca prublemi di cumpatibilità.</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
@@ -224,7 +224,7 @@ E vere dimensioni d’affisera seranu sfarente s’è u raportu larghezza/altezz
 
 U flussu istantaneu pò esse assai più altu o assai più bassu à ogni stonda.
 Ma a mediana, nant’à una longa durata, serà u valore definitu quì.  S’ella hè bisognu
-di limità u flussu istantaneu, fighjate e preferenze vbv-bufsize è vbv-maxrate di u x264.</value>
+di limità u flussu istantaneu, fighjate i parametri vbv-bufsize è vbv-maxrate di u x264.</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
     <value>Attiveghja una frequenza di fiure custente in esciuta.</value>
@@ -233,14 +233,14 @@ di limità u flussu istantaneu, fighjate e preferenze vbv-bufsize è vbv-maxrate
     <value>Cudificatori video dispunibule.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
-    <value>Preferenze di rigatura per megliurà i scenarii classichi.
+    <value>Parametri di rigatura per megliurà i scenarii classichi.
 
 Què pò megliurà a faccindaghjine di certe caratteristiche di a fonte
 o di e caratteristiche definite di u schedariu d’esciuta.  I cambiamenti
-seranu appiecati dopu a prerigatura ma nanzu tutti l’altre preferenze.</value>
+seranu appiecati dopu a prerigatura ma nanzu tutti l’altri parametri.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
-    <value>Preferenze addiziunale di u cudificatore.
+    <value>Parametri addiziunale di u cudificatore.
 
 Lista d’ozzioni di u cudificatore staccate da dui punti.</value>
   </data>
@@ -257,24 +257,24 @@ Attivate st’ozzione s’è u vostru apparechju ùn leghje micca bè u schedari
   <data name="Video_Level" xml:space="preserve">
     <value>Definisce è assicureghja a cunfurmità cù u livellu specificatu.
 
-Supraneghja tutte l’altre preferenze.</value>
+Supraneghja tutti l’altri parametri.</value>
   </data>
   <data name="Video_PeakFramerate" xml:space="preserve">
-    <value>Attiveghja una frequenza di fiure d’esciuta variabile cù una frequenza di cresta determinata da a preferenza di a frequenza di fiure.</value>
+    <value>Attiveghja una frequenza di fiure d’esciuta variabile cù una frequenza di cresta determinata da u parametru di a frequenza di fiure.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Adatteghja e preferenze di u cudificatore per bilancià trà a faccindaghjine di a cumpressione è a vitezza di cudificazione.
+    <value>Adatteghja i parametri di u cudificatore per bilancià trà a faccindaghjine di a cumpressione è a vitezza di cudificazione.
 
-Què definisce e vostre preferenze predefinite di cudificatore.
+Què definisce i vostri parametri predefiniti di cudificatore.
 Rigature, prufili, livelli è ozzioni d’espertu seranu appiecati à st’operazione.
 Di regula, duveriate definisce st’ozzione à u valore u più lentu chì
-vo siate capace d’accettà, perchè preferenze più lente vi danu una
+vo siate capace d’accettà, perchè parametri più lenti vi danu una
 più bella qualità o schedarii più chjuchi.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Definisce è assicureghja a cunfurmità cù u prufilu specificatu.
 
-Supraneghja tutte l’altre preferenze.</value>
+Supraneghja tutti l’altri parametri.</value>
   </data>
   <data name="Video_Quality" xml:space="preserve">
     <value>Definisce u fattore di qualità pregatu.
@@ -293,7 +293,7 @@ A scala di FFMpeg è Theora hè più lineare.
 Sti cudificatori ùn anu micca di modu senza perdita.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>Durante u passu d’analisa d’una cudificazione à parechji passi, impiegate preferenze chì acceleranu u trattamentu.</value>
+    <value>Durante u passu d’analisa d’una cudificazione à parechji passi, impiegate parametri chì acceleranu u trattamentu.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
     <value>Effettuà una cudificazione à parechji passi.
@@ -323,9 +323,9 @@ VFR ùn hè micca cumpatibile cù certi lettori.</value>
     <value>Ozzioni addiziunale di prerigatura.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>E prerigature sò gruppi di preferenze di cudificazione custruiti per scenarii specifichi. Selezziunate quella chì currisponde u più à u vostru bisognu.
+    <value>E prerigature sò gruppi di parametri di cudificazione custruiti per scenarii specifichi. Selezziunate quella chì currisponde u più à u vostru bisognu.
  
- Rimpiazzeghja tutte e preferenze di cudificazione. E preferenze ponu esse adattate dopu a selezzione di a prerigatura.</value>
+ Rimpiazzeghja tutti i parametri di cudificazione. I parametri ponu esse adattati dopu a selezzione di a prerigatura.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
     <value>Caccià a prerigatura selezziunata.</value>
@@ -350,11 +350,11 @@ Predefinizioni HQDN3D : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-t
     <value>Prerigatura di u filtru di riduzzione di trostu. Definisce a forza di u filtru.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Rigatura di riduzzione di trostu. Adattazioni addiziunale di a prerigatura di riduzzione di trostu per megliurà e preferenze per scenarii specifichi.
+    <value>Rigatura di riduzzione di trostu. Adattazioni addiziunale di a prerigatura di riduzzione di trostu per megliurà i parametri per scenarii specifichi.
  
-- « None » (Alcuna) impiegheghja e preferenze di prerigatura predefinite.
+- « None » (Alcuna) impiegheghja i parametri di prerigatura predefiniti.
  
-- « Film » (Filmu) affineghja e preferenze per un adopru cù a maiò parte di i cuntenuti d’azzione.
+- « Film » (Filmu) affineghja i parametri per un adopru cù a maiò parte di i cuntenuti d’azzione.
  
 - « Grain » (Granellu) tratta solu i canali di culore. Ghjuvevule per preservà l’aspettu cinematograficu di u granellu di luminanza, tuttu riducendu o cacciendu u rumore di culore.
 
@@ -371,7 +371,7 @@ Predefinizioni HQDN3D : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-t
 
 - « Bwdif » è « Yadif » sò sò dui filtri di disintricciamentu populari è rapidi.
 
-- « Dipettinera » bilanceghja trà parechje cudificazioni d’interpolazione per favurisce a vitezza è a qualità.</value>
+- « Dipettinera » bilanceghja trà parechje cudificazioni d’interpulazione per favurisce a vitezza è a qualità.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>Parametri di disintricciamentu persunalizati.
@@ -391,7 +391,7 @@ A prerigatura predefinita hè ben equilibrata trà vitezza è a qualità.
 
 Ignurà a verificazione spaciale permette à Yadif d’ignurà a currezzione di certi effetti parassiti pudendu esse impediti per un legeru aumentu di a vitezza.
 
-EEDI2 impiegheghja una cudificazione d’interpolazione più lenta è di più bella qualità per a dipettinera. Ghjuvevule per e fonti e più difficiule.
+EEDI2 impiegheghja una cudificazione d’interpulazione più lenta è di più bella qualità per a dipettinera. Ghjuvevule per e fonti e più difficiule.
 
 Bob pruva di preservà megliu a mossa per una chjuca penalità à a risuluzione percepita.</value>
   </data>
@@ -412,7 +412,7 @@ Bob pruva di preservà megliu a mossa per una chjuca penalità à a risuluzione 
     <value>Girà a fiura di 90 gradi in u sensu di e sfiere d’arilogiu.</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>Durata di a stesa di fonte selezziunata in Ore:Minuti:Seconde</value>
+    <value>Durata di l’intervallu di fonte selezziunata in Ore:Minuti:Seconde</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
     <value>L’ozzione « Cunservà e prupurzioni » mantene e prupurzioni d’affissera originale di a fonte. Disattivà st’ozzione pò cagiunà una fiura stinzata o ristrinta.</value>
@@ -429,7 +429,7 @@ Sintassa Lapsharp : y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-streng
 Predefinizioni Lapsharp : y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>L’arrutata amendeghja l’aspettu di i detaglii, sopratuttu di i bordi. E preferenze troppu forte d’arrutata ponu dannighjà a qualità di a fiura creendu effetti parassiti è aumentendu u rumore, ciò chì pò riduce a faccindaghjine di a cumpressione.
+    <value>L’arrutata amendeghja l’aspettu di i detaglii, sopratuttu di i bordi. I parametri troppu forte d’arrutata ponu dannighjà a qualità di a fiura creendu effetti parassiti è aumentendu u rumore, ciò chì pò riduce a faccindaghjine di a cumpressione.
 
 - « Unsharp » hè un filtru di maschera floscia à usu generale. Funziuneghja imbrugliendu, è dopu calculendu a sfarenza trà a fiura imbrugliata è a fiura d’origine.
 
@@ -439,13 +439,13 @@ Predefinizioni Lapsharp : y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-ker
     <value>Prerigatura di u filtru d’arrutata. Definisce a forza di u filtru.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>Rigatura d’arrutata. Adattazioni addiziunale di a prerigatura d’arrutata per megliurà e preferenze per scenarii specifichi.
+    <value>Rigatura d’arrutata. Adattazioni addiziunale di a prerigatura d’arrutata per megliurà i parametri per scenarii specifichi.
 
-« None » (Nisuna) impiegheghja e preferenze di prerigatura predefinite.
+« None » (Nisuna) impiegheghja i parametri di prerigatura predefiniti.
 
 - « Unsharp » pò esse rigatu per un’arrutata Ultrafina, Fina, Mediana, Roza, o Assai roza. Selezziunate una rigatura secondu à a risuluzione di a fiura aspettata è a finezza di detaglii à amendà.
 
-A rigatura « Lapsharp's Film » (Filmu) affineghja e preferenze per un adopru cù a maiò parte di i cuntenuti d’azzione. Impiegheghja un nocciulu Laplacianu isotropicu per rende più netti tutti i bordi d’una manera simile, è l’infurmazioni di luminanza (lucidezza) sò più arrutate chè quelle di u culore.
+A rigatura « Lapsharp's Film » (Filmu) affineghja i parametri per un adopru cù a maiò parte di i cuntenuti d’azzione. Impiegheghja un nocciulu Laplacianu isotropicu per rende più netti tutti i bordi d’una manera simile, è l’infurmazioni di luminanza (lucidezza) sò più arrutate chè quelle di u culore.
 
 A rigatura « Lapsharp's Grain » (Granellu) hè simile à Film, ma impiegheghja un Laplacianu isotropicu à nocciulu Gaussianu per riduce l’zffetti nant’à u rumore è granellu. Ghjuvevule per preservà u granellu è cum’è alternativa à Film.
 
@@ -460,10 +460,10 @@ A rigatura « Lapsharp's Sprite » (Spiritibugliettu) hè ghjuvevule per i ghj
     <value>Ozzioni per cuntrollà e prerigature.</value>
   </data>
   <data name="MainView_EndPoint" xml:space="preserve">
-    <value>U puntu finale di sta stesa.</value>
+    <value>U puntu finale di st’intervallu.</value>
   </data>
   <data name="MainView_StartPoint" xml:space="preserve">
-    <value>U puntu iniziale di sta stesa.</value>
+    <value>U puntu iniziale di st’intervallu.</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Quandu st’ozzione hè attivata, u sistema di nome autumaticu impiegherà sempre u chjassu predefinitu. 
@@ -516,7 +516,7 @@ Sappiate chì i codici di sbagliu sò indicativi è puderianu esse incurretti.
 Hè ricumandatu di cunvalidà u schedariu d’esciuta primu d’effettuà qualchì azzione nant’à stu schedariu.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>U furmatu di u schedariu d’esciuta. In più di i caratteri accettati da u sistema di schedariu, pudete impiegà i campi di sustituzione chì seranu rimpiazzati quandu vo cambiate di titulu, analizate una fonte, o mudificate certe definizioni.
+    <value>U furmatu di u schedariu d’esciuta. In più di i caratteri accettati da u sistema di schedariu, pudete impiegà i campi di sustituzione chì seranu rimpiazzati quandu vo cambiate u titulu, analizate una fonte, o mudificate certi parametri.
 
 {source} - U nome di u schedariu di fonte.
 {title} - Valore interu. Què riprisente un numeru di titulu di discu.
@@ -560,6 +560,6 @@ U flussu binariu cambierà d’una fonte à l’altra.</value>
     <value>Lancia u situ web di documentazione à l’indirizzu https://handbrake.fr/docs</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Dash (-), Period (.) and Comma (,)</value>
+    <value>Lineetta (-), puntu (.) è virgula (,)</value>
   </data>
 </root>

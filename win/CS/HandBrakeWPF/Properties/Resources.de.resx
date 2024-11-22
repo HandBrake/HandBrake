@@ -1910,7 +1910,7 @@ Sie können den Text oben per Drag &amp; Drop ziehen oder eingeben.</value>
     <value>Zahl anhängen</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>Deblock-Voreinstellung</value>
+    <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Deblock-Abstimmung</value>
