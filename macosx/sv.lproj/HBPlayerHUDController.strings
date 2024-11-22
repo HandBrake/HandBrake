@@ -4,6 +4,9 @@
 /* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "6BQ-wU-p2C"; */
 "6BQ-wU-p2C.title" = "Spår";
 
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "End Live Preview"; ObjectID = "84p-08-fGK"; */
+"84p-08-fGK.ibExternalAccessibilityDescription" = "Stoppa direkt förhandsvisning";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Exit player and return to still image previews."; ObjectID = "84p-08-fGK"; */
 "84p-08-fGK.ibShadowedToolTip" = "Avsluta spelaren och återgå till bildförhandsvisning.";
 

@@ -22,8 +22,14 @@
 /* Class = "NSTextFieldCell"; title = "Duration:"; ObjectID = "USR-Qf-N5v"; */
 "USR-Qf-N5v.title" = "Speltid:";
 
+/* Class = "NSButtonCell"; title = "Live Preview"; ObjectID = "vkh-GY-5qx"; */
+"vkh-GY-5qx.title" = "Direkt förhandsvisning";
+
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "preview image"; ObjectID = "wUk-SQ-GhS"; */
 "wUk-SQ-GhS.ibExternalAccessibilityDescription" = "förhandsbild";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Starting point for the preview encode."; ObjectID = "wUk-SQ-GhS"; */
+"wUk-SQ-GhS.ibShadowedToolTip" = "Startpunkt för enkodning av förhandsvisning.";
 
 /* Class = "NSMenuItem"; title = "240"; ObjectID = "XYh-Ls-slf"; */
 "XYh-Ls-slf.title" = "240";

@@ -4,6 +4,9 @@
 /* Class = "NSTextFieldCell"; title = "An internal error has occurred. You can choose to continue in an unstable state, or crash."; ObjectID = "10"; */
 "10.title" = "내부 에러가 발생했습니다. 불안정한 상태로 계속 진행하거나 비정상 종료를 선택할 수 있습니다.";
 
+/* Class = "NSTextFieldCell"; title = "Reason contents go here."; ObjectID = "12"; */
+"12.title" = "이유 내용은 여기로 이동합니다.";
+
 /* Class = "NSButtonCell"; title = "Crash"; ObjectID = "14"; */
 "14.title" = "충돌";
 

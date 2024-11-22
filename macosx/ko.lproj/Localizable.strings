@@ -487,6 +487,9 @@ Rename preset window -> name alert message */
 /* Preferences -> Output Name Token */
 "Title" = "제목";
 
+/* HBLanguage -> Unknown language */
+"Unknown" = "알 수 없음";
+
 /* Video -> Framerate */
 "Variable Framerate" = "가변 프레임레이트";
 

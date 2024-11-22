@@ -13,11 +13,20 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
 "aJi-zQ-0cg.ibExternalAccessibilityDescription" = "SRT/SSA-justering";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibShadowedToolTip" = "Positiv eller negativ förskjutning i millisekunder (ms) för valt källspår med SRT/SSA-format. Inte tillämpningsbart för andra format.";
+
+/* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "cSW-OC-qKA"; */
+"cSW-OC-qKA.title" = "Popupp";
+
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "dap-ee-kor"; */
 "dap-ee-kor.title" = "Objekt 1";
 
 /* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "fAW-To-EeP"; */
 "fAW-To-EeP.title" = "Objekt 3";
+
+/* Class = "NSTableColumn"; headerCell.title = "Offset"; ObjectID = "Fgh-pZ-6uu"; */
+"Fgh-pZ-6uu.headerCell.title" = "Förskjutning";
 
 /* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
 "fIe-Fg-ufj.headerCell.title" = "Inbränd";
@@ -40,6 +49,9 @@
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Forced subtitles only"; ObjectID = "HC5-ql-Vcr"; */
 "HC5-ql-Vcr.ibExternalAccessibilityDescription" = "Tvingade undertexter endast";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Forced Only. Use only subtitles marked as “forced” in the selected source track."; ObjectID = "HC5-ql-Vcr"; */
+"HC5-ql-Vcr.ibShadowedToolTip" = "Endast tvingad. Använd endast undertexter markerade som \"tvingad\" i valt källspår.";
+
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hhH-c3-gD0"; */
 "hhH-c3-gD0.title" = "0";
 
@@ -55,11 +67,17 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Language"; ObjectID = "Inz-O5-B8g"; */
 "Inz-O5-B8g.ibExternalAccessibilityDescription" = "SRT/SSA-språk";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Language of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibShadowedToolTip" = "Språket för det valda källspåret i SRT/SSA-format. Inte tillämpningsbart för andra format.";
+
 /* Class = "NSMenuItem"; title = "Reload"; ObjectID = "jcM-HL-QJ6"; */
 "jcM-HL-QJ6.title" = "Läs om";
 
 /* Class = "NSButtonCell"; title = "Reload"; ObjectID = "jG8-uo-1tv"; */
 "jG8-uo-1tv.title" = "Läs om";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "JLr-Qi-X0X"; */
+"JLr-Qi-X0X.title" = "Markerat";
 
 /* Class = "NSTableColumn"; headerCell.title = "Forced Only"; ObjectID = "klV-Gy-igk"; */
 "klV-Gy-igk.headerCell.title" = "Endast tvingad";
@@ -67,11 +85,17 @@
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Default"; ObjectID = "mdO-Qu-3Pb"; */
 "mdO-Qu-3Pb.ibExternalAccessibilityDescription" = "Standard";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Default flag. Mark the selected subtitles track as the default to be displayed on playback."; ObjectID = "mdO-Qu-3Pb"; */
+"mdO-Qu-3Pb.ibShadowedToolTip" = "Standardflagga. Markera valt undertextspår som standard för att visa vid uppspelning.";
+
 /* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "mVi-zH-KUq"; */
 "mVi-zH-KUq.title" = "Ta bort alla spår";
 
 /* Class = "NSTableColumn"; headerCell.title = "Track"; ObjectID = "N3S-st-yGv"; */
 "N3S-st-yGv.headerCell.title" = "Spår";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "ooy-Sh-Edm"; */
+"ooy-Sh-Edm.title" = "Markerat";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
 "oxg-bs-1si.title" = "Valbeteende...";
@@ -82,11 +106,20 @@
 /* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
 "QRj-KI-a03.title" = "Text";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track."; ObjectID = "QsM-28-Pya"; */
+"QsM-28-Pya.ibShadowedToolTip" = "Konfigurera valbeteende för undertextspår. Dessa inställningar påverkar vilka spår som kommer att läggas till i undertextspårlistan och de inställningar som användas för varje spår.";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Character Encoding"; ObjectID = "QV0-kE-4yR"; */
 "QV0-kE-4yR.ibExternalAccessibilityDescription" = "Teckenkodning för SRT/SSA";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibShadowedToolTip" = "Teckenkodning för det valda källspåret i SRT/SSA-format. Inte tillämpningsbart för andra format.";
+
 /* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "R8a-qg-ASg"; */
 "R8a-qg-ASg.title" = "Ta bort alla spår";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "R9w-Bn-CCt"; */
+"R9w-Bn-CCt.title" = "Markerat";
 
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "Rj8-KI-k4L"; */
 "Rj8-KI-k4L.title" = "Objekt 1";
@@ -94,14 +127,26 @@
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
 "S2I-Jd-Lyg.title" = "Lägg till alla spår";
 
+/* Class = "NSScrollView"; ibShadowedToolTip = "Subtitle tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the subtitle Selection Behavior dialog."; ObjectID = "Syo-rH-vof"; */
+"Syo-rH-vof.ibShadowedToolTip" = "Undertextspårlista. Beteendet för spårval och inställningar läses in från valt förval och kan konfigureras med dialogrutan för Beteende för undertextval.";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Selected track"; ObjectID = "Tf3-cP-TGw"; */
 "Tf3-cP-TGw.ibExternalAccessibilityDescription" = "Valt spår";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Subtitles language and type."; ObjectID = "Tf3-cP-TGw"; */
+"Tf3-cP-TGw.ibShadowedToolTip" = "Undertextspråk och -typ.";
 
 /* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "ThR-Cn-Vfr"; */
 "ThR-Cn-Vfr.title" = "Objekt 3";
 
 /* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "TJO-RZ-jgb"; */
 "TJO-RZ-jgb.title" = "Spår";
+
+/* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
+"vHW-fn-RSG.title" = "Popupp";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Reload the subtitles tracks list using the configured Selection Behavior."; ObjectID = "Vxx-gk-9kY"; */
+"Vxx-gk-9kY.ibShadowedToolTip" = "Läs om undertextspårlistan med konfigurerat valbeteende.";
 
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "yDg-DK-z5D"; */
 "yDg-DK-z5D.title" = "Objekt 1";
@@ -111,4 +156,7 @@
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Burned In"; ObjectID = "zpm-9Z-Hsq"; */
 "zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "Inbränd";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burned In. Make the selected subtitles permanent by overlaying them onto the video track."; ObjectID = "zpm-9Z-Hsq"; */
+"zpm-9Z-Hsq.ibShadowedToolTip" = "Inbränd. Markera valda undertexter permanent genom att överlägga dem på videospåret.";
 

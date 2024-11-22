@@ -90,6 +90,9 @@ Touch bar */
 /* Preferences Advanced Toolbar Item */
 "Advanced" = "Avançado";
 
+/* Main Window -> Same as source destination open panel */
+"Allow" = "Permitir";
+
 /* HBLanguage -> Any language */
 "Any" = "Qualquer";
 
@@ -110,6 +113,9 @@ Touch bar */
 
 /* Job statistics */
 "Average speed:" = "Velocidade média:";
+
+/* Preferences -> Output Name Token */
+"Bit Depth" = "Profundidade de bits";
 
 /* Copy Protection Alert -> second button
 Delete preset alert -> second button
@@ -198,6 +204,9 @@ Queue done notification failed message */
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode working" = "Encode trabalhando";
 
+/* Preferences -> Output Name Token */
+"Encoder" = "Codificador";
+
 /* No comment provided by engineer. */
 "Encoding %lu Jobs" = "Codificando %lu tarefas";
 
@@ -213,8 +222,14 @@ Queue done notification failed message */
 /* Export presets save panel title */
 "Export presets" = "Exportar Predefinições";
 
+/* Default name for a newly added excluded file extension */
+"extension" = "extensão";
+
 /* File already exists alert -> message */
 "File already exists." = "O arquivo já existe.";
+
+/* Preferences Output File Name Toolbar Item */
+"File name" = "Nome do arquivo";
 
 /* HBRange -> display name */
 "Frames" = "Tempo de início em frames";
@@ -230,6 +245,12 @@ Queue done notification failed message */
 
 /* Preview -> live preview alert informative text */
 "HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "O HandBrake não pode reproduzir essa combinação de formato de vídeo/áudio/contêiner. Você quer abri-lo em um jogador externo?";
+
+/* Main Window -> Same as source destination open panel */
+"HandBrake does not have permission to write to this folder. To allow HandBrake to write to this folder, click \"Allow\"" = "O HandBrake não tem permissão para gravar nessa pasta. Para permitir que o HandBrake grave nessa pasta, clique em “Allow” (Permitir)";
+
+/* Preferences -> Output Name Token */
+"Height" = "Altura";
 
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Se você sair do HandBrake, seu código atual será recarregado na sua fila no próximo lançamento. Você quer parar de qualquer maneira?";
@@ -249,6 +270,12 @@ Queue Stop Alert -> stop and remove first button */
 
 /* Touch bar */
 "Live Preview" = "Visualização ao vivo";
+
+/* Preferences -> Output Name Token */
+"Modification-Date" = "Data de modificação";
+
+/* Preferences -> Output Name Token */
+"Modification-Time" = "Tempo de modificação";
 
 /* Queue undo action name */
 "Move Job in Queue" = "Mova o trabalho na fila";
@@ -353,6 +380,9 @@ Preview -> window title */
 
 /* Queue notification alert message */
 "Put down that cocktail…" = "Abaixe o coquetel...";
+
+/* Preferences -> Output Name Token */
+"Quality Type" = "Tipo de qualidade";
 
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualidade/Bitrate";
@@ -592,4 +622,7 @@ Rename preset window -> name alert message */
 /* Queue Edit Alert -> stop and edit informative text
 Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "Seu filme será perdido se você não continuar codificando.";
+
+/* Queue done notification message */
+"Your queue is done!" = "Sua fila está concluída!";
 

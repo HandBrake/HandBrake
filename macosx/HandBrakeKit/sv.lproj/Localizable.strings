@@ -1,3 +1,6 @@
+/* Video description */
+" - fastdecode" = " - fastdecode";
+
 /* HBStateFormatter -> work time format */
 " (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f bilder/s, genomsnitt %2$.2f bilder/s, Klar om %3$@)";
 
@@ -47,6 +50,9 @@ HBStateFormatter -> work time format */
 /* Format description */
 ", Web Optimized" = ", Webboptimerad";
 
+/* HBStateFormatter -> work pass type format */
+"(subtitle scan)" = "(undertextsökning)";
+
 /* Title short description -> video format */
 "%.6g FPS" = "%.6g bilder/s";
 
@@ -79,6 +85,9 @@ HBStateFormatter -> work time format */
 
 /* HBJob -> subtitles short description */
 "+ 1 additional subtitles track" = "+ 1 ytterligare undertextspår";
+
+/* Title description */
+"1 Foreign Language Search Pass - " = "1 Sökpass för utländskt ljud - ";
 
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "5.1 kanaler";
@@ -277,6 +286,12 @@ HBJob -> filters short description */
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "Mono (endast höger)";
 
+/* Title description */
+"Multi Passes" = "Flerpass";
+
+/* Title description */
+"Multi Passes Turbo" = "Flerpass med turbo";
+
 /* HBStateFormatter -> pass display name */
 "Muxing…" = "Muxar…";
 
@@ -310,6 +325,12 @@ HBFilters -> off display name */
 
 /* HBStateFormatter -> pass display name */
 "Paused" = "Pausad";
+
+/* Video description */
+"Peak %@ (constant frame rate)" = "Högsta %@ (konstant bildfrekvens)";
+
+/* Video description */
+"Peak %@ (may be lower)" = "Högsta %@ (kan vara lägre)";
 
 /* Preset description */
 "Preset:" = "Förval:";
