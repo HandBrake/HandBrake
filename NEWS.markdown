@@ -18,8 +18,9 @@ Download available from Microsoft:
 
 - Added Intel QSV VVC (hardware) video decoder
 - Added an option to enable AV1 screen content coding(SCC) on Intel Lunar Lake QSV AV1 encoder
-- Added a preference to keep duplicated Blu-ray titles
 - Added support for lossless VP9 encoding
+- Added a preference to keep duplicated Blu-ray titles
+- Added support for Max Duration of Scan titles for disc based sources (#6304)
 
 #### Audio
 
@@ -47,24 +48,24 @@ Download available from Microsoft:
   - nv-codec-headers 12.2.72.0 (Nvidia NVENC encoding)
   - oneVPL 2.13.0 (Intel QSV video encoding/decoding)
   - SVT-AV1 2.3.0 (AV1 video encoding)
-  - x265 4.0 (H.265/HEVC video encoding)
+  - x265 4.1 (H.265/HEVC video encoding)
 
 ### Linux
 
 - Fixed the Power Save option to pause the encodes only when enabled
 - Fixed the queue being stopped when removing completed items
 - Fixed chapters names not being saved properly
+- Fixed various issues related to presets
 
 ### Mac
 
 - Add Range Limit controls to the "Add to Queue" selection window (#4146)
-- Added support for Max Duration of Scan titles for disc based sources (#6304)
+- Fixed an issue that could cause corrupted video when using VideoToolbox HEVC multi-pass
 - Miscellaneous bug fixes and improvements
 
 ### Windows
 
 - Added Range Limit controls to the "Add to Queue" "Add Selection" window (#4146)
-- Added support for Max Duration of Scan titles for disc based sources (#6304)
 - Added support for DirectX based video decoding when using the Media Foundation encoder on ARM devices
 - Added support for the AV1 Media Foundation encoder on ARM devices
 - Added a "Start Later" option to the Queue Window.
