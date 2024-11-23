@@ -61,6 +61,9 @@
 /* Class = "NSMenuItem"; title = "HandBrake Website"; ObjectID = "1432"; */
 "1432.title" = "HandBrakes webbsida";
 
+/* Class = "NSMenuItem"; title = "Online Community Forums"; ObjectID = "1433"; */
+"1433.title" = "Gemenskapsforum på nätet";
+
 /* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "1445"; */
 "1445.title" = "Inställningar...";
 
@@ -142,8 +145,8 @@
 /* Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "1822"; */
 "1822.title" = "Klistra in och matcha stil";
 
-/* Class = "NSMenuItem"; title = "Presets View"; ObjectID = "1884"; */
-"1884.title" = "Förvalsvy";
+/* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1884"; */
+"1884.title" = "Förval";
 
 /* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1948"; */
 "1948.title" = "Förval";
@@ -160,8 +163,8 @@
 /* Class = "NSMenuItem"; title = "Online Documentation"; ObjectID = "1985"; */
 "1985.title" = "Nätdokumentation";
 
-/* Class = "NSMenuItem"; title = "Activity Window"; ObjectID = "2295"; */
-"2295.title" = "Aktivitetsfönster";
+/* Class = "NSMenuItem"; title = "Activity"; ObjectID = "2295"; */
+"2295.title" = "Aktivitet";
 
 /* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "2368"; */
 "2368.title" = "HandBrake";
@@ -187,8 +190,8 @@
 /* Class = "NSMenuItem"; title = "Check for Updates…"; ObjectID = "4964"; */
 "4964.title" = "Leta efter uppdateringar...";
 
-/* Class = "NSMenuItem"; title = "Preview Window"; ObjectID = "5157"; */
-"5157.title" = "Förhandsvisningsfönster";
+/* Class = "NSMenuItem"; title = "Preview"; ObjectID = "5157"; */
+"5157.title" = "Förhandsvisning";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "5188"; */
 "5188.title" = "Exportera…";
@@ -210,6 +213,9 @@
 
 /* Class = "NSMenuItem"; title = "Subtitles"; ObjectID = "Csx-2S-iUe"; */
 "Csx-2S-iUe.title" = "Undertexter";
+
+/* Class = "NSMenuItem"; title = "Actual Size"; ObjectID = "dhI-xk-VkB"; */
+"dhI-xk-VkB.title" = "Faktisk storlek";
 
 /* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "fNa-z2-K1i"; */
 "fNa-z2-K1i.title" = "Öppna senaste";
@@ -261,6 +267,9 @@
 
 /* Class = "NSMenuItem"; title = "Services"; ObjectID = "XcG-Aw-Gdb"; */
 "XcG-Aw-Gdb.title" = "Tjänster";
+
+/* Class = "NSMenuItem"; title = "Scale to Screen"; ObjectID = "xXN-Ui-Jyv"; */
+"xXN-Ui-Jyv.title" = "Skala till skärm";
 
 /* Class = "NSMenuItem"; title = "Switch to Previous Title"; ObjectID = "zgj-Iv-4xJ"; */
 "zgj-Iv-4xJ.title" = "Växla till föregående titel";

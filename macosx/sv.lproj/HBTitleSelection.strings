@@ -31,6 +31,12 @@
 /* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "jHg-nh-9NJ"; */
 "jHg-nh-9NJ.title" = "Avbryt";
 
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "JqJ-5C-Yhw"; */
+"JqJ-5C-Yhw.title" = "Markerat";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "k84-a6-eZ7"; */
+"k84-a6-eZ7.title" = "Markerat";
+
 /* Class = "NSMenuItem"; title = "Disable All"; ObjectID = "MIb-bL-Z6i"; */
 "MIb-bL-Z6i.title" = "Inaktivera alla";
 

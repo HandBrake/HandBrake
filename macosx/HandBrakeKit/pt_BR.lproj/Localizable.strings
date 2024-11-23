@@ -286,6 +286,12 @@ HBJob -> filters short description */
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "Mono (somente à direita)";
 
+/* Title description */
+"Multi Passes" = "Múltiplos passes";
+
+/* Title description */
+"Multi Passes Turbo" = "Multi Passes Turbo";
+
 /* HBStateFormatter -> pass display name */
 "Muxing…" = "Muxing...";
 

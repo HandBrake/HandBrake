@@ -145,8 +145,8 @@
 /* Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "1822"; */
 "1822.title" = "Coller et assortir le style";
 
-/* Class = "NSMenuItem"; title = "Presets View"; ObjectID = "1884"; */
-"1884.title" = "Afficher les préréglages";
+/* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1884"; */
+"1884.title" = "Préréglages";
 
 /* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1948"; */
 "1948.title" = "Préréglages";
@@ -163,8 +163,8 @@
 /* Class = "NSMenuItem"; title = "Online Documentation"; ObjectID = "1985"; */
 "1985.title" = "Documentation en ligne";
 
-/* Class = "NSMenuItem"; title = "Activity Window"; ObjectID = "2295"; */
-"2295.title" = "Fenêtre d'activité";
+/* Class = "NSMenuItem"; title = "Activity"; ObjectID = "2295"; */
+"2295.title" = "Activité";
 
 /* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "2368"; */
 "2368.title" = "HandBrake";
@@ -190,8 +190,8 @@
 /* Class = "NSMenuItem"; title = "Check for Updates…"; ObjectID = "4964"; */
 "4964.title" = "Rechercher des mises à jour…";
 
-/* Class = "NSMenuItem"; title = "Preview Window"; ObjectID = "5157"; */
-"5157.title" = "Fenêtre d'aperçu";
+/* Class = "NSMenuItem"; title = "Preview"; ObjectID = "5157"; */
+"5157.title" = "Aperçu";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "5188"; */
 "5188.title" = "Exporter…";
@@ -213,6 +213,9 @@
 
 /* Class = "NSMenuItem"; title = "Subtitles"; ObjectID = "Csx-2S-iUe"; */
 "Csx-2S-iUe.title" = "Sous-titres";
+
+/* Class = "NSMenuItem"; title = "Actual Size"; ObjectID = "dhI-xk-VkB"; */
+"dhI-xk-VkB.title" = "Taille réelle";
 
 /* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "fNa-z2-K1i"; */
 "fNa-z2-K1i.title" = "Ouvrir un élément récent";
@@ -264,6 +267,9 @@
 
 /* Class = "NSMenuItem"; title = "Services"; ObjectID = "XcG-Aw-Gdb"; */
 "XcG-Aw-Gdb.title" = "Services";
+
+/* Class = "NSMenuItem"; title = "Scale to Screen"; ObjectID = "xXN-Ui-Jyv"; */
+"xXN-Ui-Jyv.title" = "Adapter à l'écran";
 
 /* Class = "NSMenuItem"; title = "Switch to Previous Title"; ObjectID = "zgj-Iv-4xJ"; */
 "zgj-Iv-4xJ.title" = "Passer au titre précédent";

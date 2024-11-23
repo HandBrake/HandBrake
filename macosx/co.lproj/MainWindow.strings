@@ -47,7 +47,7 @@
 "1554.ibExternalAccessibilityDescription" = "Durata";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Duration of the selected source range in Hours:Minutes:Seconds."; ObjectID = "1554"; */
-"1554.ibShadowedToolTip" = "Durata di a stesa di fonte selezziunata in Ore:Minuti:Seconde.";
+"1554.ibShadowedToolTip" = "Durata di l’intervallu di fonte selezziunata in Ore:Minuti:Seconde.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Output filename"; ObjectID = "1561"; */
 "1561.ibExternalAccessibilityDescription" = "Nomi di u schedariu d’esciuta";
@@ -113,10 +113,10 @@
 "5506.title" = "–";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Range Selection"; ObjectID = "5513"; */
-"5513.ibExternalAccessibilityDescription" = "Selezzione di a stesa";
+"5513.ibExternalAccessibilityDescription" = "Selezzione di l’intervallu";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "5513"; */
-"5513.ibShadowedToolTip" = "Selezzione di a stesa di fonte. Senza precisà, tutti i capituli sò selezziunati è a fonte hè cudificata sana sana.";
+"5513.ibShadowedToolTip" = "Selezzione di l’intervallu di fonte. Senza precisà, tutti i capituli sò selezziunati è a fonte hè cudificata sana sana.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "5521"; */
 "5521.ibExternalAccessibilityDescription" = "Ora di principiu in fiure";
@@ -131,7 +131,7 @@
 "5523.ibShadowedToolTip" = "Ultima fiura à cudificà.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the encoding settings for the currently selected preset. Modifications will be discarded."; ObjectID = "AhR-pK-Oz4"; */
-"AhR-pK-Oz4.ibShadowedToolTip" = "Ricaricà e preferenze per a prerigatura attualmente selezziunata. I cambiamenti seranu persi.";
+"AhR-pK-Oz4.ibShadowedToolTip" = "Ricaricà i parametri per a prerigatura attualmente selezziunata. I cambiamenti seranu persi.";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "aID-g7-zTF"; */
 "aID-g7-zTF.ibShadowedIsNilPlaceholder" = "";
@@ -167,7 +167,7 @@
 "IOU-3L-nvB.title" = "Arregistrà a nova prerigatura…";
 
 /* Class = "NSTextFieldCell"; title = "Range:"; ObjectID = "IxV-PW-oYh"; */
-"IxV-PW-oYh.title" = "Stesa :";
+"IxV-PW-oYh.title" = "Intervallu :";
 
 /* Class = "NSTextFieldCell"; title = "Progress"; ObjectID = "KUR-YZ-Da8"; */
 "KUR-YZ-Da8.title" = "Prugressione";

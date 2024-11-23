@@ -10,8 +10,14 @@
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Subtitles Track Languages"; ObjectID = "aTC-39-h6S"; */
 "aTC-39-h6S.ibExternalAccessibilityDescription" = "Språk för undertextspår";
 
+/* Class = "NSScrollView"; ibShadowedToolTip = "Select the languages to use with the Track Selection Behavior setting."; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibShadowedToolTip" = "Välj språken att använda med inställningen för spårvalsbeteende.";
+
 /* Class = "NSButtonCell"; title = "Blu-ray Subtitles"; ObjectID = "bfV-9D-6dh"; */
 "bfV-9D-6dh.title" = "Bluray-undertexter";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "ceZ-On-t5S"; */
+"ceZ-On-t5S.ibShadowedToolTip" = "Bränn in första valda dvd-undertextspåret. Alla andra dvd-undertextspår kommer att förkastas. Använd detta alternativ om din uppspelningsprogramvara eller -enhet inte har stöd för dvd-undertexter.\n\nEndast ett undertextspår kan brännas in.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio, then First Selected Track"; ObjectID = "d79-2j-fhc"; */
 "d79-2j-fhc.title" = "Utländskt ljud, sedan första valda spåret";
@@ -37,6 +43,9 @@
 /* Class = "NSWindow"; title = "Subtitles Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
 "kwM-lz-5lG.title" = "Beteende för undertextval";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.\n\nOnly one subtitles track can be burned in."; ObjectID = "Lsa-kB-2BP"; */
+"Lsa-kB-2BP.ibShadowedToolTip" = "Beteende för inbränning. Välj vilka undertexter som ska göras permanenta genom att överlägga dem på videospåret.\n\nEndast ett undertextspår kan brännas in.";
+
 /* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
 "mAT-Jp-SG1.title" = "Språk:";
 
@@ -46,14 +55,29 @@
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
 "mvw-Hg-JFM.title" = "Ingen";
 
+/* Class = "NSTextFieldCell"; title = "Only one subtitles burn-in option will be applied, starting with the first (top)."; ObjectID = "N4s-K9-RwM"; */
+"N4s-K9-RwM.title" = "Endast ett alternativ för inbränning av undertexter kommer att verkställa, börjar med första (överst).";
+
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NJl-q3-zXL"; */
 "NJl-q3-zXL.title" = "Alternativ:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
+"oiD-QI-wly.ibShadowedToolTip" = "Spårvalsbeteende.\n\nIngen kommer inte att välja några ljudspår som standard.\n\nFörsta matchande valda språken lägger till första ljudspåret som matchar varje valt språk som finns i källan.\n\nAlla matchande valda språk lägger till alla ljudspår som matchar varenda av de valda språken som finns i källan.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default."; ObjectID = "OOC-GZ-OFA"; */
+"OOC-GZ-OFA.ibShadowedToolTip" = "Sökning efter utländska ljud söker igenom källan för kort sekvenser av utländska eller liknande ljud som visas som standard.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "Px8-G6-NVX"; */
+"Px8-G6-NVX.ibShadowedToolTip" = "Bränn in första valda Blu-ray-undertextspåret. Alla andra Blu-ray-undertextspår kommer att förkastas. Använd detta alternativ om din uppspelningsprogramvara eller -enhet inte har stöd för Blu-ray-undertexter.\n\nEndast ett undertextspår kan brännas in.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
 "QRd-XH-6TH.title" = "Undertextspår med utländskt ljud";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
 "qVQ-fS-w1S.title" = "Tabellvycell";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
+"uF5-6E-EIe.ibShadowedToolTip" = "Lägg till stängd undertext som ett mjukt undertextspår (inte inbränt).";
 
 /* Class = "NSButtonCell"; title = "Add Foreign Audio Search"; ObjectID = "vNY-OC-hTJ"; */
 "vNY-OC-hTJ.title" = "Lägg till sökning av utländskt ljud";

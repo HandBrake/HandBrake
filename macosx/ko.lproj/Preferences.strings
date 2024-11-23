@@ -148,11 +148,17 @@
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "saX-n7-YV0"; */
 "saX-n7-YV0.title" = "옵션:";
 
+/* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "t9b-CO-ShI"; */
+"t9b-CO-ShI.title" = "ISO 날짜 형식(YYYY-MM-DD) 사용";
+
 /* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "tAb-w4-Xwt"; */
 "tAb-w4-Xwt.title" = "밑줄을 공백으로 변경";
 
 /* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "UCC-tm-0Sa"; */
 "UCC-tm-0Sa.title" = "자동으로 출력파일 이름 설정";
+
+/* Class = "NSButtonCell"; title = "Clear completed jobs at launch"; ObjectID = "uIJ-tX-PEA"; */
+"uIJ-tX-PEA.title" = "시작 시 완료된 작업 지우기";
 
 /* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "v6r-mL-XmA"; */
 "v6r-mL-XmA.title" = "기본 MP4 확장자:";

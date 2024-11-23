@@ -7,6 +7,9 @@
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
 "5.title" = "首选项";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Maximum title duration in seconds. Longer titles will be skipped"; ObjectID = "5AX-Hp-nby"; */
+"5AX-Hp-nby.ibShadowedToolTip" = "标题的最长持续时间以秒为单位。较长的标题将被跳过";
+
 /* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "6Sg-su-vLd"; */
 "6Sg-su-vLd.title" = "选择新标题时保留预设的编辑内容";
 
@@ -106,6 +109,9 @@
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
 "399.title" = "使用 libdvdnav（而不是 libdvdread）";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped"; ObjectID = "480"; */
+"480.ibShadowedToolTip" = "标题的最短持续时间以秒为单位。较短的标题将被跳过";
+
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
 
@@ -126,6 +132,12 @@
 
 /* Class = "NSTableView"; ibShadowedToolTip = "The following file extensions will be ignored when scanning a folder. The list is case insensitive"; ObjectID = "ax0-hR-WPq"; */
 "ax0-hR-WPq.ibShadowedToolTip" = "扫描文件夹时将忽略以下文件扩展名。 列表不区分大小写";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Keep all the titles to match the titles numbers of a Blu-ray player"; ObjectID = "AYI-kG-it2"; */
+"AYI-kG-it2.ibShadowedToolTip" = "保留所有标题，以匹配蓝光播放器的标题编号";
+
+/* Class = "NSTextFieldCell"; title = "DVD and Blu-ray:"; ObjectID = "bG9-Tu-YsZ"; */
+"bG9-Tu-YsZ.title" = "DVD 和蓝光：";
 
 /* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
 "BHK-QU-DwS.title" = "启用 VideoToolbox 硬件解码器";
@@ -181,6 +193,9 @@
 /* Class = "NSTextFieldCell"; title = "Decoder:"; ObjectID = "j6w-xf-tC0"; */
 "j6w-xf-tC0.title" = "解码器：";
 
+/* Class = "NSButtonCell"; title = "Ignore titles shorter than:"; ObjectID = "jNT-vQ-h0c"; */
+"jNT-vQ-h0c.title" = "忽略小于时长的标题：";
+
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "JZb-Vz-cY4"; */
 "JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "无";
 
@@ -216,6 +231,9 @@
 
 /* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "phv-oU-WnC"; */
 "phv-oU-WnC.title" = ".m4v";
+
+/* Class = "NSButtonCell"; title = "Ignore titles longer than:"; ObjectID = "PoY-PD-tSq"; */
+"PoY-PD-tSq.title" = "忽略超过时长的标题：";
 
 /* Class = "NSButtonCell"; title = "Show notification when queue is completed"; ObjectID = "Qdg-Tw-rlf"; */
 "Qdg-Tw-rlf.title" = "队列完成后显示通知";

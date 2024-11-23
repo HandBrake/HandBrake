@@ -67,6 +67,9 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "LLW-KN-65P"; */
 "LLW-KN-65P.ibExternalAccessibilityDescription" = "Смесване";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.\n\nDolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility."; ObjectID = "LLW-KN-65P"; */
+"LLW-KN-65P.ibShadowedToolTip" = "Тип смесване. Контролира начина на смесване на многоканален звук в по-малко канали или дали оригиналните канали се запазват.\n\nDolby Surround и Dolby Pro Logic II конвертират многоканално аудио в стерео и матрично кодират допълнителни канали за съраунд възпроизвеждане на съвместимо оборудване, като запазват стерео съвместимостта.";
+
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "lnO-sZ-6xv"; */
 "lnO-sZ-6xv.headerCell.title" = "Кодек";
 

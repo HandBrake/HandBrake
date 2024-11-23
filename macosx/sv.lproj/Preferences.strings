@@ -1,8 +1,17 @@
+/* Class = "NSTextField"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "1mY-Wc-qrc"; */
+"1mY-Wc-qrc.ibShadowedToolTip" = "Bestämmer granuläriteten för kontroll av x264 konstant kvalitet. Mindre värden tillåter finare kvalitetsökningar.";
+
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "2Js-R4-g0K"; */
 "2Js-R4-g0K.title" = "Stäng av datorn";
 
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
 "5.title" = "Inställningar";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Maximum title duration in seconds. Longer titles will be skipped"; ObjectID = "5AX-Hp-nby"; */
+"5AX-Hp-nby.ibShadowedToolTip" = "Maximal titellängd i sekunder. Längre titlar kommer att hoppas över";
+
+/* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "6Sg-su-vLd"; */
+"6Sg-su-vLd.title" = "Behåll redigerade förval vid val av en ny titel";
 
 /* Class = "NSButtonCell"; title = "Show preview images on summary tab"; ObjectID = "7CY-9s-SGl"; */
 "7CY-9s-SGl.title" = "Visa förhandsbilder i sammandragsfliken";
@@ -31,6 +40,9 @@
 /* Class = "NSTextFieldCell"; title = "Activity Logs:"; ObjectID = "351"; */
 "351.title" = "Aktivitetsloggar:";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "352"; */
+"352.ibShadowedToolTip" = "Antal bilder att läsa in för förhandsvisning. Höger värden kan öka precisionen för automatisk beskäring på bekostnad av tid för titelinläsningen.";
+
 /* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
 "355.title" = "10";
 
@@ -40,11 +52,20 @@
 /* Class = "NSMenuItem"; title = "20"; ObjectID = "357"; */
 "357.title" = "20";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "359"; */
+"359.ibShadowedToolTip" = "Antal bilder att läsa in för förhandsvisning. Höger värden kan öka precisionen för automatisk beskäring på bekostnad av tid för titelinläsningen.";
+
+/* Class = "NSTextFieldCell"; title = "Number of picture previews to scan:"; ObjectID = "360"; */
+"360.title" = "Antal förhandsbilder att läsa in:";
+
 /* Class = "NSMenuItem"; title = "25"; ObjectID = "361"; */
 "361.title" = "25";
 
 /* Class = "NSMenuItem"; title = "30"; ObjectID = "362"; */
 "362.title" = "30";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "363"; */
+"363.ibShadowedToolTip" = "Verbositetsnivå. Utökad verbositet samlar mer teknisk information till aktivitetsloggen. Minimal verbositet samlar mindre.";
 
 /* Class = "NSMenuItem"; title = "Extended"; ObjectID = "368"; */
 "368.title" = "Utökad";
@@ -54,6 +75,15 @@
 
 /* Class = "NSMenuItem"; title = "Minimised"; ObjectID = "370"; */
 "370.title" = "Minimerad";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "371"; */
+"371.ibShadowedToolTip" = "Verbositetsnivå. Utökad verbositet samlar mer teknisk information till aktivitetsloggen. Minimal verbositet samlar mindre.";
+
+/* Class = "NSTextFieldCell"; title = "Verbosity Level:"; ObjectID = "372"; */
+"372.title" = "Verbositetsnivå:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "387"; */
+"387.ibShadowedToolTip" = "Bestämmer granuläriteten för kontroll av x264 konstant kvalitet. Mindre värden tillåter finare kvalitetsökningar.";
 
 /* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
 "390.title" = "0.20";
@@ -67,8 +97,20 @@
 /* Class = "NSMenuItem"; title = "1.0"; ObjectID = "394"; */
 "394.title" = "1.0";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "395"; */
+"395.ibShadowedToolTip" = "Bestämmer granuläriteten för kontroll av x264 konstant kvalitet. Mindre värden tillåter finare kvalitetsökningar.";
+
+/* Class = "NSTextFieldCell"; title = "Constant Quality fractional granularity:"; ObjectID = "396"; */
+"396.title" = "Fraktionell granuläritet för konstant kvalitet:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)."; ObjectID = "398"; */
+"398.ibShadowedToolTip" = "Använd libdvdnav för att läsa dvd. Inaktivera endast för problematiska dvd-skivor där libdvdread fungerar bättre (sällan).";
+
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
 "399.title" = "Använd libdvdnav (istället för libdvdread)";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped"; ObjectID = "480"; */
+"480.ibShadowedToolTip" = "Minimal titellängd i sekunder. Kortare titlar kommer att hoppas över";
 
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
@@ -88,8 +130,17 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
+/* Class = "NSTableView"; ibShadowedToolTip = "The following file extensions will be ignored when scanning a folder. The list is case insensitive"; ObjectID = "ax0-hR-WPq"; */
+"ax0-hR-WPq.ibShadowedToolTip" = "Följande filändelser kommer att ignoreras när en mapp söks igenom. Listan är inte känslig för skiftläge";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Keep all the titles to match the titles numbers of a Blu-ray player"; ObjectID = "AYI-kG-it2"; */
+"AYI-kG-it2.ibShadowedToolTip" = "Behåll alla titlar för att matcha titelnummer för en Blu-ray-spelare";
+
 /* Class = "NSTextFieldCell"; title = "DVD and Blu-ray:"; ObjectID = "bG9-Tu-YsZ"; */
 "bG9-Tu-YsZ.title" = "Dvd och Bluray:";
+
+/* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
+"BHK-QU-DwS.title" = "Aktivera enkodare för VideoToolbox-hårdvara";
 
 /* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "BKV-oH-uht"; */
 "BKV-oH-uht.title" = "GB";
@@ -108,6 +159,15 @@
 
 /* Class = "NSMenuItem"; title = "Auto"; ObjectID = "cZP-RL-fcB"; */
 "cZP-RL-fcB.title" = "Auto";
+
+/* Class = "NSButtonCell"; title = "Also use in combination with software encoders"; ObjectID = "d9B-Vd-jMM"; */
+"d9B-Vd-jMM.title" = "Använd även i kombination med programvaruenkodare";
+
+/* Class = "NSButtonCell"; title = "Pause queue when switching to battery power"; ObjectID = "dMs-sk-W4G"; */
+"dMs-sk-W4G.title" = "Pausa kö vid byte till batteriström";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed."; ObjectID = "Doh-Ja-Gh7"; */
+"Doh-Ja-Gh7.ibShadowedToolTip" = "Hårdvaruenkodare kommer att minska CPU-användning och lägre batterianvändning när kombinerad med en hårdvaruenkodare. Beroende på CPU-hastighet så kan de antingen öka eller minska enkodningshastigheten.";
 
 /* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "f47-PN-ctH"; */
 "f47-PN-ctH.title" = "Nollställ till 'Gör ingenting' vid uppstart";
@@ -154,6 +214,12 @@
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "l9y-MS-HnS"; */
 "l9y-MS-HnS.title" = "Textcell";
 
+/* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 7 days"; ObjectID = "lgn-RF-k0d"; */
+"lgn-RF-k0d.title" = "Ta bort gamla loggar från huvudmappen för aktivitetsloggar efter sju dagar";
+
+/* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "MSp-go-i1C"; */
+"MSp-go-i1C.title" = "Dra etiketter till Format för att bygga ett namngivningsformat.";
+
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "ODf-uW-BrD"; */
 "ODf-uW-BrD.title" = "Pausa kön om ledigt diskutrymme är mindre än:";
 
@@ -184,6 +250,9 @@
 /* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "tAb-w4-Xwt"; */
 "tAb-w4-Xwt.title" = "Ersätt understreck med blanksteg";
 
+/* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "UCC-tm-0Sa"; */
+"UCC-tm-0Sa.title" = "Namnge automatiskt utdatafiler";
+
 /* Class = "NSButtonCell"; title = "Clear completed jobs at launch"; ObjectID = "uIJ-tX-PEA"; */
 "uIJ-tX-PEA.title" = "Töm färdiga jobb vid uppstart";
 
@@ -211,6 +280,9 @@
 /* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "wgg-7I-LBB"; */
 "wgg-7I-LBB.title" = ".mp4";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "wOW-0q-lpT"; */
+"wOW-0q-lpT.ibShadowedToolTip" = "Högre värden kan hjälpa att fullständigt använda CPUn om en enda enkodning inte kan skala till alla tillgängliga CPU-kärnor.";
+
 /* Class = "NSButtonCell"; title = "Use same destination folder as source when possible"; ObjectID = "wXE-Fz-Dru"; */
 "wXE-Fz-Dru.title" = "Använd samma målmapp som källan om möjligt";
 
@@ -228,4 +300,7 @@
 
 /* Class = "NSButtonCell"; title = "Show Open Source panel"; ObjectID = "Zqz-Kn-xOS"; */
 "Zqz-Kn-xOS.title" = "Visa Öppna källa-panelen";
+
+/* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Zvg-MF-RQF"; */
+"Zvg-MF-RQF.ibShadowedToolTip" = "Dra etiketter till fältet Format för att bygga ett namngivningsformat.";
 

@@ -11,7 +11,7 @@
 "aTC-39-h6S.ibExternalAccessibilityDescription" = "Lingue di a traccia di sottutituli";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Select the languages to use with the Track Selection Behavior setting."; ObjectID = "aTC-39-h6S"; */
-"aTC-39-h6S.ibShadowedToolTip" = "Selezziunà e lingue à impiegà cù a preferenza di cumpurtamentu di selezzione di traccia audio.";
+"aTC-39-h6S.ibShadowedToolTip" = "Selezziunà e lingue à impiegà cù u parametru di cumpurtamentu di selezzione di traccia audio.";
 
 /* Class = "NSButtonCell"; title = "Blu-ray Subtitles"; ObjectID = "bfV-9D-6dh"; */
 "bfV-9D-6dh.title" = "Sottutituli Blu-ray";

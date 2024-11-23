@@ -28,6 +28,9 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Source file name."; ObjectID = "1539"; */
 "1539.ibShadowedToolTip" = "Källans filnamn.";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Title, or video clip, to encode. The longest title is selected by default.\n\nBlu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature."; ObjectID = "1541"; */
+"1541.ibShadowedToolTip" = "Titel eller videoklipp att enkoda. Den längsta titeln väljs som standard.\n\nBlu-ray och dvd-källor har oftast flera titlar och den längsta är oftast den som är den huvudsakliga filmen.";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "1545"; */
 "1545.ibExternalAccessibilityDescription" = "Första kapitlet";
 
@@ -42,6 +45,9 @@
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Duration"; ObjectID = "1554"; */
 "1554.ibExternalAccessibilityDescription" = "Speltid";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Duration of the selected source range in Hours:Minutes:Seconds."; ObjectID = "1554"; */
+"1554.ibShadowedToolTip" = "Längden för valt källomfång i timmar:minuter:sekunder.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Output filename"; ObjectID = "1561"; */
 "1561.ibExternalAccessibilityDescription" = "Filnamn för utdata";
@@ -82,6 +88,9 @@
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "4923"; */
 "4923.title" = "Förval:";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video angle to encode. Only applicable to multi-angle DVD and Blu-ray."; ObjectID = "5181"; */
+"5181.ibShadowedToolTip" = "Videovinkel att enkoda. Gäller endast för dvd och Blu-ray med flera vinklar.";
+
 /* Class = "NSTextFieldCell"; title = "Angle:"; ObjectID = "5185"; */
 "5185.title" = "Vinkel:";
 
@@ -106,14 +115,26 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Range Selection"; ObjectID = "5513"; */
 "5513.ibExternalAccessibilityDescription" = "Omfångsval";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "5513"; */
+"5513.ibShadowedToolTip" = "Val av källomfång. Alla kapitel kommer som standard att väljas och hela källan enkodas.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "5521"; */
+"5521.ibExternalAccessibilityDescription" = "Starttid i bildrutor";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "First frame to encode."; ObjectID = "5521"; */
 "5521.ibShadowedToolTip" = "Första bildrutan att enkoda.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "5523"; */
+"5523.ibExternalAccessibilityDescription" = "Sluttid i bildrutor";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "5523"; */
 "5523.ibShadowedToolTip" = "Sista bildrutan att enkoda.";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Reload the encoding settings for the currently selected preset. Modifications will be discarded."; ObjectID = "AhR-pK-Oz4"; */
+"AhR-pK-Oz4.ibShadowedToolTip" = "Läs om enkodningsinställningarna för det valda förvalet. Ändringar kommer att förkastas.";
+
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "aID-g7-zTF"; */
-"aID-g7-zTF.ibShadowedIsNilPlaceholder" = "aaeffbdebc703c50e2574782f0579842_tr";
+"aID-g7-zTF.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSTabViewItem"; label = "Summary"; ObjectID = "BA0-eg-2Ka"; */
 "BA0-eg-2Ka.label" = "Sammandrag";
@@ -123,6 +144,9 @@
 
 /* Class = "NSButtonCell"; title = "Reload"; ObjectID = "cgS-BU-Nfd"; */
 "cgS-BU-Nfd.title" = "Läs om";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "d0E-xw-bxh"; */
+"d0E-xw-bxh.title" = "Ruta";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Scan only the specified title instead of all titles."; ObjectID = "DN4-48-aOI"; */
 "DN4-48-aOI.ibShadowedToolTip" = "Läs endast in angiven titel istället för alla titlar.";
@@ -137,7 +161,7 @@
 "Hwu-gp-tRZ.title" = "Sök igenom mappar rekursivt";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "Iat-pL-ttI"; */
-"Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "3bb4134d1db8d768bda54fd480079421_tr";
+"Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSButtonCell"; title = "Save New Preset…"; ObjectID = "IOU-3L-nvB"; */
 "IOU-3L-nvB.title" = "Spara nytt förval...";

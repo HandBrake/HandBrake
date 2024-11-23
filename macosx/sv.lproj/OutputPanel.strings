@@ -10,6 +10,9 @@
 /* Class = "NSMenuItem"; title = "Copy Window Contents"; ObjectID = "24"; */
 "24.title" = "Kopiera fönsterinnehåll";
 
+/* Class = "NSMenuItem"; title = "Open Activity Log For This Session In Default Application"; ObjectID = "33"; */
+"33.title" = "Öppna aktivitetsloggen för denna session i standardprogrammet";
+
 /* Class = "NSMenuItem"; title = "Clear Activity Log For This Session"; ObjectID = "35"; */
 "35.title" = "Töm aktivitetsloggen för denna session";
 
