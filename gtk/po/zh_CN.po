@@ -5,17 +5,17 @@
 # 
 # Translators:
 # 玉堂白鹤 <yjwork@qq.com>, 2024
-# 普鲁文 <pluwen@gmail.com>, 2024
 # YFdyh000 <yfdyh000@gmail.com>, 2024
+# 普鲁文 <pluwen@gmail.com>, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 20240416-git-d9791800c\n"
+"Project-Id-Version: ghb 20241116-git-41d7e1d69\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-16 19:10+0100\n"
+"POT-Creation-Date: 2024-11-16 19:27+0000\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: YFdyh000 <yfdyh000@gmail.com>, 2024\n"
+"Last-Translator: 普鲁文 <pluwen@gmail.com>, 2024\n"
 "Language-Team: Chinese (https://app.transifex.com/HandBrakeProject/teams/92423/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,11 +27,11 @@ msgstr ""
 msgid "_File"
 msgstr "文件(_F)"
 
-#: src/ui/menu.ui:10 src/ui/menu.ui:462
+#: src/ui/menu.ui:10 src/ui/menu.ui:456
 msgid "_Open Source…"
 msgstr "打开源文件(_O)…"
 
-#: src/ui/menu.ui:14 src/ui/menu.ui:466
+#: src/ui/menu.ui:14 src/ui/menu.ui:460
 msgid "Open _Directory…"
 msgstr "打开目录(_D)…"
 
@@ -44,7 +44,7 @@ msgid "_Preferences"
 msgstr "首选项(_P)"
 
 #. Toss up a warning dialog
-#: src/ui/menu.ui:30 src/ui/menu.ui:210 src/callbacks.c:3814
+#: src/ui/menu.ui:30 src/ui/menu.ui:210 src/callbacks.c:3820
 msgid "_Quit"
 msgstr "退出(_Q)"
 
@@ -56,19 +56,19 @@ msgstr "队列(_Q)"
 msgid "_Add"
 msgstr "添加(_A)"
 
-#: src/ui/menu.ui:43 src/ui/menu.ui:449
+#: src/ui/menu.ui:43 src/ui/menu.ui:443
 msgid "Add _Multiple…"
 msgstr "添加多个(_M)…"
 
-#: src/ui/menu.ui:47 src/ui/menu.ui:453
+#: src/ui/menu.ui:47 src/ui/menu.ui:447
 msgid "Add A_ll"
 msgstr "全部添加(_A)"
 
-#: src/ui/menu.ui:53 src/queuehandler.c:1877
+#: src/ui/menu.ui:53 src/queuehandler.c:1870
 msgid "_Start Encoding"
 msgstr "开始编码(_S)"
 
-#: src/ui/menu.ui:57 src/queuehandler.c:1920
+#: src/ui/menu.ui:57 src/queuehandler.c:1913
 msgid "_Pause Encoding"
 msgstr "暂停编码(_P)"
 
@@ -108,9 +108,9 @@ msgstr "设为默认(_F)"
 msgid "_New Preset…"
 msgstr "新预设(_N)…"
 
-#: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:5975
-#: src/ui/ghb.ui:6065 src/callbacks.c:2135 src/chapters.c:455
-#: src/ghb-file-button.c:219 src/presets.c:2229 src/queuehandler.c:1391
+#: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:6038
+#: src/ui/ghb.ui:6128 src/callbacks.c:2141 src/chapters.c:455
+#: src/ghb-file-button.c:219 src/presets.c:2331 src/queuehandler.c:1386
 msgid "_Save"
 msgstr "保存(_S)"
 
@@ -194,11 +194,11 @@ msgstr "清除所有任务(_A)"
 msgid "_Add Track"
 msgstr ""
 
-#: src/ui/menu.ui:350 src/ui/menu.ui:425 src/ui/menu.ui:437
+#: src/ui/menu.ui:350 src/ui/menu.ui:419 src/ui/menu.ui:431
 msgid "Add A_ll Tracks"
 msgstr ""
 
-#: src/ui/menu.ui:354 src/ui/menu.ui:441
+#: src/ui/menu.ui:354 src/ui/menu.ui:435
 msgid "Add _Foreign Audio Scan"
 msgstr ""
 
@@ -222,11 +222,7 @@ msgstr "编辑(_E)"
 msgid "_Reset"
 msgstr "重置(_R)"
 
-#: src/ui/menu.ui:413
-msgid "Re_move"
-msgstr "移除(_M)"
-
-#: src/ui/menu.ui:421 src/ui/menu.ui:433
+#: src/ui/menu.ui:415 src/ui/menu.ui:427
 msgid "_Add New Track"
 msgstr ""
 
@@ -338,7 +334,7 @@ msgstr "预设"
 
 #: src/ui/ghb.ui:157
 msgid "Save as new preset"
-msgstr ""
+msgstr "另存为新预设"
 
 #: src/ui/ghb.ui:166 src/ui/ghb.ui:430
 msgid "Actions"
@@ -348,23 +344,23 @@ msgstr "动作"
 msgid "HandBrake Queue"
 msgstr "HandBrake 队列"
 
-#: src/ui/ghb.ui:212 src/ui/ghb.ui:1416 src/queuehandler.c:1850
-#: src/queuehandler.c:1863
+#: src/ui/ghb.ui:212 src/ui/ghb.ui:1416 src/queuehandler.c:1843
+#: src/queuehandler.c:1856
 msgid "Start Encoding"
 msgstr "开始编码"
 
-#: src/ui/ghb.ui:213 src/ui/ghb.ui:1417 src/ui/ghb.ui:4156
-#: src/queuehandler.c:1849 src/queuehandler.c:1862
+#: src/ui/ghb.ui:213 src/ui/ghb.ui:1417 src/ui/ghb.ui:4154
+#: src/queuehandler.c:1842 src/queuehandler.c:1855
 msgid "Start"
 msgstr "开始"
 
-#: src/ui/ghb.ui:221 src/ui/ghb.ui:1424 src/queuehandler.c:1894
-#: src/queuehandler.c:1907
+#: src/ui/ghb.ui:221 src/ui/ghb.ui:1424 src/queuehandler.c:1887
+#: src/queuehandler.c:1900
 msgid "Pause Encoding"
 msgstr "暂停编码"
 
-#: src/ui/ghb.ui:222 src/ui/ghb.ui:1425 src/queuehandler.c:1893
-#: src/queuehandler.c:1906
+#: src/ui/ghb.ui:222 src/ui/ghb.ui:1425 src/queuehandler.c:1886
+#: src/queuehandler.c:1899
 msgid "Pause"
 msgstr "暂停"
 
@@ -380,13 +376,13 @@ msgstr "0 个任务排队中"
 msgid "Options"
 msgstr "选项"
 
-#: src/ui/ghb.ui:322 src/ui/ghb.ui:4540
+#: src/ui/ghb.ui:322 src/ui/ghb.ui:4538
 msgid "When Done:"
 msgstr "完成时:"
 
 #: src/ui/ghb.ui:335
 msgid "Show/hide the queue details panel"
-msgstr ""
+msgstr "显示/隐藏队列详情面板"
 
 #: src/ui/ghb.ui:364 src/ui/ghb.ui:1733
 msgid "Summary"
@@ -408,10 +404,10 @@ msgstr "重置"
 msgid "Edit"
 msgstr "编辑"
 
-#: src/ui/ghb.ui:456 src/ui/ghb.ui:2947 src/ui/ghb.ui:3071 src/ui/ghb.ui:3212
-#: src/ui/ghb.ui:3587 src/hb-backend.c:4308 src/hb-backend.c:4315
-#: src/hb-backend.c:4339 src/hb-backend.c:4347 src/hb-backend.c:4375
-#: src/hb-backend.c:4384 src/hb-backend.c:4411 src/hb-backend.c:4436
+#: src/ui/ghb.ui:456 src/ui/ghb.ui:2945 src/ui/ghb.ui:3069 src/ui/ghb.ui:3210
+#: src/ui/ghb.ui:3585 src/hb-backend.c:4305 src/hb-backend.c:4312
+#: src/hb-backend.c:4336 src/hb-backend.c:4344 src/hb-backend.c:4372
+#: src/hb-backend.c:4381 src/hb-backend.c:4408 src/hb-backend.c:4433
 msgid "Preset:"
 msgstr "预设："
 
@@ -419,7 +415,7 @@ msgstr "预设："
 msgid "Source:"
 msgstr "源文件:"
 
-#: src/ui/ghb.ui:515 src/ui/ghb.ui:4205
+#: src/ui/ghb.ui:515 src/ui/ghb.ui:4203
 msgid "Title:"
 msgstr "标题："
 
@@ -489,20 +485,22 @@ msgid ""
 "Copyright © 2008-2024 John Stebbins\n"
 "Copyright © 2004-2024, HandBrake Devs"
 msgstr ""
+"Copyright © 2008-2024 John Stebbins\n"
+"Copyright © 2004-2024, HandBrake Devs"
 
 #: src/ui/ghb.ui:1305
 msgid "Multithreaded video transcoder"
-msgstr ""
+msgstr "多线程视频转码器"
 
 #: src/ui/ghb.ui:1334 data/fr.handbrake.ghb.desktop.in:3
 msgid "HandBrake"
 msgstr "HandBrake"
 
-#: src/ui/ghb.ui:1363 src/callbacks.c:4521
+#: src/ui/ghb.ui:1363 src/callbacks.c:4556
 msgid "Choose Video Source"
 msgstr "选择视频源文件"
 
-#: src/ui/ghb.ui:1364 src/callbacks.c:1866 src/callbacks.c:4520
+#: src/ui/ghb.ui:1364 src/callbacks.c:1873 src/callbacks.c:4555
 msgid "Open Source"
 msgstr "打开源文件"
 
@@ -545,12 +543,12 @@ msgstr "<b>源文件:</b>"
 #: src/ui/ghb.ui:1498 src/hb-backend.c:54 src/hb-backend.c:66
 #: src/hb-backend.c:79 src/hb-backend.c:117 src/hb-backend.c:217
 #: src/hb-backend.c:250 src/hb-backend.c:261 src/hb-backend.c:288
-#: src/hb-backend.c:373 src/hb-backend.c:2537 src/hb-backend.c:2762
+#: src/hb-backend.c:373 src/hb-backend.c:2547 src/hb-backend.c:2772
 #: src/subtitlehandler.c:1434
 msgid "None"
 msgstr "无"
 
-#: src/ui/ghb.ui:1526 src/callbacks.c:4493
+#: src/ui/ghb.ui:1526 src/callbacks.c:4528
 msgid "Scanning..."
 msgstr "扫描中 ..."
 
@@ -608,7 +606,7 @@ msgstr "选择预设"
 msgid "<u><i>Modified</i></u>"
 msgstr "<u><i>被修改</i></u>"
 
-#: src/ui/ghb.ui:1681 src/ui/ghb.ui:3859 src/ui/ghb.ui:4013
+#: src/ui/ghb.ui:1681 src/ui/ghb.ui:3857 src/ui/ghb.ui:4011
 msgid "Reload"
 msgstr "重新加载"
 
@@ -636,7 +634,7 @@ msgstr "格式："
 msgid "Format to mux encoded tracks to."
 msgstr "轨道混流的格式。"
 
-#: src/ui/ghb.ui:1770 src/queuehandler.c:230
+#: src/ui/ghb.ui:1770 src/queuehandler.c:225
 msgid "Web Optimized"
 msgstr "Web 优化"
 
@@ -697,9 +695,9 @@ msgstr "滤镜："
 msgid "Size:"
 msgstr "尺寸："
 
-#: src/ui/ghb.ui:1987 src/ui/ghb.ui:2006 src/ui/ghb.ui:6229
+#: src/ui/ghb.ui:1987 src/ui/ghb.ui:2006 src/ui/ghb.ui:6292
 msgid "Video Preview"
-msgstr ""
+msgstr "视频预览"
 
 #: src/ui/ghb.ui:2022
 msgid "Dimensions"
@@ -709,15 +707,15 @@ msgstr "尺寸"
 msgid "<b>Source Dimensions</b>"
 msgstr "<b> 源尺寸</b>"
 
-#: src/ui/ghb.ui:2051 src/ui/ghb.ui:2699
+#: src/ui/ghb.ui:2051 src/ui/ghb.ui:2697
 msgid "Storage Size:"
 msgstr "存储大小:"
 
-#: src/ui/ghb.ui:2074 src/ui/ghb.ui:2726
+#: src/ui/ghb.ui:2074 src/ui/ghb.ui:2724
 msgid "Display Size:"
 msgstr "显示大小："
 
-#: src/ui/ghb.ui:2097 src/ui/ghb.ui:2793
+#: src/ui/ghb.ui:2097 src/ui/ghb.ui:2791
 msgid "Aspect Ratio:"
 msgstr "宽高比:"
 
@@ -849,7 +847,7 @@ msgstr ""
 "这是视频存储的宽度。\n"
 "如果像素宽高比不是 1:1 的话，实际的画面显示尺寸会有所不同。"
 
-#: src/ui/ghb.ui:2485 src/ui/ghb.ui:2749
+#: src/ui/ghb.ui:2485 src/ui/ghb.ui:2747
 msgid "×"
 msgstr "×"
 
@@ -882,60 +880,60 @@ msgstr ""
 msgid "<b>Borders</b>"
 msgstr ""
 
-#: src/ui/ghb.ui:2568
+#: src/ui/ghb.ui:2567
 msgid "Fill:"
 msgstr "填充："
 
-#: src/ui/ghb.ui:2580
+#: src/ui/ghb.ui:2579
 msgid "Add a border around the video."
 msgstr ""
 
-#: src/ui/ghb.ui:2594
+#: src/ui/ghb.ui:2592
 msgid "Left Pad"
-msgstr ""
+msgstr "左边距"
 
-#: src/ui/ghb.ui:2608
+#: src/ui/ghb.ui:2606
 msgid "Top Pad"
-msgstr ""
+msgstr "上边距"
 
-#: src/ui/ghb.ui:2622
+#: src/ui/ghb.ui:2620
 msgid "Bottom Pad"
-msgstr ""
+msgstr "下边距"
 
-#: src/ui/ghb.ui:2636
+#: src/ui/ghb.ui:2634
 msgid "Right Pad"
-msgstr ""
+msgstr "右边距"
 
-#: src/ui/ghb.ui:2649
+#: src/ui/ghb.ui:2647
 msgid "Color:"
 msgstr "色彩："
 
-#: src/ui/ghb.ui:2661
+#: src/ui/ghb.ui:2659
 msgid "Color of border added around video."
 msgstr "视频周围添加的边框颜色。"
 
-#: src/ui/ghb.ui:2685
+#: src/ui/ghb.ui:2683
 msgid "<b>Final Dimensions</b>"
 msgstr ""
 
-#: src/ui/ghb.ui:2737 src/ui/ghb.ui:2760 src/ui/ghb.ui:2773
+#: src/ui/ghb.ui:2735 src/ui/ghb.ui:2758 src/ui/ghb.ui:2771
 msgid "Changing the display size will stretch the video."
-msgstr ""
+msgstr "更改显示尺寸会拉伸视频。"
 
-#: src/ui/ghb.ui:2771 src/hb-backend.c:116 src/hb-backend.c:219
+#: src/ui/ghb.ui:2769 src/hb-backend.c:116 src/hb-backend.c:219
 #: src/hb-backend.c:291
 msgid "Automatic"
 msgstr "自动"
 
-#: src/ui/ghb.ui:2822
+#: src/ui/ghb.ui:2820
 msgid "Filters"
 msgstr "滤镜"
 
-#: src/ui/ghb.ui:2832
+#: src/ui/ghb.ui:2830
 msgid "Detelecine:"
 msgstr "反胶卷过带滤镜："
 
-#: src/ui/ghb.ui:2843
+#: src/ui/ghb.ui:2841
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
@@ -945,7 +943,7 @@ msgstr ""
 "\n"
 "胶卷过带 (telecining) 用于转换 24fps 的胶卷为 30fps NTSC 视频。"
 
-#: src/ui/ghb.ui:2859 src/ui/ghb.ui:3285
+#: src/ui/ghb.ui:2857 src/ui/ghb.ui:3283
 msgid ""
 "Custom detelecine filter string format\n"
 "\n"
@@ -955,11 +953,11 @@ msgstr ""
 "\n"
 "JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 
-#: src/ui/ghb.ui:2874
+#: src/ui/ghb.ui:2872
 msgid "Interlace Detection:"
 msgstr "隔行扫描检测："
 
-#: src/ui/ghb.ui:2885
+#: src/ui/ghb.ui:2883
 msgid ""
 "This filter detects interlaced frames.\n"
 "\n"
@@ -970,7 +968,7 @@ msgstr ""
 "\n"
 "如果启用了反交错滤镜，则只有该滤镜发现隔行扫描的帧才会进行反交错处理。"
 
-#: src/ui/ghb.ui:2900
+#: src/ui/ghb.ui:2898
 msgid ""
 "Custom interlace detection filter string format\n"
 "\n"
@@ -982,11 +980,11 @@ msgstr ""
 "Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:\n"
 "Block Thresh: Block Width: Block Height"
 
-#: src/ui/ghb.ui:2916
+#: src/ui/ghb.ui:2914
 msgid "Deinterlace:"
 msgstr "反交错："
 
-#: src/ui/ghb.ui:2927
+#: src/ui/ghb.ui:2925
 msgid ""
 "Choose decomb or deinterlace filter.\n"
 "\n"
@@ -998,7 +996,7 @@ msgstr ""
 "decomb 去梳状纹理滤镜支持各种插值算法。\n"
 "deinterlace 反交错滤镜是经典的 YADIF 去隔行过滤器。\n"
 
-#: src/ui/ghb.ui:2954
+#: src/ui/ghb.ui:2952
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
 "\n"
@@ -1006,12 +1004,16 @@ msgid ""
 "    The deinterlace filter is a classic YADIF deinterlacer.\n"
 "    "
 msgstr ""
+"选择去梳状纹理或者反交错滤镜选项。\n"
+"\n"
+"    去梳状纹理滤镜支持多种插值算法。\n"
+"    反交错滤镜是经典的 YADIF 反交错算法。"
 
-#: src/ui/ghb.ui:2981
+#: src/ui/ghb.ui:2979
 msgid "Deblock Filter:"
 msgstr "去区块滤镜："
 
-#: src/ui/ghb.ui:2992
+#: src/ui/ghb.ui:2990
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
@@ -1019,29 +1021,31 @@ msgstr ""
 "去区块滤镜可以去除压缩导致的区块效应。\n"
 "如果您的源文件存在区块效应，这个滤镜则可以将其清除。"
 
-#: src/ui/ghb.ui:3009 src/ui/ghb.ui:3089 src/ui/ghb.ui:3151 src/ui/ghb.ui:3229
-#: src/ui/ghb.ui:3643 src/hb-backend.c:4412 src/hb-backend.c:4437
+#: src/ui/ghb.ui:3007 src/ui/ghb.ui:3087 src/ui/ghb.ui:3149 src/ui/ghb.ui:3227
+#: src/ui/ghb.ui:3641 src/hb-backend.c:4409 src/hb-backend.c:4434
 msgid "Tune:"
 msgstr "调优："
 
-#: src/ui/ghb.ui:3016
+#: src/ui/ghb.ui:3014
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
+"去区块滤镜可以去除常见的压缩伪影。\n"
+"    如果你的源视频出现“块状”失真，该滤镜可能有助于清除这些问题。"
 
-#: src/ui/ghb.ui:3025 src/ui/ghb.ui:3167
+#: src/ui/ghb.ui:3023 src/ui/ghb.ui:3165
 msgid ""
 "Custom deblock filter string format\n"
 "\n"
 "    strength=weak|strong:thresh=0-100:blocksize=4-512"
 msgstr ""
 
-#: src/ui/ghb.ui:3042
+#: src/ui/ghb.ui:3040
 msgid "Denoise Filter:"
 msgstr "降噪滤镜："
 
-#: src/ui/ghb.ui:3053
+#: src/ui/ghb.ui:3051
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "Film grain and other types of high frequency noise are difficult to compress.\n"
@@ -1051,85 +1055,85 @@ msgstr ""
 "胶卷颗粒噪点及其他高频噪音通常难以压缩。\n"
 "使用该滤镜可以得到更小的输出文件。"
 
-#: src/ui/ghb.ui:3078 src/ui/ghb.ui:3096
+#: src/ui/ghb.ui:3076 src/ui/ghb.ui:3094
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 
-#: src/ui/ghb.ui:3106 src/ui/ghb.ui:3245
+#: src/ui/ghb.ui:3104 src/ui/ghb.ui:3243
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
 "    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 msgstr ""
 
-#: src/ui/ghb.ui:3123
+#: src/ui/ghb.ui:3121
 msgid "Chroma Smooth Filter:"
-msgstr ""
+msgstr "色度平滑滤镜："
 
-#: src/ui/ghb.ui:3134
+#: src/ui/ghb.ui:3132
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "Lower resolution analog source content may benefit from this filter."
 msgstr ""
 
-#: src/ui/ghb.ui:3158
+#: src/ui/ghb.ui:3156
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
 msgstr ""
 
-#: src/ui/ghb.ui:3184
+#: src/ui/ghb.ui:3182
 msgid "Sharpen Filter:"
 msgstr "锐化滤镜："
 
-#: src/ui/ghb.ui:3195
+#: src/ui/ghb.ui:3193
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "high frequency components in the video."
 msgstr "锐化滤镜将增强视频中的边缘和其他高频成分。 "
 
-#: src/ui/ghb.ui:3219 src/ui/ghb.ui:3236
+#: src/ui/ghb.ui:3217 src/ui/ghb.ui:3234
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
 msgstr ""
 
-#: src/ui/ghb.ui:3262
+#: src/ui/ghb.ui:3260
 msgid "Colorspace:"
 msgstr "色彩空间："
 
-#: src/ui/ghb.ui:3273
+#: src/ui/ghb.ui:3271
 msgid "Translate the colorspace of the source."
 msgstr ""
 
-#: src/ui/ghb.ui:3299 src/hb-backend.c:4880
+#: src/ui/ghb.ui:3297 src/hb-backend.c:4877
 msgid "Grayscale"
 msgstr "灰度"
 
-#: src/ui/ghb.ui:3301
+#: src/ui/ghb.ui:3299
 msgid "If enabled, filter colour components out of video."
 msgstr "如果启用，将过滤输出文件的色彩部分。"
 
-#: src/ui/ghb.ui:3318 src/callbacks.c:5609
+#: src/ui/ghb.ui:3316 src/callbacks.c:5644
 msgid "Video"
 msgstr "视频"
 
-#: src/ui/ghb.ui:3333
+#: src/ui/ghb.ui:3331
 msgid "Video Encoder:"
 msgstr "视频编码器："
 
-#: src/ui/ghb.ui:3343
+#: src/ui/ghb.ui:3341
 msgid "Available video encoders."
 msgstr "可用的视频编码器。"
 
-#: src/ui/ghb.ui:3354
+#: src/ui/ghb.ui:3352
 msgid "Framerate:"
 msgstr "帧率："
 
-#: src/ui/ghb.ui:3364
+#: src/ui/ghb.ui:3362
 msgid ""
 "Output framerate.\n"
 "\n"
@@ -1141,19 +1145,19 @@ msgstr ""
 "推荐选择“与源视频相同”。如果您的源视频使用动态帧率，\n"
 "该选项能保证其与源视频帧率一致。"
 
-#: src/ui/ghb.ui:3380
+#: src/ui/ghb.ui:3378
 msgid "Constant Framerate"
 msgstr "固定帧率"
 
-#: src/ui/ghb.ui:3381
+#: src/ui/ghb.ui:3379
 msgid "Enables constant framerate output."
 msgstr "启用恒定帧率输出。"
 
-#: src/ui/ghb.ui:3388
+#: src/ui/ghb.ui:3386
 msgid "Peak Framerate (VFR)"
 msgstr "峰值帧率 (VFR)"
 
-#: src/ui/ghb.ui:3389
+#: src/ui/ghb.ui:3387
 msgid ""
 "Enables variable framerate output with a peak\n"
 "    rate determined by the framerate setting.\n"
@@ -1161,22 +1165,22 @@ msgid ""
 "    VFR is not compatible with some players."
 msgstr ""
 
-#: src/ui/ghb.ui:3400
+#: src/ui/ghb.ui:3398
 msgid "Variable Framerate"
 msgstr "动态帧率"
 
-#: src/ui/ghb.ui:3401
+#: src/ui/ghb.ui:3399
 msgid ""
 "Enables variable framerate output.\n"
 "\n"
 "    VFR is not compatible with some players."
 msgstr ""
 
-#: src/ui/ghb.ui:3427
+#: src/ui/ghb.ui:3425
 msgid "Constant Quality:"
 msgstr "恒定画质："
 
-#: src/ui/ghb.ui:3428
+#: src/ui/ghb.ui:3426
 msgid ""
 "Set the desired quality factor.\n"
 "  The encoder targets a certain quality.\n"
@@ -1192,7 +1196,7 @@ msgid ""
 "  These encoders do not have a lossless mode."
 msgstr ""
 
-#: src/ui/ghb.ui:3467
+#: src/ui/ghb.ui:3465
 msgid ""
 "Set the desired quality factor.\n"
 "The encoder targets a certain quality.\n"
@@ -1217,15 +1221,15 @@ msgstr ""
 "\n"
 "FFMpeg 和 Theora 的刻度是线性的，而且显然没有无损模式。"
 
-#: src/ui/ghb.ui:3483 src/audiohandler.c:1783
+#: src/ui/ghb.ui:3481 src/audiohandler.c:1791
 msgid "Quality"
 msgstr "质量"
 
-#: src/ui/ghb.ui:3494
+#: src/ui/ghb.ui:3492
 msgid "Bitrate (kbps):    "
 msgstr "码率 (kbps):    "
 
-#: src/ui/ghb.ui:3495 src/ui/ghb.ui:3512
+#: src/ui/ghb.ui:3493 src/ui/ghb.ui:3510
 msgid ""
 "Set the average bitrate.\n"
 "\n"
@@ -1238,11 +1242,11 @@ msgstr ""
 "任意时间点的瞬时码率可能更高或者更低，但是总体的平均值为此处设置的值。\n"
 "如果您需要限定瞬时码率的值，您可以参考 x264 的 vbv-bufsize 和 vbv-maxrate 设置。"
 
-#: src/ui/ghb.ui:3541
+#: src/ui/ghb.ui:3539
 msgid "Multi-Pass Encoding"
 msgstr ""
 
-#: src/ui/ghb.ui:3543
+#: src/ui/ghb.ui:3541
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
@@ -1251,17 +1255,17 @@ msgid ""
 "to make bitrate allocation decisions."
 msgstr ""
 
-#: src/ui/ghb.ui:3554
+#: src/ui/ghb.ui:3552
 msgid "Turbo Analysis Pass"
 msgstr ""
 
-#: src/ui/ghb.ui:3556
+#: src/ui/ghb.ui:3554
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
 msgstr ""
 
-#: src/ui/ghb.ui:3601
+#: src/ui/ghb.ui:3599
 msgid ""
 "Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
@@ -1277,11 +1281,11 @@ msgstr ""
 "您应该选择您所能接受的最慢的设置选项，因为较慢的设置可以\n"
 "得到更好的输出质量或者更小的输出文件。"
 
-#: src/ui/ghb.ui:3616
+#: src/ui/ghb.ui:3614
 msgid "Encoder Preset"
 msgstr ""
 
-#: src/ui/ghb.ui:3653
+#: src/ui/ghb.ui:3651
 msgid ""
 "Tune settings to optimize for common scenarios.\n"
 "\n"
@@ -1294,11 +1298,11 @@ msgstr ""
 "对于特定的源文件特性或者输出文件特性，这能提高效率。\n"
 "所修改的选项作用紧跟预设但是在其他参数之前。"
 
-#: src/ui/ghb.ui:3667
+#: src/ui/ghb.ui:3665
 msgid "Fast Decode"
 msgstr "快速解码"
 
-#: src/ui/ghb.ui:3669
+#: src/ui/ghb.ui:3667
 msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
@@ -1308,11 +1312,11 @@ msgstr ""
 "\n"
 "如果您的输出在设备上播放不流畅（掉帧），请勾选此选项。"
 
-#: src/ui/ghb.ui:3684
+#: src/ui/ghb.ui:3682
 msgid "Zero Latency"
 msgstr "零延迟"
 
-#: src/ui/ghb.ui:3686
+#: src/ui/ghb.ui:3684
 msgid ""
 "Minimize latency between input to encoder and output of decoder.\n"
 "\n"
@@ -1328,11 +1332,11 @@ msgstr ""
 "但是 HandBrake 并不适用于流媒体广播，\n"
 "所以这个设置基本没有什么意义。"
 
-#: src/ui/ghb.ui:3704
+#: src/ui/ghb.ui:3702
 msgid "Profile:"
 msgstr "规格："
 
-#: src/ui/ghb.ui:3714
+#: src/ui/ghb.ui:3712
 msgid ""
 "Sets and ensures compliance with the specified profile.\n"
 "\n"
@@ -1342,11 +1346,11 @@ msgstr ""
 "\n"
 "会覆盖其他所有设置。"
 
-#: src/ui/ghb.ui:3727
+#: src/ui/ghb.ui:3725
 msgid "Level:"
 msgstr "级别："
 
-#: src/ui/ghb.ui:3737
+#: src/ui/ghb.ui:3735
 msgid ""
 "Sets and ensures compliance with the specified level.\n"
 "\n"
@@ -1356,155 +1360,155 @@ msgstr ""
 "\n"
 "会覆盖其他所有设置。"
 
-#: src/ui/ghb.ui:3753
+#: src/ui/ghb.ui:3751
 msgid "Additional Options:"
 msgstr ""
 
-#: src/ui/ghb.ui:3793
+#: src/ui/ghb.ui:3791
 msgid "Audio"
 msgstr "音频"
 
-#: src/ui/ghb.ui:3822
+#: src/ui/ghb.ui:3820
 msgid "Show audio default selection options"
 msgstr ""
 
-#: src/ui/ghb.ui:3836 src/ui/ghb.ui:3990
+#: src/ui/ghb.ui:3834 src/ui/ghb.ui:3988
 msgid "Selection Behavior…"
 msgstr ""
 
-#: src/ui/ghb.ui:3845
+#: src/ui/ghb.ui:3843
 msgid "Reload all audio settings from defaults"
 msgstr "重新加载所有音频的默认设置"
 
-#: src/ui/ghb.ui:3888 src/ui/ghb.ui:4042 src/ui/ghb.ui:4949
+#: src/ui/ghb.ui:3886 src/ui/ghb.ui:4040 src/ui/ghb.ui:4953
 msgid "Remove"
 msgstr "移除"
 
-#: src/ui/ghb.ui:3911 src/ui/ghb.ui:4065
+#: src/ui/ghb.ui:3909 src/ui/ghb.ui:4063
 msgid "Clear"
 msgstr ""
 
-#: src/ui/ghb.ui:3947
+#: src/ui/ghb.ui:3945
 msgid "Subtitles"
 msgstr "字幕"
 
-#: src/ui/ghb.ui:3963
+#: src/ui/ghb.ui:3961
 msgid "Tracks"
 msgstr ""
 
-#: src/ui/ghb.ui:3976
+#: src/ui/ghb.ui:3974
 msgid "Show subtitle default selection options"
 msgstr ""
 
-#: src/ui/ghb.ui:4101
+#: src/ui/ghb.ui:4099
 msgid "Chapters"
 msgstr "章节"
 
-#: src/ui/ghb.ui:4112 src/callbacks.c:2533 src/queuehandler.c:220
+#: src/ui/ghb.ui:4110 src/callbacks.c:2539 src/queuehandler.c:215
 msgid "Chapter Markers"
 msgstr "章节标记"
 
-#: src/ui/ghb.ui:4114
+#: src/ui/ghb.ui:4112
 msgid "Add chapter markers to output file."
 msgstr "添加章节标记到输出文件。"
 
-#: src/ui/ghb.ui:4121
+#: src/ui/ghb.ui:4119
 msgid "Import Chapters"
 msgstr ""
 
-#: src/ui/ghb.ui:4123
+#: src/ui/ghb.ui:4121
 msgid "Import chapter list from an XML file"
 msgstr ""
 
-#: src/ui/ghb.ui:4131
+#: src/ui/ghb.ui:4129
 msgid "Export Chapters"
 msgstr ""
 
-#: src/ui/ghb.ui:4133
+#: src/ui/ghb.ui:4131
 msgid "Export chapter list as an XML file"
 msgstr ""
 
-#: src/ui/ghb.ui:4149
+#: src/ui/ghb.ui:4147
 msgid "Index"
 msgstr "序号"
 
-#: src/ui/ghb.ui:4163
+#: src/ui/ghb.ui:4161
 msgid "Duration"
 msgstr "持续时长"
 
-#: src/ui/ghb.ui:4169
+#: src/ui/ghb.ui:4167
 msgid "Title"
 msgstr "标题"
 
-#: src/ui/ghb.ui:4195
+#: src/ui/ghb.ui:4193
 msgid "Tags"
 msgstr "标签"
 
-#: src/ui/ghb.ui:4233
+#: src/ui/ghb.ui:4231
 msgid "Actors:"
 msgstr "演员："
 
-#: src/ui/ghb.ui:4261
+#: src/ui/ghb.ui:4259
 msgid "Director:"
 msgstr "导演："
 
-#: src/ui/ghb.ui:4289
+#: src/ui/ghb.ui:4287
 msgid "Release Date:"
 msgstr "发布日期："
 
-#: src/ui/ghb.ui:4317
+#: src/ui/ghb.ui:4315
 msgid "Comment:"
 msgstr "评论："
 
-#: src/ui/ghb.ui:4345
+#: src/ui/ghb.ui:4343
 msgid "Genre:"
 msgstr "种类："
 
-#: src/ui/ghb.ui:4373 src/ui/ghb.ui:6026 src/ui/ghb.ui:6178
+#: src/ui/ghb.ui:4371 src/ui/ghb.ui:6089 src/ui/ghb.ui:6241
 msgid "Description:"
 msgstr "描述："
 
-#: src/ui/ghb.ui:4401
+#: src/ui/ghb.ui:4399
 msgid "Plot:"
 msgstr "剧情："
 
-#: src/ui/ghb.ui:4452
+#: src/ui/ghb.ui:4450
 msgid "<b>Save As:</b>"
 msgstr "<b>另存为：</b>"
 
-#: src/ui/ghb.ui:4464
+#: src/ui/ghb.ui:4462
 msgid "Destination filename for your encode."
 msgstr "编码的目标文件名。"
 
-#: src/ui/ghb.ui:4478
+#: src/ui/ghb.ui:4476
 msgid "<b>To:</b>"
 msgstr "<b>位置:</b>"
 
-#: src/ui/ghb.ui:4489
+#: src/ui/ghb.ui:4487
 msgid "Destination directory for your encode."
 msgstr "编码的目标文件夹。"
 
-#: src/ui/ghb.ui:4491 src/title-add.c:474
+#: src/ui/ghb.ui:4489 src/title-add.c:474
 msgid "Destination Directory"
 msgstr "目标文件夹"
 
-#: src/ui/ghb.ui:4564
+#: src/ui/ghb.ui:4568
 msgid "Subtitle Selection Behavior"
 msgstr ""
 
-#: src/ui/ghb.ui:4833
+#: src/ui/ghb.ui:4837
 msgid "Audio Selection Behavior"
 msgstr ""
 
-#: src/ui/ghb.ui:4863
+#: src/ui/ghb.ui:4867
 msgid "Track Selection Behavior:"
 msgstr ""
 
-#: src/ui/ghb.ui:4874
+#: src/ui/ghb.ui:4878
 msgid "Choose which audio tracks of the source media are used."
 msgstr "选择使用源媒体的哪一个音轨。"
 
-#: src/ui/ghb.ui:4922
+#: src/ui/ghb.ui:4926
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
 "Tracks matching these languages will be selected using the chosen Selection Behavior."
@@ -1512,37 +1516,37 @@ msgstr ""
 "创建您想要选择的音频的语言列表。\n"
 "将使用所选的选择行为选择与这些语言匹配的音轨。"
 
-#: src/ui/ghb.ui:4936 src/ui/ghb.ui:5288
+#: src/ui/ghb.ui:4940 src/ui/ghb.ui:5322
 msgid "Add"
 msgstr "添加"
 
-#: src/ui/ghb.ui:4962
+#: src/ui/ghb.ui:4966
 msgid "Available Languages"
 msgstr "可用语言"
 
-#: src/ui/ghb.ui:4971
+#: src/ui/ghb.ui:4975
 msgid "Selected Languages"
 msgstr "已选择语言"
 
-#: src/ui/ghb.ui:4995
+#: src/ui/ghb.ui:4999
 msgid "Auto Passthru:"
 msgstr "自动复制流："
 
-#: src/ui/ghb.ui:5004
+#: src/ui/ghb.ui:5008
 msgid "MP2"
 msgstr "MP2"
 
-#: src/ui/ghb.ui:5006
+#: src/ui/ghb.ui:5010
 msgid ""
 "Enable this if your playback device supports MP2.\n"
 "This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui/ghb.ui:5019
+#: src/ui/ghb.ui:5023
 msgid "MP3"
 msgstr "MP3"
 
-#: src/ui/ghb.ui:5021
+#: src/ui/ghb.ui:5025
 msgid ""
 "Enable this if your playback device supports MP3.\n"
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
@@ -1550,11 +1554,11 @@ msgstr ""
 "如果您的回放设备支持 MP3 则勾选此项。\n"
 "已勾选自动直通时则允许使用 MP3 直通。"
 
-#: src/ui/ghb.ui:5034
+#: src/ui/ghb.ui:5038
 msgid "AC-3"
 msgstr "AC-3"
 
-#: src/ui/ghb.ui:5036
+#: src/ui/ghb.ui:5040
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
@@ -1562,11 +1566,11 @@ msgstr ""
 "如果您的回放设备支持 AC-3 则勾选此项。\n"
 "已勾选自动直通时则允许使用 AC-3 直通。"
 
-#: src/ui/ghb.ui:5049
+#: src/ui/ghb.ui:5053
 msgid "EAC-3"
 msgstr "EAC-3"
 
-#: src/ui/ghb.ui:5051
+#: src/ui/ghb.ui:5055
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
 "This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
@@ -1574,11 +1578,11 @@ msgstr ""
 "如果您的回放设备支持 EAC-3 则勾选此项。\n"
 "已勾选自动直通时则允许使用 EAC-3 直通。"
 
-#: src/ui/ghb.ui:5064
+#: src/ui/ghb.ui:5068
 msgid "DTS"
 msgstr "DTS"
 
-#: src/ui/ghb.ui:5066
+#: src/ui/ghb.ui:5070
 msgid ""
 "Enable this if your playback device supports DTS.\n"
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
@@ -1586,11 +1590,11 @@ msgstr ""
 "如果您的回放设备支持 DTS 则勾选此项。\n"
 "已勾选自动直通时则允许使用 DTS 直通。"
 
-#: src/ui/ghb.ui:5079
+#: src/ui/ghb.ui:5083
 msgid "DTS-HD"
 msgstr "DTS-HD"
 
-#: src/ui/ghb.ui:5081
+#: src/ui/ghb.ui:5085
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
 "This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
@@ -1598,11 +1602,11 @@ msgstr ""
 "如果您的回放设备支持 DTS-HD 则勾选此项。\n"
 "已勾选自动直通时则允许使用 DTS-HD 直通。"
 
-#: src/ui/ghb.ui:5094
+#: src/ui/ghb.ui:5098
 msgid "TrueHD"
 msgstr "TrueHD"
 
-#: src/ui/ghb.ui:5096
+#: src/ui/ghb.ui:5100
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
 "This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
@@ -1610,11 +1614,21 @@ msgstr ""
 "如果您的回放设备支持 TrueHD 则勾选此项。\n"
 "已勾选自动直通时则允许使用 TrueHD 直通。"
 
-#: src/ui/ghb.ui:5109
+#: src/ui/ghb.ui:5113
+msgid "ALAC"
+msgstr ""
+
+#: src/ui/ghb.ui:5115
+msgid ""
+"Enable this if your playback device supports ALAC.\n"
+"This permits ALAC passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+
+#: src/ui/ghb.ui:5128
 msgid "FLAC"
 msgstr "FLAC"
 
-#: src/ui/ghb.ui:5111
+#: src/ui/ghb.ui:5130
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
 "This permits FLAC passthru to be selected when automatic passthru selection is enabled."
@@ -1622,11 +1636,11 @@ msgstr ""
 "如果您的回放设备支持 FLAC 则勾选此项。\n"
 "已勾选自动直通时则允许使用 FLAC 直通。"
 
-#: src/ui/ghb.ui:5124
+#: src/ui/ghb.ui:5143
 msgid "AAC"
 msgstr "AAC"
 
-#: src/ui/ghb.ui:5126
+#: src/ui/ghb.ui:5145
 msgid ""
 "Enable this if your playback device supports AAC.\n"
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
@@ -1634,63 +1648,73 @@ msgstr ""
 "如果您的回放设备支持 AAC 则勾选此项。\n"
 "已勾选自动直通时则允许使用 AAC 直通。"
 
-#: src/ui/ghb.ui:5139
+#: src/ui/ghb.ui:5158
+msgid "Vorbis"
+msgstr ""
+
+#: src/ui/ghb.ui:5160
+msgid ""
+"Enable this if your playback device supports Vorbis.\n"
+"This permits Vorbis passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+
+#: src/ui/ghb.ui:5173
 msgid "Opus"
 msgstr "Opus"
 
-#: src/ui/ghb.ui:5141
+#: src/ui/ghb.ui:5175
 msgid ""
 "Enable this if your playback device supports Opus.\n"
 "This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui/ghb.ui:5162
+#: src/ui/ghb.ui:5196
 msgid "Passthru Fallback:"
 msgstr "直通回滚："
 
-#: src/ui/ghb.ui:5168
+#: src/ui/ghb.ui:5202
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
 msgstr "当音频直通无法找到合适的轨道时，设置用于编码的音频编解码器。"
 
-#: src/ui/ghb.ui:5184
+#: src/ui/ghb.ui:5218
 msgid "Audio encoder settings for each selected track:"
 msgstr ""
 
-#: src/ui/ghb.ui:5185
+#: src/ui/ghb.ui:5219
 msgid "Each selected source track will be encoded with all selected encoders"
 msgstr "每一个选中的源音轨都将用所有选中编码器进行编码"
 
-#: src/ui/ghb.ui:5195
+#: src/ui/ghb.ui:5229
 msgid "Encoder"
 msgstr "编码"
 
-#: src/ui/ghb.ui:5201
+#: src/ui/ghb.ui:5235
 msgid "Bitrate/Quality"
 msgstr "比特率/质量"
 
-#: src/ui/ghb.ui:5207
+#: src/ui/ghb.ui:5241
 msgid "Mixdown"
 msgstr "混音"
 
-#: src/ui/ghb.ui:5213
+#: src/ui/ghb.ui:5247
 msgid "Samplerate"
 msgstr "采样率"
 
-#: src/ui/ghb.ui:5219 src/queuehandler.c:555
+#: src/ui/ghb.ui:5253 src/queuehandler.c:550
 msgid "Gain"
 msgstr "增益"
 
-#: src/ui/ghb.ui:5225
+#: src/ui/ghb.ui:5259
 msgid "DRC"
 msgstr "动态范围压缩(DRC)"
 
-#: src/ui/ghb.ui:5253
+#: src/ui/ghb.ui:5287
 msgid "Add Track"
 msgstr ""
 
-#: src/ui/ghb.ui:5254
+#: src/ui/ghb.ui:5288
 msgid ""
 "Add an audio encoder.\n"
 "Each selected source track will be encoded with all selected encoders."
@@ -1698,95 +1722,104 @@ msgstr ""
 "添加一个音频编码器。\n"
 "每一个选中的源音轨都将使用所有选中的编码器进行编码。"
 
-#: src/ui/ghb.ui:5261
+#: src/ui/ghb.ui:5295
 msgid "Use only first encoder for secondary audio"
 msgstr "仅使用第一编码器，用于辅助音频"
 
-#: src/ui/ghb.ui:5263
+#: src/ui/ghb.ui:5297
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "  All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
 
-#: src/ui/ghb.ui:5276
+#: src/ui/ghb.ui:5310
 msgid "Add Multiple Titles"
 msgstr ""
 
-#: src/ui/ghb.ui:5282 src/ui/ghb.ui:5969 src/ui/ghb.ui:6059
-#: src/hb-backend.c:4480 src/hb-backend.c:4530 src/hb-backend.c:4547
-#: src/hb-backend.c:4564 src/hb-backend.c:4621 src/hb-backend.c:4673
-#: src/presets.c:2583 src/title-add.c:124 src/title-add.c:134
+#: src/ui/ghb.ui:5316 src/ui/ghb.ui:6032 src/ui/ghb.ui:6122
+#: src/hb-backend.c:4477 src/hb-backend.c:4527 src/hb-backend.c:4544
+#: src/hb-backend.c:4561 src/hb-backend.c:4618 src/hb-backend.c:4670
+#: src/presets.c:2123 src/presets.c:2505 src/presets.c:2730
+#: src/title-add.c:124 src/title-add.c:134
 msgid "Cancel"
 msgstr "取消"
 
-#: src/ui/ghb.ui:5306
+#: src/ui/ghb.ui:5340
 msgid "Select All"
 msgstr "全选"
 
-#: src/ui/ghb.ui:5308
+#: src/ui/ghb.ui:5342
 msgid "Mark all titles for adding to the queue"
 msgstr "将所有标题标记并加入队列"
 
-#: src/ui/ghb.ui:5317
+#: src/ui/ghb.ui:5351
 msgid "Clear All"
 msgstr "清除所有"
 
-#: src/ui/ghb.ui:5319
+#: src/ui/ghb.ui:5353
 msgid "Unmark all titles"
 msgstr "取消标记所有标题"
 
-#: src/ui/ghb.ui:5328
+#: src/ui/ghb.ui:5362
 msgid "Invert Selection"
 msgstr ""
 
-#: src/ui/ghb.ui:5361 src/title-add.c:351
+#: src/ui/ghb.ui:5395 src/title-add.c:351
 msgid "Destination files OK.  No duplicates detected."
 msgstr "目标文件没问题。未检测到重复文件。"
 
-#: src/ui/ghb.ui:5373
+#: src/ui/ghb.ui:5407
 msgid "Preferences"
 msgstr "首选项"
 
-#: src/ui/ghb.ui:5418
+#: src/ui/ghb.ui:5452
 msgid "General"
 msgstr "普通"
 
-#: src/ui/ghb.ui:5425
+#: src/ui/ghb.ui:5459
 msgid "Use automatic naming (uses modified source name)"
 msgstr "使用自动命名（使用修改后的源名称）"
 
-#: src/ui/ghb.ui:5427
+#: src/ui/ghb.ui:5461
 msgid "Create destination filename from source filename or volume label"
 msgstr "从源文件名或卷标创建目标文件名"
 
-#: src/ui/ghb.ui:5442
+#: src/ui/ghb.ui:5476
 msgid "Auto-Name Template"
 msgstr "自动命名模板"
 
-#: src/ui/ghb.ui:5450
+#: src/ui/ghb.ui:5484
 msgid ""
 "Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
 " {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
 
-#: src/ui/ghb.ui:5464
+#: src/ui/ghb.ui:5498
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
 msgstr "为 MP4 使用 iPod / iTunes 友好的文件扩展名（.m4v）"
 
-#: src/ui/ghb.ui:5487
+#: src/ui/ghb.ui:5509
 msgid "Number of previews"
 msgstr "预览数"
 
-#: src/ui/ghb.ui:5510
+#: src/ui/ghb.ui:5532
 msgid "Minimum DVD/Blu-ray title duration (seconds)"
 msgstr ""
 
-#: src/ui/ghb.ui:5518
+#: src/ui/ghb.ui:5555
+msgid "Maximum DVD/Blu-ray title duration (seconds)"
+msgstr ""
+
+#: src/ui/ghb.ui:5575
+msgid "Keep duplicate titles"
+msgstr ""
+
+#: src/ui/ghb.ui:5581
 msgid "Use the same settings for all titles in a batch"
 msgstr "对批处理中的所有标题使用相同的设置"
 
-#: src/ui/ghb.ui:5520
+#: src/ui/ghb.ui:5583
 msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
@@ -1797,115 +1830,115 @@ msgstr ""
 "\n"
 "如果要允许单独更改每个标题的设置，请取消选中此项。"
 
-#: src/ui/ghb.ui:5530
+#: src/ui/ghb.ui:5593
 msgid "Show preview image in Summary tab"
 msgstr ""
 
-#: src/ui/ghb.ui:5533
+#: src/ui/ghb.ui:5596
 msgid ""
 "Uncheck this if you want to hide the video preview image on the Summary tab "
 "for privacy reasons."
 msgstr ""
 
-#: src/ui/ghb.ui:5542
+#: src/ui/ghb.ui:5605
 msgid "Excluded File Extensions:"
 msgstr "已排除的文件扩展名："
 
-#: src/ui/ghb.ui:5551
+#: src/ui/ghb.ui:5614
 msgid ""
 "The following file extensions will be ignored when scanning a folder. The "
 "list is case insensitive."
 msgstr "扫描文件夹时将忽略以下文件扩展名。列表不区分大小写。"
 
-#: src/ui/ghb.ui:5561
+#: src/ui/ghb.ui:5624
 msgctxt "Queue tab in Preferences window"
 msgid "Queue"
 msgstr "队列"
 
-#: src/ui/ghb.ui:5574
+#: src/ui/ghb.ui:5637
 msgid "Pause queue if disk space is lower than:"
 msgstr ""
 
-#: src/ui/ghb.ui:5590
+#: src/ui/ghb.ui:5653
 msgid "Disk Free Space Limit"
 msgstr ""
 
-#: src/ui/ghb.ui:5598 src/queuehandler.c:803 src/queuehandler.c:1293
+#: src/ui/ghb.ui:5661 src/queuehandler.c:798 src/queuehandler.c:1288
 msgid "GB"
 msgstr "GB"
 
-#: src/ui/ghb.ui:5608
+#: src/ui/ghb.ui:5671
 msgid "Clear completed jobs after an encode completes"
 msgstr ""
 
-#: src/ui/ghb.ui:5610
+#: src/ui/ghb.ui:5673
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
 "  Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
 
-#: src/ui/ghb.ui:5618
+#: src/ui/ghb.ui:5681
 msgid "Power Saving"
 msgstr "省电模式"
 
-#: src/ui/ghb.ui:5632
+#: src/ui/ghb.ui:5695
 msgid "Pause encoding when in Power Saver mode"
 msgstr "省电模式下暂停编码"
 
-#: src/ui/ghb.ui:5636
+#: src/ui/ghb.ui:5699
 msgid ""
 "If checked, encoding will be paused when the device\n"
 "enters Power Saver mode. Encoding will resume when\n"
 "Power Saver mode is disabled."
 msgstr ""
 
-#: src/ui/ghb.ui:5644
+#: src/ui/ghb.ui:5707
 msgid "Pause encoding when on battery power"
 msgstr "电池供电时暂停编码"
 
-#: src/ui/ghb.ui:5648
+#: src/ui/ghb.ui:5711
 msgid ""
 "If checked, encoding will be paused when charger is\n"
 "unplugged. Encoding will resume when reconnected to\n"
 "a mains power source."
 msgstr ""
 
-#: src/ui/ghb.ui:5656
+#: src/ui/ghb.ui:5719
 msgid "Pause encoding when battery is low"
 msgstr "电池电量低时暂停编码"
 
-#: src/ui/ghb.ui:5660
+#: src/ui/ghb.ui:5723
 msgid ""
 "If checked, encoding will be paused when the battery\n"
 "level is low. Encoding will resume when the\n"
 "battery is charged."
 msgstr ""
 
-#: src/ui/ghb.ui:5672
+#: src/ui/ghb.ui:5735
 msgid "When Done"
 msgstr ""
 
-#: src/ui/ghb.ui:5684
+#: src/ui/ghb.ui:5747
 msgid "Default action when queue is completed:"
 msgstr ""
 
-#: src/ui/ghb.ui:5697
+#: src/ui/ghb.ui:5760
 msgid "Show notification when queue is completed"
 msgstr ""
 
-#: src/ui/ghb.ui:5705
+#: src/ui/ghb.ui:5768
 msgid "Show notification when each item is completed"
 msgstr ""
 
-#: src/ui/ghb.ui:5717
+#: src/ui/ghb.ui:5780
 msgid "Advanced"
 msgstr "高级"
 
-#: src/ui/ghb.ui:5733
+#: src/ui/ghb.ui:5796
 msgid "Set a custom directory for Handbrake temporary files"
 msgstr ""
 
-#: src/ui/ghb.ui:5735 src/ui/ghb.ui:5751
+#: src/ui/ghb.ui:5798 src/ui/ghb.ui:5814
 msgid ""
 "Temporary files that HandBrake creates will be placed under this directory.\n"
 "\n"
@@ -1916,125 +1949,125 @@ msgid ""
 "  Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
 
-#: src/ui/ghb.ui:5760
+#: src/ui/ghb.ui:5823
 msgid "Temp Directory"
 msgstr "临时目录"
 
-#: src/ui/ghb.ui:5783
+#: src/ui/ghb.ui:5846
 msgid "Constant Quality fractional granularity"
 msgstr "恒定画质因子的调节粒度"
 
-#: src/ui/ghb.ui:5795
+#: src/ui/ghb.ui:5858
 msgid "Use dvdnav (instead of libdvdread)"
 msgstr "使用 dvdnav（代替 libdvdread）"
 
-#: src/ui/ghb.ui:5813
+#: src/ui/ghb.ui:5876
 msgid "Put individual encode logs in same location as movie"
 msgstr "将个人编码日志放在与电影相同的位置"
 
-#: src/ui/ghb.ui:5833
+#: src/ui/ghb.ui:5896
 msgid "Activity Log Verbosity Level"
 msgstr "活动日志详细程度"
 
-#: src/ui/ghb.ui:5852
+#: src/ui/ghb.ui:5915
 msgid "Activity Log Longevity"
 msgstr "活动日志保存时间"
 
-#: src/ui/ghb.ui:5865
+#: src/ui/ghb.ui:5928
 msgid "Scale down High Definition previews"
 msgstr "缩小高清视频的预览尺寸"
 
-#: src/ui/ghb.ui:5877
+#: src/ui/ghb.ui:5940
 msgid "Automatically Scan DVD when loaded"
 msgstr "DVD 装载时自动扫描"
 
-#: src/ui/ghb.ui:5879
+#: src/ui/ghb.ui:5942
 msgid "Scans the DVD whenever a new disc is loaded"
 msgstr "当有新碟装载时扫描 DVD"
 
-#: src/ui/ghb.ui:5906
+#: src/ui/ghb.ui:5969
 msgid "Activity Window Font Size"
 msgstr "活动窗口字体大小"
 
-#: src/ui/ghb.ui:5924
+#: src/ui/ghb.ui:5987
 msgid "Allow Tweaks"
 msgstr "允许 Tweaks"
 
-#: src/ui/ghb.ui:5937
+#: src/ui/ghb.ui:6000
 msgid "Allow HandBrake For Dummies"
 msgstr "为新手提供傻瓜模式"
 
-#: src/ui/ghb.ui:5961
+#: src/ui/ghb.ui:6024
 msgid "Rename Preset"
 msgstr "重命名预设"
 
-#: src/ui/ghb.ui:6005 src/ui/ghb.ui:6139
+#: src/ui/ghb.ui:6068 src/ui/ghb.ui:6202
 msgid "Preset Name:"
 msgstr "预设名称："
 
-#: src/ui/ghb.ui:6051
+#: src/ui/ghb.ui:6114
 msgid "New Preset"
 msgstr "新建预设"
 
-#: src/ui/ghb.ui:6094
+#: src/ui/ghb.ui:6157
 msgid "Category:"
 msgstr "类别："
 
-#: src/ui/ghb.ui:6104
+#: src/ui/ghb.ui:6167
 msgid "Set the category that this preset will be shown under."
 msgstr "设置此预设将显示在下面的类别。"
 
-#: src/ui/ghb.ui:6115
+#: src/ui/ghb.ui:6178
 msgid "Category Name:"
 msgstr "类别名称："
 
-#: src/ui/ghb.ui:6164
+#: src/ui/ghb.ui:6227
 msgid "Default Preset"
 msgstr "默认预设"
 
-#: src/ui/ghb.ui:6166
+#: src/ui/ghb.ui:6229
 msgid "Make this the default Preset when HandBrake starts"
 msgstr "设置为 HandBrake 启动时的默认预设"
 
-#: src/ui/ghb.ui:6205
+#: src/ui/ghb.ui:6268
 msgid "HandBrake Preview"
 msgstr "HandBrake 预览"
 
-#: src/ui/ghb.ui:6273
+#: src/ui/ghb.ui:6336
 msgid "Select preview frames."
 msgstr "选择预览画面。"
 
-#: src/ui/ghb.ui:6288 src/preview.c:167
+#: src/ui/ghb.ui:6351 src/preview.c:167
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
 msgstr "从当前预览位置编码并播放一小段视频。"
 
-#: src/ui/ghb.ui:6301
+#: src/ui/ghb.ui:6364
 msgid "Preview Video Position"
 msgstr "预览视频位置"
 
-#: src/ui/ghb.ui:6314
+#: src/ui/ghb.ui:6377
 msgid "Preview Encode Progress"
 msgstr "预览编码进度"
 
-#: src/ui/ghb.ui:6323
+#: src/ui/ghb.ui:6386
 msgid "Click to toggle full screen mode"
 msgstr ""
 
-#: src/ui/ghb.ui:6338
+#: src/ui/ghb.ui:6401
 msgid "<b>Duration:</b>"
 msgstr "<b>持续时间:</b>"
 
-#: src/ui/ghb.ui:6346
+#: src/ui/ghb.ui:6409
 msgid "Set the duration of the live preview in seconds."
 msgstr "以秒为单位设置实时预览时间。"
 
-#: src/ui/ghb.ui:6356
+#: src/ui/ghb.ui:6419
 msgid "Source Resolution"
 msgstr "源分辨率"
 
-#: src/ui/ghb.ui:6359
+#: src/ui/ghb.ui:6422
 msgid "Reset preview window to the source video's resolution"
 msgstr "将预览窗口重置为源视频的分辨率"
 
@@ -2046,7 +2079,7 @@ msgstr "章节标题"
 msgid "(None)"
 msgstr "（无）"
 
-#: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:265 src/ghb-queue-row.c:281
+#: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:272 src/ghb-queue-row.c:288
 msgid "Pending Queue Item"
 msgstr ""
 
@@ -2059,8 +2092,8 @@ msgid "Encode Progress"
 msgstr "编码进度"
 
 #. Audio DRC Label
-#: src/audiohandler.c:419 src/audiohandler.c:764 src/audiohandler.c:1175
-#: src/audiohandler.c:1929 src/callbacks.c:5465 src/hb-backend.c:180
+#: src/audiohandler.c:427 src/audiohandler.c:772 src/audiohandler.c:1183
+#: src/audiohandler.c:1937 src/callbacks.c:5500 src/hb-backend.c:180
 #: src/hb-backend.c:193 src/hb-backend.c:205 src/hb-backend.c:230
 #: src/hb-backend.c:301 src/hb-backend.c:313 src/hb-backend.c:325
 #: src/hb-backend.c:386
@@ -2068,41 +2101,41 @@ msgstr "编码进度"
 msgid "Off"
 msgstr "关闭"
 
-#: src/audiohandler.c:431 src/audiohandler.c:760 src/audiohandler.c:1245
+#: src/audiohandler.c:439 src/audiohandler.c:768 src/audiohandler.c:1253
 #, c-format
 msgid "%ddB"
 msgstr "%ddB"
 
-#: src/audiohandler.c:736
+#: src/audiohandler.c:744
 msgid "Quality: "
 msgstr "质量: "
 
-#: src/audiohandler.c:743
+#: src/audiohandler.c:751
 #, c-format
 msgid "Bitrate: %dkbps\n"
 msgstr "码率 : %dkbps\n"
 
-#: src/audiohandler.c:755
+#: src/audiohandler.c:763
 #, c-format
 msgid "%.4gkHz"
 msgstr "%.4gkHz"
 
-#: src/audiohandler.c:770
+#: src/audiohandler.c:778
 #, c-format
 msgid "<small>%d - %s (%.4gkHz)</small>"
 msgstr "<small>%d - %s (%.4gkHz)</small>"
 
-#: src/audiohandler.c:775
+#: src/audiohandler.c:783
 #, c-format
 msgid "Bitrate: %.4gkbps"
 msgstr "码率 : %.4gkbps"
 
-#: src/audiohandler.c:781
+#: src/audiohandler.c:789
 #, c-format
 msgid "<small>Passthru</small>"
 msgstr ""
 
-#: src/audiohandler.c:790
+#: src/audiohandler.c:798
 #, c-format
 msgid ""
 "%sGain: %s\n"
@@ -2113,7 +2146,7 @@ msgstr ""
 "DRC: %s\n"
 "曲目名称: %s"
 
-#: src/audiohandler.c:795
+#: src/audiohandler.c:803
 #, c-format
 msgid ""
 "%sGain: %s\n"
@@ -2122,27 +2155,27 @@ msgstr ""
 "%s增益: %s\n"
 "DRC: %s"
 
-#: src/audiohandler.c:1401
+#: src/audiohandler.c:1409
 msgid "Add Audio Track"
 msgstr "添加音轨"
 
-#: src/audiohandler.c:1493
+#: src/audiohandler.c:1501
 msgid "Edit Audio Track"
 msgstr "编辑音轨"
 
-#: src/audiohandler.c:1766
+#: src/audiohandler.c:1774
 msgid "Set the audio codec to encode this track with."
 msgstr "设置该轨道的音频编码。"
 
-#: src/audiohandler.c:1780
+#: src/audiohandler.c:1788
 msgid "Bitrate"
 msgstr "码率"
 
-#: src/audiohandler.c:1798
+#: src/audiohandler.c:1806
 msgid "Set the bitrate to encode this track with."
 msgstr "设置该轨道的码率。"
 
-#: src/audiohandler.c:1823
+#: src/audiohandler.c:1831
 msgid ""
 "<b>Audio Quality:</b>\n"
 "For encoders that support it, adjust the quality of the output."
@@ -2150,26 +2183,26 @@ msgstr ""
 "<b>音质：</b>\n"
 "调节输出的音频质量，需要编码器支持。"
 
-#: src/audiohandler.c:1850
+#: src/audiohandler.c:1858
 msgid "Set the mixdown of the output audio track."
 msgstr "设置输出音轨的混音。"
 
-#: src/audiohandler.c:1863
+#: src/audiohandler.c:1871
 msgid "Set the sample rate of the output audio track."
 msgstr "设置输出音轨的采样率。"
 
-#: src/audiohandler.c:1884
+#: src/audiohandler.c:1892
 msgid ""
 "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
 "audio track."
 msgstr "<b>音频增益：</b> 调整输出音量大小。"
 
 #. Audio Gain Label
-#: src/audiohandler.c:1895
+#: src/audiohandler.c:1903
 msgid "0dB"
 msgstr "0dB"
 
-#: src/audiohandler.c:1915
+#: src/audiohandler.c:1923
 msgid ""
 "<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
@@ -2180,7 +2213,7 @@ msgstr ""
 "\n"
 "对于源音轨有较大音量范围的（非常响亮和非常柔和的序列），动态范围压缩 (DRC) 允许您压缩其范围使得大音量降低而小音量有所增加。"
 
-#: src/audiohandler.c:1946
+#: src/audiohandler.c:1954
 msgid "Remove this audio encoder"
 msgstr "移除此音频编码"
 
@@ -2188,301 +2221,301 @@ msgstr "移除此音频编码"
 msgid "An encode is in progress."
 msgstr ""
 
-#: src/callbacks.c:1124 src/callbacks.c:1135 src/callbacks.c:1785
+#: src/callbacks.c:1125 src/callbacks.c:1136 src/callbacks.c:1792
 msgid "Not Selected"
 msgstr "未选择"
 
-#: src/callbacks.c:1133
+#: src/callbacks.c:1134
 msgid "Detected DVD devices:"
 msgstr "侦测到 DVD 设备："
 
 #. This needs to be in scanning and working since scanning
 #. happens fast enough that it can be missed
-#: src/callbacks.c:1460 src/callbacks.c:4578
+#: src/callbacks.c:1461 src/callbacks.c:4613
 msgid "Scanning ..."
 msgstr "扫描中 ..."
 
-#: src/callbacks.c:1492 src/callbacks.c:1493 src/callbacks.c:1512
-#: src/callbacks.c:1513
+#: src/callbacks.c:1493 src/callbacks.c:1494 src/callbacks.c:1516
+#: src/callbacks.c:1517
 msgid "Stop Scan"
 msgstr "停止扫描"
 
-#: src/callbacks.c:1866
+#: src/callbacks.c:1873
 msgid "Open Source Directory"
 msgstr "打开源文件目录"
 
-#: src/callbacks.c:1869 src/chapters.c:484 src/ghb-file-button.c:222
-#: src/presets.c:2113 src/queuehandler.c:1479
+#: src/callbacks.c:1876 src/chapters.c:483 src/ghb-file-button.c:222
+#: src/presets.c:2216 src/queuehandler.c:1469
 msgid "_Open"
 msgstr "打开(_O)"
 
-#: src/callbacks.c:1870 src/callbacks.c:2136 src/chapters.c:456
-#: src/chapters.c:485 src/presets.c:2114 src/presets.c:2230
-#: src/queuehandler.c:1392 src/queuehandler.c:1480
+#: src/callbacks.c:1877 src/callbacks.c:2142 src/chapters.c:456
+#: src/chapters.c:484 src/ghb-file-button.c:355 src/presets.c:2217
+#: src/presets.c:2332 src/queuehandler.c:1387 src/queuehandler.c:1470
 msgid "_Cancel"
 msgstr "取消(_C)"
 
-#: src/callbacks.c:1877
+#: src/callbacks.c:1884
 msgid "Recursively scan directories"
 msgstr ""
 
-#: src/callbacks.c:1889
+#: src/callbacks.c:1896
 msgid "Single Title"
 msgstr ""
 
-#: src/callbacks.c:2247 src/callbacks.c:2391
+#: src/callbacks.c:2253 src/callbacks.c:2397
 msgid "FPS"
 msgstr "FPS"
 
-#: src/callbacks.c:2251
+#: src/callbacks.c:2257
 #, c-format
 msgid "Dolby Vision %d.%d"
 msgstr "杜比视界 %d.%d"
 
-#: src/callbacks.c:2255 src/callbacks.c:2258
+#: src/callbacks.c:2261 src/callbacks.c:2264
 msgid "HDR10+"
 msgstr "HDR10+"
 
-#: src/callbacks.c:2260
+#: src/callbacks.c:2266
 msgid "HDR10"
 msgstr "HDR10"
 
-#: src/callbacks.c:2262
+#: src/callbacks.c:2268
 msgid "HDR"
 msgstr "HDR"
 
-#: src/callbacks.c:2264
+#: src/callbacks.c:2270
 msgid "SDR"
 msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
-#: src/callbacks.c:2272
+#: src/callbacks.c:2278
 #, c-format
 msgid "%d-bit"
 msgstr ""
 
-#: src/callbacks.c:2294
+#: src/callbacks.c:2300
 msgid "Audio Track"
 msgid_plural "Audio Tracks"
 msgstr[0] "音轨"
 
-#: src/callbacks.c:2297
+#: src/callbacks.c:2303
 msgid "Subtitle Track"
 msgid_plural "Subtitle Tracks"
 msgstr[0] "字幕轨"
 
-#: src/callbacks.c:2395
+#: src/callbacks.c:2401
 msgid "CFR"
 msgstr "CFR"
 
-#: src/callbacks.c:2399
+#: src/callbacks.c:2405
 msgid "PFR"
 msgstr "PFR"
 
-#: src/callbacks.c:2403
+#: src/callbacks.c:2409
 msgid "VFR"
 msgstr "VFR"
 
-#: src/callbacks.c:2445
+#: src/callbacks.c:2451
 #, c-format
 msgid "+ %d more audio track"
 msgid_plural "+ %d more audio tracks"
 msgstr[0] ""
 
-#: src/callbacks.c:2476 src/queuehandler.c:592 src/queuehandler.c:1027
+#: src/callbacks.c:2482 src/queuehandler.c:587 src/queuehandler.c:1022
 #: src/subtitlehandler.c:415 src/subtitlehandler.c:1292
 msgid "Foreign Audio Scan"
 msgstr "外语音频扫描"
 
-#: src/callbacks.c:2479 src/callbacks.c:2511 src/queuehandler.c:595
-#: src/queuehandler.c:632
+#: src/callbacks.c:2485 src/callbacks.c:2517 src/queuehandler.c:590
+#: src/queuehandler.c:627
 #, c-format
 msgid ", Forced Only"
 msgstr ", 仅强制"
 
-#: src/callbacks.c:2483 src/callbacks.c:2515 src/queuehandler.c:599
-#: src/queuehandler.c:636
+#: src/callbacks.c:2489 src/callbacks.c:2521 src/queuehandler.c:594
+#: src/queuehandler.c:631
 #, c-format
 msgid ", Burned"
 msgstr ", 已烧录"
 
-#: src/callbacks.c:2487 src/callbacks.c:2519 src/queuehandler.c:603
-#: src/queuehandler.c:640
+#: src/callbacks.c:2493 src/callbacks.c:2525 src/queuehandler.c:598
+#: src/queuehandler.c:635
 #, c-format
 msgid ", Default"
 msgstr ", 默认"
 
-#: src/callbacks.c:2525
+#: src/callbacks.c:2531
 #, c-format
 msgid "+ %d more subtitle track"
 msgid_plural "+ %d more subtitle tracks"
 msgstr[0] ""
 
-#: src/callbacks.c:2680
+#: src/callbacks.c:2686
 msgid "storage"
 msgstr "存储"
 
-#: src/callbacks.c:2681
+#: src/callbacks.c:2687
 msgid "display"
 msgstr "显示"
 
-#: src/callbacks.c:2682
+#: src/callbacks.c:2688
 msgid "Pixel Aspect Ratio"
 msgstr "像素宽高比"
 
-#: src/callbacks.c:2683
+#: src/callbacks.c:2689
 msgid "Display Aspect Ratio"
 msgstr "显示宽高比"
 
-#: src/callbacks.c:2818 src/hb-backend.c:2206 src/hb-backend.c:2327
-#: src/hb-backend.c:2339
+#: src/callbacks.c:2824 src/hb-backend.c:2216 src/hb-backend.c:2337
+#: src/hb-backend.c:2349
 msgid "No Title Found"
 msgstr "找不到标题"
 
-#: src/callbacks.c:2819
+#: src/callbacks.c:2825
 msgid "New Video"
 msgstr "新视频"
 
-#: src/callbacks.c:3815
+#: src/callbacks.c:3821
 msgid "Temp Directory Changed"
 msgstr ""
 
-#: src/callbacks.c:3816
+#: src/callbacks.c:3822
 msgid "You must restart HandBrake now."
 msgstr ""
 
-#: src/callbacks.c:3843 src/callbacks.c:3853 src/callbacks.c:3871
-#: src/callbacks.c:3920
+#: src/callbacks.c:3849 src/callbacks.c:3859 src/callbacks.c:3877
+#: src/callbacks.c:3926
 #, c-format
 msgid "%s in %d seconds…"
 msgstr ""
 
-#: src/callbacks.c:4097
+#: src/callbacks.c:4132
 msgid "Stop Encoding?"
 msgstr "停止编码？"
 
-#: src/callbacks.c:4098 src/callbacks.c:4123 src/queuehandler.c:1702
+#: src/callbacks.c:4133 src/callbacks.c:4158 src/queuehandler.c:1695
 msgid "Your movie will be lost if you don't continue encoding."
 msgstr ""
 
-#: src/callbacks.c:4099 src/queuehandler.c:1636
+#: src/callbacks.c:4134 src/queuehandler.c:1626
 msgid "Cancel Current and Stop"
 msgstr "取消当前任务并停止"
 
-#: src/callbacks.c:4099
+#: src/callbacks.c:4134
 msgid "Cancel Current, Start Next"
 msgstr "取消当前任务，开始下一个"
 
-#: src/callbacks.c:4100
+#: src/callbacks.c:4135
 msgid "Finish Current and Stop"
 msgstr ""
 
-#: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
+#: src/callbacks.c:4135 src/callbacks.c:4159 src/queuehandler.c:1696
 msgid "Continue Encoding"
 msgstr "继续编码"
 
-#: src/callbacks.c:4122
+#: src/callbacks.c:4157
 msgid "Quit HandBrake?"
 msgstr "退出 HandBrake？"
 
-#: src/callbacks.c:4124
+#: src/callbacks.c:4159
 msgid "Cancel All and Quit"
 msgstr "全部取消并退出"
 
-#: src/callbacks.c:4290
+#: src/callbacks.c:4325
 #, c-format
 msgid "%d encode pending"
 msgid_plural "%d encodes pending"
 msgstr[0] ""
 
-#: src/callbacks.c:4349 src/callbacks.c:4417
+#: src/callbacks.c:4384 src/callbacks.c:4452
 #, c-format
 msgid "job %d of %d, "
 msgstr "正在进行第%d个任务 ，共%d个任务， "
 
-#: src/callbacks.c:4359
+#: src/callbacks.c:4394
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
 msgstr "正在处理%d(扫描字幕中)of%d, "
 
-#: src/callbacks.c:4364
+#: src/callbacks.c:4399
 #, c-format
 msgid "pass %d of %d, "
 msgstr "正在处理%dof%d "
 
-#: src/callbacks.c:4377
+#: src/callbacks.c:4412
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
 msgstr "正在编码：%s%s%.2f %% (%.2f fps，平均 %.2f fps，还需%02d小时%02d分%02d秒)"
 
-#: src/callbacks.c:4387 src/callbacks.c:4427
+#: src/callbacks.c:4422 src/callbacks.c:4462
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 msgstr "正在编码：%s%s%.2f %% (还需 %02d小时%02d分%02d秒)"
 
-#: src/callbacks.c:4397 src/callbacks.c:4436
+#: src/callbacks.c:4432 src/callbacks.c:4471
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
 msgstr "正在编码：%s%s%.2f %%"
 
-#: src/callbacks.c:4423
+#: src/callbacks.c:4458
 #, c-format
 msgid "Searching for start time, "
 msgstr "搜索开始时间， "
 
-#: src/callbacks.c:4498
+#: src/callbacks.c:4533
 #, c-format
 msgid "Scanning title %d of %d..."
 msgstr "正在扫描标题%d，共%d..."
 
-#: src/callbacks.c:4502
+#: src/callbacks.c:4537
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
 msgstr "正在扫描标题%dof%d，预览%d……"
 
-#: src/callbacks.c:4589
+#: src/callbacks.c:4624
 msgid "Paused"
 msgstr "暂停"
 
-#: src/callbacks.c:4616
+#: src/callbacks.c:4651
 msgid "Encode Done!"
 msgstr "编码完成！"
 
-#: src/callbacks.c:4621
+#: src/callbacks.c:4656
 msgid "Encode Canceled."
 msgstr "编码取消。"
 
-#: src/callbacks.c:4626
+#: src/callbacks.c:4661
 msgid "Encode Failed."
 msgstr "编码失败。"
 
-#: src/callbacks.c:4668
+#: src/callbacks.c:4703
 msgid "Muxing: This may take a while..."
 msgstr "合成中：这可能需要一段时间…"
 
-#: src/callbacks.c:5478 src/callbacks.c:5485 src/callbacks.c:5493
+#: src/callbacks.c:5513 src/callbacks.c:5520 src/callbacks.c:5528
 msgid "Your encode is complete."
 msgstr "您的编码已完成。"
 
-#: src/callbacks.c:5479
+#: src/callbacks.c:5514
 msgid "Quitting HandBrake"
 msgstr "正在退出 HandBrake"
 
-#: src/callbacks.c:5486
+#: src/callbacks.c:5521
 msgid "Putting computer to sleep"
 msgstr "计算机转入休眠"
 
-#: src/callbacks.c:5494
+#: src/callbacks.c:5529
 msgid "Shutting down the computer"
 msgstr "关闭此计算机"
 
 #. Add filters
-#: src/callbacks.c:5608 src/chapters.c:458 src/chapters.c:487
-#: src/presets.c:2116 src/queuehandler.c:1483
+#: src/callbacks.c:5643 src/chapters.c:458 src/chapters.c:486
+#: src/presets.c:2219 src/queuehandler.c:1473
 msgid "All Files"
 msgstr "全部文件"
 
-#: src/chapters.c:459 src/chapters.c:488
+#: src/chapters.c:459 src/chapters.c:487
 msgid "Chapters (*.xml)"
 msgstr ""
 
@@ -2494,19 +2527,19 @@ msgstr "选择文件"
 msgid "_Select"
 msgstr ""
 
-#: src/ghb-queue-row.c:260
+#: src/ghb-queue-row.c:267
 msgid "Running Queue Item"
 msgstr ""
 
-#: src/ghb-queue-row.c:269
+#: src/ghb-queue-row.c:276
 msgid "Failed Queue Item"
 msgstr ""
 
-#: src/ghb-queue-row.c:273
+#: src/ghb-queue-row.c:280
 msgid "Cancelled Queue Item"
 msgstr ""
 
-#: src/ghb-queue-row.c:277
+#: src/ghb-queue-row.c:284
 msgid "Completed Queue Item"
 msgstr ""
 
@@ -2530,7 +2563,7 @@ msgstr "使用第一个选中的轨道"
 msgid "Foreign Audio, then First Selected Track"
 msgstr "使用外语音轨中第一个选中的轨道"
 
-#: src/hb-backend.c:91 src/queuehandler.c:167
+#: src/hb-backend.c:91 src/queuehandler.c:162
 msgid "Chapters:"
 msgstr "章节:"
 
@@ -2538,7 +2571,7 @@ msgstr "章节:"
 msgid "Seconds:"
 msgstr "秒:"
 
-#: src/hb-backend.c:93 src/queuehandler.c:188
+#: src/hb-backend.c:93 src/queuehandler.c:183
 msgid "Frames:"
 msgstr "帧："
 
@@ -2579,7 +2612,7 @@ msgstr "年"
 msgid "Immortal"
 msgstr "永久"
 
-#: src/hb-backend.c:181 src/hb-backend.c:4864
+#: src/hb-backend.c:181 src/hb-backend.c:4861
 msgid "Decomb"
 msgstr "Decomb 去梳状纹理滤镜"
 
@@ -2815,72 +2848,72 @@ msgstr "(PAL 电影/视频）"
 msgid "(NTSC Video)"
 msgstr "(NTSC 视频)"
 
-#: src/hb-backend.c:2195
+#: src/hb-backend.c:2205
 #, c-format
 msgid "%s - (%05d.MPLS)"
 msgstr "%s - (%05d.MPLS)"
 
-#: src/hb-backend.c:2346
+#: src/hb-backend.c:2356
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
 msgstr "%3d - %02d小时%02d分%02d秒 - %s"
 
-#: src/hb-backend.c:2365
+#: src/hb-backend.c:2375
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 msgstr "%3d - %02d小时%02d分%02d秒 - (%05d.MPLS)"
 
-#: src/hb-backend.c:2371
+#: src/hb-backend.c:2381
 #, c-format
 msgid "%3d - (%05d.MPLS)"
 msgstr "%3d - (%05d.MPLS)"
 
-#: src/hb-backend.c:2377
+#: src/hb-backend.c:2387
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
 msgstr "%3d - %02d小时%02d分%02d秒"
 
-#: src/hb-backend.c:2410
+#: src/hb-backend.c:2420
 msgid "No Titles"
 msgstr "无标题"
 
 #. No audio. set some default
-#: src/hb-backend.c:2690
+#: src/hb-backend.c:2700
 msgid "No Audio"
 msgstr "无音频"
 
-#: src/hb-backend.c:4306 src/hb-backend.c:4314
+#: src/hb-backend.c:4303 src/hb-backend.c:4311
 msgid "Invalid Detelecine Settings"
 msgstr ""
 
-#: src/hb-backend.c:4309 src/hb-backend.c:4340 src/hb-backend.c:4376
-#: src/hb-backend.c:4413 src/hb-backend.c:4438
+#: src/hb-backend.c:4306 src/hb-backend.c:4337 src/hb-backend.c:4373
+#: src/hb-backend.c:4410 src/hb-backend.c:4435
 msgid "Custom:"
 msgstr "自定义"
 
-#: src/hb-backend.c:4337 src/hb-backend.c:4345
+#: src/hb-backend.c:4334 src/hb-backend.c:4342
 msgid "Invalid Comb Detect Settings"
 msgstr ""
 
-#: src/hb-backend.c:4372 src/hb-backend.c:4381
+#: src/hb-backend.c:4369 src/hb-backend.c:4378
 msgid "Invalid Deinterlace Settings"
 msgstr ""
 
-#: src/hb-backend.c:4374 src/hb-backend.c:4383 src/hb-backend.c:4410
-#: src/hb-backend.c:4435
+#: src/hb-backend.c:4371 src/hb-backend.c:4380 src/hb-backend.c:4407
+#: src/hb-backend.c:4432
 msgid "Filter:"
 msgstr "滤镜："
 
-#: src/hb-backend.c:4408
+#: src/hb-backend.c:4405
 msgid "Invalid Denoise Settings"
 msgstr ""
 
-#: src/hb-backend.c:4433
+#: src/hb-backend.c:4430
 msgid "Invalid Sharpen Settings"
 msgstr ""
 
 #. mp4/theora combination is not supported.
-#: src/hb-backend.c:4462
+#: src/hb-backend.c:4459
 msgid ""
 "Theora is not supported in the MP4 container.\n"
 "\n"
@@ -2893,7 +2926,7 @@ msgstr ""
 "如果您继续，FFMPEG 将为您自动选择。"
 
 #. webm only supports vp8, vp9 and av1.
-#: src/hb-backend.c:4471
+#: src/hb-backend.c:4468
 msgid ""
 "Only VP8, VP9 and AV1 is supported in the WebM container.\n"
 "\n"
@@ -2901,25 +2934,25 @@ msgid ""
 "If you continue, one will be chosen for you."
 msgstr ""
 
-#: src/hb-backend.c:4479 src/hb-backend.c:4530 src/hb-backend.c:4547
-#: src/hb-backend.c:4564 src/hb-backend.c:4621 src/hb-backend.c:4673
+#: src/hb-backend.c:4476 src/hb-backend.c:4527 src/hb-backend.c:4544
+#: src/hb-backend.c:4561 src/hb-backend.c:4618 src/hb-backend.c:4670
 msgid "Continue"
 msgstr "继续"
 
-#: src/hb-backend.c:4480
+#: src/hb-backend.c:4477
 msgid "Invalid Video Codec"
 msgstr ""
 
 #. No valid title, stop right there
-#: src/hb-backend.c:4503 src/hb-backend.c:4589
+#: src/hb-backend.c:4500 src/hb-backend.c:4586
 msgid "No title found.\n"
 msgstr "找不到标题。\n"
 
-#: src/hb-backend.c:4530 src/hb-backend.c:4547
+#: src/hb-backend.c:4527 src/hb-backend.c:4544
 msgid "Invalid Subtitle Selection"
 msgstr ""
 
-#: src/hb-backend.c:4531
+#: src/hb-backend.c:4528
 msgid ""
 "Only one subtitle may be burned into the video.\n"
 "\n"
@@ -2931,7 +2964,7 @@ msgstr ""
 "您应该修改您的字幕选择。\n"
 "如果您选择继续，一些字幕将会丢失。"
 
-#: src/hb-backend.c:4548
+#: src/hb-backend.c:4545
 msgid ""
 "WebM in HandBrake only supports burned subtitles.\n"
 "\n"
@@ -2943,11 +2976,11 @@ msgstr ""
 "您应该修改您的字幕选择。\n"
 "如果您选择继续，一些字幕将会丢失。"
 
-#: src/hb-backend.c:4564
+#: src/hb-backend.c:4561
 msgid "Subtitle File Not Found"
 msgstr ""
 
-#: src/hb-backend.c:4565
+#: src/hb-backend.c:4562
 msgid ""
 "SRT file does not exist or not a regular file.\n"
 "\n"
@@ -2959,11 +2992,11 @@ msgstr ""
 "您应该选择一个有效的文件。\n"
 "如果您继续，该字幕将会被忽略。"
 
-#: src/hb-backend.c:4621 src/hb-backend.c:4673
+#: src/hb-backend.c:4618 src/hb-backend.c:4670
 msgid "Invalid Audio Selection"
 msgstr ""
 
-#: src/hb-backend.c:4622
+#: src/hb-backend.c:4619
 msgid ""
 "The source does not support Pass-Thru.\n"
 "\n"
@@ -2975,7 +3008,7 @@ msgstr ""
 "您应该选择另一个音频编解码器。\n"
 "如果您继续，我们将为您指定一个。"
 
-#: src/hb-backend.c:4674
+#: src/hb-backend.c:4671
 #, c-format
 msgid ""
 "%s is not supported in the %s container.\n"
@@ -2988,51 +3021,51 @@ msgstr ""
 "您应该选择另一个音频编解码器。\n"
 "如果您继续，我们将为您选择一个。"
 
-#: src/hb-backend.c:4856
+#: src/hb-backend.c:4853
 msgid "Comb Detect"
 msgstr ""
 
-#: src/hb-backend.c:4858
+#: src/hb-backend.c:4855
 msgid "Detelecine"
 msgstr "反胶卷过带滤镜"
 
-#: src/hb-backend.c:4860
+#: src/hb-backend.c:4857
 msgid "Deinterlace (Yadif)"
 msgstr ""
 
-#: src/hb-backend.c:4862
+#: src/hb-backend.c:4859
 msgid "Deinterlace (Bwdif)"
 msgstr ""
 
-#: src/hb-backend.c:4866
+#: src/hb-backend.c:4863
 msgid "Deblock"
 msgstr "去区块滤镜"
 
-#: src/hb-backend.c:4868
+#: src/hb-backend.c:4865
 msgid "Denoise (NLMeans)"
 msgstr ""
 
-#: src/hb-backend.c:4870
+#: src/hb-backend.c:4867
 msgid "Denoise (HQDN3D)"
 msgstr ""
 
-#: src/hb-backend.c:4872
+#: src/hb-backend.c:4869
 msgid "Chroma Smooth"
 msgstr "色度平滑"
 
-#: src/hb-backend.c:4874
+#: src/hb-backend.c:4871
 msgid "Sharpen (Unsharp)"
 msgstr ""
 
-#: src/hb-backend.c:4876
+#: src/hb-backend.c:4873
 msgid "Rotate"
 msgstr "旋转"
 
-#: src/hb-backend.c:4878
+#: src/hb-backend.c:4875
 msgid "Sharpen (lapsharp)"
 msgstr ""
 
-#: src/hb-backend.c:4882
+#: src/hb-backend.c:4879
 msgid "Colorspace"
 msgstr "色彩空间"
 
@@ -3077,31 +3110,35 @@ msgstr ""
 msgid "%d.%d GB free space remaining."
 msgstr ""
 
-#: src/notifications.c:165 src/queuehandler.c:1176
+#: src/notifications.c:165 src/queuehandler.c:1171
 msgid "Encoding Paused"
 msgstr "编码暂停"
 
-#: src/presets.c:78
+#: src/presets.c:52
+msgid "My Presets"
+msgstr ""
+
+#: src/presets.c:87
 msgid "Preset Name"
 msgstr "预设名称"
 
-#: src/presets.c:1281
+#: src/presets.c:1299
 msgid "ghb_presets_menu_init: Failed to find presets folder."
 msgstr "ghb_presets_menu_init: 无法找到预设文件夹。"
 
-#: src/presets.c:1443
+#: src/presets.c:1455
 msgid "Failed to find parent folder when adding child."
 msgstr "添加子项时无法找到父文件夹。"
 
-#: src/presets.c:1927
+#: src/presets.c:1942
 msgid "Load backup presets"
 msgstr "加载备份预设"
 
-#: src/presets.c:1927
+#: src/presets.c:1942
 msgid "Get me out of here!"
 msgstr "离开这里吧！"
 
-#: src/presets.c:1928
+#: src/presets.c:1943
 msgid ""
 "Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
@@ -3111,27 +3148,45 @@ msgstr ""
 "\n"
 "您想继续吗？"
 
-#: src/presets.c:2117
+#: src/presets.c:2123 src/presets.c:2505 src/title-add.c:124
+#: src/title-add.c:134
+msgid "Overwrite"
+msgstr "覆盖"
+
+#: src/presets.c:2124 src/presets.c:2506
+msgid "Overwrite Preset?"
+msgstr ""
+
+#: src/presets.c:2125 src/presets.c:2507
+#, c-format
+msgid "The preset “%s” already exists. Do you want to overwrite it?"
+msgstr ""
+
+#: src/presets.c:2214
+msgid "Import Preset"
+msgstr ""
+
+#: src/presets.c:2220
 msgid "Presets (*.json)"
 msgstr "预置 (*.json)"
 
-#: src/presets.c:2227
+#: src/presets.c:2329
 msgid "Export Preset"
 msgstr "输出设定"
 
-#: src/presets.c:2583
+#: src/presets.c:2730
 msgid "_Delete"
 msgstr "删除(_D)"
 
-#: src/presets.c:2584
+#: src/presets.c:2731
 msgid "Delete Folder?"
 msgstr "删除文件夹？"
 
-#: src/presets.c:2584
+#: src/presets.c:2731
 msgid "Delete Preset?"
 msgstr "删除预设？"
 
-#: src/presets.c:2585
+#: src/presets.c:2732
 #, c-format
 msgid ""
 "Are you sure you want to delete “%s”?\n"
@@ -3158,24 +3213,24 @@ msgstr "播放错误"
 msgid "The video could not be played. For more details, see the Activity Log."
 msgstr ""
 
-#: src/queuehandler.c:133
+#: src/queuehandler.c:128
 #, c-format
 msgid "%s (Modified)"
 msgstr "%s (已修改)"
 
-#: src/queuehandler.c:181
+#: src/queuehandler.c:176
 msgid "Time:"
 msgstr "时间："
 
-#: src/queuehandler.c:225
+#: src/queuehandler.c:220
 msgid "Align A/V"
 msgstr "对齐音视频"
 
-#: src/queuehandler.c:235
+#: src/queuehandler.c:230
 msgid "iPod 5G"
 msgstr "iPod 5G"
 
-#: src/queuehandler.c:267
+#: src/queuehandler.c:262
 #, c-format
 msgid ""
 "%d:%d:%d:%d Crop\n"
@@ -3188,42 +3243,42 @@ msgstr ""
 "%d:%d 像素宽高比\n"
 "%s 显示宽高比"
 
-#: src/queuehandler.c:296
+#: src/queuehandler.c:291
 #, c-format
 msgid "%s, Bitrate %dkbps"
 msgstr "%s, 码率 %dkbps"
 
-#: src/queuehandler.c:302
+#: src/queuehandler.c:297
 #, c-format
 msgid "%s, Constant Quality %.4g(%s)"
 msgstr "%s, 恒定画质 %.4g(%s)"
 
-#: src/queuehandler.c:309
+#: src/queuehandler.c:304
 #, c-format
 msgid " (Multi Pass)"
 msgstr ""
 
-#: src/queuehandler.c:341
+#: src/queuehandler.c:336
 #, c-format
 msgid "%sPreset %s"
 msgstr "%s预设 %s"
 
-#: src/queuehandler.c:346
+#: src/queuehandler.c:341
 #, c-format
 msgid "%sTune %s"
 msgstr "%s调优 %s"
 
-#: src/queuehandler.c:351
+#: src/queuehandler.c:346
 #, c-format
 msgid "%sProfile %s"
 msgstr "%s配置文件 %s"
 
-#: src/queuehandler.c:356
+#: src/queuehandler.c:351
 #, c-format
 msgid "%sLevel %s"
 msgstr "%s等级 %s"
 
-#: src/queuehandler.c:373
+#: src/queuehandler.c:368
 #, c-format
 msgid ""
 "\n"
@@ -3232,7 +3287,7 @@ msgstr ""
 "\n"
 "固定帧率 %s fps"
 
-#: src/queuehandler.c:377
+#: src/queuehandler.c:372
 #, c-format
 msgid ""
 "\n"
@@ -3241,7 +3296,7 @@ msgstr ""
 "\n"
 "峰值帧率 %s fps (可能更低)"
 
-#: src/queuehandler.c:382
+#: src/queuehandler.c:377
 #, c-format
 msgid ""
 "\n"
@@ -3250,76 +3305,76 @@ msgstr ""
 "\n"
 "动态帧率 %s fps"
 
-#: src/queuehandler.c:550
+#: src/queuehandler.c:545
 msgid "kbps"
 msgstr "kbps"
 
-#: src/queuehandler.c:684 src/queuehandler.c:709
+#: src/queuehandler.c:679 src/queuehandler.c:704
 msgid "Pending"
 msgstr "排队中"
 
-#: src/queuehandler.c:696 src/queuehandler.c:1187
+#: src/queuehandler.c:691 src/queuehandler.c:1182
 msgid "Completed"
 msgstr "完成"
 
-#: src/queuehandler.c:700 src/queuehandler.c:1191
+#: src/queuehandler.c:695 src/queuehandler.c:1186
 msgid "Canceled"
 msgstr "已取消"
 
-#: src/queuehandler.c:704 src/queuehandler.c:1195
+#: src/queuehandler.c:699 src/queuehandler.c:1190
 msgid "Failed"
 msgstr "已失败"
 
-#: src/queuehandler.c:745 src/queuehandler.c:773 src/queuehandler.c:1235
-#: src/queuehandler.c:1263
+#: src/queuehandler.c:740 src/queuehandler.c:768 src/queuehandler.c:1230
+#: src/queuehandler.c:1258
 #, c-format
 msgid "%d Day %02d:%02d:%02d"
 msgstr "%d 天 %02d:%02d:%02d"
 
-#: src/queuehandler.c:748 src/queuehandler.c:776 src/queuehandler.c:1238
-#: src/queuehandler.c:1266
+#: src/queuehandler.c:743 src/queuehandler.c:771 src/queuehandler.c:1233
+#: src/queuehandler.c:1261
 #, c-format
 msgid "%d Days %02d:%02d:%02d"
 msgstr "%d 天 %02d:%02d:%02d"
 
-#: src/queuehandler.c:789 src/queuehandler.c:1279
+#: src/queuehandler.c:784 src/queuehandler.c:1274
 msgid "B"
 msgstr "B"
 
-#: src/queuehandler.c:793 src/queuehandler.c:1283
+#: src/queuehandler.c:788 src/queuehandler.c:1278
 msgid "KB"
 msgstr "KB"
 
-#: src/queuehandler.c:798 src/queuehandler.c:1288
+#: src/queuehandler.c:793 src/queuehandler.c:1283
 msgid "MB"
 msgstr "MB"
 
-#: src/queuehandler.c:814 src/queuehandler.c:1304
+#: src/queuehandler.c:809 src/queuehandler.c:1299
 msgid "Not Available"
 msgstr "不可用"
 
-#: src/queuehandler.c:1139
+#: src/queuehandler.c:1134
 msgid "Foreign Audio Search"
 msgstr "外语音频搜索"
 
-#: src/queuehandler.c:1143
+#: src/queuehandler.c:1138
 msgid "Encode"
 msgstr "编码"
 
-#: src/queuehandler.c:1147
+#: src/queuehandler.c:1142
 msgid "Encode Analysis Pass"
 msgstr ""
 
-#: src/queuehandler.c:1151
+#: src/queuehandler.c:1146
 msgid "Encode Final Pass"
 msgstr ""
 
 #. Should never happen
-#: src/queuehandler.c:1156
+#: src/queuehandler.c:1151
 msgid "Error"
 msgstr "错误"
 
-#: src/queuehandler.c:1160
+#: src/queuehandler.c:1155
 #, c-format
 msgid ""
 "pass %d of %d\n"
@@ -3328,32 +3383,32 @@ msgstr ""
 "正在处理 %d of %d\n"
 "%s"
 
-#: src/queuehandler.c:1172
+#: src/queuehandler.c:1167
 msgid "Scanning Title"
 msgstr "扫描标题"
 
-#: src/queuehandler.c:1180
+#: src/queuehandler.c:1175
 msgid "Encoding In Progress"
 msgstr "编码进行中"
 
 #. Should never happen
-#: src/queuehandler.c:1200
+#: src/queuehandler.c:1195
 msgid "Unknown"
 msgstr "未知"
 
-#: src/queuehandler.c:1388
+#: src/queuehandler.c:1383
 msgid "Export Queue"
 msgstr "导出队列"
 
-#: src/queuehandler.c:1476
+#: src/queuehandler.c:1466
 msgid "Import Queue"
 msgstr "导入队列"
 
-#: src/queuehandler.c:1627
+#: src/queuehandler.c:1617
 msgid "Low Disk Space: Encoding Paused"
 msgstr ""
 
-#: src/queuehandler.c:1629
+#: src/queuehandler.c:1619
 #, c-format
 msgid ""
 "The destination filesystem is almost full: %<PRId64> MB free.\n"
@@ -3361,43 +3416,43 @@ msgid ""
 "Encode may be incomplete if you proceed."
 msgstr ""
 
-#: src/queuehandler.c:1634
+#: src/queuehandler.c:1624
 msgid "Resume, I've fixed the problem"
 msgstr "继续，我已经解决了这个问题"
 
-#: src/queuehandler.c:1635
+#: src/queuehandler.c:1625
 msgid "Resume, Don't tell me again"
 msgstr "继续，不要再通知我"
 
-#: src/queuehandler.c:1701
+#: src/queuehandler.c:1694
 msgid "Remove Item in Progress?"
 msgstr ""
 
-#: src/queuehandler.c:1703
+#: src/queuehandler.c:1696
 msgid "Cancel and Remove"
 msgstr "取消并移除"
 
-#: src/queuehandler.c:1843 src/queuehandler.c:1856
+#: src/queuehandler.c:1836 src/queuehandler.c:1849
 msgid "Stop"
 msgstr "停止"
 
-#: src/queuehandler.c:1844 src/queuehandler.c:1857
+#: src/queuehandler.c:1837 src/queuehandler.c:1850
 msgid "Stop Encoding"
 msgstr "停止编码"
 
-#: src/queuehandler.c:1869
+#: src/queuehandler.c:1862
 msgid "S_top Encoding"
 msgstr "停止编码(_T)"
 
-#: src/queuehandler.c:1887 src/queuehandler.c:1900
+#: src/queuehandler.c:1880 src/queuehandler.c:1893
 msgid "Resume"
 msgstr "恢复"
 
-#: src/queuehandler.c:1888 src/queuehandler.c:1901
+#: src/queuehandler.c:1881 src/queuehandler.c:1894
 msgid "Resume Encoding"
 msgstr "重新编码"
 
-#: src/queuehandler.c:1912
+#: src/queuehandler.c:1905
 msgid "_Resume Encoding"
 msgstr "重新编码(_R)"
 
@@ -3458,10 +3513,6 @@ msgstr ""
 #, c-format
 msgid "“%s” is not a writable directory."
 msgstr ""
-
-#: src/title-add.c:124 src/title-add.c:134
-msgid "Overwrite"
-msgstr "覆盖"
 
 #: src/title-add.c:124 src/title-add.c:134
 msgid "Overwrite File?"
