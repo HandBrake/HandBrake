@@ -1012,7 +1012,7 @@ Vihje: Tiedoston korvaamista voi hallita asetuksista.</value>
     <value>(muuttunut)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>Muxing: This may take a while...</value>
+    <value>Muxing: Tämä voi kestää jonkin aikaa...</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
     <value>Valinnat</value>
@@ -1126,7 +1126,7 @@ Vihje: Tiedoston korvaamista voi hallita asetuksista.</value>
     <value>Metatiedot</value>
   </data>
   <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
-    <value>Allow use of DirectX Decoding</value>
+    <value>Salli DirectX-koodauksenpurun käyttö</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Annetussa tiedostomuodossa on kiellettyjä merkkejä. Nämä on poistettu.</value>
@@ -1225,7 +1225,7 @@ Vihje: Tiedoston korvaamista voi hallita asetuksista.</value>
     <value>DVD- ja Bluray-nimikkeen vähimmäiskesto sekunteina. Lyhyemmät nimikkeet sivuutetaan:</value>
   </data>
   <data name="Options_KeepDuplicateTitles" xml:space="preserve">
-    <value>Keep duplicate titles on Blu-ray sources (Requires Restart)</value>
+    <value>Pidä Bluray-lähteissä toistuvat otsakkeet (vaatii uudelleenkäynnistyksen)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4-tiedoston pääte:</value>
@@ -1917,7 +1917,7 @@ Voit vetää ja pudottaa tai kirjoittaa tekstin ylle.</value>
     <value>Lohkoutumisenpoiston säätö</value>
   </data>
   <data name="OptionsView_EncodeNotes" xml:space="preserve">
-    <value>Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown.</value>
+    <value>Huom! Kaikilla laitteistokoodaimilla ei ole lisäasetuksia. Järjestelmän kaikki käytettävissä olevat ja tuetut laitteistokoodaimet ovat valittavissa videovälilehdeltä videokoodaimen pudotusvalikosta.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake on havainnut useita keskeneräisiä jonotiedostoja. Nämä ovat useammasta käynnissä olevasta HandBrakestä. Haluatko palauttaa kaikki keskeneräiset työt?</value>
@@ -2323,7 +2323,7 @@ Valitse toinen esiasetus.</value>
     <value>Taso, jolla levytilan vähyydestä varoitetaan:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
+    <value>Huom! Tämä on samanaikaisten töiden yläraja. Laiterajoitukset voivat edelleen alentaa koodauksen samanaikaisten töiden todellista määrää. Asetus tulee voimaan vasta seuraavassa jonossa tai sovelluksen käynnistyttyä uudelleen.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Ei saatavilla)</value>
@@ -2850,25 +2850,25 @@ Usean rinnakkaisen koodauksen voi ottaa käyttöön asetuksella ”Prosessien er
     <value>Lopetetaan koodausta…</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>Allow Upscaling</value>
+    <value>Salli ylöspäin skaalaus</value>
   </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
-    <value>Optimal Size</value>
+    <value>Optimikoko</value>
   </data>
   <data name="OptionsView_Available" xml:space="preserve">
-    <value>Available on this system.</value>
+    <value>Käytettävissä tässä järjestelmässä.</value>
   </data>
   <data name="OptionsView_NotAvailable" xml:space="preserve">
-    <value>Not available on this system.</value>
+    <value>Ei käytettävissä tässä järjestelmässä.</value>
   </data>
   <data name="MainView_ScanningStatus" xml:space="preserve">
-    <value>Please wait ...</value>
+    <value>Odota…</value>
   </data>
   <data name="MainView_Cancel" xml:space="preserve">
     <value>Peru</value>
   </data>
   <data name="MainView_OpenLog" xml:space="preserve">
-    <value>Open Log Window</value>
+    <value>Avaa loki-ikkuna</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value/>
@@ -2919,6 +2919,6 @@ Usean rinnakkaisen koodauksen voi ottaa käyttöön asetuksella ”Prosessien er
     <value>Ei käytössä</value>
   </data>
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
-    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
+    <value>DVD- ja Bluray-otsakkeiden enimmäiskesto sekunteina. Pidemmät otsakkeet ohitetaan:</value>
   </data>
 </root>

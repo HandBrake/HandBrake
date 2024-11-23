@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>Deblock reduces blocky artifacts caused by low quality video compression.</value>
+    <value>Deblock vähentää huonolaatuisen videopakkauksen aiheuttamia lohkomisia artefakteja.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
     <value>Aseta kamman- tai lomituksenpoistosuodattimen valintoja.
@@ -163,15 +163,15 @@ HQDN3D on mukautuva matalapäästäsuodatin, joka on NLMeansiä nopeampi mutta h
 Bluray- ja DVD-lähteissä on usein useampia nimikkeitä, joista varsinainen elokuva on tyypillisesti pisin.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>Anamorfinen mahdollistaa mielivaltaisen tallennusmitan säilyttäen alkuperäisen kuvakulman toiston aikana.
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+None poistaa anamorfisuuden käytöstä. Videon tallennusmitat ja näyttömitat ovat identtiset. Hyödyllinen vain yhteensopivuuden kannalta tiettyjen vanhojen laitteiden kanssa.
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+Automaattinen maksimoi tallennustarkkuuden säilyttäen alkuperäisen kuvasuhteen. Suositellaan.
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+Loose on samanlainen kuin Auto, mutta yrittää säilyttää tallennuksen kuvasuhteen. Tämä voi johtaa pieneen tallennustarkkuuden menetykseen verrattuna Automaattiseen.
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+Mukautettu mahdollistaa kaikkien parametrien asettamisen manuaalisesti. Hyödyllinen, kun korjataan väärää lähteen kuvasuhdetta ja kun ammattilaiset tarvitsevat edistynyttä ohjausta jälkituotannossa.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Rajaa automaattisesti mustat reunat videon laidoilta.</value>
@@ -263,12 +263,12 @@ Ohittaa kaikki muut asetukset.</value>
     <value>Ottaa käyttöön vaihtelevan kuvanopeuden tulosteen, jonka huippunopeuden määrittää kuvanopeusasetus.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
+    <value>Säätää kooderin asetuksia pakkaustehokkuuden ja koodausnopeuden tasapainottamiseksi.
 
-This establishes your default encoder settings.
-Tunes, profiles, levels and advanced option string will be applied to this.
-You should generally set this option to the slowest you can bear since slower
-settings will result in better quality or smaller files.</value>
+Tämä määrittää kooderin oletusasetukset.
+Tähän sovelletaan virityksiä, profiileja, tasoja ja lisäasetusten merkkijonoa.
+Tämä asetus kannattaa yleensä asettaa hitaimmaksi, koska
+hitaammat asetukset johtavat parempaan laatuun tai pienempiin tiedostoihin.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Asettaa ja varmistaa yhteensopivuuden annetun profiilin kanssa.
@@ -276,19 +276,19 @@ settings will result in better quality or smaller files.</value>
 Ohittaa kaikki muut asetukset.</value>
   </data>
   <data name="Video_Quality" xml:space="preserve">
-    <value>Set the desired quality factor.
-The encoder targets a certain quality.
-The scale used by each video encoder is different.
+    <value>Aseta haluttu laatukerroin.
+Kooderi tähtää tiettyyn laatuun.
+Jokaisen videokoodaajan käyttämä asteikko on erilainen.
 
-x264's scale is logarithmic and lower values correspond to higher quality.
-So small decreases in value will result in progressively larger increases
-in the resulting file size.  A value of 0 means lossless and will result
-in a file size that is larger than the original source, unless the source
-was also lossless.
-Suggested values are: 18 to 20 for standard definition sources and 20 to 23 for high definition sources.
+x264:n asteikko on logaritminen, ja pienemmät arvot vastaavat korkeampaa laatua.
+Pienet arvon alenemat johtavat siis asteittain suurempiin nousuihin.
+tiedostokokoon. Arvo 0 tarkoittaa häviötöntä, ja tuloksena on
+tiedostokokoon, joka on suurempi kuin alkuperäinen lähde, ellei lähde ole
+oli myös häviötön.
+Ehdotetut arvot ovat: 18-20 standardiresoluutiolähteille ja 20-23 teräväpiirtolähteille.
 
-FFMpeg's and Theora's scale is more linear.
-These encoders do not have a lossless mode.</value>
+FFMpegin ja Theoran asteikko on lineaarisempi.
+Näissä koodereissa ei ole häviötöntä tilaa.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
     <value>Käytä monivaiheisen koodauksen analyysivaiheessa toimintaa nopeuttavia asetuksia.</value>
@@ -334,35 +334,35 @@ Korvaa kaikki koodausasetukset, joita valinnan jälkeen voi vielä hienosäätä
 Jos tiedät tarkkaan, minkä otsakkeen haluat koodata, sen voi asettaa tässä, jolloin HandBrake etsii vain sen eikä tutki lähdetiedoston jokaista otsaketta. Muussa tapauksessa jätä kenttä tyhjäksi.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
-    <value>Custom Denoise parameters.
- 
-NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+    <value>Mukautetut Denoise-parametrit.
 
-NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+NLMeans-syntaksi: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
 
-HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+NLMeans oletus: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
 
-HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+HQDN3D-syntaksi: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D oletus: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
     <value>Kohinanpoistosuodatitimen esiasetus. Asettaa suodattimen voimakkuuden.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
- 
-- None uses the default preset settings.
- 
-- Film refines settings for use with most live action content.
- 
-- Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+    <value>Denoise tune. Säätää Denoise-esiasetusta edelleen optimoidakseen asetukset tiettyjä skenaarioita varten.
 
-- High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+- None käyttää oletusarvoisia esiasetuksia.
 
-- Animation is useful for cel animation such as anime and cartoons.
+- Film tarkentaa asetuksia useimpien live action -sisältöjen käyttöä varten.
 
-- Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
+- Grain käsittelee vain värikanavia. Käyttökelpoinen, kun halutaan säilyttää luminanssirakeen elokuvamainen ulkoasu ja vähentää tai poistaa värikohinaa.
 
-- Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</value>
+- High Motion vähentää värien likaantumista voimakkaan liikkeen kohtauksissa välttämällä värikanavien ajallista käsittelyä. Hyödyllinen urheilu- ja toimintavideoissa.
+
+- Animation on hyödyllinen cel-animaatioille, kuten animeille ja piirretyille.
+
+- Tape on käyttökelpoinen vähän yksityiskohtia sisältäville analogisille nauhalähteille, kuten VHS:lle, joissa Film ei tuota toivottua tulosta.
+
+- Sprite on hyödyllinen 1-/4-/8-/16-bittisissä kaksiulotteisissa peleissä. Spriteä ei ole suunniteltu teräväpiirtovideota varten.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>Lomituksenpoisto poistaa kuvasta kampamaisuutta.
@@ -400,11 +400,11 @@ Bob yrittää säilyttää liikkuvan kuvan laadun havaitun tarkkuuden kustannuks
     <value>Lomituksen tunnistus, kun käytössä, mahdollistaa, että lomituksenpoistosuodatin käsittelee vain lomitetut kuvat.</value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
-    <value>Custom Interlace Detection parameters.
- 
- Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
- 
- Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+    <value>Mukautetut Interlace-tunnistusparametrit.
+
+Syntaksi: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+
+Oletus: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
   </data>
   <data name="FilterView_Rotate" xml:space="preserve">
     <value>Kierrä kuvaa myötäpäivään 90° askelin.</value>
@@ -416,40 +416,40 @@ Bob yrittää säilyttää liikkuvan kuvan laadun havaitun tarkkuuden kustannuks
     <value>”Säilytä kuvasuhde” säilyttää lähteen alkuperäisen kuvasuhteen. Jos tämä poistetaan käytöstä, kuva voi näyttää venyneeltä tai litistyneeltä.</value>
   </data>
   <data name="FilterView_CustomSharpenParams" xml:space="preserve">
-    <value>Custom Sharpen parameters.
+    <value>Mukautetut terävöitymisparametrit.
 
-Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+Unsharp-syntaksi: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
 
-Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+Unsharp oletus: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
 
-Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+Lapsharp-syntaksi: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
 
-Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+Lapsharpin oletus: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+    <value>Terävöittäminen parantaa yksityiskohtien, erityisesti reunojen, ulkonäköä. Liian voimakkaat terävöitysasetukset voivat heikentää kuvanlaatua luomalla rengasmaisia artefakteja ja lisäämällä kohinaa, mikä voi heikentää pakkaustehokkuutta.
 
-Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
+Unsharp on yleiskäyttöinen häivytyssuodatin. Se terävöittää sumentamalla ja laskemalla sitten sumentuneen kuvan ja alkuperäisen kuvan välisen eron.
 
-Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
+Lapsharp terävöittää käyttämällä Laplacian-reunasuodattimia lähenteleviä konvoluutiokerneleitä, jotka tuottavat joskus laadukkaampia tuloksia kuin unsharp masking.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
     <value>Terävöityssuodattimen esiasetus. Asettaa suodattimen voimakkuuden.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+    <value>Teroita viritys. Säätää edelleen terävöityksen esiasetusta optimoidakseen asetukset tiettyjä skenaarioita varten.
 
-None uses the default preset settings.
+None käyttää oletusarvoisia esiasetuksia.
 
-Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+Unsharp voidaan virittää Ultrahieno, Hieno, Keskikarkea, Karkea tai Erittäin karkea terävöitys. Valitse yksi niistä lähtökuvan resoluution ja parannettavien yksityiskohtien hienojakoisuuden perusteella.
 
-Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
+Lapsharpin Film viritys tarkentaa asetuksia käytettäväksi useimpien live action -sisältöjen kanssa. Film käyttää isotrooppista Laplacian-ydintä terävöittääkseen kaikki reunat samalla tavalla, ja luminanssi (kirkkaus) -tietoja terävöitetään enemmän kuin krominanssi (väri) -tietoja.
 
-Lapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.
+Lapsharpin Grain-viritys on samanlainen kuin Film, mutta siinä käytetään Gaussin isotrooppista Laplacian-ydintä kohinan ja rakeisuuden vaikutuksen vähentämiseksi. Hyödyllinen rakeisuuden säilyttämiseen ja yleisenä vaihtoehtona Film-viritykselle.
 
-Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
+Lapsharpin Animation-viritys on hyödyllinen cel-animaatioille, kuten animen ja piirroselokuvien kuvaamiseen. Animaatio on identtinen Film-virityksen kanssa, mutta yleistä voimakkuutta vähennetään artefaktien syntymisen välttämiseksi.
 
-Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</value>
+Lapsharpin Sprite-viritys on hyödyllinen 1-/4-/8-/16-bittisissä kaksiulotteisissa peleissä. Sprite käyttää 4 naapurin Laplacian-ydintä, joka vahvistaa pysty- ja vaakasuoria reunoja enemmän kuin diagonaalisia reunoja.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
     <value>Tasaa kaikkien ääni- ja videovirtojen alkuaikaleimat joko lisäämällä tyhjiä kuvia tai jättämällä kuvia pois. Voi parantaa äänen ja kuvan tahdistusta viallisissa toistimissa, jotka eivät kunnioita MP4-muokkauslistoja.</value>
@@ -464,8 +464,8 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
     <value>Tämän alueen alkupiste.</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>When enabled the auto name system will always use the default path. 
-When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path.</value>
+    <value>Kun automaattinen nimijärjestelmä on käytössä, se käyttää aina oletuspolkua. 
+Kun se on poistettu käytöstä, se käyttää pääikkunan kohdeikkunassa olevaa polkua, jos se on täytetty, muuten se käyttää oletuspolkua.</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
     <value>Väriavaruussuodatin.</value>
@@ -485,9 +485,9 @@ lähteen tekstitysraidan muotoa.
 Esimerkiksi MP4 ei tue PGS-tekstitystä</value>
   </data>
   <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
-    <value>Flat - Presets are displayed as a flat list.
-Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
-Categories - All presets are shown under a sub menu per category.</value>
+    <value>Tasainen - Esiasetukset näytetään tasaisena luettelona.
+Osittain tasainen - 8 viimeistä käyttäjän esiasetusta näytetään tasaisena luettelona, minkä jälkeen kaikki esiasetukset näytetään luokkaluettelona.
+Kategoriat - Kaikki esiasetukset näytetään kategorian alavalikossa.</value>
   </data>
   <data name="AudioView_AudioDefaults" xml:space="preserve">
     <value>Asettaa, miten tämä välilehti automaattisesti lisää ääniraidat uutta lähdettä tai nimikettä valittaessa.</value>
@@ -515,27 +515,27 @@ Huomaa, että virhekoodit ovat sinne päin eivätkä aina tarkkoja.
 Tulostiedosto suositellaan varmistamaan ennen sille tehtäviä toimenpiteitä.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>Tulostustiedoston muoto. Voit käyttää minkä tahansa tuetun tiedostojärjestelmän merkin lisäksi mitä tahansa sijoitussalpaa, joka korvataan, kun vaihdat otsikkoa tai skannaat lähdettä tai päivität tiettyjä asetuksia.
 
-{source} - Name of the source file.
-{title} - Integer value. This is representative of a disc title number.
-{chapters} - The range of chapters selected.
-{creation-date} - The date that the source file was created on (if available).
-{creation-time} - The time that the source file was created on (if available).
-{modification-date} - The date that the source file was last modified on (if available).
-{modification-time} - The time that the source file was last modified on (if available).
-{date} - Today. Set at time of adding to the queue.
-{time} - Today. Set at time of adding to the queue.
-{quality_bitrate} - The RF/CQ number, or bitrate
-{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
-{preset} - Name of the preset selected.
-{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
-{width} - The output storage width
-{height} - The output storage height
-{codec} - Display the video format.
-{encoder} - Display the short format key of the encoder used.
+{source} - Lähdetiedoston nimi.
+{title} - Kokonaislukuarvo. Tämä edustaa levyn otsikkonumeroa.
+{chapters} - Valittujen lukujen alue.
+{creation-date} - Päivämäärä, jolloin lähdetiedosto on luotu (jos saatavilla).
+{creation-time} - Aika, jolloin lähdetiedosto luotiin (jos saatavilla).
+{modification-date} - Päivä, jolloin lähdetiedostoa viimeksi muutettiin (jos saatavilla).
+{modification-time} - Aika, jolloin lähdetiedostoa viimeksi muutettiin (jos saatavilla).
+{date} - Tänään. Asetetaan jonoon lisäämisen yhteydessä.
+{time} - Tänään. Asetetaan jonoon lisäämisen ajankohtana.
+{quality_bitrate} - RF/CQ-numero tai bittinopeus.
+{quality_type} - Tulostaa ”kbps” tai ”Q” riippuen videovälilehdellä valitusta laatutilasta.
+{preset} - Valitun esiasetuksen nimi.
+{encode_bit_depth} - Kokonaislukuarvo, esim. 8, 10 tai 12.
+{width} - Lähtötallennuksen leveys
+{height} - Lähtötallennuksen korkeus
+{codec} - Näyttää videoformaatin.
+{encoder} - Näyttää käytetyn koodaimen lyhyen formaattiavaimen.
 
-Any illegal path characters will be removed automatically.</value>
+Kaikki laittomat polkumerkit poistetaan automaattisesti.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Oikealta vasemmalle kirjoitettavissa kielissä voi valita jommankumman tavan. ”Vain teksti” hahmontaa tekstin oikealta vasemmalle, ”koko käyttöliittymä” hahmontaa kaikki säätimet oikealta vasemmalle.
@@ -560,6 +560,6 @@ Bittinopeus vaihtelee lähteittäin.</value>
     <value>Avaa ohjeet verkon sivulta https://handbrake.fr/docs</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Dash (-), Period (.) and Comma (,)</value>
+    <value>Viiva (-), piste (.) ja pilkku (,)</value>
   </data>
 </root>

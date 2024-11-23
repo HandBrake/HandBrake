@@ -121,24 +121,23 @@
     <value>Deblock minskar blockiga artifakter som orsakas av videokomprimering av låg kvalitet.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>Choose decomb or deinterlace filter options.
+    <value>Välj alternativ för filtren decomb eller deinterlace.
 
-The decomb filter selectively deinterlaces frames that appear to be interlaced.
-This will preserve quality in frames that are not interlaced.
+Filtret decomb avflätar selektivt bildrutor som verkar vara interlaced.
+Detta kommer att bibehålla kvaliteten i bildrutor som inte är interlaced.
 
-The classic deinterlace filter is applied to all frames.
-Frames that are not interlaced will suffer some quality degradation.</value>
+Filtret classic deinterlace verkställs på alla bildrutor.
+Bildrutor som inte är interlaced kommer att få viss kvalitetsförsämring.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
-    <value>Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. 
-Overly strong Denoise settings may damage picture quality by discarding detail.
-         
-NLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.
-         
-HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail.</value>
+    <value>Denoise minskar eller tar bort synligheten för grus och korn. Detta kan förbättra komprimeringseffektiviteten och skapa videor med högre kvalitet med mindre filstorlekar. För kraftiga inställningar för Denoise kan skada bildkvaliteten genom att förkasta detaljer.
+
+NLMeans är ett Denoise-filter för högre kvalitet till bekostnad av hastighet. Använd där kvalitet är mer viktig än hastighet.
+
+HQDN3D är ett adaptivt lågpassfilter, snabbare än NLMeans men mindre effektiv att behålla findetaljer.</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
-    <value>Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</value>
+    <value>Detelecine tar bort kamliknande artefakter som ett resultat av telecine, en process för att konvertera bildrutor från film till television.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
     <value>Gråskala tar bort färgkomponenten för videon. Ofta refererad till som svartvit video.</value>
@@ -163,15 +162,15 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
 Blu-ray och dvd-källor har ofta flera titlar, den längsta av dessa är oftast själva filmen</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>Anamorfisk tillåter godtyckliga lagringsdimensioner samtidigt som ursprungliga bildförhållanden bibehålls under uppspelning.
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+None inaktiverar anamorfisk. Lagringsdimensionerna för video och skärmdimensioner kommer att vara identiska. Endast användbar för kompatibilitet med vissa gamla enheter.
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+Automatic maximerar lagringsupplösningen samtidigt som ursprunglig skärmbildförhållande bibehålls. Rekommenderas.
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+Loose är liknande som Auto, men försöker att bibehålla bildförhållandet för lagring. Detta kan resultera i en viss ökad lagringsupplösning jämfört med Auto.
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+Custom tillåter manuell inställningar av alla parametrar. Användbart för att korrigera en felaktig skärmupplösning för en källa och för proffs som behöver avancerade kontroller för efterbehandling.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Beskär automatiskt svarta sorgkanter runt kanten för videon.</value>
@@ -202,9 +201,9 @@ Denna inställning är endast nödvändig för kompatibilitet med vissa enheter.
 Du bör använda 2 såvida inte du upplever kompatibilitetsproblem.</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>Pixel aspect defines the shape of the pixels.
-A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
-Players will scale the image in order to achieve the specified aspect.</value>
+    <value>Bildpunktsförhållande definierar formen för bildpunkterna.
+Ett förhållande på 1:1 definierar en fyrkantig bildpunkt. Andra värden definierar rektangulära former.
+Uppspelare kommer att skala bilden för att kunna uppnå angivet förhållande.</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
     <value>Detta är bredden som videon kommer att lagras med.
@@ -220,11 +219,12 @@ De faktiska storleksdimensionerna kommer att skilja sig om bildpunkternas förh�
     <value>Skicka jobbet tillbaka till huvudfönstret för redigering.</value>
   </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
-    <value>Set the average bitrate.
+    <value>Ställer in genomsnittlig bitfrekvens.
 
-The instantaneous bitrate can be much higher or lower at any point in time.
-But the average over a long duration will be the value set here.  If you need
-to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</value>
+Den momentana bitfrekvensen kan vara högre eller lägre vid någon tidpunkt.
+Men den genomsnittliga över lång tid kommer vara värdet som anges här.  Om
+du behöver begränsa momentan bitfrekvens, se inställningarna för x264's 
+vbv-bufsize och vbv-maxrate.</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
     <value>Aktiverar utdata med konstant bildfrekvens.</value>
@@ -233,11 +233,11 @@ to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate set
     <value>Tillgängliga videoenkodare.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
-    <value>Tune settings to optimize for common scenarios.
+    <value>Justera inställningar för att optimera för vanliga scenarior.
 
-This can improve efficiency for particular source characteristics or set
-characteristics of the output file.  Changes will be applied after the
-preset but before all other parameters.</value>
+Detta kan förbättra effektiviteten för specifika källor med olika
+defekter för utdatafilen.  Ändringar kommer att verkställas efter 
+förvalet men innan alla andra parametrar.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
     <value>Ytterligare enkodningsinställningar.
@@ -250,60 +250,59 @@ Kolonseparerad lista med enkoderalternativ.</value>
 Ställ in denna om din enhet kämpar med att spela upp utdata (förlorade bildrutor).</value>
   </data>
   <data name="Video_Framerate" xml:space="preserve">
-    <value>Output framerate.
+    <value>Bildfrekvens för utdata.
 
-'Same as source' is recommended. If your source video has a variable framerate, 'Same as source' will preserve it.</value>
+'Samma som källa' rekommenderas. Om din källvideo har en variabel bildfrekvens så kommer 'Samma som källa' att behålla den.</value>
   </data>
   <data name="Video_Level" xml:space="preserve">
-    <value>Sets and ensures compliance with the specified level.
+    <value>Ställer in och försäkrar giltighet med angiven nivå.
 
-Overrides all other settings.</value>
+Åsidosätter alla andra inställningar.</value>
   </data>
   <data name="Video_PeakFramerate" xml:space="preserve">
     <value>Aktiverar utdata med variabel bildfrekvens med högsta frekvensen bestämd av inställningen bildfrekvens.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
+    <value>Justerar enkodarinställningarna att sänka komprimeringseffektiviteten mot att få högre enkodningshastighet.
 
-This establishes your default encoder settings.
-Tunes, profiles, levels and advanced option string will be applied to this.
-You should generally set this option to the slowest you can bear since slower
-settings will result in better quality or smaller files.</value>
+Detta bestämmer dina standardinställningar för enkodaren.
+Justeringar, profiler, nivåer och avancerade alternativ kommer att tillämpas för detta.
+Du bör oftast ställa in detta alternativ till det långsammaste som du bara orkar med eftersom
+inställningarna kommer att resultera i bättre kvalitet eller mindre filer.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
-    <value>Sets and ensures compliance with the specified profile.
-
-Overrides all other settings.</value>
+    <value>Ställer in och försäkrar giltighet med angivna profilen.</value>
   </data>
   <data name="Video_Quality" xml:space="preserve">
-    <value>Set the desired quality factor.
-The encoder targets a certain quality.
-The scale used by each video encoder is different.
+    <value>Ställer in önskad kvalitetsfaktor.
+Enkodaren siktar på en viss kvalitet.
+Skalan som används av varje videoenkodare är annorlunda.
 
-x264's scale is logarithmic and lower values correspond to higher quality.
-So small decreases in value will result in progressively larger increases
-in the resulting file size.  A value of 0 means lossless and will result
-in a file size that is larger than the original source, unless the source
-was also lossless.
-Suggested values are: 18 to 20 for standard definition sources and 20 to 23 for high definition sources.
+Skalan för x264 är logaritmisk och lägre värden motsvarar högre kvalitet.
+Därför kan små minskningar i värdet ge progressivt större ökningar i den
+resulterande filstorleken.  Ett värde på 0 betyder förlustfritt och kommer att
+ge en filstorlek som är större än originalkällan, såvida inte källan också
+var förlustfri.
+Föreslagna värden är: 18 till 20 för källor med standarddefinition (SD) och 20 till 23 för hög definition (HD).
 
-FFMpeg's and Theora's scale is more linear.
-These encoders do not have a lossless mode.</value>
+Skalan för FFMpeg och Theora är mer linjär.
+Dessa enkodare har inte ett förlustfritt läge.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>Använd inställningar som snabbar på saker under analyspasset för en flerpassenkodning.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>Genomföra en flerpassenkodning.
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+Alternativet 'Bitfrekvens' är en nödvändig förutsättning. Under analys-
+passen kommer statistik om videon att samlas in. Därefter i det slutgiltiga 
+passet kommer denna statistik att användas för att göra allokeringsbeslut 
+för bitfrekvensen.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
-    <value>Enables variable framerate output.
+    <value>Aktiverar utdata med variabel bildfrekvens.
 
-VFR is not compatible with some players.</value>
+VFR är inte kompatibel med vissa uppspelare.</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
     <value>När HandBrake har färdigställt den aktuella kön eller enkodning så kommer denna åtgärd att genomföras.</value>
@@ -321,90 +320,90 @@ VFR is not compatible with some players.</value>
     <value>Ytterligare förvalsalternativ.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
- 
- Overrides all encode settings. Settings may be further adjusted after selecting a preset.</value>
+    <value>Förval är grupper av enkodarinställningar anpassade för specifika scenarior. Välj den som närmast matchar dina önskemål.
+
+Åsidosätter alla enkodarinställningar. Inställningar kan justeras ytterligare efter att ett förval valts.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
     <value>Ta bort valt förval.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+    <value>Vissa källor kan innehålla fler än ett videoklipp, eller en samling titlar. Blu-ray och dvd-källor har ofta flera titlar.
 
-If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank.</value>
+Om du vet den specifika titeln som du önskar att enkoda så kan du ange den här och HandBrake kommer att läsa in endast den istället för varenda titel i källfilen. Lämna detta fält tomt om du inte vet.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
-    <value>Custom Denoise parameters.
+    <value>Anpassade parametrar för Denoise.
  
-NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+Syntax för NLMeans: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
 
-NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+Standard för NLMeans: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
 
-HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+Syntax för HQDN3D: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
 
-HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+Standard för HQDN3D: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
     <value>Förval för filtret denoise. Anger styrkan för filtret.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
- 
-- None uses the default preset settings.
- 
-- Film refines settings for use with most live action content.
- 
-- Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+    <value>Justera Denoise. Justerar ytterligare förvalet Denoise för att optimera inställningar för specifika scenarior.
 
-- High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+None använder standardinställningar för förvalet.
 
-- Animation is useful for cel animation such as anime and cartoons.
+Film förfinar inställningar att använda för mestadels vanligt filminnehåll.
 
-- Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
+Grain behandlar endast färgkanalerna. Användbart för att behålla filmliknande artefakter av luminanskorn men också minska eller ta bort färggrus.
 
-- Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</value>
+High Motion mindksar färgsmetning i scener med stora rörelser genom att undvika tidsmässig behandling av färgkanaler. Användbart för sport- och actionvideor.
+
+Animation är användbar för animerade filmer såsom anime och tecknad film.
+
+Tape är användbar för analoga bandkällor med låg detaljnivå såsom VHS, där Film inte producerar ett önskvärt resultat.
+
+Sprite är användbar för tvådimensionella spel (1-/4-/8-/16 bitar). Sprite är inte designad för videor med high definition (HD).</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace removes comb artifacts from the picture.
+    <value>Deinterlace tar bort kamliknande artefakter från bilden.
 
-Bwdif and Yadif are two popular and fast deinterlacers.
+Bwdif och Yadif är två populära och snabba deinterlacers.
 
-Decomb switches between multiple interpolation algorithms for speed and quality.</value>
+Decomb växlar mellan flera interpoleringsalgoritmer för hastighet och kvalitet.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Custom Deinterlace parameters.
+    <value>Anpassade parametrar för Custom Deinterlace.
  
- Bwdif and Yadif syntax: mode=m:parity=p
+ Syntax för Bwdif och Yadif: mode=m:parity=p
  
- Bwdif and Yadif default: mode=3
+ Standard för Bwdif och Yadif: mode=3
  
- Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ Syntax för Decomb: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
- Decomb default: mode=7</value>
+ Standard för Decomb: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>Deinterlace filter preset.
+    <value>Filterförvalet Deinterlace.
 
-Default is well balanced for speed and quality.
+Default är välbalanserad för hastighet och kvalitet.
 
-Skip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.
+Skip Spatial Check låter Yadif hoppa över korrigeringar av vissa undvikbara artefakter för en liten hastighetsökning.
 
-EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.
+EEDI2 använder en långsammare interpoleringsalgoritm med högre kvalitet för Decomb. Användbar för de flera svåra källor.
 
-Bob attempts to better preserve motion for a slight penalty to perceived resolution.</value>
+Bob försöker att bättre behålla rörelser för en viss minskning av upplevd upplösning.</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
     <value>Vänder (speglar) bilden på den horisontella axeln.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
-    <value>Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames.</value>
+    <value>Interlace Detection, när aktiverat, låter filtret Deinterlace att endast behandla interlaced videobildrutor.</value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
-    <value>Custom Interlace Detection parameters.
+    <value>Anpassade parametrar för Custom Interlace Detection.
  
  Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
  
- Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+ Standard: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
   </data>
   <data name="FilterView_Rotate" xml:space="preserve">
     <value>Rotera bilden inkrementellt 90 grader medurs.</value>
@@ -416,43 +415,43 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
     <value>Behåll bildförhållande upprätthåller det ursprungliga skärmförhållandet för källan. Inaktivering av detta kan resultera i utdragen eller ihoptryckt bild.</value>
   </data>
   <data name="FilterView_CustomSharpenParams" xml:space="preserve">
-    <value>Custom Sharpen parameters.
+    <value>Anpassade parametrar för Custom Sharpen.
 
-Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+Syntax för Unsharp: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
 
-Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+Standard för Unsharp: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
 
-Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+Syntax för Lapsharp: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
 
-Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+Standard för Lapsharp: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+    <value>Sharpening förbättrar synliga detaljer och speciellt kanter. För kraftiga inställningar för Sharpen kan skada bildkvaliteten genom att skapa ringliknande artefakter och förstärkningsgrus, som kan minska komprimeringseffektiviteten.
 
-Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
+Unsharp är ett allmänt maskeringsfilter för oskärpa. Det förstärker genom utsuddning och beräknar sedan skillnaden mellan den suddiga bilden och originalet.
 
-Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
+Lapsharp är skärpan genom convolution kernels ungefärliga Laplacian-kantfilter, vilket ibland producerar en högre kvalitet än maskning för oskärpa.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
     <value>Förval för filtret sharpen. Anger styrkan för filtret.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+    <value>Justera Sharpen. Justerar ytterligare förvalet Sharpen för att optimera inställningar för specifika scenarior.
 
-None uses the default preset settings.
+None använder standardinställningar för förvalet.
 
-Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+Unsharp kan justeras för Ultrafine, Fine, Medium, Coarse eller Very Coarse sharpening. Välj en baserat på bildupplösningen för utdata och detaljrikedom att förbättra.
 
-Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
+Lapsharp's Film justerar inställningar att använda med de flesta med rörligt material. Film använder en isotropisk Laplacian kernel för att skärpa alla kanter på liknande sätt och luminance (ljusstyrka) information är skärpt mer än chrominance (färg) information.
 
-Lapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.
+Lapsharp's Grain justeras liknande som Film, men använder en isotropisk Laplacian of Gaussian kernel för att minska effekten på grus och korn. Använd för att bibehålla grus och som ett allmänt alternativ till Film.
 
-Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
+Lapsharp's Animation justeras för att användas för animation såsom anime och tecknad film. Animation är identisk till Film men totala styrkan är minskad för att undvika att artefakter skapas.
 
-Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</value>
+Lapsharp's Sprite justeras för att användas för tvådimensionella spel (1-/4-/8-/16-bitar). Sprite använder en 4-neighbor Laplacian kernel som förbättrar vertikala och horisontella kanter mer än diagonala kanter.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</value>
+    <value>Justerar de initiala tidsstämplarna för alla ljud- och videoströmmar genom att sätta in svarta bildrutor eller att tappa bildrutor. Kan förbättra synk för ljud/video för trasiga uppspelare som inte förstår MP4-redigeringslistor.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Alternativ för att kontrollera förval.</value>
@@ -464,8 +463,8 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
     <value>Startpunkten för detta omfång.</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>When enabled the auto name system will always use the default path. 
-When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path.</value>
+    <value>När aktiverad kommer systemet för automatisk namngivning att alltid använda standardsökvägen. 
+När inaktiverad kommer den använda sökvägen i målrutan i huvudfönstret om den är angiven där, annars kommer den använda standardsökvägen.</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
     <value>Colourspace-filter.</value>
@@ -474,19 +473,19 @@ When disabled, it will use the path in the destination box on the main window if
     <value>Chroma Smooth-filter</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
-    <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
+    <value>Detta fält accepterar RGB-värden såsom: "0xFF0000" eller engelska färgnamn såsom "red". Se filterdokumentationen för utfyllnad för en fullständig lista över namngivna färger.</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Burn in subtitles to the video stream.
+    <value>Brönn in undertexter till videoströmmen.
 
-Note, this will be automatically selected if the source subtitle track format is not supported in the output file type.
+Observera att detta kommer automatiskt väljas om källans undertextspårformat inte stöds i utdatans filtyp.
 
-For example, PGS subtitles are not supported in MP4</value>
+Till exempel så stöds inte PGS-undertexter i MP4</value>
   </data>
   <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
-    <value>Flat - Presets are displayed as a flat list.
-Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
-Categories - All presets are shown under a sub menu per category.</value>
+    <value>Platta - Förval visas som en platt lista.
+Delvis platta - De sista åtta användarförvalen visas som en platt lista följt av alla förval som listas i kategorier.
+Kategorier - Alla förval visas i en undermeny per kategori.</value>
   </data>
   <data name="AudioView_AudioDefaults" xml:space="preserve">
     <value>Konfigurera beteendet som bestämmer hur denna flik automatiskt lägger till ljudspår när en ny källa eller titel väljs</value>
@@ -498,61 +497,61 @@ Categories - All presets are shown under a sub menu per category.</value>
     <value>Konfigurera beteendet som bestämmer hur denna flik automatiskt lägger till undertextspår när en ny källa eller titel väljs</value>
   </data>
   <data name="OptionsView_SendFileToArguments" xml:space="preserve">
-    <value>The following environment variables are always set:
+    <value>Följande miljövariabler är alltid inställda:
 HB_SOURCE
 HB_DESTINATION
 HB_EXIT_CODE
 
-Possible Exit Codes are as follows:
+Möjliga avslutskoder är som följer:
 0 : Successful
 2 : Input Arguments Error
 3 : Failed to Initialise 
 4 : Unknown Error
 5 : Error reading source file.
 
-Please note, errors codes are best effort and may not always be accurate.
-It is recommended the output file is validated before performing actions on it.</value>
+Observera att felkoder är efter bästa insats och kanske inte alltid är helt korrekta.
+Det rekommenderas att utdatafilen valideras innan du genomför åtgärder på den.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>Formatet för utdatafilen. I tillägg till alla filsystemstecken som stöds kan du använda någon av dessa platshållare som kommer att ersättas när du ändrar titeln, läser in en källa eller uppdatera vissa inställningar.
 
-{source} - Name of the source file.
-{title} - Integer value. This is representative of a disc title number.
-{chapters} - The range of chapters selected.
-{creation-date} - The date that the source file was created on (if available).
-{creation-time} - The time that the source file was created on (if available).
-{modification-date} - The date that the source file was last modified on (if available).
-{modification-time} - The time that the source file was last modified on (if available).
-{date} - Today. Set at time of adding to the queue.
-{time} - Today. Set at time of adding to the queue.
-{quality_bitrate} - The RF/CQ number, or bitrate
-{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
-{preset} - Name of the preset selected.
-{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
-{width} - The output storage width
-{height} - The output storage height
-{codec} - Display the video format.
-{encoder} - Display the short format key of the encoder used.
+{source} - Namnet för källfilen.
+{title} - Heltalsvärde. Detta motsvarar en skivas titelnummer.
+{chapters} - Omfånget för valda kapitel.
+{creation-date} - Datumet som källfilen skapades på (om tillgängligt).
+{creation-time} - Tidpunkten som källfilen skapades på (om tillgängligt).
+{modification-date} - Datumet som källfilen senast ändrades på (om tillgängligt).
+{modification-time} - Tidpunkten som källfilen senast ändrades på (om tillgängligt).
+{date} - Idag. Anger datumet när den lades till i kön.
+{time} - Idag. Anger tiden när den lades till i kön.
+{quality_bitrate} - RF/CQ-numret, eller bitfrekvens
+{quality_type} - Skriver ut "kbps" eller "Q" beroende på kvalitetsläget valt i videofliken.
+{preset} - Namnet för förvalet som valts.
+{encode_bit_depth} - Heltalsvärde. t.ex. 8, 10 eller 12
+{width} - Lagringsbredd för utdata
+{height} - Lagringshöjd för utdata
+{codec} - Visa videoformatet.
+{encoder} - Visa kortformaterad nyckel för använd enkodare.
 
-Any illegal path characters will be removed automatically.</value>
+Alla ogiltiga sökvägstecken kommer att tas bort automatiskt.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
-    <value>For languages that are right to left, you can enable one of two modes.   "Text Only" will only render the text in right to left style.  "Entire User Interface" will render all controls in right to left.
+    <value>Du kan aktivera ett eller två lägen för språk som skrivs höger till vänster. "Endast text" kommer att rendera texten från höger till vänster. "Hela användargränssnittet" kommer att rendera alla kontroller från höger till vänster.
 
-Please note, there may be inperfections in the UI layout when using these modes. Depending on the language, it may be worth trying both modes to find the best fit.</value>
+Observera att det kan finnas synliga felaktigheter i gränssnittet när dessa lägen används. Beroende på språket så kan det vara värt att prova båda lägena för att hitta den som passar bäst.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Target a specific quality level for audio.
-1 is lowest quality and 5 is highest quality.
+    <value>Sikta på en specifik kvalitetsnivå för ljud.
+1 är lägsta kvalitet och 5 är högsta kvalitet.
 
-Bitrate will vary source to source.</value>
+Bitfrekvensen kan skilja sig mellan källa till källa.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
-    <value>The following can be used singularly, or together to build up a destination path
+    <value>Följande kan användas som en eller flera parametrar för att bygga upp en målsökväg
 
-{source_path} - In the same folder as the source path (if possible)
-{source_folder_name} – The name of the directory that the source file is in, without the full path.
-{source} - The name of the source file.</value>
+{source_path} - I samma mapp som källsökvägen (om möjligt)
+{source_folder_name} – Namnet på den katalog som källfilen finns i men utan fullständig sökväg.
+{source} - Namnet på källfilen.</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>Startar upp webbsidan för dokumentation på https://handbrake.fr/docs</value>

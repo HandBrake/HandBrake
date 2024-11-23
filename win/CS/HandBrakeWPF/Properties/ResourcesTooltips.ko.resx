@@ -289,14 +289,12 @@ FFMpeg와 Theora의 척도는 더 선형적입니다.
 이 인코더들은 무손실 모드를 갖고 있지 않습니다.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>멀티 패스 인코딩의 분석 패스에서 작업 속도를 높이는 설정을 사용합니다.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>멀티 패스 인코딩을 수행합니다.
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+'비트 전송률' 옵션은 필수입니다. 분석 패스가 진행되는 동안 동영상에 대한 통계가 수집됩니다. 그런 다음 최종 패스에서 이러한 통계를 사용하여 비트레이트 할당 결정을 내립니다.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>가변 프레임 속도 출력을 활성화합니다. VFR은 일부 재생기와 호환되지 않습니다.</value>
@@ -510,27 +508,27 @@ HB_EXIT_CODE
 작업을 수행하기 전에 출력 파일의 유효성을 검사하는 것이 좋습니다.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>출력 파일의 형식입니다. 지원되는 모든 파일 시스템 문자 외에도 제목을 변경하거나 소스를 스캔하거나 특정 설정을 업데이트할 때 대체할 자리 표시자를 사용할 수 있습니다.
 
-{source} - Name of the source file.
-{title} - Integer value. This is representative of a disc title number.
-{chapters} - The range of chapters selected.
-{creation-date} - The date that the source file was created on (if available).
-{creation-time} - The time that the source file was created on (if available).
-{modification-date} - The date that the source file was last modified on (if available).
-{modification-time} - The time that the source file was last modified on (if available).
-{date} - Today. Set at time of adding to the queue.
-{time} - Today. Set at time of adding to the queue.
-{quality_bitrate} - The RF/CQ number, or bitrate
-{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
-{preset} - Name of the preset selected.
-{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
-{width} - The output storage width
-{height} - The output storage height
-{codec} - Display the video format.
-{encoder} - Display the short format key of the encoder used.
+{source} - 소스 파일의 이름입니다.
+{title} - 정수 값입니다. 디스크 타이틀 번호를 나타냅니다.
+{chapters} - 선택한 챕터의 범위입니다.
+{creation-date}  - 소스 파일을 생성한 날짜(사용 가능한 경우)입니다.
+{creation-time} - 소스 파일을 생성한 시간(사용 가능한 경우).
+{modification-date}- 소스 파일을 마지막으로 수정한 날짜입니다(사용 가능한 경우).
+{modification-time}- 소스 파일을 마지막으로 수정한 시간(사용 가능한 경우).
+{date}  - 오늘입니다. 대기열에 추가할 때 설정합니다.
+{time}- 오늘. 대기열에 추가할 때 설정합니다.
+{quality_bitrate} - RF/CQ 번호 또는 비트 전송률입니다.
+{quality_type}  - 비디오 탭에서 선택한 품질 모드에 따라 “kbps” 또는 “Q”를 출력합니다.
+{preset} - 선택한 사전 설정의 이름입니다.
+{encode_bit_depth} - 정수 값(예: 8, 10 또는 12)
+{width}  - 출력 저장 너비
+{height} - 출력 저장소 높이
+{codec}- 동영상 포맷을 표시합니다.
+{encoder} - 사용된 인코더의 짧은 형식 키를 표시합니다.
 
-Any illegal path characters will be removed automatically.</value>
+잘못된 경로 문자는 자동으로 제거됩니다.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>오른쪽에서 왼쪽으로 사용되는 언어의 경우 두 가지 모드 중 하나를 활성화할 수 있습니다. "텍스트만"은 오른쪽에서 왼쪽 스타일로만 텍스트를 렌더링합니다. "전체 사용자 인터페이스"는 모든 컨트롤을 오른쪽에서 왼쪽으로 렌더링합니다.
@@ -551,9 +549,9 @@ Any illegal path characters will be removed automatically.</value>
 {source} - 원본 파일의 이름입니다.</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
-    <value>Launches the documentation website located at https://handbrake.fr/docs</value>
+    <value>문서 웹사이트(https://handbrake.fr/docs)를 시작합니다.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Dash (-), Period (.) and Comma (,)</value>
+    <value>대시(-), 마침표(.) 및 쉼표(,)</value>
   </data>
 </root>

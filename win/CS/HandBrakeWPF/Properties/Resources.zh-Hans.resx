@@ -1900,7 +1900,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>添加编号</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>过滤器视图——去块效应滤波器预设</value>
+    <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>去块效应调优</value>
@@ -2312,7 +2312,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>显示磁盘空间不足警报的级别。</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
+    <value>注意：这是并发任务的上限。由于硬件限制，在编码过程中，实际的并发任务数量可能会减少。此设置仅在下一批队列或应用程序重启后生效。</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>（不可用）</value>
@@ -2908,6 +2908,6 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>关闭</value>
   </data>
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
-    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
+    <value>DVD 和蓝光片段的最长时长（秒）。将跳过较短的片段：</value>
   </data>
 </root>

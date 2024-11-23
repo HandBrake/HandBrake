@@ -1903,7 +1903,7 @@ You can drag/drop or enter the text above.</value>
     <value>Append Number</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>نمایش‌پالایه_پالایه‌ی‌هموارسازی</value>
+    <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>تنظیم هموارسازی:</value>
