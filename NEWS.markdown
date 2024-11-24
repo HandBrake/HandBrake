@@ -56,12 +56,16 @@ Download available from Microsoft:
 - Fixed the queue being stopped when removing completed items
 - Fixed chapters names not being saved properly
 - Fixed various issues related to presets
+- Updated existing translations
 
 ### Mac
 
 - Add Range Limit controls to the "Add to Queue" selection window (#4146)
 - Fixed an issue that could cause corrupted video when using VideoToolbox HEVC multi-pass
 - Miscellaneous bug fixes and improvements
+- Updated existing translations
+- Added new translations
+  - Swedish
 
 ### Windows
 
@@ -73,7 +77,7 @@ Download available from Microsoft:
 - Miscellaneous bug fixes and improvements
 - Updated existing translations
 - Added new translations
-  - Sweedish
+  - Swedish
 
 
 ## HandBrake 1.8.2
