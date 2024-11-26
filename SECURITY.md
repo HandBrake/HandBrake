@@ -22,7 +22,7 @@ Our goal is to deal with any issues reported as quickly as possible.  If you do 
 
 We accept bug reports (including security reports) for the following versions:
 
-| Version                | Supported          |
+| Version                | Accepts Reports    |
 | ---------------------- | ------------------ |
 | git main (development) | :white_check_mark: |
 | 1.8.x                  | :white_check_mark: |
