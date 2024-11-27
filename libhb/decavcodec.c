@@ -53,7 +53,6 @@
 #include "handbrake/extradata.h"
 
 #if HB_PROJECT_FEATURE_QSV
-#include "libavutil/hwcontext_qsv.h"
 #include "handbrake/qsv_common.h"
 #include "handbrake/qsv_libav.h"
 #endif
@@ -592,7 +591,6 @@ static void closePrivData( hb_work_private_t ** ppv )
              * form of communication between the two libmfx sessions).
              */
             //if (!(pv->qsv.decode && pv->job != NULL && (pv->job->vcodec & HB_VCODEC_QSV_MASK)))
-            hb_qsv_uninit_dec(pv->context);
 #endif
             hb_avcodec_free_context(&pv->context);
         }
@@ -1193,17 +1191,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     reordered_data_t * reordered = NULL;
     hb_buffer_t      * out;
 
-#if HB_PROJECT_FEATURE_QSV
-    // no need to copy the frame data when decoding with QSV to opaque memory
-    if (hb_qsv_full_path_is_enabled(pv->job) && hb_qsv_get_memory_type(pv->job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
-    {
-        out = hb_qsv_copy_avframe_to_video_buffer(pv->job, pv->frame, (AVRational){1,1}, 0);
-    }
-    else
-#endif
-    {
-        out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1});
-    }
+    out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1});
 
     if (pv->frame->pts != AV_NOPTS_VALUE)
     {
@@ -1871,7 +1859,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     hb_buffer_list_clear(&pv->list);
 
 #if HB_PROJECT_FEATURE_QSV
-    if ((pv->qsv.decode = hb_qsv_decode_is_enabled(job)))
+    pv->qsv.decode = hb_qsv_decode_is_enabled(job);
+    if (pv->qsv.decode)
     {
         pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
         pv->qsv.config.io_pattern = MFX_IOPATTERN_OUT_SYSTEM_MEMORY;
@@ -1968,18 +1957,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         avcodec_parameters_to_context(pv->context,
                                   ic->streams[pv->title->video_id]->codecpar);
 
-#if HB_PROJECT_FEATURE_QSV
-        if (pv->qsv.decode &&
-            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
-        {
-            // assign callbacks and job to have access to qsv context from ffmpeg
-            pv->context->get_format      = hb_qsv_get_format;
-            pv->context->get_buffer2     = hb_qsv_get_buffer;
-            pv->context->opaque          = pv->job;
-            pv->context->hwaccel_context = 0;
-        }
-#endif
-
         // Set decoder opts
         AVDictionary * av_opts = NULL;
         if (pv->title->flags & HBTF_NO_IDR)
@@ -1990,17 +1967,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 #if HB_PROJECT_FEATURE_QSV
         if (pv->qsv.decode)
         {
+            if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
+            {
+                hb_hwaccel_hwframes_ctx_init(pv->context, job);
+                job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx = av_buffer_ref(pv->context->hw_frames_ctx);
+            }
             if (pv->context->codec_id == AV_CODEC_ID_HEVC)
                 av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
-#if defined(_WIN32) || defined(__MINGW32__)
-            if (hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_SYSTEM_MEMORY)
-            {
-                hb_qsv_device_init(job);
-                pv->context->hw_device_ctx = av_buffer_ref(job->qsv.ctx->hb_hw_device_ctx);
-                pv->context->get_format = hb_qsv_get_format;
-                pv->context->opaque = pv->job;
-            }
-#endif
         }
 #endif
 
@@ -2189,15 +2162,6 @@ static int decodePacket( hb_work_object_t * w )
                 return HB_WORK_ERROR;
             }
         }
-
-#if HB_PROJECT_FEATURE_QSV
-        if (pv->qsv.decode &&
-            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
-        {
-            // set the QSV configuration before opening the decoder
-            pv->context->hwaccel_context = &pv->qsv.config;
-        }
-#endif
 
         AVDictionary * av_opts = NULL;
         if (pv->title->flags & HBTF_NO_IDR)

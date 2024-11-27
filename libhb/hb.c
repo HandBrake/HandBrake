@@ -2149,12 +2149,6 @@ int hb_global_init()
     hb_register(&hb_encx265);
 #endif
     hb_register(&hb_encsvtav1);
-#if HB_PROJECT_FEATURE_QSV
-    if (!disable_hardware)
-    {
-        hb_register(&hb_encqsv);
-    }
-#endif
 
     hb_x264_global_init();
     hb_common_global_init(disable_hardware);

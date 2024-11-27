@@ -11,8 +11,6 @@
 #include "handbrake/avfilter_priv.h"
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
 #include "handbrake/qsv_common.h"
-#include "libavutil/hwcontext_qsv.h"
-#include "libavutil/hwcontext.h"
 #endif
 
 static int format_init(hb_filter_object_t *filter,
@@ -71,15 +69,6 @@ static int format_init(hb_filter_object_t *filter, hb_filter_init_t *init)
         if (init->job->qsv.ctx->out_range != AVCOL_RANGE_UNSPECIFIED)
             hb_dict_set_string(avsettings, "out_range", (init->job->qsv.ctx->out_range == AVCOL_RANGE_JPEG) ? "full" : "limited");
 
-        if (hb_qsv_hw_filters_via_video_memory_are_enabled(init->job))
-        {
-            int result = hb_qsv_create_ffmpeg_vpp_pool(init, init->geometry.width, init->geometry.height);
-            if (result < 0)
-            {
-                hb_error("hb_create_ffmpeg_pool vpp allocation failed");
-                return result;
-            }
-        }
         hb_dict_set(avfilter, "vpp_qsv", avsettings);
     }
     else
