@@ -217,7 +217,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /*
      * HDR10 Static metadata
      */
-    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
+    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084 && job->color_matrix == HB_COLR_MAT_BT2020_NCL)
     {
         if (depth > 8)
         {

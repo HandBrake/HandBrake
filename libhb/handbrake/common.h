@@ -702,7 +702,7 @@ struct hb_job_s
 #define HB_COLR_PRI_SMPTE431     11
 #define HB_COLR_PRI_SMPTE432     12
 #define HB_COLR_PRI_JEDEC_P22    22
-// 0, 3-4, 7-8, 10-65535: reserved/not implemented
+// 0, 3, 19-65535: reserved/not implemented
 #define HB_COLR_TRA_UNSET       -1
 #define HB_COLR_TRA_BT709        1 // also use for bt470m, bt470bg, smpte170m, bt2020_10 and bt2020_12
 #define HB_COLR_TRA_UNDEF        2
@@ -721,7 +721,7 @@ struct hb_job_s
 #define HB_COLR_TRA_SMPTEST2084  16
 #define HB_COLR_TRA_SMPTE428     17
 #define HB_COLR_TRA_ARIB_STD_B67 18 //known as "Hybrid log-gamma"
-// 0, 3-6, 8-15, 17-65535: reserved/not implemented
+// 0, 3, 18-65535: reserved/not implemented
 #define HB_COLR_MAT_UNSET       -1
 #define HB_COLR_MAT_RGB          0
 #define HB_COLR_MAT_BT709        1
@@ -737,6 +737,9 @@ struct hb_job_s
 #define HB_COLR_MAT_CD_NCL       12 // chromaticity derived non-constant lum
 #define HB_COLR_MAT_CD_CL        13 // chromaticity derived constant lum
 #define HB_COLR_MAT_ICTCP        14 // ITU-R BT.2100-0, ICtCp
+#define HB_COLR_MAT_IPT_C2       15 // SMPTE ST 2128, IPT-C2
+#define HB_COLR_MAT_YCGCO_RE     16 // YCgCo-R, even addition of bits
+#define HB_COLR_MAT_YCGCO_RO     17 // YCgCo-R, odd addition of bits
 // 0, 3-5, 8, 11-65535: reserved/not implemented
 #define HB_COLR_RANGE_UNSET     -1
 #define HB_COLR_RANGE_LIMITED    1
