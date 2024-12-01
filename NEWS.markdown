@@ -10,6 +10,7 @@ Download available from Microsoft:
 - [For x64 (AMD or Intel CPUs)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe)
 - [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-arm64.exe)
 
+
 ## HandBrake 1.9.0
 
 ### All platforms
@@ -65,7 +66,7 @@ Download available from Microsoft:
 - Miscellaneous bug fixes and improvements
 - Updated existing translations
 - Added new translations
-  - Swedish
+  - Swedish (Svenska)
 
 ### Windows
 
@@ -77,7 +78,7 @@ Download available from Microsoft:
 - Miscellaneous bug fixes and improvements
 - Updated existing translations
 - Added new translations
-  - Swedish
+  - Swedish (Svenska)
 
 
 ## HandBrake 1.8.2
