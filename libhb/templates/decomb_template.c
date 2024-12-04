@@ -181,7 +181,7 @@ static void FUNC(blend_filter_line)(const filter_param_t *filter,
         result = vshrq_n_s32(result, 3);
 
         uint32x4_t result_u32 = vreinterpretq_u32_s32(vaddq_s32(result, offset));
-        vst1q_u32(&cr_table_vec, result_u32);
+        vst1q_u32(cr_table_vec, result_u32);
         dst[x+0] = crop_table[cr_table_vec[0]];
         dst[x+1] = crop_table[cr_table_vec[1]];
         dst[x+2] = crop_table[cr_table_vec[2]];
@@ -263,7 +263,7 @@ static void FUNC(blend_filter_line)(const filter_param_t *filter,
         result = vshrq_n_s16(result, 3);
 
         uint16x8_t result_u16 = vreinterpretq_u16_s16(vaddq_s16(result, offset));
-        vst1q_u16(&cr_table_vec, result_u16);
+        vst1q_u16(cr_table_vec, result_u16);
         dst[x+0] = crop_table[cr_table_vec[0]];
         dst[x+1] = crop_table[cr_table_vec[1]];
         dst[x+2] = crop_table[cr_table_vec[2]];
