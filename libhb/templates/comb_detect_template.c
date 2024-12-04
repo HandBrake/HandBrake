@@ -270,7 +270,7 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                 mask_vec = vandq_u32(mask_vec, condition);
                 mask_vec = vandq_u32(mask_vec, v_one);
 
-                vst1q_u32(&mask32, mask_vec);
+                vst1q_u32(mask32, mask_vec);
 
                 mask[0] = mask32[0];
                 mask[1] = mask32[1];
@@ -550,7 +550,7 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                         mask_vec = vandq_u32(mask_vec, condition);
                         mask_vec = vandq_u32(mask_vec, v_one);
 
-                        vst1q_u32(&mask32, mask_vec);
+                        vst1q_u32(mask32, mask_vec);
 
                         mask[0] = mask32[0];
                         mask[1] = mask32[1];
@@ -568,7 +568,7 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                         mask_vec = vandq_u32(mask_vec, condition);
                         mask_vec = vandq_u32(mask_vec, v_one);
 
-                        vst1q_u32(&mask32, mask_vec);
+                        vst1q_u32(mask32, mask_vec);
 
                         mask[0] = mask32[0];
                         mask[1] = mask32[1];
@@ -585,7 +585,7 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                         mask_vec = vandq_u32(mask_vec, condition);
                         mask_vec = vandq_u32(mask_vec, v_one);
 
-                        vst1q_u32(&mask32, mask_vec);
+                        vst1q_u32(mask32, mask_vec);
 
                         mask[0] = mask32[0];
                         mask[1] = mask32[1];
