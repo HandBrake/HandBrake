@@ -42,7 +42,7 @@
 
 @end
 
-@interface HBTitleSelectionController () <NSTableViewDataSource, NSTableViewDelegate>
+@interface HBTitleSelectionController () <NSTableViewDataSource, NSTableViewDelegate, NSMenuItemValidation>
 
 @property (nonatomic, weak) IBOutlet HBTableView *tableView;
 @property (nonatomic, weak) IBOutlet NSView *rangeView;
