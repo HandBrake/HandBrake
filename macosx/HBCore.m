@@ -401,6 +401,148 @@ HB_OBJC_DIRECT_MEMBERS
 
 #pragma mark - Preview images
 
+static void pix_buf_callback(void * CV_NULLABLE releaseRefCon,
+                             const void * CV_NULLABLE dataPtr, size_t dataSize,
+                             size_t numberOfPlanes, const void * CV_NULLABLE planeAddresses[CV_NULLABLE])
+{
+    hb_image_t *image = (hb_image_t *)releaseRefCon;
+    if (image)
+    {
+        hb_image_close(&image);
+    }
+}
+
+- (nullable CVPixelBufferRef)copyPixelBufferAtIndex:(NSUInteger)index job:(HBJob *)job CF_RETURNS_RETAINED
+{
+    CVPixelBufferRef pix_buf = NULL;
+
+    hb_job_t *hb_job = job.hb_job;
+    hb_dict_t *job_dict = hb_job_to_dict(hb_job);
+    hb_job_close(&hb_job);
+    hb_image_t *image = hb_get_preview(_hb_handle, job_dict, (int)index, 0, -1);
+
+    if (image)
+    {
+        OSType pixelFormatType = kCVPixelFormatType_420YpCbCr8Planar;
+        size_t numberOfPlanes = 3;
+
+        void *planeBaseAddress[3] = {image->plane[0].data, image->plane[1].data, image->plane[2].data};
+        size_t planeWidth[3] = {image->plane[0].width, image->plane[1].width, image->plane[2].width};
+        size_t planeHeight[3] = {image->plane[0].height, image->plane[1].height, image->plane[2].height};
+        size_t planeBytesPerRow[3] = {image->plane[0].stride, image->plane[1].stride, image->plane[2].stride};
+
+        CVReturn err = CVPixelBufferCreateWithPlanarBytes(
+                                                 kCFAllocatorDefault,
+                                                 image->width,
+                                                 image->height,
+                                                 pixelFormatType,
+                                                 image->data,
+                                                 0,
+                                                 numberOfPlanes,
+                                                 planeBaseAddress,
+                                                 planeWidth,
+                                                 planeHeight,
+                                                 planeBytesPerRow,
+                                                 pix_buf_callback,
+                                                 image,
+                                                 NULL,
+                                                 &pix_buf);
+
+        if (err != kCVReturnSuccess)
+        {
+            hb_image_close(&image);
+        }
+
+        CFStringRef prim = CVColorPrimariesGetStringForIntegerCodePoint(image->color_prim);
+        CFStringRef transfer = CVTransferFunctionGetStringForIntegerCodePoint(image->color_transfer);
+        CFStringRef matrix = CVYCbCrMatrixGetStringForIntegerCodePoint(image->color_matrix);
+
+        if (prim)
+        {
+            CVBufferSetAttachment(pix_buf, kCVImageBufferColorPrimariesKey, prim, kCVAttachmentMode_ShouldPropagate);
+        }
+        if (transfer)
+        {
+            CVBufferSetAttachment(pix_buf, kCVImageBufferTransferFunctionKey, transfer, kCVAttachmentMode_ShouldPropagate);
+        }
+        if (matrix)
+        {
+            CVBufferSetAttachment(pix_buf, kCVImageBufferYCbCrMatrixKey, matrix, kCVAttachmentMode_ShouldPropagate);
+        }
+
+        hb_rational_t par = { job.picture.parNum, job.picture.parDen };
+
+        int scaled_width  = image->width;
+        int scaled_height = image->height;
+
+        if (par.num >= par.den)
+        {
+            scaled_width = scaled_width * par.num / par.den;
+        }
+        else
+        {
+            scaled_height = scaled_height * par.den / par.num;
+        }
+
+        CFNumberRef display_width  = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &scaled_width);
+        CFNumberRef display_height = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &scaled_height);
+
+        const void *display_size_keys[2] =
+        {
+            kCVImageBufferDisplayWidthKey, kCVImageBufferDisplayHeightKey
+        };
+
+        const void *display_size_values[2] =
+        {
+            display_width, display_height
+        };
+
+        CFDictionaryRef display_size = CFDictionaryCreate(kCFAllocatorDefault,
+                                                          display_size_keys,
+                                                          display_size_values,
+                                                          2,
+                                                          &kCFTypeDictionaryKeyCallBacks,
+                                                          &kCFTypeDictionaryValueCallBacks);
+
+        CVBufferSetAttachment(pix_buf, kCVImageBufferDisplayDimensionsKey, display_size, kCVAttachmentMode_ShouldPropagate);
+
+        CFRelease(display_width);
+        CFRelease(display_height);
+        CFRelease(display_size);
+
+        CFNumberRef par_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &par.num);
+        CFNumberRef par_den = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &par.den);
+
+
+        const void *par_keys[2] =
+        {
+            kCVImageBufferPixelAspectRatioHorizontalSpacingKey, kCVImageBufferPixelAspectRatioVerticalSpacingKey
+        };
+
+        const void *par_values[2] =
+        {
+            par_num, par_den
+        };
+
+        CFDictionaryRef aspect_ratio = CFDictionaryCreate(kCFAllocatorDefault,
+                                                          par_keys,
+                                                          par_values,
+                                                          2,
+                                                          &kCFTypeDictionaryKeyCallBacks,
+                                                          &kCFTypeDictionaryValueCallBacks);
+
+        CVBufferSetAttachment(pix_buf, kCVImageBufferPixelAspectRatioKey, aspect_ratio, kCVAttachmentMode_ShouldPropagate);
+
+        CFRelease(par_num);
+        CFRelease(par_den);
+        CFRelease(aspect_ratio);
+    }
+
+    hb_value_free(&job_dict);
+
+    return pix_buf;
+}
+
 - (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index job:(HBJob *)job CF_RETURNS_RETAINED
 {
     CGImageRef img = NULL;
