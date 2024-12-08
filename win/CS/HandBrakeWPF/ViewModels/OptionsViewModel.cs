@@ -576,6 +576,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     new PlaceHolderBucket { Name = Constants.Source },
                     new PlaceHolderBucket { Name = Constants.Title },
+                    new PlaceHolderBucket { Name = Constants.Angle },
                     new PlaceHolderBucket { Name = Constants.Chapters},
                     new PlaceHolderBucket { Name = Constants.CreationDate },
                     new PlaceHolderBucket { Name = Constants.CreationTime },

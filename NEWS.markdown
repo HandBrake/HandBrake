@@ -17,7 +17,7 @@ Download available from Microsoft:
 ### Windows
 
 - Added a new preference "Default Range Mode for titles". (#6385)
-
+- Added "{angle}" to the auto name filename generation options. (#6086)
 
 ## HandBrake 1.9.0
 

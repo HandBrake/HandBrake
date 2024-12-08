@@ -43,6 +43,7 @@ namespace HandBrakeWPF
         public const string Codec = "{codec}";
         public const string EncoderDisplay = "{encoder-display}";
         public const string Encoder = "{encoder}";
+        public const string Angle = "{angle}";
 
         /* Auto-name Path Constants */
         public const string Source = "{source}";
