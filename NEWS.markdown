@@ -16,8 +16,11 @@ Download available from Microsoft:
 
 ### Windows
 
-- Added a new preference "Default Range Mode for titles". (#6385)
-- Added "{angle}" to the auto name filename generation options. (#6086)
+- Added a new preference "Default Range Mode for titles". See Preferences -> Advanced (#6385)
+- Added a new preference to run a custom action when the queue completes. See Preferences -> When Done (#4851)
+- Updated Auto Naming Preferences to add "{angle}" as a filename generation option. (#6086)
+
+
 
 ## HandBrake 1.9.0
 

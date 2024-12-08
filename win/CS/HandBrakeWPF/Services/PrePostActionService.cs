@@ -13,7 +13,6 @@ namespace HandBrakeWPF.Services
     using System.Diagnostics;
     using System.IO;
     using System.Media;
-    using System.Windows.Media;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Helpers;
@@ -212,11 +211,40 @@ namespace HandBrakeWPF.Services
                     case WhenDone.QuickHandBrake:
                         ThreadHelper.OnUIThread(() => System.Windows.Application.Current.Shutdown());
                         break;
+                    case WhenDone.CustomAction:
+                        ProcessQueueWhenDoneAction();
+                        break;
                 }
             }
             catch (Exception ex)
             {
                 this.ServiceLogMessage(string.Format("Post Action Failed: {0}", ex));
+            }
+        }
+
+        private void ProcessQueueWhenDoneAction()
+        {
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.QueueDoneCustomActionEnabled) && !string.IsNullOrEmpty(
+                    this.userSettingService.GetUserSetting<string>(UserSettingConstants.QueueDoneAction)))
+            {
+                string arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.QueueDoneArguments);
+                string autoNamePath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath);
+                arguments = arguments.Replace(Constants.AutonameOutputFolder, string.Format("\"{0}\"", autoNamePath));
+
+                var process = new ProcessStartInfo(this.userSettingService.GetUserSetting<string>(UserSettingConstants.QueueDoneAction), arguments);
+                process.EnvironmentVariables.Add("HB_AUTONAME_PATH", autoNamePath);
+
+
+                this.ServiceLogMessage(string.Format("Starting Queue Complete Custom Actoin: {0}, with arguments: {1} ", process.FileName, arguments));
+
+                try
+                {
+                    Process.Start(process);
+                }
+                catch (Exception ex)
+                {
+                    this.ServiceLogMessage(string.Format("Queue Done Action failed to execute: {0}", ex));
+                }
             }
         }
 

@@ -36,6 +36,9 @@ namespace HandBrakeWPF
         public const string SendFile = "SendFile";
         public const string SendFileTo = "SendFileTo";
         public const string SendFileToArgs = "SendFileToArgs";
+        public const string QueueDoneCustomActionEnabled = "QueueDoneCustomActionEnabled";
+        public const string QueueDoneAction = "QueueDoneAction";
+        public const string QueueDoneArguments = "QueueDoneArguments";
         public const string PreventSleep = "PreventSleep";
         public const string PauseOnLowDiskspace = "PauseOnLowDiskspace";
         public const string PauseQueueOnLowDiskspaceLevel = "LowDiskSpaceWarningLevelInBytes";

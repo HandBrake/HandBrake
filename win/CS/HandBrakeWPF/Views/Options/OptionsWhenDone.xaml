@@ -37,6 +37,9 @@
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
+
+        <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+
     </UserControl.Resources>
 
     <StackPanel Name="WhenDone" Orientation="Vertical" Margin="10,5,0,0">
@@ -58,6 +61,10 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="{x:Static Properties:Resources.Options_WhenDoneColon}" Grid.Row="1" Grid.Column="0" />
                 <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions, Converter={StaticResource enumComboConverter}}" SelectedItem="{Binding WhenDone, Converter={StaticResource enumComboConverter}}" 
@@ -66,6 +73,47 @@
                                       IsChecked="{Binding ResetWhenDoneAction}" />
                 <CheckBox Content="{x:Static Properties:Resources.Options_PromptBeforeAction}" VerticalAlignment="Center" Margin="0,5,0,0" Grid.Row="3" Grid.Column="1" 
                                       IsChecked="{Binding WhenDonePerformActionImmediately}" />
+
+
+                <StackPanel Grid.Row="4" Grid.Column="1" Margin="0,15,0,0" Visibility="{Binding IsQueueDoneCustomActionEnabled, Converter={StaticResource boolToVisConverter}}">
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_CustomActionConfig}" ></TextBlock>
+                    
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                        <CheckBox VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding QueueDoneCustomActionEnabled}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static Properties:Resources.Options_SendFileTo}" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding QueueDoneAction}" VerticalAlignment="Center" Margin="5,0,5,0"  />
+                            </StackPanel>
+                        </CheckBox>
+
+                        <Button Content="{x:Static Properties:Resources.Browse}" Command="{Binding RelayCommand}" CommandParameter="BrowseQueueDoneAction" />
+
+                        <Button Content="{x:Static Properties:Resources.Generic_Clear}" Command="{Binding RelayCommand}" CommandParameter="ClearQueueDoneAction" Margin="5,0,0,0" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" >
+                        <TextBlock VerticalAlignment="Center"  Margin="25,0,5,0" Text="{x:Static Properties:Resources.Options_Arguments}" />
+                        <TextBox Name="QueueDoneSendToArguments" Text="{Binding QueueDoneArguments}" Width="250"
+                                 DragEnter="SendToArguments_OnDragEnter" />
+                    </StackPanel>
+
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_FormatOptions}"  Margin="91,1,0,0" Style="{StaticResource subText}" TextWrapping="Wrap" />
+
+                    <ListView x:Name="QueueDoneArguments" ItemsSource="{Binding QueueDoneArgumentsOptions}"  Background="Transparent"
+                              ItemTemplate="{StaticResource PlaceholderItemTemplate}" BorderThickness="0" Margin="91,1,0,0"
+                              MaxWidth="400" HorizontalAlignment="Left"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1"
+                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                              PreviewMouseDown="WhenDoneArguments_OnPreviewMouseDown">
+
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate >
+                                <WrapPanel  />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+
+                </StackPanel>
             </Grid>
 
             <TextBlock Text="{x:Static Properties:Resources.Options_EncodeCompleted}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
@@ -82,6 +130,7 @@
                     </CheckBox>
 
                     <Button Content="{x:Static Properties:Resources.Browse}" Command="{Binding RelayCommand}" CommandParameter="BrowseSendFileTo" />
+                    <Button Content="{x:Static Properties:Resources.Generic_Clear}" Command="{Binding RelayCommand}" CommandParameter="ClearSendFileToAction" Margin="5,0,0,0" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">

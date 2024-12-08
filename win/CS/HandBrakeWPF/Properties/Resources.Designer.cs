@@ -4109,6 +4109,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;Custom Action&apos; Configuration:.
+        /// </summary>
+        public static string OptionsView_CustomActionConfig {
+            get {
+                return ResourceManager.GetString("OptionsView_CustomActionConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Theme:.
         /// </summary>
         public static string OptionsView_DarkThemeMode {
@@ -8197,6 +8206,15 @@ namespace HandBrakeWPF.Properties {
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom Action.
+        /// </summary>
+        public static string WhenDone_CustomAction {
+            get {
+                return ResourceManager.GetString("WhenDone_CustomAction", resourceCulture);
             }
         }
         

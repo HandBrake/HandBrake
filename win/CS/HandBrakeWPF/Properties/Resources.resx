@@ -2930,4 +2930,10 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="Options_RangeModeSelection" xml:space="preserve">
     <value>Default Range Mode for Titles:</value>
   </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Custom Action</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>'Custom Action' Configuration:</value>
+  </data>
 </root>
