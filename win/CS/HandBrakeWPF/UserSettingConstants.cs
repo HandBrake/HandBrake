@@ -97,5 +97,7 @@ namespace HandBrakeWPF
         public static string RecursiveFolderScan = "RecursiveFolderScan";
         public static string SimpleQueueView = "SimpleQueueView";
         public static string IsLegacyMenuShown = "IsLegacyMenuShown";
+        public static string DefaultRangeMode = "DefaultRangeMode";
+
     }
 }

@@ -520,7 +520,20 @@ namespace HandBrakeWPF.ViewModels
                                                 ? this.selectedTitle.Chapters.Last().ChapterNumber
                                                 : 1;
 
-                    this.SelectedPointToPoint = PointToPointMode.Chapters;
+                    DefaultRangeMode defaultRangeMode = this.userSettingService.GetUserSetting<DefaultRangeMode>(UserSettingConstants.DefaultRangeMode);
+                    switch (defaultRangeMode)
+                    {
+                        case DefaultRangeMode.Chapters:
+                            this.SelectedPointToPoint = PointToPointMode.Chapters;
+                            break;
+                        case DefaultRangeMode.Frames:
+                            this.SelectedPointToPoint = PointToPointMode.Frames;
+                            break;
+                        case DefaultRangeMode.Seconds:
+                            this.SelectedPointToPoint = PointToPointMode.Seconds;
+                            break;
+                    }
+
                     this.SelectedAngle = 1;
 
                     this.TriggerAutonameChange(ChangedOption.Source);

@@ -122,8 +122,8 @@ namespace HandBrakeWPF.ViewModels
         private BindingList<string> excludedFileExtensions;
         private bool recursiveFolderScan;
         private bool keepDuplicateTitles;
-
         private bool maxDurationEnabled;
+        private DefaultRangeMode selectedDefaultRangeMode;
 
         public OptionsViewModel(
             IUserSettingService userSettingService,
@@ -392,8 +392,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SendFileAfterEncode);
             }
         }
-
-
+        
         public WhenDone WhenDone
         {
             get => this.whenDone;
@@ -970,6 +969,23 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.keepDuplicateTitles) return;
                 this.keepDuplicateTitles = value;
                 this.NotifyOfPropertyChange(() => this.KeepDuplicateTitles);
+            }
+        }
+
+        public BindingList<DefaultRangeMode> DefaultRangeModes { get; } = new BindingList<DefaultRangeMode>(EnumHelper<DefaultRangeMode>.GetEnumList().ToList());
+
+        public DefaultRangeMode SelectedDefaultRangeMode
+        {
+            get => this.selectedDefaultRangeMode;
+            set
+            {
+                if (value == this.selectedDefaultRangeMode)
+                {
+                    return;
+                }
+
+                this.selectedDefaultRangeMode = value;
+                this.NotifyOfPropertyChange(() => this.SelectedDefaultRangeMode);
             }
         }
 
@@ -1556,6 +1572,8 @@ namespace HandBrakeWPF.ViewModels
             this.ExcludedFileExtensions = new BindingList<string>(userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions));
             this.RecursiveFolderScan = userSettingService.GetUserSetting<bool>(UserSettingConstants.RecursiveFolderScan);
 
+            this.SelectedDefaultRangeMode = userSettingService.GetUserSetting<DefaultRangeMode>(UserSettingConstants.DefaultRangeMode);
+
             // #############################
             // Safe Mode
             // #############################
@@ -1740,6 +1758,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationEnabled, this.RemoteServiceEnabled);
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationPort, this.RemoteServicePort);
             this.userSettingService.SetUserSetting(UserSettingConstants.SimultaneousEncodes, this.SimultaneousEncodes);
+            this.userSettingService.SetUserSetting(UserSettingConstants.DefaultRangeMode, this.SelectedDefaultRangeMode);
         }
 
         public void LaunchHelp()

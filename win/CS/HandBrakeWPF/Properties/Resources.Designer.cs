@@ -934,6 +934,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string CombDetect_Custom {
+            get {
+                return ResourceManager.GetString("CombDetect_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string CombDetect_Default {
+            get {
+                return ResourceManager.GetString("CombDetect_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        public static string CombDetect_Off {
+            get {
+                return ResourceManager.GetString("CombDetect_Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
@@ -1074,6 +1101,78 @@ namespace HandBrakeWPF.Properties {
         public static string Debug_QueueSweep_NotSetup {
             get {
                 return ResourceManager.GetString("Debug_QueueSweep_NotSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapters.
+        /// </summary>
+        public static string DefaultRangeMode_Chapters {
+            get {
+                return ResourceManager.GetString("DefaultRangeMode_Chapters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frames.
+        /// </summary>
+        public static string DefaultRangeMode_Frames {
+            get {
+                return ResourceManager.GetString("DefaultRangeMode_Frames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seconds.
+        /// </summary>
+        public static string DefaultRangeMode_Seconds {
+            get {
+                return ResourceManager.GetString("DefaultRangeMode_Seconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        public static string DeinterlaceFilter_Off {
+            get {
+                return ResourceManager.GetString("DeinterlaceFilter_Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        public static string Denoise_Off {
+            get {
+                return ResourceManager.GetString("Denoise_Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string Detelecine_Custom {
+            get {
+                return ResourceManager.GetString("Detelecine_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string Detelecine_Default {
+            get {
+                return ResourceManager.GetString("Detelecine_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        public static string Detelecine_Off {
+            get {
+                return ResourceManager.GetString("Detelecine_Off", resourceCulture);
             }
         }
         
@@ -3712,6 +3811,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default Range Mode for Titles:.
+        /// </summary>
+        public static string Options_RangeModeSelection {
+            get {
+                return ResourceManager.GetString("Options_RangeModeSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recursively scan directories when using the folder scan mode..
         /// </summary>
         public static string Options_RecursiveFolderScan {
@@ -4445,7 +4553,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart..
+        ///   Looks up a localized string similar to Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart..
         /// </summary>
         public static string OptionsView_SimultaneousHardwareLimitNotice {
             get {
@@ -6750,6 +6858,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        public static string Sharpen_Off {
+            get {
+                return ResourceManager.GetString("Sharpen_Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An Encode is currently running. Exiting HandBrake will stop this encode.
         ///Are you sure you wish to exit HandBrake?.
         /// </summary>
@@ -8161,87 +8278,6 @@ namespace HandBrakeWPF.Properties {
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to CombDetect Off.
-        /// </summary>
-        public static string CombDetect_Off {
-            get {
-                return ResourceManager.GetString("CombDetect_Off", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to CombDetect Custom.
-        /// </summary>
-        public static string CombDetect_Custom {
-            get {
-                return ResourceManager.GetString("CombDetect_Custom", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to CombDetect Default.
-        /// </summary>
-        public static string CombDetect_Default {
-            get {
-                return ResourceManager.GetString("CombDetect_Default", resourceCulture);
-            }
-        }
-				
-		/// <summary>
-        ///   Looks up a localized string similar to DeinterlaceFilter Off.
-        /// </summary>
-        public static string DeinterlaceFilter_Off {
-            get {
-                return ResourceManager.GetString("DeinterlaceFilter_Off", resourceCulture);
-            }
-        }
-				
-		/// <summary>
-        ///   Looks up a localized string similar to Denoise Off.
-        /// </summary>
-        public static string Denoise_Off {
-            get {
-                return ResourceManager.GetString("Denoise_Off", resourceCulture);
-            }
-        }
-				
-		/// <summary>
-        ///   Looks up a localized string similar to Detelecine Off.
-        /// </summary>
-        public static string Detelecine_Off {
-            get {
-                return ResourceManager.GetString("Detelecine_Off", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to Detelecine Default.
-        /// </summary>
-        public static string Detelecine_Default {
-            get {
-                return ResourceManager.GetString("Detelecine_Default", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to Detelecine Custom.
-        /// </summary>
-        public static string Detelecine_Custom {
-            get {
-                return ResourceManager.GetString("Detelecine_Custom", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to Sharpen Off.
-        /// </summary>
-        public static string Sharpen_Off {
-            get {
-                return ResourceManager.GetString("Sharpen_Off", resourceCulture);
             }
         }
     }
