@@ -5,7 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBPreviewView.h"
-#import <QuartzCore/QuartzCore.h>
+
+@import AVFoundation;
 
 // the white border around the preview image
 #define BORDER_SIZE 2.0
@@ -13,7 +14,10 @@
 @interface HBPreviewView ()
 
 @property (nonatomic) CALayer *backLayer;
-@property (nonatomic) CALayer *pictureLayer;
+@property (nonatomic) CALayer *imageLayer;
+@property (nonatomic) AVSampleBufferDisplayLayer *displayLayer;
+
+@property (nonatomic) NSSize size;
 
 @end
 
@@ -58,6 +62,16 @@
     self.layer = [CALayer new];
     self.wantsLayer = YES;
 
+    [self initBackground];
+    [self initImageLayer];
+
+    _imageLayer.hidden = YES;
+    _backLayer.hidden = YES;
+    _showBorder = YES;
+}
+
+- (void)initBackground
+{
     _backLayer = [CALayer layer];
     _backLayer.bounds = CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height);
     _backLayer.backgroundColor = NSColor.whiteColor.CGColor;
@@ -66,27 +80,54 @@
     _backLayer.anchorPoint = CGPointZero;
     _backLayer.opaque = YES;
 
-    _pictureLayer = [CALayer layer];
-    _pictureLayer.bounds = CGRectMake(0.0, 0.0, self.frame.size.width - (BORDER_SIZE * 2), self.frame.size.height - (BORDER_SIZE * 2));
-    _pictureLayer.anchorPoint = CGPointZero;
-    _pictureLayer.opaque = YES;
+    [self.layer addSublayer:_backLayer];
+}
+
+- (void)initImageLayer
+{
+    _imageLayer = [CALayer layer];
+    _imageLayer.bounds = CGRectMake(0.0, 0.0, self.frame.size.width - (BORDER_SIZE * 2), self.frame.size.height - (BORDER_SIZE * 2));
+    _imageLayer.anchorPoint = CGPointZero;
+    _imageLayer.opaque = YES;
 
     // Disable fade on contents change.
     NSMutableDictionary *actions = [NSMutableDictionary dictionary];
-    if (_pictureLayer.actions)
+    if (_imageLayer.actions)
     {
-        [actions addEntriesFromDictionary:_pictureLayer.actions];
+        [actions addEntriesFromDictionary:_imageLayer.actions];
     }
 
     actions[@"contents"] = [NSNull null];
-    _pictureLayer.actions = actions;
+    _imageLayer.actions = actions;
 
-    [self.layer addSublayer:_backLayer];
-    [self.layer addSublayer:_pictureLayer];
+    [self.layer addSublayer:_imageLayer];
+}
 
-    _pictureLayer.hidden = YES;
-    _backLayer.hidden = YES;
-    _showBorder = YES;
+- (void)initDisplayLayer
+{
+    _displayLayer = [AVSampleBufferDisplayLayer layer];
+    _displayLayer.bounds = CGRectMake(0.0, 0.0, self.frame.size.width - (BORDER_SIZE * 2), self.frame.size.height - (BORDER_SIZE * 2));
+    _displayLayer.anchorPoint = CGPointZero;
+    _displayLayer.opaque = YES;
+    _displayLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+
+    if (@available(macOS 14.0, *))
+    {
+        _displayLayer.wantsExtendedDynamicRangeContent = NO;
+        _displayLayer.preventsDisplaySleepDuringVideoPlayback = NO;
+    }
+
+    [self.layer addSublayer:_displayLayer];
+}
+
+- (void)removeDisplayLayer
+{
+    if (@available(macOS 14.0, *))
+    {
+        [self.displayLayer.sampleBufferRenderer flushWithRemovalOfDisplayedImage:YES completionHandler:NULL];
+    }
+    [self.displayLayer removeFromSuperlayer];
+    self.displayLayer = nil;
 }
 
 - (void)viewDidChangeBackingProperties
@@ -97,14 +138,114 @@
     }
 }
 
-- (void)setImage:(CGImageRef)image
+- (void)displayPixelBuffer:(CVPixelBufferRef)pixelBuffer
 {
-    _image = image;
-    self.pictureLayer.contents = (__bridge id)(image);
+    if (@available(macOS 14.0, *))
+    {
+        if (pixelBuffer)
+        {
+            self.imageLayer.contents = nil;
+
+            if (self.displayLayer == nil)
+            {
+                [self initDisplayLayer];
+            }
+
+            // Read the display size
+            CFDictionaryRef displaySize = CVBufferCopyAttachment(pixelBuffer, kCVImageBufferDisplayDimensionsKey, NULL);
+
+            CFNumberRef displayWidthNum  = CFDictionaryGetValue(displaySize, kCVImageBufferDisplayWidthKey);
+            CFNumberRef displayHeightNum = CFDictionaryGetValue(displaySize, kCVImageBufferDisplayHeightKey);
+
+            int displayWidth, displayHeight;
+
+            CFNumberGetValue(displayWidthNum, kCFNumberSInt32Type, &displayWidth);
+            CFNumberGetValue(displayHeightNum, kCFNumberSInt32Type, &displayHeight);
+
+            CFRelease(displaySize);
+
+            // Wrap the pixel buffer in a sample buffer
+            CMSampleBufferRef sampleBuffer = NULL;
+            CMVideoFormatDescriptionRef formatDescription = NULL;
+
+            CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &formatDescription);
+            CMSampleTimingInfo timingInfo = {kCMTimeInvalid, kCMTimeZero, kCMTimeInvalid};
+
+            CMSampleBufferCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, 1, NULL, NULL,
+                                               formatDescription,
+                                               &timingInfo,
+                                               &sampleBuffer);
+
+            CFArrayRef attachmentsArray = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, 1);
+            if (attachmentsArray && CFArrayGetCount(attachmentsArray) > 0)
+            {
+                CFMutableDictionaryRef dict = (CFMutableDictionaryRef)CFArrayGetValueAtIndex(attachmentsArray, 0);
+                if (dict)
+                {
+                    CFDictionarySetValue(dict, kCMSampleAttachmentKey_DisplayImmediately, kCFBooleanTrue);
+                }
+            }
+
+            // Display the sample buffer
+            [self.displayLayer.sampleBufferRenderer enqueueSampleBuffer:sampleBuffer];
+            self.size = NSMakeSize(displayWidth, displayHeight);
+
+            CFRelease(sampleBuffer);
+            CFRelease(formatDescription);
+        }
+        else
+        {
+            [self.displayLayer.sampleBufferRenderer flushWithRemovalOfDisplayedImage:YES completionHandler:NULL];
+            [self removeDisplayLayer];
+        }
+    }
+}
+
+- (void)displayCGImage:(CGImageRef)image
+{
+    [self removeDisplayLayer];
+
+    self.imageLayer.contents = (__bridge id)image;
+    self.size = NSMakeSize(CGImageGetWidth(image), CGImageGetHeight(image));
+}
+
+- (void)displayImage:(NSImage *)image
+{
+    [self removeDisplayLayer];
+
+    self.imageLayer.contents = image;
+    self.size = image.size;
+}
+
+- (void)setImage:(id)image
+{
+    if (image)
+    {
+        CFTypeID type = CFGetTypeID((__bridge CFTypeRef)(image));
+
+        if (type == CVPixelBufferGetTypeID())
+        {
+            [self displayPixelBuffer:(__bridge CVPixelBufferRef)(image)];
+        }
+        else if (type == CGImageGetTypeID())
+        {
+            [self displayCGImage:(__bridge CGImageRef)(image)];
+        }
+        else if ([image isKindOfClass:[NSImage class]])
+        {
+            [self displayImage:image];
+        }
+    }
+    else
+    {
+        [self removeDisplayLayer];
+        self.imageLayer.contents = nil;
+    }
 
     // Hide the layers if there is no image
-    BOOL hidden = _image == nil ? YES : NO;
-    self.pictureLayer.hidden = hidden ;
+    BOOL hidden = self.size.width == 0 ? YES : NO;
+    self.imageLayer.hidden = hidden;
+    self.displayLayer.hidden = hidden;
     self.backLayer.hidden = hidden || !self.showBorder;
 
     self.needsLayout = YES;
@@ -130,15 +271,15 @@
 
 - (CGFloat)scale
 {
-    if (self.image)
+    if (self.size.width > 0 && self.size.height > 0)
     {
-        NSSize imageSize = NSMakeSize(CGImageGetWidth(self.image), CGImageGetHeight(self.image));
         CGFloat backingScaleFactor = self.window.backingScaleFactor;
         CGFloat borderSize = self.showBorder ? BORDER_SIZE : 0;
 
-        NSSize imageScaledSize = [self imageScaledSize:imageSize toFit:self.frame.size borderSize:borderSize scaleFactor:self.window.backingScaleFactor];
+        NSSize imageScaledSize = [self imageScaledSize:self.size toFit:self.frame.size
+                                            borderSize:borderSize scaleFactor:self.window.backingScaleFactor];
 
-        return (imageScaledSize.width - borderSize * 2) / imageSize.width * backingScaleFactor;
+        return (imageScaledSize.width - borderSize * 2) / self.size.width * backingScaleFactor;
     }
     else
     {
@@ -148,7 +289,7 @@
 
 - (CGRect)pictureFrame
 {
-    return self.pictureLayer.frame;
+    return self.imageLayer.frame;
 }
 
 - (NSSize)scaledSize:(NSSize)source toFit:(NSSize)destination
@@ -197,14 +338,12 @@
 {
     [super layout];
 
-    NSSize imageSize = NSMakeSize(CGImageGetWidth(self.image), CGImageGetHeight(self.image));
-
-    if (imageSize.width > 0 && imageSize.height > 0)
+    if (self.size.width > 0 && self.size.height > 0)
     {
         CGFloat borderSize = self.showBorder ? BORDER_SIZE : 0;
         NSSize frameSize = self.frame.size;
 
-        NSSize imageScaledSize = [self imageScaledSize:imageSize
+        NSSize imageScaledSize = [self imageScaledSize:self.size
                                                  toFit:frameSize
                                             borderSize:borderSize
                                            scaleFactor:self.window.backingScaleFactor];
@@ -221,7 +360,8 @@
         NSRect alignedRect = [self backingAlignedRect:NSMakeRect(offsetX, offsetY, width, height) options:NSAlignAllEdgesNearest];
 
         self.backLayer.frame = alignedRect;
-        self.pictureLayer.frame = NSInsetRect(alignedRect, borderSize, borderSize);
+        self.imageLayer.frame = NSInsetRect(alignedRect, borderSize, borderSize);
+        self.displayLayer.frame = NSInsetRect(alignedRect, borderSize, borderSize);
 
         [CATransaction commit];
     }
@@ -268,9 +408,9 @@
 
 - (NSString *)accessibilityLabel
 {
-    if (self.image)
+    if (self.size.width && self.size.height)
     {
-        return [NSString stringWithFormat:NSLocalizedString(@"Preview Image, Size: %zu x %zu, Scale: %.0f%%", @"Preview -> accessibility label"), CGImageGetWidth(self.image), CGImageGetHeight(self.image), self.scale * 100];
+        return [NSString stringWithFormat:NSLocalizedString(@"Preview Image, Size: %f x %f, Scale: %.0f%%", @"Preview -> accessibility label"), self.size.width, self.size.height, self.scale * 100];
     }
     return NSLocalizedString(@"No image", @"Preview -> accessibility label");
 }

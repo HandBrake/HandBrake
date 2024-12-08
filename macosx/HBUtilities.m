@@ -16,7 +16,6 @@ static BOOL hb_resolveBookmarks = YES;
 HB_OBJC_DIRECT_MEMBERS
 @interface HBURLPair : NSObject
 @property (nonatomic) NSURL *URL;
-@property (nonatomic) NSUInteger length;
 @property (nonatomic) NSURL *volumeURL;
 @end
 
@@ -153,6 +152,41 @@ HB_OBJC_DIRECT_MEMBERS
     return [HBUtilities bookmarkFromURL:url options:NSURLBookmarkCreationWithSecurityScope];
 }
 
++ (NSURL *)commonParentOfURL:(NSURL *)a withURL:(NSURL *)b
+{
+    if ([a isEqualTo:b])
+    {
+        return a;
+    }
+
+    if ([b.path hasPrefix:a.path])
+    {
+        return a;
+    }
+
+    NSArray<NSString *> *aComponents = a.pathComponents;
+    NSArray<NSString *> *bComponents = b.pathComponents;
+
+    NSMutableArray<NSString *> *commonComponents = [NSMutableArray array];
+
+    for (int idx = 0; idx < aComponents.count && idx < bComponents.count; idx++)
+    {
+        NSString *aComponent = aComponents[idx];
+        NSString *bComponent = bComponents[idx];
+
+        if ([aComponent isEqualToString:bComponent])
+        {
+            [commonComponents addObject:aComponent];
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return [NSURL fileURLWithPathComponents:commonComponents];
+}
+
 + (NSArray<NSURL *> *)baseURLs:(NSArray<NSURL *> *)fileURLs
 {
     NSMutableArray<HBURLPair *> *pairs = [[NSMutableArray alloc] init];
@@ -167,7 +201,6 @@ HB_OBJC_DIRECT_MEMBERS
         {
             HBURLPair *pair = [[HBURLPair alloc] init];
             pair.URL = fileURL.URLByDeletingLastPathComponent;
-            pair.length = fileURL.path.stringByDeletingLastPathComponent.length;
             pair.volumeURL = volumeURL;
 
             [pairs addObject:pair];
@@ -179,24 +212,24 @@ HB_OBJC_DIRECT_MEMBERS
 
     for (NSURL *volumeURL in volumeURLs)
     {
-        HBURLPair *currentPair = nil;
+        NSURL *baseURL = nil;
         for (HBURLPair *pair in pairs)
         {
             if ([pair.volumeURL isEqualTo:volumeURL])
             {
-                if (currentPair == nil)
+                if (baseURL == nil)
                 {
-                    currentPair = pair;
+                    baseURL = pair.URL;
                 }
-                else if (pair.length < currentPair.length)
+                else
                 {
-                    currentPair = pair;
+                    baseURL = [HBUtilities commonParentOfURL:baseURL withURL:pair.URL];
                 }
             }
         }
-        if (currentPair)
+        if (baseURL)
         {
-            [baseURLs addObject:currentPair.URL];
+            [baseURLs addObject:baseURL];
         }
     }
 

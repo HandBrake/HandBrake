@@ -562,7 +562,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
 Ваш старий файл наборів заархівовано у:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value> with {0} errors detected. Check Queue window for details.</value>
+    <value>з виявленими {0} помилками. Детальніше дивіться у вікні «Черга».</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>Бракує місця на диску</value>
@@ -895,7 +895,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Обертання:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Sharpen:</value>
+    <value>Різкість:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
     <value>Набір різкості</value>
@@ -1264,7 +1264,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Скидати до «Нічого не робити», коли додаток перезапущено</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>Choose Scaler:</value>
+    <value>Виберіть Скалер:</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
     <value>Масштабування</value>
@@ -1856,10 +1856,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Видалити вибране</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
+    <value>Портативний режим: неможливо створити каталог TMP. Перевірте правильність шляху та права запису.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
+    <value>Портативний режим: неможливо каталог для зберігання. Перевірте правильність шляху та права запису.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Портативний режим: не вдається прочитати portable.ini. Можливо, виникла помилка у цьому файлі. Повторіть спробу, використовуючи portable.ini.template як основу.</value>
@@ -1914,7 +1914,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Настроювання Deblock</value>
   </data>
   <data name="OptionsView_EncodeNotes" xml:space="preserve">
-    <value>Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown.</value>
+    <value>Примітка: Не всі апаратні кодеки мають додаткові налаштування. Усі доступні та підтримувані апаратні кодеки у цій системі будуть доступні для вибору на вкладці «Відео» у випадаючому списку «Відеокодер».</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake виявив декілька незавершених файлів черги. Вони з декількох запущених екземплярів HandBrake. Хочете відновити всі незакінчені завдання?</value>
@@ -2203,16 +2203,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Спеціальне (без обмежень)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (Surround)</value>
+    <value>Заповнення (об'єм)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (Pillarbox)</value>
+    <value>Висота (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Немає</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (Letterbox)</value>
+    <value>Ширина (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
     <value>Заповнення:</value>
@@ -2320,7 +2320,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Значення, коли показуються сповіщення про брак дискового простору:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
+    <value>Зауважте: Це верхня межа одночасних завдань. Можуть вступати в дію апаратні обмеження, які знижують фактичну кількість одночасних завдань під час кодування. Налаштування набуде чинності лише при обробці наступного елементу черги, або перезапуску програми.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Недоступно)</value>
@@ -2356,7 +2356,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>(Потрібен перезапуск)</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth:</value>
+    <value>Хрома-гладкий:</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
     <value>Колірний простір:</value>
@@ -2389,7 +2389,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Невідомий статус. Погляньте в журнал для отримання детальнішої інформації.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Errors detected while trying to read source.</value>
+    <value>Виявлено помилки при спробі прочитати вихідний код.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>Невідома помилка. Погляньте в журнал для отримання детальнішої інформації.</value>
@@ -2416,7 +2416,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Значення RGB:</value>
   </data>
   <data name="SummaryView_Padded" xml:space="preserve">
-    <value>(padded)</value>
+    <value>(з м'якою підкладкою)</value>
   </data>
   <data name="FiltersView_Flip" xml:space="preserve">
     <value>Перевертання:</value>
@@ -2446,7 +2446,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Перенести загальні метадані</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
-    <value>The default auto name path was not valid. {0} must not be before {1}</value>
+    <value>Шлях до автоматичного імені за замовчуванням був недійсним. {0} не повинно бути перед {1}</value>
   </data>
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
     <value>Ви хочете дозволити HandBrake автоматично перевіряти наявність оновлень?
@@ -2483,10 +2483,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>[Завершено]</value>
   </data>
   <data name="QueueViewModel_EditJob" xml:space="preserve">
-    <value>Edit Job?</value>
+    <value>Редагувати завдання?</value>
   </data>
   <data name="QueueView_Length" xml:space="preserve">
-    <value>Output Length:</value>
+    <value>Вихідна довжина:</value>
   </data>
   <data name="QueueView_MoveToBottom" xml:space="preserve">
     <value>Перемістити в низ</value>
@@ -2501,13 +2501,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Середня швидкість кодування:</value>
   </data>
   <data name="QueueViewModel_DifferenceText" xml:space="preserve">
-    <value> of source file</value>
+    <value>вихідного файлу</value>
   </data>
   <data name="QueueViewModel_NotAvailable" xml:space="preserve">
     <value>Недоступно</value>
   </data>
   <data name="QueueView_SourceLength" xml:space="preserve">
-    <value>Source Length:</value>
+    <value>Вихідна довжина:</value>
   </data>
   <data name="Options_Reset" xml:space="preserve">
     <value>Скинути</value>
@@ -2531,7 +2531,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Налаштування користувача</value>
   </data>
   <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
-    <value>Floating Treeview</value>
+    <value>Плаваючий огляд дерев</value>
   </data>
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
     <value>Будь ласка, переконайтеся, що у вас налаштовані відповідні асоціації файлів у Windows, щоб мати змогу відкрити цей файл за допомогою підтримуваного відеопрогравача.</value>
@@ -2556,10 +2556,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Видалити HandBrake з панелі керування сповіщеннями Windows.</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
-    <value>Uninstalled</value>
+    <value>Видалено</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
-    <value>Notification settings have been removed.</value>
+    <value>Видалено налаштування сповіщень.</value>
   </data>
   <data name="OptionsView_UninstallToast" xml:space="preserve">
     <value>Очистити та видалити</value>
@@ -2571,10 +2571,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Сповіщення Windows</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
-    <value>{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.</value>
+    <value> {0} завдання виконано. {1} Працюємо над {2} завданнями, {3} чекають на обробку</value>
   </data>
   <data name="MainView_AutonameRegenerate" xml:space="preserve">
-    <value>Regenerate (Autoname)</value>
+    <value>Відновити (автоім'я)</value>
   </data>
   <data name="MainView_OpenDirectory" xml:space="preserve">
     <value>Відкрити цей каталог</value>
@@ -2598,58 +2598,58 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Весь інтерфейс користувача</value>
   </data>
   <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
-    <value>The current development build you are running is getting old. You may wish to update!</value>
+    <value>Поточна збірка розробки, яку ви використовуєте, застаріла. Можливо, ви захочете оновити її!</value>
   </data>
   <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
     <value>Завантажити через Github</value>
   </data>
   <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
-    <value>Download Development Builds (HTTPS)</value>
+    <value>Завантажити збірки для розробки (HTTPS)</value>
   </data>
   <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
-    <value>Enable QuickSync Deep Link Hyper Encode</value>
+    <value>Увімкнути QuickSync Deep Link Hyper Encode</value>
   </data>
   <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
-    <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
+    <value>Надає перевагу використанню декількох медіа-рушіїв для пришвидшення одного кодування, якщо це підтримується. Вимкніть, щоб дозволити розподілення навантаження між кількома паралельними кодуваннями на різних медіа-рушіях.</value>
   </data>
   <data name="MainView_OpenHandBrake" xml:space="preserve">
     <value>Відкрити HandBrake</value>
   </data>
   <data name="Startup_UnableToStartInfo" xml:space="preserve">
-    <value>Hardware encoding support has been disabled as it is a common cause of start-up issues.
-- Please try restarting HandBrake. 
-- If the problem persists, it may be an out-of-date graphics card driver (onboard or discrete) that is causing the problem.
+    <value>Підтримка апаратного кодування була вимкнена, оскільки це поширена причина проблем із запуском.
+- Спробуйте перезапустити HandBrake. 
+- Якщо проблема не зникне, можливо, причиною є застарілий драйвер відеокарти (вбудованої або дискретної).
 
-Hardware encoding support can be re-enabled in preferences. </value>
+Підтримку апаратного кодування можна увімкнути у налаштуваннях.</value>
   </data>
   <data name="Startup_UnableToStart" xml:space="preserve">
     <value>HandBrake не зміг запуститися.</value>
   </data>
   <data name="OptionsView_ResetSafeMode" xml:space="preserve">
-    <value>Reset Safe Mode</value>
+    <value>Скидання безпечного режиму</value>
   </data>
   <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
     <value>Будь ласка, перезавантажте HandBrake.</value>
   </data>
   <data name="Debug_QueueDataExport" xml:space="preserve">
-    <value>Export Queue Statistics Data (csv)</value>
+    <value>Експорт даних статистики черги (csv)</value>
   </data>
   <data name="Debug_QueueExportDataDone" xml:space="preserve">
     <value>Експорт завершено!</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
-    <value>You must first scan a source and have an initial destination directory set</value>
+    <value>Спочатку потрібно просканувати джерело і встановити початковий каталог призначення</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
     <value>Тільки якщо файл вже існує на диску.</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Info</value>
+    <value>Інформація</value>
   </data>
   <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
-    <value>There were no subtitle tracks added. 
+    <value>Доріжки субтитрів не було додано. 
 
-This may be due to limitations of the file container you have selected. Please see our subtitle help documentation for more information.</value>
+Це може бути пов'язано з обмеженнями обраного вами файлового контейнера. Будь ласка, зверніться до нашої довідкової документації щодо субтитрів для отримання додаткової інформації.</value>
   </data>
   <data name="DarkTheme_None" xml:space="preserve">
     <value>Немає</value>
@@ -2661,7 +2661,7 @@ This may be due to limitations of the file container you have selected. Please s
     <value>Автоматично</value>
   </data>
   <data name="CropMode_Loose" xml:space="preserve">
-    <value>Conservative</value>
+    <value>Консервативний</value>
   </data>
   <data name="CropMode_None" xml:space="preserve">
     <value>Немає</value>
@@ -2670,16 +2670,16 @@ This may be due to limitations of the file container you have selected. Please s
     <value>Власне</value>
   </data>
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
-    <value>Prefer use of Nvidia NVDec for decoding video when using the NVEnc encoder and the hardware is available for use.</value>
+    <value>Віддавайте перевагу використанню Nvidia NVDec для декодування відео, якщо використовується кодер NVEnc і апаратне забезпечення доступне для використання.</value>
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Апаратна підтримка</value>
   </data>
   <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
-    <value>The system was unable to play this file. 
+    <value>Система не змогла відтворити цей файл. 
 
-Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
-Alternatively, check the "Use External Player" checkbox below.</value>
+Зверніть увагу, що для відтворення деяких кодеків, таких як AV1 або HEVC, потрібні плагіни кодеків Microsoft AV1 або HEVC з Microsoft Store.
+Крім того, встановіть прапорець «Використовувати зовнішній програвач» нижче.</value>
   </data>
   <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
     <value>Закрити програвач</value>
@@ -2688,10 +2688,10 @@ Alternatively, check the "Use External Player" checkbox below.</value>
     <value>Відтворити</value>
   </data>
   <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
-    <value>Video Preview</value>
+    <value>Перегляд відео</value>
   </data>
   <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
-    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
+    <value>Вбудований попередній перегляд недоступний для контейнера WebM. Необхідно використовувати зовнішній програвач.</value>
   </data>
   <data name="StaticPreview_EncodingPreview" xml:space="preserve">
     <value>Кодування попереднього перегляду…</value>
@@ -2709,19 +2709,19 @@ Alternatively, check the "Use External Player" checkbox below.</value>
     <value>Використовувати формати дат ISO (РРРР-ММ-ДД) замість системного формату.</value>
   </data>
   <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
-    <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
+    <value>Пройти {0} з {1}, {2:00.00}%, {3,000.0} fps, avg {4,000.0} fps, ETA: {5}</value>
   </data>
   <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
-    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+    <value>Сканування субтитрів {0:00.00}%, ETA: {1}</value>
   </data>
   <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
-    <value>Extend Queue Info</value>
+    <value>Розширити інформацію про чергу</value>
   </data>
   <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
-    <value>Minimise Queue Info</value>
+    <value>Мінімізувати інформацію про чергу</value>
   </data>
   <data name="QueueStats_ShortOutputStats" xml:space="preserve">
-    <value>Output: {0}, avg {1} fps</value>
+    <value>Вихід: {0}, avg {1}fps</value>
   </data>
   <data name="PresetPane_Desc" xml:space="preserve">
     <value>Опис набору:</value>
@@ -2734,12 +2734,12 @@ Alternatively, check the "Use External Player" checkbox below.</value>
   </data>
   <data name="TaskTrayStatusManyTitle" xml:space="preserve">
     <value>{0}
-Encoding {1} jobs</value>
+Кодування {1} робочих місць</value>
   </data>
   <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
-    <value>Unable to encode a preview. The application is currently busy encoding another file.
+    <value>Не вдалося закодувати попередній перегляд. Програма наразі зайнята кодуванням іншого файлу.
 
-To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+Щоб дозволити кілька одночасних кодувань, увімкніть «Ізоляцію процесів» у меню «Інструменти» -&gt; «Параметри» -&gt; «Додатково» -&gt; «Ізоляція процесів» -&gt; «Запускати кожне завдання у черзі в окремому робочому процесі».</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
     <value>Якість</value>
@@ -2760,7 +2760,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Клонувати набір</value>
   </data>
   <data name="PresetPane_MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>Перемістити вниз</value>
   </data>
   <data name="PresetPane_MoveToBottom" xml:space="preserve">
     <value>Перемістити в низ</value>
@@ -2772,7 +2772,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Перемістити вище</value>
   </data>
   <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
-    <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
+    <value>Наразі є завдання, які виконуються. Бажаєте завершити поточні завдання до того, як зупинити чергу?</value>
   </data>
   <data name="Options_AddExt" xml:space="preserve">
     <value>Додати розширення</value>
@@ -2784,7 +2784,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Наступні розширення файлів буде проігноровано під час сканування папки. Список не залежить від регістру. "." не є обов'язковим.</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
-    <value>This file extension already exists in the list.</value>
+    <value>Таке розширення файлу вже існує у списку.</value>
   </data>
   <data name="Options_FileHandling" xml:space="preserve">
     <value>Робота з файлами (сканування)</value>
@@ -2805,67 +2805,67 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Видалити цей аудіозапис</value>
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
-    <value>Audio Encoder Quality Mode</value>
+    <value>Режим якості аудіокодера</value>
   </data>
   <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
-    <value>Use Advanced Queue View</value>
+    <value>Використання розширеного перегляду черги</value>
   </data>
   <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
-    <value>Use Simple Queue View</value>
+    <value>Використання простого подання черги</value>
   </data>
   <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
-    <value>Lossless encoding only.</value>
+    <value>Тільки кодування без втрат.</value>
   </data>
   <data name="MainView_HideClassicMenu" xml:space="preserve">
-    <value>Hide Classic Menu</value>
+    <value>Приховати класичне меню</value>
   </data>
   <data name="MainView_ShowClassicMenu" xml:space="preserve">
-    <value>Show Classic Menu</value>
+    <value>Показати класичне меню</value>
   </data>
   <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
-    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+    <value>(Попередження: виявлено непідтримуваний драйвер - рекомендується оновити)</value>
   </data>
   <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
-    <value>Range Limits:</value>
+    <value>Обмеження діапазону:</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
-    <value>Limit the length of the titles added to the queue.</value>
+    <value>Обмежте довжину назв, що додаються до черги.</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
-    <value>Enable Range Limits</value>
+    <value>Увімкнути обмеження діапазону</value>
   </data>
   <data name="AddToQueue_RangeLimitError" xml:space="preserve">
-    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+    <value>Деякі назви не вдалося додати до черги через те, що вони виходять за межі обраного діапазону.</value>
   </data>
   <data name="QueueView_StartAtTime" xml:space="preserve">
-    <value>Start Later</value>
+    <value>Почніть пізніше</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>Queue Start Time:</value>
+    <value>Час запуску черги:</value>
   </data>
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
-    <value>Shutting Down Encode ...</value>
+    <value>Вимкнення кодування ...</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>Allow Upscaling</value>
+    <value>Дозволити масштабування</value>
   </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
-    <value>Optimal Size</value>
+    <value>Оптимальний розмір</value>
   </data>
   <data name="OptionsView_Available" xml:space="preserve">
-    <value>Available on this system.</value>
+    <value>Доступно в цій системі.</value>
   </data>
   <data name="OptionsView_NotAvailable" xml:space="preserve">
-    <value>Not available on this system.</value>
+    <value>Не доступний на цій системі.</value>
   </data>
   <data name="MainView_ScanningStatus" xml:space="preserve">
-    <value>Please wait ...</value>
+    <value>Будь ласка, зачекайте...</value>
   </data>
   <data name="MainView_Cancel" xml:space="preserve">
     <value>Скасувати</value>
   </data>
   <data name="MainView_OpenLog" xml:space="preserve">
-    <value>Open Log Window</value>
+    <value>Відкрити вікно журналу</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value/>
@@ -2916,6 +2916,6 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Вимкнено</value>
   </data>
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
-    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
+    <value>Максимальна тривалість епізоду на DVD та Blu-ray у секундах. Довші заголовки будуть пропущені:</value>
   </data>
 </root>

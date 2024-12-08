@@ -28,7 +28,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y autoconf automake autopoint appstream build-essential cmake git libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev libogg-dev libopus-dev libsamplerate-dev libspeex-dev -y 
         sudo apt-get install -y libtheora-dev libtool libtool-bin libturbojpeg0-dev libvorbis-dev libx264-dev libxml2-dev libvpx-dev m4 make meson nasm ninja-build patch pkg-config tar zlib1g-dev
-        sudo apt-get install -y libva-dev libdrm-dev intltool libglib2.0-dev libunwind-dev libgtk-4-dev libgudev-1.0-dev libwebkit2gtk-4.0-dev libssl-dev
+        sudo apt-get install -y libva-dev libdrm-dev intltool libglib2.0-dev libunwind-dev libgtk-4-dev libgudev-1.0-dev libssl-dev
         sudo python -m pip install meson
         sudo apt-get install flatpak flatpak-builder
         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo

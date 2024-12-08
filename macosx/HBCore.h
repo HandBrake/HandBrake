@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#import <CoreGraphics/CoreGraphics.h>
+#import <CoreVideo/CoreVideo.h>
 
 @class HBJob;
 @class HBPicture;
@@ -187,6 +187,17 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  *  An array of HBTitles found by the latest scan.
  */
 @property (nonatomic, readonly, copy) NSArray<HBTitle *> *titles;
+
+/**
+ *  This function converts an image created by libhb (specified via index)
+ *  into an CVPixelBuffer.
+ *
+ *  @param index       the index of the desired image.
+ *  @param job           a HBJob instance.
+ *
+ *  @return a CVPixelBuffer of the wanted image, NULL if the index is out of bounds.
+ */
+- (nullable CVPixelBufferRef)copyPixelBufferAtIndex:(NSUInteger)index job:(HBJob *)job CF_RETURNS_RETAINED;
 
 /**
  *  This function converts an image created by libhb (specified via index)

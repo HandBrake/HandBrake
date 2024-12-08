@@ -76,6 +76,8 @@ hb_buffer_t * hb_read_preview( hb_handle_t * h, hb_title_t *title,
                                int preview, int format );
 #endif // __LIBHB__
 
+hb_image_t  * hb_get_preview(hb_handle_t * h, hb_dict_t * job_dict,
+                             int picture, int rescale, int pix_fmt);
 hb_image_t  * hb_get_preview3(hb_handle_t * h, int picture,
                               hb_dict_t * job_dict);
 void          hb_rotate_geometry( hb_geometry_crop_t * geo,

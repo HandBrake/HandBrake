@@ -7,6 +7,9 @@
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
 "5.title" = "Preferenze";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Maximum title duration in seconds. Longer titles will be skipped"; ObjectID = "5AX-Hp-nby"; */
+"5AX-Hp-nby.ibShadowedToolTip" = "Durata massima in seconde di u titulu. I tituli più longhi seranu tralasciati";
+
 /* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "6Sg-su-vLd"; */
 "6Sg-su-vLd.title" = "Cunservà e mudificazioni di prerigatura quandu un novu titulu hè selezziunatu";
 
@@ -106,6 +109,9 @@
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
 "399.title" = "Impiegà libdvdnav (piuttostu chì libdvdread)";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped"; ObjectID = "480"; */
+"480.ibShadowedToolTip" = "Durata minima in seconde di u titulu. I tituli più corti seranu tralasciati";
+
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
 
@@ -126,6 +132,12 @@
 
 /* Class = "NSTableView"; ibShadowedToolTip = "The following file extensions will be ignored when scanning a folder. The list is case insensitive"; ObjectID = "ax0-hR-WPq"; */
 "ax0-hR-WPq.ibShadowedToolTip" = "Quelle estensioni di schedariu seranu ignurate durante un’analisa di cartulare. Sta lista ùn sfarenzieghja micca maiuscule è minuscule";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Keep all the titles to match the titles numbers of a Blu-ray player"; ObjectID = "AYI-kG-it2"; */
+"AYI-kG-it2.ibShadowedToolTip" = "Cunservà tutti i tituli per falli currisponde à i numeri di tituli d’un lettore Blu-ray";
+
+/* Class = "NSTextFieldCell"; title = "DVD and Blu-ray:"; ObjectID = "bG9-Tu-YsZ"; */
+"bG9-Tu-YsZ.title" = "DVD è Blu-ray :";
 
 /* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
 "BHK-QU-DwS.title" = "Attivà i discudificatori materiale VideoToolbox";
@@ -166,6 +178,9 @@
 /* Class = "NSButtonCell"; title = "Show notification when each job is completed"; ObjectID = "fdI-zP-r7j"; */
 "fdI-zP-r7j.title" = "Affissà una nutificazione quandu ogni travagliu hè compiu";
 
+/* Class = "NSButtonCell"; title = "Keep duplicate titles"; ObjectID = "FOr-iY-GVl"; */
+"FOr-iY-GVl.title" = "Cunservà i tituli in duppione";
+
 /* Class = "NSButtonCell"; title = "Play notification sound"; ObjectID = "GFD-Ju-1n9"; */
 "GFD-Ju-1n9.title" = "Sunà un sonu di nutificazione";
 
@@ -177,6 +192,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Decoder:"; ObjectID = "j6w-xf-tC0"; */
 "j6w-xf-tC0.title" = "Discudificatore :";
+
+/* Class = "NSButtonCell"; title = "Ignore titles shorter than:"; ObjectID = "jNT-vQ-h0c"; */
+"jNT-vQ-h0c.title" = "Tralascià i tituli più corti chè :";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "JZb-Vz-cY4"; */
 "JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "Nisuna";
@@ -213,6 +231,9 @@
 
 /* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "phv-oU-WnC"; */
 "phv-oU-WnC.title" = ".m4v";
+
+/* Class = "NSButtonCell"; title = "Ignore titles longer than:"; ObjectID = "PoY-PD-tSq"; */
+"PoY-PD-tSq.title" = "Tralascià i tituli più longhi chè :";
 
 /* Class = "NSButtonCell"; title = "Show notification when queue is completed"; ObjectID = "Qdg-Tw-rlf"; */
 "Qdg-Tw-rlf.title" = "Affissà una nutificazione quandu a fila d’attesa hè compia";

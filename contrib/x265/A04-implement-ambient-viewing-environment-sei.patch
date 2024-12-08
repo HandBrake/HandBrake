@@ -1,8 +1,9 @@
-From 2d918078c803c774f828f7f070f0d345cd1a3e82 Mon Sep 17 00:00:00 2001
+From 39f1065dc6e6c85780c42123033391233f7104af Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
-Date: Thu, 22 Aug 2024 07:46:30 +0200
-Subject: [PATCH 4/6] implement ambient viewing environment sei
+Date: Fri, 22 Nov 2024 10:49:10 +0100
+Subject: [PATCH 4/5] Implement ambient viewing environment sei
 
+Defined in ISO/IEC 23008-2:2017, D.2.39.
 ---
  source/common/param.cpp    |  6 ++++++
  source/encoder/encoder.cpp |  9 +++++++++
@@ -11,10 +12,10 @@ Subject: [PATCH 4/6] implement ambient viewing environment sei
  4 files changed, 43 insertions(+)
 
 diff --git a/source/common/param.cpp b/source/common/param.cpp
-index d08bb604e..68f7f84fe 100755
+index a35b06339..92f70b6bf 100755
 --- a/source/common/param.cpp
 +++ b/source/common/param.cpp
-@@ -380,6 +380,7 @@ void x265_param_default(x265_param* param)
+@@ -408,6 +408,7 @@ void x265_param_default(x265_param* param)
      param->preferredTransferCharacteristics = -1;
      param->pictureStructure = -1;
      param->bEmitCLL = 1;
@@ -22,15 +23,15 @@ index d08bb604e..68f7f84fe 100755
  
      param->bEnableFrameDuplication = 0;
      param->dupThreshold = 70;
-@@ -1929,6 +1930,7 @@ int x265_check_params(x265_param* param)
+@@ -1963,6 +1964,7 @@ int x265_check_params(x265_param* param)
                       || param->bEmitIDRRecoverySEI
                     || !!param->interlaceMode
                       || param->preferredTransferCharacteristics > 1
 +                     || param->bEmitAmbientViewingEnvironment
-                      || param->toneMapFile
-                      || param->naluFile);
+                      || strlen(param->toneMapFile)
+                      || strlen(param->naluFile));
  
-@@ -2850,6 +2852,10 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+@@ -2910,6 +2912,10 @@ void x265_copy_params(x265_param* dst, x265_param* src)
      dst->bEmitCLL = src->bEmitCLL;
      dst->maxCLL = src->maxCLL;
      dst->maxFALL = src->maxFALL;
@@ -42,10 +43,10 @@ index d08bb604e..68f7f84fe 100755
      dst->bEmitVUIHRDInfo = src->bEmitVUIHRDInfo;
      dst->bEmitVUITimingInfo = src->bEmitVUITimingInfo;
 diff --git a/source/encoder/encoder.cpp b/source/encoder/encoder.cpp
-index 13d65655f..e7dd30fa7 100644
+index 6670c814d..752e41a8a 100644
 --- a/source/encoder/encoder.cpp
 +++ b/source/encoder/encoder.cpp
-@@ -3429,6 +3429,15 @@ void Encoder::getStreamHeaders(NALList& list, Entropy& sbacCoder, Bitstream& bs)
+@@ -3367,6 +3367,15 @@ void Encoder::getStreamHeaders(NALList& list, Entropy& sbacCoder, Bitstream& bs)
          }
      }
  
@@ -62,10 +63,10 @@ index 13d65655f..e7dd30fa7 100644
      {
          char *opts = x265_param2string(m_param, m_sps.conformanceWindow.rightOffset, m_sps.conformanceWindow.bottomOffset);
 diff --git a/source/encoder/sei.h b/source/encoder/sei.h
-index e357a1bf5..ab6086a2c 100644
+index 3ed957058..9d3e74c63 100644
 --- a/source/encoder/sei.h
 +++ b/source/encoder/sei.h
-@@ -464,6 +464,25 @@ public:
+@@ -638,6 +638,25 @@ public:
      }
  };
  
@@ -92,10 +93,10 @@ index e357a1bf5..ab6086a2c 100644
  {
  public:
 diff --git a/source/x265.h b/source/x265.h
-index 08ccb4b74..f2981cea2 100644
+index 7241beda2..c9fd99984 100644
 --- a/source/x265.h
 +++ b/source/x265.h
-@@ -371,6 +371,7 @@ typedef enum
+@@ -376,6 +376,7 @@ typedef enum
      MASTERING_DISPLAY_INFO               = 137,
      CONTENT_LIGHT_LEVEL_INFO             = 144,
      ALTERNATIVE_TRANSFER_CHARACTERISTICS = 147,
@@ -103,7 +104,7 @@ index 08ccb4b74..f2981cea2 100644
      ALPHA_CHANNEL_INFO                   = 165,
      THREE_DIMENSIONAL_REFERENCE_DISPLAYS_INFO = 176,
      MULTIVIEW_SCENE_INFO                 = 178,
-@@ -1956,6 +1957,11 @@ typedef struct x265_param
+@@ -1962,6 +1963,11 @@ typedef struct x265_param
       * value to that value. */
      uint16_t maxLuma;
  
@@ -115,7 +116,7 @@ index 08ccb4b74..f2981cea2 100644
      /* Maximum of the picture order count */
      int log2MaxPocLsb;
  
-@@ -2167,6 +2173,9 @@ typedef struct x265_param
+@@ -2173,6 +2179,9 @@ typedef struct x265_param
      /*Emit content light level info SEI*/
      int         bEmitCLL;
  
@@ -126,5 +127,5 @@ index 08ccb4b74..f2981cea2 100644
      * Signals picture structure SEI timing message for every frame
      * picture structure 7 is signalled for frame doubling
 -- 
-2.39.3 (Apple Git-146)
+2.39.5 (Apple Git-154)
 

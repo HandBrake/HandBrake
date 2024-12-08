@@ -6678,6 +6678,12 @@ int hb_get_color_matrix(int colorspace, hb_geometry_t geometry)
             return HB_COLR_MAT_CD_CL;
         case AVCOL_SPC_ICTCP:
             return HB_COLR_MAT_ICTCP;
+        case AVCOL_SPC_IPT_C2:
+            return HB_COLR_MAT_IPT_C2;
+        case AVCOL_SPC_YCGCO_RE:
+            return HB_COLR_MAT_YCGCO_RE;
+        case AVCOL_SPC_YCGCO_RO:
+            return HB_COLR_MAT_YCGCO_RO;
         default:
         {
             if ((geometry.width >= 1280 || geometry.height >= 720)||

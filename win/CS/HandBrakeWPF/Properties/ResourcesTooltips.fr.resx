@@ -558,6 +558,6 @@ Le débit variera d'une source à une autre.</value>
     <value>Ouvre le site internet de documentation à l'adresse https://handbrake.fr/docs</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Dash (-), Period (.) and Comma (,)</value>
+    <value>Tiret (-), Point (.) et Virgule (,)</value>
   </data>
 </root>

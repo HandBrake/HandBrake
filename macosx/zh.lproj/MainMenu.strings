@@ -145,8 +145,8 @@
 /* Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "1822"; */
 "1822.title" = "粘贴并匹配样式";
 
-/* Class = "NSMenuItem"; title = "Presets View"; ObjectID = "1884"; */
-"1884.title" = "预设视图";
+/* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1884"; */
+"1884.title" = "预设";
 
 /* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1948"; */
 "1948.title" = "预设";
@@ -163,8 +163,8 @@
 /* Class = "NSMenuItem"; title = "Online Documentation"; ObjectID = "1985"; */
 "1985.title" = "在线文档";
 
-/* Class = "NSMenuItem"; title = "Activity Window"; ObjectID = "2295"; */
-"2295.title" = "活动窗口";
+/* Class = "NSMenuItem"; title = "Activity"; ObjectID = "2295"; */
+"2295.title" = "活动";
 
 /* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "2368"; */
 "2368.title" = "HandBrake";
@@ -190,8 +190,8 @@
 /* Class = "NSMenuItem"; title = "Check for Updates…"; ObjectID = "4964"; */
 "4964.title" = "检查更新...";
 
-/* Class = "NSMenuItem"; title = "Preview Window"; ObjectID = "5157"; */
-"5157.title" = "预览窗口";
+/* Class = "NSMenuItem"; title = "Preview"; ObjectID = "5157"; */
+"5157.title" = "预览";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "5188"; */
 "5188.title" = "导出...";
@@ -213,6 +213,9 @@
 
 /* Class = "NSMenuItem"; title = "Subtitles"; ObjectID = "Csx-2S-iUe"; */
 "Csx-2S-iUe.title" = "字幕";
+
+/* Class = "NSMenuItem"; title = "Actual Size"; ObjectID = "dhI-xk-VkB"; */
+"dhI-xk-VkB.title" = "实际大小";
 
 /* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "fNa-z2-K1i"; */
 "fNa-z2-K1i.title" = "最近打开";
@@ -264,6 +267,9 @@
 
 /* Class = "NSMenuItem"; title = "Services"; ObjectID = "XcG-Aw-Gdb"; */
 "XcG-Aw-Gdb.title" = "服务";
+
+/* Class = "NSMenuItem"; title = "Scale to Screen"; ObjectID = "xXN-Ui-Jyv"; */
+"xXN-Ui-Jyv.title" = "缩放到屏幕大小";
 
 /* Class = "NSMenuItem"; title = "Switch to Previous Title"; ObjectID = "zgj-Iv-4xJ"; */
 "zgj-Iv-4xJ.title" = "切换到上一个标题";

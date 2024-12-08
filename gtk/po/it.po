@@ -4,18 +4,18 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Damiano Galassi <galad87@icloud.com>, 2022
 # Francesco Saltori, 2024
 # Vincenzo Reale <vinx.reale@gmail.com>, 2024
+# Damiano Galassi <galad87@icloud.com>, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 20240416-git-d9791800c\n"
+"Project-Id-Version: ghb 20241116-git-41d7e1d69\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-16 19:10+0100\n"
+"POT-Creation-Date: 2024-11-16 19:27+0000\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Vincenzo Reale <vinx.reale@gmail.com>, 2024\n"
+"Last-Translator: Damiano Galassi <galad87@icloud.com>, 2024\n"
 "Language-Team: Italian (https://app.transifex.com/HandBrakeProject/teams/92423/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,11 +27,11 @@ msgstr ""
 msgid "_File"
 msgstr "_File"
 
-#: src/ui/menu.ui:10 src/ui/menu.ui:462
+#: src/ui/menu.ui:10 src/ui/menu.ui:456
 msgid "_Open Source…"
 msgstr "_Apri sorgente…"
 
-#: src/ui/menu.ui:14 src/ui/menu.ui:466
+#: src/ui/menu.ui:14 src/ui/menu.ui:460
 msgid "Open _Directory…"
 msgstr "Apri _cartella…"
 
@@ -44,7 +44,7 @@ msgid "_Preferences"
 msgstr "_Preferenze"
 
 #. Toss up a warning dialog
-#: src/ui/menu.ui:30 src/ui/menu.ui:210 src/callbacks.c:3814
+#: src/ui/menu.ui:30 src/ui/menu.ui:210 src/callbacks.c:3820
 msgid "_Quit"
 msgstr "_Esci"
 
@@ -56,19 +56,19 @@ msgstr "_Coda"
 msgid "_Add"
 msgstr "_Aggiungi"
 
-#: src/ui/menu.ui:43 src/ui/menu.ui:449
+#: src/ui/menu.ui:43 src/ui/menu.ui:443
 msgid "Add _Multiple…"
 msgstr "Aggiunta _multipla…"
 
-#: src/ui/menu.ui:47 src/ui/menu.ui:453
+#: src/ui/menu.ui:47 src/ui/menu.ui:447
 msgid "Add A_ll"
 msgstr "Aggiungi _tutto"
 
-#: src/ui/menu.ui:53 src/queuehandler.c:1877
+#: src/ui/menu.ui:53 src/queuehandler.c:1870
 msgid "_Start Encoding"
 msgstr "_Avvia codifica"
 
-#: src/ui/menu.ui:57 src/queuehandler.c:1920
+#: src/ui/menu.ui:57 src/queuehandler.c:1913
 msgid "_Pause Encoding"
 msgstr "Metti in _pausa la codifica"
 
@@ -108,9 +108,9 @@ msgstr "Imposta prede_finiti"
 msgid "_New Preset…"
 msgstr "_Nuova preimpostazione…"
 
-#: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:5975
-#: src/ui/ghb.ui:6065 src/callbacks.c:2135 src/chapters.c:455
-#: src/ghb-file-button.c:219 src/presets.c:2229 src/queuehandler.c:1391
+#: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:6038
+#: src/ui/ghb.ui:6128 src/callbacks.c:2141 src/chapters.c:455
+#: src/ghb-file-button.c:219 src/presets.c:2331 src/queuehandler.c:1386
 msgid "_Save"
 msgstr "_Salva"
 
@@ -194,11 +194,11 @@ msgstr "Rimuovi _tutte le operazioni"
 msgid "_Add Track"
 msgstr "_Aggiungi traccia"
 
-#: src/ui/menu.ui:350 src/ui/menu.ui:425 src/ui/menu.ui:437
+#: src/ui/menu.ui:350 src/ui/menu.ui:419 src/ui/menu.ui:431
 msgid "Add A_ll Tracks"
 msgstr "Aggiungi _tutte le tracce"
 
-#: src/ui/menu.ui:354 src/ui/menu.ui:441
+#: src/ui/menu.ui:354 src/ui/menu.ui:435
 msgid "Add _Foreign Audio Scan"
 msgstr "Aggiungi scansione dell'audio in lingua straniera"
 
@@ -222,11 +222,7 @@ msgstr "_Modifica"
 msgid "_Reset"
 msgstr "_Reimposta"
 
-#: src/ui/menu.ui:413
-msgid "Re_move"
-msgstr "R_imuovi"
-
-#: src/ui/menu.ui:421 src/ui/menu.ui:433
+#: src/ui/menu.ui:415 src/ui/menu.ui:427
 msgid "_Add New Track"
 msgstr "_Aggiungi nuova traccia"
 
@@ -353,23 +349,23 @@ msgstr "Azioni"
 msgid "HandBrake Queue"
 msgstr "Coda di HandBrake"
 
-#: src/ui/ghb.ui:212 src/ui/ghb.ui:1416 src/queuehandler.c:1850
-#: src/queuehandler.c:1863
+#: src/ui/ghb.ui:212 src/ui/ghb.ui:1416 src/queuehandler.c:1843
+#: src/queuehandler.c:1856
 msgid "Start Encoding"
 msgstr "Avvia codifica"
 
-#: src/ui/ghb.ui:213 src/ui/ghb.ui:1417 src/ui/ghb.ui:4156
-#: src/queuehandler.c:1849 src/queuehandler.c:1862
+#: src/ui/ghb.ui:213 src/ui/ghb.ui:1417 src/ui/ghb.ui:4154
+#: src/queuehandler.c:1842 src/queuehandler.c:1855
 msgid "Start"
 msgstr "Avvia"
 
-#: src/ui/ghb.ui:221 src/ui/ghb.ui:1424 src/queuehandler.c:1894
-#: src/queuehandler.c:1907
+#: src/ui/ghb.ui:221 src/ui/ghb.ui:1424 src/queuehandler.c:1887
+#: src/queuehandler.c:1900
 msgid "Pause Encoding"
 msgstr "Metti in pausa la codifica"
 
-#: src/ui/ghb.ui:222 src/ui/ghb.ui:1425 src/queuehandler.c:1893
-#: src/queuehandler.c:1906
+#: src/ui/ghb.ui:222 src/ui/ghb.ui:1425 src/queuehandler.c:1886
+#: src/queuehandler.c:1899
 msgid "Pause"
 msgstr "Metti in pausa"
 
@@ -385,7 +381,7 @@ msgstr "0 operazioni in attesa"
 msgid "Options"
 msgstr "Opzioni"
 
-#: src/ui/ghb.ui:322 src/ui/ghb.ui:4540
+#: src/ui/ghb.ui:322 src/ui/ghb.ui:4538
 msgid "When Done:"
 msgstr "Al termine:"
 
@@ -413,10 +409,10 @@ msgstr "Reimposta"
 msgid "Edit"
 msgstr "Modifica"
 
-#: src/ui/ghb.ui:456 src/ui/ghb.ui:2947 src/ui/ghb.ui:3071 src/ui/ghb.ui:3212
-#: src/ui/ghb.ui:3587 src/hb-backend.c:4308 src/hb-backend.c:4315
-#: src/hb-backend.c:4339 src/hb-backend.c:4347 src/hb-backend.c:4375
-#: src/hb-backend.c:4384 src/hb-backend.c:4411 src/hb-backend.c:4436
+#: src/ui/ghb.ui:456 src/ui/ghb.ui:2945 src/ui/ghb.ui:3069 src/ui/ghb.ui:3210
+#: src/ui/ghb.ui:3585 src/hb-backend.c:4305 src/hb-backend.c:4312
+#: src/hb-backend.c:4336 src/hb-backend.c:4344 src/hb-backend.c:4372
+#: src/hb-backend.c:4381 src/hb-backend.c:4408 src/hb-backend.c:4433
 msgid "Preset:"
 msgstr "Preimpostazione:"
 
@@ -424,7 +420,7 @@ msgstr "Preimpostazione:"
 msgid "Source:"
 msgstr "Sorgente:"
 
-#: src/ui/ghb.ui:515 src/ui/ghb.ui:4205
+#: src/ui/ghb.ui:515 src/ui/ghb.ui:4203
 msgid "Title:"
 msgstr "Titolo:"
 
@@ -505,11 +501,11 @@ msgstr "Transcodificatore video multithread"
 msgid "HandBrake"
 msgstr "HandBrake"
 
-#: src/ui/ghb.ui:1363 src/callbacks.c:4521
+#: src/ui/ghb.ui:1363 src/callbacks.c:4556
 msgid "Choose Video Source"
 msgstr "Scegli sorgente video"
 
-#: src/ui/ghb.ui:1364 src/callbacks.c:1866 src/callbacks.c:4520
+#: src/ui/ghb.ui:1364 src/callbacks.c:1873 src/callbacks.c:4555
 msgid "Open Source"
 msgstr "Apri sorgente"
 
@@ -552,12 +548,12 @@ msgstr "<b>Sorgente:</b>"
 #: src/ui/ghb.ui:1498 src/hb-backend.c:54 src/hb-backend.c:66
 #: src/hb-backend.c:79 src/hb-backend.c:117 src/hb-backend.c:217
 #: src/hb-backend.c:250 src/hb-backend.c:261 src/hb-backend.c:288
-#: src/hb-backend.c:373 src/hb-backend.c:2537 src/hb-backend.c:2762
+#: src/hb-backend.c:373 src/hb-backend.c:2547 src/hb-backend.c:2772
 #: src/subtitlehandler.c:1434
 msgid "None"
 msgstr "Nessuno"
 
-#: src/ui/ghb.ui:1526 src/callbacks.c:4493
+#: src/ui/ghb.ui:1526 src/callbacks.c:4528
 msgid "Scanning..."
 msgstr "Scansione..."
 
@@ -619,7 +615,7 @@ msgstr "Scegli preimpostazione"
 msgid "<u><i>Modified</i></u>"
 msgstr "<u><i>Modificato</i></u>"
 
-#: src/ui/ghb.ui:1681 src/ui/ghb.ui:3859 src/ui/ghb.ui:4013
+#: src/ui/ghb.ui:1681 src/ui/ghb.ui:3857 src/ui/ghb.ui:4011
 msgid "Reload"
 msgstr "Ricarica"
 
@@ -647,7 +643,7 @@ msgstr "Formato:"
 msgid "Format to mux encoded tracks to."
 msgstr "Formato di multiplazione delle tracce codificate."
 
-#: src/ui/ghb.ui:1770 src/queuehandler.c:230
+#: src/ui/ghb.ui:1770 src/queuehandler.c:225
 msgid "Web Optimized"
 msgstr "Ottimizzato per il web"
 
@@ -708,7 +704,7 @@ msgstr "Filtri:"
 msgid "Size:"
 msgstr "Dimensione:"
 
-#: src/ui/ghb.ui:1987 src/ui/ghb.ui:2006 src/ui/ghb.ui:6229
+#: src/ui/ghb.ui:1987 src/ui/ghb.ui:2006 src/ui/ghb.ui:6292
 msgid "Video Preview"
 msgstr "Anteprima video"
 
@@ -720,15 +716,15 @@ msgstr "Dimensioni"
 msgid "<b>Source Dimensions</b>"
 msgstr "<b>Dimensioni della sorgente</b>"
 
-#: src/ui/ghb.ui:2051 src/ui/ghb.ui:2699
+#: src/ui/ghb.ui:2051 src/ui/ghb.ui:2697
 msgid "Storage Size:"
 msgstr "Dimensioni di archiviazione:"
 
-#: src/ui/ghb.ui:2074 src/ui/ghb.ui:2726
+#: src/ui/ghb.ui:2074 src/ui/ghb.ui:2724
 msgid "Display Size:"
 msgstr "Dimensioni di visualizzazione:"
 
-#: src/ui/ghb.ui:2097 src/ui/ghb.ui:2793
+#: src/ui/ghb.ui:2097 src/ui/ghb.ui:2791
 msgid "Aspect Ratio:"
 msgstr "Rapporto d'aspetto:"
 
@@ -866,7 +862,7 @@ msgstr ""
 "Questa è la larghezza a cui il video verrà memorizzato.\n"
 "Le dimensioni di visualizzazione effettive saranno diverse, se il rapporto d'aspetto dei pixel non è 1:1."
 
-#: src/ui/ghb.ui:2485 src/ui/ghb.ui:2749
+#: src/ui/ghb.ui:2485 src/ui/ghb.ui:2747
 msgid "×"
 msgstr "×"
 
@@ -901,60 +897,60 @@ msgstr ""
 msgid "<b>Borders</b>"
 msgstr "<b>Bordi</b>"
 
-#: src/ui/ghb.ui:2568
+#: src/ui/ghb.ui:2567
 msgid "Fill:"
 msgstr "Riempi:"
 
-#: src/ui/ghb.ui:2580
+#: src/ui/ghb.ui:2579
 msgid "Add a border around the video."
 msgstr "Aggiungi un bordo attorno al video."
 
-#: src/ui/ghb.ui:2594
+#: src/ui/ghb.ui:2592
 msgid "Left Pad"
 msgstr "Bordo sinistro"
 
-#: src/ui/ghb.ui:2608
+#: src/ui/ghb.ui:2606
 msgid "Top Pad"
 msgstr "Bordo superiore"
 
-#: src/ui/ghb.ui:2622
+#: src/ui/ghb.ui:2620
 msgid "Bottom Pad"
 msgstr "Bordo inferiore"
 
-#: src/ui/ghb.ui:2636
+#: src/ui/ghb.ui:2634
 msgid "Right Pad"
 msgstr "Bordo destro"
 
-#: src/ui/ghb.ui:2649
+#: src/ui/ghb.ui:2647
 msgid "Color:"
 msgstr "Colore:"
 
-#: src/ui/ghb.ui:2661
+#: src/ui/ghb.ui:2659
 msgid "Color of border added around video."
 msgstr "Colore del bordo aggiunto attorno al video."
 
-#: src/ui/ghb.ui:2685
+#: src/ui/ghb.ui:2683
 msgid "<b>Final Dimensions</b>"
 msgstr "<b>Dimensioni al termine</b>"
 
-#: src/ui/ghb.ui:2737 src/ui/ghb.ui:2760 src/ui/ghb.ui:2773
+#: src/ui/ghb.ui:2735 src/ui/ghb.ui:2758 src/ui/ghb.ui:2771
 msgid "Changing the display size will stretch the video."
 msgstr "Modificare le dimensioni di visualizzazione deformerà il video."
 
-#: src/ui/ghb.ui:2771 src/hb-backend.c:116 src/hb-backend.c:219
+#: src/ui/ghb.ui:2769 src/hb-backend.c:116 src/hb-backend.c:219
 #: src/hb-backend.c:291
 msgid "Automatic"
 msgstr "Automatico"
 
-#: src/ui/ghb.ui:2822
+#: src/ui/ghb.ui:2820
 msgid "Filters"
 msgstr "Filtri"
 
-#: src/ui/ghb.ui:2832
+#: src/ui/ghb.ui:2830
 msgid "Detelecine:"
 msgstr "Telecinema inverso:"
 
-#: src/ui/ghb.ui:2843
+#: src/ui/ghb.ui:2841
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
@@ -964,7 +960,7 @@ msgstr ""
 "\n"
 "Il telecinema è un processo che adatta la frequenza dei fotogrammi dei film, che è di 24 fps, alla frequenza dei fotogrammi NTSC, che è di 30 fps."
 
-#: src/ui/ghb.ui:2859 src/ui/ghb.ui:3285
+#: src/ui/ghb.ui:2857 src/ui/ghb.ui:3283
 msgid ""
 "Custom detelecine filter string format\n"
 "\n"
@@ -974,11 +970,11 @@ msgstr ""
 "\n"
 "JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 
-#: src/ui/ghb.ui:2874
+#: src/ui/ghb.ui:2872
 msgid "Interlace Detection:"
 msgstr "Rilevamento interlacciamento:"
 
-#: src/ui/ghb.ui:2885
+#: src/ui/ghb.ui:2883
 msgid ""
 "This filter detects interlaced frames.\n"
 "\n"
@@ -990,7 +986,7 @@ msgstr ""
 "Se è abilitato un filtro di deinterlacciamento, verranno deinterlacciati\n"
 "solo i fotogrammi trovati interlacciati da questo filtro."
 
-#: src/ui/ghb.ui:2900
+#: src/ui/ghb.ui:2898
 msgid ""
 "Custom interlace detection filter string format\n"
 "\n"
@@ -1002,11 +998,11 @@ msgstr ""
 "Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:\n"
 "Block Thresh: Block Width: Block Height"
 
-#: src/ui/ghb.ui:2916
+#: src/ui/ghb.ui:2914
 msgid "Deinterlace:"
 msgstr "Deinterlacciamento:"
 
-#: src/ui/ghb.ui:2927
+#: src/ui/ghb.ui:2925
 msgid ""
 "Choose decomb or deinterlace filter.\n"
 "\n"
@@ -1018,7 +1014,7 @@ msgstr ""
 "Il filtro decomb supporta vari algoritmi di interpolazione.\n"
 "Il filtro deinterlacciamento è un classico deinterlacciatore YADIF.\n"
 
-#: src/ui/ghb.ui:2954
+#: src/ui/ghb.ui:2952
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
 "\n"
@@ -1031,11 +1027,11 @@ msgstr ""
 "Il filtro decomb supporta vari algoritmi di interpolazione.\n"
 "Il filtro deinterlacciamento è un classico deinterlacciatore YADIF."
 
-#: src/ui/ghb.ui:2981
+#: src/ui/ghb.ui:2979
 msgid "Deblock Filter:"
 msgstr "Filtro di deblocking:"
 
-#: src/ui/ghb.ui:2992
+#: src/ui/ghb.ui:2990
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
@@ -1043,12 +1039,12 @@ msgstr ""
 "Il filtro di deblocking rimuove un tipo comune di artefatti di compressione.\n"
 "Se la tua sorgente presenta degli artefatti di \"quadrettatura\", questo filtro può aiutare a toglierli."
 
-#: src/ui/ghb.ui:3009 src/ui/ghb.ui:3089 src/ui/ghb.ui:3151 src/ui/ghb.ui:3229
-#: src/ui/ghb.ui:3643 src/hb-backend.c:4412 src/hb-backend.c:4437
+#: src/ui/ghb.ui:3007 src/ui/ghb.ui:3087 src/ui/ghb.ui:3149 src/ui/ghb.ui:3227
+#: src/ui/ghb.ui:3641 src/hb-backend.c:4409 src/hb-backend.c:4434
 msgid "Tune:"
 msgstr "Regolazione:"
 
-#: src/ui/ghb.ui:3016
+#: src/ui/ghb.ui:3014
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
@@ -1056,7 +1052,7 @@ msgstr ""
 "Il filtro di deblocking rimuove un tipo comune di artefatti di compressione.\n"
 "Se la tua sorgente presenta degli artefatti di \"quadrettatura\", questo filtro può aiutare a toglierli."
 
-#: src/ui/ghb.ui:3025 src/ui/ghb.ui:3167
+#: src/ui/ghb.ui:3023 src/ui/ghb.ui:3165
 msgid ""
 "Custom deblock filter string format\n"
 "\n"
@@ -1066,11 +1062,11 @@ msgstr ""
 "\n"
 "    strength=weak|strong:thresh=0-100:blocksize=4-512"
 
-#: src/ui/ghb.ui:3042
+#: src/ui/ghb.ui:3040
 msgid "Denoise Filter:"
 msgstr "Filtro di riduzione del rumore:"
 
-#: src/ui/ghb.ui:3053
+#: src/ui/ghb.ui:3051
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "Film grain and other types of high frequency noise are difficult to compress.\n"
@@ -1080,7 +1076,7 @@ msgstr ""
 "La grana della pellicola ed altri tipi di rumore ad alta frequenza sono difficili da comprimere.\n"
 "L'utilizzo di questo filtro su tali sorgenti può ridurre le dimensioni dei file."
 
-#: src/ui/ghb.ui:3078 src/ui/ghb.ui:3096
+#: src/ui/ghb.ui:3076 src/ui/ghb.ui:3094
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "    Film grain and other types of high frequency noise are difficult to compress.\n"
@@ -1090,7 +1086,7 @@ msgstr ""
 "La grana della pellicola ed altri tipi di rumore ad alta frequenza sono difficili da comprimere.\n"
 "L'utilizzo di questo filtro su tali sorgenti può ridurre le dimensioni dei file."
 
-#: src/ui/ghb.ui:3106 src/ui/ghb.ui:3245
+#: src/ui/ghb.ui:3104 src/ui/ghb.ui:3243
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
@@ -1100,11 +1096,11 @@ msgstr ""
 "\n"
 "  SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
-#: src/ui/ghb.ui:3123
+#: src/ui/ghb.ui:3121
 msgid "Chroma Smooth Filter:"
 msgstr "Filtro Chroma Smooth:"
 
-#: src/ui/ghb.ui:3134
+#: src/ui/ghb.ui:3132
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "Lower resolution analog source content may benefit from this filter."
@@ -1112,7 +1108,7 @@ msgstr ""
 "Il filtro chroma smooth rimuove gli artefatti cromatici comuni.\n"
 "Il contenuto delle sorgenti analogiche a risoluzione inferiore può trarre vantaggio da questo filtro."
 
-#: src/ui/ghb.ui:3158
+#: src/ui/ghb.ui:3156
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
@@ -1120,11 +1116,11 @@ msgstr ""
 "Il filtro chroma smooth rimuove gli artefatti cromatici comuni.\n"
 "   Il contenuto delle sorgenti analogiche a risoluzione inferiore può trarre vantaggio da questo filtro."
 
-#: src/ui/ghb.ui:3184
+#: src/ui/ghb.ui:3182
 msgid "Sharpen Filter:"
 msgstr "Filtro nitidezza:"
 
-#: src/ui/ghb.ui:3195
+#: src/ui/ghb.ui:3193
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "high frequency components in the video."
@@ -1132,7 +1128,7 @@ msgstr ""
 "Il filtro nitidezza migliora i bordi ed altri\n"
 "componenti ad alta frequenza nel video."
 
-#: src/ui/ghb.ui:3219 src/ui/ghb.ui:3236
+#: src/ui/ghb.ui:3217 src/ui/ghb.ui:3234
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
@@ -1140,39 +1136,39 @@ msgstr ""
 "Il filtro nitidezza migliora i bordi ed altri\n"
 "componenti ad alta frequenza nel video."
 
-#: src/ui/ghb.ui:3262
+#: src/ui/ghb.ui:3260
 msgid "Colorspace:"
 msgstr "Spazio dei colori:"
 
-#: src/ui/ghb.ui:3273
+#: src/ui/ghb.ui:3271
 msgid "Translate the colorspace of the source."
 msgstr "Converti lo spazio dei colori della sorgente."
 
-#: src/ui/ghb.ui:3299 src/hb-backend.c:4880
+#: src/ui/ghb.ui:3297 src/hb-backend.c:4877
 msgid "Grayscale"
 msgstr "Scala di grigi"
 
-#: src/ui/ghb.ui:3301
+#: src/ui/ghb.ui:3299
 msgid "If enabled, filter colour components out of video."
 msgstr "Se abilitato, filtra i componenti a colori dal video."
 
-#: src/ui/ghb.ui:3318 src/callbacks.c:5609
+#: src/ui/ghb.ui:3316 src/callbacks.c:5644
 msgid "Video"
 msgstr "Video"
 
-#: src/ui/ghb.ui:3333
+#: src/ui/ghb.ui:3331
 msgid "Video Encoder:"
 msgstr "Codificatore video:"
 
-#: src/ui/ghb.ui:3343
+#: src/ui/ghb.ui:3341
 msgid "Available video encoders."
 msgstr "Codificatori video disponibili."
 
-#: src/ui/ghb.ui:3354
+#: src/ui/ghb.ui:3352
 msgid "Framerate:"
 msgstr "Frequenza fotogrammi:"
 
-#: src/ui/ghb.ui:3364
+#: src/ui/ghb.ui:3362
 msgid ""
 "Output framerate.\n"
 "\n"
@@ -1183,19 +1179,19 @@ msgstr ""
 "\n"
 "Ti raccomandiamo l'utilizzo dell'opzione 'Uguale alla sorgente'. Se il tuo video sorgente ha un frequenza fotogrammi variabile, l'opzione 'Uguale alla sorgente' la conserverà."
 
-#: src/ui/ghb.ui:3380
+#: src/ui/ghb.ui:3378
 msgid "Constant Framerate"
 msgstr "Frequenza fotogrammi costante"
 
-#: src/ui/ghb.ui:3381
+#: src/ui/ghb.ui:3379
 msgid "Enables constant framerate output."
 msgstr "Produce in output una frequenza dei fotogrammi costante."
 
-#: src/ui/ghb.ui:3388
+#: src/ui/ghb.ui:3386
 msgid "Peak Framerate (VFR)"
 msgstr "Picco frequenza fotogrammi (variabile)"
 
-#: src/ui/ghb.ui:3389
+#: src/ui/ghb.ui:3387
 msgid ""
 "Enables variable framerate output with a peak\n"
 "    rate determined by the framerate setting.\n"
@@ -1207,11 +1203,11 @@ msgstr ""
 "\n"
 "La frequenza variabile non è compatibile con alcuni lettori."
 
-#: src/ui/ghb.ui:3400
+#: src/ui/ghb.ui:3398
 msgid "Variable Framerate"
 msgstr "Frequenza fotogrammi variabile"
 
-#: src/ui/ghb.ui:3401
+#: src/ui/ghb.ui:3399
 msgid ""
 "Enables variable framerate output.\n"
 "\n"
@@ -1221,11 +1217,11 @@ msgstr ""
 "\n"
 "La frequenza variabile non è compatibile con alcuni lettori."
 
-#: src/ui/ghb.ui:3427
+#: src/ui/ghb.ui:3425
 msgid "Constant Quality:"
 msgstr "Qualità costante:"
 
-#: src/ui/ghb.ui:3428
+#: src/ui/ghb.ui:3426
 msgid ""
 "Set the desired quality factor.\n"
 "  The encoder targets a certain quality.\n"
@@ -1251,7 +1247,7 @@ msgstr ""
 "Le scale FFMpeg e Theora sono più lineari.\n"
 "Questi codificatori non offrono una modalità senza perdite."
 
-#: src/ui/ghb.ui:3467
+#: src/ui/ghb.ui:3465
 msgid ""
 "Set the desired quality factor.\n"
 "The encoder targets a certain quality.\n"
@@ -1277,15 +1273,15 @@ msgstr ""
 "Le scale FFMpeg e Theora sono più lineari.\n"
 "Questi codificatori non offrono una modalità senza perdite."
 
-#: src/ui/ghb.ui:3483 src/audiohandler.c:1783
+#: src/ui/ghb.ui:3481 src/audiohandler.c:1791
 msgid "Quality"
 msgstr "Qualità"
 
-#: src/ui/ghb.ui:3494
+#: src/ui/ghb.ui:3492
 msgid "Bitrate (kbps):    "
 msgstr "Bitrate (kbps): "
 
-#: src/ui/ghb.ui:3495 src/ui/ghb.ui:3512
+#: src/ui/ghb.ui:3493 src/ui/ghb.ui:3510
 msgid ""
 "Set the average bitrate.\n"
 "\n"
@@ -1299,11 +1295,11 @@ msgstr ""
 "Ma la media su una lunga durata sarà il valore impostato qui. Se hai bisogno\n"
 "di limitare il bitrate istantaneo, controlla le impostazioni vbv-bufsize e vbv-maxrate di x264."
 
-#: src/ui/ghb.ui:3541
+#: src/ui/ghb.ui:3539
 msgid "Multi-Pass Encoding"
 msgstr "Codifica a più passaggi"
 
-#: src/ui/ghb.ui:3543
+#: src/ui/ghb.ui:3541
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
@@ -1317,11 +1313,11 @@ msgstr ""
 "raccolte le statistiche sul video. Quindi, nel passaggio finale, tali\n"
 "statistiche sono utilizzate per prendere decisioni di allocazione del bitrate."
 
-#: src/ui/ghb.ui:3554
+#: src/ui/ghb.ui:3552
 msgid "Turbo Analysis Pass"
 msgstr "Passaggio di analisi turbo"
 
-#: src/ui/ghb.ui:3556
+#: src/ui/ghb.ui:3554
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
@@ -1329,7 +1325,7 @@ msgstr ""
 "Durante il passaggio di analisi di una codifica a più passaggi, usa le "
 "impostazioni che velocizzino le fasi."
 
-#: src/ui/ghb.ui:3601
+#: src/ui/ghb.ui:3599
 msgid ""
 "Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
@@ -1345,11 +1341,11 @@ msgstr ""
 "In genere questa opzione andrebbe regolata sulla più lenta possibile in quanto le impostazioni\n"
 "più lente risulteranno in una migliore qualità o in file più piccoli."
 
-#: src/ui/ghb.ui:3616
+#: src/ui/ghb.ui:3614
 msgid "Encoder Preset"
 msgstr "Preimpostazione del codificatore"
 
-#: src/ui/ghb.ui:3653
+#: src/ui/ghb.ui:3651
 msgid ""
 "Tune settings to optimize for common scenarios.\n"
 "\n"
@@ -1363,11 +1359,11 @@ msgstr ""
 "o impostare le caratteristiche del file di output. Le modifiche verranno\n"
 "applicate dopo la preimpostazione, ma prima di tutti gli altri parametri."
 
-#: src/ui/ghb.ui:3667
+#: src/ui/ghb.ui:3665
 msgid "Fast Decode"
 msgstr "Decodifica rapida"
 
-#: src/ui/ghb.ui:3669
+#: src/ui/ghb.ui:3667
 msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
@@ -1377,11 +1373,11 @@ msgstr ""
 "\n"
 "Imposta questo parametro se il dispositivo fatica a riprodurre l'output (fotogrammi persi)."
 
-#: src/ui/ghb.ui:3684
+#: src/ui/ghb.ui:3682
 msgid "Zero Latency"
 msgstr "Latenza zero"
 
-#: src/ui/ghb.ui:3686
+#: src/ui/ghb.ui:3684
 msgid ""
 "Minimize latency between input to encoder and output of decoder.\n"
 "\n"
@@ -1397,11 +1393,11 @@ msgstr ""
 "Poiché HandBrake non è adatto per trasmissioni in diretta,\n"
 "questa impostazione ha poco valore."
 
-#: src/ui/ghb.ui:3704
+#: src/ui/ghb.ui:3702
 msgid "Profile:"
 msgstr "Profilo:"
 
-#: src/ui/ghb.ui:3714
+#: src/ui/ghb.ui:3712
 msgid ""
 "Sets and ensures compliance with the specified profile.\n"
 "\n"
@@ -1411,11 +1407,11 @@ msgstr ""
 "\n"
 "Sovrascrive tutte le altre impostazioni."
 
-#: src/ui/ghb.ui:3727
+#: src/ui/ghb.ui:3725
 msgid "Level:"
 msgstr "Livello:"
 
-#: src/ui/ghb.ui:3737
+#: src/ui/ghb.ui:3735
 msgid ""
 "Sets and ensures compliance with the specified level.\n"
 "\n"
@@ -1425,155 +1421,155 @@ msgstr ""
 "\n"
 "Sovrascrive tutte le altre impostazioni."
 
-#: src/ui/ghb.ui:3753
+#: src/ui/ghb.ui:3751
 msgid "Additional Options:"
 msgstr "Opzioni aggiuntive:"
 
-#: src/ui/ghb.ui:3793
+#: src/ui/ghb.ui:3791
 msgid "Audio"
 msgstr "Audio"
 
-#: src/ui/ghb.ui:3822
+#: src/ui/ghb.ui:3820
 msgid "Show audio default selection options"
 msgstr "Mostra le opzioni di selezione predefinite per l'audio"
 
-#: src/ui/ghb.ui:3836 src/ui/ghb.ui:3990
+#: src/ui/ghb.ui:3834 src/ui/ghb.ui:3988
 msgid "Selection Behavior…"
 msgstr "Comportamento selezione..."
 
-#: src/ui/ghb.ui:3845
+#: src/ui/ghb.ui:3843
 msgid "Reload all audio settings from defaults"
 msgstr "Ricarica tutte le impostazioni audio predefinite"
 
-#: src/ui/ghb.ui:3888 src/ui/ghb.ui:4042 src/ui/ghb.ui:4949
+#: src/ui/ghb.ui:3886 src/ui/ghb.ui:4040 src/ui/ghb.ui:4953
 msgid "Remove"
 msgstr "Rimuovi"
 
-#: src/ui/ghb.ui:3911 src/ui/ghb.ui:4065
+#: src/ui/ghb.ui:3909 src/ui/ghb.ui:4063
 msgid "Clear"
 msgstr "Cancella"
 
-#: src/ui/ghb.ui:3947
+#: src/ui/ghb.ui:3945
 msgid "Subtitles"
 msgstr "Sottotitoli"
 
-#: src/ui/ghb.ui:3963
+#: src/ui/ghb.ui:3961
 msgid "Tracks"
 msgstr "Tracce"
 
-#: src/ui/ghb.ui:3976
+#: src/ui/ghb.ui:3974
 msgid "Show subtitle default selection options"
 msgstr "Mostra le opzioni di selezione predefinite per i sottotitoli"
 
-#: src/ui/ghb.ui:4101
+#: src/ui/ghb.ui:4099
 msgid "Chapters"
 msgstr "Capitoli"
 
-#: src/ui/ghb.ui:4112 src/callbacks.c:2533 src/queuehandler.c:220
+#: src/ui/ghb.ui:4110 src/callbacks.c:2539 src/queuehandler.c:215
 msgid "Chapter Markers"
 msgstr "Marcatori di capitolo"
 
-#: src/ui/ghb.ui:4114
+#: src/ui/ghb.ui:4112
 msgid "Add chapter markers to output file."
 msgstr "Aggiungi marcatori di capitolo nel file di destinazione."
 
-#: src/ui/ghb.ui:4121
+#: src/ui/ghb.ui:4119
 msgid "Import Chapters"
 msgstr "Importa capitoli"
 
-#: src/ui/ghb.ui:4123
+#: src/ui/ghb.ui:4121
 msgid "Import chapter list from an XML file"
 msgstr "Importa la lista dei capitoli da un file XML"
 
-#: src/ui/ghb.ui:4131
+#: src/ui/ghb.ui:4129
 msgid "Export Chapters"
 msgstr "Esporta capitoli"
 
-#: src/ui/ghb.ui:4133
+#: src/ui/ghb.ui:4131
 msgid "Export chapter list as an XML file"
 msgstr "Esporta la lista dei capitoli in un file XML"
 
-#: src/ui/ghb.ui:4149
+#: src/ui/ghb.ui:4147
 msgid "Index"
 msgstr "Indice"
 
-#: src/ui/ghb.ui:4163
+#: src/ui/ghb.ui:4161
 msgid "Duration"
 msgstr "Durata"
 
-#: src/ui/ghb.ui:4169
+#: src/ui/ghb.ui:4167
 msgid "Title"
 msgstr "Titolo"
 
-#: src/ui/ghb.ui:4195
+#: src/ui/ghb.ui:4193
 msgid "Tags"
 msgstr "Tag"
 
-#: src/ui/ghb.ui:4233
+#: src/ui/ghb.ui:4231
 msgid "Actors:"
 msgstr "Attori:"
 
-#: src/ui/ghb.ui:4261
+#: src/ui/ghb.ui:4259
 msgid "Director:"
 msgstr "Regista:"
 
-#: src/ui/ghb.ui:4289
+#: src/ui/ghb.ui:4287
 msgid "Release Date:"
 msgstr "Data di uscita:"
 
-#: src/ui/ghb.ui:4317
+#: src/ui/ghb.ui:4315
 msgid "Comment:"
 msgstr "Commento:"
 
-#: src/ui/ghb.ui:4345
+#: src/ui/ghb.ui:4343
 msgid "Genre:"
 msgstr "Genere:"
 
-#: src/ui/ghb.ui:4373 src/ui/ghb.ui:6026 src/ui/ghb.ui:6178
+#: src/ui/ghb.ui:4371 src/ui/ghb.ui:6089 src/ui/ghb.ui:6241
 msgid "Description:"
 msgstr "Descrizione:"
 
-#: src/ui/ghb.ui:4401
+#: src/ui/ghb.ui:4399
 msgid "Plot:"
 msgstr "Trama:"
 
-#: src/ui/ghb.ui:4452
+#: src/ui/ghb.ui:4450
 msgid "<b>Save As:</b>"
 msgstr "<b>Salva con nome:</b>"
 
-#: src/ui/ghb.ui:4464
+#: src/ui/ghb.ui:4462
 msgid "Destination filename for your encode."
 msgstr "Nome del file di destinazione della codifica."
 
-#: src/ui/ghb.ui:4478
+#: src/ui/ghb.ui:4476
 msgid "<b>To:</b>"
 msgstr "<b>In:</b>"
 
-#: src/ui/ghb.ui:4489
+#: src/ui/ghb.ui:4487
 msgid "Destination directory for your encode."
 msgstr "Cartella di destinazione della codifica."
 
-#: src/ui/ghb.ui:4491 src/title-add.c:474
+#: src/ui/ghb.ui:4489 src/title-add.c:474
 msgid "Destination Directory"
 msgstr "Cartella di destinazione"
 
-#: src/ui/ghb.ui:4564
+#: src/ui/ghb.ui:4568
 msgid "Subtitle Selection Behavior"
 msgstr "Comportamento selezione dei sottotitoli"
 
-#: src/ui/ghb.ui:4833
+#: src/ui/ghb.ui:4837
 msgid "Audio Selection Behavior"
 msgstr "Comportamento selezione dell'audio"
 
-#: src/ui/ghb.ui:4863
+#: src/ui/ghb.ui:4867
 msgid "Track Selection Behavior:"
 msgstr "Comportamento selezione delle tracce"
 
-#: src/ui/ghb.ui:4874
+#: src/ui/ghb.ui:4878
 msgid "Choose which audio tracks of the source media are used."
 msgstr "Scegli quali tracce audio del supporto di origine sono utilizzate."
 
-#: src/ui/ghb.ui:4922
+#: src/ui/ghb.ui:4926
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
 "Tracks matching these languages will be selected using the chosen Selection Behavior."
@@ -1581,27 +1577,27 @@ msgstr ""
 "Crea un elenco di lingue per cui desideri selezionare l'audio.\n"
 "Le tracce corrispondenti a queste lingue saranno selezionate usando il Comportamento selezione scelto."
 
-#: src/ui/ghb.ui:4936 src/ui/ghb.ui:5288
+#: src/ui/ghb.ui:4940 src/ui/ghb.ui:5322
 msgid "Add"
 msgstr "Aggiungi"
 
-#: src/ui/ghb.ui:4962
+#: src/ui/ghb.ui:4966
 msgid "Available Languages"
 msgstr "Lingue disponibili"
 
-#: src/ui/ghb.ui:4971
+#: src/ui/ghb.ui:4975
 msgid "Selected Languages"
 msgstr "Lingue selezionate"
 
-#: src/ui/ghb.ui:4995
+#: src/ui/ghb.ui:4999
 msgid "Auto Passthru:"
 msgstr "Passthrough automatico:"
 
-#: src/ui/ghb.ui:5004
+#: src/ui/ghb.ui:5008
 msgid "MP2"
 msgstr "MP2"
 
-#: src/ui/ghb.ui:5006
+#: src/ui/ghb.ui:5010
 msgid ""
 "Enable this if your playback device supports MP2.\n"
 "This permits MP2 passthru to be selected when automatic passthru selection is enabled."
@@ -1609,11 +1605,11 @@ msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta MP2.\n"
 "Ciò consente al passthrough MP2 di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
-#: src/ui/ghb.ui:5019
+#: src/ui/ghb.ui:5023
 msgid "MP3"
 msgstr "MP3"
 
-#: src/ui/ghb.ui:5021
+#: src/ui/ghb.ui:5025
 msgid ""
 "Enable this if your playback device supports MP3.\n"
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
@@ -1621,11 +1617,11 @@ msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta MP3.\n"
 "Ciò consente al passthrough MP3 di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
-#: src/ui/ghb.ui:5034
+#: src/ui/ghb.ui:5038
 msgid "AC-3"
 msgstr "AC-3"
 
-#: src/ui/ghb.ui:5036
+#: src/ui/ghb.ui:5040
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
@@ -1633,11 +1629,11 @@ msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta AC-3.\n"
 "Ciò consente al passthrough AC-3 di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
-#: src/ui/ghb.ui:5049
+#: src/ui/ghb.ui:5053
 msgid "EAC-3"
 msgstr "EAC-3"
 
-#: src/ui/ghb.ui:5051
+#: src/ui/ghb.ui:5055
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
 "This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
@@ -1645,11 +1641,11 @@ msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta EAC-3.\n"
 "Ciò consente al passthrough EAC-3 di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
-#: src/ui/ghb.ui:5064
+#: src/ui/ghb.ui:5068
 msgid "DTS"
 msgstr "DTS"
 
-#: src/ui/ghb.ui:5066
+#: src/ui/ghb.ui:5070
 msgid ""
 "Enable this if your playback device supports DTS.\n"
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
@@ -1657,11 +1653,11 @@ msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta DTS.\n"
 "Ciò consente al passthrough DTS di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
-#: src/ui/ghb.ui:5079
+#: src/ui/ghb.ui:5083
 msgid "DTS-HD"
 msgstr "DTS-HD"
 
-#: src/ui/ghb.ui:5081
+#: src/ui/ghb.ui:5085
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
 "This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
@@ -1669,11 +1665,11 @@ msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta DTS-HD.\n"
 "Ciò consente al passthrough DTS-HD di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
-#: src/ui/ghb.ui:5094
+#: src/ui/ghb.ui:5098
 msgid "TrueHD"
 msgstr "TrueHD"
 
-#: src/ui/ghb.ui:5096
+#: src/ui/ghb.ui:5100
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
 "This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
@@ -1681,11 +1677,23 @@ msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta TrueHD.\n"
 "Ciò consente al passthrough TrueHD di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
-#: src/ui/ghb.ui:5109
+#: src/ui/ghb.ui:5113
+msgid "ALAC"
+msgstr "ALAC"
+
+#: src/ui/ghb.ui:5115
+msgid ""
+"Enable this if your playback device supports ALAC.\n"
+"This permits ALAC passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Abilita questa opzione se il tuo dispositivo di riproduzione supporta ALAC.\n"
+"Ciò consente al passthrough ALAC di essere selezionato quando la selezione automatica del passthrough è abilitata."
+
+#: src/ui/ghb.ui:5128
 msgid "FLAC"
 msgstr "FLAC"
 
-#: src/ui/ghb.ui:5111
+#: src/ui/ghb.ui:5130
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
 "This permits FLAC passthru to be selected when automatic passthru selection is enabled."
@@ -1693,11 +1701,11 @@ msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta FLAC.\n"
 "Ciò consente al passthrough FLAC di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
-#: src/ui/ghb.ui:5124
+#: src/ui/ghb.ui:5143
 msgid "AAC"
 msgstr "AAC"
 
-#: src/ui/ghb.ui:5126
+#: src/ui/ghb.ui:5145
 msgid ""
 "Enable this if your playback device supports AAC.\n"
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
@@ -1705,11 +1713,23 @@ msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta AAC.\n"
 "Ciò consente al passthrough AAC di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
-#: src/ui/ghb.ui:5139
+#: src/ui/ghb.ui:5158
+msgid "Vorbis"
+msgstr "Vorbis"
+
+#: src/ui/ghb.ui:5160
+msgid ""
+"Enable this if your playback device supports Vorbis.\n"
+"This permits Vorbis passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Abilita questa opzione se il tuo dispositivo di riproduzione supporta Vorbis.\n"
+"Ciò consente al passthrough Vorbis di essere selezionato quando la selezione automatica del passthrough è abilitata."
+
+#: src/ui/ghb.ui:5173
 msgid "Opus"
 msgstr "Opus"
 
-#: src/ui/ghb.ui:5141
+#: src/ui/ghb.ui:5175
 msgid ""
 "Enable this if your playback device supports Opus.\n"
 "This permits Opus passthru to be selected when automatic passthru selection is enabled."
@@ -1717,11 +1737,11 @@ msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta Opus.\n"
 "Ciò consente al passthrough Opus di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
-#: src/ui/ghb.ui:5162
+#: src/ui/ghb.ui:5196
 msgid "Passthru Fallback:"
 msgstr "Ripiego passthrough:"
 
-#: src/ui/ghb.ui:5168
+#: src/ui/ghb.ui:5202
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
@@ -1729,45 +1749,45 @@ msgstr ""
 "Imposta il codificatore audio da utilizzare quando non è possibile trovare "
 "una traccia appropriata per il passthrough audio."
 
-#: src/ui/ghb.ui:5184
+#: src/ui/ghb.ui:5218
 msgid "Audio encoder settings for each selected track:"
 msgstr "Impostazioni del codificatore audio per ciascuna traccia selezionata:"
 
-#: src/ui/ghb.ui:5185
+#: src/ui/ghb.ui:5219
 msgid "Each selected source track will be encoded with all selected encoders"
 msgstr ""
 "Ogni traccia sorgente selezionata sarà codificata con tutti i codificatori "
 "selezionati"
 
-#: src/ui/ghb.ui:5195
+#: src/ui/ghb.ui:5229
 msgid "Encoder"
 msgstr "Codificatore"
 
-#: src/ui/ghb.ui:5201
+#: src/ui/ghb.ui:5235
 msgid "Bitrate/Quality"
 msgstr "Bitrate/Qualità"
 
-#: src/ui/ghb.ui:5207
+#: src/ui/ghb.ui:5241
 msgid "Mixdown"
 msgstr "Mixdown"
 
-#: src/ui/ghb.ui:5213
+#: src/ui/ghb.ui:5247
 msgid "Samplerate"
 msgstr "Campionamento"
 
-#: src/ui/ghb.ui:5219 src/queuehandler.c:555
+#: src/ui/ghb.ui:5253 src/queuehandler.c:550
 msgid "Gain"
 msgstr "Guadagno"
 
-#: src/ui/ghb.ui:5225
+#: src/ui/ghb.ui:5259
 msgid "DRC"
 msgstr "DRC"
 
-#: src/ui/ghb.ui:5253
+#: src/ui/ghb.ui:5287
 msgid "Add Track"
 msgstr "Aggiungi traccia"
 
-#: src/ui/ghb.ui:5254
+#: src/ui/ghb.ui:5288
 msgid ""
 "Add an audio encoder.\n"
 "Each selected source track will be encoded with all selected encoders."
@@ -1775,11 +1795,11 @@ msgstr ""
 "Aggiungi un codificatore audio.\n"
 "Ciascuna traccia sorgente selezionata sarà codificata con tutti i codificatori selezionati."
 
-#: src/ui/ghb.ui:5261
+#: src/ui/ghb.ui:5295
 msgid "Use only first encoder for secondary audio"
 msgstr "Usa solo il primo codificatore per l'audio secondario"
 
-#: src/ui/ghb.ui:5263
+#: src/ui/ghb.ui:5297
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "  All other secondary audio output tracks will be encoded with first encoder only."
@@ -1787,64 +1807,65 @@ msgstr ""
 "Solo la traccia audio primaria sarà codificata con l'elenco completo dei codificatori.\n"
 "  Tutte le altre tracce di uscita audio secondarie saranno codificate solo con il primo codificatore."
 
-#: src/ui/ghb.ui:5276
+#: src/ui/ghb.ui:5310
 msgid "Add Multiple Titles"
 msgstr "Aggiungi più titoli"
 
-#: src/ui/ghb.ui:5282 src/ui/ghb.ui:5969 src/ui/ghb.ui:6059
-#: src/hb-backend.c:4480 src/hb-backend.c:4530 src/hb-backend.c:4547
-#: src/hb-backend.c:4564 src/hb-backend.c:4621 src/hb-backend.c:4673
-#: src/presets.c:2583 src/title-add.c:124 src/title-add.c:134
+#: src/ui/ghb.ui:5316 src/ui/ghb.ui:6032 src/ui/ghb.ui:6122
+#: src/hb-backend.c:4477 src/hb-backend.c:4527 src/hb-backend.c:4544
+#: src/hb-backend.c:4561 src/hb-backend.c:4618 src/hb-backend.c:4670
+#: src/presets.c:2123 src/presets.c:2505 src/presets.c:2730
+#: src/title-add.c:124 src/title-add.c:134
 msgid "Cancel"
 msgstr "Annulla"
 
-#: src/ui/ghb.ui:5306
+#: src/ui/ghb.ui:5340
 msgid "Select All"
 msgstr "Seleziona tutto"
 
-#: src/ui/ghb.ui:5308
+#: src/ui/ghb.ui:5342
 msgid "Mark all titles for adding to the queue"
 msgstr "Marca tutti i titoli per l'aggiunta alla coda"
 
-#: src/ui/ghb.ui:5317
+#: src/ui/ghb.ui:5351
 msgid "Clear All"
 msgstr "Cancella tutto"
 
-#: src/ui/ghb.ui:5319
+#: src/ui/ghb.ui:5353
 msgid "Unmark all titles"
 msgstr "Deseleziona tutti i titoli"
 
-#: src/ui/ghb.ui:5328
+#: src/ui/ghb.ui:5362
 msgid "Invert Selection"
 msgstr "Inverti selezione"
 
-#: src/ui/ghb.ui:5361 src/title-add.c:351
+#: src/ui/ghb.ui:5395 src/title-add.c:351
 msgid "Destination files OK.  No duplicates detected."
 msgstr "File di destinazione OK. Nessun duplicato rilevato."
 
-#: src/ui/ghb.ui:5373
+#: src/ui/ghb.ui:5407
 msgid "Preferences"
 msgstr "Preferenze"
 
-#: src/ui/ghb.ui:5418
+#: src/ui/ghb.ui:5452
 msgid "General"
 msgstr "Generale"
 
-#: src/ui/ghb.ui:5425
+#: src/ui/ghb.ui:5459
 msgid "Use automatic naming (uses modified source name)"
 msgstr "Usa nomi automatici (utilizza i nomi di origine modificati)"
 
-#: src/ui/ghb.ui:5427
+#: src/ui/ghb.ui:5461
 msgid "Create destination filename from source filename or volume label"
 msgstr ""
 "Crea il nome del file di destinazione a partire dal nome del file sorgente o"
 " dall'etichetta del volume"
 
-#: src/ui/ghb.ui:5442
+#: src/ui/ghb.ui:5476
 msgid "Auto-Name Template"
 msgstr "Modello di assegnazione automatica dei nomi"
 
-#: src/ui/ghb.ui:5450
+#: src/ui/ghb.ui:5484
 msgid ""
 "Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
 " {time} {creation-date} {creation-time} {modification-date} {modification-"
@@ -1854,23 +1875,31 @@ msgstr ""
 "{date} {time} {creation-date} {creation-time} {modification-date} "
 "{modification-time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 
-#: src/ui/ghb.ui:5464
+#: src/ui/ghb.ui:5498
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
 msgstr "Usa estensione file per iPod/iTunes (.m4v) per i file MP4"
 
-#: src/ui/ghb.ui:5487
+#: src/ui/ghb.ui:5509
 msgid "Number of previews"
 msgstr "Numero di anteprime"
 
-#: src/ui/ghb.ui:5510
+#: src/ui/ghb.ui:5532
 msgid "Minimum DVD/Blu-ray title duration (seconds)"
 msgstr "Durata minima del titolo del DVD/Blu-ray (secondi)"
 
-#: src/ui/ghb.ui:5518
+#: src/ui/ghb.ui:5555
+msgid "Maximum DVD/Blu-ray title duration (seconds)"
+msgstr "Durata massima del titolo del DVD/Blu-ray (secondi)"
+
+#: src/ui/ghb.ui:5575
+msgid "Keep duplicate titles"
+msgstr "Mantieni titoli duplicati"
+
+#: src/ui/ghb.ui:5581
 msgid "Use the same settings for all titles in a batch"
 msgstr "Utilizza le stesse impostazioni per tutti i titoli in serie"
 
-#: src/ui/ghb.ui:5520
+#: src/ui/ghb.ui:5583
 msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
@@ -1882,11 +1911,11 @@ msgstr ""
 "\n"
 "Deseleziona questa opzione se desideri consentire la modifica delle impostazioni di ciascun titolo in modo indipendente."
 
-#: src/ui/ghb.ui:5530
+#: src/ui/ghb.ui:5593
 msgid "Show preview image in Summary tab"
 msgstr "Mostra l'immagine di anteprima nella scheda Riepilogo"
 
-#: src/ui/ghb.ui:5533
+#: src/ui/ghb.ui:5596
 msgid ""
 "Uncheck this if you want to hide the video preview image on the Summary tab "
 "for privacy reasons."
@@ -1894,11 +1923,11 @@ msgstr ""
 "Deseleziona questa opzione se desideri nascondere l'immagine di anteprima "
 "del video nella scheda Riepilogo per motivi di riservatezza."
 
-#: src/ui/ghb.ui:5542
+#: src/ui/ghb.ui:5605
 msgid "Excluded File Extensions:"
 msgstr "Estensioni file escluse:"
 
-#: src/ui/ghb.ui:5551
+#: src/ui/ghb.ui:5614
 msgid ""
 "The following file extensions will be ignored when scanning a folder. The "
 "list is case insensitive."
@@ -1906,28 +1935,28 @@ msgstr ""
 "Le seguenti estensioni di file saranno ignorate durante la scansione di una "
 "cartella. L'elenco non fa distinzione tra maiuscole e minuscole."
 
-#: src/ui/ghb.ui:5561
+#: src/ui/ghb.ui:5624
 msgctxt "Queue tab in Preferences window"
 msgid "Queue"
 msgstr "Coda"
 
-#: src/ui/ghb.ui:5574
+#: src/ui/ghb.ui:5637
 msgid "Pause queue if disk space is lower than:"
 msgstr "Sospendi la coda se lo spazio su disco è inferiore a:"
 
-#: src/ui/ghb.ui:5590
+#: src/ui/ghb.ui:5653
 msgid "Disk Free Space Limit"
 msgstr "Limite di spazio libero su disco"
 
-#: src/ui/ghb.ui:5598 src/queuehandler.c:803 src/queuehandler.c:1293
+#: src/ui/ghb.ui:5661 src/queuehandler.c:798 src/queuehandler.c:1288
 msgid "GB"
 msgstr "GB"
 
-#: src/ui/ghb.ui:5608
+#: src/ui/ghb.ui:5671
 msgid "Clear completed jobs after an encode completes"
 msgstr "Rimuovi le operazioni completate dopo la fine di una codifica"
 
-#: src/ui/ghb.ui:5610
+#: src/ui/ghb.ui:5673
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
 "  Check this if you want the queue to clean itself up by deleting completed jobs."
@@ -1935,15 +1964,15 @@ msgstr ""
 "Per impostazione predefinita, le operazioni completate rimangono nella coda e vengono segnate come completate.\n"
 "Seleziona questa opzione se desideri che la coda si svuoti automaticamente eliminando le operazioni completate."
 
-#: src/ui/ghb.ui:5618
+#: src/ui/ghb.ui:5681
 msgid "Power Saving"
 msgstr "Risparmio energetico"
 
-#: src/ui/ghb.ui:5632
+#: src/ui/ghb.ui:5695
 msgid "Pause encoding when in Power Saver mode"
 msgstr "Sospendi la codifica se in modalità Risparmio energetico"
 
-#: src/ui/ghb.ui:5636
+#: src/ui/ghb.ui:5699
 msgid ""
 "If checked, encoding will be paused when the device\n"
 "enters Power Saver mode. Encoding will resume when\n"
@@ -1953,11 +1982,11 @@ msgstr ""
 "entra in modalità Risparmio energetico. La codifica riprenderà quando\n"
 "si disabilita la modalità Risparmio energetico."
 
-#: src/ui/ghb.ui:5644
+#: src/ui/ghb.ui:5707
 msgid "Pause encoding when on battery power"
 msgstr "Sospendi la codifica con l'alimentazione a batteria"
 
-#: src/ui/ghb.ui:5648
+#: src/ui/ghb.ui:5711
 msgid ""
 "If checked, encoding will be paused when charger is\n"
 "unplugged. Encoding will resume when reconnected to\n"
@@ -1967,11 +1996,11 @@ msgstr ""
 "scollegato. La codifica riprenderà quando si ricollegherà a\n"
 "alla rete elettrica."
 
-#: src/ui/ghb.ui:5656
+#: src/ui/ghb.ui:5719
 msgid "Pause encoding when battery is low"
 msgstr "Sospendi la codifica quando il livello della batteria è basso"
 
-#: src/ui/ghb.ui:5660
+#: src/ui/ghb.ui:5723
 msgid ""
 "If checked, encoding will be paused when the battery\n"
 "level is low. Encoding will resume when the\n"
@@ -1981,32 +2010,32 @@ msgstr ""
 "batteria è basso. La codifica riprenderà quando\n"
 "la batteria sarà caricata."
 
-#: src/ui/ghb.ui:5672
+#: src/ui/ghb.ui:5735
 msgid "When Done"
 msgstr "Al termine"
 
-#: src/ui/ghb.ui:5684
+#: src/ui/ghb.ui:5747
 msgid "Default action when queue is completed:"
 msgstr "Azione predefinita quando la coda viene completata:"
 
-#: src/ui/ghb.ui:5697
+#: src/ui/ghb.ui:5760
 msgid "Show notification when queue is completed"
 msgstr "Mostra una notifica quando la coda viene completata"
 
-#: src/ui/ghb.ui:5705
+#: src/ui/ghb.ui:5768
 msgid "Show notification when each item is completed"
 msgstr "Mostra una notifica quando ciascun elemento viene completato"
 
-#: src/ui/ghb.ui:5717
+#: src/ui/ghb.ui:5780
 msgid "Advanced"
 msgstr "Avanzate"
 
-#: src/ui/ghb.ui:5733
+#: src/ui/ghb.ui:5796
 msgid "Set a custom directory for Handbrake temporary files"
 msgstr ""
 "Imposta una cartella personalizzata per i file temporanei di HandBrake"
 
-#: src/ui/ghb.ui:5735 src/ui/ghb.ui:5751
+#: src/ui/ghb.ui:5798 src/ui/ghb.ui:5814
 msgid ""
 "Temporary files that HandBrake creates will be placed under this directory.\n"
 "\n"
@@ -2024,96 +2053,96 @@ msgstr ""
 "\n"
 "Gli utenti Flatpak potrebbero dover impostare questa impostazione affinché determinati flussi di lavoro funzionino correttamente. La dimensione predefinita della cartella TEMP in una sandbox flatpak è pari a 1/2 della dimensione della memoria fisica e potrebbe essere troppo piccola per cose come il file delle statistiche con 2 passaggi."
 
-#: src/ui/ghb.ui:5760
+#: src/ui/ghb.ui:5823
 msgid "Temp Directory"
 msgstr "Cartella temporanea"
 
-#: src/ui/ghb.ui:5783
+#: src/ui/ghb.ui:5846
 msgid "Constant Quality fractional granularity"
 msgstr "Granularità frazionaria qualità costante"
 
-#: src/ui/ghb.ui:5795
+#: src/ui/ghb.ui:5858
 msgid "Use dvdnav (instead of libdvdread)"
 msgstr "Usa dvdnav (anziché libdvdread)"
 
-#: src/ui/ghb.ui:5813
+#: src/ui/ghb.ui:5876
 msgid "Put individual encode logs in same location as movie"
 msgstr ""
 "Salva i registri delle singole codifiche nella stessa posizione del filmato"
 
-#: src/ui/ghb.ui:5833
+#: src/ui/ghb.ui:5896
 msgid "Activity Log Verbosity Level"
 msgstr "Livello di verbosità del registro attività"
 
-#: src/ui/ghb.ui:5852
+#: src/ui/ghb.ui:5915
 msgid "Activity Log Longevity"
 msgstr "Longevità del registro attività"
 
-#: src/ui/ghb.ui:5865
+#: src/ui/ghb.ui:5928
 msgid "Scale down High Definition previews"
 msgstr "Riduci la dimensione della anteprime in alta definizione"
 
-#: src/ui/ghb.ui:5877
+#: src/ui/ghb.ui:5940
 msgid "Automatically Scan DVD when loaded"
 msgstr "Scansiona automaticamente il DVD quando caricato"
 
-#: src/ui/ghb.ui:5879
+#: src/ui/ghb.ui:5942
 msgid "Scans the DVD whenever a new disc is loaded"
 msgstr "Scansiona il DVD ogni volta che un nuovo disco viene caricato"
 
-#: src/ui/ghb.ui:5906
+#: src/ui/ghb.ui:5969
 msgid "Activity Window Font Size"
 msgstr "Dimensione carattere della finestra delle attività"
 
-#: src/ui/ghb.ui:5924
+#: src/ui/ghb.ui:5987
 msgid "Allow Tweaks"
 msgstr "Consenti modifiche"
 
-#: src/ui/ghb.ui:5937
+#: src/ui/ghb.ui:6000
 msgid "Allow HandBrake For Dummies"
 msgstr "Consenti HandBrake per principianti"
 
-#: src/ui/ghb.ui:5961
+#: src/ui/ghb.ui:6024
 msgid "Rename Preset"
 msgstr "Rinomina preimpostazione"
 
-#: src/ui/ghb.ui:6005 src/ui/ghb.ui:6139
+#: src/ui/ghb.ui:6068 src/ui/ghb.ui:6202
 msgid "Preset Name:"
 msgstr "Nome preimpostazione:"
 
-#: src/ui/ghb.ui:6051
+#: src/ui/ghb.ui:6114
 msgid "New Preset"
 msgstr "Nuova preimpostazione"
 
-#: src/ui/ghb.ui:6094
+#: src/ui/ghb.ui:6157
 msgid "Category:"
 msgstr "Categoria:"
 
-#: src/ui/ghb.ui:6104
+#: src/ui/ghb.ui:6167
 msgid "Set the category that this preset will be shown under."
 msgstr "Imposta la categoria in cui questa preimpostazione sarà visualizzata."
 
-#: src/ui/ghb.ui:6115
+#: src/ui/ghb.ui:6178
 msgid "Category Name:"
 msgstr "Nome categoria:"
 
-#: src/ui/ghb.ui:6164
+#: src/ui/ghb.ui:6227
 msgid "Default Preset"
 msgstr "Preimpostazione predefinita"
 
-#: src/ui/ghb.ui:6166
+#: src/ui/ghb.ui:6229
 msgid "Make this the default Preset when HandBrake starts"
 msgstr "Imposta come predefinito all'avvio di HandBrake"
 
-#: src/ui/ghb.ui:6205
+#: src/ui/ghb.ui:6268
 msgid "HandBrake Preview"
 msgstr "Anteprima di HandBrake"
 
-#: src/ui/ghb.ui:6273
+#: src/ui/ghb.ui:6336
 msgid "Select preview frames."
 msgstr "Seleziona frame di anteprima"
 
-#: src/ui/ghb.ui:6288 src/preview.c:167
+#: src/ui/ghb.ui:6351 src/preview.c:167
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
@@ -2121,31 +2150,31 @@ msgstr ""
 "Codifica e riproduci una breve sequenza di video a partire dalla posizione "
 "di anteprima attuale."
 
-#: src/ui/ghb.ui:6301
+#: src/ui/ghb.ui:6364
 msgid "Preview Video Position"
 msgstr "Anteprima posizione del video"
 
-#: src/ui/ghb.ui:6314
+#: src/ui/ghb.ui:6377
 msgid "Preview Encode Progress"
 msgstr "Anteprima avanzamento della codifica"
 
-#: src/ui/ghb.ui:6323
+#: src/ui/ghb.ui:6386
 msgid "Click to toggle full screen mode"
 msgstr "Clicca per abilitare/disabilitare la modalità a schermo intero"
 
-#: src/ui/ghb.ui:6338
+#: src/ui/ghb.ui:6401
 msgid "<b>Duration:</b>"
 msgstr "<b>Durata:</b>"
 
-#: src/ui/ghb.ui:6346
+#: src/ui/ghb.ui:6409
 msgid "Set the duration of the live preview in seconds."
 msgstr "Seleziona la durata dell'anteprima in secondi."
 
-#: src/ui/ghb.ui:6356
+#: src/ui/ghb.ui:6419
 msgid "Source Resolution"
 msgstr "Risoluzione sorgente"
 
-#: src/ui/ghb.ui:6359
+#: src/ui/ghb.ui:6422
 msgid "Reset preview window to the source video's resolution"
 msgstr "Ripristina finestra di anteprima alla risoluzione del video sorgente"
 
@@ -2157,7 +2186,7 @@ msgstr "Titolo del capitolo"
 msgid "(None)"
 msgstr "(Nessuna)"
 
-#: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:265 src/ghb-queue-row.c:281
+#: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:272 src/ghb-queue-row.c:288
 msgid "Pending Queue Item"
 msgstr "Elemento della coda in attesa"
 
@@ -2170,8 +2199,8 @@ msgid "Encode Progress"
 msgstr "Avanzamento della codifica"
 
 #. Audio DRC Label
-#: src/audiohandler.c:419 src/audiohandler.c:764 src/audiohandler.c:1175
-#: src/audiohandler.c:1929 src/callbacks.c:5465 src/hb-backend.c:180
+#: src/audiohandler.c:427 src/audiohandler.c:772 src/audiohandler.c:1183
+#: src/audiohandler.c:1937 src/callbacks.c:5500 src/hb-backend.c:180
 #: src/hb-backend.c:193 src/hb-backend.c:205 src/hb-backend.c:230
 #: src/hb-backend.c:301 src/hb-backend.c:313 src/hb-backend.c:325
 #: src/hb-backend.c:386
@@ -2179,41 +2208,41 @@ msgstr "Avanzamento della codifica"
 msgid "Off"
 msgstr "Spento"
 
-#: src/audiohandler.c:431 src/audiohandler.c:760 src/audiohandler.c:1245
+#: src/audiohandler.c:439 src/audiohandler.c:768 src/audiohandler.c:1253
 #, c-format
 msgid "%ddB"
 msgstr "%ddB"
 
-#: src/audiohandler.c:736
+#: src/audiohandler.c:744
 msgid "Quality: "
 msgstr "Qualità:"
 
-#: src/audiohandler.c:743
+#: src/audiohandler.c:751
 #, c-format
 msgid "Bitrate: %dkbps\n"
 msgstr "Bitrate: %dkbps\n"
 
-#: src/audiohandler.c:755
+#: src/audiohandler.c:763
 #, c-format
 msgid "%.4gkHz"
 msgstr "%.4gkHz"
 
-#: src/audiohandler.c:770
+#: src/audiohandler.c:778
 #, c-format
 msgid "<small>%d - %s (%.4gkHz)</small>"
 msgstr "<small>%d- %s (%.4g kHz)</small>"
 
-#: src/audiohandler.c:775
+#: src/audiohandler.c:783
 #, c-format
 msgid "Bitrate: %.4gkbps"
 msgstr "Bitrate:%.4gkbps"
 
-#: src/audiohandler.c:781
+#: src/audiohandler.c:789
 #, c-format
 msgid "<small>Passthru</small>"
 msgstr "<small>Passthru</small>"
 
-#: src/audiohandler.c:790
+#: src/audiohandler.c:798
 #, c-format
 msgid ""
 "%sGain: %s\n"
@@ -2224,7 +2253,7 @@ msgstr ""
 "DRC: %s\n"
 "Nome traccia: %s"
 
-#: src/audiohandler.c:795
+#: src/audiohandler.c:803
 #, c-format
 msgid ""
 "%sGain: %s\n"
@@ -2233,27 +2262,27 @@ msgstr ""
 "%sGuadagno: %s\n"
 "DRC: %s"
 
-#: src/audiohandler.c:1401
+#: src/audiohandler.c:1409
 msgid "Add Audio Track"
 msgstr "Aggiungi traccia audio"
 
-#: src/audiohandler.c:1493
+#: src/audiohandler.c:1501
 msgid "Edit Audio Track"
 msgstr "Modifica traccia audio"
 
-#: src/audiohandler.c:1766
+#: src/audiohandler.c:1774
 msgid "Set the audio codec to encode this track with."
 msgstr "Imposta il codificatore audio da utilizzare per questa traccia."
 
-#: src/audiohandler.c:1780
+#: src/audiohandler.c:1788
 msgid "Bitrate"
 msgstr "Bitrate"
 
-#: src/audiohandler.c:1798
+#: src/audiohandler.c:1806
 msgid "Set the bitrate to encode this track with."
 msgstr "Imposta il bitrate con cui codificare questa traccia."
 
-#: src/audiohandler.c:1823
+#: src/audiohandler.c:1831
 msgid ""
 "<b>Audio Quality:</b>\n"
 "For encoders that support it, adjust the quality of the output."
@@ -2261,15 +2290,15 @@ msgstr ""
 "<b>Qualità audio:</b>\n"
 "Per i codificatori che lo supportano, adatta la qualità dell'output."
 
-#: src/audiohandler.c:1850
+#: src/audiohandler.c:1858
 msgid "Set the mixdown of the output audio track."
 msgstr "Imposta il mixdown della traccia audio di uscita."
 
-#: src/audiohandler.c:1863
+#: src/audiohandler.c:1871
 msgid "Set the sample rate of the output audio track."
 msgstr "Imposta la frequenza di campionamento della traccia audio di output"
 
-#: src/audiohandler.c:1884
+#: src/audiohandler.c:1892
 msgid ""
 "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
 "audio track."
@@ -2278,11 +2307,11 @@ msgstr ""
 "traccia audio in uscita."
 
 #. Audio Gain Label
-#: src/audiohandler.c:1895
+#: src/audiohandler.c:1903
 msgid "0dB"
 msgstr "0dB"
 
-#: src/audiohandler.c:1915
+#: src/audiohandler.c:1923
 msgid ""
 "<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
@@ -2294,7 +2323,7 @@ msgstr ""
 "Per l'audio sorgente che ha un'ampia gamma dinamica (sequenze molto forti e molto deboli),\n"
 "DRC consente di \"comprimere\" la gamma rendendo i suoni forti più deboli e quelli deboli più forti."
 
-#: src/audiohandler.c:1946
+#: src/audiohandler.c:1954
 msgid "Remove this audio encoder"
 msgstr "Rimuovi questo codificatore audio"
 
@@ -2302,106 +2331,106 @@ msgstr "Rimuovi questo codificatore audio"
 msgid "An encode is in progress."
 msgstr "Una codifica è in corso."
 
-#: src/callbacks.c:1124 src/callbacks.c:1135 src/callbacks.c:1785
+#: src/callbacks.c:1125 src/callbacks.c:1136 src/callbacks.c:1792
 msgid "Not Selected"
 msgstr "Non selezionato"
 
-#: src/callbacks.c:1133
+#: src/callbacks.c:1134
 msgid "Detected DVD devices:"
 msgstr "Dispositivi DVD rilevati:"
 
 #. This needs to be in scanning and working since scanning
 #. happens fast enough that it can be missed
-#: src/callbacks.c:1460 src/callbacks.c:4578
+#: src/callbacks.c:1461 src/callbacks.c:4613
 msgid "Scanning ..."
 msgstr "Scansione…"
 
-#: src/callbacks.c:1492 src/callbacks.c:1493 src/callbacks.c:1512
-#: src/callbacks.c:1513
+#: src/callbacks.c:1493 src/callbacks.c:1494 src/callbacks.c:1516
+#: src/callbacks.c:1517
 msgid "Stop Scan"
 msgstr "Interrompi scansione"
 
-#: src/callbacks.c:1866
+#: src/callbacks.c:1873
 msgid "Open Source Directory"
 msgstr "Apri cartella sorgente"
 
-#: src/callbacks.c:1869 src/chapters.c:484 src/ghb-file-button.c:222
-#: src/presets.c:2113 src/queuehandler.c:1479
+#: src/callbacks.c:1876 src/chapters.c:483 src/ghb-file-button.c:222
+#: src/presets.c:2216 src/queuehandler.c:1469
 msgid "_Open"
 msgstr "_Apri"
 
-#: src/callbacks.c:1870 src/callbacks.c:2136 src/chapters.c:456
-#: src/chapters.c:485 src/presets.c:2114 src/presets.c:2230
-#: src/queuehandler.c:1392 src/queuehandler.c:1480
+#: src/callbacks.c:1877 src/callbacks.c:2142 src/chapters.c:456
+#: src/chapters.c:484 src/ghb-file-button.c:355 src/presets.c:2217
+#: src/presets.c:2332 src/queuehandler.c:1387 src/queuehandler.c:1470
 msgid "_Cancel"
 msgstr "_Annulla"
 
-#: src/callbacks.c:1877
+#: src/callbacks.c:1884
 msgid "Recursively scan directories"
 msgstr "Scansione ricorsiva delle cartelle"
 
-#: src/callbacks.c:1889
+#: src/callbacks.c:1896
 msgid "Single Title"
 msgstr "Titolo singolo"
 
-#: src/callbacks.c:2247 src/callbacks.c:2391
+#: src/callbacks.c:2253 src/callbacks.c:2397
 msgid "FPS"
 msgstr "FPS"
 
-#: src/callbacks.c:2251
+#: src/callbacks.c:2257
 #, c-format
 msgid "Dolby Vision %d.%d"
 msgstr "Dolby Vision %d.%d"
 
-#: src/callbacks.c:2255 src/callbacks.c:2258
+#: src/callbacks.c:2261 src/callbacks.c:2264
 msgid "HDR10+"
 msgstr "HDR10+"
 
-#: src/callbacks.c:2260
+#: src/callbacks.c:2266
 msgid "HDR10"
 msgstr "HDR10"
 
-#: src/callbacks.c:2262
+#: src/callbacks.c:2268
 msgid "HDR"
 msgstr "HDR"
 
-#: src/callbacks.c:2264
+#: src/callbacks.c:2270
 msgid "SDR"
 msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
-#: src/callbacks.c:2272
+#: src/callbacks.c:2278
 #, c-format
 msgid "%d-bit"
 msgstr "%d-bit"
 
-#: src/callbacks.c:2294
+#: src/callbacks.c:2300
 msgid "Audio Track"
 msgid_plural "Audio Tracks"
 msgstr[0] "traccia audio"
 msgstr[1] "di tracce audio"
 msgstr[2] "tracce audio"
 
-#: src/callbacks.c:2297
+#: src/callbacks.c:2303
 msgid "Subtitle Track"
 msgid_plural "Subtitle Tracks"
 msgstr[0] "traccia sottotitoli"
 msgstr[1] "di tracce sottotitoli"
 msgstr[2] "tracce sottotitoli"
 
-#: src/callbacks.c:2395
+#: src/callbacks.c:2401
 msgid "CFR"
 msgstr "CFR"
 
-#: src/callbacks.c:2399
+#: src/callbacks.c:2405
 msgid "PFR"
 msgstr "PFR"
 
-#: src/callbacks.c:2403
+#: src/callbacks.c:2409
 msgid "VFR"
 msgstr "VFR"
 
-#: src/callbacks.c:2445
+#: src/callbacks.c:2451
 #, c-format
 msgid "+ %d more audio track"
 msgid_plural "+ %d more audio tracks"
@@ -2409,30 +2438,30 @@ msgstr[0] "+ %d altra traccia audio"
 msgstr[1] "+ %d di altre tracce audio"
 msgstr[2] "+ %d altre tracce audio"
 
-#: src/callbacks.c:2476 src/queuehandler.c:592 src/queuehandler.c:1027
+#: src/callbacks.c:2482 src/queuehandler.c:587 src/queuehandler.c:1022
 #: src/subtitlehandler.c:415 src/subtitlehandler.c:1292
 msgid "Foreign Audio Scan"
 msgstr "Scansione audio in lingua straniera"
 
-#: src/callbacks.c:2479 src/callbacks.c:2511 src/queuehandler.c:595
-#: src/queuehandler.c:632
+#: src/callbacks.c:2485 src/callbacks.c:2517 src/queuehandler.c:590
+#: src/queuehandler.c:627
 #, c-format
 msgid ", Forced Only"
 msgstr ", Solo forzati"
 
-#: src/callbacks.c:2483 src/callbacks.c:2515 src/queuehandler.c:599
-#: src/queuehandler.c:636
+#: src/callbacks.c:2489 src/callbacks.c:2521 src/queuehandler.c:594
+#: src/queuehandler.c:631
 #, c-format
 msgid ", Burned"
 msgstr ", In sovraimpressione"
 
-#: src/callbacks.c:2487 src/callbacks.c:2519 src/queuehandler.c:603
-#: src/queuehandler.c:640
+#: src/callbacks.c:2493 src/callbacks.c:2525 src/queuehandler.c:598
+#: src/queuehandler.c:635
 #, c-format
 msgid ", Default"
 msgstr ", Predefiniti"
 
-#: src/callbacks.c:2525
+#: src/callbacks.c:2531
 #, c-format
 msgid "+ %d more subtitle track"
 msgid_plural "+ %d more subtitle tracks"
@@ -2440,78 +2469,78 @@ msgstr[0] "+ %d altra traccia sottotitoli"
 msgstr[1] "+ %d di altre tracce sottotitoli"
 msgstr[2] "+ %d altre tracce sottotitoli"
 
-#: src/callbacks.c:2680
+#: src/callbacks.c:2686
 msgid "storage"
 msgstr "archiviazione"
 
-#: src/callbacks.c:2681
+#: src/callbacks.c:2687
 msgid "display"
 msgstr "schermo"
 
-#: src/callbacks.c:2682
+#: src/callbacks.c:2688
 msgid "Pixel Aspect Ratio"
 msgstr "Proporzioni pixel"
 
-#: src/callbacks.c:2683
+#: src/callbacks.c:2689
 msgid "Display Aspect Ratio"
 msgstr "Proporzioni schermo"
 
-#: src/callbacks.c:2818 src/hb-backend.c:2206 src/hb-backend.c:2327
-#: src/hb-backend.c:2339
+#: src/callbacks.c:2824 src/hb-backend.c:2216 src/hb-backend.c:2337
+#: src/hb-backend.c:2349
 msgid "No Title Found"
 msgstr "Nessun titolo trovato"
 
-#: src/callbacks.c:2819
+#: src/callbacks.c:2825
 msgid "New Video"
 msgstr "Nuovo video"
 
-#: src/callbacks.c:3815
+#: src/callbacks.c:3821
 msgid "Temp Directory Changed"
 msgstr "Cartella temporanea modificata"
 
-#: src/callbacks.c:3816
+#: src/callbacks.c:3822
 msgid "You must restart HandBrake now."
 msgstr "Devi riavviare subito HandBrake."
 
-#: src/callbacks.c:3843 src/callbacks.c:3853 src/callbacks.c:3871
-#: src/callbacks.c:3920
+#: src/callbacks.c:3849 src/callbacks.c:3859 src/callbacks.c:3877
+#: src/callbacks.c:3926
 #, c-format
 msgid "%s in %d seconds…"
 msgstr "%s in %d secondi…"
 
-#: src/callbacks.c:4097
+#: src/callbacks.c:4132
 msgid "Stop Encoding?"
 msgstr "Interrompere la codifica?"
 
-#: src/callbacks.c:4098 src/callbacks.c:4123 src/queuehandler.c:1702
+#: src/callbacks.c:4133 src/callbacks.c:4158 src/queuehandler.c:1695
 msgid "Your movie will be lost if you don't continue encoding."
 msgstr "Se non continui la codifica, il filmato andrà perduto."
 
-#: src/callbacks.c:4099 src/queuehandler.c:1636
+#: src/callbacks.c:4134 src/queuehandler.c:1626
 msgid "Cancel Current and Stop"
 msgstr "Annulla corrente e interrompi"
 
-#: src/callbacks.c:4099
+#: src/callbacks.c:4134
 msgid "Cancel Current, Start Next"
 msgstr "Annulla corrente, avvia successivo"
 
-#: src/callbacks.c:4100
+#: src/callbacks.c:4135
 msgid "Finish Current and Stop"
 msgstr "Termina attuale e interrompi"
 
-#: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
+#: src/callbacks.c:4135 src/callbacks.c:4159 src/queuehandler.c:1696
 msgid "Continue Encoding"
 msgstr "Continua la codifica"
 
-#: src/callbacks.c:4122
+#: src/callbacks.c:4157
 msgid "Quit HandBrake?"
 msgstr "Uscire da HandBrake?"
 
-#: src/callbacks.c:4124
+#: src/callbacks.c:4159
 msgid "Cancel All and Quit"
 msgstr "Annulla tutto ed esci"
 
-#: src/callbacks.c:4290
+#: src/callbacks.c:4325
 #, c-format
 msgid "%d encode pending"
 msgid_plural "%d encodes pending"
@@ -2519,96 +2548,96 @@ msgstr[0] "%d codifica in attesa"
 msgstr[1] "%d di codifiche in attesa"
 msgstr[2] "%d codifiche in attesa"
 
-#: src/callbacks.c:4349 src/callbacks.c:4417
+#: src/callbacks.c:4384 src/callbacks.c:4452
 #, c-format
 msgid "job %d of %d, "
 msgstr "operazione %d di %d,"
 
-#: src/callbacks.c:4359
+#: src/callbacks.c:4394
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
 msgstr "passaggio %d (scansione sottotitoli) di %d,"
 
-#: src/callbacks.c:4364
+#: src/callbacks.c:4399
 #, c-format
 msgid "pass %d of %d, "
 msgstr "passaggio %d di %d,"
 
-#: src/callbacks.c:4377
+#: src/callbacks.c:4412
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
 msgstr ""
 "Codifica: %s%s%.2f%% (%.2f fps, media %.2f fps, %02d h %02d m %02d s "
 "rimanenti)"
 
-#: src/callbacks.c:4387 src/callbacks.c:4427
+#: src/callbacks.c:4422 src/callbacks.c:4462
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 msgstr "Codifica: %s%s%.2f%% (%02dh%02dm%02ds rimanenti)"
 
-#: src/callbacks.c:4397 src/callbacks.c:4436
+#: src/callbacks.c:4432 src/callbacks.c:4471
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
 msgstr "Codifica: %s%s%.2f%%"
 
-#: src/callbacks.c:4423
+#: src/callbacks.c:4458
 #, c-format
 msgid "Searching for start time, "
 msgstr "Cerca per il tempo di inizio,"
 
-#: src/callbacks.c:4498
+#: src/callbacks.c:4533
 #, c-format
 msgid "Scanning title %d of %d..."
 msgstr "Scansione titolo %d di %d..."
 
-#: src/callbacks.c:4502
+#: src/callbacks.c:4537
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
 msgstr "Scansione titolo %d di %d anteprima %d..."
 
-#: src/callbacks.c:4589
+#: src/callbacks.c:4624
 msgid "Paused"
 msgstr "In pausa"
 
-#: src/callbacks.c:4616
+#: src/callbacks.c:4651
 msgid "Encode Done!"
 msgstr "Codifica effettuata!"
 
-#: src/callbacks.c:4621
+#: src/callbacks.c:4656
 msgid "Encode Canceled."
 msgstr "Codifica annullata."
 
-#: src/callbacks.c:4626
+#: src/callbacks.c:4661
 msgid "Encode Failed."
 msgstr "Codifica non riuscita."
 
-#: src/callbacks.c:4668
+#: src/callbacks.c:4703
 msgid "Muxing: This may take a while..."
 msgstr "Multiplazione: potrebbe richiedere del tempo…"
 
-#: src/callbacks.c:5478 src/callbacks.c:5485 src/callbacks.c:5493
+#: src/callbacks.c:5513 src/callbacks.c:5520 src/callbacks.c:5528
 msgid "Your encode is complete."
 msgstr "La tua codifica è completa."
 
-#: src/callbacks.c:5479
+#: src/callbacks.c:5514
 msgid "Quitting HandBrake"
 msgstr "Uscita da HandBrake in corso"
 
-#: src/callbacks.c:5486
+#: src/callbacks.c:5521
 msgid "Putting computer to sleep"
 msgstr "Sospensione del computer in corso"
 
-#: src/callbacks.c:5494
+#: src/callbacks.c:5529
 msgid "Shutting down the computer"
 msgstr "Spegnimento del computer in corso"
 
 #. Add filters
-#: src/callbacks.c:5608 src/chapters.c:458 src/chapters.c:487
-#: src/presets.c:2116 src/queuehandler.c:1483
+#: src/callbacks.c:5643 src/chapters.c:458 src/chapters.c:486
+#: src/presets.c:2219 src/queuehandler.c:1473
 msgid "All Files"
 msgstr "Tutti i file"
 
-#: src/chapters.c:459 src/chapters.c:488
+#: src/chapters.c:459 src/chapters.c:487
 msgid "Chapters (*.xml)"
 msgstr "Capitoli (*.xml)"
 
@@ -2620,19 +2649,19 @@ msgstr "Seleziona un file"
 msgid "_Select"
 msgstr "_Seleziona"
 
-#: src/ghb-queue-row.c:260
+#: src/ghb-queue-row.c:267
 msgid "Running Queue Item"
 msgstr "Elemento della coda in esecuzione"
 
-#: src/ghb-queue-row.c:269
+#: src/ghb-queue-row.c:276
 msgid "Failed Queue Item"
 msgstr "Elemento della coda non riuscito"
 
-#: src/ghb-queue-row.c:273
+#: src/ghb-queue-row.c:280
 msgid "Cancelled Queue Item"
 msgstr "Elemento della coda annullato"
 
-#: src/ghb-queue-row.c:277
+#: src/ghb-queue-row.c:284
 msgid "Completed Queue Item"
 msgstr "Elemento della coda completato"
 
@@ -2656,7 +2685,7 @@ msgstr "Prima traccia selezionata"
 msgid "Foreign Audio, then First Selected Track"
 msgstr "Audio in lingua straniera, poi la prima traccia selezionata"
 
-#: src/hb-backend.c:91 src/queuehandler.c:167
+#: src/hb-backend.c:91 src/queuehandler.c:162
 msgid "Chapters:"
 msgstr "Capitoli:"
 
@@ -2664,7 +2693,7 @@ msgstr "Capitoli:"
 msgid "Seconds:"
 msgstr "Secondi:"
 
-#: src/hb-backend.c:93 src/queuehandler.c:188
+#: src/hb-backend.c:93 src/queuehandler.c:183
 msgid "Frames:"
 msgstr "Fotogrammi:"
 
@@ -2705,7 +2734,7 @@ msgstr "Anno"
 msgid "Immortal"
 msgstr "Per sempre"
 
-#: src/hb-backend.c:181 src/hb-backend.c:4864
+#: src/hb-backend.c:181 src/hb-backend.c:4861
 msgid "Decomb"
 msgstr "Decomb"
 
@@ -2941,72 +2970,72 @@ msgstr "(PAL Film/Video)"
 msgid "(NTSC Video)"
 msgstr "(NTSC Video)"
 
-#: src/hb-backend.c:2195
+#: src/hb-backend.c:2205
 #, c-format
 msgid "%s - (%05d.MPLS)"
 msgstr "%s- (%05d.MPLS)"
 
-#: src/hb-backend.c:2346
+#: src/hb-backend.c:2356
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
 msgstr "%3d - %02dh%02dm%02ds - %s"
 
-#: src/hb-backend.c:2365
+#: src/hb-backend.c:2375
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 msgstr "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 
-#: src/hb-backend.c:2371
+#: src/hb-backend.c:2381
 #, c-format
 msgid "%3d - (%05d.MPLS)"
 msgstr "%3d - (%05d.MPLS)"
 
-#: src/hb-backend.c:2377
+#: src/hb-backend.c:2387
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
 msgstr "%3d-%02dh%02dm%02ds"
 
-#: src/hb-backend.c:2410
+#: src/hb-backend.c:2420
 msgid "No Titles"
 msgstr "Nessun titolo"
 
 #. No audio. set some default
-#: src/hb-backend.c:2690
+#: src/hb-backend.c:2700
 msgid "No Audio"
 msgstr "Nessun audio"
 
-#: src/hb-backend.c:4306 src/hb-backend.c:4314
+#: src/hb-backend.c:4303 src/hb-backend.c:4311
 msgid "Invalid Detelecine Settings"
 msgstr "Impostazioni del telecinema inverso non valide"
 
-#: src/hb-backend.c:4309 src/hb-backend.c:4340 src/hb-backend.c:4376
-#: src/hb-backend.c:4413 src/hb-backend.c:4438
+#: src/hb-backend.c:4306 src/hb-backend.c:4337 src/hb-backend.c:4373
+#: src/hb-backend.c:4410 src/hb-backend.c:4435
 msgid "Custom:"
 msgstr "Personalizzato:"
 
-#: src/hb-backend.c:4337 src/hb-backend.c:4345
+#: src/hb-backend.c:4334 src/hb-backend.c:4342
 msgid "Invalid Comb Detect Settings"
 msgstr "Impostazioni di rilevamento combing non valide"
 
-#: src/hb-backend.c:4372 src/hb-backend.c:4381
+#: src/hb-backend.c:4369 src/hb-backend.c:4378
 msgid "Invalid Deinterlace Settings"
 msgstr "Impostazioni di deinterlacciamento non valide"
 
-#: src/hb-backend.c:4374 src/hb-backend.c:4383 src/hb-backend.c:4410
-#: src/hb-backend.c:4435
+#: src/hb-backend.c:4371 src/hb-backend.c:4380 src/hb-backend.c:4407
+#: src/hb-backend.c:4432
 msgid "Filter:"
 msgstr "Filtro:"
 
-#: src/hb-backend.c:4408
+#: src/hb-backend.c:4405
 msgid "Invalid Denoise Settings"
 msgstr "Impostazioni di riduzione del rumore non valide"
 
-#: src/hb-backend.c:4433
+#: src/hb-backend.c:4430
 msgid "Invalid Sharpen Settings"
 msgstr "Impostazioni di nitidezza non valide"
 
 #. mp4/theora combination is not supported.
-#: src/hb-backend.c:4462
+#: src/hb-backend.c:4459
 msgid ""
 "Theora is not supported in the MP4 container.\n"
 "\n"
@@ -3019,7 +3048,7 @@ msgstr ""
 "Se continui, FFMPEG lo sceglierà per te."
 
 #. webm only supports vp8, vp9 and av1.
-#: src/hb-backend.c:4471
+#: src/hb-backend.c:4468
 msgid ""
 "Only VP8, VP9 and AV1 is supported in the WebM container.\n"
 "\n"
@@ -3031,25 +3060,25 @@ msgstr ""
 "Dovresti scegliere un contenitore o un codificatore video diverso.\n"
 "Se continui, ne verrà scelto uno per te."
 
-#: src/hb-backend.c:4479 src/hb-backend.c:4530 src/hb-backend.c:4547
-#: src/hb-backend.c:4564 src/hb-backend.c:4621 src/hb-backend.c:4673
+#: src/hb-backend.c:4476 src/hb-backend.c:4527 src/hb-backend.c:4544
+#: src/hb-backend.c:4561 src/hb-backend.c:4618 src/hb-backend.c:4670
 msgid "Continue"
 msgstr "Continua"
 
-#: src/hb-backend.c:4480
+#: src/hb-backend.c:4477
 msgid "Invalid Video Codec"
 msgstr "Codificatore video non valido"
 
 #. No valid title, stop right there
-#: src/hb-backend.c:4503 src/hb-backend.c:4589
+#: src/hb-backend.c:4500 src/hb-backend.c:4586
 msgid "No title found.\n"
 msgstr "Nessun titolo trovato.\n"
 
-#: src/hb-backend.c:4530 src/hb-backend.c:4547
+#: src/hb-backend.c:4527 src/hb-backend.c:4544
 msgid "Invalid Subtitle Selection"
 msgstr "Selezione dei sottotitoli non valida"
 
-#: src/hb-backend.c:4531
+#: src/hb-backend.c:4528
 msgid ""
 "Only one subtitle may be burned into the video.\n"
 "\n"
@@ -3061,7 +3090,7 @@ msgstr ""
 "Dovresti cambiare la selezione dei sottotitoli.\n"
 "Se continui, alcuni sottotitoli andranno perduti."
 
-#: src/hb-backend.c:4548
+#: src/hb-backend.c:4545
 msgid ""
 "WebM in HandBrake only supports burned subtitles.\n"
 "\n"
@@ -3073,11 +3102,11 @@ msgstr ""
 "Dovresti cambiare la selezione dei sottotitoli.\n"
 "Se continui, alcuni sottotitoli andranno perduti."
 
-#: src/hb-backend.c:4564
+#: src/hb-backend.c:4561
 msgid "Subtitle File Not Found"
 msgstr "File dei sottotitoli non trovato"
 
-#: src/hb-backend.c:4565
+#: src/hb-backend.c:4562
 msgid ""
 "SRT file does not exist or not a regular file.\n"
 "\n"
@@ -3089,11 +3118,11 @@ msgstr ""
 "Devi scegliere un file valido. \n"
 "Se continui, questo sottotitolo sarà ignorato."
 
-#: src/hb-backend.c:4621 src/hb-backend.c:4673
+#: src/hb-backend.c:4618 src/hb-backend.c:4670
 msgid "Invalid Audio Selection"
 msgstr "Selezione audio non valida"
 
-#: src/hb-backend.c:4622
+#: src/hb-backend.c:4619
 msgid ""
 "The source does not support Pass-Thru.\n"
 "\n"
@@ -3105,7 +3134,7 @@ msgstr ""
 "Dovresti scegliere un codificatore audio diverso.\n"
 "Se continui, ne verrà scelto uno per te."
 
-#: src/hb-backend.c:4674
+#: src/hb-backend.c:4671
 #, c-format
 msgid ""
 "%s is not supported in the %s container.\n"
@@ -3118,51 +3147,51 @@ msgstr ""
 "Dovresti scegliere un codificatore audio diverso.\n"
 "Se continui, ne verrà scelto uno per te."
 
-#: src/hb-backend.c:4856
+#: src/hb-backend.c:4853
 msgid "Comb Detect"
 msgstr "Rilevamento combing"
 
-#: src/hb-backend.c:4858
+#: src/hb-backend.c:4855
 msgid "Detelecine"
 msgstr "Telecinema inverso"
 
-#: src/hb-backend.c:4860
+#: src/hb-backend.c:4857
 msgid "Deinterlace (Yadif)"
 msgstr "Deinterlacciamento (Yadif)"
 
-#: src/hb-backend.c:4862
+#: src/hb-backend.c:4859
 msgid "Deinterlace (Bwdif)"
 msgstr "Deinterlacciamento (Bwdif)"
 
-#: src/hb-backend.c:4866
+#: src/hb-backend.c:4863
 msgid "Deblock"
 msgstr "Deblocking"
 
-#: src/hb-backend.c:4868
+#: src/hb-backend.c:4865
 msgid "Denoise (NLMeans)"
 msgstr "Riduzione del rumore (NLMeans)"
 
-#: src/hb-backend.c:4870
+#: src/hb-backend.c:4867
 msgid "Denoise (HQDN3D)"
 msgstr "Riduzione del rumore (HQDN3D)"
 
-#: src/hb-backend.c:4872
+#: src/hb-backend.c:4869
 msgid "Chroma Smooth"
 msgstr "Chroma Smooth"
 
-#: src/hb-backend.c:4874
+#: src/hb-backend.c:4871
 msgid "Sharpen (Unsharp)"
 msgstr "Nitidezza (Unsharp)"
 
-#: src/hb-backend.c:4876
+#: src/hb-backend.c:4873
 msgid "Rotate"
 msgstr "Ruota"
 
-#: src/hb-backend.c:4878
+#: src/hb-backend.c:4875
 msgid "Sharpen (lapsharp)"
 msgstr "Nitidezza (lapsharp)"
 
-#: src/hb-backend.c:4882
+#: src/hb-backend.c:4879
 msgid "Colorspace"
 msgstr "Spazio dei colori"
 
@@ -3211,34 +3240,38 @@ msgstr "La modalità di risparmio energetico è stata attivata."
 msgid "%d.%d GB free space remaining."
 msgstr "%d.%d GB di spazio libero rimanenti."
 
-#: src/notifications.c:165 src/queuehandler.c:1176
+#: src/notifications.c:165 src/queuehandler.c:1171
 msgid "Encoding Paused"
 msgstr "Codifica in pausa"
 
-#: src/presets.c:78
+#: src/presets.c:52
+msgid "My Presets"
+msgstr "Le mie preimpostazioni"
+
+#: src/presets.c:87
 msgid "Preset Name"
 msgstr "Nome predefinito"
 
-#: src/presets.c:1281
+#: src/presets.c:1299
 msgid "ghb_presets_menu_init: Failed to find presets folder."
 msgstr ""
 "ghb_presets_menu_init: individuazione cartelle preimpostazioni non riuscita."
 
-#: src/presets.c:1443
+#: src/presets.c:1455
 msgid "Failed to find parent folder when adding child."
 msgstr ""
 "Impossibile trovare la cartella principale durante l'aggiunta di quella "
 "secondaria."
 
-#: src/presets.c:1927
+#: src/presets.c:1942
 msgid "Load backup presets"
 msgstr "Carica preimpostazioni di backup"
 
-#: src/presets.c:1927
+#: src/presets.c:1942
 msgid "Get me out of here!"
 msgstr "Portami fuori di qui!"
 
-#: src/presets.c:1928
+#: src/presets.c:1943
 msgid ""
 "Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
@@ -3248,27 +3281,45 @@ msgstr ""
 "\n"
 "Vuoi proseguire?"
 
-#: src/presets.c:2117
+#: src/presets.c:2123 src/presets.c:2505 src/title-add.c:124
+#: src/title-add.c:134
+msgid "Overwrite"
+msgstr "Sovrascrivi"
+
+#: src/presets.c:2124 src/presets.c:2506
+msgid "Overwrite Preset?"
+msgstr "Sovrascivere la preimpostazione?"
+
+#: src/presets.c:2125 src/presets.c:2507
+#, c-format
+msgid "The preset “%s” already exists. Do you want to overwrite it?"
+msgstr "La preimpostazione  “%s” esiste già. Vuoi sovrascriverla?"
+
+#: src/presets.c:2214
+msgid "Import Preset"
+msgstr "Importa preimpostazione"
+
+#: src/presets.c:2220
 msgid "Presets (*.json)"
 msgstr "Predefiniti (*.json)"
 
-#: src/presets.c:2227
+#: src/presets.c:2329
 msgid "Export Preset"
 msgstr "Esporta preimpostazione"
 
-#: src/presets.c:2583
+#: src/presets.c:2730
 msgid "_Delete"
 msgstr "_Elimina"
 
-#: src/presets.c:2584
+#: src/presets.c:2731
 msgid "Delete Folder?"
 msgstr "Eliminare la cartella?"
 
-#: src/presets.c:2584
+#: src/presets.c:2731
 msgid "Delete Preset?"
 msgstr "Eliminare la preimpostazione?"
 
-#: src/presets.c:2585
+#: src/presets.c:2732
 #, c-format
 msgid ""
 "Are you sure you want to delete “%s”?\n"
@@ -3299,24 +3350,24 @@ msgstr ""
 "Non è stato possibile riprodurre il video. Per maggiori dettagli, consulta "
 "il registro attività."
 
-#: src/queuehandler.c:133
+#: src/queuehandler.c:128
 #, c-format
 msgid "%s (Modified)"
 msgstr "%s (Modificato)"
 
-#: src/queuehandler.c:181
+#: src/queuehandler.c:176
 msgid "Time:"
 msgstr "Tempo:"
 
-#: src/queuehandler.c:225
+#: src/queuehandler.c:220
 msgid "Align A/V"
 msgstr "Allinea inizio A/V"
 
-#: src/queuehandler.c:235
+#: src/queuehandler.c:230
 msgid "iPod 5G"
 msgstr "iPod 5G"
 
-#: src/queuehandler.c:267
+#: src/queuehandler.c:262
 #, c-format
 msgid ""
 "%d:%d:%d:%d Crop\n"
@@ -3329,42 +3380,42 @@ msgstr ""
 "%d:%d rapporto dei pixel\n"
 "%s proporzioni di visualizzazione"
 
-#: src/queuehandler.c:296
+#: src/queuehandler.c:291
 #, c-format
 msgid "%s, Bitrate %dkbps"
 msgstr "%s, Bitrate %dkbps"
 
-#: src/queuehandler.c:302
+#: src/queuehandler.c:297
 #, c-format
 msgid "%s, Constant Quality %.4g(%s)"
 msgstr "%s, Qualità costante %.4g(%s)"
 
-#: src/queuehandler.c:309
+#: src/queuehandler.c:304
 #, c-format
 msgid " (Multi Pass)"
 msgstr " (Più passaggi)"
 
-#: src/queuehandler.c:341
+#: src/queuehandler.c:336
 #, c-format
 msgid "%sPreset %s"
 msgstr "%sPreimpostazione %s"
 
-#: src/queuehandler.c:346
+#: src/queuehandler.c:341
 #, c-format
 msgid "%sTune %s"
 msgstr "%sRegolazione %s"
 
-#: src/queuehandler.c:351
+#: src/queuehandler.c:346
 #, c-format
 msgid "%sProfile %s"
 msgstr "%sProfilo %s"
 
-#: src/queuehandler.c:356
+#: src/queuehandler.c:351
 #, c-format
 msgid "%sLevel %s"
 msgstr "%sLivello %s"
 
-#: src/queuehandler.c:373
+#: src/queuehandler.c:368
 #, c-format
 msgid ""
 "\n"
@@ -3373,7 +3424,7 @@ msgstr ""
 "\n"
 "Frequenza fotogrammi costante %s fps"
 
-#: src/queuehandler.c:377
+#: src/queuehandler.c:372
 #, c-format
 msgid ""
 "\n"
@@ -3382,7 +3433,7 @@ msgstr ""
 "\n"
 "Picco frequenza fotogrammi %s fps (potrebbe essere minore)"
 
-#: src/queuehandler.c:382
+#: src/queuehandler.c:377
 #, c-format
 msgid ""
 "\n"
@@ -3391,76 +3442,76 @@ msgstr ""
 "\n"
 "Frequenza fotogrammi variabile %s fps"
 
-#: src/queuehandler.c:550
+#: src/queuehandler.c:545
 msgid "kbps"
 msgstr "kbps"
 
-#: src/queuehandler.c:684 src/queuehandler.c:709
+#: src/queuehandler.c:679 src/queuehandler.c:704
 msgid "Pending"
 msgstr "In attesa"
 
-#: src/queuehandler.c:696 src/queuehandler.c:1187
+#: src/queuehandler.c:691 src/queuehandler.c:1182
 msgid "Completed"
 msgstr "Completato"
 
-#: src/queuehandler.c:700 src/queuehandler.c:1191
+#: src/queuehandler.c:695 src/queuehandler.c:1186
 msgid "Canceled"
 msgstr "Annullato"
 
-#: src/queuehandler.c:704 src/queuehandler.c:1195
+#: src/queuehandler.c:699 src/queuehandler.c:1190
 msgid "Failed"
 msgstr "Non riuscito"
 
-#: src/queuehandler.c:745 src/queuehandler.c:773 src/queuehandler.c:1235
-#: src/queuehandler.c:1263
+#: src/queuehandler.c:740 src/queuehandler.c:768 src/queuehandler.c:1230
+#: src/queuehandler.c:1258
 #, c-format
 msgid "%d Day %02d:%02d:%02d"
 msgstr "%d Giorno %02d:%02d:%02d"
 
-#: src/queuehandler.c:748 src/queuehandler.c:776 src/queuehandler.c:1238
-#: src/queuehandler.c:1266
+#: src/queuehandler.c:743 src/queuehandler.c:771 src/queuehandler.c:1233
+#: src/queuehandler.c:1261
 #, c-format
 msgid "%d Days %02d:%02d:%02d"
 msgstr "%d Giorni %02d:%02d:%02d"
 
-#: src/queuehandler.c:789 src/queuehandler.c:1279
+#: src/queuehandler.c:784 src/queuehandler.c:1274
 msgid "B"
 msgstr "B"
 
-#: src/queuehandler.c:793 src/queuehandler.c:1283
+#: src/queuehandler.c:788 src/queuehandler.c:1278
 msgid "KB"
 msgstr "KB"
 
-#: src/queuehandler.c:798 src/queuehandler.c:1288
+#: src/queuehandler.c:793 src/queuehandler.c:1283
 msgid "MB"
 msgstr "MB"
 
-#: src/queuehandler.c:814 src/queuehandler.c:1304
+#: src/queuehandler.c:809 src/queuehandler.c:1299
 msgid "Not Available"
 msgstr "Non disponibile"
 
-#: src/queuehandler.c:1139
+#: src/queuehandler.c:1134
 msgid "Foreign Audio Search"
 msgstr "Ricerca dell'audio in lingua straniera"
 
-#: src/queuehandler.c:1143
+#: src/queuehandler.c:1138
 msgid "Encode"
 msgstr "Codifica"
 
-#: src/queuehandler.c:1147
+#: src/queuehandler.c:1142
 msgid "Encode Analysis Pass"
 msgstr "Passaggio di analisi della codifica"
 
-#: src/queuehandler.c:1151
+#: src/queuehandler.c:1146
 msgid "Encode Final Pass"
 msgstr "Passaggio finale della codifica"
 
 #. Should never happen
-#: src/queuehandler.c:1156
+#: src/queuehandler.c:1151
 msgid "Error"
 msgstr "Errore"
 
-#: src/queuehandler.c:1160
+#: src/queuehandler.c:1155
 #, c-format
 msgid ""
 "pass %d of %d\n"
@@ -3469,32 +3520,32 @@ msgstr ""
 "passaggio %d di %d\n"
 "%s"
 
-#: src/queuehandler.c:1172
+#: src/queuehandler.c:1167
 msgid "Scanning Title"
 msgstr "Scansione del titolo"
 
-#: src/queuehandler.c:1180
+#: src/queuehandler.c:1175
 msgid "Encoding In Progress"
 msgstr "Codifica in corso"
 
 #. Should never happen
-#: src/queuehandler.c:1200
+#: src/queuehandler.c:1195
 msgid "Unknown"
 msgstr "Sconosciuta"
 
-#: src/queuehandler.c:1388
+#: src/queuehandler.c:1383
 msgid "Export Queue"
 msgstr "Esporta coda"
 
-#: src/queuehandler.c:1476
+#: src/queuehandler.c:1466
 msgid "Import Queue"
 msgstr "Importa coda"
 
-#: src/queuehandler.c:1627
+#: src/queuehandler.c:1617
 msgid "Low Disk Space: Encoding Paused"
 msgstr "Spazio su disco insufficiente: codifica sospesa"
 
-#: src/queuehandler.c:1629
+#: src/queuehandler.c:1619
 #, c-format
 msgid ""
 "The destination filesystem is almost full: %<PRId64> MB free.\n"
@@ -3505,43 +3556,43 @@ msgstr ""
 "Destinazione: %s\n"
 "Se procedi, la codifica potrebbe essere incompleta."
 
-#: src/queuehandler.c:1634
+#: src/queuehandler.c:1624
 msgid "Resume, I've fixed the problem"
 msgstr "Riprendi, ho risolto il problema"
 
-#: src/queuehandler.c:1635
+#: src/queuehandler.c:1625
 msgid "Resume, Don't tell me again"
 msgstr "Riprendi, non ripetermelo di nuovo"
 
-#: src/queuehandler.c:1701
+#: src/queuehandler.c:1694
 msgid "Remove Item in Progress?"
 msgstr "Vuoi rimuovere l'elemento in corso?"
 
-#: src/queuehandler.c:1703
+#: src/queuehandler.c:1696
 msgid "Cancel and Remove"
 msgstr "Annulla e rimuovi"
 
-#: src/queuehandler.c:1843 src/queuehandler.c:1856
+#: src/queuehandler.c:1836 src/queuehandler.c:1849
 msgid "Stop"
 msgstr "Interrompi"
 
-#: src/queuehandler.c:1844 src/queuehandler.c:1857
+#: src/queuehandler.c:1837 src/queuehandler.c:1850
 msgid "Stop Encoding"
 msgstr "Interrompi codifica"
 
-#: src/queuehandler.c:1869
+#: src/queuehandler.c:1862
 msgid "S_top Encoding"
 msgstr "_Interrompi codifica"
 
-#: src/queuehandler.c:1887 src/queuehandler.c:1900
+#: src/queuehandler.c:1880 src/queuehandler.c:1893
 msgid "Resume"
 msgstr "Riprendi"
 
-#: src/queuehandler.c:1888 src/queuehandler.c:1901
+#: src/queuehandler.c:1881 src/queuehandler.c:1894
 msgid "Resume Encoding"
 msgstr "Riprendi codifica"
 
-#: src/queuehandler.c:1912
+#: src/queuehandler.c:1905
 msgid "_Resume Encoding"
 msgstr "_Riprendi codifica"
 
@@ -3604,10 +3655,6 @@ msgstr "“%s” non è una cartella valida."
 #, c-format
 msgid "“%s” is not a writable directory."
 msgstr "“%s” non è una cartella scrivibile."
-
-#: src/title-add.c:124 src/title-add.c:134
-msgid "Overwrite"
-msgstr "Sovrascrivi"
 
 #: src/title-add.c:124 src/title-add.c:134
 msgid "Overwrite File?"

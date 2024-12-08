@@ -63,7 +63,7 @@
         {
             if (trim == HBTitleSelectionTrimTypeNormal)
             {
-                self.chapterStop = self.chaptersCount;
+                self.chapterStop = self.chaptersCount - 1;
                 self.secondsStop = self.secondsCount;
                 self.frameStop = self.framesCount;
             }

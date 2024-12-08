@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#import <CoreGraphics/CoreGraphics.h>
+#import <CoreVideo/CoreVideo.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,12 +37,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Still image generator
 
+
+/**
+ * Returns the picture preview CVPixelBuffer at the specified index
+ *
+ * @param index picture index in title.
+ */
+- (nullable CVPixelBufferRef)copyPixelBufferAtIndex:(NSUInteger)index shouldCache:(BOOL)cache;
+
 /**
  * Returns the picture preview at the specified index
  *
  * @param index picture index in title.
  */
-- (nullable CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache CF_RETURNS_RETAINED;
+- (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index shouldCache:(BOOL)cache CF_RETURNS_RETAINED;
 
 /**
  * Returns a small picture preview at the specified index asynchronously

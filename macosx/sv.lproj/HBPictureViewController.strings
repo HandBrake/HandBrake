@@ -13,6 +13,9 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
 "1Z0-JT-vst.ibExternalAccessibilityDescription" = "Beskär botten";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels"; ObjectID = "1Z0-JT-vst"; */
+"1Z0-JT-vst.ibShadowedToolTip" = "Beskäring av nederkanten i antal bildpunkter";
+
 /* Class = "NSMenuItem"; title = "2160p 4K Ultra HD"; ObjectID = "1Zm-mM-8Tb"; */
 "1Zm-mM-8Tb.title" = "2160p 4K Ultra HD";
 
@@ -43,6 +46,12 @@
 /* Class = "NSTextFieldCell"; title = "Aspect Ratio:"; ObjectID = "5Vi-N9-9kM"; */
 "5Vi-N9-9kM.title" = "Bildförhållande:";
 
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "6Jp-gt-DbX"; */
+"6Jp-gt-DbX.ibExternalAccessibilityDescription" = "Fyll överst";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge border amount in pixels"; ObjectID = "6Jp-gt-DbX"; */
+"6Jp-gt-DbX.ibShadowedToolTip" = "Sorgkant för överkanten i antal bildpunkter";
+
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "6Qy-ik-hiE"; */
 "6Qy-ik-hiE.title" = "Ingen";
 
@@ -52,14 +61,23 @@
 /* Class = "NSTextFieldCell"; title = "Anamorphic:"; ObjectID = "8vS-Mw-bny"; */
 "8vS-Mw-bny.title" = "Anamorfisk:";
 
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "09f-sT-7la"; */
+"09f-sT-7la.ibExternalAccessibilityDescription" = "Fyll överst";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Scaled Width"; ObjectID = "9hH-As-JSa"; */
 "9hH-As-JSa.ibExternalAccessibilityDescription" = "Skalad bredd";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Video scaled width. This is the number of pixels wide to be encoded. Scaled width may differ from display width depending on anamorphic settings and fill settings"; ObjectID = "9hH-As-JSa"; */
+"9hH-As-JSa.ibShadowedToolTip" = "Skalad videobredd. Detta är antalet bildpunkter på bredden som ska enkodas. Skalad bredd kan skilja sig från skärmbredden beroende på anamorfiska inställningar och fyllnadsinställningar.";
 
 /* Class = "NSMenuItem"; title = "480p NTSC SD"; ObjectID = "21C-Hg-mk4"; */
 "21C-Hg-mk4.title" = "480p NTSC SD";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "41c-48-2XJ"; */
 "41c-48-2XJ.ibExternalAccessibilityDescription" = "Beskär toppen";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels"; ObjectID = "41c-48-2XJ"; */
+"41c-48-2XJ.ibShadowedToolTip" = "Beskäring av överkanten i antal bildpunkter";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom border color"; ObjectID = "aby-WS-tzS"; */
 "aby-WS-tzS.ibExternalAccessibilityDescription" = "Anpassad ramfärg";
@@ -73,6 +91,9 @@
 /* Class = "NSTextFieldCell"; title = "Resolution & Scaling"; ObjectID = "aVx-b3-2AK"; */
 "aVx-b3-2AK.title" = "Upplösning och skalning";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Color of the border added around the video"; ObjectID = "BjH-qa-mJM"; */
+"BjH-qa-mJM.ibShadowedToolTip" = "Färg för sorgkanten som läggs runt videon";
+
 /* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "byr-LI-ap5"; */
 "byr-LI-ap5.title" = "0 x 0";
 
@@ -81,6 +102,12 @@
 
 /* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "c9F-IW-Rln"; */
 "c9F-IW-Rln.title" = "0 x 0";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "ck0-Gu-lGg"; */
+"ck0-Gu-lGg.ibExternalAccessibilityDescription" = "Fyll höger";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge border amount in pixels"; ObjectID = "ck0-Gu-lGg"; */
+"ck0-Gu-lGg.ibShadowedToolTip" = "Sorgkant för högerkanten i antal bildpunkter";
 
 /* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "d0T-QG-WXU"; */
 "d0T-QG-WXU.title" = "Upplösningsgräns:";
@@ -112,14 +139,23 @@
 /* Class = "NSButtonCell"; title = "Horizontal"; ObjectID = "EqJ-eR-Fz7"; */
 "EqJ-eR-Fz7.title" = "Horisontell";
 
+/* Class = "NSTextFieldCell"; title = "Flipping:"; ObjectID = "ewx-pd-ANc"; */
+"ewx-pd-ANc.title" = "Vändning:";
+
 /* Class = "NSMenuItem"; title = "Custom"; ObjectID = "f12-Dh-fDw"; */
 "f12-Dh-fDw.title" = "Anpassad";
 
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "fau-iA-M1E"; */
 "fau-iA-M1E.title" = "Ingen";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments"; ObjectID = "ffe-SL-kPm"; */
+"ffe-SL-kPm.ibShadowedToolTip" = "Rotera bilden medurs i inkrement av 90 grader";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum height"; ObjectID = "FGm-oJ-FVW"; */
 "FGm-oJ-FVW.ibExternalAccessibilityDescription" = "Maximal höjd";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "The maximum height that the video will be stored at."; ObjectID = "FGm-oJ-FVW"; */
+"FGm-oJ-FVW.ibShadowedToolTip" = "Maximal höjd som videon kommer att lagras med.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Use highest resolution permitted by above settings"; ObjectID = "fjj-ZH-nqb"; */
 "fjj-ZH-nqb.ibShadowedToolTip" = "Använd högsta upplösningen som tillåts med ovanstående inställningar";
@@ -139,6 +175,9 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "Hkl-7Z-J2e"; */
 "Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "Lagringshöjd";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Video scaled height. This is the number of pixels tall to be encoded. Scaled height may differ from display height depending on anamorphic settings and fill settings"; ObjectID = "Hkl-7Z-J2e"; */
+"Hkl-7Z-J2e.ibShadowedToolTip" = "Skalad videohöjd. Detta är antalet bildpunkter på höjden som ska enkodas. Skalad höjd kan skilja sig från skärmbredden beroende på anamorfiska inställningar och fyllnadsinställningar.";
+
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
 "hN1-S9-zl8.title" = "x";
 
@@ -150,6 +189,9 @@
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "iuc-JG-bhU"; */
 "iuc-JG-bhU.ibExternalAccessibilityDescription" = "Lagringsbredd";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad left"; ObjectID = "iZc-Ks-efB"; */
+"iZc-Ks-efB.ibExternalAccessibilityDescription" = "Fyll vänster";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "jru-UG-Rf6"; */
 "jru-UG-Rf6.ibExternalAccessibilityDescription" = "Visningsbredd";
@@ -169,6 +211,12 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "krD-da-wuz"; */
 "krD-da-wuz.ibShadowedIsNilPlaceholder" = "0";
 
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad left"; ObjectID = "l2V-GK-BgU"; */
+"l2V-GK-BgU.ibExternalAccessibilityDescription" = "Fyll vänster";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge border amount in pixels"; ObjectID = "l2V-GK-BgU"; */
+"l2V-GK-BgU.ibShadowedToolTip" = "Sorgkant för vänterkanten i antal bildpunkter";
+
 /* Class = "NSTextFieldCell"; title = "Scaled Size:"; ObjectID = "L7V-2e-qf9"; */
 "L7V-2e-qf9.title" = "Skalad storlek:";
 
@@ -181,6 +229,15 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "LTu-ic-Ty9"; */
 "LTu-ic-Ty9.ibExternalAccessibilityDescription" = "Beskär vänster";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels"; ObjectID = "LTu-ic-Ty9"; */
+"LTu-ic-Ty9.ibShadowedToolTip" = "Beskäring av vänsterkanten i antal bildpunkter";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Numerator"; ObjectID = "LWv-Y9-b0S"; */
+"LWv-Y9-b0S.ibExternalAccessibilityDescription" = "Numerator för bildpunktsförhållande";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Pixel aspect defines the shape of the pixels.\n\nA 1:1 ratio defines a square pixel. Other values define rectangulars shapers.\nPlayers will scale the image in order to achieve the specified aspect."; ObjectID = "LWv-Y9-b0S"; */
+"LWv-Y9-b0S.ibShadowedToolTip" = "Bildpunktsförhållande definierar formen för bildpunkterna.\n\nEtt förhållande på 1:1 definierar en fyrkantig bildpunkt. Andra värden definierar rektangulära former.\nUppspelare kommer att skala bilden för att kunna uppnå angivet förhållande.";
+
 /* Class = "NSTextFieldCell"; title = "Aspect Ratio:"; ObjectID = "Lz1-Cx-d30"; */
 "Lz1-Cx-d30.title" = "Bildförhållande:";
 
@@ -190,8 +247,17 @@
 /* Class = "NSMenuItem"; title = "Width & Height"; ObjectID = "N5d-nG-TZV"; */
 "N5d-nG-TZV.title" = "Bredd och höjd";
 
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Denominator"; ObjectID = "nQe-Vq-Og2"; */
+"nQe-Vq-Og2.ibExternalAccessibilityDescription" = "Denominator för bildpunktsförhållande";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Pixel aspect defines the shape of the pixels.\n\nA 1:1 ratio defines a square pixel. Other values define rectangulars shapers.\nPlayers will scale the image in order to achieve the specified aspect."; ObjectID = "nQe-Vq-Og2"; */
+"nQe-Vq-Og2.ibShadowedToolTip" = "Bildpunktsförhållande definierar formen för bildpunkterna.\n\nEtt förhållande på 1:1 definierar en fyrkantig bildpunkt. Andra värden definierar rektangulära former.\nUppspelare kommer att skala bilden för att kunna uppnå angivet förhållande.";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum width"; ObjectID = "NRy-vc-8qX"; */
 "NRy-vc-8qX.ibExternalAccessibilityDescription" = "Maximal bredd";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "The maximum width that the video will be stored at."; ObjectID = "NRy-vc-8qX"; */
+"NRy-vc-8qX.ibShadowedToolTip" = "Maximal bredd som videon kommer att lagras med.";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "ob5-QF-mOC"; */
 "ob5-QF-mOC.ibShadowedIsNilPlaceholder" = "0";
@@ -220,14 +286,23 @@
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "r9l-cH-pFW"; */
 "r9l-cH-pFW.ibExternalAccessibilityDescription" = "Beskär vänster";
 
+/* Class = "NSButton"; ibShadowedToolTip = "If not enabled, scaled dimensions will be limited to source dimensions"; ObjectID = "ROS-UT-TiG"; */
+"ROS-UT-TiG.ibShadowedToolTip" = "Skalade dimensioner kommer att begränsas till källdimensionerna om inte aktiverad.";
+
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sg1-tR-fnw"; */
 "sg1-tR-fnw.ibShadowedIsNilPlaceholder" = "0";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "SGn-b9-JVZ"; */
 "SGn-b9-JVZ.ibShadowedIsNilPlaceholder" = "-";
 
+/* Class = "NSTextFieldCell"; title = "Pixel Aspect:"; ObjectID = "SPg-s0-Oh0"; */
+"SPg-s0-Oh0.title" = "Bildpunktsförhållande:";
+
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sut-JO-hwX"; */
 "sut-JO-hwX.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Changing the displays size will stretch the video"; ObjectID = "tHu-FW-tzx"; */
+"tHu-FW-tzx.ibShadowedToolTip" = "Ändring av skärmstorleken kommer att sträcka ut videon";
 
 /* Class = "NSMenuItem"; title = "270°"; ObjectID = "tIU-4H-3Xm"; */
 "tIU-4H-3Xm.title" = "270°";
@@ -237,6 +312,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Orientation & Cropping"; ObjectID = "u2U-SJ-szy"; */
 "u2U-SJ-szy.title" = "Orientering och beskäring";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "uoH-Hv-lNp"; */
+"uoH-Hv-lNp.ibExternalAccessibilityDescription" = "Fyll höger";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "uqQ-uA-3xF"; */
 "uqQ-uA-3xF.ibExternalAccessibilityDescription" = "0b36a71978ca057bf0594fec41410ec0_tr";
@@ -265,14 +343,26 @@
 /* Class = "NSMenuItem"; title = "Custom"; ObjectID = "vzz-ej-1nx"; */
 "vzz-ej-1nx.title" = "Anpassad";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.\n\nAutomatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.\n\nNone disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.\n\nCustom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production."; ObjectID = "w1f-3S-up0"; */
+"w1f-3S-up0.ibShadowedToolTip" = "Anamorfisk tillåter godtyckliga lagringsdimensioner samtidigt som ursprungliga bildförhållanden bibehålls under uppspelning.\n\nAutomatic maximerar lagringsupplösningen samtidigt som ursprunglig skärmbildförhållande bibehålls. Rekommenderas.\n\nNone inaktiverar anamorfisk. Lagringsdimensionerna för video och skärmdimensioner kommer att vara identiska. Endast användbar för kompatibilitet med vissa gamla enheter.\n\nCustom tillåter manuell inställningar av alla parametrar. Användbart för att korrigera en felaktig skärmupplösning för en källa och för proffs som behöver avancerade kontroller för efterbehandling.";
+
 /* Class = "NSMenuItem"; title = "Width (Pillarbox)"; ObjectID = "W5p-nd-4WK"; */
 "W5p-nd-4WK.title" = "Bredd (Pillarbox)";
 
 /* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "WBD-tH-x3h"; */
 "WBD-tH-x3h.title" = "Visningsstorlek:";
 
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "WfM-tx-rC5"; */
+"WfM-tx-rC5.ibExternalAccessibilityDescription" = "Fyll nederst";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge border amount in pixels"; ObjectID = "WfM-tx-rC5"; */
+"WfM-tx-rC5.ibShadowedToolTip" = "Sorgkant för nederkanten i antal bildpunkter";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "wsq-TS-cC6"; */
 "wsq-TS-cC6.ibExternalAccessibilityDescription" = "Beskär höger";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels"; ObjectID = "wsq-TS-cC6"; */
+"wsq-TS-cC6.ibShadowedToolTip" = "Beskäring av högerkanten i antal bildpunkter";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "x0H-9t-WiF"; */
 "x0H-9t-WiF.ibShadowedIsNilPlaceholder" = "0";
@@ -297,6 +387,9 @@
 
 /* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "ZTy-fJ-cDa"; */
 "ZTy-fJ-cDa.title" = "0 x 0";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "zVm-0W-Jxg"; */
+"zVm-0W-Jxg.ibExternalAccessibilityDescription" = "Fyll nederst";
 
 /* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "ZZ9-XW-Uib"; */
 "ZZ9-XW-Uib.title" = "Lagringsstorlek:";

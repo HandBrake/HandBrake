@@ -556,6 +556,6 @@ HB_EXIT_CODE
     <value>https://handbrake.fr/docs にあるドキュメントのウェブサイトを開く</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Dash (-), Period (.) and Comma (,)</value>
+    <value>ダッシュ(-)、ピリオド(.)、カンマ(,)</value>
   </data>
 </root>

@@ -151,6 +151,12 @@ Preferences -> Output Name Token */
 /* Copy Protection Alert -> message */
 "Copy-Protected sources are not supported." = "Kopieringsskyddade källor stöds inte.";
 
+/* Preferences -> Output Name Token */
+"Creation-Date" = "Creation-Date";
+
+/* Preferences -> Output Name Token */
+"Creation-Time" = "Creation-Time";
+
 /* Touch bar */
 "Current Time" = "Aktuell tid";
 
@@ -207,6 +213,9 @@ Queue done notification failed message */
 /* No comment provided by engineer. */
 "Encoding Job: %@" = "Enkodar jobb: %@";
 
+/* Job statistics */
+"Ended at:" = "Avslutad:";
+
 /* Export presets save panel title */
 "Export preset" = "Exportera förval";
 
@@ -234,8 +243,17 @@ Queue done notification failed message */
 /* Preview -> live preview alert message */
 "HandBrake can't open the preview." = "HandBrake kan inte öppna förhandsvisningen.";
 
+/* Preview -> live preview alert informative text */
+"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake kan inte spela upp denna kombination av video/ljud/container-format. Vill du öppna den i en extern uppspelare?";
+
+/* Main Window -> Same as source destination open panel */
+"HandBrake does not have permission to write to this folder. To allow HandBrake to write to this folder, click \"Allow\"" = "HandBrake har inte rättigheter att skriva till denna mapp. Klicka \"Tillåt\" för att tillåta HandBrake att skriva till denna mapp.";
+
 /* Preferences -> Output Name Token */
 "Height" = "Höjd";
+
+/* Quit Alert -> informative text */
+"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Om du avslutar HandBrake kommer din aktuella enkodning att läsas in i din kö vid nästa start. Vill du avsluta ändå?";
 
 /* Import preset open panel title */
 "Import presets" = "Importera förval";
@@ -249,6 +267,9 @@ Queue done notification failed message */
 /* Queue Edit Alert -> stop and edit first button
 Queue Stop Alert -> stop and remove first button */
 "Keep Encoding" = "Fortsätt enkodning";
+
+/* Touch bar */
+"Live Preview" = "Direkt förhandsvisning";
 
 /* Preferences -> Output Name Token */
 "Modification-Date" = "Ändringsdatum";
@@ -318,12 +339,18 @@ Touch bar */
 /* Job statistics */
 "Paused time:" = "Pausad tid:";
 
+/* Video -> Framerate */
+"Peak Framerate (VFR)" = "Högsta bildfrekvens (VFR)";
+
 /* Touch bar */
 "Play/Pause" = "Spela upp/Paus";
 
 /* Add preset window -> name alert informative text
 Rename preset window -> name alert informative text */
 "Please enter a name." = "Ange ett namn.";
+
+/* Copy Protection Alert -> informative text */
+"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "Observera att HandBrake inte har stöd för att ta bort kopieringsskydd från dvd-skivor. Du kan om du vill använda en annan tredjepartsprogramvara för denna funktion. Denna varning kommer att visas en gång varje gång som HandBrake körs.";
 
 /* Queue Done Alert -> shut down second button
 Queue Done Alert -> sleep second button */
@@ -368,6 +395,9 @@ Queue window title */
 /* Queue window title */
 "Queue (%@)" = "Kö (%@)";
 
+/* Queue Window Quick Look Toolbar Item */
+"Quick Look" = "Snabbtitt";
+
 /* Quit Alert -> first button */
 "Quit" = "Avsluta";
 
@@ -391,6 +421,9 @@ Queue window title */
 
 /* Queue undo action name */
 "Remove Jobs From Queue" = "Ta bort jobb från kö";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Rescanning for editing" = "Söker igenom igen för redigering";
 
 /* Queue Window Action Toolbar Item */
 "Reset All Jobs" = "Nollställ alla jobb";
@@ -421,8 +454,14 @@ Touch bar */
 /* HBRange -> display name */
 "Seconds" = "Sekunder";
 
+/* Queue Alert -> cancel rip informative text */
+"Select Continue Encoding to dismiss this dialog without making changes." = "Välj Fortsätt enkodningen för att stänga denna dialogruta utan att göra ändringar.";
+
 /* Preferences -> send to app destination open panel */
 "Select the desired external application" = "Välj önskat externt program";
+
+/* Titles selection sheet -> informative text */
+"Select the titles to add to the queue using the %@ preset:" = "Välj de titlar att lägga till i kön med förvalet %@:";
 
 /* Notification -> Show in Finder */
 "Show" = "Visa";
@@ -472,6 +511,9 @@ Toolbar Start/Stop Item */
 Touch bar */
 "Start/Stop Encoding" = "Starta/Stoppa enkodning";
 
+/* Job statistics */
+"Started at:" = "Startades:";
+
 /* Queue -> Stop action
 Toolbar Start/Stop Item */
 "Stop" = "Stoppa";
@@ -510,8 +552,14 @@ Toolbar Start/Stop Item */
 /* Queue Done Alert -> sleep message */
 "The computer will sleep after encoding is done." = "Denna datorn kommer att försättas i sömnläge efter enkodningen är färdig.";
 
+/* Chapters import -> invalid CSV recovery suggestion */
+"The CSV file is not a valid chapters CSV file." = "CSV-filen är inte en giltig CSV-fil med kapitel.";
+
 /* Destination same as source alert -> informative text */
 "The destination is the same as the source, you can not overwrite your source file!" = "Målet är samma som källan. Du kan inte skriva över din källfil!";
+
+/* Chapters import -> invalid CSV line count recovery suggestion */
+"The line count in the chapters CSV file does not match the number of chapters in the movie." = "Radantalet i CSV-kapitelfilen matchar inte det antal kapitel som finns i filmen.";
 
 /* Add preset window -> name alert message
 Rename preset window -> name alert message */
@@ -552,6 +600,12 @@ Rename preset window -> name alert message */
 
 /* Delete preset alert -> informative text */
 "You can't undo this action." = "Du kan inte ångra denna åtgärd.";
+
+/* Queue Done Alert -> shut down informative text */
+"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences." = "Du har valt att stänga av datorn efter enkodningen. Gå till HandBrake-inställningarna för att inaktivera avstängningen.";
+
+/* Queue Done Alert -> sleep informative text */
+"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences." = "Du har valt att försätta datorn i viloläge efter enkodningen. Gå till HandBrake-inställningarna för att inaktivera viloläget.";
 
 /* Queue -> disk almost full alert informative text */
 "You need to make more space available on your destination disk." = "Du behöver frigöra mer plats på din måldisk.";

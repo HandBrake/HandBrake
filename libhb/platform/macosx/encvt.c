@@ -1348,7 +1348,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     }
 
     // Multi-pass
-    if (job->pass_id == HB_PASS_ENCODE_ANALYSIS && cookieOnly == 0)
+    if (job->pass_id == HB_PASS_ENCODE_ANALYSIS)
     {
         char *filename = hb_get_temporary_filename("videotoolbox.log");
 
@@ -1513,9 +1513,15 @@ static OSStatus create_cookie(hb_work_object_t *w, hb_job_t *job, hb_work_privat
 fail:
     CVPixelBufferRelease(pix_buf);
     VTCompressionSessionInvalidate(pv->session);
+    if (pv->passStorage)
+    {
+        VTMultiPassStorageClose(pv->passStorage);
+        CFRelease(pv->passStorage);
+    }
     CFRelease(pv->session);
     CFRelease(pv->queue);
     pv->session = NULL;
+    pv->passStorage = NULL;
     pv->queue = NULL;
 
     return err;
@@ -1551,6 +1557,15 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
     {
         hb_log("Error beginning a VTCompressionSession final pass err=%"PRId64"", (int64_t)err);
         return err;
+    }
+
+    hb_log("encvt_Init: starting pass with time ranges: %ld", pv->timeRangeCount);
+
+    for (CMItemCount i = 0; i < pv->timeRangeCount; i++)
+    {
+        hb_log("encvt_init: %lld, %lld",
+               pv->timeRangeArray[i].start.value,
+               pv->timeRangeArray[i].duration.value);
     }
 
     err = VTCompressionSessionBeginPass(pv->session, kVTCompressionSessionBeginFinalPass, 0);

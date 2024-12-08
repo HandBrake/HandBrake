@@ -771,8 +771,8 @@ static void process_filter(hb_filter_object_t * filter)
 }
 
 // Get preview and apply applicable filters
-hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
-                             hb_dict_t * job_dict)
+hb_image_t * hb_get_preview(hb_handle_t * h, hb_dict_t * job_dict,
+                             int picture, int rescale, int pix_fmt)
 {
     hb_job_t    * job;
     hb_title_t  * title = NULL;
@@ -880,50 +880,55 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
     job->cfr = init.cfr;
     job->grayscale = init.grayscale;
 
-    // Add "cropscale"
-    // Adjusts for pixel aspect, performs any requested
-    // post-scaling and sets required pix_fmt AV_PIX_FMT_RGB32
-    //
-    // This will scale the result at the end of the pipeline.
-    // I.e. padding will be scaled
-    hb_rational_t par = job->par;
-
-    int scaled_width  = init.geometry.width;
-    int scaled_height = init.geometry.height;
-
-    filter = hb_filter_init(HB_FILTER_CROP_SCALE);
-    filter->settings = hb_dict_init();
-    if (par.num >= par.den)
+    if (rescale)
     {
-        scaled_width = scaled_width * par.num / par.den;
+        // Add "cropscale"
+        // Adjusts for pixel aspect, performs any requested post-scaling
+        //
+        // This will scale the result at the end of the pipeline.
+        // I.e. padding will be scaled
+        hb_rational_t par = job->par;
+
+        int scaled_width  = init.geometry.width;
+        int scaled_height = init.geometry.height;
+
+        filter = hb_filter_init(HB_FILTER_CROP_SCALE);
+        filter->settings = hb_dict_init();
+        if (par.num >= par.den)
+        {
+            scaled_width = scaled_width * par.num / par.den;
+        }
+        else
+        {
+            scaled_height = scaled_height * par.den / par.num;
+        }
+        hb_dict_set_int(filter->settings, "width", scaled_width);
+        hb_dict_set_int(filter->settings, "height", scaled_height);
+        hb_list_add(job->list_filter, filter);
+
+        if (filter->init != NULL && filter->init(filter, &init))
+        {
+            hb_error("hb_get_preview3: Failure to initialize filter '%s'",
+                     filter->name);
+            hb_list_rem(list_filter, filter);
+            hb_filter_close(&filter);
+        }
     }
-    else
-    {
-        scaled_height = scaled_height * par.den / par.num;
-    }
-    hb_dict_set_int(filter->settings, "width", scaled_width);
-    hb_dict_set_int(filter->settings, "height", scaled_height);
-    hb_list_add(job->list_filter, filter);
 
-    if (filter->init != NULL && filter->init(filter, &init))
+    if (pix_fmt != AV_PIX_FMT_NONE)
     {
-        hb_error("hb_get_preview3: Failure to initialize filter '%s'",
-                 filter->name);
-        hb_list_rem(list_filter, filter);
-        hb_filter_close(&filter);
-    }
+        filter = hb_filter_init(HB_FILTER_FORMAT);
+        filter->settings = hb_dict_init();
+        hb_dict_set_string(filter->settings, "format", av_get_pix_fmt_name(pix_fmt));
+        hb_list_add(job->list_filter, filter);
 
-    filter = hb_filter_init(HB_FILTER_FORMAT);
-    filter->settings = hb_dict_init();
-    hb_dict_set_string(filter->settings, "format", av_get_pix_fmt_name(AV_PIX_FMT_RGB32));
-    hb_list_add(job->list_filter, filter);
-
-    if (filter->init != NULL && filter->init(filter, &init))
-    {
-        hb_error("hb_get_preview3: Failure to initialize filter '%s'",
-                 filter->name);
-        hb_list_rem(list_filter, filter);
-        hb_filter_close(&filter);
+        if (filter->init != NULL && filter->init(filter, &init))
+        {
+            hb_error("hb_get_preview3: Failure to initialize filter '%s'",
+                     filter->name);
+            hb_list_rem(list_filter, filter);
+            hb_filter_close(&filter);
+        }
     }
 
     hb_avfilter_combine(list_filter);
@@ -1023,11 +1028,17 @@ fail:
             height = geo->height;
         }
 
-        image = hb_image_init(AV_PIX_FMT_RGB32, width, height);
+        image = hb_image_init(pix_fmt, width, height);
     }
     hb_job_close(&job);
 
     return image;
+}
+
+hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
+                             hb_dict_t * job_dict)
+{
+    return hb_get_preview(h, job_dict, picture, 1, AV_PIX_FMT_RGB32);
 }
 
  /**

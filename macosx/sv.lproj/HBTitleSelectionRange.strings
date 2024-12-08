@@ -16,11 +16,20 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "7ug-HX-q9j"; */
 "7ug-HX-q9j.ibShadowedToolTip" = "Sista sekunden att enkoda.";
 
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "9A3-Zn-guz"; */
+"9A3-Zn-guz.title" = "Klippslut";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "aeA-ul-8yt"; */
+"aeA-ul-8yt.ibExternalAccessibilityDescription" = "Sluttid i bildrutor";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "aeA-ul-8yt"; */
 "aeA-ul-8yt.ibShadowedToolTip" = "Sista bildrutan att enkoda.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Range Selection"; ObjectID = "aM2-P8-m4w"; */
 "aM2-P8-m4w.ibExternalAccessibilityDescription" = "Omfångsval";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "aM2-P8-m4w"; */
+"aM2-P8-m4w.ibShadowedToolTip" = "Val av källomfång. Alla kapitel kommer som standard att väljas och hela källan enkodas.";
 
 /* Class = "NSMenuItem"; title = "To"; ObjectID = "eap-Rn-0qW"; */
 "eap-Rn-0qW.title" = "Till";
@@ -31,6 +40,12 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "eoO-dc-hc3"; */
 "eoO-dc-hc3.ibShadowedToolTip" = "Första kapitlet att enkoda.";
 
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "gKJ-mm-7Zy"; */
+"gKJ-mm-7Zy.title" = "Klippslut";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "guU-KE-TeY"; */
+"guU-KE-TeY.ibExternalAccessibilityDescription" = "Starttid i bildrutor";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "First frame to encode."; ObjectID = "guU-KE-TeY"; */
 "guU-KE-TeY.ibShadowedToolTip" = "Första bildrutan att enkoda.";
 
@@ -39,6 +54,9 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "OHn-dK-gFi"; */
 "OHn-dK-gFi.ibShadowedToolTip" = "Sista kapitlet att enkoda.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "tOX-Dr-TiC"; */
+"tOX-Dr-TiC.title" = "Klippslut";
 
 /* Class = "NSMenuItem"; title = "To"; ObjectID = "YpG-jj-qV2"; */
 "YpG-jj-qV2.title" = "Till";

@@ -16,8 +16,14 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Copy metadata from source to output"; ObjectID = "eJx-BO-rhL"; */
 "eJx-BO-rhL.ibShadowedToolTip" = "Kopiera metadata från källa till utdata";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists."; ObjectID = "fPv-Vw-I89"; */
+"fPv-Vw-I89.ibShadowedToolTip" = "Justerar de initiala tidsstämplarna för alla ljud- och videoströmmar genom att sätta in svarta bildrutor eller att tappa bildrutor. Kan förbättra synk för ljud/video för trasiga uppspelare som inte förstår MP4-redigeringslistor.";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
 "Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Sammandrag av storlek";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
+"lUi-Oc-208.ibShadowedToolTip" = "Optimera för progressiv hämtning. Data omorganiseras efter enkodningen och skrivs om för att tillåta direkt uppspelning över ett nätverk utan att behöva hämta hela filen.";
 
 /* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
 "m5a-0z-QQ4.ibExternalAccessibilityDescription" = "Förhandsvisning";
@@ -25,11 +31,17 @@
 /* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
 "OCw-f6-uA0.title" = "Filter:";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility."; ObjectID = "QKv-GR-d2g"; */
+"QKv-GR-d2g.ibShadowedToolTip" = "Lägger till en speciell MP4-markör för att tillåta uppspelning på enheter som uråldriga iPod femte generationen från 2006. Andra inställningar kan påverka kompatibiliteten.";
+
 /* Class = "NSTextFieldCell"; title = "None"; ObjectID = "RIB-ME-Yhh"; */
 "RIB-ME-Yhh.title" = "Ingen";
 
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "RXJ-DZ-4mh"; */
 "RXJ-DZ-4mh.title" = "Format:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility."; ObjectID = "txV-1R-WoD"; */
+"txV-1R-WoD.ibShadowedToolTip" = "Containerformat. Video, ljud och andra spår kombineras till en enda fil av denna typ. Påverkar kompatibiliteten.";
 
 /* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "wcc-5d-Dgj"; */
 "wcc-5d-Dgj.title" = "Webboptimerad";

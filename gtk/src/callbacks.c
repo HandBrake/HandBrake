@@ -1069,7 +1069,14 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 const char *codec;
                 vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
                 codec = hb_video_encoder_get_name(vcodec);
-                g_string_append_len(str, codec, strcspn(codec, " ("));
+                if (codec)
+                {
+                    g_string_append_len(str, codec, strcspn(codec, " ("));
+                }
+                else
+                {
+                    g_string_append(str, "None");
+                }
 
                 p += strlen("{codec}");
             }

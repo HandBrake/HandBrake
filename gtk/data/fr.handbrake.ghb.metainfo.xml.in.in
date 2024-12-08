@@ -26,6 +26,11 @@
   <url type="bugtracker">https://github.com/HandBrake/HandBrake/issues</url>
   <url type="translate">https://www.transifex.com/HandBrakeProject/</url>
 
+  <branding>
+    <color type="primary" scheme_preference="light">#87ceeb</color>
+    <color type="primary" scheme_preference="dark">#205c8d</color>
+  </branding>
+
   <screenshots>
     <screenshot type="default">
       <image>https://handbrake.github.io/flatpak/HandBrake_Summary_linux.png</image>
@@ -95,11 +100,38 @@
   </supports>
 
   <requires>
-    <display_length compare="ge">1280</display_length>
+    <display_length compare="ge">768</display_length>
   </requires>
 
   <releases>
     <release version="@RELEASE_TAG@" date="@RELEASE_DATE@">
+      <description>
+        <ul>
+          <li>Added Intel QSV VVC (hardware) video decoder</li>
+          <li>Added a preference to keep duplicated Blu-ray titles</li>
+          <li>Added support for lossless VP9 encoding</li>
+          <li>Improved quality of subtitles burn-in</li>
+        </ul>
+        <p>Fixed issues:</p>
+        <ul>
+          <li>Fixed a rare video corruption issue that could happen when burning-in subtitles</li>
+          <li>Fixed the Power Save option to pause the encodes only when enabled</li>
+          <li>Fixed the queue being stopped when removing completed items</li>
+          <li>Fixed chapters names not being saved properly</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.8.2" date="2024-08-07">
+      <description>
+        <p>Fixed an issue where an encoded file could be output to the wrong filename when using the queue.</p>
+      </description>
+    </release>
+    <release version="1.8.1" date="2024-06-21">
+      <description>
+        <p>Fixed an issue where dvd subtitles could be corrupted during rendering.</p>
+      </description>
+    </release>
+    <release version="1.8.0" date="2024-05-19">
       <description>
         <p>Migrates the UI to GTK 4, adds support for recursive scanning, and improves drag-and-drop to support multiple files and subtitle files.</p>
       </description>

@@ -1,6 +1,9 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6Gj-ZU-E1E"; */
 "6Gj-ZU-E1E.ibExternalAccessibilityDescription" = "Beskär botten";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels."; ObjectID = "6Gj-ZU-E1E"; */
+"6Gj-ZU-E1E.ibShadowedToolTip" = "Beskäring av nederkanten i antal bildpunkter.";
+
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
 "8e5-zI-IBg.ibExternalAccessibilityDescription" = "Beskär toppen";
 
@@ -10,6 +13,9 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
 "Cp5-xz-x1h.ibExternalAccessibilityDescription" = "Beskär toppen";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "Cp5-xz-x1h"; */
+"Cp5-xz-x1h.ibShadowedToolTip" = "Beskäring av överkanten i antal bildpunkter.";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "cWv-q0-EN9"; */
 "cWv-q0-EN9.ibShadowedToolTip" = "Rotera bilden 90 grader medurs inkrementellt.";
 
@@ -18,6 +24,9 @@
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "php-p6-Nz6"; */
 "php-p6-Nz6.ibExternalAccessibilityDescription" = "Beskär höger";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels."; ObjectID = "php-p6-Nz6"; */
+"php-p6-Nz6.ibShadowedToolTip" = "Beskäring av högerkanten i antal bildpunkter.";
 
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "Pqk-fS-pyy"; */
 "Pqk-fS-pyy.title" = "Ingen";
@@ -30,6 +39,9 @@
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Td7-sa-0TV"; */
 "Td7-sa-0TV.ibExternalAccessibilityDescription" = "Beskär vänster";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels."; ObjectID = "Td7-sa-0TV"; */
+"Td7-sa-0TV.ibShadowedToolTip" = "Beskäring av vänsterkanten i antal bildpunkter.";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "y7P-yk-q46"; */
 "y7P-yk-q46.ibExternalAccessibilityDescription" = "Beskär höger";

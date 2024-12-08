@@ -4,6 +4,9 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Track name"; ObjectID = "FpM-Jx-vLD"; */
 "FpM-Jx-vLD.ibExternalAccessibilityDescription" = "Spårnamn";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Players may use this in the audio/subtitles selection list."; ObjectID = "FpM-Jx-vLD"; */
+"FpM-Jx-vLD.ibShadowedToolTip" = "Uppspelare kan använda detta  i vallistan för ljud/undertexter.";
+
 /* Class = "NSButtonCell"; title = "Done"; ObjectID = "Vzr-yd-VKe"; */
 "Vzr-yd-VKe.title" = "Färdig";
 

@@ -18,11 +18,12 @@ This allows us time to investigate and take corrective action where necessary.
 Our goal is to deal with any issues reported as quickly as possible.  If you do not receive a direct response from us within 24 hours, please follow up with us as we may not have received the message.
 
 
-## Supported Versions
+## Versions
 
 We accept bug reports (including security reports) for the following versions:
 
-| Version            | Supported          |
-| ------------------ | ------------------ |
-| 1.8.x              | :white_check_mark: |
-| Earlier Releases   | :x:                |
+| Version                | Accepts Reports    |
+| ---------------------- | ------------------ |
+| git main (development) | :white_check_mark: |
+| 1.8.x                  | :white_check_mark: |
+| Earlier Releases       | :x:                |

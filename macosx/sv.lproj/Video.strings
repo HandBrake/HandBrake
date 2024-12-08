@@ -4,14 +4,32 @@
 /* Class = "NSButtonCell"; title = "Constant Framerate"; ObjectID = "6Dd-IP-Pwt"; */
 "6Dd-IP-Pwt.title" = "Konstant bildfrekvens";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings."; ObjectID = "8CM-4G-oId"; */
+"8CM-4G-oId.ibShadowedToolTip" = "Videoenkodarnivå. Ställer in och försäkrar giltighet med angiven nivå för videokomprimeringsstandarden. Åsidosätter alla andra inställningar.";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Framerate (Frames Per Second). Number of pictures displayed during each second of video."; ObjectID = "9tc-EO-QMd"; */
+"9tc-EO-QMd.ibShadowedToolTip" = "Bildfrekvens (bildrutor per sekund). Antal bilder som visas under varje sekund av video.";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
+"A3o-Zx-OfM.ibShadowedToolTip" = "Genomsnittlig bitfrekvens varierar kvaliteten för att försäkra sig om att datafrekvensen håller sig relativt likvärdig genom hela videon.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
+"bnV-aE-FVh.ibShadowedToolTip" = "Enkodning med flerpass analyserar hela källvideon innan enkodning. Informationen som samlas in hjälper enkodaren att göra mer utförliga beslut om kvalitet och dataomfång i läget Genomsnittlig bitfrekvens.";
+
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
+
+/* Class = "NSTextFieldCell"; title = "Unparse:"; ObjectID = "CLk-dp-1b7"; */
+"CLk-dp-1b7.title" = "Avtolka:";
 
 /* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "cRF-pz-1jt"; */
 "cRF-pz-1jt.title" = "Alternativ för enkodare:";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "auto"; ObjectID = "CRz-On-Jen"; */
 "CRz-On-Jen.ibShadowedIsNilPlaceholder" = "auto";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios."; ObjectID = "cXd-X7-OhB"; */
+"cXd-X7-OhB.ibShadowedToolTip" = "Justering av videoenkodare. Ytterligare justeringar för enkodarförvalet för att optimera inställningar för specifika scenarior.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Displays all internal video encoder options."; ObjectID = "dwn-bf-Ua0"; */
 "dwn-bf-Ua0.ibShadowedToolTip" = "Visar alla interna alternativ för videoenkodaren.";
@@ -22,8 +40,17 @@
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
 "F3s-qR-qeE.title" = "Kvalitet:";
 
+/* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices."; ObjectID = "fue-2d-Bjn"; */
+"fue-2d-Bjn.ibShadowedToolTip" = "Förval för videoenkodare. Justerar enkodarinställningar för att balansera komprimeringseffektivitet och enkodningshastighet. Långsammare enkodareförval kan använda inställningar som är mindre kompatibila med vissa enheter.";
+
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "Justera:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
+"gEp-lv-YUY.ibShadowedToolTip" = "Ytterligare alternativ för videoenkodare. Endast för avancerad användning.\n\nSyntax: option-1=foo:opt2=bar";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
+"GPu-Ht-bKg.ibShadowedToolTip" = "Konstant kvalitet varierar bitfrekvensen för att försäkra att visuell kvalitet kvarstår relativt konsistent genom hela videon.\n\nJustera draglisten för kvalitet till höger för att öka kvaliteten eller till vänster för att minska kvaliteten, i små inkrement av plus eller minus 1-2..\n\nRekommenderade värden för enkodarna för x264 och x265 är RF 18-28. Högre kvalitetsinställningar kan producera extremt stora filer.\n\nx264 är förlustfri vid RF 0.";
 
 /* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "Hho-GY-qOR"; */
 "Hho-GY-qOR.title" = "Profil:";
@@ -31,14 +58,29 @@
 /* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ja7-Zr-y1P"; */
 "ja7-Zr-y1P.title" = "Ytterligare alternativ:";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "kh8-d2-hSD"; */
+"kh8-d2-hSD.ibShadowedToolTip" = "Profil för videoenkodare. Ställer in och försäkrar giltighet med den angivna videokomprimeringsstandarden. Åsidosätter alla andra inställningar.";
+
 /* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "kPs-u2-fDn"; */
 "kPs-u2-fDn.title" = "Alternativ för enkodare:";
 
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "Videoenkodare:";
 
+/* Class = "NSButtonCell"; title = "Multi-pass encoding"; ObjectID = "nPA-nO-Eik"; */
+"nPA-nO-Eik.title" = "Enkodning med flerpass";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
+"olm-zg-k9Y.ibShadowedToolTip" = "Första turbopasset snabbar upp analyspasset för en flerpassenkodning för en inte lika bra analys.";
+
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "Förval:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "rbo-w6-ENd"; */
+"rbo-w6-ENd.ibShadowedToolTip" = "Ytterligare alternativ för videoenkodare. Endast för avancerad användning.\n\nSyntax: option-1=foo:opt2=bar,baz";
+
+/* Class = "NSTextFieldCell"; title = "RF:"; ObjectID = "rRB-9F-pHn"; */
+"rRB-9F-pHn.title" = "RF:";
 
 /* Class = "NSTextFieldCell"; title = "Framerate (FPS):"; ObjectID = "SJc-tv-AMH"; */
 "SJc-tv-AMH.title" = "Bildfrekvens (bilder/s):";
@@ -46,8 +88,17 @@
 /* Class = "NSTextFieldCell"; title = "Level:"; ObjectID = "sTM-lk-DBC"; */
 "sTM-lk-DBC.title" = "Nivå:";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering."; ObjectID = "stU-Fo-Avu"; */
+"stU-Fo-Avu.ibShadowedToolTip" = "Snabb dekodning använder inställningar som minskar CPU-användningen under uppspelning av den enkodade videon. Användbart för enheter som kämpar med att spela upp video utan att hacka.";
+
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
 "VQe-CK-YDR.title" = "Genomsnittlig bitfrekvens (kbps):";
+
+/* Class = "NSButtonCell"; title = "Turbo analysis pass"; ObjectID = "vSc-VB-NEv"; */
+"vSc-VB-NEv.title" = "Analyspass med turbo";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder. Determines video type and settings used during encoding."; ObjectID = "xwK-Yu-a1e"; */
+"xwK-Yu-a1e.ibShadowedToolTip" = "Videoenkodare. Bestämmer videotypen och inställningar som används under enkodningen.";
 
 /* Class = "NSButtonCell"; title = "Constant Quality"; ObjectID = "ZjL-cY-O5f"; */
 "ZjL-cY-O5f.title" = "Konstant kvalitet";

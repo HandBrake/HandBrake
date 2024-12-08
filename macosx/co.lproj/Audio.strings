@@ -80,7 +80,7 @@
 "nII-CW-aWc.ibExternalAccessibilityDescription" = "DRC";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "o3M-fP-6Ps"; */
-"o3M-fP-6Ps.ibShadowedToolTip" = "Cumpressione di a stesa dinamica (DRC). Riduce a sfarenza di vulume trà i soni forti è muderati. S’appieca solu à e traccie AC-3 quandu a cudificazione hè fatta ver di un altru furmatu.\n\n0 : Ùn appiecà micca a cumpressione DRC.\n1 : Appiecà DRC secondu à e sugestioni di cumpressione incurpurate in a traccia di fonte.\n\nI valori superiore à 1 aumentanu u vulume di i soni muderati. I valori superiore à 2,5 ùn sò micca ricumandati perchè ponu cagiunà una disturzione chì si sente.";
+"o3M-fP-6Ps.ibShadowedToolTip" = "Cumpressione di l’intervallu dinamicu (DRC). Riduce a sfarenza di vulume trà i soni forti è muderati. S’appieca solu à e traccie AC-3 quandu a cudificazione hè fatta ver di un altru furmatu.\n\n0 : Ùn appiecà micca a cumpressione DRC.\n1 : Appiecà DRC secondu à e sugestioni di cumpressione incurpurate in a traccia di fonte.\n\nI valori superiore à 1 aumentanu u vulume di i soni muderati. I valori superiore à 2,5 ùn sò micca ricumandati perchè ponu cagiunà una disturzione chì si sente.";
 
 /* Class = "NSTableColumn"; headerCell.title = "Bitrate"; ObjectID = "obP-lK-sY0"; */
 "obP-lK-sY0.headerCell.title" = "Flussu binariu";
@@ -104,7 +104,7 @@
 "Qg1-iw-07b.ibExternalAccessibilityDescription" = "Flussu binariu";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "Qg1-iw-07b"; */
-"Qg1-iw-07b.ibShadowedToolTip" = "Flussu binariu audio in kilobit à a seconda (kbps). I chjuchi valori riducenu a qualità di l’audio. I valori maiò impieganu più di dati è ponu esse menu cumpatibile.";
+"Qg1-iw-07b.ibShadowedToolTip" = "Flussu binariu audio in chilobit à a seconda (kbps). I chjuchi valori riducenu a qualità di l’audio. I valori maiò impieganu più di dati è ponu esse menu cumpatibile.";
 
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "qS7-Xr-9N8"; */
 "qS7-Xr-9N8.headerCell.title" = "Mischiera";
@@ -125,7 +125,7 @@
 "U4U-1b-rQF.title" = "Cellula di testu";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track."; ObjectID = "vFP-nq-IQg"; */
-"vFP-nq-IQg.ibShadowedToolTip" = "Cunfigureghja u cumpurtamentu di selezzione di e traccie audio. Ste preferenze affettanu a scelta di e traccie chì seranu aghjunte à a lista di e traccie audio, ma dinù e preferenze impiegate per ogni traccia.";
+"vFP-nq-IQg.ibShadowedToolTip" = "Cunfigureghja u cumpurtamentu di selezzione di e traccie audio. Sti parametri affettanu a scelta di e traccie chì seranu aghjunte à a lista di e traccie audio, ma dinù i parametri impiegati per ogni traccia.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the audio tracks list using the configured Selection Behavior."; ObjectID = "wcL-rL-aYS"; */
 "wcL-rL-aYS.ibShadowedToolTip" = "Ricaricheghja a lista di e traccie audio impieghendu u cumpurtamentu di selezzione cunfiguratu.";
@@ -140,8 +140,8 @@
 "yPh-4R-HRQ.ibExternalAccessibilityDescription" = "DRC";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "yPh-4R-HRQ"; */
-"yPh-4R-HRQ.ibShadowedToolTip" = "Cumpressione di a stesa dinamica (DRC). Riduce a sfarenza di vulume trà i soni forti è muderati. S’appieca solu à e traccie AC-3 quandu a cudificazione hè fatta ver di un altru furmatu.\n\n0 : Ùn appiecà micca a cumpressione DRC.\n1 : Appiecà DRC secondu à e sugestioni di cumpressione incurpurate in a traccia di fonte.\n\nI valori superiore à 1 aumentanu u vulume di i soni muderati. I valori superiore à 2,5 ùn sò micca ricumandati perchè ponu cagiunà una disturzione chì si sente.";
+"yPh-4R-HRQ.ibShadowedToolTip" = "Cumpressione di l’intervallu dinamicu (DRC). Riduce a sfarenza di vulume trà i soni forti è muderati. S’appieca solu à e traccie AC-3 quandu a cudificazione hè fatta ver di un altru furmatu.\n\n0 : Ùn appiecà micca a cumpressione DRC.\n1 : Appiecà DRC secondu à e sugestioni di cumpressione incurpurate in a traccia di fonte.\n\nI valori superiore à 1 aumentanu u vulume di i soni muderati. I valori superiore à 2,5 ùn sò micca ricumandati perchè ponu cagiunà una disturzione chì si sente.";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Audio tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the audio Selection Behavior dialog."; ObjectID = "Yzu-Rk-hTv"; */
-"Yzu-Rk-hTv.ibShadowedToolTip" = "Lista di e traccie audio. U cumpurtamentu è e preferenze di selezzione di e traccie sò caricati da a prerigatura selezziunata è ponu esse cunfigurati via u dialogu di u cumpurtamentu di selezzione audio.";
+"Yzu-Rk-hTv.ibShadowedToolTip" = "Lista di e traccie audio. U cumpurtamentu è i parametri di selezzione di e traccie sò caricati da a prerigatura selezziunata è ponu esse cunfigurati via u dialogu di u cumpurtamentu di selezzione audio.";
 

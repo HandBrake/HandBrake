@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  The image displayed by the view.
  */
-@property (nonatomic, readwrite, nullable) CGImageRef image;
+@property (nonatomic, readwrite, nullable) id image;
 
 /**
  *  The scale at which the image is shown.
