@@ -25,5 +25,5 @@ We accept bug reports (including security reports) for the following versions:
 | Version                | Accepts Reports    |
 | ---------------------- | ------------------ |
 | git main (development) | :white_check_mark: |
-| 1.8.x                  | :white_check_mark: |
+| 1.9.x                  | :white_check_mark: |
 | Earlier Releases       | :x:                |
