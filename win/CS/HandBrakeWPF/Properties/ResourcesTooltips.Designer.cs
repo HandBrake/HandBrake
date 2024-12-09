@@ -428,7 +428,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file..
+        ///   Looks up a localized string similar to Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file..
         /// </summary>
         public static string MainView_Optimise {
             get {
@@ -527,6 +527,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dash (-), Period (.) and Comma (,).
+        /// </summary>
+        public static string Options_RemovePunctuation {
+            get {
+                return ResourceManager.GetString("Options_RemovePunctuation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When enabled the auto name system will always use the default path. 
         ///When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path..
         /// </summary>
@@ -609,7 +618,7 @@ namespace HandBrakeWPF.Properties {
         ///
         ///Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
         ///
-        ///Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto. [rest of string was truncated]&quot;;.
+        ///Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced con [rest of string was truncated]&quot;;.
         /// </summary>
         public static string PictureSettingsView_Anamorphic {
             get {
@@ -954,15 +963,6 @@ namespace HandBrakeWPF.Properties {
             }
         }
         
-		/// <summary>
-        ///   Looks up a localized string similar to Remove common punctuation
-        /// </summary>
-        public static string Options_RemovePunctuation {
-            get {
-                return ResourceManager.GetString("Options_RemovePunctuation", resourceCulture);
-            }
-        }
-		
         /// <summary>
         ///   Looks up a localized string similar to Enables variable framerate output.
         ///

@@ -169,8 +169,6 @@ None disables anamorphic. Video storage dimensions and display dimensions will b
 
 Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
-
 Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
