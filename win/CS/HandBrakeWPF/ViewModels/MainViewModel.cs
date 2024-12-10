@@ -2532,11 +2532,15 @@ namespace HandBrakeWPF.ViewModels
                         this.windowsTaskbar.SetNoProgress();
                         this.ProgramStatusLabel = string.Format(Resources.Main_QueueMultiJobStatus, this.queueProcessor.CompletedCount, Environment.NewLine, queueJobStatuses.Count, this.queueProcessor.Count);
 
+                        this.WindowTitle = Resources.HandBrake_Title; // Percentage is not available when multiple jobs are running. 
+                        this.windowsTaskbar.SetTaskBarProgress(0);
+
                         this.notifyIconService.SetTooltip(string.Format(Resources.TaskTrayStatusManyTitle, Resources.HandBrake_Title, queueJobStatuses.Count));
                         this.IsMultiProcess = true;
                         this.NotifyOfPropertyChange(() => this.IsMultiProcess);
                     }
-                });
+                }
+                );
         }
 
         private void UserSettingServiceSettingChanged(object sender, SettingChangedEventArgs e)
