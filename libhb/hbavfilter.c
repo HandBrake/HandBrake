@@ -20,6 +20,7 @@
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
 #endif
+#include "handbrake/vce_common.h"
 
 struct hb_avfilter_graph_s
 {
@@ -124,7 +125,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 #endif
     {
         enum AVPixelFormat pix_fmt = init->pix_fmt;
-        if (init->hw_pix_fmt == AV_PIX_FMT_CUDA)
+        if (init->job && (init->hw_pix_fmt == AV_PIX_FMT_CUDA || init->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE))
         {
             par = av_buffersrc_parameters_alloc();
             par->format = init->hw_pix_fmt;
@@ -323,6 +324,11 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
         }
         else
 #endif
+        if(hb_vce_hw_filters_via_video_memory_are_enabled(graph->job))
+        {
+            buf = hb_vce_copy_avframe_to_video_buffer(graph->job, graph->frame, graph->out_time_base);
+        }
+        else
         {
             buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
         }
