@@ -283,6 +283,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task.VideoBitrate = importedPreset.VideoAvgBitrate;
             preset.Task.MultiPass = importedPreset.VideoMultiPass;
             preset.Task.TurboAnalysisPass = importedPreset.VideoTurboMultiPass;
+            preset.Task.PasshtruHDRDynamicMetadata = importedPreset.VideoPasshtruHDRDynamicMetadata;
             preset.Task.ExtraAdvancedArguments = importedPreset.VideoOptionExtra;
             preset.Task.Quality = double.Parse(importedPreset.VideoQualitySlider.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
             preset.Task.VideoEncodeRateType = (VideoEncodeRateType)importedPreset.VideoQualityType;
@@ -628,6 +629,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoColorMatrixCode = 0; // TODO not supported.
             preset.VideoTurboMultiPass = export.Task.TurboAnalysisPass;
             preset.VideoMultiPass = export.Task.MultiPass;
+            preset.VideoPasshtruHDRDynamicMetadata = export.Task.PasshtruHDRDynamicMetadata;
 
             // Unknown
             preset.ChildrenArray = new List<object>(); 

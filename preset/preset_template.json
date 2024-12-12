@@ -123,6 +123,7 @@
         "VideoHWDecode": 0,
         "VideoMultiPass": false,
         "VideoTurboMultiPass": false,
+        "VideoPasshtruHDRDynamicMetadata": "all",
         "x264Option": "",
         "x264UseAdvancedOptions": false
     }

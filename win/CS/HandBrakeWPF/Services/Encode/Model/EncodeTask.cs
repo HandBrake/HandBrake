@@ -295,6 +295,8 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public bool TurboAnalysisPass { get; set; }
 
+        public string PasshtruHDRDynamicMetadata { get; set; }
+
         public double? Framerate { get; set; }
 
 
