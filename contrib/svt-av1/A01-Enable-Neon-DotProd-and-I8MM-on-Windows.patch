@@ -1,0 +1,57 @@
+From 8557f2b4ad95efc367edfa2d858e6e55fb3bd255 Mon Sep 17 00:00:00 2001
+From: Harshitha Suresh <harshitha@multicorewareinc.com>
+Date: Thu, 12 Dec 2024 14:00:40 +0530
+Subject: [PATCH] Enable Neon DotProd and I8MM in SVT-AV1 for Windows On ARM
+
+---
+ Source/Lib/Codec/common_dsp_rtcd.c | 27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/Source/Lib/Codec/common_dsp_rtcd.c b/Source/Lib/Codec/common_dsp_rtcd.c
+index da4070d7..c11e4de6 100644
+--- a/Source/Lib/Codec/common_dsp_rtcd.c
++++ b/Source/Lib/Codec/common_dsp_rtcd.c
+@@ -219,7 +219,25 @@ EbCpuFlags svt_aom_get_cpu_flags(void) {
+   return flags;
+ }
+ 
+-#elif defined(_MSC_VER)  // end __APPLE__
++#elif (defined(_MSC_VER) || defined(__MINGW64__))// Windows+Aarch64 // end __APPLE__
++#include <windows.h>
++int check_i8mm_regkey()
++{
++    HKEY hKey;
++    DWORD dwSize = (DWORD)sizeof(LONGLONG);
++    LONGLONG  value = 0;
++    long lError = RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0\\", 0, KEY_READ, &hKey);
++    if (lError == ERROR_SUCCESS) 
++    {
++        lError = RegQueryValueExA(hKey, "CP 4031", NULL, NULL, (LPBYTE)&value, &dwSize);
++        RegCloseKey(hKey);
++    } 
++    else 
++    {
++        return 0;
++    }
++    return 1;
++}
+ 
+ // IsProcessorFeaturePresent() parameter documentation:
+ // https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent#parameters
+@@ -239,7 +257,12 @@ EbCpuFlags svt_aom_get_cpu_flags(void) {
+   }
+ #endif  // defined(PF_ARM_V82_DP_INSTRUCTIONS_AVAILABLE)
+ #endif  // HAVE_NEON_DOTPROD
+-// No I8MM or SVE feature detection available on Windows at time of writing.
++#if HAVE_NEON_I8MM
++    if (check_i8mm_regkey())
++       {
++            flags |= EB_CPU_FLAGS_NEON_I8MM;
++       }
++#endif  // HAVE_NEON_I8MM
+   return flags;
+ }
+ 
+-- 
+2.36.0.windows.1
+
