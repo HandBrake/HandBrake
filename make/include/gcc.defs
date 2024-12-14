@@ -95,6 +95,13 @@ ifeq ($(HOST.machine),$(filter $(HOST.machine),i686 x86_64))
     GCC.args.extra    += -mfpmath=sse -msse2
 endif
 GCC.args.extra        += $(CPPFLAGS) $(CFLAGS)
+ifeq (1,$(HOST.cross))
+    ifeq ($(HOST.machine),$(filter $(HOST.machine),aarch64))
+        ifeq (mingw,$(HOST.system))
+            GCC.args.extra  += -finline-functions -funroll-loops -mllvm -inline-threshold=1000 -ftree-vectorize -mllvm --instcombine-code-sinking -mllvm --hot-cold-split
+        endif
+    endif
+endif
 GCC.args.extra.h_o     =
 GCC.args.extra.c_o     =
 GCC.args.extra.dylib   = $(LDFLAGS)

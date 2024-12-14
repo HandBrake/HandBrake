@@ -1,0 +1,27 @@
+From 95d38b6cd541a10f0d7520f33b24ab32267e8315 Mon Sep 17 00:00:00 2001
+From: Harshitha Suresh <harshitha@multicorewareinc.com>
+Date: Fri, 13 Dec 2024 20:05:52 +0530
+Subject: [PATCH] Fix i8mm architecture build errors for mingw cross
+ compilation
+
+---
+ CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0666d76d..0d5bbf8c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -174,6 +174,9 @@ svfloat32_t func(svfloat32_t a) {
+             add_compile_definitions(HAVE_${flavor}=0)
+         endif()
+     endforeach()
++	if(ENABLE_NEON_I8MM)
++		add_compile_options(-march=armv8.2-a+dotprod+i8mm)
++	endif()
+ 
+     add_definitions(-DARCH_AARCH64=1)
+     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-lax-vector-conversions")
+-- 
+2.36.0.windows.1
+
