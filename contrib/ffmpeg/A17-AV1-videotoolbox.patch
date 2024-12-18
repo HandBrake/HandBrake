@@ -1,0 +1,400 @@
+From f9c5c5358cfef3847674c6f3b3ded9611ebc5647 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jan=20Ekstr=C3=B6m?= <jeebjp@gmail.com>
+Date: Fri, 10 Nov 2023 22:11:44 +0200
+Subject: [PATCH] avcodec/videotoolbox: add AV1 hardware acceleration
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Use AV1DecContext's current_obu to access the original OBUs, and
+feed them to videotoolbox, rather than the bare slice data passed
+via decode_slice.
+
+This requires a small addition to AV1DecContext, for keeping track
+of the current range of OBUs that belong to the current frame.
+
+Co-authored-by: Ruslan Chernenko <ractyfree@gmail.com>
+Co-authored-by: Martin Storsjö <martin@martin.st>
+Signed-off-by: Martin Storsjö <martin@martin.st>
+---
+ configure                     |   4 ++
+ libavcodec/Makefile           |   1 +
+ libavcodec/av1dec.c           |  22 ++++++-
+ libavcodec/av1dec.h           |   3 +-
+ libavcodec/hwaccels.h         |   1 +
+ libavcodec/version.h          |   2 +-
+ libavcodec/videotoolbox.c     |  34 +++++++++++
+ libavcodec/videotoolbox_av1.c | 105 ++++++++++++++++++++++++++++++++++
+ libavcodec/vt_internal.h      |   4 ++
+ 9 files changed, 171 insertions(+), 5 deletions(-)
+ create mode 100644 libavcodec/videotoolbox_av1.c
+
+diff --git a/configure b/configure
+index c8fb49a7a4a58..dc1b9b2bea1be 100755
+--- a/configure
++++ b/configure
+@@ -2467,6 +2467,7 @@ TYPES_LIST="
+     kCMVideoCodecType_HEVC
+     kCMVideoCodecType_HEVCWithAlpha
+     kCMVideoCodecType_VP9
++    kCMVideoCodecType_AV1
+     kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange
+     kCVPixelFormatType_422YpCbCr8BiPlanarVideoRange
+     kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange
+@@ -3174,6 +3175,8 @@ av1_vaapi_hwaccel_deps="vaapi VADecPictureParameterBufferAV1_bit_depth_idx"
+ av1_vaapi_hwaccel_select="av1_decoder"
+ av1_vdpau_hwaccel_deps="vdpau VdpPictureInfoAV1"
+ av1_vdpau_hwaccel_select="av1_decoder"
++av1_videotoolbox_hwaccel_deps="videotoolbox"
++av1_videotoolbox_hwaccel_select="av1_decoder"
+ av1_vulkan_hwaccel_deps="vulkan"
+ av1_vulkan_hwaccel_select="av1_decoder"
+ h263_vaapi_hwaccel_deps="vaapi"
+@@ -6708,6 +6711,7 @@ enabled videotoolbox && {
+     check_func_headers CoreMedia/CMFormatDescription.h kCMVideoCodecType_HEVC "-framework CoreMedia"
+     check_func_headers CoreMedia/CMFormatDescription.h kCMVideoCodecType_HEVCWithAlpha "-framework CoreMedia"
+     check_func_headers CoreMedia/CMFormatDescription.h kCMVideoCodecType_VP9 "-framework CoreMedia"
++    check_func_headers CoreMedia/CMFormatDescription.h kCMVideoCodecType_AV1 "-framework CoreMedia"
+     check_func_headers CoreVideo/CVPixelBuffer.h kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange "-framework CoreVideo"
+     check_func_headers CoreVideo/CVPixelBuffer.h kCVPixelFormatType_422YpCbCr8BiPlanarVideoRange "-framework CoreVideo"
+     check_func_headers CoreVideo/CVPixelBuffer.h kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange "-framework CoreVideo"
+diff --git a/libavcodec/Makefile b/libavcodec/Makefile
+index a4fcce3b42156..21188b2479c73 100644
+--- a/libavcodec/Makefile
++++ b/libavcodec/Makefile
+@@ -1008,6 +1008,7 @@ OBJS-$(CONFIG_AV1_D3D12VA_HWACCEL)        += dxva2_av1.o d3d12va_av1.o
+ OBJS-$(CONFIG_AV1_NVDEC_HWACCEL)          += nvdec_av1.o
+ OBJS-$(CONFIG_AV1_VAAPI_HWACCEL)          += vaapi_av1.o
+ OBJS-$(CONFIG_AV1_VDPAU_HWACCEL)          += vdpau_av1.o
++OBJS-$(CONFIG_AV1_VIDEOTOOLBOX_HWACCEL)   += videotoolbox_av1.o
+ OBJS-$(CONFIG_AV1_VULKAN_HWACCEL)         += vulkan_decode.o vulkan_av1.o
+ OBJS-$(CONFIG_H263_VAAPI_HWACCEL)         += vaapi_mpeg4.o
+ OBJS-$(CONFIG_H263_VIDEOTOOLBOX_HWACCEL)  += videotoolbox.o
+diff --git a/libavcodec/av1dec.c b/libavcodec/av1dec.c
+index 1d5b9ef4f4c62..6a9de07d16faa 100644
+--- a/libavcodec/av1dec.c
++++ b/libavcodec/av1dec.c
+@@ -541,6 +541,7 @@ static int get_pixel_format(AVCodecContext *avctx)
+                      CONFIG_AV1_NVDEC_HWACCEL + \
+                      CONFIG_AV1_VAAPI_HWACCEL + \
+                      CONFIG_AV1_VDPAU_HWACCEL + \
++                     CONFIG_AV1_VIDEOTOOLBOX_HWACCEL + \
+                      CONFIG_AV1_VULKAN_HWACCEL)
+     enum AVPixelFormat pix_fmts[HWACCEL_MAX + 2], *fmtp = pix_fmts;
+ 
+@@ -568,6 +569,9 @@ static int get_pixel_format(AVCodecContext *avctx)
+ #if CONFIG_AV1_VDPAU_HWACCEL
+         *fmtp++ = AV_PIX_FMT_VDPAU;
+ #endif
++#if CONFIG_AV1_VIDEOTOOLBOX_HWACCEL
++        *fmtp++ = AV_PIX_FMT_VIDEOTOOLBOX;
++#endif
+ #if CONFIG_AV1_VULKAN_HWACCEL
+         *fmtp++ = AV_PIX_FMT_VULKAN;
+ #endif
+@@ -592,6 +596,9 @@ static int get_pixel_format(AVCodecContext *avctx)
+ #if CONFIG_AV1_VDPAU_HWACCEL
+         *fmtp++ = AV_PIX_FMT_VDPAU;
+ #endif
++#if CONFIG_AV1_VIDEOTOOLBOX_HWACCEL
++        *fmtp++ = AV_PIX_FMT_VIDEOTOOLBOX;
++#endif
+ #if CONFIG_AV1_VULKAN_HWACCEL
+         *fmtp++ = AV_PIX_FMT_VULKAN;
+ #endif
+@@ -1439,6 +1446,10 @@ static int av1_receive_frame_internal(AVCodecContext *avctx, AVFrame *frame)
+ 
+         if (raw_tile_group && (s->tile_num == raw_tile_group->tg_end + 1)) {
+             int show_frame = s->raw_frame_header->show_frame;
++            // Set nb_unit to point at the next OBU, to indicate which
++            // OBUs have been processed for this current frame. (If this
++            // frame gets output, we set nb_unit to this value later too.)
++            s->nb_unit = i + 1;
+             if (avctx->hwaccel && s->cur_frame.f) {
+                 ret = FF_HW_SIMPLE_CALL(avctx, end_frame);
+                 if (ret < 0) {
+@@ -1449,6 +1460,8 @@ static int av1_receive_frame_internal(AVCodecContext *avctx, AVFrame *frame)
+ 
+             update_reference_list(avctx);
+ 
++            // Set start_unit to indicate the first OBU of the next frame.
++            s->start_unit       = s->nb_unit;
+             raw_tile_group      = NULL;
+             s->raw_frame_header = NULL;
+ 
+@@ -1478,7 +1491,7 @@ static int av1_receive_frame_internal(AVCodecContext *avctx, AVFrame *frame)
+             s->raw_frame_header = NULL;
+         av_packet_unref(s->pkt);
+         ff_cbs_fragment_reset(&s->current_obu);
+-        s->nb_unit = 0;
++        s->nb_unit = s->start_unit = 0;
+     }
+     if (!ret && !frame->buf[0])
+         ret = AVERROR(EAGAIN);
+@@ -1505,7 +1518,7 @@ static int av1_receive_frame(AVCodecContext *avctx, AVFrame *frame)
+                 return ret;
+             }
+ 
+-            s->nb_unit = 0;
++            s->nb_unit = s->start_unit = 0;
+             av_log(avctx, AV_LOG_DEBUG, "Total OBUs on this packet: %d.\n",
+                    s->current_obu.nb_units);
+         }
+@@ -1526,7 +1539,7 @@ static void av1_decode_flush(AVCodecContext *avctx)
+ 
+     av1_frame_unref(&s->cur_frame);
+     s->operating_point_idc = 0;
+-    s->nb_unit = 0;
++    s->nb_unit = s->start_unit = 0;
+     s->raw_frame_header = NULL;
+     s->raw_seq = NULL;
+     s->cll = NULL;
+@@ -1594,6 +1607,9 @@ const FFCodec ff_av1_decoder = {
+ #if CONFIG_AV1_VDPAU_HWACCEL
+         HWACCEL_VDPAU(av1),
+ #endif
++#if CONFIG_AV1_VIDEOTOOLBOX_HWACCEL
++        HWACCEL_VIDEOTOOLBOX(av1),
++#endif
+ #if CONFIG_AV1_VULKAN_HWACCEL
+         HWACCEL_VULKAN(av1),
+ #endif
+diff --git a/libavcodec/av1dec.h b/libavcodec/av1dec.h
+index 8b2a7b08961e6..10c807f73f98f 100644
+--- a/libavcodec/av1dec.h
++++ b/libavcodec/av1dec.h
+@@ -114,7 +114,8 @@ typedef struct AV1DecContext {
+     AV1Frame ref[AV1_NUM_REF_FRAMES];
+     AV1Frame cur_frame;
+ 
+-    int nb_unit;
++    int nb_unit;           ///< The index of the next OBU to be processed.
++    int start_unit;        ///< The index of the first OBU of the current frame.
+ 
+     // AVOptions
+     int operating_point;
+diff --git a/libavcodec/hwaccels.h b/libavcodec/hwaccels.h
+index 5171e4c7d7357..2b9bdc8fc97ad 100644
+--- a/libavcodec/hwaccels.h
++++ b/libavcodec/hwaccels.h
+@@ -26,6 +26,7 @@ extern const struct FFHWAccel ff_av1_dxva2_hwaccel;
+ extern const struct FFHWAccel ff_av1_nvdec_hwaccel;
+ extern const struct FFHWAccel ff_av1_vaapi_hwaccel;
+ extern const struct FFHWAccel ff_av1_vdpau_hwaccel;
++extern const struct FFHWAccel ff_av1_videotoolbox_hwaccel;
+ extern const struct FFHWAccel ff_av1_vulkan_hwaccel;
+ extern const struct FFHWAccel ff_h263_vaapi_hwaccel;
+ extern const struct FFHWAccel ff_h263_videotoolbox_hwaccel;
+diff --git a/libavcodec/version.h b/libavcodec/version.h
+index d0980e28de827..da6f3a84ac197 100644
+--- a/libavcodec/version.h
++++ b/libavcodec/version.h
+@@ -29,7 +29,7 @@
+ 
+ #include "version_major.h"
+ 
+-#define LIBAVCODEC_VERSION_MINOR  19
++#define LIBAVCODEC_VERSION_MINOR  20
+ #define LIBAVCODEC_VERSION_MICRO 100
+ 
+ #define LIBAVCODEC_VERSION_INT  AV_VERSION_INT(LIBAVCODEC_VERSION_MAJOR, \
+diff --git a/libavcodec/videotoolbox.c b/libavcodec/videotoolbox.c
+index 505483ef66d7a..a5a76e83271fc 100644
+--- a/libavcodec/videotoolbox.c
++++ b/libavcodec/videotoolbox.c
+@@ -56,6 +56,10 @@ enum { kCMVideoCodecType_HEVC = 'hvc1' };
+ enum { kCMVideoCodecType_VP9 = 'vp09' };
+ #endif
+ 
++#if !HAVE_KCMVIDEOCODECTYPE_AV1
++enum { kCMVideoCodecType_AV1 = 'av01' };
++#endif
++
+ #define VIDEOTOOLBOX_ESDS_EXTRADATA_PADDING  12
+ 
+ typedef struct VTHWFrame {
+@@ -92,6 +96,26 @@ int ff_videotoolbox_buffer_copy(VTContext *vtctx,
+     return 0;
+ }
+ 
++int ff_videotoolbox_buffer_append(VTContext *vtctx,
++                                 const uint8_t *buffer,
++                                 uint32_t size)
++{
++    void *tmp;
++
++    tmp = av_fast_realloc(vtctx->bitstream,
++                          &vtctx->allocated_size,
++                          vtctx->bitstream_size + size);
++
++    if (!tmp)
++        return AVERROR(ENOMEM);
++
++    vtctx->bitstream = tmp;
++    memcpy(vtctx->bitstream + vtctx->bitstream_size, buffer, size);
++    vtctx->bitstream_size += size;
++
++    return 0;
++}
++
+ static int videotoolbox_postproc_frame(void *avctx, AVFrame *frame)
+ {
+     int ret;
+@@ -846,6 +870,13 @@ static CFDictionaryRef videotoolbox_decoder_config_create(CMVideoCodecType codec
+         if (data)
+             CFDictionarySetValue(avc_info, CFSTR("vpcC"), data);
+         break;
++#endif
++#if CONFIG_AV1_VIDEOTOOLBOX_HWACCEL
++    case kCMVideoCodecType_AV1 :
++        data = ff_videotoolbox_av1c_extradata_create(avctx);
++        if (data)
++            CFDictionarySetValue(avc_info, CFSTR("av1C"), data);
++        break;
+ #endif
+     default:
+         break;
+@@ -912,6 +943,9 @@ static int videotoolbox_start(AVCodecContext *avctx)
+     case AV_CODEC_ID_VP9 :
+         videotoolbox->cm_codec_type = kCMVideoCodecType_VP9;
+         break;
++    case AV_CODEC_ID_AV1 :
++        videotoolbox->cm_codec_type = kCMVideoCodecType_AV1;
++        break;
+     default :
+         break;
+     }
+diff --git a/libavcodec/videotoolbox_av1.c b/libavcodec/videotoolbox_av1.c
+new file mode 100644
+index 0000000000000..b4d39194d5d0f
+--- /dev/null
++++ b/libavcodec/videotoolbox_av1.c
+@@ -0,0 +1,105 @@
++/*
++ * Videotoolbox hardware acceleration for AV1
++ * Copyright (c) 2023 Jan Ekström
++ * Copyright (c) 2024 Ruslan Chernenko
++ * Copyright (c) 2024 Martin Storsjö
++ *
++ * This file is part of FFmpeg.
++ *
++ * FFmpeg is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * FFmpeg is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with FFmpeg; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include "libavutil/mem.h"
++
++#include "av1dec.h"
++#include "hwaccel_internal.h"
++#include "internal.h"
++#include "vt_internal.h"
++
++CFDataRef ff_videotoolbox_av1c_extradata_create(AVCodecContext *avctx)
++{
++    AV1DecContext *s = avctx->priv_data;
++    uint8_t *buf;
++    CFDataRef data;
++    if (!s->raw_seq)
++        return NULL;
++
++    buf = av_malloc(s->seq_data_ref->size + 4);
++    if (!buf)
++        return NULL;
++    buf[0] = 0x81; // version and marker (constant)
++    buf[1] = s->raw_seq->seq_profile << 5 | s->raw_seq->seq_level_idx[0];
++    buf[2] = s->raw_seq->seq_tier[0]                << 7 |
++             s->raw_seq->color_config.high_bitdepth << 6 |
++             s->raw_seq->color_config.twelve_bit    << 5 |
++             s->raw_seq->color_config.mono_chrome   << 4 |
++             s->raw_seq->color_config.subsampling_x << 3 |
++             s->raw_seq->color_config.subsampling_y << 2 |
++             s->raw_seq->color_config.chroma_sample_position;
++
++    if (s->raw_seq->initial_display_delay_present_flag)
++        buf[3] = 0 << 5 |
++                 s->raw_seq->initial_display_delay_present_flag << 4 |
++                 s->raw_seq->initial_display_delay_minus_1[0];
++    else
++        buf[3] = 0x00;
++    memcpy(buf + 4, s->seq_data_ref->data, s->seq_data_ref->size);
++    data = CFDataCreate(kCFAllocatorDefault, buf, s->seq_data_ref->size + 4);
++    av_free(buf);
++    return data;
++};
++
++
++static int videotoolbox_av1_start_frame(AVCodecContext *avctx,
++                                        const uint8_t *buffer,
++                                        uint32_t size)
++{
++    return 0;
++}
++
++static int videotoolbox_av1_decode_slice(AVCodecContext *avctx,
++                                         const uint8_t *buffer,
++                                         uint32_t size)
++{
++    return 0;
++}
++
++static int videotoolbox_av1_end_frame(AVCodecContext *avctx)
++{
++    const AV1DecContext *s = avctx->priv_data;
++    VTContext *vtctx = avctx->internal->hwaccel_priv_data;
++    AVFrame *frame = s->cur_frame.f;
++
++    vtctx->bitstream_size = 0;
++    for (int i = s->start_unit; i < s->nb_unit; i++)
++        ff_videotoolbox_buffer_append(vtctx, s->current_obu.units[i].data,
++                                      s->current_obu.units[i].data_size);
++    return ff_videotoolbox_common_end_frame(avctx, frame);
++}
++
++const FFHWAccel ff_av1_videotoolbox_hwaccel = {
++    .p.name         = "av1_videotoolbox",
++    .p.type         = AVMEDIA_TYPE_VIDEO,
++    .p.id           = AV_CODEC_ID_AV1,
++    .p.pix_fmt      = AV_PIX_FMT_VIDEOTOOLBOX,
++    .alloc_frame    = ff_videotoolbox_alloc_frame,
++    .start_frame    = videotoolbox_av1_start_frame,
++    .decode_slice   = videotoolbox_av1_decode_slice,
++    .end_frame      = videotoolbox_av1_end_frame,
++    .frame_params   = ff_videotoolbox_frame_params,
++    .init           = ff_videotoolbox_common_init,
++    .uninit         = ff_videotoolbox_uninit,
++    .priv_data_size = sizeof(VTContext),
++};
+diff --git a/libavcodec/vt_internal.h b/libavcodec/vt_internal.h
+index 9502d7c7dc373..effa96fc15c92 100644
+--- a/libavcodec/vt_internal.h
++++ b/libavcodec/vt_internal.h
+@@ -56,6 +56,9 @@ int ff_videotoolbox_frame_params(AVCodecContext *avctx,
+ int ff_videotoolbox_buffer_copy(VTContext *vtctx,
+                                 const uint8_t *buffer,
+                                 uint32_t size);
++int ff_videotoolbox_buffer_append(VTContext *vtctx,
++                                  const uint8_t *buffer,
++                                  uint32_t size);
+ int ff_videotoolbox_uninit(AVCodecContext *avctx);
+ int ff_videotoolbox_h264_start_frame(AVCodecContext *avctx,
+                                      const uint8_t *buffer,
+@@ -64,6 +67,7 @@ int ff_videotoolbox_h264_decode_slice(AVCodecContext *avctx,
+                                       const uint8_t *buffer,
+                                       uint32_t size);
+ int ff_videotoolbox_common_end_frame(AVCodecContext *avctx, AVFrame *frame);
++CFDataRef ff_videotoolbox_av1c_extradata_create(AVCodecContext *avctx);
+ CFDataRef ff_videotoolbox_avcc_extradata_create(AVCodecContext *avctx);
+ CFDataRef ff_videotoolbox_hvcc_extradata_create(AVCodecContext *avctx);
+ CFDataRef ff_videotoolbox_vpcc_extradata_create(AVCodecContext *avctx);
+ 
