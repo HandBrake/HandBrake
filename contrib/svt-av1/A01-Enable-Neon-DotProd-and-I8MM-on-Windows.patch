@@ -1,44 +1,60 @@
-From 8557f2b4ad95efc367edfa2d858e6e55fb3bd255 Mon Sep 17 00:00:00 2001
-From: Harshitha Suresh <harshitha@multicorewareinc.com>
-Date: Thu, 12 Dec 2024 14:00:40 +0530
+From e9bc4fa0d8229abd46df1ada8a1253ceea60aee1 Mon Sep 17 00:00:00 2001
+From: Dash Santosh <dash.sathyanarayanan@multicorewareinc.com>
+Date: Thu, 19 Dec 2024 03:46:56 -0800
 Subject: [PATCH] Enable Neon DotProd and I8MM in SVT-AV1 for Windows On ARM
 
 ---
- Source/Lib/Codec/common_dsp_rtcd.c | 27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+ Source/Lib/Codec/common_dsp_rtcd.c | 43 ++++++++++++++++++++++++++++--
+ 1 file changed, 41 insertions(+), 2 deletions(-)
 
 diff --git a/Source/Lib/Codec/common_dsp_rtcd.c b/Source/Lib/Codec/common_dsp_rtcd.c
-index da4070d7..c11e4de6 100644
+index da4070d7..a253630c 100644
 --- a/Source/Lib/Codec/common_dsp_rtcd.c
 +++ b/Source/Lib/Codec/common_dsp_rtcd.c
-@@ -219,7 +219,25 @@ EbCpuFlags svt_aom_get_cpu_flags(void) {
+@@ -219,7 +219,41 @@ EbCpuFlags svt_aom_get_cpu_flags(void) {
    return flags;
  }
  
 -#elif defined(_MSC_VER)  // end __APPLE__
-+#elif (defined(_MSC_VER) || defined(__MINGW64__))// Windows+Aarch64 // end __APPLE__
++#elif (defined(_MSC_VER) || defined(__MINGW64__)) // Windows+Aarch64
 +#include <windows.h>
++
++DWORD get_number_of_cores()
++{
++    SYSTEM_INFO sys_info;
++    GetSystemInfo(&sys_info);
++    return sys_info.dwNumberOfProcessors;
++}
 +int check_i8mm_regkey()
 +{
 +    HKEY hKey;
 +    DWORD dwSize = (DWORD)sizeof(LONGLONG);
-+    LONGLONG  value = 0;
-+    long lError = RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0\\", 0, KEY_READ, &hKey);
-+    if (lError == ERROR_SUCCESS) 
++    LONGLONG value = 0;
++    UINT NumOfCPUs = get_number_of_cores();
++    int i8mmAvailable = 0;
++    WCHAR keyPath[256];
++    for (UINT i = 0; i < NumOfCPUs; i++)
 +    {
-+        lError = RegQueryValueExA(hKey, "CP 4031", NULL, NULL, (LPBYTE)&value, &dwSize);
-+        RegCloseKey(hKey);
-+    } 
-+    else 
-+    {
-+        return 0;
++        swprintf_s(keyPath, 256, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\%d", i);
++        long lError = RegOpenKeyExW(HKEY_LOCAL_MACHINE, keyPath, 0, KEY_READ, &hKey);
++        if (lError == ERROR_SUCCESS) 
++        {
++            lError = RegQueryValueExA(hKey, "CP 4031", NULL, NULL, (LPBYTE)&value, &dwSize);
++            i8mmAvailable = (int)((value >> 52) & 0x1);
++            if (!i8mmAvailable) {
++                break;
++            }
++        } 
++        else {
++            return 0;
++        }
 +    }
-+    return 1;
++    return i8mmAvailable;
 +}
  
  // IsProcessorFeaturePresent() parameter documentation:
  // https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent#parameters
-@@ -239,7 +257,12 @@ EbCpuFlags svt_aom_get_cpu_flags(void) {
+@@ -239,7 +273,12 @@ EbCpuFlags svt_aom_get_cpu_flags(void) {
    }
  #endif  // defined(PF_ARM_V82_DP_INSTRUCTIONS_AVAILABLE)
  #endif  // HAVE_NEON_DOTPROD
@@ -53,5 +69,5 @@ index da4070d7..c11e4de6 100644
  }
  
 -- 
-2.36.0.windows.1
+2.34.1
 
