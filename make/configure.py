@@ -1448,6 +1448,10 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-vce', dest="enable_vce", default=IfHost(True, 'x86_64-w64-mingw32*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
+    h = 'AMD VCE video decoder' if vce_supported else argparse.SUPPRESS
+    grp.add_argument( '--enable-amfdec', dest="enable_amfdec", default=IfHost(True, 'x86_64-w64-mingw32*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-amfdec', dest="enable_amfdec", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
+
     h = IfHost( 'libdovi', '*-*-*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-libdovi', dest="enable_libdovi", default=not Tools.cargo.fail and not Tools.cargoc.fail, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-libdovi', dest="enable_libdovi", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -1780,6 +1784,7 @@ try:
     options.enable_nvdec      = options.enable_nvdec if nvenc_supported else False
     options.enable_qsv        = options.enable_qsv if qsv_supported else False
     options.enable_vce        = options.enable_vce if vce_supported else False
+    options.enable_amfdec     = options.enable_amfdec if vce_supported else False
     options.enable_gtk        = options.enable_gtk if gtk_supported else False
 
     #####################################
@@ -2086,6 +2091,7 @@ int main()
     doc.add( 'FEATURE.nvdec',      int( options.enable_nvdec ))
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
+    doc.add( 'FEATURE.amfdec',     int( options.enable_amfdec ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
     doc.add( 'FEATURE.numa',       int( options.enable_numa ))
     doc.add( 'FEATURE.libdovi',    int( options.enable_libdovi ))
@@ -2213,6 +2219,7 @@ int main()
     print(f'Enable NVDEC:       {options.enable_nvdec}' + ('' if nvenc_supported else note_unsupported))
     print(f'Enable QSV:         {options.enable_qsv}' + ('' if qsv_supported else note_unsupported))
     print(f'Enable VCE:         {options.enable_vce}' + ('' if vce_supported else note_unsupported))
+    print(f'Enable AMFDEC:      {options.enable_amfdec}' + ('' if vce_supported else note_unsupported))
     print(f'Enable libdovi:     {options.enable_libdovi}')
     print(f'Enable GTK GUI:     {options.enable_gtk}' + ('' if gtk_supported else note_unsupported))
 
