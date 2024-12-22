@@ -200,8 +200,10 @@
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Height}" />
             </StackPanel>
 
-            <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_OptimalSize}" IsChecked="{Binding OptimalSize}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" VerticalContentAlignment="Center" />
-            <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_AllowUpscaling}" IsChecked="{Binding AllowUpscaling}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" VerticalContentAlignment="Center" />
+            <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_OptimalSize}" IsChecked="{Binding OptimalSize}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" 
+                      VerticalContentAlignment="Center" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_OptimalSize}" />
+            <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_AllowUpscaling}" IsChecked="{Binding AllowUpscaling}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" 
+                      VerticalContentAlignment="Center" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AllowUpscaling}" />
         </Grid>
 
         <!-- Padding Panel -->
@@ -293,7 +295,8 @@
                 <CheckBox  IsChecked="{Binding MaintainAspectRatio}" Margin="10,0,0,0" 
                           ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_KeepAR}" 
                           VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
-                    <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_KeepAR}" VerticalAlignment="Center" Margin="0,1,0,0" />
+                    <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_KeepAR}" VerticalAlignment="Center" Margin="0,1,0,0"
+                               ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutomaticKeepAR}"/>
                 </CheckBox>
 
                 <TextBlock Text="{Binding OutputAspect}" Margin="20,0,0,0" />

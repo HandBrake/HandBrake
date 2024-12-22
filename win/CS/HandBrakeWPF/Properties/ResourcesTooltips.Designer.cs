@@ -612,6 +612,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If not enabled, scaled dimensions will be limited to source dimensions..
+        /// </summary>
+        public static string PictureSettingsView_AllowUpscaling {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_AllowUpscaling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
         ///
         ///None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
@@ -632,6 +641,15 @@ namespace HandBrakeWPF.Properties {
         public static string PictureSettingsView_AutoCrop {
             get {
                 return ResourceManager.GetString("PictureSettingsView_AutoCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changing the displays size will stretch the video.
+        /// </summary>
+        public static string PictureSettingsView_AutomaticKeepAR {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_AutomaticKeepAR", resourceCulture);
             }
         }
         
@@ -708,6 +726,15 @@ namespace HandBrakeWPF.Properties {
         public static string PictureSettingsView_Modulus {
             get {
                 return ResourceManager.GetString("PictureSettingsView_Modulus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use highest resolution permitted by above settings.
+        /// </summary>
+        public static string PictureSettingsView_OptimalSize {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_OptimalSize", resourceCulture);
             }
         }
         
