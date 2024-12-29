@@ -187,7 +187,11 @@ ifeq ($(HAS.dlfcn),1)
     LIBHB.GCC.l += dl
 endif
 LIBHB.out += $(LIBHB.dll) $(LIBHB.lib)
-
+ifeq ($(HOST.machine),$(filter $(HOST.machine),aarch64))
+    ifneq (none,$(GCC.g))
+        LIBHB.out += $(LIBHB.pdb)
+    endif
+endif
 endif
 
 ###############################################################################
