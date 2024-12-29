@@ -16,6 +16,7 @@ namespace HandBrakeWPF.Model
         Dimensions,
         Source,
         Preset,
-        Angle
+        Angle,
+        Title
     }
 }

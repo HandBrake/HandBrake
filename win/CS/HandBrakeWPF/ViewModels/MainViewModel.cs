@@ -2221,7 +2221,7 @@ namespace HandBrakeWPF.ViewModels
 
             bool is_execute = false;
             
-            if ((autonameFormat.Contains(Constants.Source) || autonameFormat.Contains(Constants.SourcePath) || autonameFormat.Contains(Constants.SourceFolderName)) && option == ChangedOption.Source)
+            if ((autonameFormat.Contains(Constants.Source) || autonameFormat.Contains(Constants.SourcePath) || autonameFormat.Contains(Constants.SourceFolderName) || autonameFormat.Contains(Constants.Title)) && option == ChangedOption.Source)
             {
                 is_execute = true;
             }
@@ -2270,7 +2270,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 is_execute = true;
             }
-            
+
             if (is_execute)
             {
                 this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName, this.SelectedTitle?.DisplaySourceName, this.selectedPreset);
