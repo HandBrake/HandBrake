@@ -184,17 +184,21 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
-    if (job->encoder_tune != NULL && strstr("ssim", job->encoder_tune) != NULL)
+    if (job->encoder_tune != NULL && strstr("vq", job->encoder_tune) != NULL)
     {
-        param->tune = 2;
+        param->tune = 0; // "vq" corresponds to tune = 0
     }
     else if (job->encoder_tune != NULL && strstr("psnr", job->encoder_tune) != NULL)
     {
-        param->tune = 1;
+        param->tune = 1; // "psnr" corresponds to tune = 1
+    }
+    else if (job->encoder_tune != NULL && strstr("ssim", job->encoder_tune) != NULL)
+    {
+        param->tune = 2; // "ssim" corresponds to tune = 2
     }
     else
     {
-        param->tune = 0;
+        param->tune = 0; // Default to "vq" if no specific tune is found
     }
 
     if (job->encoder_tune != NULL && strstr("fastdecode", job->encoder_tune) != NULL)
