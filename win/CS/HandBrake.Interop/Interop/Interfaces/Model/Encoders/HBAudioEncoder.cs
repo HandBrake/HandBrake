@@ -152,5 +152,35 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
                 return this.ShortName.Contains("flac"); // TODO Find a better way to do this. 
             }
         }
+
+        protected bool Equals(HBAudioEncoder other)
+        {
+            return this.ShortName == other.ShortName;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((HBAudioEncoder)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.ShortName != null ? this.ShortName.GetHashCode() : 0);
+        }
     }
 }
