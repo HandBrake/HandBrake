@@ -269,7 +269,7 @@ You should generally set this option to the slowest you can bear since slower
 settings will result in better quality or smaller files.
 
 Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
-or to the left to increase encoding speed at the expose of compression efficiency.</value>
+or to the left to increase encoding speed at the expense of compression efficiency.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Sets and ensures compliance with the specified profile.
