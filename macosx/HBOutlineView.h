@@ -1,4 +1,4 @@
-/*  HBTableView.h $
+/*  HBOutlineView.h $
 
  This file is part of the HandBrake source code.
  Homepage: <http://handbrake.fr/>.
@@ -8,14 +8,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol HBTableViewDelegate <NSTableViewDelegate>
-@optional
-- (void)HB_deleteSelectionFromTableView:(NSTableView *)tableView;
-- (void)HB_expandSelectionFromTableView:(NSTableView *)tableView;
-- (void)HB_collapseSelectionFromTableView:(NSTableView *)tableView;
-@end
-
-@interface HBTableView : NSTableView
+@interface HBOutlineView : NSOutlineView
 
 /**
  *  An index set containing the indexes of the targeted rows.

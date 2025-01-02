@@ -223,6 +223,7 @@
 		A957EBCD218DBE5900007988 /* HBAutoNamer.m in Sources */ = {isa = PBXBuildFile; fileRef = A957EBCC218DBE5900007988 /* HBAutoNamer.m */; };
 		A958EAC222E24D6400D83AF4 /* HBQueueTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A958EAC422E24D6400D83AF4 /* HBQueueTableViewController.xib */; };
 		A958EAC522E24D6800D83AF4 /* HBQueueInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A958EAC722E24D6800D83AF4 /* HBQueueInfoViewController.xib */; };
+		A95967382D26A1E900EDF58D /* HBOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = A95967372D26A1E900EDF58D /* HBOutlineView.m */; };
 		A95BA15D220C968500A2F9F9 /* HBQueueJobItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A95BA15C220C968500A2F9F9 /* HBQueueJobItem.m */; };
 		A95BC1E71CD2548A008D6A33 /* volHighTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */; };
 		A95BC1E81CD2548A008D6A33 /* volLowTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E61CD2548A008D6A33 /* volLowTemplate.pdf */; };
@@ -665,6 +666,8 @@
 		A958605B2216A5E5002092B1 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A958EAC322E24D6400D83AF4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBQueueTableViewController.xib; sourceTree = "<group>"; };
 		A958EAC622E24D6800D83AF4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBQueueInfoViewController.xib; sourceTree = "<group>"; };
+		A95967362D26A1E900EDF58D /* HBOutlineView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBOutlineView.h; sourceTree = "<group>"; };
+		A95967372D26A1E900EDF58D /* HBOutlineView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBOutlineView.m; sourceTree = "<group>"; };
 		A9597A281A49749D00007771 /* HBRange+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBRange+UIAdditions.h"; sourceTree = "<group>"; };
 		A9597A291A49749D00007771 /* HBRange+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBRange+UIAdditions.m"; sourceTree = "<group>"; };
 		A95BA15B220C968500A2F9F9 /* HBQueueJobItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueJobItem.h; sourceTree = "<group>"; };
@@ -2001,6 +2004,8 @@
 				A9F7102519A475EC00F61301 /* HBDockTile.m */,
 				A9EA43661A2210C400785E95 /* HBTableView.h */,
 				A9EA43671A2210C400785E95 /* HBTableView.m */,
+				A95967362D26A1E900EDF58D /* HBOutlineView.h */,
+				A95967372D26A1E900EDF58D /* HBOutlineView.m */,
 				A9D0FA751C1C284D0003F2A9 /* HBFocusRingView.h */,
 				A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */,
 				A9C61F9C22E31CDB00C28E7C /* HBFlippedClipView.h */,
@@ -2555,6 +2560,7 @@
 				A96127DF22E0994E0086E6DC /* HBQueueInfoViewController.m in Sources */,
 				A97ECB8222E1D85500570935 /* HBQueue.m in Sources */,
 				A93CD3172C47CAFC00B11335 /* HBTitleSelectionRange.m in Sources */,
+				A95967382D26A1E900EDF58D /* HBOutlineView.m in Sources */,
 				A92B148220CA9F7700146FD8 /* HBHUDView.m in Sources */,
 				A9150DAE243F7BE200694870 /* HBQueueDockTileController.m in Sources */,
 				A9B3B63922E2EA58001CEB9A /* HBQueueItemWorkingView.m in Sources */,

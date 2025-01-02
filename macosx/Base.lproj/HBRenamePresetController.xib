@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBRenamePresetController">
             <connections>
+                <outlet property="desc" destination="lWY-TH-873" id="T4a-xu-m3f"/>
                 <outlet property="name" destination="UXm-yG-bgW" id="htS-T7-qP0"/>
                 <outlet property="renameButton" destination="WEv-SR-3sw" id="lRz-JT-RDG"/>
                 <outlet property="window" destination="C4G-OG-ksc" id="oNS-V8-CBz"/>
@@ -16,28 +16,28 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Rename Preset" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="C4G-OG-ksc">
+        <window title="Rename Preset" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="C4G-OG-ksc">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="283" y="305" width="290" height="132"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
+            <rect key="contentRect" x="283" y="305" width="290" height="247"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <view key="contentView" id="3oN-GT-JmW">
-                <rect key="frame" x="0.0" y="0.0" width="290" height="132"/>
+                <rect key="frame" x="0.0" y="0.0" width="290" height="245"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A8w-ij-o7q">
-                        <rect key="frame" x="18" y="95" width="114" height="17"/>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A8w-ij-o7q">
+                        <rect key="frame" x="18" y="209" width="114" height="16"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="New preset name:" id="Pe0-gr-Yv4">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UXm-yG-bgW">
-                        <rect key="frame" x="20" y="65" width="250" height="22"/>
+                    <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UXm-yG-bgW">
+                        <rect key="frame" x="20" y="180" width="250" height="21"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="Untitled" drawsBackground="YES" id="NQn-fS-Rbd">
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
@@ -45,7 +45,7 @@
                         </connections>
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HkI-lC-Q2A">
-                        <rect key="frame" x="106" y="13" width="82" height="32"/>
+                        <rect key="frame" x="121" y="13" width="76" height="32"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="N2f-jz-YyX">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -58,7 +58,7 @@ Gw
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WEv-SR-3sw" userLabel="Rename Button">
-                        <rect key="frame" x="187" y="13" width="89" height="32"/>
+                        <rect key="frame" x="194" y="13" width="83" height="32"/>
                         <buttonCell key="cell" type="push" title="Rename" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Z9M-dc-5Ml">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -70,23 +70,51 @@ DQ
                             <action selector="rename:" target="-2" id="BAK-gD-GHH"/>
                         </connections>
                     </button>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9hB-9r-zcc">
+                        <rect key="frame" x="18" y="148" width="107" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="New description:" id="GiC-Xi-NGv">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lWY-TH-873">
+                        <rect key="frame" x="20" y="60" width="250" height="80"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="80" id="CxL-OK-DB8"/>
+                        </constraints>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="pir-T5-CMF">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstItem="UXm-yG-bgW" firstAttribute="trailing" secondItem="WEv-SR-3sw" secondAttribute="trailing" id="FMb-6L-akr"/>
+                    <constraint firstItem="HkI-lC-Q2A" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="3oN-GT-JmW" secondAttribute="leading" constant="20" symbolic="YES" id="Hhc-nU-Bjo"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="9hB-9r-zcc" secondAttribute="trailing" constant="20" symbolic="YES" id="Ktl-me-pBa"/>
                     <constraint firstItem="HkI-lC-Q2A" firstAttribute="baseline" secondItem="WEv-SR-3sw" secondAttribute="baseline" id="SxI-wa-yJV"/>
                     <constraint firstItem="A8w-ij-o7q" firstAttribute="leading" secondItem="UXm-yG-bgW" secondAttribute="leading" id="TKi-pl-2oX"/>
                     <constraint firstItem="A8w-ij-o7q" firstAttribute="leading" secondItem="3oN-GT-JmW" secondAttribute="leading" constant="20" symbolic="YES" id="Tnf-NN-kbG"/>
                     <constraint firstAttribute="bottom" secondItem="HkI-lC-Q2A" secondAttribute="bottom" constant="20" symbolic="YES" id="UNd-bY-NCa"/>
+                    <constraint firstItem="lWY-TH-873" firstAttribute="leading" secondItem="9hB-9r-zcc" secondAttribute="leading" id="VYq-4J-h7Y"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="A8w-ij-o7q" secondAttribute="trailing" constant="20" symbolic="YES" id="bmD-9w-4qs"/>
                     <constraint firstItem="A8w-ij-o7q" firstAttribute="top" secondItem="3oN-GT-JmW" secondAttribute="top" constant="20" symbolic="YES" id="ds6-hB-jKz"/>
+                    <constraint firstAttribute="trailing" secondItem="lWY-TH-873" secondAttribute="trailing" constant="20" symbolic="YES" id="fTA-IW-9fQ"/>
+                    <constraint firstItem="9hB-9r-zcc" firstAttribute="top" secondItem="UXm-yG-bgW" secondAttribute="bottom" constant="16" id="fq2-h2-Js8"/>
+                    <constraint firstItem="lWY-TH-873" firstAttribute="top" secondItem="9hB-9r-zcc" secondAttribute="bottom" constant="8" symbolic="YES" id="gRZ-zf-xgA"/>
                     <constraint firstItem="WEv-SR-3sw" firstAttribute="leading" secondItem="HkI-lC-Q2A" secondAttribute="trailing" constant="11" id="iPl-sl-4rt"/>
+                    <constraint firstItem="9hB-9r-zcc" firstAttribute="leading" secondItem="A8w-ij-o7q" secondAttribute="leading" id="m7S-hF-cd6"/>
                     <constraint firstAttribute="trailing" secondItem="UXm-yG-bgW" secondAttribute="trailing" constant="20" symbolic="YES" id="nUT-Cq-nKu"/>
+                    <constraint firstItem="WEv-SR-3sw" firstAttribute="top" secondItem="lWY-TH-873" secondAttribute="bottom" constant="20" id="tFn-8h-Tdw"/>
                     <constraint firstItem="UXm-yG-bgW" firstAttribute="top" secondItem="A8w-ij-o7q" secondAttribute="bottom" constant="8" symbolic="YES" id="y1i-GD-vKr"/>
                 </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="7b1-8k-MIb"/>
             </connections>
-            <point key="canvasLocation" x="66" y="176"/>
+            <point key="canvasLocation" x="66" y="233.5"/>
         </window>
     </objects>
 </document>

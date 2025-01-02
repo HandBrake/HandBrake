@@ -1,4 +1,4 @@
-/*  HBQueueOutlineView.m $
+/*  HBTableView.m $
 
  This file is part of the HandBrake source code.
  Homepage: <http://handbrake.fr/>.
