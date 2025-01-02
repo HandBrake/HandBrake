@@ -1,0 +1,144 @@
+From 71b77865d4955440106015bd08172b876abed1f5 Mon Sep 17 00:00:00 2001
+From: galinart <artem.galin@intel.com>
+Date: Tue, 12 Nov 2024 15:50:06 +0000
+Subject: [PATCH] qsv: enable av1 scc
+
+---
+ libavcodec/qsvenc.c     | 42 +++++++++++++++++++++++++++++++++++++++++
+ libavcodec/qsvenc.h     |  8 +++++++-
+ libavcodec/qsvenc_av1.c |  4 ++++
+ 3 files changed, 53 insertions(+), 1 deletion(-)
+
+diff --git a/libavcodec/qsvenc.c b/libavcodec/qsvenc.c
+index c2bb5e5..284b608 100644
+--- a/libavcodec/qsvenc.c
++++ b/libavcodec/qsvenc.c
+@@ -494,6 +494,9 @@ static void dump_video_av1_param(AVCodecContext *avctx, QSVEncContext *q,
+     mfxExtAV1BitstreamParam *av1_bs_param = (mfxExtAV1BitstreamParam *)coding_opts[1];
+     mfxExtCodingOption2 *co2 = (mfxExtCodingOption2*)coding_opts[2];
+     mfxExtCodingOption3 *co3 = (mfxExtCodingOption3*)coding_opts[3];
++#if QSV_HAVE_EXT_AV1_SCC
++    mfxExtAV1ScreenContentTools *scc = (mfxExtAV1ScreenContentTools*)coding_opts[4];
++#endif
+ 
+     av_log(avctx, AV_LOG_VERBOSE, "profile: %s; level: %"PRIu16"\n",
+            print_profile(avctx->codec_id, info->CodecProfile), info->CodecLevel);
+@@ -566,6 +569,13 @@ static void dump_video_av1_param(AVCodecContext *avctx, QSVEncContext *q,
+            print_threestate(av1_bs_param->WriteIVFHeaders));
+     av_log(avctx, AV_LOG_VERBOSE, "LowDelayBRC: %s\n", print_threestate(co3->LowDelayBRC));
+     av_log(avctx, AV_LOG_VERBOSE, "MaxFrameSize: %d;\n", co2->MaxFrameSize);
++#if QSV_HAVE_EXT_AV1_SCC
++    if (scc) {
++        av_log(avctx, AV_LOG_VERBOSE,
++               "Palette: %s; IntraBlockCopy: %s\n",
++               print_threestate(scc->Palette), print_threestate(scc->IntraBlockCopy));
++    }
++#endif
+ }
+ #endif
+ 
+@@ -1282,6 +1292,28 @@ static int init_video_param(AVCodecContext *avctx, QSVEncContext *q)
+     }
+ #endif
+ 
++#if QSV_HAVE_EXT_AV1_SCC
++    if (q->palette_mode || q->intrabc) {
++        if (QSV_RUNTIME_VERSION_ATLEAST(q->ver, 2, 13)) {
++            if (q->param.mfx.CodecId != MFX_CODEC_AV1) {
++                av_log(avctx, AV_LOG_ERROR, "Not supported encoder for Screen Content Tool Encode. "
++                                            "Supported: av1_qsv \n");
++                return AVERROR_UNKNOWN;
++            }
++
++            q->extsccparam.Header.BufferId = MFX_EXTBUFF_AV1_SCREEN_CONTENT_TOOLS;
++            q->extsccparam.Header.BufferSz = sizeof(q->extsccparam);
++            q->extsccparam.Palette = q->palette_mode ? MFX_CODINGOPTION_ON : MFX_CODINGOPTION_OFF;
++            q->extsccparam.IntraBlockCopy = q->intrabc ? MFX_CODINGOPTION_ON : MFX_CODINGOPTION_OFF;
++            q->extparam_internal[q->nb_extparam_internal++] = (mfxExtBuffer *)&q->extsccparam;
++        } else {
++            av_log(avctx, AV_LOG_ERROR,
++                   "This version of runtime doesn't support Screen Content Tool Encode\n");
++            return AVERROR_UNKNOWN;
++        }
++    }
++#endif
++
+     if (!check_enc_param(avctx,q)) {
+         av_log(avctx, AV_LOG_ERROR,
+                "some encoding parameters are not supported by the QSV "
+@@ -1389,11 +1421,21 @@ static int qsv_retrieve_enc_av1_params(AVCodecContext *avctx, QSVEncContext *q)
+         .Header.BufferSz = sizeof(co3),
+     };
+ 
++#if QSV_HAVE_EXT_AV1_SCC
++    mfxExtAV1ScreenContentTools scc_buf = {
++        .Header.BufferId = MFX_EXTBUFF_AV1_SCREEN_CONTENT_TOOLS,
++        .Header.BufferSz = sizeof(scc_buf),
++    };
++#endif
++
+     mfxExtBuffer *ext_buffers[] = {
+         (mfxExtBuffer*)&av1_extend_tile_buf,
+         (mfxExtBuffer*)&av1_bs_param,
+         (mfxExtBuffer*)&co2,
+         (mfxExtBuffer*)&co3,
++#if QSV_HAVE_EXT_AV1_SCC
++        (mfxExtBuffer*)&scc_buf,
++#endif
+     };
+ 
+     if (!QSV_RUNTIME_VERSION_ATLEAST(q->ver, 2, 5)) {
+diff --git a/libavcodec/qsvenc.h b/libavcodec/qsvenc.h
+index 4bc77f2..2e0a19b 100644
+--- a/libavcodec/qsvenc.h
++++ b/libavcodec/qsvenc.h
+@@ -38,6 +38,7 @@
+ 
+ #define QSV_HAVE_EXT_VP9_TILES QSV_VERSION_ATLEAST(1, 29)
+ #define QSV_HAVE_EXT_AV1_PARAM QSV_VERSION_ATLEAST(2, 5)
++#define QSV_HAVE_EXT_AV1_SCC   QSV_VERSION_ATLEAST(2, 13)
+ 
+ #if defined(_WIN32) || defined(__CYGWIN__)
+ #define QSV_HAVE_AVBR   1
+@@ -188,10 +189,13 @@ typedef struct QSVEncContext {
+     mfxFrameSurface1       **opaque_surfaces;
+     AVBufferRef             *opaque_alloc_buf;
+ #endif
++#if QSV_HAVE_EXT_AV1_SCC
++    mfxExtAV1ScreenContentTools extsccparam;
++#endif
+ 
+     mfxExtVideoSignalInfo extvsi;
+ 
+-    mfxExtBuffer  *extparam_internal[5 + (QSV_HAVE_MF * 2) + (QSV_HAVE_EXT_AV1_PARAM * 2) + QSV_HAVE_HE];
++    mfxExtBuffer  *extparam_internal[5 + (QSV_HAVE_MF * 2) + (QSV_HAVE_EXT_AV1_PARAM * 2) + QSV_HAVE_HE + QSV_HAVE_EXT_AV1_SCC];
+     int         nb_extparam_internal;
+ 
+     mfxExtBuffer  **extparam_str;
+@@ -319,6 +323,8 @@ typedef struct QSVEncContext {
+     int dual_gfx;
+ 
+     AVDictionary *qsv_params;
++    int palette_mode;
++    int intrabc;
+ } QSVEncContext;
+ 
+ int ff_qsv_enc_init(AVCodecContext *avctx, QSVEncContext *q);
+diff --git a/libavcodec/qsvenc_av1.c b/libavcodec/qsvenc_av1.c
+index a86b409..4f035f3 100644
+--- a/libavcodec/qsvenc_av1.c
++++ b/libavcodec/qsvenc_av1.c
+@@ -189,6 +189,10 @@ static const AVOption options[] = {
+     { "tile_cols",  "Number of columns for tiled encoding",   OFFSET(qsv.tile_cols),    AV_OPT_TYPE_INT, { .i64 = 0 }, 0, UINT16_MAX, VE },
+     { "tile_rows",  "Number of rows for tiled encoding",      OFFSET(qsv.tile_rows),    AV_OPT_TYPE_INT, { .i64 = 0 }, 0, UINT16_MAX, VE },
+     { "look_ahead_depth", "Depth of look ahead in number frames, available when extbrc option is enabled", OFFSET(qsv.look_ahead_depth), AV_OPT_TYPE_INT, { .i64 = 0 }, 0, 100, VE },
++#if QSV_HAVE_EXT_AV1_SCC
++    { "palette_mode", "Enable palette mode of Screen Content Tool for encoding", OFFSET(qsv.palette_mode), AV_OPT_TYPE_BOOL, { .i64 = 0}, 0, 1, VE},
++    { "intrabc", "Enable intra block copy of Screen Content Tool for encoding", OFFSET(qsv.intrabc), AV_OPT_TYPE_BOOL, { .i64 = 0}, 0, 1, VE},
++#endif
+     { NULL },
+ };
+ 
+-- 
+2.25.1
+
