@@ -31,11 +31,13 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 - (instancetype)initWithJob:(HBJob *)job
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _encoder = HB_VCODEC_X264;
         _avgBitrate = 1000;
         _quality = 18.0;
         _qualityMaxValue = 51.0f;
+        _passthruHDRDynamicMetadata = HBVideoHDRDynamicMetadataPassthruAll;
         _job = job;
 
         _preset = @"medium";
@@ -479,6 +481,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         copy->_multiPass = _multiPass;
         copy->_turboMultiPass = _turboMultiPass;
 
+        copy->_passthruHDRDynamicMetadata = _passthruHDRDynamicMetadata;
+
         copy->_preset = [_preset copy];
         copy->_tune = [_tune copy];
         copy->_profile = [_profile copy];
@@ -518,6 +522,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     encodeBool(_multiPass);
     encodeBool(_turboMultiPass);
 
+    encodeInteger(_passthruHDRDynamicMetadata);
+
     encodeObject(_preset);
     encodeObject(_tune);
     encodeObject(_profile);
@@ -545,6 +551,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     decodeInteger(_frameRateMode); if (_frameRateMode < HBVideoFrameRateModeVFR_PFR || _frameRateMode > HBVideoFrameRateModeCFR) { goto fail; }
     decodeBool(_multiPass);
     decodeBool(_turboMultiPass);
+
+    decodeInteger(_frameRateMode); if (_passthruHDRDynamicMetadata < HBVideoHDRDynamicMetadataPassthruOff || _passthruHDRDynamicMetadata > HBVideoHDRDynamicMetadataPassthruAll) { goto fail; }
 
     decodeObjectOrFail(_preset, NSString);
     decodeObjectOrFail(_tune, NSString);
@@ -707,6 +715,23 @@ fail:
     // Turbo 1st pass for 2 Pass Encoding.
     self.turboMultiPass = [preset[@"VideoTurboMultiPass"] boolValue];
 
+    if ([preset[@"VideoPasshtruHDRDynamicMetadata"] isEqualToString:@"off"])
+    {
+        self.passthruHDRDynamicMetadata = HBVideoHDRDynamicMetadataPassthruOff;
+    }
+    else if ([preset[@"VideoPasshtruHDRDynamicMetadata"] isEqualToString:@"hdr10plus"])
+    {
+        self.passthruHDRDynamicMetadata = HBVideoHDRDynamicMetadataPassthruHDR10Plus;
+    }
+    else if ([preset[@"VideoPasshtruHDRDynamicMetadata"] isEqualToString:@"dovi"])
+    {
+        self.passthruHDRDynamicMetadata = HBVideoHDRDynamicMetadataPassthruDolbyVision;
+    }
+    else
+    {
+        self.passthruHDRDynamicMetadata = HBVideoHDRDynamicMetadataPassthruAll;
+    }
+
     self.notificationsEnabled = YES;
 }
 
@@ -763,6 +788,22 @@ fail:
 
     preset[@"VideoMultiPass"] = @(self.multiPass);
     preset[@"VideoTurboMultiPass"] = @(self.turboMultiPass);
+
+    switch (self.passthruHDRDynamicMetadata)
+    {
+        case HBVideoHDRDynamicMetadataPassthruOff:
+            preset[@"VideoPasshtruHDRDynamicMetadata"] = @"off";
+            break;
+        case HBVideoHDRDynamicMetadataPassthruHDR10Plus:
+            preset[@"VideoPasshtruHDRDynamicMetadata"] = @"hdr10plus";
+            break;
+        case HBVideoHDRDynamicMetadataPassthruDolbyVision:
+            preset[@"VideoPasshtruHDRDynamicMetadata"] = @"dolbyvision";
+            break;
+        case HBVideoHDRDynamicMetadataPassthruAll:
+            preset[@"VideoPasshtruHDRDynamicMetadata"] = @"all";
+            break;
+    }
 }
 
 @end

@@ -461,7 +461,7 @@ static int avformatInit( hb_mux_object_t * m )
                                 sizeof(AVAmbientViewingEnvironment), 0);
     }
 
-    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
     {
         if (job->dovi.dv_profile == 5 && job->mux == HB_MUX_AV_MP4)
         {

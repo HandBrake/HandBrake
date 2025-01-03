@@ -1637,7 +1637,7 @@ int encvt_init(hb_work_object_t *w, hb_job_t *job)
 
         // Read the actual level and tier and set
         // the Dolby Vision level and data limits
-        if (job->passthru_dynamic_hdr_metadata & DOVI)
+        if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
         {
             int level_idc, high_tier;
             hb_parse_h265_extradata(*w->extradata, &level_idc, &high_tier);
@@ -1814,7 +1814,7 @@ static void insert_dynamic_metadata(hb_work_private_t *pv, CMSampleBufferRef sam
         }
     }
 
-    if (pv->job->passthru_dynamic_hdr_metadata & HDR_10_PLUS)
+    if (pv->job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_HDR10PLUS)
     {
         CFDataRef hdrPlus = CMGetAttachment(sampleBuffer, CFSTR("HB_HDR_PLUS"), NULL);
         if (hdrPlus != NULL)
@@ -1833,7 +1833,7 @@ static void insert_dynamic_metadata(hb_work_private_t *pv, CMSampleBufferRef sam
     hb_nal_t nals[1];
     size_t nals_count = 0;
 
-    if (pv->job->passthru_dynamic_hdr_metadata & DOVI)
+    if (pv->job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
     {
         CFDataRef rpu = CMGetAttachment(sampleBuffer, CFSTR("HB_DOVI_RPU"), NULL);
         if (rpu != NULL)

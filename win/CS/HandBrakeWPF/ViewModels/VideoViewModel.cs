@@ -259,6 +259,18 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public string PasshtruHDRDynamicMetadata
+        {
+            get => this.Task.PasshtruHDRDynamicMetadata;
+
+            set
+            {
+                this.Task.PasshtruHDRDynamicMetadata = value;
+                this.NotifyOfPropertyChange(() => this.PasshtruHDRDynamicMetadata);
+                this.OnTabStatusChanged(null);
+            }
+        }
+
         public string Rfqp
         {
             get => HandBrakeEncoderHelpers.GetVideoQualityRateControlName(this.SelectedVideoEncoder?.ShortName);

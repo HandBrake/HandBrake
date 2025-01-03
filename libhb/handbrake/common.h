@@ -371,6 +371,14 @@ struct hb_dovi_conf_s
     unsigned dv_bl_signal_compatibility_id;
 };
 
+typedef enum
+{
+    HB_HDR_DYNAMIC_METADATA_NONE      = 0,
+    HB_HDR_DYNAMIC_METADATA_HDR10PLUS = 1 << 1,
+    HB_HDR_DYNAMIC_METADATA_DOVI      = 1 << 2,
+    HB_HDR_DYNAMIC_METADATA_ALL       = HB_HDR_DYNAMIC_METADATA_HDR10PLUS | HB_HDR_DYNAMIC_METADATA_DOVI
+} hb_hdr_dynamic_metadata_mode_t;
+
 int hb_str_ends_with(const char *base, const char *str);
 
 /*******************************************************************************
@@ -436,6 +444,11 @@ const char* hb_video_quality_get_name(uint32_t codec);
 int         hb_video_quality_is_supported(uint32_t codec);
 int         hb_video_bitrate_is_supported(uint32_t codec);
 int         hb_video_multipass_is_supported(uint32_t codec, int constant_quality);
+
+int                hb_video_hdr_dynamic_metadata_is_supported(uint32_t codec, int hdr_dynamic_metadata, int profile);
+
+int                hb_hdr_dynamic_metadata_get_from_name(const char *name);
+const char*        hb_hdr_dynamic_metadata_get_name(int hdr_dynamic_metadata);
 
 int                hb_video_encoder_is_supported(int encoder);
 int                hb_video_encoder_get_count_of_analysis_passes(int encoder);
@@ -750,7 +763,7 @@ struct hb_job_s
     hb_ambient_viewing_environment_metadata_t ambient;
     hb_dovi_conf_t dovi;
 
-    enum {NONE = 0x0, ALL = 0x3, DOVI = 0x1, HDR_10_PLUS = 0x2} passthru_dynamic_hdr_metadata;
+    hb_hdr_dynamic_metadata_mode_t passthru_dynamic_hdr_metadata;
 
 
     hb_list_t     * list_chapter;

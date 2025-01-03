@@ -2050,7 +2050,12 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
                     hb_value_xform(hb_dict_get(preset, "VideoTurboMultiPass"),
                                     HB_VALUE_TYPE_BOOL));
     }
-    
+
+    if ((value = hb_dict_get(preset, "VideoPasshtruHDRDynamicMetadata")) != NULL)
+    {
+        hb_dict_set(video_dict, "VideoPasshtruHDRDynamicMetadata", hb_value_dup(value));
+    }
+
     if ((value = hb_dict_get(preset, "VideoHWDecode")) != NULL)
     {
         hb_dict_set(video_dict, "HardwareDecode", hb_value_xform(value, HB_VALUE_TYPE_INT));
@@ -2956,6 +2961,11 @@ static void und_to_any(hb_value_array_t * list)
     }
 }
 
+static void import_dynamic_metadata_preset_settings_60_0_0(hb_value_t *preset)
+{
+    hb_dict_set_string(preset, "VideoPasshtruHDRDynamicMetadata", "all");
+}
+
 static void import_passthru_preset_settings_57_0_0(hb_value_t *preset)
 {
     int passthru = hb_dict_get_bool(preset, "MetadataPassthrough");
@@ -3711,9 +3721,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_60_0_0(hb_value_t *preset)
+{
+    import_dynamic_metadata_preset_settings_60_0_0(preset);
+}
+
 static void import_57_0_0(hb_value_t *preset)
 {
     import_passthru_preset_settings_57_0_0(preset);
+
+    import_60_0_0(preset);
 }
 
 static void import_55_0_0(hb_value_t *preset)
@@ -3927,6 +3944,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 57, 0, 0) <= 0)
         {
             import_57_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 60, 0, 0) <= 0)
+        {
+            import_60_0_0(preset);
             result = 1;
         }
 
