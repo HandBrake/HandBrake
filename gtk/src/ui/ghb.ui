@@ -5774,6 +5774,28 @@ battery is charged.</property>
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                         </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">4</property>
+                            <child>
+                              <object class="GtkCheckButton" id="SendFileTo">
+                                <property name="label" translatable="yes">Send file to:</property>
+                                <property name="halign">start</property>
+                                <signal name="toggled" handler="pref_changed_cb" />
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="SendFileToTarget">
+                                <property name="width-chars">30</property>
+                                <property name="truncate-multiline">1</property>
+                                <signal name="changed" handler="pref_changed_cb" swapped="no"/>
+                                <accessibility>
+                                  <relation name="labelled-by">SendFileTo</relation>
+                                </accessibility>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </property>
                   </object>
