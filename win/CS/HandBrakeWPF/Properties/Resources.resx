@@ -2939,4 +2939,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
     <value>Open Autoname Preferences</value>
   </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Run Script / Executable: </value>
+  </data>
 </root>

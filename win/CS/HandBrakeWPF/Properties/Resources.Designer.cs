@@ -3874,6 +3874,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Run Script / Executable: .
+        /// </summary>
+        public static string Options_RunAction {
+            get {
+                return ResourceManager.GetString("Options_RunAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose Scaler:.
         /// </summary>
         public static string Options_Scaler {

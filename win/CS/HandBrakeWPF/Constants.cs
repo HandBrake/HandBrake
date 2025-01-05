@@ -56,9 +56,12 @@ namespace HandBrakeWPF
         /* When Done Options*/
         public const string SourceArg = "{source}";
         public const string DestinationArg = "{destination}";
+        public const string DestinationFolder = "{destination_folder}";
         public const string ExitCodeArg = "{exit_code}";
 
         /* When Done Options*/
         public const string AutonameOutputFolder = "{autoname_output_folder}";
+
+      
     }
 }

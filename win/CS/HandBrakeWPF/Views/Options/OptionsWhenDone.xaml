@@ -81,7 +81,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <CheckBox VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding QueueDoneCustomActionEnabled}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{x:Static Properties:Resources.Options_SendFileTo}" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Static Properties:Resources.Options_RunAction}" VerticalAlignment="Center" />
                                 <TextBlock Text="{Binding QueueDoneAction}" VerticalAlignment="Center" Margin="5,0,5,0"  />
                             </StackPanel>
                         </CheckBox>

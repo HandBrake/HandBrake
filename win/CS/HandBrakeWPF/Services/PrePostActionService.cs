@@ -255,13 +255,17 @@ namespace HandBrakeWPF.Services
             {
                 string arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs);
 
+                string destinationFolder = Path.GetDirectoryName(destination);
+
                 arguments = arguments.Replace(Constants.SourceArg, string.Format("\"{0}\"", source));
                 arguments = arguments.Replace(Constants.DestinationArg, string.Format("\"{0}\"", destination));
+                arguments = arguments.Replace(Constants.DestinationFolder, string.Format("\"{0}\"", destinationFolder));
                 arguments = arguments.Replace(Constants.ExitCodeArg, string.Format("{0}", exitCode));
 
                 var process = new ProcessStartInfo(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo), arguments);
                 process.EnvironmentVariables.Add("HB_SOURCE", source);
                 process.EnvironmentVariables.Add("HB_DESTINATION", destination);
+                process.EnvironmentVariables.Add("HB_DESTINATION_FOLDER", destinationFolder);
                 process.EnvironmentVariables.Add("HB_EXIT_CODE", exitCode.ToString());
 
                 this.ServiceLogMessage(string.Format("Sending output file to: {0}, with arguments: {1} ", process.FileName, arguments));

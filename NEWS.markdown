@@ -20,6 +20,7 @@ Download available from Microsoft:
 
 - Added a new preference "Default Range Mode for titles". See Preferences -> Advanced (#6385)
 - Added a new preference to run a custom action when the queue completes. See Preferences -> When Done (#4851)
+- Added "{destination_folder}" as option on the "Encode Completed" "Send File To" option.
 - Updated Auto Naming Preferences to add "{angle}" as a filename generation option. (#6086)
 - Minor Performance Optimisations for ARM64 devices running Windows
 - Minor UI improvements throughout the UI. 

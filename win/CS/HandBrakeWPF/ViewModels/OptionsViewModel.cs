@@ -684,7 +684,8 @@ namespace HandBrakeWPF.ViewModels
                        {
                            new PlaceHolderBucket { Name = Constants.SourceArg },
                            new PlaceHolderBucket { Name = Constants.DestinationArg },
-                           new PlaceHolderBucket { Name = Constants.ExitCodeArg }
+                           new PlaceHolderBucket { Name = Constants.ExitCodeArg },
+                           new PlaceHolderBucket { Name = Constants.DestinationFolder }
                        };
             }
         }
