@@ -2485,6 +2485,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Autoname Preferences.
+        /// </summary>
+        public static string MainView_OpenAutonamePreferences {
+            get {
+                return ResourceManager.GetString("MainView_OpenAutonamePreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open this Directory.
         /// </summary>
         public static string MainView_OpenDirectory {

@@ -2936,4 +2936,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="OptionsView_CustomActionConfig" xml:space="preserve">
     <value>'Custom Action' Configuration:</value>
   </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Open Autoname Preferences</value>
+  </data>
 </root>

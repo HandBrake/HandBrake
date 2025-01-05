@@ -967,6 +967,12 @@ namespace HandBrakeWPF.ViewModels
 
         /* Menu and Toolbar */
 
+        public void OpenAutonamePreferences()
+        {
+            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
+            command.Execute(OptionsTab.OutputFiles);
+        }
+
         public void OpenAboutApplication()
         {
             OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
