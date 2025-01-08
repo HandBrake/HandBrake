@@ -519,7 +519,7 @@ Please note, errors codes are best effort and may not always be accurate.
 It is recommended the output file is validated before performing actions on it.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
 
 {source} - Name of the source file.
 {title} - Integer value. This is representative of a disc title number.
