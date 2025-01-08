@@ -329,7 +329,7 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
     }
 
     // Update and set Dolby Vision level
-    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
     {
         int level_idx, high_tier;
         hb_parse_av1_extradata(*w->extradata, &level_idx, &high_tier);
@@ -486,7 +486,7 @@ static int send(hb_work_object_t *w, hb_buffer_t *in)
         for (int i = 0; i < in->nb_side_data; i++)
         {
             const AVFrameSideData *side_data = in->side_data[i];
-            if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS &&
+            if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_HDR10PLUS &&
                 side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
             {
                 uint8_t *payload = NULL;
@@ -501,7 +501,7 @@ static int send(hb_work_object_t *w, hb_buffer_t *in)
                 svt_add_metadata(headerPtr, EB_AV1_METADATA_TYPE_ITUT_T35, payload, playload_size);
                 av_freep(&payload);
             }
-            else if (job->passthru_dynamic_hdr_metadata & DOVI &&
+            else if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI &&
                      side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER_T35)
             {
                 svt_add_metadata(headerPtr, EB_AV1_METADATA_TYPE_ITUT_T35, side_data->data, side_data->size);

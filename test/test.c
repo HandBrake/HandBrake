@@ -59,6 +59,7 @@
 #define ROTATE_DEFAULT               "angle=180:hflip=0"
 #define DEBLOCK_DEFAULT_PRESET       "medium"
 #define COLORSPACE_DEFAULT_PRESET    "bt709"
+#define HDR_DYNAMIC_METADATA_DEFAULT_PRESET "all"
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
@@ -211,6 +212,8 @@ static int      qsv_decode         = -1;
 #endif
 static int      hw_decode          = -1;
 static int      keep_duplicate_titles = 0;
+static int      hdr_dynamic_metadata_disable = 0;
+static char *   hdr_dynamic_metadata  = NULL;
 
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
@@ -1497,6 +1500,12 @@ static void ShowHelp(void)
 "                           timing if it's below that rate.\n"
 "                           If none of these flags are given, the default\n"
 "                           is --pfr when -r is given and --vfr otherwise\n"
+"   --hdr-dynamic-metadata  <string>\n"
+"                           Set the kind of HDR dynamic metadata to preserve:\n"
+"                               hdr10plus\n"
+"                               dolbyvision\n"
+"                               all\n"
+"   --no-hdr-dynamic-metadata Disable HDR dynamic metadata passthru\n"
 "   --enable-hw-decoding <string>                                        \n"
 #if defined( __APPLE_CC__ )
 "                           Use 'videotoolbox' to enable VideoToolbox    \n"
@@ -2234,8 +2243,9 @@ static int ParseOptions( int argc, char ** argv )
     #define CROP_MODE                     330
     #define HW_DECODE                     331
     #define KEEP_DUPLICATE_TITLES         332
-    #define MAX_DURATION         333
-    
+    #define MAX_DURATION                  333
+    #define HDR_DYNAMIC_METADATA          334
+
     for( ;; )
     {
         static struct option long_options[] =
@@ -2254,8 +2264,12 @@ static int ParseOptions( int argc, char ** argv )
             { "enable-qsv-decoding",  no_argument,       &qsv_decode, 1,                  },
 #endif
             { "disable-hw-decoding", no_argument,        &hw_decode,  0, },
-            { "enable-hw-decoding",  required_argument,  NULL,  HW_DECODE, },
+            { "enable-hw-decoding",  required_argument,  NULL, HW_DECODE, },
+
             { "keep-duplicate-titles", no_argument,      NULL, KEEP_DUPLICATE_TITLES },
+
+            { "no-hdr-dynamic-metadata",  no_argument,       &hdr_dynamic_metadata_disable, 1 },
+            { "hdr-dynamic-metadata",     required_argument, NULL, HDR_DYNAMIC_METADATA },
 
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
@@ -3237,6 +3251,17 @@ static int ParseOptions( int argc, char ** argv )
             case KEEP_DUPLICATE_TITLES:
                 keep_duplicate_titles = 1;
                 break;
+            case HDR_DYNAMIC_METADATA:
+                free(hdr_dynamic_metadata);
+                if (optarg != NULL)
+                {
+                    hdr_dynamic_metadata = strdup(optarg);
+                }
+                else
+                {
+                    hdr_dynamic_metadata = strdup(HDR_DYNAMIC_METADATA_DEFAULT_PRESET);
+                }
+                break;
             case ':':
                 fprintf( stderr, "missing parameter (%s)\n", argv[cur_optind] );
                 return -1;
@@ -3570,6 +3595,16 @@ static int ParseOptions( int argc, char ** argv )
         else
         {
             fprintf(stderr, "Invalid lapsharp option %s\n", lapsharp);
+            return -1;
+        }
+    }
+
+    if (hdr_dynamic_metadata != NULL)
+    {
+        if (hdr_dynamic_metadata_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --hdr-dynamic-metadata and --no-hdr-dynamic-metadata\n");
             return -1;
         }
     }
@@ -4379,6 +4414,14 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (hw_decode != -1)
     {
         hb_dict_set(preset, "VideoHWDecode", hb_value_int(hw_decode));
+    }
+    if (hdr_dynamic_metadata_disable)
+    {
+        hb_dict_set(preset, "VideoPasshtruHDRDynamicMetadata", hb_value_string("off"));
+    }
+    if (hdr_dynamic_metadata != NULL)
+    {
+        hb_dict_set(preset, "VideoPasshtruHDRDynamicMetadata", hb_value_string(hdr_dynamic_metadata));
     }
     if (maxWidth > 0)
     {

@@ -1707,6 +1707,41 @@ int hb_video_multipass_is_supported(uint32_t codec, int constant_quality)
     }
 }
 
+int hb_video_hdr_dynamic_metadata_is_supported(uint32_t codec, int hdr_dynamic_metadata, int profile)
+{
+    if (hdr_dynamic_metadata == HB_HDR_DYNAMIC_METADATA_HDR10PLUS)
+    {
+        switch (codec)
+        {
+            case HB_VCODEC_X265_10BIT:
+            case HB_VCODEC_VT_H265_10BIT:
+            case HB_VCODEC_SVT_AV1_10BIT:
+                return 1;
+        }
+    }
+#if HB_PROJECT_FEATURE_LIBDOVI
+    else if (hdr_dynamic_metadata == HB_HDR_DYNAMIC_METADATA_DOVI)
+    {
+        if (profile != 5 &&
+            profile != 7 &&
+            profile != 8 &&
+            profile != 10)
+        {
+            return 0;
+        }
+
+        switch (codec)
+        {
+            case HB_VCODEC_X265_10BIT:
+            case HB_VCODEC_VT_H265_10BIT:
+            case HB_VCODEC_SVT_AV1_10BIT:
+                return 1;
+        }
+    }
+#endif
+    return 0;
+}
+
 int hb_video_encoder_is_supported(int encoder)
 {
     const hb_encoder_t *video_encoder = NULL;
@@ -4446,8 +4481,8 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->coll           = title->coll;
     job->ambient        = title->ambient;
     job->dovi           = title->dovi;
-    job->passthru_dynamic_hdr_metadata |= title->dovi.dv_profile ? DOVI : NONE;
-    job->passthru_dynamic_hdr_metadata |= title->hdr_10_plus ? HDR_10_PLUS : NONE;
+    job->passthru_dynamic_hdr_metadata |= title->dovi.dv_profile ? HB_HDR_DYNAMIC_METADATA_DOVI : HB_HDR_DYNAMIC_METADATA_NONE;
+    job->passthru_dynamic_hdr_metadata |= title->hdr_10_plus ? HB_HDR_DYNAMIC_METADATA_HDR10PLUS : HB_HDR_DYNAMIC_METADATA_NONE;
 
     job->mux = HB_MUX_MP4;
 

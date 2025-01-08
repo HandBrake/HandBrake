@@ -493,7 +493,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /*
      * Update and set Dolby Vision level
      */
-    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
     {
         char dolbyVisionProfile[256];
         snprintf(dolbyVisionProfile, sizeof(dolbyVisionProfile),
@@ -713,7 +713,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
         for (int i = 0; i < in->nb_side_data; i++)
         {
             const AVFrameSideData *side_data = in->side_data[i];
-            if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS &&
+            if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_HDR10PLUS &&
                 side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
             {
                 uint8_t *payload = NULL;
@@ -743,7 +743,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
                 sei_payload->payloadType = USER_DATA_REGISTERED_ITU_T_T35;
                 sei->numPayloads++;
             }
-            if (job->passthru_dynamic_hdr_metadata & DOVI &&
+            if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI &&
                 side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
             {
                 x265_dolby_vision_rpu *rpu = &pic_in.rpu;
