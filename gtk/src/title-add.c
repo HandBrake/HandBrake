@@ -290,26 +290,32 @@ static PangoAttrList *default_title_attrs;
 static void
 title_add_set_sensitive (GtkWidget *row, gboolean sensitive)
 {
+    PangoAttrList *pal;
+    PangoAttribute *bg, *alpha;
     GtkWidget *widget;
     widget = find_widget(row, "title_selected");
     gtk_widget_set_sensitive(widget, sensitive);
 
     widget = find_widget(row, "title_label");
+
     if (!sensitive)
     {
-        PangoAttrList *pal;
-        PangoAttribute *bg;
-        bg = pango_attr_background_new(0xFFFF, 0xFFFF, 0xA000);
-        pal = pango_attr_list_new();
-        pango_attr_list_insert(pal, bg);
-        gtk_label_set_attributes(GTK_LABEL(widget), pal);
+        alpha = pango_attr_background_alpha_new(0);
         gtk_widget_set_has_tooltip(widget, TRUE);
     }
     else
     {
+        alpha = pango_attr_background_alpha_new(1);
         gtk_label_set_attributes(GTK_LABEL(widget), default_title_attrs);
         gtk_widget_set_has_tooltip(widget, FALSE);
     }
+
+    pal = pango_attr_list_new();
+    bg = pango_attr_background_new(0xFFFF, 0xFFFF, 0xA000);
+    pango_attr_list_insert(pal, bg);
+    pango_attr_list_insert(pal, alpha);
+
+    gtk_label_set_attributes(GTK_LABEL(widget), pal);
 }
 
 static gboolean
