@@ -512,7 +512,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+        ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
         ///
         ///{source} - Name of the source file.
         ///{title} - Integer value. This is representative of a disc title number.
