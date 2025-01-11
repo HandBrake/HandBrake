@@ -11,6 +11,24 @@ Download available from Microsoft:
 - [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-arm64.exe)
 
 
+## HandBrake 1.9.1
+
+### All platforms
+
+- Fix gcc14 aarch64 build failures (#6463)
+
+#### Third-party libraries
+
+- nv-codec-headers: Harden DLL loading so that it only uses system32 for the search path on Windows. (#6548)
+
+### Windows
+
+- Fix an issue with the autoname function not updating when title is the only option. (#6517)
+- Fix an issue where the audio encoder may not display correctly after a queue has been imported and queue item edited. This may exhibit in other scenarios as well. (#6524)
+- Fix an issue with titlebar / taskbar progress erroneously showing with multi-instance encodes. (#6477)
+- Fix a crash when importing chapters where there is a chapter count mis-match.(#6514)
+
+
 ## HandBrake 1.9.0
 
 ### All platforms
