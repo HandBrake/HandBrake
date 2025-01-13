@@ -72,12 +72,27 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
+            BlueprintIdentifier = "273F1FFE14ADAE950021BE6D"
+            BuildableName = "HandBrakeCLI"
+            BlueprintName = "HandBrakeCLI"
+            ReferencedContainer = "container:HandBrake.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "273F203814ADBC200021BE6D"
             BuildableName = "HandBrake.app"
             BlueprintName = "HandBrake"
             ReferencedContainer = "container:HandBrake.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-i /Users/damians/Downloads/Samples/Hybrid\ HDR10Plus\ DV\ Sample.mkv  -e x265_10bit --hdr-dynamic-metadata dolbyvision -o boh.mp4"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "debug-sandbox"

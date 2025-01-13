@@ -108,6 +108,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -218,6 +219,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -327,6 +329,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -436,6 +439,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -545,6 +549,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -654,6 +659,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -764,6 +770,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -874,6 +881,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -983,6 +991,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -1092,6 +1101,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -1201,6 +1211,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -1310,6 +1321,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -1433,6 +1445,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -1556,6 +1569,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -1679,6 +1693,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -1802,6 +1817,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -1925,6 +1941,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -2048,6 +2065,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -2172,6 +2190,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -2296,6 +2315,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -2419,6 +2439,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -2542,6 +2563,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -2665,6 +2687,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -2788,6 +2811,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 }
@@ -2904,6 +2928,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -3013,6 +3038,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -3122,6 +3148,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -3231,6 +3258,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -3340,6 +3368,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -3449,6 +3478,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -3558,6 +3588,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -3667,6 +3698,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -3776,6 +3808,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -3885,6 +3918,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -3994,6 +4028,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": true,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 }
@@ -4124,6 +4159,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -4247,6 +4283,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -4356,6 +4393,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -4465,6 +4503,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -4574,6 +4613,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -4683,6 +4723,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -4792,6 +4833,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -4915,6 +4957,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -5038,6 +5081,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -5161,6 +5205,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -5284,6 +5329,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -5407,6 +5453,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -5530,6 +5577,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -5653,6 +5701,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -5776,6 +5825,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -5897,6 +5947,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -6020,6 +6071,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -6129,6 +6181,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -6238,6 +6291,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -6364,6 +6418,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -6487,6 +6542,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -6610,6 +6666,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -6719,6 +6776,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -6828,6 +6886,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -6951,6 +7010,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 }
@@ -7066,6 +7126,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -7175,6 +7236,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -7284,6 +7346,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -7393,6 +7456,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -7502,6 +7566,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -7611,6 +7676,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -7720,6 +7786,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -7829,6 +7896,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -7938,6 +8006,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -8047,6 +8116,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -8156,6 +8226,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -8264,6 +8335,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -8372,6 +8444,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -8480,6 +8553,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -8588,6 +8662,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -8696,6 +8771,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 }
@@ -8812,6 +8888,7 @@
                     "VideoQSVDecode": true,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -8921,6 +8998,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -9030,6 +9108,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -9139,6 +9218,7 @@
                     "VideoQSVDecode": true,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -9248,6 +9328,7 @@
                     "VideoQSVDecode": true,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -9357,6 +9438,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -9466,6 +9548,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -9575,6 +9658,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -9684,6 +9768,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -9793,6 +9878,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -9902,6 +9988,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": false,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 }
@@ -10018,6 +10105,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -10127,6 +10215,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -10236,6 +10325,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -10345,6 +10435,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -10465,6 +10556,7 @@
                     "VideoQSVDecode": false,
                     "VideoMultiPass": true,
                     "VideoTurboMultiPass": false,
+                    "VideoPasshtruHDRDynamicMetadata": "all",
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 }

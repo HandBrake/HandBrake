@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Services.Encode.Model
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-
+    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
@@ -294,6 +294,8 @@ namespace HandBrakeWPF.Services.Encode.Model
         public bool MultiPass { get; set; }
 
         public bool TurboAnalysisPass { get; set; }
+
+        public HDRDynamicMetadata PasshtruHDRDynamicMetadata { get; set; }
 
         public double? Framerate { get; set; }
 

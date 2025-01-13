@@ -821,6 +821,9 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         hb_dict_set(video_dict, "Turbo",
                             hb_value_bool(job->fastanalysispass));
     }
+    hb_dict_set(video_dict, "PasshtruHDRDynamicMetadata",
+                        hb_value_int(job->passthru_dynamic_hdr_metadata));
+
     if (job->encoder_preset != NULL)
     {
         hb_dict_set(video_dict, "Preset",
@@ -1115,6 +1118,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     const char       * video_preset = NULL, * video_tune = NULL;
     const char       * video_profile = NULL, * video_level = NULL;
     const char       * video_options = NULL;
+    int                passthru_dynamic_hdr_metadata = 0;
     int                subtitle_search_burn = 0;
     json_int_t         range_start = -1, range_end = -1, range_seek_points = -1;
     int                vbitrate = -1;
@@ -1135,7 +1139,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     // PAR {Num, Den}
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
-    //       MultiPass, Turbo,
+    //       MultiPass, Turbo, PasshtruHDRDynamicMetadata
     //       ColorInputFormat, ColorOutputFormat, ColorRange,
     //       ColorPrimaries, ColorTransfer, ColorMatrix, ChromaLocation,
     //       MasteringDisplayColorVolume,
@@ -1145,7 +1149,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //       HardwareDecode
     //       QSV {Decode, AsyncDepth, AdapterIndex}}
     "s:{s:o, s?F, s?i, s?s, s?s, s?s, s?s, s?s,"
-    "   s?b, s?b,"
+    "   s?b, s?b, s?i,"
     "   s?i, s?i, s?i,"
     "   s?i, s?i, s?i, s?i,"
     "   s?o,"
@@ -1196,6 +1200,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "Options",              unpack_s(&video_options),
             "MultiPass",            unpack_b(&job->multipass),
             "Turbo",                unpack_b(&job->fastanalysispass),
+            "PasshtruHDRDynamicMetadata", unpack_i(&passthru_dynamic_hdr_metadata),
             "ColorInputFormat",     unpack_i(&job->input_pix_fmt),
             "ColorOutputFormat",    unpack_i(&job->output_pix_fmt),
             "ColorRange",           unpack_i(&job->color_range),
@@ -1295,6 +1300,11 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             if (range_end > 0)
                 job->frame_to_stop = range_end - job->frame_to_start;
         }
+    }
+
+    if (passthru_dynamic_hdr_metadata)
+    {
+        job->passthru_dynamic_hdr_metadata = passthru_dynamic_hdr_metadata;
     }
 
     if (destfile != NULL && destfile[0] != 0)

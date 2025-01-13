@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     using HandBrakeWPF.EventArgs;
@@ -255,6 +256,18 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.TurboAnalysisPass = value;
                 this.NotifyOfPropertyChange(() => this.TurboAnalysisPass);
+                this.OnTabStatusChanged(null);
+            }
+        }
+
+        public HDRDynamicMetadata PasshtruHDRDynamicMetadata
+        {
+            get => this.Task.PasshtruHDRDynamicMetadata;
+
+            set
+            {
+                this.Task.PasshtruHDRDynamicMetadata = value;
+                this.NotifyOfPropertyChange(() => this.PasshtruHDRDynamicMetadata);
                 this.OnTabStatusChanged(null);
             }
         }
