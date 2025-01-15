@@ -2542,14 +2542,6 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter,
-                       0, _("None"),
-                       1, TRUE,
-                       2, "none",
-                       3, (gdouble)0,
-                       -1);
-
     for (ii = 0; ii < count; ii++)
     {
         if (((encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_SVT_AV1_MASK)) &&

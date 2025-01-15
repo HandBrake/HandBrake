@@ -79,6 +79,11 @@ hb_work_object_t hb_encavcodec =
     encavcodecClose
 };
 
+static const char * const empty_tune_names[] =
+{
+    "none", NULL
+};
+
 static const char * const vpx_preset_names[] =
 {
     "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow", NULL
@@ -86,7 +91,7 @@ static const char * const vpx_preset_names[] =
 
 static const char * const vp9_tune_names[] = 
 {
-    "screen", "film", NULL 
+    "none", "screen", "film", NULL
 };
 
 static const char * const h26x_nvenc_preset_names[] =
@@ -1502,7 +1507,7 @@ const char* const* hb_av_tune_get_names(int encoder)
         case HB_VCODEC_FFMPEG_VP9_10BIT:
             return vp9_tune_names;
         default:
-            return NULL;
+            return empty_tune_names;
     }
 }
 

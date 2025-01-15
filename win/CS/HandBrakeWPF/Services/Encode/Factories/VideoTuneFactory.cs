@@ -38,10 +38,14 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     return "Grain";
                 case "stillimage":
                     return "Still Image";
+                case "vq":
+                    return "VQ";
                 case "psnr":
                     return "PSNR";
                 case "ssim":
                     return "SSIM";
+                case "screen":
+                    return "Screen";
                 case "fastdecode":
                     return "Fast Decode";
                 case "zerolatency":

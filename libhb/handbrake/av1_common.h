@@ -24,17 +24,17 @@ static const int          hb_av1_level_values[] = {
      -1,  20,  21,  22,  23,  30,  31,  32,  33,  40,  41,  42,
      43,  50,  51,  52,  53,  60,  61,  62,  63,  0 };
 
-static const char * const av1_svt_preset_names[] =
+static const char * const hb_av1_svt_preset_names[] =
 {
     "13", "12", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "0", "-1", NULL
 };
 
-static const char * const av1_svt_tune_names[] =
+static const char * const hb_av1_svt_tune_names[] =
 {
-    "psnr", "ssim", "fastdecode", NULL
+    "vq", "psnr", "ssim", "fastdecode", NULL
 };
 
-static const char * const av1_svt_profile_names[] =
+static const char * const hb_av1_svt_profile_names[] =
 {
     "auto", "main", NULL // "high", "profesional"
 };

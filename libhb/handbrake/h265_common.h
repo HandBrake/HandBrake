@@ -17,6 +17,8 @@
 // in HEVC, all "random access point" NAL units are keyframes
 #define HB_HEVC_NALU_KEYFRAME(nal_unit_type) (((nal_unit_type) >= 16) && ((nal_unit_type) <= 23))
 
+static const char * const hb_x265_tune_names[]              = {
+    "none", "psnr", "ssim", "grain", "zerolatency", "fastdecode", "animation", NULL };
 static const char * const hb_h265_tier_names[]              = {
     "auto", "main", "high", NULL, };
 static const char * const hb_h265_profile_names_8bit[]      = {
