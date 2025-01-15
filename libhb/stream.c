@@ -10,6 +10,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <iconv.h>
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
@@ -6094,6 +6095,12 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     title->container_name = strdup( ic->iformat->name );
     title->data_rate = ic->bit_rate;
 
+    iconv_t iconv_context;
+    iconv_context = iconv_open("utf-8", "utf-8");
+
+    size_t utf8_buf_size = 2048;
+    char *utf8_buf = malloc(utf8_buf_size);
+
     hb_deep_log( 2, "Found ffmpeg %d chapters, container=%s", ic->nb_chapters, ic->iformat->name );
 
     if( ic->nb_chapters != 0 )
@@ -6131,10 +6138,29 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 chapter->seconds = ( seconds % 60 );
 
                 tag = av_dict_get( m->metadata, "title", NULL, 0 );
+
+                // Detect if the chapter title is a valid UTF-8 string
+                char *p, *q;
+                size_t in_size, out_size, retval;
+
+                p = tag->value;
+                q = utf8_buf;
+
+                in_size = strlen(tag->value);
+                out_size = in_size;
+
+                if (utf8_buf_size < in_size)
+                {
+                    utf8_buf = realloc(utf8_buf, in_size);
+                }
+
+                retval = iconv(iconv_context, &p, &in_size, &q, &out_size);
+                int valid = retval != (size_t) -1;
+
                 /* Ignore generic chapter names set by MakeMKV
                  * ("Chapter 00" etc.).
                  * Our default chapter names are better. */
-                if( tag && tag->value && tag->value[0] &&
+                if( valid && tag && tag->value && tag->value[0] &&
                     ( strncmp( "Chapter ", tag->value, 8 ) ||
                       strlen( tag->value ) > 11 ) )
                 {
@@ -6154,6 +6180,9 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 hb_list_add( title->list_chapter, chapter );
             }
     }
+
+    iconv_close(iconv_context);
+    free(utf8_buf);
 
     /*
      * Fill the metadata.
