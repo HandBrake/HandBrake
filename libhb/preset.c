@@ -2061,7 +2061,6 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         else if (!strcasecmp(hb_value_get_string(value), "hdr10plus"))
         {
             hdr_dynamic_metadata = HB_HDR_DYNAMIC_METADATA_HDR10PLUS;
-
         }
         else if (!strcasecmp(hb_value_get_string(value), "dolbyvision"))
         {

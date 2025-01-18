@@ -1118,7 +1118,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     const char       * video_preset = NULL, * video_tune = NULL;
     const char       * video_profile = NULL, * video_level = NULL;
     const char       * video_options = NULL;
-    int                passthru_dynamic_hdr_metadata = 0;
+    int                passthru_dynamic_hdr_metadata = -1;
     int                subtitle_search_burn = 0;
     json_int_t         range_start = -1, range_end = -1, range_seek_points = -1;
     int                vbitrate = -1;
@@ -1302,7 +1302,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         }
     }
 
-    if (passthru_dynamic_hdr_metadata)
+    if (passthru_dynamic_hdr_metadata > -1)
     {
         job->passthru_dynamic_hdr_metadata = passthru_dynamic_hdr_metadata;
     }

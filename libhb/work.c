@@ -1514,11 +1514,18 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         return;
     }
 
-    if (hb_video_hdr_dynamic_metadata_is_supported(job->vcodec,HB_HDR_DYNAMIC_METADATA_HDR10PLUS, 0) == 0)
+    if (job->title->hdr_10_plus == 0 ||
+        hb_video_hdr_dynamic_metadata_is_supported(job->vcodec,
+                                                   HB_HDR_DYNAMIC_METADATA_HDR10PLUS,
+                                                   0) == 0)
     {
         job->passthru_dynamic_hdr_metadata &= ~HB_HDR_DYNAMIC_METADATA_HDR10PLUS;
     }
-    if (hb_video_hdr_dynamic_metadata_is_supported(job->vcodec, HB_HDR_DYNAMIC_METADATA_DOVI, job->dovi.dv_profile) == 0)
+
+    if (job->title->dovi.dv_profile == 0 ||
+        hb_video_hdr_dynamic_metadata_is_supported(job->vcodec,
+                                                   HB_HDR_DYNAMIC_METADATA_DOVI,
+                                                   job->dovi.dv_profile) == 0)
     {
         job->passthru_dynamic_hdr_metadata &= ~HB_HDR_DYNAMIC_METADATA_DOVI;
     }
