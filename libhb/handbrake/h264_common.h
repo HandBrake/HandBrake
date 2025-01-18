@@ -10,6 +10,8 @@
 #ifndef HANDBRAKE_H264_COMMON_H
 #define HANDBRAKE_H264_COMMON_H
 
+static const char * const hb_x264_tune_names[]          = {
+    "none", "film", "animation", "grain", "stillimage", "psnr", "ssim", "fastdecode", "zerolatency", NULL };
 static const char * const hb_h264_profile_names_8bit[]  = {
     "auto", "baseline", "main", "high", NULL, };
 static const char * const hb_x264_profile_names_8bit[] = {

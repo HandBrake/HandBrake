@@ -2975,6 +2975,21 @@ static void und_to_any(hb_value_array_t * list)
     }
 }
 
+static void import_svt_av1_tune_61_0_0(hb_value_t *preset)
+{
+    const char *enc = hb_dict_get_string(preset, "VideoEncoder");
+    int codec = hb_video_encoder_get_from_name(enc);
+
+    if (codec == HB_VCODEC_SVT_AV1 || codec == HB_VCODEC_SVT_AV1_10BIT)
+    {
+        const char *tune = hb_dict_get_string(preset, "VideoTune");
+        if (tune == NULL || strlen(tune) == 0)
+        {
+            hb_dict_set_string(preset, "VideoTune", "vq");
+        }
+    }
+}
+
 static void import_dynamic_metadata_preset_settings_60_0_0(hb_value_t *preset)
 {
     hb_dict_set_string(preset, "VideoPasshtruHDRDynamicMetadata", "all");
@@ -3735,9 +3750,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_61_0_0(hb_value_t *preset)
+{
+    import_svt_av1_tune_61_0_0(preset);
+}
+
 static void import_60_0_0(hb_value_t *preset)
 {
     import_dynamic_metadata_preset_settings_60_0_0(preset);
+
+    import_61_0_0(preset);
 }
 
 static void import_57_0_0(hb_value_t *preset)
@@ -3963,6 +3985,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 60, 0, 0) <= 0)
         {
             import_60_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 61, 0, 0) <= 0)
+        {
+            import_61_0_0(preset);
             result = 1;
         }
 
