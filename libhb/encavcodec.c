@@ -608,6 +608,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             snprintf(quality, 7, "%d", (int)job->vquality);
             av_dict_set(&av_opts, "rate_control", "quality", 0);
             av_dict_set(&av_opts, "quality", quality, 0);
+            if (!av_dict_get(av_opts, "scenario", NULL, 0))
+            {
+                av_dict_set(&av_opts, "scenario", "archive", 0);
+            }
         }
         else
         {
