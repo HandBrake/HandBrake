@@ -10,3 +10,13 @@ GCC.args.g.std  = -g2
 GCC.args.g.max  = -g3
 
 GCC.args.extra += -mno-ms-bitfields
+
+ifeq ($(HOST.machine),$(filter $(HOST.machine),aarch64))
+    ifneq (none,$(GCC.g))
+        GCC.args.g.max        += -gcodeview
+        GCC.args.g.min        += -gcodeview
+        GCC.args.g.std        += -gcodeview
+        GCC.args.extra.exe++  += -Wl-debug -Wl,--pdb=
+        GCC.args.extra.exe    += -Wl-debug -Wl,--pdb=
+    endif
+endif
