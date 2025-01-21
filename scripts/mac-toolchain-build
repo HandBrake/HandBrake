@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # mac-toolchain-build - download and build common macOS toolchain components
 #
-# Copyright 2024 Bradley Sepos
+# Copyright 2025 Bradley Sepos
 # Released under the MIT License. See LICENSE for details.
 # https://github.com/bradleysepos/mac-toolchain-build
 

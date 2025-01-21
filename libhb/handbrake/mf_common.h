@@ -1,7 +1,7 @@
 /* mf_common.h
  *
  * Copyright (c) Dash Santosh <dash.sathyanarayanan@multicorewareinc.com>
- * Copyright (c) 2003-2024 HandBrake Team
+ * Copyright (c) 2003-2025 HandBrake Team
  * This file is part of the HandBrake source code.
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License v2.

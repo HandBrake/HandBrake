@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024 HandBrake Team
+# Copyright (C) 2023-2025 HandBrake Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 icons = gnome.compile_resources('icon_res', 'icon_res.gresource.xml',
