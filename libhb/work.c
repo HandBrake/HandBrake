@@ -1451,6 +1451,43 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
 #endif
 }
 
+static enum AVPixelFormat match_pix_fmt(enum AVPixelFormat pix_fmt,
+                                        const enum AVPixelFormat *encoder_pix_fmts,
+                                        int keep_chroma,
+                                        int keep_depth)
+{
+    while (*encoder_pix_fmts != AV_PIX_FMT_NONE)
+    {
+        int match = 1;
+
+        const AVPixFmtDescriptor *input_desc = av_pix_fmt_desc_get(pix_fmt);
+        const AVPixFmtDescriptor *pix_fmt_desc = av_pix_fmt_desc_get(*encoder_pix_fmts);
+
+        if (keep_chroma)
+        {
+            match &= pix_fmt_desc->log2_chroma_w >= input_desc->log2_chroma_w &&
+                     pix_fmt_desc->log2_chroma_h >= input_desc->log2_chroma_h;
+        }
+
+        if (keep_depth)
+        {
+            int input_depth = hb_get_bit_depth(pix_fmt);
+            int candidate_depth = hb_get_bit_depth(*encoder_pix_fmts);
+
+            match &= input_depth == candidate_depth;
+        }
+
+        if (match)
+        {
+            return *encoder_pix_fmts;
+        }
+
+        encoder_pix_fmts++;
+    }
+
+    return AV_PIX_FMT_NONE;
+}
+
 static void sanitize_filter_list_post(hb_job_t *job)
 {
 #ifdef __APPLE__
@@ -1465,23 +1502,20 @@ static void sanitize_filter_list_post(hb_job_t *job)
     {
         // Some encoders require a specific input pixel format
         // that could be different from the current pipeline format.
-        const int *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec, job->encoder_profile);
-        int encoder_pix_fmt = *encoder_pix_fmts;
+        const enum AVPixelFormat *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec,job->encoder_profile);
 
         // Prefer a pixel format with the
-        // same chroma subsampling
-        while (*encoder_pix_fmts != AV_PIX_FMT_NONE)
-        {
-            const AVPixFmtDescriptor *input_desc = av_pix_fmt_desc_get(job->input_pix_fmt);
-            const AVPixFmtDescriptor *pix_fmt_desc = av_pix_fmt_desc_get(*encoder_pix_fmts);
+        // same chroma subsampling and depth
+        enum AVPixelFormat encoder_pix_fmt = match_pix_fmt(job->input_pix_fmt, encoder_pix_fmts, 1, 1);
 
-            if (pix_fmt_desc->log2_chroma_w >= input_desc->log2_chroma_w &&
-                pix_fmt_desc->log2_chroma_h >= input_desc->log2_chroma_h)
-            {
-                encoder_pix_fmt = *encoder_pix_fmts;
-                break;
-            }
-            encoder_pix_fmts++;
+        if (encoder_pix_fmt == AV_PIX_FMT_NONE)
+        {
+            encoder_pix_fmt = match_pix_fmt(job->input_pix_fmt, encoder_pix_fmts, 1, 0);
+        }
+
+        if (encoder_pix_fmt == AV_PIX_FMT_NONE)
+        {
+            encoder_pix_fmt = match_pix_fmt(job->input_pix_fmt, encoder_pix_fmts, 0, 0);
         }
 
         hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
