@@ -1,6 +1,6 @@
 /* util.c
  *
- * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
+ * Copyright (C) 2008-2025 John Stebbins <stebbins@stebbins>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
