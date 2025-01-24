@@ -60,7 +60,9 @@
     if (self = [super initWithWindowNibName:@"Queue"])
     {
         _queue = queue;
-        _sendQueue = dispatch_queue_create("fr.handbrake.SendToQueue", DISPATCH_QUEUE_SERIAL);
+        _sendQueue = dispatch_queue_create("fr.handbrake.SendToQueue",
+                                           dispatch_queue_attr_make_with_autorelease_frequency(DISPATCH_QUEUE_SERIAL,
+                                                                                               DISPATCH_AUTORELEASE_FREQUENCY_WORK_ITEM));
 
         if (@available(macOS 10.14, *))
         {
