@@ -463,12 +463,13 @@ extern hb_filter_object_t hb_filter_unsharp_vt;
 #endif
 
 extern hb_motion_metric_object_t hb_motion_metric;
+extern hb_blend_object_t hb_blend;
 
 #if defined(__APPLE__)
 extern hb_motion_metric_object_t hb_motion_metric_vt;
+extern hb_blend_object_t hb_blend_vt;
 #endif
 
-extern hb_blend_object_t hb_blend;
 
 extern hb_work_object_t * hb_objects;
 

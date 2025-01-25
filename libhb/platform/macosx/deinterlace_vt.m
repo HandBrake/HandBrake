@@ -267,16 +267,16 @@ static hb_buffer_t * filter_frame(hb_filter_private_t *pv, int parity, int tff)
         }
 
         int channels;
-        const MTLPixelFormat format = hb_metal_pix_fmt_from_component(comp, &channels);
+        const MTLPixelFormat format = hb_metal_pix_fmt_from_component(comp, 0, &channels);
         if (format == MTLPixelFormatInvalid)
         {
             goto fail;
         }
 
-        CVMetalTextureRef prev = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_prev, i, format);
-        CVMetalTextureRef cur  = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_cur,  i, format);
-        CVMetalTextureRef next = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_next, i, format);
-        CVMetalTextureRef dest = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_dest, i, format);
+        CVMetalTextureRef prev = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_prev, i, channels, format);
+        CVMetalTextureRef cur  = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_cur,  i, channels, format);
+        CVMetalTextureRef next = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_next, i, channels, format);
+        CVMetalTextureRef dest = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_dest, i, channels, format);
 
         id<MTLTexture> tex_prev = CVMetalTextureGetTexture(prev);
         id<MTLTexture> tex_cur  = CVMetalTextureGetTexture(cur);

@@ -92,6 +92,24 @@ CVPixelBufferRef hb_cv_get_pixel_buffer(const hb_buffer_t *buf)
     return NULL;
 }
 
+int hb_cv_get_io_surface_usage_count(const hb_buffer_t *buf)
+{
+    IOSurfaceRef surface = NULL;
+    CVPixelBufferRef pix_buf = hb_cv_get_pixel_buffer(buf);
+
+    if (pix_buf)
+    {
+        surface = CVPixelBufferGetIOSurface(pix_buf);
+    }
+
+    if (surface)
+    {
+        return IOSurfaceGetUseCount(surface);
+    }
+
+    return 0;
+}
+
 CVPixelBufferPoolRef hb_cv_create_pixel_buffer_pool(int width, int height, enum AVPixelFormat pix_fmt, enum AVColorRange color_range)
 {
     // CVPixelBuffer pool

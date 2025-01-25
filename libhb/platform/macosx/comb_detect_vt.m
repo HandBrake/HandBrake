@@ -270,7 +270,7 @@ static int comb_detect_vt_init(hb_filter_object_t *filter,
     descriptor.height           = init->geometry.height;
     descriptor.depth            = 1;
     descriptor.storageMode      = MTLStorageModePrivate;
-    descriptor.usage            = MTLResourceUsageRead | MTLResourceUsageWrite;
+    descriptor.usage            = MTLTextureUsageShaderRead | MTLTextureUsageShaderWrite;
 
     pv->mask   = [pv->mtl->device newTextureWithDescriptor:descriptor];
     pv->temp   = [pv->mtl->device newTextureWithDescriptor:descriptor];
@@ -386,7 +386,7 @@ static int analyze_frame(hb_filter_private_t *pv, hb_buffer_t **out)
     const AVComponentDescriptor *comp = &pv->desc->comp[0];
 
     int channels;
-    const MTLPixelFormat format = hb_metal_pix_fmt_from_component(comp, &channels);
+    const MTLPixelFormat format = hb_metal_pix_fmt_from_component(comp, 0, &channels);
     if (format == MTLPixelFormatInvalid)
     {
         goto fail;
@@ -403,13 +403,13 @@ static int analyze_frame(hb_filter_private_t *pv, hb_buffer_t **out)
             hb_log("comb_detect_vt: CVPixelBufferPoolCreatePixelBuffer failed");
             goto fail;
         }
-        dest = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_dest, 0, format);
+        dest = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_dest, 0, channels, format);
         tex_dest = CVMetalTextureGetTexture(dest);
     }
 
-    CVMetalTextureRef prev = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_prev, 0, format);
-    CVMetalTextureRef cur  = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_cur,  0, format);
-    CVMetalTextureRef next = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_next, 0, format);
+    CVMetalTextureRef prev = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_prev, 0, channels, format);
+    CVMetalTextureRef cur  = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_cur,  0, channels, format);
+    CVMetalTextureRef next = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_next, 0, channels, format);
 
     id<MTLTexture> tex_prev = CVMetalTextureGetTexture(prev);
     id<MTLTexture> tex_cur  = CVMetalTextureGetTexture(cur);

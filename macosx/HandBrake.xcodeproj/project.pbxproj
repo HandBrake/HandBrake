@@ -237,6 +237,8 @@
 		A96664B51CCE48F700DA4A57 /* HBPictureHUDController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96664B31CCE48F700DA4A57 /* HBPictureHUDController.m */; };
 		A96664BA1CCE493D00DA4A57 /* HBEncodingProgressHUDController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96664B81CCE493D00DA4A57 /* HBEncodingProgressHUDController.m */; };
 		A96E20642B90B0A20043CFCD /* HBBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A96E20632B90B0A20043CFCD /* HBBadgeView.m */; };
+		A96E35732D44F35800642601 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A96E35722D44F35800642601 /* IOSurface.framework */; };
+		A96E35742D44F35F00642601 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A96E35722D44F35800642601 /* IOSurface.framework */; };
 		A96E461B278D99840016DCBB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = A96E461A278D99840016DCBB /* Sparkle */; };
 		A9706CB41AC1436F00BAEAA8 /* HBApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = A9706CB31AC1436F00BAEAA8 /* HBApplication.m */; };
 		A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9706CB61AC1437800BAEAA8 /* HBExceptionAlertController.m */; };
@@ -728,6 +730,7 @@
 		A96CD1751BCC5F9100F372F1 /* HBMutablePreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBMutablePreset.m; sourceTree = "<group>"; };
 		A96E20622B90B0A20043CFCD /* HBBadgeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBBadgeView.h; sourceTree = "<group>"; };
 		A96E20632B90B0A20043CFCD /* HBBadgeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBBadgeView.m; sourceTree = "<group>"; };
+		A96E35722D44F35800642601 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		A9706CB21AC1436F00BAEAA8 /* HBApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBApplication.h; sourceTree = "<group>"; };
 		A9706CB31AC1436F00BAEAA8 /* HBApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBApplication.m; sourceTree = "<group>"; };
 		A9706CB51AC1437800BAEAA8 /* HBExceptionAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBExceptionAlertController.h; sourceTree = "<group>"; };
@@ -1265,6 +1268,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A96E35732D44F35800642601 /* IOSurface.framework in Frameworks */,
 				A9C3A8F7278DFFA500839EDF /* Foundation.framework in Frameworks */,
 				A9A25D9C21182741005A8A0F /* CoreMedia.framework in Frameworks */,
 				A9AB9AA821181CC700BB3C7E /* CoreVideo.framework in Frameworks */,
@@ -1359,6 +1363,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A96E35742D44F35F00642601 /* IOSurface.framework in Frameworks */,
 				A9A25D9D21182753005A8A0F /* CoreMedia.framework in Frameworks */,
 				A9AB9AA5211819A500BB3C7E /* VideoToolbox.framework in Frameworks */,
 				A9ABD1AA1E2A0F8F00EC8B65 /* CoreGraphics.framework in Frameworks */,
@@ -1503,6 +1508,7 @@
 		273F203414ADBAC30021BE6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A96E35722D44F35800642601 /* IOSurface.framework */,
 				A99B989F27957FCE00DCD062 /* Metal.framework */,
 				273F202214ADB8650021BE6D /* IOKit.framework */,
 				A95798DA278DEAE500AA7C7D /* AppKit.framework */,

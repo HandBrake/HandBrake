@@ -151,7 +151,6 @@ int hb_metal_add_pipeline(hb_metal_context_t *ctx, const char *function_name,
         return -1;
     }
     return 0;
-
 }
 
 void hb_metal_context_close(hb_metal_context_t **_ctx)
@@ -229,27 +228,49 @@ void hb_metal_compute_encoder_dispatch_fixed_threadgroup_size(id<MTLDevice> devi
     [encoder dispatchThreadgroups:threadgroups threadsPerThreadgroup:threadsPerThreadgroup];
 }
 
-MTLPixelFormat hb_metal_pix_fmt_from_component(const AVComponentDescriptor *comp, int *channels_out)
+MTLPixelFormat hb_metal_pix_fmt_from_component(const AVComponentDescriptor *comp, int readwrite, int *channels_out)
 {
     MTLPixelFormat format;
     int pixel_size = (comp->depth + comp->shift) / 8;
     int channels = comp->step / pixel_size;
+
     if (pixel_size > 2 || channels > 2)
     {
         hb_log("metal: unsupported pixel format");
         return MTLPixelFormatInvalid;
     }
-    switch (pixel_size)
+
+    // Metal has additional limitation in
+    // readwrite pixel formats
+    if (readwrite)
     {
-        case 1:
-            format = channels == 1 ? MTLPixelFormatR8Unorm : MTLPixelFormatRG8Unorm;
-            break;
-        case 2:
-            format = channels == 1 ? MTLPixelFormatR16Unorm : MTLPixelFormatRG16Unorm;
-            break;
-        default:
-            hb_log("metal: unsupported pixel format");
-            return MTLPixelFormatInvalid;
+        switch (pixel_size)
+        {
+            case 1:
+                format = MTLPixelFormatR8Uint;
+                break;
+            case 2:
+                format = MTLPixelFormatR16Uint;
+                break;
+            default:
+                hb_log("metal: unsupported pixel format");
+                return MTLPixelFormatInvalid;
+        }
+    }
+    else
+    {
+        switch (pixel_size)
+        {
+            case 1:
+                format = channels == 1 ? MTLPixelFormatR8Unorm : MTLPixelFormatRG8Unorm;
+                break;
+            case 2:
+                format = channels == 1 ? MTLPixelFormatR16Unorm : MTLPixelFormatRG16Unorm;
+                break;
+            default:
+                hb_log("metal: unsupported pixel format");
+                return MTLPixelFormatInvalid;
+        }
     }
 
     *channels_out = channels;
@@ -259,10 +280,23 @@ MTLPixelFormat hb_metal_pix_fmt_from_component(const AVComponentDescriptor *comp
 CVMetalTextureRef hb_metal_create_texture_from_pixbuf(CVMetalTextureCacheRef textureCache,
                                                CVPixelBufferRef pixbuf,
                                                int plane,
+                                               int channels,
                                                MTLPixelFormat format)
 {
     CVMetalTextureRef tex = NULL;
     CVReturn ret;
+
+    int width  = CVPixelBufferGetWidthOfPlane(pixbuf, plane);
+    int height = CVPixelBufferGetHeightOfPlane(pixbuf, plane);
+
+    if (channels == 2)
+    {
+        if (format == MTLPixelFormatR8Uint ||
+            format == MTLPixelFormatR16Uint)
+        {
+            width *= channels;
+        }
+    }
 
     ret = CVMetalTextureCacheCreateTextureFromImage(
         NULL,
@@ -270,11 +304,12 @@ CVMetalTextureRef hb_metal_create_texture_from_pixbuf(CVMetalTextureCacheRef tex
         pixbuf,
         NULL,
         format,
-        CVPixelBufferGetWidthOfPlane(pixbuf, plane),
-        CVPixelBufferGetHeightOfPlane(pixbuf, plane),
+        width,
+        height,
         plane,
         &tex
     );
+
     if (ret != kCVReturnSuccess)
     {
         hb_log("metal: failed to create CVMetalTexture from image: %d", ret);

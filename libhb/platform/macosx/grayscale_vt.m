@@ -196,13 +196,13 @@ static hb_buffer_t * filter_frame(hb_filter_private_t *pv, hb_buffer_t *in)
             continue;
         }
 
-        format[i] = hb_metal_pix_fmt_from_component(comp, &channels);
+        format[i] = hb_metal_pix_fmt_from_component(comp, 0, &channels);
         if (format[i] == MTLPixelFormatInvalid)
         {
             goto fail;
         }
 
-        src[i]     = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_src, i, format[i]);
+        src[i]     = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_src, i, channels, format[i]);
         tex_src[i] = CVMetalTextureGetTexture(src[i]);
     }
 
@@ -214,7 +214,7 @@ static hb_buffer_t * filter_frame(hb_filter_private_t *pv, hb_buffer_t *in)
             continue;
         }
 
-        CVMetalTextureRef dest = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_dest, i, format[i]);
+        CVMetalTextureRef dest = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_dest, i, channels, format[i]);
         id<MTLTexture> tex_dest = CVMetalTextureGetTexture(dest);
 
         call_kernel(pv, tex_dest, tex_src, i);

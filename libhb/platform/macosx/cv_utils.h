@@ -18,6 +18,9 @@ OSType hb_cv_get_pixel_format(enum AVPixelFormat pix_fmt,
 
 CVPixelBufferRef hb_cv_get_pixel_buffer(const hb_buffer_t *buf);
 
+int hb_cv_get_io_surface_usage_count(const hb_buffer_t *buf);
+
+
 CVPixelBufferPoolRef hb_cv_create_pixel_buffer_pool(int width, int height,
                                                     enum AVPixelFormat pix_fmt,
                                                     enum AVColorRange color_range);

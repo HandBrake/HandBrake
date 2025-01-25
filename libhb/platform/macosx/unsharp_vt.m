@@ -325,14 +325,14 @@ static hb_buffer_t * filter_frame(hb_filter_private_t *pv, hb_buffer_t *in)
         }
 
         int channels;
-        const MTLPixelFormat format = hb_metal_pix_fmt_from_component(comp, &channels);
+        const MTLPixelFormat format = hb_metal_pix_fmt_from_component(comp, 0, &channels);
         if (format == MTLPixelFormatInvalid)
         {
             goto fail;
         }
 
-        CVMetalTextureRef src  = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_src, i, format);
-        CVMetalTextureRef dest = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_dest, i, format);
+        CVMetalTextureRef src  = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_src, i, channels, format);
+        CVMetalTextureRef dest = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_dest, i, channels, format);
 
         id<MTLTexture> tex_src  = CVMetalTextureGetTexture(src);
         id<MTLTexture> tex_dest = CVMetalTextureGetTexture(dest);

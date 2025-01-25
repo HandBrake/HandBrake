@@ -407,7 +407,6 @@ int hb_vt_are_filters_supported(hb_list_t *filters)
             case HB_FILTER_DEBLOCK:
             case HB_FILTER_DENOISE:
             case HB_FILTER_NLMEANS:
-            case HB_FILTER_RENDER_SUB:
             case HB_FILTER_COLORSPACE:
             case HB_FILTER_FORMAT:
                 supported = 0;
