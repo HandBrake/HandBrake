@@ -32,10 +32,6 @@
 @property (nonatomic) HBQueueInfoViewController *infoViewController;
 @property (nonatomic) HBQueueMultiSelectionViewController *multiSelectionViewController;
 
-/// Whether the window is visible or occluded,
-/// useful to avoid updating the UI needlessly
-@property (nonatomic) BOOL visible;
-
 @property (nonatomic) HBQueueToolbarDelegate *toolbarDelegate;
 
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
@@ -287,11 +283,6 @@
 - (BOOL)validateToolbarItem:(NSToolbarItem *)theItem
 {
     return [self validateUserIterfaceItemForAction:theItem.action];
-}
-
-- (void)windowDidChangeOcclusionState:(NSNotification *)notification
-{
-    self.visible = self.window.occlusionState & NSWindowOcclusionStateVisible ? YES : NO;
 }
 
 #pragma mark - Private queue editing methods
