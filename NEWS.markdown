@@ -27,6 +27,7 @@ Download available from Microsoft:
 - Fix an issue where the audio encoder may not display correctly after a queue has been imported and queue item edited. This may exhibit in other scenarios as well. (#6524)
 - Fix an issue with titlebar / taskbar progress erroneously showing with multi-instance encodes. (#6477)
 - Fix a crash when importing chapters where there is a chapter count mis-match.(#6514)
+- Fixed an issue with autoname pre/postfix option where it would apply regardless of file path collision.
 
 
 ## HandBrake 1.9.0
