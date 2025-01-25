@@ -136,7 +136,10 @@
         [self.mainController launchAction];
     }
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    dispatch_queue_t logCleaningQueue = dispatch_queue_create_with_target("fr.handbrake.HandBrake.LogCleaningQueue",
+                                                                          DISPATCH_QUEUE_SERIAL,
+                                                                          dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0));
+    dispatch_async(logCleaningQueue, ^{
         // Remove encodes logs older than a month
         if ([ud boolForKey:HBClearOldLogs])
         {
