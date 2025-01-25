@@ -22,7 +22,7 @@
 #define PRESET_FILE @"UserPresets.json"
 #define QUEUE_FILE @"Queue.hbqueue"
 
-@interface HBAppDelegate () <NSMenuItemValidation>
+@interface HBAppDelegate () <NSMenuItemValidation, NSWindowRestoration>
 
 @property (nonatomic, strong) HBPresetsManager *presetsManager;
 @property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
@@ -51,6 +51,7 @@
         [HBPreferencesController registerUserDefaults];
 
         _outputPanel = [[HBOutputPanelController alloc] init];
+        _outputPanel.window.restorationClass = [self class];
 
         [HBCore initGlobal];
         [HBCore registerErrorHandler:^(NSString *error) {
@@ -66,8 +67,11 @@
         _queue = [[HBQueue alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:QUEUE_FILE isDirectory:NO]];
         _queueController = [[HBQueueController alloc] initWithQueue:_queue];
         _queueController.delegate = self;
+        _queueController.window.restorationClass = [self class];
         _queueDockTileController = [[HBQueueDockTileController alloc] initWithQueue:_queue dockTile:NSApplication.sharedApplication.dockTile image:NSApplication.sharedApplication.applicationIconImage];
+
         _mainController = [[HBController alloc] initWithDelegate:self queue:_queue presetsManager:_presetsManager];
+        _mainController.window.restorationClass = [self class];
     }
     return self;
 }
@@ -76,15 +80,6 @@
 
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
 {
-    return YES;
-}
-
-- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
-{
-    if (!flag)
-    {
-        [self.mainController showWindow:nil];
-    }
     return YES;
 }
 
@@ -104,37 +99,11 @@
         [ud setInteger:HBDoneActionDoNothing forKey:HBQueueDoneAction];
     }
 
-
     self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsMenu
                                                                   action:@selector(selectPresetFromMenu:)
                                                                     size:NSFont.systemFontSize
                                                           presetsManager:self.presetsManager];
     [self.presetsMenuBuilder build];
-
-    // Open debug output window now if it was visible when HB was closed
-    if ([ud boolForKey:@"OutputPanelIsOpen"])
-    {
-        [self showOutputPanel:nil];
-    }
-
-    // Now we re-check the queue array to see if there are
-    // any remaining encodes to be done
-    if (self.queue.items.count)
-    {
-        [self showMainWindow:self];
-        [self showQueueWindow:self];
-    }
-    else
-    {
-        // Open queue window now if it was visible when HB was closed
-        if ([ud boolForKey:@"QueueWindowIsOpen"])
-        {
-            [self showQueueWindow:nil];
-        }
-
-        [self showMainWindow:self];
-        [self.mainController launchAction];
-    }
 
     dispatch_queue_t logCleaningQueue = dispatch_queue_create_with_target("fr.handbrake.HandBrake.LogCleaningQueue",
                                                                           DISPATCH_QUEUE_SERIAL,
@@ -148,6 +117,22 @@
 
         [self cleanPreviews];
     });
+}
+
+- (BOOL)applicationOpenUntitledFile:(NSApplication *)app
+{
+    [self showMainWindow:self];
+
+    if (self.queue.items.count > 0)
+    {
+        [self showQueueWindow:self];
+    }
+    else
+    {
+        [self.mainController launchAction];
+    }
+
+    return YES;
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)app
@@ -180,9 +165,6 @@
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     [self.presetsManager savePresets];
-
-    [NSUserDefaults.standardUserDefaults setBool:_queueController.window.isVisible forKey:@"QueueWindowIsOpen"];
-    [NSUserDefaults.standardUserDefaults setBool:_outputPanel.window.isVisible forKey:@"OutputPanelIsOpen"];
 
     _mainController = nil;
     _queueController = nil;
@@ -372,6 +354,26 @@
 - (IBAction)openUserGuide:(id)sender
 {
     [NSWorkspace.sharedWorkspace openURL:HBUtilities.documentationURL];
+}
+
+# pragma mark - Resume
+
++ (void)restoreWindowWithIdentifier:(NSUserInterfaceItemIdentifier)identifier
+                              state:(NSCoder *)state
+                  completionHandler:(void (^)(NSWindow *, NSError *))completionHandler
+{
+    HBAppDelegate *appDelegate = (HBAppDelegate *)NSApp.delegate;
+
+    NSWindow *window = nil;
+    if ([identifier isEqualToString:@"OutputPanel"]) {
+        window = appDelegate.outputPanel.window;
+    } else if ([identifier isEqualToString:@"Queue"]) {
+        window = appDelegate.queueController.window;
+    } else if ([identifier isEqualToString:@"MainWindow"]) {
+        window = appDelegate.mainController.window;
+    }
+
+    completionHandler(window, nil);
 }
 
 @end
