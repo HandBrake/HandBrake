@@ -285,14 +285,17 @@ namespace HandBrakeWPF.Helpers
 
             if (behaviour != AutonameFileCollisionBehaviour.AppendNumber)
             {
-                autoNamePath = Path.Combine(Path.GetDirectoryName(autoNamePath), prefix + filenameWithoutExt + postfix + extension);
-
-                int counter = 0;
-                while (File.Exists(autoNamePath))
+                if (File.Exists(autoNamePath))
                 {
-                    counter = counter + 1;
-                    string appendedNumber = string.Format("({0})", counter);
-                    autoNamePath = Path.Combine(Path.GetDirectoryName(autoNamePath), prefix + filenameWithoutExt + postfix + appendedNumber + extension);
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(autoNamePath), prefix + filenameWithoutExt + postfix + extension);
+
+                    int counter = 0;
+                    while (File.Exists(autoNamePath))
+                    {
+                        counter = counter + 1;
+                        string appendedNumber = string.Format("({0})", counter);
+                        autoNamePath = Path.Combine(Path.GetDirectoryName(autoNamePath), prefix + filenameWithoutExt + postfix + appendedNumber + extension);
+                    }
                 }
             }
             else
