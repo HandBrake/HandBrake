@@ -129,6 +129,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 @property (nonatomic) HBControllerToolbarDelegate *toolbarDelegate;
 
+#pragma mark - Resume
+
+@property (nonatomic) BOOL openPanelVisible;
+
 @end
 
 @interface HBController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
@@ -1090,8 +1094,14 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     panel.accessoryView = self.openTitleView;
     panel.accessoryViewDisclosed = YES;
 
+    self.openPanelVisible = YES;
+    [self invalidateRestorableState];
+
     [panel beginSheetModalForWindow:self.window completionHandler: ^(NSInteger result)
     {
+        self.openPanelVisible = NO;
+        [self invalidateRestorableState];
+
         if (result == NSModalResponseOK)
          {
              BOOL recursive = [NSUserDefaults.standardUserDefaults boolForKey:HBRecursiveScan];
@@ -1773,6 +1783,22 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     // Retrieve the preset stored in the NSMenuItem
     HBPreset *preset = [sender representedObject];
     [self applyPreset:preset];
+}
+
+#pragma mark - Resume
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super encodeRestorableStateWithCoder:coder];
+    [coder encodeBool:self.openPanelVisible forKey:@"openPanelVisible"];
+}
+
+- (void)restoreStateWithCoder:(NSCoder *)coder
+{
+    [super restoreStateWithCoder:coder];
+    if ([coder decodeBoolForKey:@"openPanelVisible"]) {
+        [self browseSources:self];
+    }
 }
 
 @end
