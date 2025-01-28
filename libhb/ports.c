@@ -605,6 +605,7 @@ void hb_get_user_config_filename( char name[1024], char *fmt, ... )
  ***********************************************************************/
 static pthread_once_t tmp_control = PTHREAD_ONCE_INIT;
 static char *tmp_dirname = NULL;
+static const char *tmp_override = NULL;
 
 static void
 hb_init_temporary_directory (void)
@@ -612,29 +613,35 @@ hb_init_temporary_directory (void)
     char *path = NULL, *base = NULL, *p;
 
 #if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
-    DWORD i_size = 0;
-    WCHAR wide_base[MAX_PATH + 1];
-
-    i_size = GetTempPathW(MAX_PATH, wide_base);
-    if (i_size > 0 && i_size <= MAX_PATH)
+    if (tmp_override != NULL && tmp_override[0] != '\0')
     {
-        int base_size = WideCharToMultiByte(CP_UTF8, 0, wide_base, -1,
-                                            NULL, 0, 0, NULL);
-        if (base_size)
+        base = strdup(tmp_override);
+    }
+    else
+    {
+        DWORD i_size = 0;
+        WCHAR wide_base[MAX_PATH + 1];
+
+        i_size = GetTempPathW(MAX_PATH, wide_base);
+        if (i_size > 0 && i_size <= MAX_PATH)
         {
-            base = malloc(base_size);
-            WideCharToMultiByte(CP_UTF8, 0, wide_base, -1,
-                                base, base_size, 0, NULL);
+            int base_size = WideCharToMultiByte(CP_UTF8, 0, wide_base, -1,
+                                                NULL, 0, 0, NULL);
+            if (base_size)
+            {
+                base = malloc(base_size);
+                WideCharToMultiByte(CP_UTF8, 0, wide_base, -1,
+                                    base, base_size, 0, NULL);
+            }
+        }
+        
+        if (base == NULL)
+        {
+            base = malloc(MAX_PATH + 1);
+            if (getcwd(base, MAX_PATH) == NULL)
+            strcpy(base, "c:"); /* Bad fallback but ... */
         }
     }
-
-    if (base == NULL)
-    {
-        base = malloc(MAX_PATH + 1);
-        if (getcwd(base, MAX_PATH) == NULL)
-            strcpy(base, "c:"); /* Bad fallback but ... */
-    }
-
     /* c:/path/ works like a charm under cygwin(win32?) so use it */
     while ((p = strchr(base, '\\')))
         *p = '/';
@@ -647,8 +654,10 @@ hb_init_temporary_directory (void)
     hb_mkdir(path);
     free(base);
 #else
-    if ((p = getenv("TMPDIR")) != NULL ||
-        (p = getenv("TEMP"))   != NULL)
+    if (tmp_override != NULL && tmp_override[0] != '\0')
+        base = strdup(tmp_override);
+    else if ((p = getenv("TMPDIR")) != NULL ||
+             (p = getenv("TEMP"))   != NULL)
         base = strdup(p);
     else
         base = strdup("/tmp");
@@ -666,6 +675,18 @@ hb_init_temporary_directory (void)
     free(base);
 #endif
     tmp_dirname = path;
+}
+
+/************************************************************************
+ * Sets the location of the temporary directory. This function must be
+ * called before the first use of hb_get_temporary_directory().
+ ***********************************************************************/
+void
+hb_set_temporary_directory (const char *tmp_dir)
+{
+    tmp_override = tmp_dir;
+    pthread_once(&tmp_control, hb_init_temporary_directory);
+    tmp_override = NULL;
 }
 
 const char *
