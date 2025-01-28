@@ -130,6 +130,7 @@ char * hb_strndup(const char * src, size_t len);
 /************************************************************************
  * File utils
  ***********************************************************************/
+void hb_set_temporary_directory(const char *tmp_dir);
 const char * hb_get_temporary_directory(void);
 char * hb_get_temporary_filename( char *fmt, ... );
 size_t hb_getline(char **lineptr, size_t *n, FILE *fp);
