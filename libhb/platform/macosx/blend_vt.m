@@ -16,8 +16,12 @@ extern unsigned int hb_blend_vt_metallib_len;
 
 struct mtl_blend_params
 {
-    uint x;
-    uint y;
+    uint16_t x;
+    uint16_t y;
+    uint16_t xc;
+    uint16_t yc;
+    uint16_t width;
+    uint16_t height;
 };
 
 struct hb_blend_private_s
@@ -25,14 +29,15 @@ struct hb_blend_private_s
     hb_metal_context_t *mtl;
 
     id<MTLTexture> overlays[4];
+    id<MTLBuffer> chroma_coeffs;
 
     const AVPixFmtDescriptor *in_desc;
     const AVPixFmtDescriptor *overlay_desc;
 
-    int subw;
-    int subh;
-    int overlay_subw;
-    int overlay_subh;
+    uint16_t subw;
+    uint16_t subh;
+    uint16_t overlay_subw;
+    uint16_t overlay_subh;
 };
 
 static int hb_blend_vt_init(hb_blend_object_t *object,
@@ -77,9 +82,9 @@ static int hb_blend_vt_init(hb_blend_object_t *object,
     pv->in_desc      = av_pix_fmt_desc_get(in_pix_fmt);
     pv->overlay_desc = av_pix_fmt_desc_get(overlay_pix_fmt);
 
-    int depth     = pv->in_desc->comp[0].depth == 8 ? 8 : 16;
-    int shift     = depth - 8;
-    int max_value = (1 << depth) - 1;
+    uint16_t depth     = pv->in_desc->comp[0].depth == 8 ? 8 : 16;
+    uint16_t shift     = depth - 8;
+    uint32_t max_value = (1 << depth) - 1;
 
     pv->subw  = pv->in_desc->log2_chroma_w;
     pv->subh  = pv->in_desc->log2_chroma_h;
@@ -99,17 +104,17 @@ static int hb_blend_vt_init(hb_blend_object_t *object,
         return -1;
     }
 
-    uint32_t plane = 0;
-    uint32_t channels = 1;
+    uint16_t plane = 0;
+    uint16_t channels = 1;
     MTLFunctionConstantValues *constant_values = [MTLFunctionConstantValues new];
 
-    [constant_values setConstantValue:&plane            type:MTLDataTypeUInt withName:@"plane"];
-    [constant_values setConstantValue:&channels         type:MTLDataTypeUInt withName:@"channels"];
-    [constant_values setConstantValue:&pv->subw         type:MTLDataTypeUInt withName:@"subw"];
-    [constant_values setConstantValue:&pv->subh         type:MTLDataTypeUInt withName:@"subh"];
-    [constant_values setConstantValue:&pv->overlay_subw type:MTLDataTypeUInt withName:@"osubw"];
-    [constant_values setConstantValue:&pv->overlay_subh type:MTLDataTypeUInt withName:@"osubh"];
-    [constant_values setConstantValue:&shift            type:MTLDataTypeUInt withName:@"shift"];
+    [constant_values setConstantValue:&plane            type:MTLDataTypeUShort withName:@"plane"];
+    [constant_values setConstantValue:&channels         type:MTLDataTypeUShort withName:@"channels"];
+    [constant_values setConstantValue:&pv->subw         type:MTLDataTypeUShort withName:@"subw"];
+    [constant_values setConstantValue:&pv->subh         type:MTLDataTypeUShort withName:@"subh"];
+    [constant_values setConstantValue:&pv->overlay_subw type:MTLDataTypeUShort withName:@"osubw"];
+    [constant_values setConstantValue:&pv->overlay_subh type:MTLDataTypeUShort withName:@"osubh"];
+    [constant_values setConstantValue:&shift            type:MTLDataTypeUShort withName:@"shift"];
     [constant_values setConstantValue:&max_value        type:MTLDataTypeUInt withName:@"maxv"];
     [constant_values setConstantValue:&needs_subsample  type:MTLDataTypeBool withName:@"subsample"];
 
@@ -122,8 +127,8 @@ static int hb_blend_vt_init(hb_blend_object_t *object,
 
     plane = 1;
     channels = 2;
-    [constant_values setConstantValue:&plane    type:MTLDataTypeUInt withName:@"plane"];
-    [constant_values setConstantValue:&channels type:MTLDataTypeUInt withName:@"channels"];
+    [constant_values setConstantValue:&plane    type:MTLDataTypeUShort withName:@"plane"];
+    [constant_values setConstantValue:&channels type:MTLDataTypeUShort withName:@"channels"];
 
     if (hb_metal_add_pipeline(pv->mtl, "blend", constant_values, pv->mtl->pipelines_count))
     {
@@ -152,6 +157,19 @@ static int hb_blend_vt_init(hb_blend_object_t *object,
 
         [descriptor release];
     }
+
+    NSUInteger length = 4 * 2 * sizeof(uint32_t);
+    pv->chroma_coeffs = [pv->mtl->device newBufferWithLength:length
+                                                     options:MTLResourceStorageModeManaged];
+    if (pv->chroma_coeffs == nil)
+    {
+        hb_error("blend_vt: failed to create Metal buffers");
+    }
+
+    hb_compute_chroma_smoothing_coefficient(pv->chroma_coeffs.contents,
+                                            in_pix_fmt,
+                                            in_chroma_location);
+    [pv->chroma_coeffs didModifyRange:NSMakeRange(0, length)];
 
     return 0;
 }
@@ -187,13 +205,18 @@ static void call_kernel(hb_blend_private_t *pv,
     struct mtl_blend_params *params = (struct mtl_blend_params *)pv->mtl->params_buffer.contents;
     params->x = x;
     params->y = y;
+    params->xc = x & ~((1 << pv->subw) - 1);
+    params->yc = y & ~((1 << pv->subh) - 1);
+    params->width  = width;
+    params->height = height;
 
     [encoder setTexture:dst atIndex:0];
     for (int i = 0; i < pv->overlay_desc->nb_components; i++)
     {
         [encoder setTexture:pv->overlays[i] atIndex:i + 1];
     }
-    [encoder setBuffer:pv->mtl->params_buffer offset:0 atIndex:0];
+    [encoder setBuffer:pv->chroma_coeffs offset:0 atIndex:0];
+    [encoder setBuffer:pv->mtl->params_buffer offset:0 atIndex:1];
 
     if (plane)
     {
@@ -288,6 +311,8 @@ static void hb_blend_vt_close(hb_blend_object_t *metric)
     {
         [pv->overlays[i] release];
     }
+
+    [pv->chroma_coeffs release];
 
     hb_metal_context_close(&pv->mtl);
 

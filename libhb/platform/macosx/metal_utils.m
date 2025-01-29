@@ -141,7 +141,7 @@ int hb_metal_add_pipeline(hb_metal_context_t *ctx, const char *function_name,
     }
     if (!ctx->functions[index])
     {
-        hb_error("metal: failed to create Metal function");
+        hb_error("metal: failed to create Metal function: %s", err.description.UTF8String);
         return -1;
     }
     ctx->pipelines[index] = [ctx->device newComputePipelineStateWithFunction:ctx->functions[index] error:&err];

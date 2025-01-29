@@ -6296,7 +6296,7 @@ hb_csp_convert_f hb_get_rgb2yuv_function(int color_matrix)
     return hb_rgb2yuv_bt709;
 }
 
-void hb_compute_chroma_smoothing_coefficient(unsigned chroma_coeffs[2][4], int pix_fmt, int chroma_location)
+void hb_compute_chroma_smoothing_coefficient(uint32_t chroma_coeffs[2][4], int pix_fmt, int chroma_location)
 {
     const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
 
@@ -6324,7 +6324,7 @@ void hb_compute_chroma_smoothing_coefficient(unsigned chroma_coeffs[2][4], int p
             break;
     }
 
-    const unsigned base_coefficients[] = {1, 3, 9, 27, 9, 3, 1};
+    const uint32_t base_coefficients[] = {1, 3, 9, 27, 9, 3, 1};
     // If wZ is even, an intermediate value is interpolated for symmetry.
     for (int x = 0; x < 4; x++)
     {
