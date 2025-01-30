@@ -371,6 +371,14 @@
         window = appDelegate.queueController.window;
     } else if ([identifier isEqualToString:@"MainWindow"]) {
         window = appDelegate.mainController.window;
+
+        // Removing this call to `dispatch_async` results in the open panel
+        // being positioned in the bottom left corner since AppKit hasn’t had a
+        // chance yet to restore the main window’s position. Delaying the
+        // presentation of the open panel by one runloop turn fixes this.
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [appDelegate.mainController launchAction];
+        });
     }
 
     completionHandler(window, nil);
