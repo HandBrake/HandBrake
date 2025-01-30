@@ -372,9 +372,6 @@ Preview -> window title */
 /* Preview -> window title format */
 "Preview - %@ %@" = "Fighjulata - %1$@ %2$@";
 
-/* Preview -> accessibility label */
-"Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Fighjulata di a fiura, dimensione : %1$zu x %2$zu, scala : %3$.0f%%";
-
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "Mette l’urdinatore in veghja";
 

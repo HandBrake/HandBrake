@@ -10,20 +10,32 @@
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
 "cm5-Kl-dB3.title" = "Възстанови официалните шаблони";
 
+/* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "cUW-79-8BY"; */
+"cUW-79-8BY.title" = "Направи по подразбиране";
+
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "D2t-YG-Frn"; */
 "D2t-YG-Frn.title" = "Направи по подразбиране";
 
 /* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
 "Io0-Vm-Qez.title" = "Нова категория";
 
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "k6z-1U-qsp"; */
+"k6z-1U-qsp.title" = "Преименуване...";
+
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
 "LUl-ag-Iu6.title" = "Импортиране...";
+
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "M33-MU-aWd"; */
+"M33-MU-aWd.title" = "Експортиране...";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
 "oBC-Nh-TwB.title" = "Клетка от табличен изглед";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
 "r4V-6L-SO8.title" = "Шаблони";
+
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "ryC-EH-q4k"; */
+"ryC-EH-q4k.title" = "Преименуване...";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Presets"; ObjectID = "uad-bt-uKD"; */
 "uad-bt-uKD.ibExternalAccessibilityDescription" = "Шаблони";
