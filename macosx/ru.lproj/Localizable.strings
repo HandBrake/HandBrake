@@ -339,9 +339,6 @@ Preview -> window title */
 /* Preview -> window title format */
 "Preview - %@ %@" = "Предпросмотр - %1$@ %2$@";
 
-/* Preview -> accessibility label */
-"Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Изображение предпросмотра, Размер: %1$zu x %2$zu, Масштаб: %3$.0f%%";
-
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "Перевести компьютер в спящий режим";
 
