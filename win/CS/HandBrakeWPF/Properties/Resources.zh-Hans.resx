@@ -2910,4 +2910,28 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>DVD 和蓝光片段的最长时长（秒）。将跳过较短的片段：</value>
   </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>章节</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>秒</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>帧数</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Default Range Mode for Titles:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Custom Action</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>'Custom Action' Configuration:</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Open Autoname Preferences</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Run Script / Executable: </value>
+  </data>
 </root>

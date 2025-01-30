@@ -169,8 +169,6 @@ None disables anamorphic. Video storage dimensions and display dimensions will b
 
 Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
-
 Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
@@ -268,7 +266,10 @@ Overrides all other settings.</value>
 This establishes your default encoder settings.
 Tunes, profiles, levels and advanced option string will be applied to this.
 You should generally set this option to the slowest you can bear since slower
-settings will result in better quality or smaller files.</value>
+settings will result in better quality or smaller files.
+
+Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
+or to the left to increase encoding speed at the expense of compression efficiency.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Sets and ensures compliance with the specified profile.
@@ -559,5 +560,14 @@ Bitrate will vary source to source.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Use highest resolution permitted by above settings</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Changing the displays size will stretch the video</value>
   </data>
 </root>

@@ -2576,7 +2576,7 @@ Es werden nur Warteschlangen-Dateien der aktuellen Version unterstützt.</value>
     <value>{0} Aufgaben abgeschlossen. {1} Arbeite an {2} Aufgaben,{3} weitere anstehend.</value>
   </data>
   <data name="MainView_AutonameRegenerate" xml:space="preserve">
-    <value>Wiederherstellen (Autoname)</value>
+    <value>Wiederherstellen (Automatische Benennung)</value>
   </data>
   <data name="MainView_OpenDirectory" xml:space="preserve">
     <value>Dieses Verzeichnis öffnen</value>
@@ -2920,5 +2920,29 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
   </data>
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>Maximale DVD- und Blu-ray-Titeldauer in Sekunden. Längere Titel werden übersprungen:</value>
+  </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>Kapitel</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>Sekunden</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>Bilder</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Standard-Bereichsmodus für Titel:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Benutzerdefinierte Aktion</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>Konfiguration "Benutzerdefinierte Aktion"</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Einstellung der automatischen Benennung öffnen</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Skript / Programm ausführen:</value>
   </data>
 </root>

@@ -2917,4 +2917,28 @@ AV1やHEVCといった特定のコーデックは、再生するためにマイ�
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>DVDとBlu-rayタイトルの最大時間(秒)。これより長いタイトルはスキップされます:</value>
   </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>チャプター</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>秒</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>フレーム</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Default Range Mode for Titles:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Custom Action</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>'Custom Action' Configuration:</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Open Autoname Preferences</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Run Script / Executable: </value>
+  </data>
 </root>

@@ -163,15 +163,13 @@ I parametri troppu forte di riduzzione di trostu ponu dannighjà a qualità di a
 I dischi di fonte Blu-ray è DVD anu aspessu parechji tituli ; da bona regula, u più longu hè l’elementu principale</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>« Anamorficu » permette dimensioni arbitrarie d’allucamentu tuttu preservendu l’aspettu d’origine durante a ripruduzzione.
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-- « None » disattiveghja « Anamorficu ». E dimensioni d’allucamentu di a video è quelle di l’affissera seranu uguale. Solu ghjuvevule per a cumpatibilità cù certi apparechji anziani.
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-- « Automatic » megliureghja a risuluzione d’allucamentu tuttu preservendu e prupurzioni d’affissera d’origine. Ricumandatu.
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-- « Loose » hè simile à « Automatic » ma prova di preservà e prupurzioni d’allucamentu. Què pò cagiunà una chjuca perdita di risuluzione d’allucamentu in pettu à « Automatic ».
-
-- « Custom » permette di definisce dapervoi tutti i parametri. Ghjuvevule per currege un aspettu incurrettu d’affissera di a fonte è per i prufessiunali chì anu bisognu d’un cuntrollu espertu in post-pruduzzione.</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Runzicà autumaticamente i bordi neri intornu à a video.</value>
@@ -263,13 +261,15 @@ Supraneghja tutti l’altri parametri.</value>
     <value>Attiveghja una frequenza di fiure d’esciuta variabile cù una frequenza di cresta determinata da u parametru di a frequenza di fiure.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Adatteghja i parametri di u cudificatore per bilancià trà a faccindaghjine di a cumpressione è a vitezza di cudificazione.
+    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
 
-Què definisce i vostri parametri predefiniti di cudificatore.
-Rigature, prufili, livelli è ozzioni d’espertu seranu appiecati à st’operazione.
-Di regula, duveriate definisce st’ozzione à u valore u più lentu chì
-vo siate capace d’accettà, perchè parametri più lenti vi danu una
-più bella qualità o schedarii più chjuchi.</value>
+This establishes your default encoder settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.
+
+Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
+or to the left to increase encoding speed at the expense of compression efficiency.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Definisce è assicureghja a cunfurmità cù u prufilu specificatu.
@@ -561,5 +561,14 @@ U flussu binariu cambierà d’una fonte à l’altra.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Lineetta (-), puntu (.) è virgula (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Use highest resolution permitted by above settings</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Changing the displays size will stretch the video</value>
   </data>
 </root>

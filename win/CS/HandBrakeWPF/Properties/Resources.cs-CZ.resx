@@ -2906,4 +2906,28 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
   </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>Kapitoly</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>Seconds</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>Frames</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Default Range Mode for Titles:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Custom Action</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>'Custom Action' Configuration:</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Open Autoname Preferences</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Run Script / Executable: </value>
+  </data>
 </root>

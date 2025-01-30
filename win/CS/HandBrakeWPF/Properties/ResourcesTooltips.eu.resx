@@ -163,15 +163,13 @@ HQDN3D pasabide baxuko iragazki moldagarria da, NLMeans baino azkarragoa, baina 
 Blu-ray eta DVDek askotan izenburu ugari izaten dituzte, eta luzeena da normalean nagusia</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorfikoak hautazko biltegiratze dimentsioak ahalbidetzen ditu, erreprodukzioan jatorrizko aspektua gordetzen duen bitartean.
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-'Bat ere ez' aukerak anamorfikoa desgaitzen du. Bideoak biltegiratzeko neurriak eta pantailaren neurriak berdinak izango dira. Oinarrizko gailu batzuekin bateragarri izateko bakarrik erabilgarria.
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Automatikoak biltegiratze bereizmena maximizatzen du jatorrizko pantailaren aspektu-erlazioa mantenduz. Gomendagarria.
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-'Lasaia' autoamatikoaren antzekoa da, baina biltegiratze-erlazioa mantentzen saiatzen da. Honek biltegiratze bereizmen galera txiki bat eragin dezake automatikoarekin alderatuta.
-
-Pertsonalizatuak parametro guztiak eskuz ezartzeko aukera ematen du. Baliagarria iturriaren bistaratze alderdi oker bat zuzentzeko eta postprodukzioan kontrol aurreratua behar duten profesionalentzat.</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Moztu automatikoki bideoaren inguruko ertz beltzak.</value>
@@ -263,12 +261,15 @@ Beste ezarpen guztiak gainidazten ditu.</value>
     <value>Fotograma-tasa aldakorreko irteera gaitzen du, fotograma-tasaren ezarpenak zehazten duen gehienezko kopuruarekin.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Kodetzailearen ezarpenak doitzen ditu konpresio-eraginkortasuna kodetze-abiadurarekin orekatzeko.
+    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
 
-Honek kodetzearen ezarpen lehenetsiak ezartzen ditu.
-Tonuak, profilak, mailak eta aukera-kate aurreratuak aplikatuko zaizkio.
-Oro har, aukera hau motelenean ezarri beharko zenuke
-kalitate hobeko edo tamaina txikiagoko fitxategiak sortzeko.</value>
+This establishes your default encoder settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.
+
+Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
+or to the left to increase encoding speed at the expense of compression efficiency.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Zehaztutako profila betetzen dela ezartzen eta ziurtatzen du.
@@ -558,5 +559,14 @@ Bit-tasa iturburu batetik bestera aldatu egiten da.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Use highest resolution permitted by above settings</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Changing the displays size will stretch the video</value>
   </data>
 </root>
