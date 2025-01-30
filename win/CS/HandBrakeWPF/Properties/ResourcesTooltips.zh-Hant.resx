@@ -163,15 +163,13 @@ HQDN3D 是個適應性的低通濾鏡，速度較 NLMeans 快，但保留精細�
 藍光及 DVD 來源通常具有多個標題，一般時間最長的是正片。</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic 允許任意的儲存尺寸，同時在播放時保留原始長寬比。
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-None：停用 Anamorphic。影片的儲存尺寸與顯示尺寸相同，可保持與某些傳統裝置的相容性。
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Automatic：建議使用。在保留原始顯示長寬比時，最大化儲存解析度。
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Loose：與 Auto 相似，但會試圖保留儲存長寬比。與 Auto 相比，可能會稍微損失儲存解析度。
-
-Custom：允許手動設定所有參數。適用於矯正錯誤的顯示長寬比，以及需要進行進階後製的專業人士。</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>自動裁切影片周圍的黑邊。</value>
@@ -261,12 +259,15 @@ Custom：允許手動設定所有參數。適用於矯正錯誤的顯示長寬�
     <value>啟用可變影格率輸出，其峰值影格率由影格率設定決定。</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>調整編碼器設定以權衡壓縮效率與編碼速度。
+    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
 
-以此建立預設編碼器設定。
-Tunes、profiles、levels 及其他進階選項字串亦套用於此。
-一般而言，在可允許的程度內愈慢愈好，
-因為較慢的設定會產出較高品質或較小的檔案。</value>
+This establishes your default encoder settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.
+
+Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
+or to the left to increase encoding speed at the expense of compression efficiency.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>設定並確保符合指定的設定值。
@@ -550,5 +551,14 @@ Bitrate will vary source to source.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Use highest resolution permitted by above settings</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Changing the displays size will stretch the video</value>
   </data>
 </root>

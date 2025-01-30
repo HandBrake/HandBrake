@@ -2918,4 +2918,28 @@ Afin d'autoriser les encodages simultanés, activez l'option "Isolement des Proc
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>Durée maximale des titres DVD et Blu-ray en secondes. Les titres plus longs seront ignorés :</value>
   </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>Chapitres</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>Secondes</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Default Range Mode for Titles:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Custom Action</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>'Custom Action' Configuration:</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Open Autoname Preferences</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Run Script / Executable: </value>
+  </data>
 </root>

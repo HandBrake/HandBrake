@@ -2918,4 +2918,28 @@ För att tillåta flera samtidiga enkodningar, aktivera "Processisolering" i Ver
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>Maximal längd i sekunder för dvd och blu-ray-titlar. Längre titlar kommer att hoppas över:</value>
   </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>Kapitel</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>Sekunder</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>Bildrutor</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Standardomfångsläge för titlar:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Anpassad åtgärd</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>Konfiguration för 'Anpassad åtgärd':</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Öppna inställningar för automatisk namngivning</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Kör skript / körbar fil:</value>
+  </data>
 </root>

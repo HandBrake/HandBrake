@@ -163,15 +163,13 @@
 Τα Blu-ray και τα DVD έχουν συνήθως πολλούς τίτλους, με τον μεγαλύτερο συνήθως να είναι η κύρια ταινία.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Το Anamorphic επιτρέπει οποιεσδήποτε διαστάσεις εξόδου, ενώ διατηρεί την αρχική εμφάνιση κατά την αναπαραγωγή.
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-Απενεργοποιεί το Anamorphic. Οι διαστάσεις αποθήκευσης βίντεο και οι διαστάσεις προβολής θα είναι ίδιες. Χρήσιμο μόνο για συμβατότητα με ορισμένες παλαιού τύπου συσκευές. 
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Αυτόματο, μεγιστοποιεί την ανάλυση αποθήκευσης ενώ διατηρεί την αρχική αναλογία διαστάσεων της οθόνης. Συνιστάται. 
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Το Χαραλό είναι παρόμοιο με το Αυτόματο, αλλά προσπαθεί να διατηρήσει την αναλογία διαστάσεων της εξόδου. Αυτό μπορεί να οδηγήσει σε ελαφρά απώλεια ανάλυσης σε σύγκριση με το Αυτόματο. 
-
-Προσαρμοσμένο, επιτρέπει τη μη αυτόματη ρύθμιση όλων των παραμέτρων. Χρήσιμο για τη διόρθωση της λανθασμένης εμφάνισης του υλικού πηγής και για επαγγελματίες που χρειάζονται προηγμένο έλεγχο κατά τη μετα-παραγωγή.</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Αυτόματη περικοπή μαύρων περιγραμμάτων γύρω από το βίντεο.</value>
@@ -263,12 +261,15 @@
     <value>Ενεργοποιεί την έξοδο μεταβλητού ρυθμού καρέ με ρυθμό που καθορίζεται από τη ρύθμιση του ρυθμού καρέ.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Προσαρμόζει τις ρυθμίσεις κωδικοποιητή για να αντισταθμίσει την απόδοση συμπίεσης με την ταχύτητα κωδικοποίησης.
+    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
 
-Αυτό καθορίζει τις προεπιλεγμένες ρυθμίσεις κωδικοποιητή σας. 
-Οι συντονισμοί, τα προφίλ, τα επίπεδα και οι προηγμένες παράμετροι εφαρμόζονται σε αυτό.
-Γενικά θα πρέπει να ρυθμίσετε αυτήν την επιλογή στο πιο αργό, καθώς οι
-πιο αργές ρυθμίσεις θα οδηγήσουν σε καλύτερη ποιότητα ή μικρότερα αρχεία.</value>
+This establishes your default encoder settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.
+
+Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
+or to the left to increase encoding speed at the expense of compression efficiency.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Ορίζει και συμμορφώνεται με ένα συγκεκριμένο προφίλ.
@@ -558,5 +559,14 @@ Any illegal path characters will be removed automatically.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Use highest resolution permitted by above settings</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Changing the displays size will stretch the video</value>
   </data>
 </root>

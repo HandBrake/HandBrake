@@ -2917,4 +2917,28 @@ AV1 또는 HEVC와 같은 특정 코덱을 재생하려면 Microsoft Store의 Mi
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>최대 DVD 및 블루레이 타이틀 재생 시간(초). 더 긴 타이틀은 건너뜁니다:</value>
   </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>챕터</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>초</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>프레임</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>제목의 기본 범위 모드:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>사용자 지정 작업</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>'사용자 지정 작업' 구성:</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>자동 이름 환경설정 열기</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>스크립트 실행 / 실행 파일:</value>
+  </data>
 </root>

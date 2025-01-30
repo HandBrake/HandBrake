@@ -163,15 +163,13 @@ HQDN3D is een adaptief laagdoorlaatfilter, sneller dan NLMeans maar minder effec
 Blu-ray- en dvd-bronnen bevatten vaak meerdere titels, waarvan de langste in het algemeen het belangrijkste deel is</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorf maakt willekeurige opslagafmetingen mogelijk met behoud van het oorspronkelijke beeldverhouding tijdens het afspelen.
+    <value>Anamorf maakt willekeurige opslagafmetingen mogelijk met behoud van de originele beeldverhouding tijdens het afspelen.
 
-Geen schakelt anamorf uit. Afmetingen van opslag en weergave zijn identiek. Alleen handig voor compatibiliteit met bepaalde verouderde apparaten.
+Geen schakelt anamorf uit. De afmetingen van video-opslag en het beeldscherm zijn identiek. Alleen handig voor compatibiliteit met bepaalde oudere apparaten.
 
 Automatisch maximaliseert de opslagresolutie met behoud van de oorspronkelijke beeldverhouding van het scherm. Aanbevolen.
 
-Los is vergelijkbaar met Automatisch, maar probeert de aspectverhouding te behouden. Dit kan leiden tot een licht verlies van opslagresolutie in vergelijking met Auto.
-
-Aangepast maakt het handmatig instellen van alle parameters mogelijk. Handig voor het corrigeren van een onjuist bron-beeldverhouding en voor professionals die geavanceerde controle nodig hebben in postproductie.</value>
+Aangepast maakt het mogelijk om alle parameters handmatig in te stellen. Handig voor het corrigeren van een onjuist beeldverhouding van de bronweergave en voor professionals die geavanceerde controle nodig hebben in de postproductie.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Zwarte randen rond de video automatisch bijsnijden.</value>
@@ -263,14 +261,13 @@ Overschrijft alle andere instellingen.</value>
     <value>Maakt uitvoer met variabele framesnelheid mogelijk met een ingestelde piekwaarde.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Past de instellingen van de encoder aan waarbij compressie-efficiëntie afweegt
-tegenover coderingssnelheid.
+    <value>Past de instellingen van de encoder aan waarbij compressie-efficiëntie wordt afgewogen tegen coderingssnelheid.
 
-Hiermee worden de standaard encoderinstellingen vastgelegd.
-Hierop worden nummers, profielen, niveaus en geavanceerde 
-optietekenreeks toegepast.
-Stel deze optie in op de traagste stand die acceptabel is, aangezien langzamer 
-instellingen resulteren in bestanden van betere kwaliteit of kleinere bestanden.</value>
+Hiermee worden de standaardinstellingen van de codering vastgelegd.
+Tunes, profielen, niveaus en geavanceerde opties worden hierop toegepast.
+Het is raadzaam om deze optie in te stellen op de langzaamste stand die u kunt verdragen, aangezien dit zal resulteren in een betere kwaliteit of kleinere bestanden.
+
+Beweeg de schuifregelaar naar rechts om de compressie-efficiëntie te verhogen ten koste van de coderingssnelheid, of naar links om de coderingssnelheid te verhogen ten koste van de compressie-efficiëntie.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Zorgt ervoor dat het gespecificeerde niveau wordt nageleefd.
@@ -564,5 +561,14 @@ op te bouwen
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Streep (-), punt (.) en komma (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Gebruik de hoogste resolutie die is toegestaan in de bovenstaande instellingen</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Als deze optie niet is ingeschakeld, wordt de schaal beperkt tot de brondimensies.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Als de schermgrootte wijzigt, wordt de video uitgerekt</value>
   </data>
 </root>

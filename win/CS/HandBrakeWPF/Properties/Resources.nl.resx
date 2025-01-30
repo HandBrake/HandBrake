@@ -2918,4 +2918,28 @@ Om meerdere gelijktijdige coderingen toe te staan dien je "Procesisolatie" in te
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>Maximale duur van DVD- en Blu-ray-titels in seconden. Langere titels worden overgeslagen:</value>
   </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>Hoofdstukken</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>Seconden</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>Frames</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Standaardbereikmodus voor titels:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Aangepaste actie</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>Configuratie van 'aangepaste actie':</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Voorkeuren automatische naamgeving openen</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Run Script / Executable: </value>
+  </data>
 </root>

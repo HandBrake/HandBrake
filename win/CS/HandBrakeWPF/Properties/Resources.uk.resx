@@ -2856,7 +2856,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Доступно в цій системі.</value>
   </data>
   <data name="OptionsView_NotAvailable" xml:space="preserve">
-    <value>Не доступний на цій системі.</value>
+    <value>Недоступно в цій системі.</value>
   </data>
   <data name="MainView_ScanningStatus" xml:space="preserve">
     <value>Будь ласка, зачекайте...</value>
@@ -2917,5 +2917,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   </data>
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>Максимальна тривалість епізоду на DVD та Blu-ray у секундах. Довші заголовки будуть пропущені:</value>
+  </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>Глави</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>Секунди</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>Кадри</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Режим діапазону за замовчуванням для назв:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Користувацька дія</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>Конфігурація «Користувацька дія»:</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Відкрити налаштування автоімені</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Запустити скрипт / виконуваний файл: </value>
   </data>
 </root>
