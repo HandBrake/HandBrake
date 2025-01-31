@@ -445,10 +445,6 @@ The Activity log may have further information.</value>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
     <value>A New Update is Available! Please check the website for release notes.</value>
   </data>
-  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>Your system supports the 64bit version of HandBrake! This offers performance and stability improvements over this 32bit version.
-    Please check the website for release notes.</value>
-  </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>There are no new updates at this time.</value>
   </data>
@@ -2941,5 +2937,8 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="Options_RunAction" xml:space="preserve">
     <value>Run Script / Executable: </value>
+  </data>
+  <data name="OptionsViewModel_PortableMode" xml:space="preserve">
+    <value>HandBrake is currently configured in portable mode. To update a portable install, please download the latest update from the website.</value>
   </data>
 </root>

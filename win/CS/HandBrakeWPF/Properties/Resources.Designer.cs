@@ -4643,16 +4643,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your system supports the 64bit version of HandBrake! This offers performance and stability improvements over this 32bit version.
-        ///    Please check the website for release notes..
-        /// </summary>
-        public static string OptionsViewModel_64bitAvailable {
-            get {
-                return ResourceManager.GetString("OptionsViewModel_64bitAvailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Click &apos;Check for Updates&apos; to check for new versions.
         /// </summary>
         public static string OptionsViewModel_CheckForUpdatesMsg {
@@ -4685,6 +4675,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsViewModel_NoNewUpdates {
             get {
                 return ResourceManager.GetString("OptionsViewModel_NoNewUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake is currently configured in portable mode. To update a portable install, please download the latest update from the website..
+        /// </summary>
+        public static string OptionsViewModel_PortableMode {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_PortableMode", resourceCulture);
             }
         }
         
