@@ -146,7 +146,7 @@ V blend_subsample_pixel_uv(
             uint32_t res_v = v_out;
 
             // Chroma sampled area overlap with bitmap
-            if ((pos.x > 0 || p.xc == p.x) && pos.x < p.width ||
+            if ((pos.x > 0 || p.xc == p.x) && pos.x < p.width &&
                 (pos.y > 0 || p.yc == p.y) && pos.y < p.height) {
                 ushort2 offset = ushort2(xz, yz);
                 T a_in = overlay_a.read(pos_a(pos, p.xc, p.yc) + offset).x << shift;

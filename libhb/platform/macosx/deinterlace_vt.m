@@ -291,7 +291,9 @@ static hb_buffer_t * filter_frame(hb_filter_private_t *pv, int parity, int tff)
         CFRelease(dest);
     }
 
+#if defined(HB_VT_PROPAGATE_ATTACHMENTS)
     CVBufferPropagateAttachments(cv_cur, cv_dest);
+#endif
 
     out = hb_buffer_wrapper_init();
     out->storage_type      = COREMEDIA;

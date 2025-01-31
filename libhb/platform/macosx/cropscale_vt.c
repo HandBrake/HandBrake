@@ -247,14 +247,14 @@ static int crop_scale_vt_work(hb_filter_object_t *filter,
     OSStatus err = noErr;
 
     CVPixelBufferRef source_buf = hb_cv_get_pixel_buffer(in);
-    hb_cv_add_color_tag(source_buf,
-                        pv->input.color_prim, pv->input.color_transfer,
-                        pv->input.color_matrix, pv->input.chroma_location);
     if (source_buf == NULL)
     {
         hb_log("cropscale_vt: extract_buf failed");
         return HB_FILTER_FAILED;
     }
+    hb_cv_add_color_tag(source_buf,
+                        pv->input.color_prim, pv->input.color_transfer,
+                        pv->input.color_matrix, pv->input.chroma_location);
     CVBufferSetAttachment(source_buf, kCVImageBufferCleanApertureKey,
                           pv->source_clean_aperture, kCVAttachmentMode_ShouldPropagate);
 
