@@ -552,6 +552,10 @@ static int avformatInit( hb_mux_object_t * m )
             track->st->time_base = m->time_base;
         }
 
+        // Some containers don't need metadata for some audio formats,
+        // and for some formats extradata will be generated automatically,
+        // set only what's needed
+        int need_extradata = 0;
         switch (audio->config.out.codec & HB_ACODEC_MASK)
         {
             case HB_ACODEC_DCA:
@@ -576,17 +580,21 @@ static int avformatInit( hb_mux_object_t * m )
                 break;
             case HB_ACODEC_VORBIS:
                 track->st->codecpar->codec_id = AV_CODEC_ID_VORBIS;
+                need_extradata = 1;
                 break;
             case HB_ACODEC_OPUS:
                 track->st->codecpar->codec_id = AV_CODEC_ID_OPUS;
+                need_extradata = 1;
                 break;
             case HB_ACODEC_FFALAC:
             case HB_ACODEC_FFALAC24:
                 track->st->codecpar->codec_id = AV_CODEC_ID_ALAC;
+                need_extradata = 1;
                 break;
             case HB_ACODEC_FFFLAC:
             case HB_ACODEC_FFFLAC24:
                 track->st->codecpar->codec_id = AV_CODEC_ID_FLAC;
+                need_extradata = 1;
                 break;
             case HB_ACODEC_FFAAC:
             case HB_ACODEC_CA_AAC:
@@ -594,6 +602,7 @@ static int avformatInit( hb_mux_object_t * m )
             case HB_ACODEC_FDK_AAC:
             case HB_ACODEC_FDK_HAAC:
                 track->st->codecpar->codec_id = AV_CODEC_ID_AAC;
+                need_extradata = 1;
 
                 // AAC from pass-through source may be ADTS.
                 // Therefore inserting "aac_adtstoasc" bitstream filter is
@@ -623,9 +632,14 @@ static int avformatInit( hb_mux_object_t * m )
                 goto error;
         }
 
-        if (set_extradata(audio->priv.extradata, &track->st->codecpar->extradata, &track->st->codecpar->extradata_size))
+        if (need_extradata)
         {
-            goto error;
+            if (set_extradata(audio->priv.extradata,
+                              &track->st->codecpar->extradata,
+                              &track->st->codecpar->extradata_size))
+            {
+                goto error;
+            }
         }
 
         if (track->bitstream_context != NULL)
