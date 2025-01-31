@@ -1181,9 +1181,12 @@ static void fixSubtitleOverlap( sync_stream_t * stream )
         // marker to indicate the end of a subtitle
         return;
     }
-    // Only SSA subs can overlap
+    // Theoretically only SSA subs can overlap,
+    // but there are some SRT subs out there with
+    // overlapping samples, so let's try to preserve them too
     if (stream->subtitle.subtitle->source      != SSASUB &&
         stream->subtitle.subtitle->source      != IMPORTSSA &&
+        stream->subtitle.subtitle->source      != IMPORTSRT &&
         stream->subtitle.subtitle->config.dest == PASSTHRUSUB &&
         buf->s.start <= stream->last_pts)
     {
