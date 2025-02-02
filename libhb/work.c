@@ -1541,8 +1541,7 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
 {
     hb_list_t *list = job->list_filter;
 
-    if (hb_filter_find(list, HB_FILTER_ROTATE)     != NULL ||
-        hb_filter_find(list, HB_FILTER_COLORSPACE) != NULL)
+    if (hb_filter_find(list, HB_FILTER_COLORSPACE) != NULL)
     {
         job->passthru_dynamic_hdr_metadata = HB_HDR_DYNAMIC_METADATA_NONE;
         return;
