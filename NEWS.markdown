@@ -15,18 +15,35 @@ Download available from Microsoft:
 
 ### All platforms
 
-- Fix gcc14 aarch64 build failures (#6463)
+#### General
+
+- Fixed FFV1 pixel format selection when an hardware decoder is used (#6565)
+- Fixed an issue that could happen when chapters titles are not UTF-8 (#6489)
+- Fixed gcc14 aarch64 build failures (#6463)
+
+#### Subtitles
+
+- Improved support for SRT files with overlapping subtitles (#6155)
+
+#### Audio
+
+- Fixed AC3 and EAC3 extradata in MKV (#6582)
 
 #### Third-party libraries
 
-- nv-codec-headers: Harden DLL loading so that it only uses system32 for the search path on Windows. (#6548)
+- nv-codec-headers: Harden DLL loading so that it only uses system32 for the search path on Windows (#6548)
 
+- Updated libraries
+  - libdav1d 1.5.1 (AV1 video decoding)
+  - HarfBuzz 10.2.0 (subtitles)
+  - libjpeg-turbo 3.1.0 (preview image compression)
+  
 ### Windows
 
-- Fix an issue with the autoname function not updating when title is the only option. (#6517)
-- Fix an issue where the audio encoder may not display correctly after a queue has been imported and queue item edited. This may exhibit in other scenarios as well. (#6524)
-- Fix an issue with titlebar / taskbar progress erroneously showing with multi-instance encodes. (#6477)
-- Fix a crash when importing chapters where there is a chapter count mis-match.(#6514)
+- Fix an issue with the autoname function not updating when title is the only option (#6517)
+- Fix an issue where the audio encoder may not display correctly after a queue has been imported and queue item edited. This may exhibit in other scenarios as well (#6524)
+- Fix an issue with titlebar / taskbar progress erroneously showing with multi-instance encodes (#6477)
+- Fix a crash when importing chapters where there is a chapter count mis-match (#6514)
 - Fixed an issue with autoname pre/postfix option where it would apply regardless of file path collision.
 
 
