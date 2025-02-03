@@ -58,6 +58,7 @@ enum
 {
     META_HB,
     META_MUX_MP4,
+    META_MUX_MOV,
     META_MUX_MKV,
     META_MUX_WEBM,
     META_MUX_LAST
@@ -65,16 +66,16 @@ enum
 
 const char *metadata_keys[][META_MUX_LAST] =
 {
-    {"Name",            "title",        "TITLE"},
-    {"Artist",          "artist",       "ARTIST"},
-    {"AlbumArtist",     "album_artist", "DIRECTOR"},
-    {"Composer",        "composer",     "COMPOSER"},
-    {"ReleaseDate",     "date",         "DATE_RELEASED"},
-    {"Comment",         "comment",      "SUMMARY"},
-    {"Album",           "album",        NULL},
-    {"Genre",           "genre",        "GENRE"},
-    {"Description",     "description",  "DESCRIPTION"},
-    {"LongDescription", "synopsis",     "SYNOPSIS"},
+    {"Name",            "title",        "com.apple.quicktime.displayname",  "TITLE"},
+    {"Artist",          "artist",       "com.apple.quicktime.artist",       "ARTIST"},
+    {"AlbumArtist",     "album_artist", NULL,                               "DIRECTOR"},
+    {"Composer",        "composer",     "com.apple.quicktime.composer",     "COMPOSER"},
+    {"ReleaseDate",     "date",         "com.apple.quicktime.creationdate", "DATE_RELEASED"},
+    {"Comment",         "comment",      "com.apple.quicktime.comment",      "SUMMARY"},
+    {"Album",           "album",        "com.apple.quicktime.album",        NULL},
+    {"Genre",           "genre",        "com.apple.quicktime.genre",        "GENRE"},
+    {"Description",     "description",  "com.apple.quicktime.description",  "DESCRIPTION"},
+    {"LongDescription", "synopsis",     NULL,                               "SYNOPSIS"},
     {NULL}
 };
 
