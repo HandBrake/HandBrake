@@ -1071,9 +1071,81 @@ static int avformatInit( hb_mux_object_t * m )
             }
         }
 
+        if (job->mux == HB_MUX_AV_MP4 || job->mux == HB_MUX_AV_MKV)
+        {
+            hb_list_t *list_coverart = job->metadata->list_coverart;
+            for (int ii = 0; ii < hb_list_count(list_coverart); ii++)
+            {
+                hb_coverart_t *art = hb_list_item(list_coverart, ii);
+
+                enum AVCodecID codec_id = AV_CODEC_ID_NONE;
+                const char *mimetype;
+                const char *filename;
+
+                switch (art->type)
+                {
+                    case HB_ART_PNG:
+                        codec_id = AV_CODEC_ID_PNG;
+                        mimetype = "image/png";
+                        filename = "cover.png";
+                        break;
+                    case HB_ART_JPEG:
+                        codec_id = AV_CODEC_ID_MJPEG;
+                        mimetype = "image/jpeg";
+                        filename = "cover.jpg";
+                        break;
+                    default:
+                        break;
+                }
+
+                if (codec_id != AV_CODEC_ID_NONE)
+                {
+                    AVStream *st = avformat_new_stream(m->oc, NULL);
+                    if (st == NULL)
+                    {
+                        hb_error("Could not initialize cover art stream");
+                        goto error;
+                    }
+
+                    if (job->mux == HB_MUX_AV_MKV)
+                    {
+                        st->codecpar->codec_type = AVMEDIA_TYPE_ATTACHMENT;
+                        st->codecpar->codec_id = codec_id;
+
+                        av_dict_set(&st->metadata, "mimetype", mimetype, 0);
+                        av_dict_set(&st->metadata, "filename", filename, 0);
+
+                        size_t   priv_size = art->size;
+                        uint8_t *priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                        if (priv_data == NULL)
+                        {
+                            hb_error("Cover art extradata: malloc failure");
+                            goto error;
+                        }
+                        memcpy(priv_data, art->data, priv_size);
+
+                        st->codecpar->extradata = priv_data;
+                        st->codecpar->extradata_size = priv_size;
+                    }
+                    else if (job->mux == HB_MUX_AV_MP4)
+                    {
+                        st->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
+                        st->codecpar->codec_id = codec_id;
+                        st->codecpar->width  = 640;
+                        st->codecpar->height = 360;
+                        st->disposition = AV_DISPOSITION_ATTACHED_PIC;
+                    }
+                }
+
+                // Write only the first
+                // cover art for now
+                break;
+            }
+        }
+
         if (job->mux == HB_MUX_AV_MP4)
         {
-            // Many software can only read the mvhd creation date field
+            // Many softwares can only read the mvhd creation date field
             // and use it incorrectly as the date the video was recorded
             hb_value_t *val = hb_dict_get(job->metadata->dict, "ReleaseDate");
             if (val != NULL)
@@ -1532,6 +1604,22 @@ static int avformatEnd(hb_mux_object_t *m)
                 break;
             default:
                 break;
+        }
+    }
+
+    // Write MP4 cover art
+    if (job->mux == HB_MUX_AV_MP4 && job->metadata && job->metadata->dict)
+    {
+        hb_list_t *list_coverart = job->metadata->list_coverart;
+        for (int ii = 0; ii < hb_list_count(list_coverart); ii++)
+        {
+            hb_coverart_t *art = hb_list_item(list_coverart, ii);
+            m->pkt->data = art->data;
+            m->pkt->size = art->size;
+            m->pkt->stream_index = m->ntracks;
+            av_interleaved_write_frame(m->oc, m->pkt);
+            av_packet_unref(m->pkt);
+            break;
         }
     }
 

@@ -5926,6 +5926,33 @@ static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int i
     hb_list_add(title->list_attachment, attachment);
 }
 
+static void add_ffmpeg_coverart(hb_title_t *title, hb_stream_t *stream, int id)
+{
+    int type = HB_ART_UNDEFINED;
+    AVStream *st = stream->ffmpeg_ic->streams[id];
+    AVCodecParameters *codecpar = st->codecpar;
+
+    switch (codecpar->codec_id)
+    {
+        case AV_CODEC_ID_PNG:
+            type = HB_ART_PNG;
+            break;
+        case AV_CODEC_ID_MJPEG:
+            type = HB_ART_JPEG;
+            break;
+        default:
+            break;
+    }
+
+    if (type != HB_ART_UNDEFINED)
+    {
+        hb_metadata_add_coverart(title->metadata,
+                                 st->attached_pic.data,
+                                 st->attached_pic.size,
+                                 type);
+    }
+}
+
 static void ffmpeg_decdate(const char *hb_key, const char *av_key,
                           AVDictionary *m, hb_title_t *title)
 {
@@ -6114,6 +6141,12 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
         else if (st->codecpar->codec_type == AVMEDIA_TYPE_ATTACHMENT)
         {
             add_ffmpeg_attachment( title, stream, i );
+        }
+        else if (st->codecpar->codec_type == AVMEDIA_TYPE_VIDEO &&
+                 st->disposition & AV_DISPOSITION_ATTACHED_PIC &&
+                 (st->disposition & AV_DISPOSITION_TIMED_THUMBNAILS) == 0)
+        {
+            add_ffmpeg_coverart(title, stream, i);
         }
     }
     find_ffmpeg_fallback_audio(title);
