@@ -66,16 +66,28 @@ enum
 
 const char *metadata_keys[][META_MUX_LAST] =
 {
-    {"Name",            "title",        "com.apple.quicktime.displayname",  "TITLE"},
-    {"Artist",          "artist",       "com.apple.quicktime.artist",       "ARTIST"},
-    {"AlbumArtist",     "album_artist", NULL,                               "DIRECTOR"},
-    {"Composer",        "composer",     "com.apple.quicktime.composer",     "COMPOSER"},
-    {"ReleaseDate",     "date",         "com.apple.quicktime.creationdate", "DATE_RELEASED"},
-    {"Comment",         "comment",      "com.apple.quicktime.comment",      "SUMMARY"},
-    {"Album",           "album",        "com.apple.quicktime.album",        NULL},
-    {"Genre",           "genre",        "com.apple.quicktime.genre",        "GENRE"},
-    {"Description",     "description",  "com.apple.quicktime.description",  "DESCRIPTION"},
-    {"LongDescription", "synopsis",     NULL,                               "SYNOPSIS"},
+    {"Name",            "title",         "com.apple.quicktime.displayname",      "TITLE"},
+    {"Artist",          "artist",        "com.apple.quicktime.artist",           "ARTIST"},
+    {"AlbumArtist",     "album_artist",  NULL,                                   "DIRECTOR"},
+    {"Album",           "album",         "com.apple.quicktime.album",            NULL},
+    {"Genre",           "genre",         "com.apple.quicktime.genre",            "GENRE"},
+    {"ReleaseDate",     "date",          "com.apple.quicktime.creationdate",     "DATE_RELEASED"},
+    {"Track",           "track",         "com.apple.quicktime.track",            NULL},
+    {"Show",            "show",          NULL,                                   NULL},
+    {"Network",         "network",       NULL,                                   NULL},
+    {"Episode ID",      "episode_id",    NULL,                                   NULL},
+    {"Episode Sort",    "episode_sort",  NULL,                                   NULL},
+    {"Season Number",   "season_number", NULL,                                   NULL},
+    {"Media Type",      "media_type",    NULL,                                   NULL},
+    {"HD Video",        "hd_video",      NULL,                                   NULL},
+    {"Composer",        "composer",      "com.apple.quicktime.composer",         "COMPOSER"},
+    {"Comment",         "comment",       "com.apple.quicktime.comment",          "SUMMARY"},
+    {"Description",     "description",   "com.apple.quicktime.description",      "DESCRIPTION"},
+    {"LongDescription", "synopsis",      NULL,                                   "SYNOPSIS"},
+    {"Grouping",        "grouping",      NULL,                                   NULL},
+    {"Lyrics",          "lyrics",        NULL,                                   "LYRICS"},
+    {"Keywords",        "keywords",      "com.apple.quicktime.keywords",         "KEYWORDS"},
+    {"Copyright",       "copyright",     "com.apple.quicktime.copyright",        "COPYRIGHT"},
     {NULL}
 };
 
