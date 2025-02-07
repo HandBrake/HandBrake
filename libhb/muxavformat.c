@@ -72,6 +72,7 @@ const char *metadata_keys[][META_MUX_LAST] =
     {"Album",           "album",         "com.apple.quicktime.album",            NULL},
     {"Genre",           "genre",         "com.apple.quicktime.genre",            "GENRE"},
     {"ReleaseDate",     "date",          "com.apple.quicktime.creationdate",     "DATE_RELEASED"},
+    {"CreationTime",    "creation_time", NULL,                                   NULL},
     {"Track",           "track",         "com.apple.quicktime.track",            NULL},
     {"Show",            "show",          NULL,                                   NULL},
     {"Network",         "network",       NULL,                                   NULL},
@@ -1152,21 +1153,6 @@ static int avformatInit( hb_mux_object_t * m )
                 // Write only the first
                 // cover art for now
                 break;
-            }
-        }
-
-        if (job->mux == HB_MUX_AV_MP4)
-        {
-            // Many softwares can only read the mvhd creation date field
-            // and use it incorrectly as the date the video was recorded
-            hb_value_t *val = hb_dict_get(job->metadata->dict, "ReleaseDate");
-            if (val != NULL)
-            {
-                const char *str = hb_value_get_string(val);
-                if (str != NULL)
-                {
-                    av_dict_set(&m->oc->metadata, "creation_time", str, 0);
-                }
             }
         }
     }
