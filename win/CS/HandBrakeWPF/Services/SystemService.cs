@@ -82,6 +82,10 @@ namespace HandBrakeWPF.Services
                     this.queueService.Pause(true);
                     this.storageLowPause = true;
                 }
+                else
+                {
+                    this.storageLowPause = false;
+                }
             }
         }
 
