@@ -563,6 +563,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.ParHeight);
             this.NotifyOfPropertyChange(() => this.MaxWidth);
             this.NotifyOfPropertyChange(() => this.MaxHeight);
+            this.NotifyOfPropertyChange(() => this.IsCustomCrop);
 
             this.UpdateVisibleControls();
         }
