@@ -61,6 +61,7 @@ Download available from Microsoft:
 - Fix an issue with titlebar / taskbar progress erroneously showing with multi-instance encodes (#6477)
 - Fix a crash when importing chapters where there is a chapter count mis-match (#6514)
 - Fixed an issue with autoname pre/postfix option where it would apply regardless of file path collision.
+- Fixed an issue where the crop controls would not enable correctly when editing jobs (#6614)
 
 
 ## HandBrake 1.9.0
