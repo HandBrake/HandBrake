@@ -263,12 +263,16 @@ Ställ in denna om din enhet kämpar med att spela upp utdata (förlorade bildru
     <value>Aktiverar utdata med variabel bildfrekvens med högsta frekvensen bestämd av inställningen bildfrekvens.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Justerar enkodarinställningarna att sänka komprimeringseffektiviteten mot att få högre enkodningshastighet.
+    <value>Justera enkoderinställningar för att öka komprimeringseffektiviteten mot enkodningshastighet.
 
-Detta bestämmer dina standardinställningar för enkodaren.
-Justeringar, profiler, nivåer och avancerade alternativ kommer att tillämpas för detta.
-Du bör oftast ställa in detta alternativ till det långsammaste som du bara orkar med eftersom
-inställningarna kommer att resultera i bättre kvalitet eller mindre filer.</value>
+Detta fastställer dina standardinställningar för enkodaren.
+Sträng för Justeringar, profiler, nivåer och avancerade alternativ kommer att tillåmpas för detta.
+Du bör oftast ställa in detta alternativ till det långsammaste som du orkar eftersom
+långsamma inställningar resulterar i bättre kvalitet eller mindre filer.
+
+Justera draglisten till höger för att öka komprimeringseffektiviteten på bekostnad av
+enkodningshastighet, eller till höger för att öka enkodningshastigheten på bekostnad
+av komprimeringseffektiviten.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Ställer in och försäkrar giltighet med angivna profilen.</value>
@@ -558,5 +562,14 @@ Bitfrekvensen kan skilja sig mellan källa till källa.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Streck (-), Punkt (.) och Komma (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Använd högsta upplösningen som tillåts av ovanstående inställningar</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Om inte aktiverad, kommer skalade dimensioner att begränsas till källdimensionerna.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Ändring av skärmstorleken kommer att sträcka ut videon</value>
   </data>
 </root>

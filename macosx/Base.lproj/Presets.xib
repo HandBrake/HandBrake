@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -31,7 +31,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                         <rect key="frame" x="1" y="1" width="285" height="264"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" tableStyle="plain" columnReordering="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="14" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" autoresizesOutlineColumn="YES" outlineTableColumn="jhC-ge-H1w" id="00W-tb-wgY">
+                            <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" tableStyle="plain" columnReordering="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="14" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" autoresizesOutlineColumn="YES" outlineTableColumn="jhC-ge-H1w" id="00W-tb-wgY" customClass="HBOutlineView">
                                 <rect key="frame" x="0.0" y="0.0" width="285" height="264"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
@@ -98,6 +98,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                                     <binding destination="ohT-Pp-wBT" name="selectionIndexPaths" keyPath="selectionIndexPaths" previousBinding="y8f-ht-Zs3" id="ntG-Tk-AkS"/>
                                     <outlet property="dataSource" destination="-2" id="XrD-y9-BCi"/>
                                     <outlet property="delegate" destination="-2" id="VEB-gf-oNP"/>
+                                    <outlet property="menu" destination="pZl-EB-HyZ" id="sRc-eU-sv2"/>
                                 </connections>
                             </outlineView>
                         </subviews>
@@ -137,18 +138,25 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                     <rect key="frame" x="76" y="4" width="51" height="25"/>
                     <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="2JY-O9-FR6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
+                        <font key="font" metaFont="message"/>
                         <menu key="menu" title="Presets Action Menu" id="LQk-kD-5sj">
                             <items>
                                 <menuItem state="on" image="NSActionTemplate" hidden="YES" id="KPx-Ep-mb4"/>
-                                <menuItem title="New Category" id="Io0-Vm-Qez">
+                                <menuItem title="Rename…" id="ryC-EH-q4k">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
                                     <connections>
-                                        <action selector="insertCategory:" target="-2" id="ZWP-Z4-cHu"/>
+                                        <action selector="renamePreset:" target="-2" id="s4t-KE-TNo"/>
                                     </connections>
                                 </menuItem>
                                 <menuItem title="Make Default" id="D2t-YG-Frn">
                                     <connections>
                                         <action selector="setDefault:" target="-2" id="tLd-jt-H1g"/>
+                                    </connections>
+                                </menuItem>
+                                <menuItem isSeparatorItem="YES" id="7gN-GZ-DJb"/>
+                                <menuItem title="New Category" id="Io0-Vm-Qez">
+                                    <connections>
+                                        <action selector="insertCategory:" target="-2" id="ZWP-Z4-cHu"/>
                                     </connections>
                                 </menuItem>
                                 <menuItem isSeparatorItem="YES" id="QaO-y0-sMc"/>
@@ -202,9 +210,39 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
             </declaredKeys>
             <classReference key="objectClass" className="HBPreset"/>
             <connections>
-                <binding destination="-2" name="contentArray" keyPath="presets.root.children" id="A8P-Hb-YE9"/>
+                <binding destination="-2" name="contentArray" keyPath="manager.root.children" id="WsS-cK-ZeQ"/>
             </connections>
         </treeController>
+        <menu id="pZl-EB-HyZ">
+            <items>
+                <menuItem title="Rename…" id="k6z-1U-qsp">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="renamePreset:" target="-2" id="dcZ-bs-YG1"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Make Default" id="cUW-79-8BY">
+                    <connections>
+                        <action selector="setDefault:" target="-2" id="a7j-at-XM0"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="Kq3-kg-7O1"/>
+                <menuItem title="Export…" id="M33-MU-aWd">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="exportPreset:" target="-2" id="YXa-yH-6Pv"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="m90-SB-xdh"/>
+                <menuItem title="Delete…" id="xtN-lj-fJP">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="deletePreset:" target="-2" id="Dbq-ZG-jnC"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="193" y="353"/>
+        </menu>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="20" height="20"/>

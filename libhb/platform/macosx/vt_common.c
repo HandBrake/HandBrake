@@ -1,6 +1,6 @@
 /* vt_common.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -407,7 +407,6 @@ int hb_vt_are_filters_supported(hb_list_t *filters)
             case HB_FILTER_DEBLOCK:
             case HB_FILTER_DENOISE:
             case HB_FILTER_NLMEANS:
-            case HB_FILTER_RENDER_SUB:
             case HB_FILTER_COLORSPACE:
             case HB_FILTER_FORMAT:
                 supported = 0;

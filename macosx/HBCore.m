@@ -419,7 +419,9 @@ static void pix_buf_callback(void * CV_NULLABLE releaseRefCon,
     hb_job_t *hb_job = job.hb_job;
     hb_dict_t *job_dict = hb_job_to_dict(hb_job);
     hb_job_close(&hb_job);
+
     hb_image_t *image = hb_get_preview(_hb_handle, job_dict, (int)index, 0, -1);
+    hb_value_free(&job_dict);
 
     if (image)
     {
@@ -538,9 +540,22 @@ static void pix_buf_callback(void * CV_NULLABLE releaseRefCon,
         CFRelease(aspect_ratio);
     }
 
-    hb_value_free(&job_dict);
-
     return pix_buf;
+}
+
+static const void * cgimage_get_byte_pointer_callback(void *info)
+{
+    hb_image_t *image = (hb_image_t *)info;
+    return (const void *)image->plane[0].data;
+}
+
+static void cgimage_release_byte_pointer_callback(void *info, const void *pointer)
+{
+    hb_image_t *image = (hb_image_t *)info;
+    if (image)
+    {
+        hb_image_close(&image);
+    }
 }
 
 - (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index job:(HBJob *)job CF_RETURNS_RETAINED
@@ -550,33 +565,20 @@ static void pix_buf_callback(void * CV_NULLABLE releaseRefCon,
     hb_job_t *hb_job = job.hb_job;
     hb_dict_t *job_dict = hb_job_to_dict(hb_job);
     hb_job_close(&hb_job);
-    hb_image_t *image = hb_get_preview3(_hb_handle, (int)index, job_dict);
+
+    hb_image_t *image = hb_get_preview(_hb_handle, job_dict, (int)index, 1, 2);
+    hb_value_free(&job_dict);
 
     if (image)
     {
-        // Create an CGImageRef and copy the libhb image into it.
-        // The image data returned by hb_get_preview3 is 4 bytes per pixel, BGRA format.
-        // Alpha is ignored.
-        CFMutableDataRef imgData = CFDataCreateMutable(kCFAllocatorDefault, 0);
-        CFDataSetLength(imgData, 3 * image->width * image->height);
+        // Wrap the hb_image_t in a CGImageRef.
+        // The image data returned by hb_get_preview
+        // is 3 bytes per pixel, AV_PIX_FMT_RGB24 format.
+        CGDataProviderDirectCallbacks callbacks = {0};
+        callbacks.getBytePointer = cgimage_get_byte_pointer_callback;
+        callbacks.releaseBytePointer = cgimage_release_byte_pointer_callback;
 
-        UInt8 *src_line = image->data;
-        UInt8 *dst = CFDataGetMutableBytePtr(imgData);
-        for (int r = 0; r < image->height; r++)
-        {
-            UInt8 *src = src_line;
-            for (int c = 0; c < image->width; c++)
-            {
-                *dst++ = src[2];
-                *dst++ = src[1];
-                *dst++ = src[0];
-                src += 4;
-            }
-            src_line += image->plane[0].stride;
-        }
-
-        CGDataProviderRef provider = CGDataProviderCreateWithCFData(imgData);
-
+        CGDataProviderRef dataProvider = CGDataProviderCreateDirect(image, image->plane[0].size, &callbacks);
         CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNone;
         CGColorSpaceRef colorSpace = copyColorSpace(image->color_prim,
                                                     image->color_transfer,
@@ -585,23 +587,18 @@ static void pix_buf_callback(void * CV_NULLABLE releaseRefCon,
         img = CGImageCreate(image->width,
                             image->height,
                             8,
-                            24,
-                            image->width * 3,
+                            8 * 3,
+                            image->plane[0].stride,
                             colorSpace,
                             bitmapInfo,
-                            provider,
+                            dataProvider,
                             NULL,
                             NO,
                             kCGRenderingIntentDefault);
 
         CGColorSpaceRelease(colorSpace);
-        CGDataProviderRelease(provider);
-        CFRelease(imgData);
-
-        hb_image_close(&image);
+        CGDataProviderRelease(dataProvider);
     }
-
-    hb_value_free(&job_dict);
 
     return img;
 }

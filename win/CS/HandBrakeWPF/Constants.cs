@@ -43,6 +43,7 @@ namespace HandBrakeWPF
         public const string Codec = "{codec}";
         public const string EncoderDisplay = "{encoder-display}";
         public const string Encoder = "{encoder}";
+        public const string Angle = "{angle}";
 
         /* Auto-name Path Constants */
         public const string Source = "{source}";
@@ -55,6 +56,12 @@ namespace HandBrakeWPF
         /* When Done Options*/
         public const string SourceArg = "{source}";
         public const string DestinationArg = "{destination}";
+        public const string DestinationFolder = "{destination_folder}";
         public const string ExitCodeArg = "{exit_code}";
+
+        /* When Done Options*/
+        public const string AutonameOutputFolder = "{autoname_output_folder}";
+
+      
     }
 }

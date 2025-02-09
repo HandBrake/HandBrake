@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # mingw-w64-build - download and build mingw-w64 toolchain
 #
-# Copyright 2023 Bradley Sepos
+# Copyright 2025 Bradley Sepos
 # Released under the MIT License. See LICENSE for details.
 # https://github.com/bradleysepos/mingw-w64-build
 

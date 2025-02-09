@@ -53,7 +53,9 @@
 
         _imagesCount = [_scanCore imagesCountForTitle:self.job.title];
 
-        _queue = dispatch_queue_create("fr.handbrake.PreviewQueue", DISPATCH_QUEUE_SERIAL);
+        _queue = dispatch_queue_create("fr.handbrake.PreviewQueue",
+                                       dispatch_queue_attr_make_with_autorelease_frequency(DISPATCH_QUEUE_SERIAL,
+                                                                                           DISPATCH_AUTORELEASE_FREQUENCY_WORK_ITEM));
         _group = dispatch_group_create();
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBPictureChangedNotification object:job.picture];

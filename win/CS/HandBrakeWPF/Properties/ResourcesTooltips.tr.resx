@@ -133,7 +133,7 @@ Geçmeli olmayan çerçeveler bazı kalite bozulmalarına neden olur.</value>
     <value>Gürültü giderme, gürültü ve tanecik görünümünü azaltır veya ortadan kaldırır. Bu, sıkıştırma verimliliğini artırabilir ve daha küçük dosya boyutlarında daha yüksek kalitede video oluşturabilir. 
 Aşırı güçlü Gürültü giderme ayarları, ayrıntıları kaldırarak görüntü kalitesine zarar verebilir.
          
-NLMeans, hız maliyeti yüksek olan, yüksek kaliteli bir gürültü giderme filtresidir. Kalitenin hızdan daha önemli olduğu yerlerde kullanın.
+NLMeans, hız maliyeti yüksek olan, yüksek kaliteli bir gürültü giderme filtresidir. Kalitenin hızdan daha önemli olduğu durumlarda kullanın.
          
 HQDN3D, NLMeans'dan daha hızlı ancak ince detayların korunmasında daha az etkili olan, uyarlamalı bir düşük geçirgen filtredir.</value>
   </data>
@@ -153,7 +153,7 @@ HQDN3D, NLMeans'dan daha hızlı ancak ince detayların korunmasında daha az et
     <value>Konteyner formatı. Video, ses ve diğer parçalar bu türden tek bir dosyada birleştirilir. Uyumluluğu etkiler.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
-    <value>Aşamalı indirme için MP4'ü optimize edin. Kodlamadan sonra, tüm dosyayı indirmeye gerek kalmadan ağ üzerinden anında oynatmaya izin vermek için veriler yeniden düzenlenir ve yeniden yazılır.</value>
+    <value>Aşamalı indirme için MP4'ü optimize eder. Kodlamadan sonra, tüm dosyayı indirmeye gerek kalmadan ağ üzerinden anında oynatmaya izin vermek için veriler yeniden düzenlenir ve yeniden yazılır.</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Kaynak aralığı seçimi. Varsayılan olarak, tüm bölümler seçilir ve tüm kaynak kodlanır.</value>
@@ -163,15 +163,13 @@ HQDN3D, NLMeans'dan daha hızlı ancak ince detayların korunmasında daha az et
 Blu-ray ve DVD kaynakları genellikle birden fazla başlığa sahiptir, en uzun olanı tipik olarak ana özelliktir.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorfik, oynatma sırasında orijinal görünümü korurken isteğe bağlı depolama boyutlarına izin verir.
+    <value>Anamorfik: Oynatma sırasında orijinal görünümü korurken isteğe bağlı depolama boyutlarına izin verir.
 
-Hiçbiri anamorfiği devre dışı bırakmaz. Video depolama boyutları ve ekran boyutları aynı olacaktır. Yalnızca belirli eski cihazlarla uyumluluk için kullanışlıdır.
+Hiçbiri: Anamorfik özelliği devre dışı bırakır. Video depolama boyutları ve ekran boyutları aynı olacaktır. Yalnızca belirli eski aygıtlarla uyumluluk için yararlıdır.
 
-Otomatik, orijinal ekran en boy oranını korurken depolama çözünürlüğünü en üst düzeye çıkarır. Önerilir.
+Otomatik: Orijinal ekran en boy oranını korurken depolama çözünürlüğünü en üst düzeye çıkarır. Önerilir.
 
-Serbest, Otomatik'e benzer, ancak depolama en boy oranını korumaya çalışır. Bu, Otomatik'e kıyasla hafif bir depolama çözünürlüğü kaybına neden olabilir.
-
-Özel, tüm parametreleri manuel olarak ayarlamaya izin verir. Yanlış bir kaynak gösterimi yönünü düzeltmek ve post prodüksiyonda gelişmiş kontrole ihtiyaç duyan profesyoneller için kullanışlıdır.</value>
+Özel: Tüm parametrelerin manuel olarak ayarlanmasına olanak tanır. Yanlış bir kaynak görüntüleme görünümünü düzeltmek ve post prodüksiyonda gelişmiş kontrole ihtiyaç duyan profesyoneller için kullanışlıdır.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Videonun kenarlarında siyah kenarlıkları otomatik olarak kırp.</value>
@@ -263,11 +261,13 @@ Diğer tüm ayarları geçersiz kılar.</value>
     <value>Kare hızı ayarıyla belirlenen, en yüksek hızda değişken kare hızı çıkışını etkinleştirir.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Kodlayıcı ayarlarını sıkıştırma verimliliği ile kodlama hızı arasında dengelemek için kodlayıcı ayarlarını yapar.
+    <value>Kodlama hızına karşı sıkıştırma verimliliğini arttırmak veya azaltmak için kodlama ayarlarını düzenler.
 
 Bu, varsayılan kodlayıcı ayarlarınızı belirler.
 İnce ayarlar, profiller, seviyeler ve gelişmiş seçenek dizgisi buna uygulanacaktır.
-Daha yavaş olduğundan genellikle bu seçeneği dayanabileceğiniz en yavaş değere ayarlamanız gerekir. Ayarların yapılması daha kaliteli veya daha küçük dosyalara yol açacaktır.</value>
+Daha yavaş işleneceğinden dolayı bu seçeneği genellikle dayanabileceğiniz en yavaş değere ayarlamanız gerekir.
+Ayarlamalar sonucu daha kaliteli veya daha küçük boyutlu dosyalar kodlanacaktır.
+Kodlama hızından ödün vererek sıkıştırma verimliliğini artırmak için kaydırıcıyı sağa ya da sıkıştırma verimliliğinden ödün vererek kodlama hızını arttırmak için kaydırıcıyı sola ayarlayın.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Belirtilen profile uygunluğu ayarlar ve sağlar.
@@ -306,7 +306,7 @@ bit hızı tahsis kararları vermek için kullanılır.</value>
 VFR bazı oynatıcılarla uyumlu değil.</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
-    <value>HandBrake mevcut sırayı tamamladığında veya kodladığında bu işlemi gerçekleştirir.</value>
+    <value>HandBrake mevcut sıra görevini tamamladığında veya kodlama bittiğinde burada belirtilen işlemi gerçekleştirecek.</value>
   </data>
   <data name="MainView_Browse" xml:space="preserve">
     <value>Kodunuz için yeni bir hedef yolu ve dosya adı seçmek üzere göz atın.</value>
@@ -326,15 +326,15 @@ VFR bazı oynatıcılarla uyumlu değil.</value>
 Tüm kodlama ayarlarını geçersiz kılar. Bir ön ayar seçildikten sonra ayarlar daha da ayarlanabilir.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>Seçilen ön ayarı kaldırın.</value>
+    <value>Seçili ön ayarı kaldır.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
     <value>Bazı Kaynaklar birden fazla video klip veya bir Başlık koleksiyonu içerebilir. Blu-ray ve DVD Kaynaklarında genellikle birden fazla Başlık bulunur.
 
-Kodlamak istediğiniz belirli başlığı biliyorsanız, buraya girebilirsiniz ve HandBrake kaynak dosyadaki her başlık yerine yalnızca o başlığı tarar. Aksi takdirde, alanı boş bırakın.</value>
+Kodlamak istediğiniz bir başlığı biliyorsanız, buraya girebilirsiniz ve HandBrake kaynak dosyadaki tüm başlıklar yerine yalnızca o başlığı tarayacaktır. Aksi takdirde, alanı boş bırakın.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
-    <value>Özel  Gürültüsüzlük parametreleri.
+    <value>Özel  Gürültü Giderme Parametreleri.
  
 NLMeans sözdizimi: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
 
@@ -345,24 +345,24 @@ HQDN3D sözdizimi: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-tempora
 HQDN3D varsayılan: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>Gürültüsüzlük filtresi ön ayarı. Filtrenin gücünü ayarlar.</value>
+    <value>Gürültü giderme filtresi ön ayarı. Filtrenin gücünü ayarlar.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Gürültüsüzlük ayarı. Ayrıca, belirli senaryolar için ayarları optimize etmek üzere Gürültüsüzlük ön ayarını da ayarlar.
+    <value>Gürültü Giderme Ayarı. Ayrıca, belirli senaryolar için ayarları optimize etmek üzere Gürültü Giderme ön ayarını da ayarlar.
  
-- Hiçbiri varsayılan ön ayar ayarlarını kullanmaz.
- 
-- Film, en canlı hareketli içeriklerle kullanım için ayarları iyileştirir.
- 
-- Tane, sadece renk kanallarını işler. Renk gürültüsünü azaltırken veya çıkarırken parlaklık tanesinin film benzeri görünümünü korumak için kullanışlıdır.
+- Hiçbiri: Varsayılan ön ayarı kullanır.
 
-- Yüksek Hareket, renkli kanallar için geçici işlemden kaçınarak yüksek hareketli sahnelerde renk bulaşmasını azaltır. Spor ve aksiyon videoları için kullanışlıdır.
+- Film: Çoğu canlı aksiyon içeriği için ayarları optimize eder.
 
-- Animasyon, anime ve çizgi film gibi cel animasyonu için kullanışlıdır.
+- Tanecikler: Yalnızca renk kanallarını işler. Parlaklık tanecikleri film benzeri görünümünü korurken renk parazitini azaltmak veya kaldırmak için kullanışlıdır.
 
-- Bant, Film'in istenen bir sonuç üretmediği VHS gibi düşük detaylı analog bant kaynakları için kullanışlıdır.
+- Aşırı Hareketlilik: Renk kanalları için zamansal işlemeyi önleyerek yüksek hareketli sahnelerde renk bulanıklığını azaltır. Spor ve aksiyon videoları için kullanışlıdır.
 
-- Hareketli, 1-/4-/8-/16-bit 2 boyutlu oyunlar için yararlıdır. Hareketli, yüksek çözünürlüklü video için tasarlanmamıştır.</value>
+- Animasyon: Anime ve çizgi filmler gibi hücre animasyonları için uygundur.
+
+- Bant: VHS gibi düşük ayrıntılı analog kaset kaynakları için uygundur. Film ön ayarının istenen sonucu vermediği durumlarda tercih edilir.
+
+- Sprite "Görsel Eleman": 1-/4-/8-/16-bit 2 boyutlu oyunlar için uygundur. Sprite, yüksek çözünürlüklü videolar için tasarlanmamıştır.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>Görüntü ayrıştırma, resimdeki tarak kalıntılarını kaldırır.
@@ -383,15 +383,15 @@ Ayrıştırma, hız ve kalite için çoklu enterpolasyon algoritmaları arasınd
  Ayrıştırma varsayılanı: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>Ayırma filtresi ön ayarı.
+    <value>Ayrıştırma Filtresi Ön Ayarı.
 
-Varsayılan hız ve kalite için iyi dengelenmiş.
+Varsayılan, hız ve kalite açısından iyi bir dengeye sahiptir.
 
-Uzamsal Kontrolü Atlama, Yadif'in hafif bir hız artışı için kaçınılabilir bazı kalıntıları düzeltmeyi atlamasını sağlar.
+Uzamsal Kontrolü Atlama, Yadif'in hafif bir hız artışı için belirli kaçınılabilir eserleri düzeltmeyi atlamasına olanak tanır.
 
-EEDI2, Ayrıştırma için daha yavaş, daha kaliteli bir enterpolasyon algoritması kullanır. En zor kaynaklar için kullanışlıdır.
+EEDI2, ayrıştırma için daha yavaş, daha kaliteli bir enterpolasyon algoritması kullanır. En zor kaynaklar için kullanışlıdır.
 
-Bob, algılanan çözünürlüğe hafif bir vuruş için hareketi daha iyi korumaya çalışır.</value>
+"Bob, algılanan çözünürlüğe hafif bir zarar vererek hareketi daha iyi korumaya çalışır."</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
     <value>Yatay eksende resmi döndürür (aynalama).</value>
@@ -400,7 +400,7 @@ Bob, algılanan çözünürlüğe hafif bir vuruş için hareketi daha iyi korum
     <value>Geçmeli Algılama, etkin olduğunda Ayrıştırma filtresinin yalnızca geçmeli video karelerini işlemesine izin verir.</value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
-    <value>Özel Geçmeli Algılama parametreleri.
+    <value>Özel Geçmeli Algılama Parametreleri.
  
  Sözdizimi: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
  
@@ -410,13 +410,13 @@ Bob, algılanan çözünürlüğe hafif bir vuruş için hareketi daha iyi korum
     <value>Resmi 90 derecelik artışlarla saat yönünde döndürün.</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>Seçilen kaynak aralığının Saat:Dakika:Saniye cinsinden süresi</value>
+    <value>Seçili kaynak aralığının Saat:Dakika:Saniye cinsinden süresi</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>En Boy Oranını Koru, kaynağın orijinal görüntü özelliğini korur. Bunun devre dışı bırakılması, uzatılmış veya sıkışmış bir görüntüyle sonuçlanabilir.</value>
+    <value>En Boy Oranını Koru: Kaynağın orijinal görüntü özelliğini korur. Devre dışı bırakılırsa, uzatılmış veya sıkıştırılmış bir görüntü oluşturabilir.</value>
   </data>
   <data name="FilterView_CustomSharpenParams" xml:space="preserve">
-    <value>Özel Keskinleştirme parametreleri.
+    <value>Özel Keskinleştirme Parametreleri.
 
 Keskinleştirme sözdizimi: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
 
@@ -427,9 +427,9 @@ Lapsharp sözdizimi: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-streng
 Lapsharp varsayılan: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>Keskinleştirme, özellikle kenarların ayrıntı görünümünü artırır. Aşırı güçlü Keskinleştirme ayarları, zil sesleri oluşturarak ve gürültüyü artırarak, sıkıştırma verimliliğini azaltabilecek şekilde resim kalitesine zarar verebilir.
+    <value>Keskinleştirme: Özellikle kenarların ayrıntı görünümünü artırır. Aşırı güçlü Keskinleştirme ayarları, yapaylıklar "haleler" oluşturarak ve gürültüyü artırarak, sıkıştırma verimliliğini azaltabilecek şekilde resim kalitesine zarar verebilir.
 
-Keskinleştirme, genel amaçlı bir keskinleştirme maskeleme filtresidir. Bulanıklaştırma ile netleşir, ardından bulanık resim ile orijinal arasındaki farkı hesaplar.
+Keskinleştirme: Genel amaçlı bir keskinleştirme maskeleme filtresidir. Bulanıklaştırma ile netleşir, ardından bulanık resim ile orijinal arasındaki farkı hesaplar.
 
 Lapsharp, Laplacian kenar filtrelerine yakın olan evrişimli çekirdekleri kullanarak keskinleşir, bazen keskin olmayan maskelemeden daha yüksek kaliteli sonuçlar verir.</value>
   </data>
@@ -437,19 +437,19 @@ Lapsharp, Laplacian kenar filtrelerine yakın olan evrişimli çekirdekleri kull
     <value>Keskinleştirme filtresi ön ayarı. Filtrenin gücünü ayarlar.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>Keskinleştirme ayarı. Ayrıca, belirli senaryolar için ayarları optimize etmek üzere Keskinleştirme hazır ayarını da ayarlar.
+    <value>Keskinleştirme Ayarı: Belirli senaryolar için ayarları optimize etmek üzere Keskinleştirme hazır ayarını da ayarlar.
 
-Hiçbiri varsayılan ön ayar ayarlarını kullanmaz.
+Hiçbiri: Varsayılan hazır ayarları kullanır.
 
-Keskinleştirme, Ultra İnce, İnce, Orta, Kaba veya Çok Kaba keskinleştirme için ayarlanabilir. Çıktı resmin çözünürlüğüne ve geliştirilecek ayrıntı inceliğine göre birini seçin.
+Keskinleştirme "Unsharp": Ultra İnce, İnce, Orta, Kaba veya Çok Kaba keskinleştirme için ayarlanabilir. Çıktı resmin çözünürlüğüne ve geliştirilecek ayrıntı inceliğine göre birini seçin.
 
-Lapsharp'ın Film ayarı, en canlı hareketli içeriklerle kullanım için ayarları düzenler. Film, tüm kenarları benzer şekilde keskinleştirmek için izotropik bir Laplacian çekirdeği kullanır ve parlaklık (aydınlık) bilgisi, krominans (renk) bilgisinden daha fazla keskinleştirilir.
+Lapsharp'ın Film Ayarı: Çoğu canlı aksiyon içeriği için ayarları düzenler. Film, tüm kenarları benzer şekilde keskinleştirmek için izotropik bir Laplacian çekirdeği kullanır ve parlaklık (aydınlık) bilgisi, krominans (renk) bilgisinden daha fazla keskinleştirilir.
 
-Lapsharp'ın Tane ayarı, Film'e benzer, ancak gürültü ve Tane üzerindeki etkiyi azaltmak için Gauss çekirdeğinin izotropik bir Laplacian'ı kullanır. Taneyi korumak için ve Film ayarlarına genel bir alternatif olarak kullanışlıdır.
+Lapsharp'ın Tane Ayarı: Film'e benzer, ancak gürültü ve tanecik üzerindeki etkiyi azaltmak için Gauss çekirdeğinin izotropik bir Laplacian'ı kullanır. Taneyi korumak için ve Film ayarlarına genel bir alternatif olarak kullanışlıdır.
 
-Lapsharp'ın Animasyon ayarı, anime ve çizgi film gibi cel animasyonu için yararlıdır. Animasyon filmle aynıdır, ancak eserler oluşturmaktan kaçınmak için genel güç azaltılır.
+Lapsharp'ın Animasyon Ayarı: Anime ve çizgi film gibi hücre animasyonu için yararlıdır. Animasyon filmle aynıdır, ancak eserler oluşturmaktan kaçınmak için genel güç azaltılır.
 
-Lapsharp'ın Hareketli ayarı, 1-/4-/8-/16-bit 2 boyutlu oyunlar için yararlıdır. Hareketli, dikey ve yatay kenarları çapraz kenarlardan daha fazla geliştiren 4 komşulu bir Laplacian çekirdeği kullanır.</value>
+Lapsharp'ın Hareketli Ayarı: 1-/4-/8-/16-bit 2 boyutlu oyunlar için yararlıdır. Hareketli, dikey ve yatay kenarları çapraz kenarlardan daha fazla geliştiren 4 komşulu bir Laplacian çekirdeği kullanır.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
     <value>Boş kareler ekleyerek veya kareler bırakarak tüm ses ve video akışlarının başlangıç zaman damgalarını hizalar. MP4 düzenleme listelerine uymayan bozuk oynatıcılar için ses/video senkronizasyonunu iyileştirebilir.</value>
@@ -471,31 +471,31 @@ Devre dışı bırakıldığında, doldurulursa ana penceredeki hedef kutusundak
     <value>Renk Alanı Filtresi.</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth Filtresi</value>
+    <value>Kroma Yumuşatma Filtresi</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
     <value>Bu alan, "0xFF0000" gibi RGB değerlerini veya "kırmızı" gibi renk adlarını kabul edebilir. Adlandırılmış renklerin tam listesi için dolgu filtresi belgelerine bakın. </value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Video akışına altyazı yazın.
+    <value>Altyazıları video akışına göm.
 
-Not, kaynak altyazı parçası biçimi çıktı dosyası türünde desteklenmiyorsa bu otomatik olarak seçilecektir.
+Not: Kaynak altyazı parçası formatı çıktı dosyası türünde desteklenmiyorsa otomatik olarak bu seçilecektir.
 
-Örneğin, PGS altyazıları MP4'te desteklenmez.</value>
+Örneğin, PGS altyazıları MP4'te desteklenme, otomatik olarak bu seçiliri ve altyazılar video dosyasına gömülür.</value>
   </data>
   <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
-    <value>Düz - Ön ayarlar düz bir liste olarak görüntülenir.
-Kısmen Düz - Son 8 kullanıcı ön ayarı düz bir liste olarak görüntülenir ve ardından tüm ön ayarlar kategori listesinde gösterilir.
-Kategoriler - Tüm ön ayarlar kategori başına bir alt menü altında gösterilir.</value>
+    <value>Sabit: Ön ayarlar düz bir liste olarak görüntülenir.
+Kısmen Sabit: Son 8 kullanıcı ön ayarı düz bir liste olarak görüntülenir ve ardından tüm ön ayarlar kategori listesinde gösterilir.
+Kategori: Tüm ön ayarlar kategori başına bir alt menü altında gösterilir.</value>
   </data>
   <data name="AudioView_AudioDefaults" xml:space="preserve">
-    <value>Yeni bir kaynak veya başlık seçerken bu sekmenin otomatik olarak ses parçalarını nasıl eklediğini belirleyen kurulum davranışları.</value>
+    <value>Yeni bir kaynak veya başlık seçildiğinde, otomatik olarak ses parçaları eklemesini belirleyen davranışları bu sekmeden ayarlayabilirsiniz.</value>
   </data>
   <data name="BehavioursReload" xml:space="preserve">
-    <value>Yapılandırılan davranışlara göre aşağıdaki listeyi yenileyin.</value>
+    <value>Yapılandırılan davranışlara göre aşağıdaki listeyi yenile</value>
   </data>
   <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
-    <value>Yeni bir kaynak veya başlık seçerken bu sekmenin altyazı parçalarını nasıl otomatik olarak eklediğini belirleyen kurulum davranışları.</value>
+    <value>Yeni bir kaynak veya başlık seçildiğinde, altyazı parçalarını otomatik olarak nasıl ekleyeceğini belirleyen davranışları bu sekmeden ayarlayabilirsiniz.</value>
   </data>
   <data name="OptionsView_SendFileToArguments" xml:space="preserve">
     <value>Aşağıdaki ortam değişkenleri her zaman ayarlanır:
@@ -534,7 +534,7 @@ Lütfen unutmayın, hata kodları en iyi çabadır ve her zaman doğru olmayabil
 {codec} - Video biçimini görüntüler.
 {encoder} - Kullanılan kodlayıcının kısa biçim anahtarını görüntüler.
 
-Herhangi bir geçersiz yol karakteri otomatik olarak kaldırılacaktır.</value>
+Herhangi geçersiz bir yol karakteri otomatik olarak kaldırılacaktır.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Sağdan sola doğru olan diller için iki moddan birini etkinleştirebilirsiniz. "Yalnızca Metin", metni yalnızca sağdan sola stilde işler. "Tüm Kullanıcı Arayüzü", tüm kontrolleri sağdan sola yapacaktır.
@@ -555,9 +555,18 @@ Bit hızı kaynaktan kaynağa değişecektir.</value>
 {source} - Kaynak dosyanın adı.</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
-    <value>https://handbrake.fr/docs adresinde bulunan belgeler web sitesini başlatır</value>
+    <value>https://handbrake.fr/docs adresinde bulunan belgeler için web sitesini başlatır.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Tire (-), Nokta (.) ve Virgül (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Yukarıdaki ayarlar tarafından izin verilen en yüksek çözünürlüğü kullanın</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Etkinleştirilmezse, ölçeklenen boyutlar kaynak boyutlarıyla sınırlı kalacaktır.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Ekran ebatlarını değiştirmek videoyu ebatını uzatacaktır.</value>
   </data>
 </root>

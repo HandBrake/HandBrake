@@ -1,6 +1,6 @@
 /* blend.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -23,13 +23,17 @@ struct hb_blend_private_s
 };
 
 static int hb_blend_init(hb_blend_object_t *object,
+                         int in_width,
+                         int in_height,
                          int in_pix_fmt,
                          int in_chroma_location,
+                         int in_color_range,
                          int overlay_pix_fmt);
 
 static hb_buffer_t * hb_blend_work(hb_blend_object_t *object,
                                    hb_buffer_t *in,
-                                   hb_buffer_list_t *overlays);
+                                   hb_buffer_list_t *overlays,
+                                   int changed);
 
 static void hb_blend_close(hb_blend_object_t *object);
 
@@ -746,8 +750,11 @@ static void blend8onbi1x(const hb_blend_private_t *pv, hb_buffer_t *dst, const h
 }
 
 static int hb_blend_init(hb_blend_object_t *object,
+                         int in_width,
+                         int in_height,
                          int in_pix_fmt,
                          int in_chroma_location,
+                         int in_color_range,
                          int overlay_pix_fmt)
 {
     object->private_data = calloc(sizeof(struct hb_blend_private_s), 1);
@@ -804,7 +811,8 @@ static int hb_blend_init(hb_blend_object_t *object,
 
 static hb_buffer_t * hb_blend_work(hb_blend_object_t *object,
                                    hb_buffer_t *in,
-                                   hb_buffer_list_t *overlays)
+                                   hb_buffer_list_t *overlays,
+                                   int changed)
 {
     hb_blend_private_t *pv = object->private_data;
     hb_buffer_t *out = in;

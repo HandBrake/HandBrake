@@ -1,6 +1,6 @@
 /* common.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -1707,6 +1707,41 @@ int hb_video_multipass_is_supported(uint32_t codec, int constant_quality)
     }
 }
 
+int hb_video_hdr_dynamic_metadata_is_supported(uint32_t codec, int hdr_dynamic_metadata, int profile)
+{
+    if (hdr_dynamic_metadata == HB_HDR_DYNAMIC_METADATA_HDR10PLUS)
+    {
+        switch (codec)
+        {
+            case HB_VCODEC_X265_10BIT:
+            case HB_VCODEC_VT_H265_10BIT:
+            case HB_VCODEC_SVT_AV1_10BIT:
+                return 1;
+        }
+    }
+#if HB_PROJECT_FEATURE_LIBDOVI
+    else if (hdr_dynamic_metadata == HB_HDR_DYNAMIC_METADATA_DOVI)
+    {
+        if (profile != 5 &&
+            profile != 7 &&
+            profile != 8 &&
+            profile != 10)
+        {
+            return 0;
+        }
+
+        switch (codec)
+        {
+            case HB_VCODEC_X265_10BIT:
+            case HB_VCODEC_VT_H265_10BIT:
+            case HB_VCODEC_SVT_AV1_10BIT:
+                return 1;
+        }
+    }
+#endif
+    return 0;
+}
+
 int hb_video_encoder_is_supported(int encoder)
 {
     const hb_encoder_t *video_encoder = NULL;
@@ -1807,12 +1842,18 @@ const char* const* hb_video_encoder_get_presets(int encoder)
 
         case HB_VCODEC_SVT_AV1:
         case HB_VCODEC_SVT_AV1_10BIT:
-            return av1_svt_preset_names;
+            return hb_av1_svt_preset_names;
 
         default:
             return NULL;
     }
 }
+
+static const char * const hb_empty_tune_names[] =
+{
+    "none", NULL
+};
+
 
 const char* const* hb_video_encoder_get_tunes(int encoder)
 {
@@ -1825,22 +1866,22 @@ const char* const* hb_video_encoder_get_tunes(int encoder)
     {
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
-            return x264_tune_names;
+            return hb_x264_tune_names;
 
 #if HB_PROJECT_FEATURE_X265
         case HB_VCODEC_X265_8BIT:
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
-            return x265_tune_names;
+            return hb_x265_tune_names;
 #endif
 
         case HB_VCODEC_SVT_AV1:
         case HB_VCODEC_SVT_AV1_10BIT:
-            return av1_svt_tune_names;
+            return hb_av1_svt_tune_names;
 
         default:
-            return NULL;
+            return hb_empty_tune_names;
     }
 }
 
@@ -1895,7 +1936,7 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
 
         case HB_VCODEC_SVT_AV1:
         case HB_VCODEC_SVT_AV1_10BIT:
-            return av1_svt_profile_names;
+            return hb_av1_svt_profile_names;
 
         default:
             return NULL;
@@ -4446,8 +4487,8 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->coll           = title->coll;
     job->ambient        = title->ambient;
     job->dovi           = title->dovi;
-    job->passthru_dynamic_hdr_metadata |= title->dovi.dv_profile ? DOVI : NONE;
-    job->passthru_dynamic_hdr_metadata |= title->hdr_10_plus ? HDR_10_PLUS : NONE;
+    job->passthru_dynamic_hdr_metadata |= title->dovi.dv_profile ? HB_HDR_DYNAMIC_METADATA_DOVI : HB_HDR_DYNAMIC_METADATA_NONE;
+    job->passthru_dynamic_hdr_metadata |= title->hdr_10_plus ? HB_HDR_DYNAMIC_METADATA_HDR10PLUS : HB_HDR_DYNAMIC_METADATA_NONE;
 
     job->mux = HB_MUX_MP4;
 
@@ -6255,7 +6296,7 @@ hb_csp_convert_f hb_get_rgb2yuv_function(int color_matrix)
     return hb_rgb2yuv_bt709;
 }
 
-void hb_compute_chroma_smoothing_coefficient(unsigned chroma_coeffs[2][4], int pix_fmt, int chroma_location)
+void hb_compute_chroma_smoothing_coefficient(uint32_t chroma_coeffs[2][4], int pix_fmt, int chroma_location)
 {
     const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
 
@@ -6283,7 +6324,7 @@ void hb_compute_chroma_smoothing_coefficient(unsigned chroma_coeffs[2][4], int p
             break;
     }
 
-    const unsigned base_coefficients[] = {1, 3, 9, 27, 9, 3, 1};
+    const uint32_t base_coefficients[] = {1, 3, 9, 27, 9, 3, 1};
     // If wZ is even, an intermediate value is interpolated for symmetry.
     for (int x = 0; x < 4; x++)
     {

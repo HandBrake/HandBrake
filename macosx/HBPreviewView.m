@@ -109,7 +109,7 @@
     _displayLayer.bounds = CGRectMake(0.0, 0.0, self.frame.size.width - (BORDER_SIZE * 2), self.frame.size.height - (BORDER_SIZE * 2));
     _displayLayer.anchorPoint = CGPointZero;
     _displayLayer.opaque = YES;
-    _displayLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    _displayLayer.videoGravity = AVLayerVideoGravityResize;
 
     if (@available(macOS 14.0, *))
     {
@@ -122,12 +122,15 @@
 
 - (void)removeDisplayLayer
 {
-    if (@available(macOS 14.0, *))
+    if (self.displayLayer)
     {
-        [self.displayLayer.sampleBufferRenderer flushWithRemovalOfDisplayedImage:YES completionHandler:NULL];
+        if (@available(macOS 14.0, *))
+        {
+            [self.displayLayer.sampleBufferRenderer flushWithRemovalOfDisplayedImage:YES completionHandler:NULL];
+        }
+        [self.displayLayer removeFromSuperlayer];
+        self.displayLayer = nil;
     }
-    [self.displayLayer removeFromSuperlayer];
-    self.displayLayer = nil;
 }
 
 - (void)viewDidChangeBackingProperties
@@ -142,62 +145,54 @@
 {
     if (@available(macOS 14.0, *))
     {
-        if (pixelBuffer)
+        self.imageLayer.contents = nil;
+
+        if (self.displayLayer == nil)
         {
-            self.imageLayer.contents = nil;
-
-            if (self.displayLayer == nil)
-            {
-                [self initDisplayLayer];
-            }
-
-            // Read the display size
-            CFDictionaryRef displaySize = CVBufferCopyAttachment(pixelBuffer, kCVImageBufferDisplayDimensionsKey, NULL);
-
-            CFNumberRef displayWidthNum  = CFDictionaryGetValue(displaySize, kCVImageBufferDisplayWidthKey);
-            CFNumberRef displayHeightNum = CFDictionaryGetValue(displaySize, kCVImageBufferDisplayHeightKey);
-
-            int displayWidth, displayHeight;
-
-            CFNumberGetValue(displayWidthNum, kCFNumberSInt32Type, &displayWidth);
-            CFNumberGetValue(displayHeightNum, kCFNumberSInt32Type, &displayHeight);
-
-            CFRelease(displaySize);
-
-            // Wrap the pixel buffer in a sample buffer
-            CMSampleBufferRef sampleBuffer = NULL;
-            CMVideoFormatDescriptionRef formatDescription = NULL;
-
-            CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &formatDescription);
-            CMSampleTimingInfo timingInfo = {kCMTimeInvalid, kCMTimeZero, kCMTimeInvalid};
-
-            CMSampleBufferCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, 1, NULL, NULL,
-                                               formatDescription,
-                                               &timingInfo,
-                                               &sampleBuffer);
-
-            CFArrayRef attachmentsArray = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, 1);
-            if (attachmentsArray && CFArrayGetCount(attachmentsArray) > 0)
-            {
-                CFMutableDictionaryRef dict = (CFMutableDictionaryRef)CFArrayGetValueAtIndex(attachmentsArray, 0);
-                if (dict)
-                {
-                    CFDictionarySetValue(dict, kCMSampleAttachmentKey_DisplayImmediately, kCFBooleanTrue);
-                }
-            }
-
-            // Display the sample buffer
-            [self.displayLayer.sampleBufferRenderer enqueueSampleBuffer:sampleBuffer];
-            self.size = NSMakeSize(displayWidth, displayHeight);
-
-            CFRelease(sampleBuffer);
-            CFRelease(formatDescription);
+            [self initDisplayLayer];
         }
-        else
+
+        // Read the display size
+        CFDictionaryRef displaySize = CVBufferCopyAttachment(pixelBuffer, kCVImageBufferDisplayDimensionsKey, NULL);
+
+        CFNumberRef displayWidthNum  = CFDictionaryGetValue(displaySize, kCVImageBufferDisplayWidthKey);
+        CFNumberRef displayHeightNum = CFDictionaryGetValue(displaySize, kCVImageBufferDisplayHeightKey);
+
+        int displayWidth, displayHeight;
+
+        CFNumberGetValue(displayWidthNum, kCFNumberSInt32Type, &displayWidth);
+        CFNumberGetValue(displayHeightNum, kCFNumberSInt32Type, &displayHeight);
+
+        CFRelease(displaySize);
+
+        // Wrap the pixel buffer in a sample buffer
+        CMSampleBufferRef sampleBuffer = NULL;
+        CMVideoFormatDescriptionRef formatDescription = NULL;
+
+        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &formatDescription);
+        CMSampleTimingInfo timingInfo = {kCMTimeInvalid, kCMTimeZero, kCMTimeInvalid};
+
+        CMSampleBufferCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, 1, NULL, NULL,
+                                           formatDescription,
+                                           &timingInfo,
+                                           &sampleBuffer);
+
+        CFArrayRef attachmentsArray = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, 1);
+        if (attachmentsArray && CFArrayGetCount(attachmentsArray) > 0)
         {
-            [self.displayLayer.sampleBufferRenderer flushWithRemovalOfDisplayedImage:YES completionHandler:NULL];
-            [self removeDisplayLayer];
+            CFMutableDictionaryRef dict = (CFMutableDictionaryRef)CFArrayGetValueAtIndex(attachmentsArray, 0);
+            if (dict)
+            {
+                CFDictionarySetValue(dict, kCMSampleAttachmentKey_DisplayImmediately, kCFBooleanTrue);
+            }
         }
+
+        // Display the sample buffer
+        [self.displayLayer.sampleBufferRenderer enqueueSampleBuffer:sampleBuffer];
+        self.size = NSMakeSize(displayWidth, displayHeight);
+
+        CFRelease(sampleBuffer);
+        CFRelease(formatDescription);
     }
 }
 

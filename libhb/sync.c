@@ -1,6 +1,6 @@
 /* sync.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -1181,9 +1181,12 @@ static void fixSubtitleOverlap( sync_stream_t * stream )
         // marker to indicate the end of a subtitle
         return;
     }
-    // Only SSA subs can overlap
+    // Theoretically only SSA subs can overlap,
+    // but there are some SRT subs out there with
+    // overlapping samples, so let's try to preserve them too
     if (stream->subtitle.subtitle->source      != SSASUB &&
         stream->subtitle.subtitle->source      != IMPORTSSA &&
+        stream->subtitle.subtitle->source      != IMPORTSRT &&
         stream->subtitle.subtitle->config.dest == PASSTHRUSUB &&
         buf->s.start <= stream->last_pts)
     {

@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     using HandBrakeWPF.EventArgs;
@@ -255,6 +256,18 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.TurboAnalysisPass = value;
                 this.NotifyOfPropertyChange(() => this.TurboAnalysisPass);
+                this.OnTabStatusChanged(null);
+            }
+        }
+
+        public HDRDynamicMetadata PasshtruHDRDynamicMetadata
+        {
+            get => this.Task.PasshtruHDRDynamicMetadata;
+
+            set
+            {
+                this.Task.PasshtruHDRDynamicMetadata = value;
+                this.NotifyOfPropertyChange(() => this.PasshtruHDRDynamicMetadata);
                 this.OnTabStatusChanged(null);
             }
         }
@@ -1010,19 +1023,24 @@ namespace HandBrakeWPF.ViewModels
                 this.VideoTunes.Clear();
                 if (encoder.Tunes != null)
                 {
-                    this.VideoTunes.Add(VideoTune.None);
                     foreach (var item in encoder.Tunes)
                     {
-                        if (item == VideoTune.FastDecode.ShortName &&
+                        if (item == VideoTune.None.ShortName)
+                        {
+                            this.VideoTunes.Add(VideoTune.None);
+                        }
+                        else if (item == VideoTune.FastDecode.ShortName &&
                             (this.SelectedVideoEncoder.IsX264 || this.SelectedVideoEncoder.IsSVTAV1))
                         {
                             continue;
                         }
-
-                        this.VideoTunes.Add(new VideoTune(item, item));
+                        else
+                        {
+                            this.VideoTunes.Add(new VideoTune(item, item));
+                        }
                     }
                     this.FastDecode = false;
-                    this.VideoTune = VideoTune.None;
+                    this.VideoTune = this.VideoTunes.First();
                 }
                 else
                 {

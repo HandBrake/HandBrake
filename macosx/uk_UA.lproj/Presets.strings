@@ -10,11 +10,17 @@
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
 "cm5-Kl-dB3.title" = "Reset Official Presets";
 
+/* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "cUW-79-8BY"; */
+"cUW-79-8BY.title" = "Make Default";
+
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "D2t-YG-Frn"; */
 "D2t-YG-Frn.title" = "Make Default";
 
 /* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
 "Io0-Vm-Qez.title" = "Нова Категорія";
+
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "k6z-1U-qsp"; */
+"k6z-1U-qsp.title" = "Rename…";
 
 /* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
 "LQk-kD-5sj.title" = "Presets Action Menu";
@@ -22,11 +28,17 @@
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
 "LUl-ag-Iu6.title" = "Import…";
 
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "M33-MU-aWd"; */
+"M33-MU-aWd.title" = "Export…";
+
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
 "oBC-Nh-TwB.title" = "Table View Cell";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
 "r4V-6L-SO8.title" = "Presets";
+
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "ryC-EH-q4k"; */
+"ryC-EH-q4k.title" = "Rename…";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Presets"; ObjectID = "uad-bt-uKD"; */
 "uad-bt-uKD.ibExternalAccessibilityDescription" = "Presets";
@@ -36,6 +48,9 @@
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
 "xEQ-Un-J0n.title" = "Export…";
+
+/* Class = "NSMenuItem"; title = "Delete…"; ObjectID = "xtN-lj-fJP"; */
+"xtN-lj-fJP.title" = "Видалити...";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Additional Options"; ObjectID = "Ybq-Zt-sta"; */
 "Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Additional Options";

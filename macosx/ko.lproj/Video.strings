@@ -31,9 +31,6 @@
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
 "F3s-qR-qeE.title" = "품질:";
 
-/* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices."; ObjectID = "fue-2d-Bjn"; */
-"fue-2d-Bjn.ibShadowedToolTip" = "비디오 인코더 사전설정. 압축 효율성과 인코딩 속도의 균형을 맞추기 위해 인코더 설정을 조정합니다. 인코더 사전설정이 느린 경우 특정 장치와 호환되지 않는 설정을 사용할 수 있습니다.";
-
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "조정:";
 

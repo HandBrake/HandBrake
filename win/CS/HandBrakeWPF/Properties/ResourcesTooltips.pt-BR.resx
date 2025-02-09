@@ -163,15 +163,13 @@ O HQDN3D é um filtro passagem-baixa adaptável, mais rápido que o NLMeans, por
 As fontes de Blu-ray e DVD geralmente têm vários títulos, o maior dos quais é geralmente o principal recurso</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>O anamórfico permite o armazenamento das dimensões arbitrárias enquanto preserva o aspecto original durante a reprodução.
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-Nenhum desativa o anamórfico. As dimensões serão idênticas para o armazenamento do vídeo e para a exibição . Útil apenas para a compatibilidade com certos dispositivos legados.
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Automático Maximiza a resolução de armazenamento enquanto preserva a proporção do aspecto original da tela. Recomendado.
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Solto é similar ao Auto, porém tenta preservar a relação de aspecto de armazenamento. Isso pode resultar em uma leve perda de resolução de armazenamento em comparação com o Auto.
-
-Personalizado permite o ajuste manual de todos os parâmetros. Útil para corrigir um aspecto incorreto da origem e para profissionais que precisam de um controle mais avançado na pós-produção.</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Corte automaticamente bordas pretas em torno das bordas do vídeo.</value>
@@ -262,12 +260,15 @@ Substitui todas as outras configurações.</value>
     <value>Permite saída de taxa de quadros com uma taxa de pico determinada pela configuração da taxa de quadros.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Ajusta as configurações do codificador para compensar a eficiência da compactação contra a velocidade da codificação.
+    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
 
-Isso estabelece as configurações padrão do codificador.
-Músicas, perfis, níveis e sequência de opções avançadas serão aplicados à isso.
-Geralmente, você deve definir essa opção para o mais lento possível, pois
-configuração mais lenta resultarão em melhor qualidade ou em arquivos menores.</value>
+This establishes your default encoder settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.
+
+Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
+or to the left to increase encoding speed at the expense of compression efficiency.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Define e garante a conformidade com o perfil especificado.
@@ -558,5 +559,14 @@ A taxa de bits varia de acordo com a fonte.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Traço (-), ponto (.) e vírgula (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Use highest resolution permitted by above settings</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Changing the displays size will stretch the video</value>
   </data>
 </root>

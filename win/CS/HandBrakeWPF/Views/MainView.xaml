@@ -627,6 +627,8 @@
                                 <MenuItem Header="{x:Static Properties:Resources.MainView_OpenDirectory}" Command="{Binding RelayCommand}" CommandParameter="OpenDestinationDirectory" />
                                 <MenuItem Header="{x:Static Properties:Resources.MainView_AutonameRegenerate}" Command="{Binding RelayCommand}" CommandParameter="ReGenerateAutoName" />
                                 <Separator />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_OpenAutonamePreferences}" Command="{Binding RelayCommand}" CommandParameter="OpenAutonamePreferences" />
+                                <Separator />
                                 <MenuItem Command="ApplicationCommands.Cut" />
                                 <MenuItem Command="ApplicationCommands.Copy" />
                                 <MenuItem Command="ApplicationCommands.Paste" />

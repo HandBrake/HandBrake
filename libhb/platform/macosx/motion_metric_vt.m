@@ -1,6 +1,6 @@
 /* motion_metric_vt.m
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -122,14 +122,14 @@ static float motion_metric(hb_motion_metric_private_t *pv, hb_buffer_t *a, hb_bu
     const AVComponentDescriptor *comp = &pv->desc->comp[0];
 
     int channels;
-    const MTLPixelFormat format = hb_metal_pix_fmt_from_component(comp, &channels);
+    const MTLPixelFormat format = hb_metal_pix_fmt_from_component(comp, 0, &channels);
     if (format == MTLPixelFormatInvalid)
     {
         goto fail;
     }
 
-    CVMetalTextureRef ref_a = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_a, 0, format);
-    CVMetalTextureRef ref_b = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_b, 0, format);
+    CVMetalTextureRef ref_a = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_a, 0, channels, format);
+    CVMetalTextureRef ref_b = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_b, 0, channels, format);
 
     id<MTLTexture> tex_a = CVMetalTextureGetTexture(ref_a);
     id<MTLTexture> tex_b = CVMetalTextureGetTexture(ref_b);

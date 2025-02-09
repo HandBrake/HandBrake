@@ -1,6 +1,6 @@
 /* rotate_vt.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -194,6 +194,9 @@ static int rotate_vt_work(hb_filter_object_t *filter,
         hb_log("rotate_vt: extract_buf failed");
         return HB_FILTER_FAILED;
     }
+    hb_cv_add_color_tag(source_buf,
+                        pv->input.color_prim, pv->input.color_transfer,
+                        pv->input.color_matrix, pv->input.chroma_location);
 
     CVPixelBufferRef dest_buf = NULL;
     err = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pv->pool, &dest_buf);

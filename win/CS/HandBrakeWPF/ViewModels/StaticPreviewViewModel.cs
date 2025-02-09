@@ -18,8 +18,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
     using System.Windows.Media.Imaging;
 
-    using HandBrake.Interop.Interop.Interfaces;
-
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -325,6 +323,11 @@ namespace HandBrakeWPF.ViewModels
         public bool CanPlay { get; set; }
 
         public bool IsOpen { get; set; }
+
+        public void ShowCropPanel()
+        {
+            this.ShowPictureSettingControls = true;
+        }
 
         public bool ShowPictureSettingControls
         {

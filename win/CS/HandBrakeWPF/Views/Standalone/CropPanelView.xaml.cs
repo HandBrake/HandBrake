@@ -7,12 +7,29 @@
 namespace HandBrakeWPF.Views.Standalone
 {
     using System.Windows.Controls;
+    using System.Windows.Input;
+
+    using HandBrakeWPF.ViewModels;
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     public partial class CropPanelView : UserControl
     { 
         public CropPanelView()
         {
             this.InitializeComponent();
+        }
+
+        private void UIElement_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (this.DataContext != null && this.DataContext is PictureSettingsViewModel)
+            {
+               var viewModel = ((PictureSettingsViewModel)this.DataContext);
+               IStaticPreviewViewModel previewViewModel = viewModel.StaticPreviewViewModel;
+               if (previewViewModel != null)
+               {
+                   previewViewModel.ShowPictureSettingControls = false;
+               }
+            }
         }
     }
 }

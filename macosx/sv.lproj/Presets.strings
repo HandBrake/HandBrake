@@ -10,11 +10,17 @@
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
 "cm5-Kl-dB3.title" = "Nollställ officiella förval";
 
+/* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "cUW-79-8BY"; */
+"cUW-79-8BY.title" = "Gör till standard";
+
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "D2t-YG-Frn"; */
 "D2t-YG-Frn.title" = "Gör till standard";
 
 /* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
 "Io0-Vm-Qez.title" = "Ny kategori";
+
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "k6z-1U-qsp"; */
+"k6z-1U-qsp.title" = "Byt namn...";
 
 /* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
 "LQk-kD-5sj.title" = "Åtgärdsmeny för förval";
@@ -22,11 +28,17 @@
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
 "LUl-ag-Iu6.title" = "Importera…";
 
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "M33-MU-aWd"; */
+"M33-MU-aWd.title" = "Exportera…";
+
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
 "oBC-Nh-TwB.title" = "Tabellvycell";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
 "r4V-6L-SO8.title" = "Förval";
+
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "ryC-EH-q4k"; */
+"ryC-EH-q4k.title" = "Byt namn...";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Presets"; ObjectID = "uad-bt-uKD"; */
 "uad-bt-uKD.ibExternalAccessibilityDescription" = "Förval";
@@ -36,6 +48,9 @@
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
 "xEQ-Un-J0n.title" = "Exportera…";
+
+/* Class = "NSMenuItem"; title = "Delete…"; ObjectID = "xtN-lj-fJP"; */
+"xtN-lj-fJP.title" = "Ta bort...";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Additional Options"; ObjectID = "Ybq-Zt-sta"; */
 "Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Ytterligare alternativ";

@@ -1,6 +1,6 @@
 /* notifications.c
  *
- * Copyright (C) 2023-2024 HandBrake Team
+ * Copyright (C) 2023-2025 HandBrake Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

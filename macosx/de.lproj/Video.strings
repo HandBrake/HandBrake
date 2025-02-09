@@ -40,8 +40,8 @@
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
 "F3s-qR-qeE.title" = "Qualität:";
 
-/* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices."; ObjectID = "fue-2d-Bjn"; */
-"fue-2d-Bjn.ibShadowedToolTip" = "Videoencodervoreinstellungen. Stellt die Encodiereinstellungen so ein, dass Kompressionseffizienz und Geschwindigkeit im Gleichgewicht sind. Voreinstellungen mit langsamer Geschwindigkeit sind evtl. nicht kompatibel mit manchen Geräten.";
+/* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.\n\nAdjust the slider to the right to increase compression efficiency at the expense of encoding speed, or to the left to increase encoding speed at the expense of compression efficiency."; ObjectID = "fue-2d-Bjn"; */
+"fue-2d-Bjn.ibShadowedToolTip" = "Voreinstellung für Video-Encoder. Passt die Encodereinstellungen an, um ein Gleichgewicht zwischen Komprimierungseffizienz und Kodierungsgeschwindigkeit herzustellen. Langsamere Encoder-Voreinstellungen verwenden möglicherweise Einstellungen, die mit bestimmten Geräten weniger kompatibel sind.\n\nVerschiebe den Schieberegler nach rechts, um die Komprimierungseffizienz auf Kosten der Kodierungsgeschwindigkeit zu erhöhen, oder nach links, um die Kodierungsgeschwindigkeit auf Kosten der Komprimierungseffizienz zu erhöhen.";
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "Abstimmung:";

@@ -380,16 +380,18 @@ namespace HandBrakeWPF.ViewModels
                 List<TimeSpan> diffs = new List<TimeSpan>();
                 foreach (KeyValuePair<int, Tuple<string, TimeSpan>> import in importedChapters)
                 {
-                    ChapterMarker sourceMarker = this.Chapters[import.Key - 1];
-                    TimeSpan source = sourceMarker.Duration;
+                    int key = import.Key - 1;
 
-                    TimeSpan diff = source - import.Value.Item2;
-                    diffs.Add(diff);
+                    if (key <= (this.Chapters.Count -1))
+                    {
+                        ChapterMarker sourceMarker = this.Chapters[key];
+                        TimeSpan source = sourceMarker.Duration;
 
+                        TimeSpan diff = source - import.Value.Item2;
+                        diffs.Add(diff);
+                    }
                 }
 
-
-               // var diffs = importedChapters.Zip(this.Chapters, (import, source) => source.Duration - import.Value.Item2);
                 if (diffs.Count(diff => Math.Abs(diff.TotalSeconds) > 15) > 2)
                 {
                     if (this.errorService.ShowMessageBox(
