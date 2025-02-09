@@ -25,7 +25,7 @@ namespace HandBrakeWPF.Model.Subtitles
             }
 
             this.UseSourceOrder = rule.UseSourceOrder;
-            this.AutoloadExternal = rule.AutoloadExternal;
+            this.SubtitleImportMode = rule.SubtitleImportMode;
             this.PassthruTrackNames = rule.PassthruTrackNames;
             this.Tracks = new BindingList<SubtitleBehaviourTrack>();
             foreach (var track in rule.Tracks) 
@@ -38,7 +38,7 @@ namespace HandBrakeWPF.Model.Subtitles
 
         public bool UseSourceOrder { get; set; }
 
-        public bool AutoloadExternal { get; set; }
+        public SubtitleImportMode SubtitleImportMode { get; set; }
 
         public bool PassthruTrackNames { get; set; }
 
@@ -53,7 +53,7 @@ namespace HandBrakeWPF.Model.Subtitles
             }
             
             return this.UseSourceOrder == other.UseSourceOrder && 
-                   this.AutoloadExternal == other.AutoloadExternal && 
+                   this.SubtitleImportMode == other.SubtitleImportMode && 
                    this.PassthruTrackNames == other.PassthruTrackNames;
         }
 
