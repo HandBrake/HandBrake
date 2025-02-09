@@ -443,6 +443,10 @@ Aktibitateen erregistroak informazio gehiago izan dezake.</value>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
     <value>Eguneratze berri bat eskuragarri! Mesedez, begiratu webgunea bertsioari buruzko informazioa ikusteko.</value>
   </data>
+  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
+    <value>Zure sistemak HandBrake-ren 64 biteko bertsioa onartzen du! Honek errendimendu hobekuntzak eskaintzen ditu 32 biteko bertsioaren aldean.
+Mesedez, jo ezazu gure webgunera bertsioei buruz informatzeko.</value>
+  </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>Une honetan ez dago eguneratze berririk.</value>
   </data>
@@ -2291,9 +2295,6 @@ Mesedez, aukeratu beste aurrezarpen bat.</value>
   <data name="QueueView_Stop" xml:space="preserve">
     <value>Gelditu</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
-  </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Sartu duzun kategoria-izena dagoeneko badago. Mesedez, aukeratu beste izen bat.</value>
   </data>
@@ -2911,32 +2912,14 @@ Aldibereko kode anitz onartzeko, aktibatu "Prozesuaren isolamendua" Tresnak menu
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
   </data>
-  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
-    <value>Kapituluak</value>
-  </data>
-  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
-    <value>Segunduak</value>
-  </data>
-  <data name="DefaultRangeMode_Frames" xml:space="preserve">
-    <value>Fotogramak</value>
-  </data>
-  <data name="Options_RangeModeSelection" xml:space="preserve">
-    <value>Default Range Mode for Titles:</value>
-  </data>
-  <data name="WhenDone_CustomAction" xml:space="preserve">
-    <value>Custom Action</value>
-  </data>
-  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
-    <value>'Custom Action' Configuration:</value>
-  </data>
-  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
-    <value>Open Autoname Preferences</value>
-  </data>
-  <data name="Options_RunAction" xml:space="preserve">
-    <value>Run Script / Executable: </value>
-  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="OptionsViewModel_PortableMode" type="System.Resources.ResXNullRef, System.Windows.Forms">
+  <data name="SubtitleImportMode_AllBefore" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="SubtitleImportMode_AllAfter" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="SubtitleImportMode_None" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
 </root>
