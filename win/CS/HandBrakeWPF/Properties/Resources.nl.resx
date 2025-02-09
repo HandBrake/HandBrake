@@ -446,10 +446,6 @@ Het activiteitenlogboek kan nadere informatie bevatten.</value>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
     <value>Er is een nieuwe update beschikbaar! Bezoek de website voor release-opmerkingen.</value>
   </data>
-  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>Dit systeem ondersteunt de 64bit-versie van HandBrake! Deze biedt prestatie- en stabiliteitsverbeteringen ten opzichte van deze 32bit-versie.
-Bezoek de website voor release-opmerkingen.</value>
-  </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>Er zijn op dit moment geen nieuwe updates.</value>
   </data>
@@ -2298,6 +2294,9 @@ Kies een andere voorinstelling.</value>
   <data name="QueueView_Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>De ingevoerde categorienaam bestaat al. Kies een andere naam.</value>
   </data>
@@ -2915,14 +2914,32 @@ Om meerdere gelijktijdige coderingen toe te staan dien je "Procesisolatie" in te
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>Maximale duur van DVD- en Blu-ray-titels in seconden. Langere titels worden overgeslagen:</value>
   </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>Hoofdstukken</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>Seconden</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>Frames</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Standaardbereikmodus voor titels:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Aangepaste actie</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>Configuratie van 'aangepaste actie':</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Voorkeuren automatische naamgeving openen</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Run Script / Executable: </value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="SubtitleImportMode_AllBefore" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="SubtitleImportMode_AllAfter" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="SubtitleImportMode_None" type="System.Resources.ResXNullRef, System.Windows.Forms">
+  <data name="OptionsViewModel_PortableMode" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
 </root>
