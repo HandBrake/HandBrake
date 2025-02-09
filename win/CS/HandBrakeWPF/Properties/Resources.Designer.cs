@@ -7506,15 +7506,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Foreign Audio Scan.
         /// </summary>
         public static string Subtitle_ForeignAudioScan {
@@ -7596,15 +7587,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Automatically import SRT/SSA subitlte files..
-        /// </summary>
-        public static string SubtitleDefaultView_AutoAddExternal {
-            get {
-                return ResourceManager.GetString("SubtitleDefaultView_AutoAddExternal", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Setup rules to automatically add subtitle tracks.
         ///Rules are applied in priority order and will attempt to match where possible. Subtitle limitations apply..
         /// </summary>
@@ -7633,11 +7615,47 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import SRT/SSA subtitle files: .
+        /// </summary>
+        public static string SubtitleDefaultView_SubtitleImportMode {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_SubtitleImportMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Automatic Subtitle Selections.
         /// </summary>
         public static string SubtitleDefaultView_Title {
             get {
                 return ResourceManager.GetString("SubtitleDefaultView_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After Rules.
+        /// </summary>
+        public static string SubtitleImportMode_AllAfter {
+            get {
+                return ResourceManager.GetString("SubtitleImportMode_AllAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Before Rules.
+        /// </summary>
+        public static string SubtitleImportMode_AllBefore {
+            get {
+                return ResourceManager.GetString("SubtitleImportMode_AllBefore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string SubtitleImportMode_None {
+            get {
+                return ResourceManager.GetString("SubtitleImportMode_None", resourceCulture);
             }
         }
         

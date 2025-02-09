@@ -280,7 +280,7 @@ namespace HandBrake.Interop.Interop.Json.Presets
 
         public bool SubtitleUseSourceOrder { get; set; }
 
-        public bool SubtitleAutoloadExternal { get; set; }
+        public int SubtitleImportMode { get; set; }
 
         public bool SubtitlePassthruTrackNames { get; set; }
 

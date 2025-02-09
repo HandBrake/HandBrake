@@ -91,6 +91,8 @@ namespace HandBrakeWPF.ViewModels
 
         public BindingList<ForcedModes> ForcedModes => new BindingList<ForcedModes>(EnumHelper<ForcedModes>.GetEnumList().ToList());
 
+        public BindingList<SubtitleImportMode> SubtitleImportModes => new BindingList<SubtitleImportMode>(EnumHelper<SubtitleImportMode>.GetEnumList().ToList());
+
         public SimpleRelayCommand<SubtitleBehaviourTrack> RemoveTrackCommand { get; }
 
         /// <summary>

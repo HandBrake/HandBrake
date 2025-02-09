@@ -418,7 +418,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             if (importedPreset.SubtitleBehaviours != null)
             {
                 preset.SubtitleTrackBehaviours = new SubtitleBehaviourRule();
-                preset.SubtitleTrackBehaviours.AutoloadExternal = importedPreset.SubtitleAutoloadExternal;
+                preset.SubtitleTrackBehaviours.SubtitleImportMode = (SubtitleImportMode)importedPreset.SubtitleImportMode;
                 preset.SubtitleTrackBehaviours.UseSourceOrder = importedPreset.SubtitleUseSourceOrder;
                 preset.SubtitleTrackBehaviours.PassthruTrackNames = importedPreset.SubtitlePassthruTrackNames;
                 preset.SubtitleTrackBehaviours.Tracks = new BindingList<SubtitleBehaviourTrack>();
@@ -546,7 +546,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             if (export.SubtitleTrackBehaviours != null)
             {
                 preset.SubtitleUseSourceOrder = export.SubtitleTrackBehaviours.UseSourceOrder;
-                preset.SubtitleAutoloadExternal = export.SubtitleTrackBehaviours.AutoloadExternal;
+                preset.SubtitleImportMode = (int)export.SubtitleTrackBehaviours.SubtitleImportMode;
                 preset.SubtitlePassthruTrackNames = export.SubtitleTrackBehaviours.PassthruTrackNames;
                 preset.SubtitleBehaviours = new List<SubtitleList>();
                 foreach (var item in export.SubtitleTrackBehaviours.Tracks)

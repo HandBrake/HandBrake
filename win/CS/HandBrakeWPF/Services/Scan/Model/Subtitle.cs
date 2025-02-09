@@ -83,6 +83,8 @@ namespace HandBrakeWPF.Services.Scan.Model
             }
         }
 
+        public string ExternalSubtitleFilePath { get; set; }
+
         public bool CanPassthru(OutputFormat format)
         {
             return HandBrakeSubtitleHelpers.CheckCanPassthruSubtitle(SourceId, EnumHelper<OutputFormat>.GetShortName(format));
