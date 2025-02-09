@@ -33,6 +33,13 @@ namespace HandBrakeWPF.Services.Subtitles
         {
             List<SubtitleTrack> outputTracks = new List<SubtitleTrack>();
 
+            // Import SSA/SRT subtitles *before* processing source tracks.
+            if (rules.SubtitleImportMode == SubtitleImportMode.ImportAllBefore)
+            {
+                List<SubtitleTrack> tracks = this.subtitleFileHandler.FindLocalFiles(sourcePath, true);
+                outputTracks.AddRange(tracks);
+            }
+
             // First, get the set of tracks the rules allow for:
             List<Subtitle> soruceSubtitles = this.GetSelectedLanguagesTracks(rules, sourceTracks);
 
@@ -65,7 +72,8 @@ namespace HandBrakeWPF.Services.Subtitles
                 outputTracks = orderedTrackList;
             }
 
-            if (rules.AutoloadExternal)
+            // Import SSA/SRT subtitles *After* processing source tracks.
+            if (rules.SubtitleImportMode == SubtitleImportMode.ImportAllAfter)
             {
                 List<SubtitleTrack> tracks = this.subtitleFileHandler.FindLocalFiles(sourcePath, true);
                 outputTracks.AddRange(tracks);

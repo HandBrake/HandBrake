@@ -2292,9 +2292,6 @@ You can drag/drop or enter the text above.</value>
   <data name="QueueView_Stop" xml:space="preserve">
     <value>Прекрати</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
-  </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Името за категория, което въведохте, вече съществува. Моля, изберете различно име.</value>
   </data>
@@ -2936,8 +2933,16 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="Options_RunAction" xml:space="preserve">
     <value>Run Script / Executable: </value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OptionsViewModel_PortableMode" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="SubtitleImportMode_AllBefore" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="SubtitleImportMode_AllAfter" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="SubtitleImportMode_None" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
 </root>

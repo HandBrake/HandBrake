@@ -26,6 +26,7 @@
         <subtitles:BurnPassthruModesConverter x:Key="burnPassthruModesConverter" />
         <subtitles:SubtitleBehaviourConverter x:Key="trackSelectionConverter" />
         <converters:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+        <converters:EnumComboConverter x:Key="enumComboConverter" />
 
         <Style x:Key="LongToolTip" TargetType="TextBlock">
             <Setter Property="Width" Value="400" />
@@ -204,7 +205,11 @@
 
         <!-- Row 2 -->
         <StackPanel Grid.Row="3" Margin="10,0,0,0">
-            <CheckBox Content="{x:Static Properties:Resources.SubtitleDefaultView_AutoAddExternal}" IsChecked="{Binding SubtitleBehaviourRules.AutoloadExternal}" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Static Properties:Resources.SubtitleDefaultView_SubtitleImportMode}" />
+                <ComboBox ItemsSource="{Binding SubtitleImportModes, Converter={StaticResource enumComboConverter}}" SelectedItem="{Binding SubtitleBehaviourRules.SubtitleImportMode, Converter={StaticResource enumComboConverter}}" MinWidth="200" />
+            </StackPanel>
+
             <CheckBox Content="{x:Static Properties:Resources.SubtitleDefaultView_PassthruTrackNames}" IsChecked="{Binding SubtitleBehaviourRules.PassthruTrackNames}"/>
             <CheckBox Content="{x:Static Properties:Resources.SubtitleDefaultView_SourceOrder}" IsChecked="{Binding SubtitleBehaviourRules.UseSourceOrder}" />
         </StackPanel>
