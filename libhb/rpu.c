@@ -18,6 +18,9 @@ struct hb_filter_private_s
 {
     int        mode;
 
+    int        angle;
+    int        hflip;
+
     double     scale_factor_x;
     double     scale_factor_y;
 
@@ -48,7 +51,9 @@ static int rpu_work(hb_filter_object_t *filter,
 static void rpu_close(hb_filter_object_t *filter);
 
 static const char rpu_template[] =
-    "mode=^"HB_INT_REG"$:scale-factor-x=^"HB_FLOAT_REG"$:scale-factor-y=^"HB_FLOAT_REG"$:"
+    "mode=^"HB_INT_REG"$:"
+    "angle=^(0|90|180|270)$:hflip=^"HB_BOOL_REG"$:"
+    "scale-factor-x=^"HB_FLOAT_REG"$:scale-factor-y=^"HB_FLOAT_REG"$:"
     "crop-top=^"HB_INT_REG"$:crop-bottom=^"HB_INT_REG"$:"
     "crop-left=^"HB_INT_REG"$:crop-right=^"HB_INT_REG"$:"
     "pad-top=^"HB_INT_REG"$:pad-bottom=^"HB_INT_REG"$:"
@@ -81,6 +86,7 @@ static int rpu_init(hb_filter_object_t *filter,
     pv->input = *init;
 
     int mode = RPU_MODE_UPDATE_ACTIVE_AREA | RPU_MODE_EMIT_UNSPECT_62_NAL;
+    int angle = 0, hflip = 0;
     double scale_factor_x = 1, scale_factor_y = 1;
     int crop_top = 0, crop_bottom = 0, crop_left = 0, crop_right = 0;
     int pad_top = 0, pad_bottom = 0, pad_left = 0, pad_right = 0;
@@ -89,6 +95,9 @@ static int rpu_init(hb_filter_object_t *filter,
     {
         hb_dict_t *dict = filter->settings;
         hb_dict_extract_int(&mode, dict, "mode");
+
+        hb_dict_extract_int(&angle, dict, "angle");
+        hb_dict_extract_int(&hflip, dict, "hflip");
 
         hb_dict_extract_double(&scale_factor_x, dict, "scale-factor-x");
         hb_dict_extract_double(&scale_factor_y, dict, "scale-factor-y");
@@ -105,6 +114,9 @@ static int rpu_init(hb_filter_object_t *filter,
     }
 
     pv->mode = mode;
+
+    pv->angle = angle;
+    pv->hflip = hflip;
 
     pv->scale_factor_x = scale_factor_x;
     pv->scale_factor_y = scale_factor_y;
@@ -244,9 +256,7 @@ static int rpu_work(hb_filter_object_t *filter,
 
             if (pv->mode & RPU_MODE_UPDATE_ACTIVE_AREA)
             {
-                uint16_t left_offset = 0, right_offset = 0;
-                uint16_t top_offset  = 0, bottom_offset = 0;
-
+                hb_geometry_crop_t geo = {0};
                 const DoviVdrDmData *vdr_dm_data = dovi_rpu_get_vdr_dm_data(rpu_in);
 
                 if (vdr_dm_data)
@@ -254,36 +264,41 @@ static int rpu_work(hb_filter_object_t *filter,
                     const DoviExtMetadataBlockLevel5 *level5 = vdr_dm_data->dm_data.level5;
                     if (level5)
                     {
-                        left_offset   = level5->active_area_left_offset;
-                        right_offset  = level5->active_area_right_offset;
-                        top_offset    = level5->active_area_top_offset;
-                        bottom_offset = level5->active_area_bottom_offset;
+                        geo.crop[0] = level5->active_area_top_offset;
+                        geo.crop[1] = level5->active_area_bottom_offset;
+                        geo.crop[2] = level5->active_area_left_offset;
+                        geo.crop[3] = level5->active_area_right_offset;
                     }
                 }
 
+                if (pv->angle || pv->hflip)
+                {
+                    hb_rotate_geometry(&geo, &geo, pv->angle, pv->hflip);
+                }
+
                 // First subtract the crop values
-                left_offset   -= left_offset   > pv->crop_left   ? pv->crop_left   : left_offset;
-                right_offset  -= right_offset  > pv->crop_right  ? pv->crop_right  : right_offset;
-                top_offset    -= top_offset    > pv->crop_top    ? pv->crop_right  : top_offset;
-                bottom_offset -= bottom_offset > pv->crop_bottom ? pv->crop_bottom : bottom_offset;
+                geo.crop[0] -= geo.crop[0] > pv->crop_top    ? pv->crop_top    : geo.crop[0];
+                geo.crop[1] -= geo.crop[1] > pv->crop_bottom ? pv->crop_bottom : geo.crop[1];
+                geo.crop[2] -= geo.crop[2] > pv->crop_left   ? pv->crop_left   : geo.crop[2];
+                geo.crop[3] -= geo.crop[3] > pv->crop_right  ? pv->crop_right  : geo.crop[3];
 
                 // Then rescale
-                left_offset   = (double)left_offset   / pv->scale_factor_x;
-                right_offset  = (double)right_offset  / pv->scale_factor_x;
-                top_offset    = (double)top_offset    / pv->scale_factor_y;
-                bottom_offset = (double)bottom_offset / pv->scale_factor_y;
+                geo.crop[0] = (double)geo.crop[0] / pv->scale_factor_y;
+                geo.crop[1] = (double)geo.crop[1] / pv->scale_factor_y;
+                geo.crop[2] = (double)geo.crop[2] / pv->scale_factor_x;
+                geo.crop[3] = (double)geo.crop[3] / pv->scale_factor_x;
 
                 // At last add pad values
-                left_offset   += pv->pad_left;
-                right_offset  += pv->pad_right;
-                top_offset    += pv->pad_top;
-                bottom_offset += pv->pad_bottom;
+                geo.crop[0] += pv->pad_top;
+                geo.crop[1] += pv->pad_bottom;
+                geo.crop[2] += pv->pad_left;
+                geo.crop[3] += pv->pad_right;
 
                 dovi_rpu_set_active_area_offsets(rpu_in,
-                                                 left_offset,
-                                                 right_offset,
-                                                 top_offset,
-                                                 bottom_offset);
+                                                 geo.crop[2],
+                                                 geo.crop[3],
+                                                 geo.crop[0],
+                                                 geo.crop[1]);
 
                 if (vdr_dm_data)
                 {

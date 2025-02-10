@@ -1611,16 +1611,36 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
             }
         }
 
+        int angle = 0, hflip = 0;
         double scale_factor_x = 1, scale_factor_y = 1;
         int crop_top = 0, crop_bottom = 0, crop_left = 0, crop_right = 0;
         int pad_top = 0, pad_bottom = 0, pad_left = 0, pad_right = 0;
 
-        hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+        hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_ROTATE);
         if (filter != NULL)
         {
             hb_dict_t *settings = filter->settings;
             if (settings != NULL)
             {
+                angle = hb_dict_get_int(settings, "angle");
+                hflip = hb_dict_get_int(settings, "hflip");
+            }
+        }
+
+        filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+        if (filter != NULL)
+        {
+            hb_dict_t *settings = filter->settings;
+            if (settings != NULL)
+            {
+                hb_geometry_crop_t title_geo = {0};
+                title_geo.geometry = job->title->geometry;
+
+                if (angle || hflip)
+                {
+                    hb_rotate_geometry(&title_geo, &title_geo, angle, hflip);
+                }
+
                 int width  = hb_dict_get_int(settings, "width");
                 int height = hb_dict_get_int(settings, "height");
                 crop_top    = hb_dict_get_int(settings, "crop-top");
@@ -1628,8 +1648,8 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
                 crop_left   = hb_dict_get_int(settings, "crop-left");
                 crop_right  = hb_dict_get_int(settings, "crop-right");
 
-                scale_factor_x = (float)(job->title->geometry.width - crop_right - crop_left) / width;
-                scale_factor_y = (float)(job->title->geometry.height - crop_top - crop_bottom) / height;
+                scale_factor_x = (float)(title_geo.geometry.width - crop_right - crop_left) / width;
+                scale_factor_y = (float)(title_geo.geometry.height - crop_top - crop_bottom) / height;
             }
         }
 
@@ -1647,10 +1667,12 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         }
 
         filter = hb_filter_init(HB_FILTER_RPU);
-        char *settings = hb_strdup_printf("mode=%d:scale-factor-x=%f:scale-factor-y=%f:"
+        char *settings = hb_strdup_printf("mode=%d:angle=%d:hflip=%d:"
+                                          "scale-factor-x=%f:scale-factor-y=%f:"
                                           "crop-top=%d:crop-bottom=%d:crop-left=%d:crop-right=%d:"
                                           "pad-top=%d:pad-bottom=%d:pad-left=%d:pad-right=%d",
-                                          mode, scale_factor_x, scale_factor_y,
+                                          mode, angle, hflip,
+                                          scale_factor_x, scale_factor_y,
                                           crop_top, crop_bottom, crop_left, crop_right,
                                           pad_top, pad_bottom, pad_left, pad_right);
         hb_add_filter(job, filter, settings);
