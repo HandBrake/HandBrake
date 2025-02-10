@@ -264,7 +264,7 @@ static int rpu_work(hb_filter_object_t *filter,
                 // First subtract the crop values
                 left_offset   -= left_offset   > pv->crop_left   ? pv->crop_left   : left_offset;
                 right_offset  -= right_offset  > pv->crop_right  ? pv->crop_right  : right_offset;
-                top_offset    -= top_offset    > pv->crop_top    ? pv->crop_right  : top_offset;
+                top_offset    -= top_offset    > pv->crop_top    ? pv->crop_top    : top_offset;
                 bottom_offset -= bottom_offset > pv->crop_bottom ? pv->crop_bottom : bottom_offset;
 
                 // Then rescale
