@@ -5986,10 +5986,23 @@ static int ffmpeg_decmetadata( AVDictionary *m, hb_title_t *title )
         }
     }
 
-    if (av_dict_get(m, "com.android.version", NULL, 0) &&
-        hb_dict_get(title->metadata->dict, "ReleaseDate") == NULL)
+    // Android creation time to release date
+    if (hb_dict_get(title->metadata->dict, "ReleaseDate") == NULL)
     {
-        ffmpeg_decdate("ReleaseDate", "creation_time", m, title);
+        if (av_dict_get(m, "com.android.version", NULL, 0) ||
+            av_dict_get(m, "firmware", NULL, 0))
+        {
+            ffmpeg_decdate("ReleaseDate", "creation_time", m, title);
+        }
+    }
+
+    // MXF modification date to creation time
+    if (hb_dict_get(title->metadata->dict, "CreationTime") == NULL)
+    {
+        if (av_dict_get(m, "modification_date", NULL, 0))
+        {
+            ffmpeg_decdate("CreationTime", "modification_date", m, title);
+        }
     }
 
     return result;
