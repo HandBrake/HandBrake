@@ -14,8 +14,8 @@
 struct hb_filter_private_s
 {
     VTPixelTransferSessionRef session;
-    CFDictionaryRef           source_clean_aperture;
     CVPixelBufferPoolRef      pool;
+    CFDictionaryRef           attachments;
 
     hb_filter_init_t          input;
     hb_filter_init_t          output;
@@ -98,12 +98,24 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
         crop_width_num, crop_height_num, crop_offset_left_num, crop_offset_top_num
     };
 
-    pv->source_clean_aperture = CFDictionaryCreate(kCFAllocatorDefault,
-                                                   clean_aperture_keys,
-                                                   source_clean_aperture_values,
-                                                   4,
-                                                   &kCFTypeDictionaryKeyCallBacks,
-                                                   &kCFTypeDictionaryValueCallBacks);
+    CFDictionaryRef source_clean_aperture = CFDictionaryCreate(kCFAllocatorDefault,
+                                                               clean_aperture_keys,
+                                                               source_clean_aperture_values,
+                                                               4,
+                                                               &kCFTypeDictionaryKeyCallBacks,
+                                                               &kCFTypeDictionaryValueCallBacks);
+
+    CFMutableDictionaryRef attachments = CFDictionaryCreateMutable(NULL, 0,
+                                                                   &kCFTypeDictionaryKeyCallBacks,
+                                                                   &kCFTypeDictionaryValueCallBacks);
+
+    CFDictionarySetValue(attachments, kCVImageBufferCleanApertureKey, source_clean_aperture);
+    CFRelease(source_clean_aperture);
+
+    hb_cv_add_color_tag(attachments,
+                        init->color_prim, init->color_transfer,
+                        init->color_matrix, init->chroma_location);
+    pv->attachments = attachments;
 
     CFRelease(crop_width_num);
     CFRelease(crop_height_num);
@@ -216,13 +228,13 @@ static void crop_scale_vt_close(hb_filter_object_t *filter)
         VTPixelTransferSessionInvalidate(pv->session);
         CFRelease(pv->session);
     }
-    if (pv->source_clean_aperture)
-    {
-        CFRelease(pv->source_clean_aperture);
-    }
     if (pv->pool)
     {
         CVPixelBufferPoolRelease(pv->pool);
+    }
+    if (pv->attachments)
+    {
+        CFRelease(pv->attachments);
     }
 
     free(pv);
@@ -252,11 +264,7 @@ static int crop_scale_vt_work(hb_filter_object_t *filter,
         hb_log("cropscale_vt: extract_buf failed");
         return HB_FILTER_FAILED;
     }
-    hb_cv_add_color_tag(source_buf,
-                        pv->input.color_prim, pv->input.color_transfer,
-                        pv->input.color_matrix, pv->input.chroma_location);
-    CVBufferSetAttachment(source_buf, kCVImageBufferCleanApertureKey,
-                          pv->source_clean_aperture, kCVAttachmentMode_ShouldPropagate);
+    hb_cv_set_attachments(source_buf, pv->attachments);
 
     CVPixelBufferRef dest_buf = NULL;
     err = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pv->pool, &dest_buf);

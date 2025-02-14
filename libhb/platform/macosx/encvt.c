@@ -133,6 +133,8 @@ struct hb_work_private_s
         h264;
     }
     settings;
+
+    CFDictionaryRef attachments;
 };
 
 void hb_vt_param_default(struct hb_vt_param *param)
@@ -381,6 +383,17 @@ static OSType hb_vt_encoder_pixel_format_xlat(int vcodec, int profile, int color
 
     hb_log("encvt_Init: unknown codec");
     return hb_cv_get_pixel_format(AV_PIX_FMT_NV12, color_range);
+}
+
+static CFDictionaryRef hb_vt_attachments_xlat(hb_job_t *job)
+{
+    CFMutableDictionaryRef attachments = CFDictionaryCreateMutable(NULL, 0,
+                                                                   &kCFTypeDictionaryKeyCallBacks,
+                                                                   &kCFTypeDictionaryValueCallBacks);
+    hb_cv_add_color_tag(attachments,
+                        job->color_prim, job->color_transfer,
+                        job->color_matrix, job->chroma_location);
+    return attachments;
 }
 
 static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
@@ -791,8 +804,7 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
 
     if (*pix_buf)
     {
-        hb_cv_add_color_tag(*pix_buf, pv->job->color_prim, pv->job->color_transfer,
-                            pv->job->color_matrix, pv->job->chroma_location);
+        hb_cv_set_attachments(*pix_buf, pv->attachments);
     }
 
     return err;
@@ -1693,6 +1705,8 @@ int encvt_init(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
+    pv->attachments = hb_vt_attachments_xlat(pv->job);
+
     return 0;
 }
 
@@ -1759,6 +1773,10 @@ void encvt_close(hb_work_object_t * w)
     if (pv->settings.color.ambientViewingEnviroment)
     {
         CFRelease(pv->settings.color.ambientViewingEnviroment);
+    }
+    if (pv->attachments)
+    {
+        CFRelease(pv->attachments);
     }
 
     free(pv);

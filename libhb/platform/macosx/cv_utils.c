@@ -268,7 +268,7 @@ CFStringRef hb_cv_chroma_loc_xlat(int chroma_location)
     }
 }
 
-void hb_cv_add_color_tag(CVPixelBufferRef pix_buf,
+void hb_cv_add_color_tag(CFMutableDictionaryRef attachments,
                          int color_prim, int color_transfer,
                          int color_matrix, int chroma_location)
 {
@@ -278,30 +278,34 @@ void hb_cv_add_color_tag(CVPixelBufferRef pix_buf,
     CFStringRef matrix     = hb_cv_colr_mat_xlat(color_matrix);
     CFStringRef chroma_loc = hb_cv_chroma_loc_xlat(chroma_location);
 
-    CVBufferRemoveAllAttachments(pix_buf);
-
     if (prim)
     {
-        CVBufferSetAttachment(pix_buf, kCVImageBufferColorPrimariesKey, prim, kCVAttachmentMode_ShouldPropagate);
+        CFDictionarySetValue(attachments, kCVImageBufferColorPrimariesKey, prim);
     }
     if (transfer)
     {
-        CVBufferSetAttachment(pix_buf, kCVImageBufferTransferFunctionKey, transfer, kCVAttachmentMode_ShouldPropagate);
+        CFDictionarySetValue(attachments, kCVImageBufferTransferFunctionKey, transfer);
     }
     if (gamma)
     {
-        CVBufferSetAttachment(pix_buf, kCVImageBufferGammaLevelKey, gamma, kCVAttachmentMode_ShouldPropagate);
+        CFDictionarySetValue(attachments, kCVImageBufferGammaLevelKey, gamma);
         CFRelease(gamma);
     }
     if (matrix)
     {
-        CVBufferSetAttachment(pix_buf, kCVImageBufferYCbCrMatrixKey, matrix, kCVAttachmentMode_ShouldPropagate);
+        CFDictionarySetValue(attachments, kCVImageBufferYCbCrMatrixKey, matrix);
     }
     if (chroma_loc)
     {
-        CVBufferSetAttachment(pix_buf, kCVImageBufferChromaLocationTopFieldKey, chroma_loc, kCVAttachmentMode_ShouldPropagate);
-        CVBufferSetAttachment(pix_buf, kCVImageBufferChromaLocationBottomFieldKey, chroma_loc, kCVAttachmentMode_ShouldPropagate);
+        CFDictionarySetValue(attachments, kCVImageBufferChromaLocationTopFieldKey, chroma_loc);
+        CFDictionarySetValue(attachments, kCVImageBufferChromaLocationBottomFieldKey, chroma_loc);
     }
+}
+
+void hb_cv_set_attachments(CVPixelBufferRef pix_buf, CFDictionaryRef attachments)
+{
+    CVBufferRemoveAllAttachments(pix_buf);
+    CVBufferSetAttachments(pix_buf, attachments, kCVAttachmentMode_ShouldPropagate);
 }
 
 int hb_cv_match_rgb_to_colorspace(int rgb,
