@@ -6138,29 +6138,34 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 chapter->seconds = ( seconds % 60 );
 
                 tag = av_dict_get( m->metadata, "title", NULL, 0 );
+                int valid = tag && tag->value && tag->value[0];
 
-                // Detect if the chapter title is a valid UTF-8 string
-                char *p, *q;
-                size_t in_size, out_size, retval;
-
-                p = tag->value;
-                q = utf8_buf;
-
-                in_size = strlen(tag->value);
-                out_size = in_size;
-
-                if (utf8_buf_size < in_size)
+                if (valid)
                 {
-                    utf8_buf = realloc(utf8_buf, in_size);
-                }
+                    // Detect if the chapter title is a valid UTF-8 string
+                    char *p, *q;
+                    size_t in_size, out_size, retval;
 
-                retval = iconv(iconv_context, &p, &in_size, &q, &out_size);
-                int valid = retval != (size_t) -1;
+                    in_size = strlen(tag->value);
+                    out_size = in_size;
+
+                    if (utf8_buf_size < in_size)
+                    {
+                        utf8_buf = realloc(utf8_buf, in_size + 1);
+                        utf8_buf_size = in_size + 1;
+                    }
+
+                    p = tag->value;
+                    q = utf8_buf;
+
+                    retval = iconv(iconv_context, &p, &in_size, &q, &out_size);
+                    valid = retval != (size_t) -1;
+                }
 
                 /* Ignore generic chapter names set by MakeMKV
                  * ("Chapter 00" etc.).
                  * Our default chapter names are better. */
-                if( valid && tag && tag->value && tag->value[0] &&
+                if (valid &&
                     ( strncmp( "Chapter ", tag->value, 8 ) ||
                       strlen( tag->value ) > 11 ) )
                 {
