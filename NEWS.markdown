@@ -11,6 +11,15 @@ Download available from Microsoft:
 - [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-arm64.exe)
 
 
+## HandBrake 1.9.2
+
+### All platforms
+
+#### General
+
+- Fixed a crash that could happen when a source contains chapters with no titles (#6565)
+
+
 ## HandBrake 1.9.1
 
 ### All platforms
