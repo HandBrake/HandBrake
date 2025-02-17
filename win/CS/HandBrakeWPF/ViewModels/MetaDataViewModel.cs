@@ -11,7 +11,9 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.Windows.Forms;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -39,9 +41,12 @@ namespace HandBrakeWPF.ViewModels
         public MetaDataViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
             this.task = new EncodeTask();
+            this.RemoveCommand = new SimpleRelayCommand<MetaDataValue>(this.Delete);
         }
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged { add { } remove { } }
+
+        public SimpleRelayCommand<MetaDataValue> RemoveCommand { get; set; }
 
         public ObservableCollection<MetaDataValue> SourceMetadata
         {
@@ -55,6 +60,22 @@ namespace HandBrakeWPF.ViewModels
 
                 this.task.MetaData = value;
                 this.OnPropertyChanged();
+            }
+        }
+
+        public void Add()
+        {
+            MetaDataValue value = new MetaDataValue("", "");
+            value.IsNew = true;
+
+            this.SourceMetadata.Add(value);
+        }
+
+        public void Delete(MetaDataValue row)
+        {
+            if (SourceMetadata.Contains(row) && row.IsNew)
+            {
+                this.SourceMetadata.Remove(row);
             }
         }
 

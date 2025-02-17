@@ -3154,6 +3154,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Row.
+        /// </summary>
+        public static string MetaData_Add {
+            get {
+                return ResourceManager.GetString("MetaData_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actors:.
         /// </summary>
         public static string MetadataView_Actors {

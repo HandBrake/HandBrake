@@ -2941,4 +2941,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="OptionsViewModel_PortableMode" xml:space="preserve">
     <value>HandBrake is currently configured in portable mode. To update a portable install, please download the latest update from the website.</value>
   </data>
+  <data name="MetaData_Add" xml:space="preserve">
+    <value>Add Row</value>
+  </data>
 </root>

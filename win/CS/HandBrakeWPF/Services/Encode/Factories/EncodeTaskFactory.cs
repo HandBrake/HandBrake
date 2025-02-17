@@ -624,7 +624,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 Dictionary<string, string> metadata = new Dictionary<string, string>();
                 foreach (var item in job.MetaData)
                 {
-                    metadata.Add(item.Annotation, item.Value);
+                    if (item.Enabled)
+                    {
+                        metadata.Add(item.Annotation, item.Value);
+                    }
                 }
 
                 return metadata;
