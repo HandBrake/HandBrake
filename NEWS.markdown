@@ -19,7 +19,10 @@ Download available from Microsoft:
 
 - Allowed muxing NVENC AV1 and VCN AV1 WebM container
 - Fixed a crash that could happen when a source contains chapters with no titles (#6565)
+  
+### Windows
 
+- Fixed and issue where the audio track name would not reset on source track change. (#6642)
 
 ## HandBrake 1.9.1
 
