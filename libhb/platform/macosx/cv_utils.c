@@ -112,25 +112,34 @@ int hb_cv_get_io_surface_usage_count(const hb_buffer_t *buf)
 
 CVPixelBufferPoolRef hb_cv_create_pixel_buffer_pool(int width, int height, enum AVPixelFormat pix_fmt, enum AVColorRange color_range)
 {
-    // CVPixelBuffer pool
-    // Set the Metal compatibility key
-    // to keep the buffer on the GPU memory
     OSType cv_pix_fmt = hb_cv_get_pixel_format(pix_fmt, color_range);
     CFNumberRef pix_fmt_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &cv_pix_fmt);
     CFNumberRef width_num   = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &width);
     CFNumberRef height_num  = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &height);
 
-    const void *attrs_keys[4] =
+    // Align the width and height to 16 to avoid VideoToolbox
+    // inserting an additional VTPixelTransferSession
+    int extend_width  = MULTIPLE_MOD_UP(width,  16) - width;
+    int extend_height = MULTIPLE_MOD_UP(height, 16) - height;
+
+    CFNumberRef extend_width_num  = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &extend_width);
+    CFNumberRef extend_height_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &extend_height);
+
+    const void *attrs_keys[6] =
     {
         kCVPixelBufferWidthKey,
         kCVPixelBufferHeightKey,
+        kCVPixelBufferExtendedPixelsRightKey,
+        kCVPixelBufferExtendedPixelsBottomKey,
         kCVPixelBufferPixelFormatTypeKey,
         kCVPixelBufferMetalCompatibilityKey
     };
-    const void *attrs_values[4] =
+    const void *attrs_values[6] =
     {
         width_num,
         height_num,
+        extend_width_num,
+        extend_height_num,
         pix_fmt_num,
         kCFBooleanTrue
     };
@@ -138,12 +147,14 @@ CVPixelBufferPoolRef hb_cv_create_pixel_buffer_pool(int width, int height, enum 
     CFDictionaryRef attrs = CFDictionaryCreate(kCFAllocatorDefault,
                                                attrs_keys,
                                                attrs_values,
-                                               4,
+                                               6,
                                                &kCFTypeDictionaryKeyCallBacks,
                                                &kCFTypeDictionaryValueCallBacks);
 
     CFRelease(width_num);
     CFRelease(height_num);
+    CFRelease(extend_width_num);
+    CFRelease(extend_height_num);
     CFRelease(pix_fmt_num);
 
     CVPixelBufferPoolRef pool;
@@ -298,7 +309,6 @@ void hb_cv_add_color_tag(CFMutableDictionaryRef attachments,
     if (chroma_loc)
     {
         CFDictionarySetValue(attachments, kCVImageBufferChromaLocationTopFieldKey, chroma_loc);
-        CFDictionarySetValue(attachments, kCVImageBufferChromaLocationBottomFieldKey, chroma_loc);
     }
 }
 

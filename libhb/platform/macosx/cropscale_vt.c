@@ -209,6 +209,7 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
     init->geometry.width = width;
     init->geometry.height = height;
 
+    init->pix_fmt = format;
     pv->output = *init;
 
     return 0;
