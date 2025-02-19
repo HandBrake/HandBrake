@@ -19,6 +19,7 @@
 #include "handbrake/extradata.h"
 #include "handbrake/bitstream.h"
 
+#include "vt_common.h"
 #include "cv_utils.h"
 
 int  encvt_init(hb_work_object_t *, hb_job_t *);
@@ -386,31 +387,28 @@ static CFDataRef hb_vt_ambient_viewing_enviroment_xlat(hb_ambient_viewing_enviro
 
 static OSType hb_vt_encoder_pixel_format_xlat(int vcodec, int profile, int color_range)
 {
+    int pix_fmt = AV_PIX_FMT_NV12;
+
     switch (vcodec)
     {
         case HB_VCODEC_VT_H264:
-            switch (profile)
-            {
-                case HB_VT_H264_PROFILE_BASELINE:
-                case HB_VT_H264_PROFILE_MAIN:
-                case HB_VT_H264_PROFILE_HIGH:
-                    return hb_cv_get_pixel_format(AV_PIX_FMT_NV12, color_range);
-            }
         case HB_VCODEC_VT_H265:
+            pix_fmt = hb_vt_get_best_pix_fmt(vcodec, "auto");
+            break;
         case HB_VCODEC_VT_H265_10BIT:
             switch (profile)
             {
-                case HB_VT_H265_PROFILE_MAIN:
-                    return hb_cv_get_pixel_format(AV_PIX_FMT_NV12, color_range);
                 case HB_VT_H265_PROFILE_MAIN_10:
-                    return hb_cv_get_pixel_format(AV_PIX_FMT_P010, color_range);
+                    pix_fmt = hb_vt_get_best_pix_fmt(vcodec, "main-10");
                 case HB_VT_H265_PROFILE_MAIN_422_10:
-                    return hb_cv_get_pixel_format(AV_PIX_FMT_P210, color_range);
+                    pix_fmt = hb_vt_get_best_pix_fmt(vcodec, "main422-10");
             }
+            break;
+        default:
+            hb_log("encvt_Init: unknown codec");
     }
 
-    hb_log("encvt_Init: unknown codec");
-    return hb_cv_get_pixel_format(AV_PIX_FMT_NV12, color_range);
+    return hb_cv_get_pixel_format(pix_fmt, color_range);
 }
 
 static CFDictionaryRef hb_vt_attachments_xlat(hb_job_t *job)

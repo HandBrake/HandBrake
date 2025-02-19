@@ -255,6 +255,26 @@ const int* hb_vt_get_pix_fmts(int encoder)
     return NULL;
 }
 
+int hb_vt_get_best_pix_fmt(int encoder, const char *profile)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+            return AV_PIX_FMT_NV12;
+        case HB_VCODEC_VT_H265_10BIT:
+            if (!strcasecmp(profile, "main422-10"))
+            {
+                return AV_PIX_FMT_P210;
+            }
+            else
+            {
+                return AV_PIX_FMT_P010;
+            }
+    }
+    return AV_PIX_FMT_NV12;
+}
+
 const char* const* hb_vt_preset_get_names(int encoder)
 {
     return vt_h26x_preset_name;
@@ -483,5 +503,18 @@ void hb_vt_setup_hw_filters(hb_job_t *job)
         replace_filter(job, HB_FILTER_GRAYSCALE, HB_FILTER_GRAYSCALE_VT);
         replace_filter(job, HB_FILTER_LAPSHARP, HB_FILTER_LAPSHARP_VT);
         replace_filter(job, HB_FILTER_UNSHARP, HB_FILTER_UNSHARP_VT);
+
+        int count = hb_list_count(job->list_filter);
+        if (count)
+        {
+            // Avoid an additional VTPixelTransferSession, when possible
+            // do the scale and pixel format conversion in one pass
+            hb_filter_object_t *last = hb_list_item(job->list_filter, count - 1);
+            if (last->id == HB_FILTER_CROP_SCALE_VT)
+            {
+                int pix_fmt = hb_vt_get_best_pix_fmt(job->vcodec, job->encoder_profile);
+                hb_dict_set(last->settings, "format", hb_value_int(pix_fmt));
+            }
+        }
     }
 }
