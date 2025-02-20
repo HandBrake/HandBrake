@@ -13,6 +13,8 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
     using System.Collections.Generic;
 
     using HandBrakeWPF.Services.Logging.EventArgs;
+    using HandBrakeWPF.Services.Queue;
+    using HandBrakeWPF.Services.Queue.Interfaces;
 
     public interface ILogInstanceManager
     {
@@ -57,5 +59,10 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         /// <param name="filename">The key of the log instance</param>
         /// <returns>An ILog instance or null if invalid key</returns>
         ILog GetLogInstance(string filename);
+
+        /// <summary>
+        /// Set the instance of the queue that is in-use. 
+        /// </summary>
+        void SetQueue(IQueueService queueService);
     }
 }
