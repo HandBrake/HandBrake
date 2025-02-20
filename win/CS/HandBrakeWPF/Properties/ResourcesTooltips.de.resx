@@ -168,8 +168,6 @@ Aus, deaktiviert Anamorph. Die Abmessungen des Ausgabevideos und der Anzeige sin
 
 Auto, maximiert die Auflösung der Ausgabe unter Beibehaltung des ursprünglichen Bildseitenverhältnisses. Empfohlen.
 
-Loose, ist ähnlich wie Auto, versucht aber, das Seitenverhältnis der Ausgabe zu erhalten. Dies kann zu einem leichten Verlust der Auflösung im Vergleich zu Auto führen.
-
 Eigene, ermöglicht die manuelle Einstellung aller Parameter. Nützlich zur Korrektur eines falschen Aussehens des Quellmaterials und für Profis, die in der Postproduktion eine erweiterte Kontrolle benötigen.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
@@ -262,12 +260,15 @@ Dies einstellen, wenn das Gerät Schwierigkeiten hat, die Ausgabe wiederzugeben 
     <value>Aktiviert die Ausgabe mit variabler Bildfrequenz mit einer maximalen Frequenz, die durch die Einstellung der Bildfrequenz bestimmt wird.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Stellt die Encodereinstellungen so ein, dass die Kompressionseffizienz gegen die Kodiergeschwindigkeit abgewogen wird. 
+    <value>Passt die Encoder-Einstellungen an, um die Komprimierungseffizienz gegen die Codierungsgeschwindigkeit abzuwägen.
 
-Dadurch werden die Standardencodereinstellungen festgelegt.
-Abstimmungen, Profile, Level und erweiterte Parameter werden darauf angewendet. 
-Diese Auswahl sollte generell auf die langsamste eingestellt werden, die man tolerieren kann, da langsamere
-Einstellungen zu einer besseren Qualität oder kleineren Dateien führen.</value>
+Dies legt die Standard-Encoder-Einstellungen fest.
+Abstimmungen, Profile, Pegel und erweiterte Parameter werden hierauf angewendet.
+Diese Option sollte im Allgemeinen auf die langsamste Einstellung gesetzt werden, die noch erträglich ist, da langsamere
+Einstellungen zu einer besseren Qualität oder kleineren Dateien führen.
+
+Stelle den Schieberegler nach rechts, um die Komprimierungseffizienz auf Kosten der Kodierungsgeschwindigkeit zu erhöhen,
+oder nach links, um die Kodierungsgeschwindigkeit auf Kosten der Komprimierungseffizienz zu erhöhen.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Setzt und stellt Konformität zu einem spezifischen Profil her.
@@ -557,5 +558,14 @@ Die Bitrate variiert von Quelle zu Quelle.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Strich (-), Punkt (.) und Komma (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Verwenden der höchsten Auflösung, die durch die obigen Einstellungen zulässig ist.</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Wenn diese Option nicht aktiviert ist, werden die skalierten Abmessungen auf die Quellabmessungen beschränkt.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Durch Ändern der Anzeigegröße wird das Video gestreckt.</value>
   </data>
 </root>

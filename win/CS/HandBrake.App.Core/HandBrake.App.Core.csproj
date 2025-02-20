@@ -6,7 +6,7 @@
 		<Version>1.9.0</Version>
 		<Authors>HandBrake Team</Authors>
 		<Description>HandBrake is an open-source, GPL-licensed, multiplatform,video transcoder.</Description>
-		<Copyright>Copyright © 2003-2024 HandBrake Team</Copyright>
+		<Copyright>Copyright © 2003-2025 HandBrake Team</Copyright>
 		<PackageProjectUrl>https://handbrake.fr</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/HandBrake/HandBrake</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>

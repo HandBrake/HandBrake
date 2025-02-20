@@ -1,6 +1,6 @@
 /* callbacks.c
  *
- * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
+ * Copyright (C) 2008-2025 John Stebbins <stebbins@stebbins>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -456,7 +456,8 @@ static GhbBinding widget_bindings[] =
     {"PresetCategory", "active-id", "new", "PresetCategoryName", "visible"},
     {"PresetCategory", "active-id", "new", "PresetCategoryEntryLabel", "visible"},
     {"DiskFreeCheck", "active", NULL, "DiskFreeLimitGB", "sensitive"},
-    {"LimitMaxDuration", "active", NULL, "MaxTitleDuration", "sensitive"}
+    {"LimitMaxDuration", "active", NULL, "MaxTitleDuration", "sensitive"},
+    {"SendFileTo", "active", NULL, "SendFileToTarget", "sensitive"}
 };
 
 void
@@ -4485,6 +4486,57 @@ searching_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
 }
 
 static void
+send_to_external_app(gint index, signal_user_data_t * ud)
+{
+    gboolean send_file_to = ghb_dict_get_bool(ud->prefs, "SendFileTo");
+    const gchar * send_file_to_target = ghb_dict_get_string(ud->prefs, "SendFileToTarget");
+    if (send_file_to && send_file_to_target != NULL && send_file_to_target[0] != '\0')
+    {
+        GhbValue *queueDict, *jobDict, *destDict;
+        queueDict = ghb_array_get(ud->queue, index);
+        jobDict = ghb_dict_get(queueDict, "Job");
+        destDict = ghb_dict_get(jobDict, "Destination");
+
+        gchar * file = g_shell_quote(ghb_dict_get_string(destDict, "File"));
+        gchar * command_str;
+        if (g_access("/.flatpak-info", F_OK) == 0)
+        {
+            command_str = g_strjoin(" ", "flatpak-spawn", "--host", "--", send_file_to_target, file, NULL);
+        }
+        else
+        {
+            command_str = g_strjoin(" ", send_file_to_target, file, NULL);
+        }
+
+        gchar ** command_array = NULL;
+        GError * error = NULL;
+        ghb_log("Running command `%s`", command_str);
+        if (g_shell_parse_argv(command_str, NULL, &command_array, &error))
+        {
+            g_spawn_async(
+                NULL,
+                command_array,
+                NULL,
+                G_SPAWN_SEARCH_PATH | G_SPAWN_STDERR_TO_DEV_NULL | G_SPAWN_STDOUT_TO_DEV_NULL,
+                NULL,
+                NULL,
+                NULL, 
+                &error);
+            g_strfreev(command_array);
+        }
+
+        if (error != NULL)
+        {
+            ghb_log("Failed to run command `%s`: %s", command_str, error->message);
+            g_error_free(error);
+        }
+        
+        g_free(command_str);
+        g_free(file);
+    }
+}
+
+static void
 ghb_backend_events(signal_user_data_t *ud)
 {
     ghb_status_t     status;
@@ -4657,6 +4709,7 @@ ghb_backend_events(signal_user_data_t *ud)
             case GHB_ERROR_NONE:
                 gtk_label_set_text(work_status, _("Encode Done!"));
                 qstatus = GHB_QUEUE_DONE;
+                send_to_external_app(index, ud);
                 ghb_send_notification (GHB_NOTIFY_ITEM_DONE, index, ud);
                 break;
             case GHB_ERROR_CANCELED:

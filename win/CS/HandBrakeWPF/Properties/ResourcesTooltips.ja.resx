@@ -163,15 +163,13 @@ HQDN3Dは適応性ローパスフィルターで、NLMeansよりは高速です�
 Blu-rayやDVDソースはしばしば複数のタイトルを含み、典型的には一番長いものが本編です。</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>アナモルフィックは再生時に元の縦横比を維持しながら任意の解像度で保存できます。
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-オフはアナモルフィックを無効にします。表示されるものと保存される映像の解像度は同一になります。古いデバイスとの互換性によっては便利です。
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-自動は元の表示アスペクト比を維持したまま最大の解像度で保存します。推奨です。
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-ルーズは自動と似ていますが、保存されるアスペクト比を維持しようとします。これにより自動と比べてわずかに解像度が落ちる場合があります。
-
-カスタムは全てのパラメーターを手動で設定します。ソースの間違った表示解像度の修正や、高度な操作を必要とするプロのポストプロダクション向けです。</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>映像の周りにある黒い線を自動でクロップします。</value>
@@ -262,11 +260,15 @@ Blu-rayやDVDソースはしばしば複数のタイトルを含み、典型的�
     <value>フレームレート設定を最大値とした可変フレームレートの出力を有効にします。</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>エンコーダー設定を調節して圧縮効率とエンコード速度のバランスを取ります。
+    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
 
-これは基本のエンコーダー設定です。
-チューニング、プロファイル、レベルと追加のオプションはこれに適用されます。
-品質がより高く、小さいファイルになるよう、通常は可能な限り遅いものを選ぶことをお勧めします。</value>
+This establishes your default encoder settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.
+
+Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
+or to the left to increase encoding speed at the expense of compression efficiency.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>特定のプロファイルを設定します。
@@ -557,5 +559,14 @@ HB_EXIT_CODE
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>ダッシュ(-)、ピリオド(.)、カンマ(,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Use highest resolution permitted by above settings</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Changing the displays size will stretch the video</value>
   </data>
 </root>

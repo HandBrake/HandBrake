@@ -43,7 +43,9 @@
 @property (nonatomic) NSPopover *croppingPopover;
 
 @property (nonatomic) NSPoint windowCenterPoint;
+
 @property (nonatomic, weak) IBOutlet HBPreviewView *previewView;
+@property (nonatomic) BOOL wantsDisplayLayer;
 
 @end
 
@@ -61,6 +63,7 @@
     self.window.excludedFromWindowsMenu = YES;
     self.window.acceptsMouseMovedEvents = YES;
     self.window.contentView.wantsLayer = YES;
+    self.wantsDisplayLayer = NO;
 
     // Read the window center position
     // We need the center and we can't use the
@@ -496,10 +499,12 @@
 {
     if (self.generator && self.window.isVisible)
     {
-        CGImageRef image = [self.generator copyImageAtIndex:idx shouldCache:YES];
+        CFTypeRef image = self.wantsDisplayLayer ?
+                        (CFTypeRef)[self.generator copyPixelBufferAtIndex:idx shouldCache:NO] :
+                        (CFTypeRef)[self.generator copyImageAtIndex:idx shouldCache:YES];
         if (image)
         {
-            self.previewView.image = image;
+            self.previewView.image = (__bridge id _Nullable)(image);
             CFRelease(image);
         }
     }

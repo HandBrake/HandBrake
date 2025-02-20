@@ -6,7 +6,9 @@
 
 #import "HBPresetsViewController.h"
 #import "HBAddCategoryController.h"
+#import "HBRenamePresetController.h"
 #import "HBFilePromiseProvider.h"
+#import "HBOutlineView.h"
 #import "NSArray+HBAdditions.h"
 
 @import HandBrakeKit;
@@ -53,7 +55,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
 @interface HBPresetsViewController () <NSOutlineViewDelegate, NSOutlineViewDataSource, NSFilePromiseProviderDelegate>
 
-@property (nonatomic, strong) HBPresetsManager *presets;
+@property (nonatomic, strong) HBPresetsManager *manager;
 @property (nonatomic, readwrite) HBPreset *selectedPresetInternal;
 @property (nonatomic, weak) IBOutlet NSTreeController *treeController;
 @property (nonatomic, weak) IBOutlet NSSegmentedControl *actionsControl;
@@ -71,7 +73,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
  */
 @property (nonatomic, strong) NSMutableArray *expandedNodes;
 
-@property (nonatomic, unsafe_unretained) IBOutlet NSOutlineView *outlineView;
+@property (nonatomic, unsafe_unretained) IBOutlet HBOutlineView *outlineView;
 
 
 @end
@@ -83,7 +85,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     self = [super initWithNibName:@"Presets" bundle:nil];
     if (self)
     {
-        _presets = presetManager;
+        _manager = presetManager;
         _selectedPresetInternal = presetManager.defaultPreset;
         _expandedNodes = [[NSArray arrayWithArray:[NSUserDefaults.standardUserDefaults
                                                    objectForKey:@"HBPreviewViewExpandedStatus"]] mutableCopy];
@@ -107,7 +109,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     // Update header state
     self.showHeader = _showHeader;
 
-    [self.treeController setSelectionIndexPath:[self.presets indexPathOfPreset:self.selectedPreset]];
+    [self.treeController setSelectionIndexPath:[self.manager indexPathOfPreset:self.selectedPreset]];
     [self.treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:HBPresetsViewControllerContext];
 
     [self.actionsControl setEnabled:self.enabled forSegment:0];
@@ -131,6 +133,29 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     }
 }
 
+- (nullable HBPreset *)targetedItem
+{
+    NSUInteger row = self.outlineView.targetedRowIndexes.firstIndex;
+    if (row != -1)
+    {
+        NSTreeNode *node = [self.outlineView itemAtRow:row];
+        return [node representedObject];
+    }
+
+    return nil;
+}
+
+- (NSArray<HBPreset *> *)targetedItems
+{
+    NSMutableArray *presets = [NSMutableArray array];
+    [self.outlineView.targetedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
+        NSTreeNode *node = [self.outlineView itemAtRow:index];
+        [presets addObject:[node representedObject]];
+    }];
+
+    return presets;
+}
+
 - (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem
 {
     SEL action = anItem.action;
@@ -138,15 +163,23 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     if (action == @selector(exportPreset:) ||
         action == @selector(deletePreset:))
     {
-        if (!self.treeController.selectedObjects.firstObject)
+        if (self.outlineView.targetedRowIndexes.count == 0)
         {
             return NO;
         }
     }
-    if (action == @selector(setDefault:))
+    if (action == @selector(renamePreset:))
     {
-        if (![self.treeController.selectedObjects.firstObject isLeaf] ||
-            ![self.treeController.selectedObjects.firstObject isSupported])
+        HBPreset *preset = [self targetedItem];
+        if (!preset || preset.isBuiltIn)
+        {
+            return NO;
+        }
+    }
+    else if (action == @selector(setDefault:))
+    {
+        HBPreset *preset = [self targetedItem];
+        if (!preset || !preset.isLeaf || !preset.isSupported)
         {
             return NO;
         }
@@ -234,7 +267,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
 - (IBAction)exportPreset:(id)sender
 {
-    NSArray<HBPreset *> *selectedPresets = self.treeController.selectedObjects;
+    NSArray<HBPreset *> *selectedPresets = [self targetedItems];
     if (selectedPresets.count == 1)
     {
         [self doExportPreset:selectedPresets.firstObject];
@@ -249,17 +282,17 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 {
     if (indexPath == nil)
     {
-        for (HBPreset *preset in self.presets.root.children)
+        for (HBPreset *preset in self.manager.root.children)
         {
             if (preset.isBuiltIn == NO && preset.isLeaf == NO)
             {
-                indexPath = [[self.presets indexPathOfPreset:preset] indexPathByAddingIndex:0];
+                indexPath = [[self.manager indexPathOfPreset:preset] indexPathByAddingIndex:0];
             }
         }
 
         if (indexPath == nil)
         {
-            indexPath = [NSIndexPath indexPathWithIndex:self.presets.root.countOfChildren];
+            indexPath = [NSIndexPath indexPathWithIndex:self.manager.root.countOfChildren];
         }
     }
 
@@ -274,7 +307,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
             {
                 [self.treeController insertObject:child atArrangedObjectIndexPath:indexPath];
             }
-            [self.presets savePresets];
+            [self.manager savePresets];
         }
         else
         {
@@ -363,6 +396,22 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     }
 }
 
+- (IBAction)renamePreset:(id)sender
+{
+    HBPreset *preset = [self targetedItem];
+    __block HBRenamePresetController *renamePresetController = [[HBRenamePresetController alloc] initWithPreset:preset
+                                                                                                  presetManager:self.manager];
+
+    NSModalResponse returnCode = [NSApp runModalForWindow:renamePresetController.window];
+    if (returnCode == NSModalResponseOK)
+    {
+        if (self.delegate && preset.isLeaf)
+        {
+            [self.delegate selectionDidChange];
+        }
+    }
+}
+
 - (IBAction)deletePreset:(id)sender
 {
     if (self.treeController.canRemove)
@@ -372,7 +421,9 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
         alert.alertStyle = NSAlertStyleCritical;
         alert.informativeText = NSLocalizedString(@"You can't undo this action.", @"Delete preset alert -> informative text");
 
-        if (self.treeController.selectedObjects.count > 1)
+        NSArray<HBPreset *> *presets = [self targetedItems];
+
+        if (presets.count > 1)
         {
             alert.messageText = NSLocalizedString(@"Are you sure you want to permanently delete the selected presets?", @"Delete preset alert -> message");
             [alert addButtonWithTitle:NSLocalizedString(@"Delete Presets", @"Delete preset alert -> first button")];
@@ -392,33 +443,34 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
         NSInteger status = [alert runModal];
         if (status == NSAlertFirstButtonReturn)
         {
-            for (NSIndexPath *indexPath in self.treeController.selectionIndexPaths.reverseObjectEnumerator)
+            for (HBPreset *preset in presets.reverseObjectEnumerator)
             {
-                [self.presets deletePresetAtIndexPath:indexPath];
+                NSIndexPath *indexPath = [self.manager indexPathOfPreset:preset];
+                [self.manager deletePresetAtIndexPath:indexPath];
             }
-            [self setSelection:self.presets.defaultPreset];
+            [self setSelection:self.manager.defaultPreset];
         }
     }
 }
 
 - (IBAction)insertCategory:(id)sender
 {
-    HBAddCategoryController *addCategoryController = [[HBAddCategoryController alloc] initWithPresetManager:self.presets];
+    HBAddCategoryController *addCategoryController = [[HBAddCategoryController alloc] initWithPresetManager:self.manager];
 
     NSModalResponse returnCode = [NSApp runModalForWindow:addCategoryController.window];
     if (returnCode == NSModalResponseOK)
     {
-        NSIndexPath *indexPath = [self.presets indexPathOfPreset:addCategoryController.category];
+        NSIndexPath *indexPath = [self.manager indexPathOfPreset:addCategoryController.category];
         [self.treeController setSelectionIndexPath:indexPath];
     }
 }
 
 - (IBAction)setDefault:(id)sender
 {
-    HBPreset *selectedNode = self.treeController.selectedObjects.firstObject;
+    HBPreset *selectedNode = [self targetedItem];
     if (selectedNode.isLeaf)
     {
-        self.presets.defaultPreset = selectedNode;
+        self.manager.defaultPreset = selectedNode;
     }
 }
 
@@ -435,7 +487,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
 - (void)setSelection:(HBPreset *)preset
 {
-    NSIndexPath *idx = [self.presets indexPathOfPreset:preset];
+    NSIndexPath *idx = [self.manager indexPathOfPreset:preset];
 
     if (idx)
     {
@@ -445,7 +497,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
 - (IBAction)updateBuiltInPresets:(id)sender
 {
-    [self.presets generateBuiltInPresets];
+    [self.manager generateBuiltInPresets];
 
     // Re-expand the items
     [self expandNodes:self.treeController.arrangedObjects.childNodes];
@@ -565,7 +617,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
         // the KVC accessors method for the root node.
         if (indexPath.length == 1)
         {
-            [self.presets performSelector:@selector(nodeDidChange:) withObject:nil];
+            [self.manager performSelector:@selector(nodeDidChange:) withObject:nil];
         }
 	}
 
@@ -607,7 +659,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 		// drop at the top root level
 		if (index == -1)	// drop area might be ambiguous (not at a particular location)
         {
-			indexPath = [NSIndexPath indexPathWithIndex:self.presets.root.children.count]; // drop at the end of the top level
+			indexPath = [NSIndexPath indexPathWithIndex:self.manager.root.children.count]; // drop at the end of the top level
         }
 		else
         {

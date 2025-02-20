@@ -1,7 +1,7 @@
 name: 'Close stale issues and PRs'
 on:
   schedule:
-    - cron: '*/720 * * * *'
+    - cron: '0 */12 * * *'
 
   workflow_dispatch:
 
@@ -15,7 +15,7 @@ jobs:
       - uses: actions/stale@v9
         with:
           debug-only: false # Set to true to log only.
-          operations-per-run: 200
+          operations-per-run: 500
           days-before-issue-stale: 30
           days-before-pr-stale: 90
           days-before-issue-close: 5

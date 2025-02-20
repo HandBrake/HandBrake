@@ -145,7 +145,7 @@
 /* Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "1822"; */
 "1822.title" = "Вставить с сочетанием стиля";
 
-/* Class = "NSMenuItem"; title = "Presets View"; ObjectID = "1884"; */
+/* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1884"; */
 "1884.title" = "Пресеты";
 
 /* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1948"; */
@@ -163,8 +163,8 @@
 /* Class = "NSMenuItem"; title = "Online Documentation"; ObjectID = "1985"; */
 "1985.title" = "Онлайн-документация";
 
-/* Class = "NSMenuItem"; title = "Activity Window"; ObjectID = "2295"; */
-"2295.title" = "Окно активности";
+/* Class = "NSMenuItem"; title = "Activity"; ObjectID = "2295"; */
+"2295.title" = "Активность";
 
 /* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "2368"; */
 "2368.title" = "HandBrake";
@@ -190,8 +190,8 @@
 /* Class = "NSMenuItem"; title = "Check for Updates…"; ObjectID = "4964"; */
 "4964.title" = "Проверить обновления...";
 
-/* Class = "NSMenuItem"; title = "Preview Window"; ObjectID = "5157"; */
-"5157.title" = "Окно предпросмотра";
+/* Class = "NSMenuItem"; title = "Preview"; ObjectID = "5157"; */
+"5157.title" = "Предпросмотр";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "5188"; */
 "5188.title" = "Экспорт...";

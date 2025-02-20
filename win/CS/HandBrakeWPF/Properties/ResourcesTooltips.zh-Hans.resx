@@ -163,15 +163,13 @@ HQDN3D 是一种自适应的低通滤镜，比 NLMEans 更快，但在保持细�
 蓝光和DVD源通常有多个标题，通常时间最长的是正片。</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>变形允许任意存储尺寸，同时在回放期间保留原始高宽。
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-None：禁用变形。视频存储尺寸和显示尺寸将相同。仅对与某些传统设备兼容有用。
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Automatic：最大化存储分辨率，同时保留原始显示宽高比。（推荐）
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Loose：与Auto类似，但尝试保留存储宽高比。与 Auto 相比，这可能导致轻微的存储分辨率损失。
-
-Custom：允许手动设置所有参数。 用于纠正不正确的源显示高宽以及在后期制作中需要高级控制的专业人员。</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>自动裁切视频周围的黑边。</value>
@@ -262,12 +260,15 @@ Custom：允许手动设置所有参数。 用于纠正不正确的源显示高�
     <value>启用可变帧速率输出，峰值速率由帧速率设置决定。</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>调整编码器设置以权衡压缩效率与编码速度。
+    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
 
-这将建立默认编码器设置。
-Tunes, profiles, levels 和高级选项字符串将应用于此。
-您通常应该将此选项设置为可以承受的最慢速度，
-因为较慢的设置将导致更好的质量或更小的文件。</value>
+This establishes your default encoder settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.
+
+Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
+or to the left to increase encoding speed at the expense of compression efficiency.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>设置并确保符合指定的配置文件。
@@ -577,5 +578,14 @@ HB_EXIT_CODE
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>破折号 (-)、句号 (.) 和逗号 (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Use highest resolution permitted by above settings</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Changing the displays size will stretch the video</value>
   </data>
 </root>

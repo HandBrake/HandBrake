@@ -15,6 +15,13 @@
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
     </Window.Resources>
+
+    <Window.ContextMenu>
+        <ContextMenu AutomationProperties.Name="Preview Context Menu">
+            <MenuItem Header="{x:Static Properties:Resources.StaticPreviewView_ShowPictureSettingsAdjustment}" Command="{Binding RelayCommand}" CommandParameter="ShowCropPanel" />
+        </ContextMenu>
+    </Window.ContextMenu>
+    
     <Grid>
 
         <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" Visibility="{Binding PreviewNotAvailable, Converter={StaticResource booleanToVisibilityConverter}}">
@@ -32,7 +39,7 @@
         </Grid>
  
 
-        <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" Padding="8" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20" MinWidth="200" Background="Black" Opacity="0.8"
+        <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="6" Padding="5,0,5,0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20" MinWidth="180" Background="Black" Opacity="0.8"
                 Visibility="{Binding ShowPictureSettingControls, Converter={StaticResource booleanToVisibilityConverter}}">
 
             <standalone:CropPanelView DataContext="{Binding PictureSettingsViewModel}" />

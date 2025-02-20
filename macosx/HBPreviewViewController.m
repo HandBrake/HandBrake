@@ -13,14 +13,14 @@ It may be used under the terms of the GNU General Public License. */
 
 @interface HBPreviewViewController ()
 
+@property (nonatomic, strong) IBOutlet NSView *hud;
 @property (nonatomic, strong) IBOutlet HBPreviewView *previewView;
 
-@property (nonatomic, strong) IBOutlet NSView *hud;
-
 @property (nonatomic) NSInteger selectedIndex;
-@property (nonatomic) BOOL visible;
 
+@property (nonatomic) BOOL visible;
 @property (nonatomic) BOOL mouseInView;
+@property (nonatomic) BOOL wantsDisplayLayer;
 
 @end
 
@@ -32,6 +32,7 @@ It may be used under the terms of the GNU General Public License. */
     if (self)
     {
         _selectedIndex = 1;
+        _wantsDisplayLayer = NO;
     }
     return self;
 }
@@ -180,19 +181,19 @@ It may be used under the terms of the GNU General Public License. */
 {
     if (self.generator && self.visible)
     {
-        CGImageRef fPreviewImage = [self.generator copyImageAtIndex:self.selectedIndex shouldCache:YES];
-        if (fPreviewImage)
+        CFTypeRef image = self.wantsDisplayLayer ?
+                        (CFTypeRef)[self.generator copyPixelBufferAtIndex:self.selectedIndex shouldCache:NO] :
+                        (CFTypeRef)[self.generator copyImageAtIndex:self.selectedIndex shouldCache:YES];
+        if (image)
         {
-            self.previewView.image = fPreviewImage;
-            CFRelease(fPreviewImage);
+            self.previewView.image = (__bridge id _Nullable)(image);
+            CFRelease(image);
             self.previewView.layer.opacity = 1;
         }
     }
     else
     {
-        NSImage *bars = [NSImage imageNamed:@"ColorBars"];
-        CGImageRef image = [bars CGImageForProposedRect:NULL context:nil hints:nil];
-        self.previewView.image = image;
+        self.previewView.image = [NSImage imageNamed:@"ColorBars"];
         self.previewView.layer.opacity = .3;
     }
 }

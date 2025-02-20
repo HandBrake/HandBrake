@@ -1,0 +1,279 @@
+From b62c3a69a5f286eee2be4d14cf3705c476a953a4 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Tue, 18 Feb 2025 07:32:08 +0100
+Subject: [PATCH 1/2] avformat/mov: read and write additional iTunes style
+ metadata
+
+---
+ libavformat/mov.c    | 67 +++++++++++++++++++++++++++++++++++++++++-
+ libavformat/movenc.c | 70 +++++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 132 insertions(+), 5 deletions(-)
+
+diff --git a/libavformat/mov.c b/libavformat/mov.c
+index e1e668e40c..e64b0dbe63 100644
+--- a/libavformat/mov.c
++++ b/libavformat/mov.c
+@@ -132,6 +132,33 @@ static int mov_metadata_int8_no_padding(MOVContext *c, AVIOContext *pb,
+     return 0;
+ }
+ 
++static int mov_metadata_int16_no_padding(MOVContext *c, AVIOContext *pb,
++                                         unsigned len, const char *key)
++{
++    c->fc->event_flags |= AVFMT_EVENT_FLAG_METADATA_UPDATED;
++    av_dict_set_int(&c->fc->metadata, key, avio_rb16(pb), 0);
++
++    return 0;
++}
++
++static int mov_metadata_int32_no_padding(MOVContext *c, AVIOContext *pb,
++                                         unsigned len, const char *key)
++{
++    c->fc->event_flags |= AVFMT_EVENT_FLAG_METADATA_UPDATED;
++    av_dict_set_int(&c->fc->metadata, key, avio_rb32(pb), 0);
++
++    return 0;
++}
++
++static int mov_metadata_int64_no_padding(MOVContext *c, AVIOContext *pb,
++                                         unsigned len, const char *key)
++{
++    c->fc->event_flags |= AVFMT_EVENT_FLAG_METADATA_UPDATED;
++    av_dict_set_int(&c->fc->metadata, key, avio_rb64(pb), 0);
++
++    return 0;
++}
++
+ static int mov_metadata_gnre(MOVContext *c, AVIOContext *pb,
+                              unsigned len, const char *key)
+ {
+@@ -417,7 +444,13 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     case MKTAG( 'a','k','I','D'): key = "account_type";
+         parse = mov_metadata_int8_no_padding; break;
+     case MKTAG( 'a','p','I','D'): key = "account_id"; break;
++    case MKTAG( 'a','t','I','D'): key = "artist_id";
++        parse = mov_metadata_int32_no_padding; break;
+     case MKTAG( 'c','a','t','g'): key = "category"; break;
++    case MKTAG( 'c','m','I','D'): key = "composer_id";
++        parse = mov_metadata_int32_no_padding; break;
++    case MKTAG( 'c','n','I','D'): key = "content_id";
++        parse = mov_metadata_int32_no_padding; break;
+     case MKTAG( 'c','p','i','l'): key = "compilation";
+         parse = mov_metadata_int8_no_padding; break;
+     case MKTAG( 'c','p','r','t'):
+@@ -436,6 +469,8 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     case MKTAG( 'e','g','i','d'): key = "episode_uid";
+         parse = mov_metadata_int8_no_padding; break;
+     case MKTAG( 'F','I','R','M'): key = "firmware"; raw = 1; break;
++    case MKTAG( 'g','e','I','D'): key = "genre_id";
++        parse = mov_metadata_int32_no_padding; break;
+     case MKTAG( 'g','n','r','e'):
+         key = "genre";
+         parse = mov_metadata_gnre;
+@@ -451,6 +486,8 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+         parse = mov_metadata_int8_no_padding; break;
+     case MKTAG( 'H','M','M','T'):
+         return mov_metadata_hmmt(c, pb, atom.size);
++    case MKTAG( 'i','t','n','u'): key = "itunes_u";
++        parse = mov_metadata_int8_no_padding; break;
+     case MKTAG( 'k','e','y','w'): key = "keywords";  break;
+     case MKTAG( 'l','d','e','s'): key = "synopsis";  break;
+     case MKTAG( 'l','o','c','i'):
+@@ -462,9 +499,16 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+         parse = mov_metadata_int8_no_padding; break;
+     case MKTAG( 'p','g','a','p'): key = "gapless_playback";
+         parse = mov_metadata_int8_no_padding; break;
++    case MKTAG( 'p','l','I','D'): key = "playlist_id";
++        parse = mov_metadata_int64_no_padding; break;
+     case MKTAG( 'p','u','r','d'): key = "purchase_date"; break;
+     case MKTAG( 'r','t','n','g'): key = "rating";
+         parse = mov_metadata_int8_no_padding; break;
++    case MKTAG( 's','f','I','D'): key = "itunes_country";
++        parse = mov_metadata_int32_no_padding; break;
++    case MKTAG( 's','d','e','s'): key = "series_description"; break;
++    case MKTAG( 's','h','w','m'): key = "show_work_and_movement";
++        parse = mov_metadata_int8_no_padding; break;
+     case MKTAG( 's','o','a','a'): key = "sort_album_artist"; break;
+     case MKTAG( 's','o','a','l'): key = "sort_album";   break;
+     case MKTAG( 's','o','a','r'): key = "sort_artist";  break;
+@@ -473,6 +517,8 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     case MKTAG( 's','o','s','n'): key = "sort_show";    break;
+     case MKTAG( 's','t','i','k'): key = "media_type";
+         parse = mov_metadata_int8_no_padding; break;
++    case MKTAG( 't','m','p','o'): key = "tmpo";
++        parse = mov_metadata_int16_no_padding; break;
+     case MKTAG( 't','r','k','n'): key = "track";
+         parse = mov_metadata_track_or_disc_number; break;
+     case MKTAG( 't','v','e','n'): key = "episode_id"; break;
+@@ -482,17 +528,23 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     case MKTAG( 't','v','s','h'): key = "show";      break;
+     case MKTAG( 't','v','s','n'): key = "season_number";
+         parse = mov_metadata_int8_bypass_padding; break;
++    case MKTAG( 'x','i','d',' '): key = "xid";       break;
+     case MKTAG(0xa9,'A','R','T'): key = "artist";    break;
+     case MKTAG(0xa9,'P','R','D'): key = "producer";  break;
+     case MKTAG(0xa9,'a','l','b'): key = "album";     break;
+-    case MKTAG(0xa9,'a','u','t'): key = "artist";    break;
++    case MKTAG(0xa9,'a','r','d'): key = "art_director"; break;
++    case MKTAG(0xa9,'a','r','g'): key = "arranger";  break;
++    case MKTAG(0xa9,'a','u','t'): key = "author";    break;
++    case MKTAG(0xa9,'c','a','k'): key = "acknowledgement"; break;
+     case MKTAG(0xa9,'c','h','p'): key = "chapter";   break;
+     case MKTAG(0xa9,'c','m','t'): key = "comment";   break;
+     case MKTAG(0xa9,'c','o','m'): key = "composer";  break;
++    case MKTAG(0xa9,'c','o','n'): key = "conductor"; break;
+     case MKTAG(0xa9,'c','p','y'): key = "copyright"; break;
+     case MKTAG(0xa9,'d','a','y'): key = "date";      break;
+     case MKTAG(0xa9,'d','i','r'): key = "director";  break;
+     case MKTAG(0xa9,'d','i','s'): key = "disclaimer"; break;
++    case MKTAG(0xa9,'d','e','s'): key = "song_description"; break;
+     case MKTAG(0xa9,'e','d','1'): key = "edit_date"; break;
+     case MKTAG(0xa9,'e','n','c'): key = "encoder";   break;
+     case MKTAG(0xa9,'f','m','t'): key = "original_format"; break;
+@@ -500,22 +552,35 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     case MKTAG(0xa9,'g','r','p'): key = "grouping";  break;
+     case MKTAG(0xa9,'h','s','t'): key = "host_computer"; break;
+     case MKTAG(0xa9,'i','n','f'): key = "comment";   break;
++    case MKTAG(0xa9,'l','n','t'): key = "linear_notes"; break;
+     case MKTAG(0xa9,'l','y','r'): key = "lyrics";    break;
+     case MKTAG(0xa9,'m','a','k'): key = "make";      break;
+     case MKTAG(0xa9,'m','o','d'): key = "model";     break;
++    case MKTAG(0xa9,'m','v','n'): key = "movement_name"; break;
++    case MKTAG(0xa9,'m','v','i'): key = "movement_number";
++        parse = mov_metadata_int16_no_padding; break;
++    case MKTAG(0xa9,'m','v','c'): key = "movement_count";
++        parse = mov_metadata_int16_no_padding; break;
+     case MKTAG(0xa9,'n','a','m'): key = "title";     break;
+     case MKTAG(0xa9,'o','p','e'): key = "original_artist"; break;
++    case MKTAG(0xa9,'p','h','g'): key = "phonogram_rights"; break;
+     case MKTAG(0xa9,'p','r','d'): key = "producer";  break;
+     case MKTAG(0xa9,'p','r','f'): key = "performers"; break;
++    case MKTAG(0xa9,'p','u','b'): key = "publisher"; break;
+     case MKTAG(0xa9,'r','e','q'): key = "playback_requirements"; break;
++    case MKTAG(0xa9,'s','n','e'): key = "sound_engineer"; break;
++    case MKTAG(0xa9,'s','o','l'): key = "soloist";   break;
+     case MKTAG(0xa9,'s','r','c'): key = "original_source"; break;
+     case MKTAG(0xa9,'s','t','3'): key = "subtitle";  break;
+     case MKTAG(0xa9,'s','w','r'): key = "encoder";   break;
++    case MKTAG(0xa9,'t','h','x'): key = "thanks";    break;
+     case MKTAG(0xa9,'t','o','o'): key = "encoder";   break;
+     case MKTAG(0xa9,'t','r','k'): key = "track";     break;
+     case MKTAG(0xa9,'u','r','l'): key = "URL";       break;
++    case MKTAG(0xa9,'w','r','k'): key = "work_name"; break;
+     case MKTAG(0xa9,'w','r','n'): key = "warning";   break;
+     case MKTAG(0xa9,'w','r','t'): key = "composer";  break;
++    case MKTAG(0xa9,'x','p','d'): key = "executive_producer"; break;
+     case MKTAG(0xa9,'x','y','z'): key = "location";  break;
+     case MKTAG( 'a','l','b','m'):
+     case MKTAG( 'a','u','t','h'):
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index 3486c6e3e5..11df7b0368 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -4557,15 +4557,19 @@ static int mov_write_int8_metadata(AVFormatContext *s, AVIOContext *pb,
+                                    int len)
+ {
+     AVDictionaryEntry *t = NULL;
+-    uint8_t num;
++    uint64_t num;
+     int size = 24 + len;
+ 
+-    if (len != 1 && len != 4)
++    if (len != 1 && len != 4 &&
++        len != 2 && len != 8)
+         return -1;
+ 
+     if (!(t = av_dict_get(s->metadata, tag, NULL, 0)))
+         return 0;
+-    num = atoi(t->value);
++    if (len <= 4)
++        num = atoi(t->value);
++    else
++        num = atol(t->value);
+ 
+     avio_wb32(pb, size);
+     ffio_wfourcc(pb, name);
+@@ -4573,7 +4577,9 @@ static int mov_write_int8_metadata(AVFormatContext *s, AVIOContext *pb,
+     ffio_wfourcc(pb, "data");
+     avio_wb32(pb, 0x15);
+     avio_wb32(pb, 0);
+-    if (len==4) avio_wb32(pb, num);
++    if (len==8) avio_wb64(pb, num);
++    else if (len==4) avio_wb32(pb, num);
++    else if (len==2) avio_wb16(pb, num);
+     else        avio_w8 (pb, num);
+ 
+     return size;
+@@ -4629,6 +4635,8 @@ static int mov_write_ilst_tag(AVIOContext *pb, MOVMuxContext *mov,
+     mov_write_string_metadata(s, pb, "\251lyr", "lyrics"   , 1);
+     mov_write_string_metadata(s, pb, "desc",    "description",1);
+     mov_write_string_metadata(s, pb, "ldes",    "synopsis" , 1);
++    mov_write_string_metadata(s, pb, "sdes",    "series_description", 1);
++    mov_write_string_metadata(s, pb, "rtng",    "rating",    1);
+     mov_write_string_metadata(s, pb, "tvsh",    "show"     , 1);
+     mov_write_string_metadata(s, pb, "tven",    "episode_id",1);
+     mov_write_string_metadata(s, pb, "tvnn",    "network"  , 1);
+@@ -4639,6 +4647,60 @@ static int mov_write_ilst_tag(AVIOContext *pb, MOVMuxContext *mov,
+     mov_write_int8_metadata  (s, pb, "hdvd",    "hd_video",  1);
+     mov_write_int8_metadata  (s, pb, "pgap",    "gapless_playback",1);
+     mov_write_int8_metadata  (s, pb, "cpil",    "compilation", 1);
++
++    mov_write_string_metadata(s, pb, "\251st3", "subtitle"        , 1);
++    mov_write_string_metadata(s, pb, "\251des", "song_description", 1);
++    mov_write_string_metadata(s, pb, "\251dir", "director"        , 1);
++    mov_write_string_metadata(s, pb, "\251ard", "art_director"    , 1);
++    mov_write_string_metadata(s, pb, "\251arg", "arranger"        , 1);
++    mov_write_string_metadata(s, pb, "\251aut", "author"          , 1);
++    mov_write_string_metadata(s, pb, "\251cak", "acknowledgement" , 1);
++    mov_write_string_metadata(s, pb, "\251con", "conductor"       , 1);
++
++    mov_write_string_metadata(s, pb, "\251wrk", "work_name"     , 1);
++    mov_write_string_metadata(s, pb, "\251mvn", "movement_name" , 1);
++    mov_write_int8_metadata  (s, pb, "\251mvi", "movement_number", 2);
++    mov_write_int8_metadata  (s, pb, "\251mvc", "movement_count" , 2);
++    mov_write_int8_metadata  (s, pb, "shwm",    "show_work_and_movement", 1);
++
++    mov_write_string_metadata(s, pb, "\251lnt", "linear_notes"      , 1);
++    mov_write_string_metadata(s, pb, "\251mak", "make"              , 1); // Record company
++    mov_write_string_metadata(s, pb, "\251ope", "original_artist"   , 1);
++    mov_write_string_metadata(s, pb, "\251phg", "phonogram_rights"  , 1);
++    mov_write_string_metadata(s, pb, "\251prd", "producer"          , 1);
++    mov_write_string_metadata(s, pb, "\251prf", "performers"        , 1);
++    mov_write_string_metadata(s, pb, "\251pub", "publisher"         , 1);
++    mov_write_string_metadata(s, pb, "\251sne", "sound_engineer"    , 1);
++    mov_write_string_metadata(s, pb, "\251sol", "soloist"           , 1);
++    mov_write_string_metadata(s, pb, "\251src", "original_source"   , 1); // Credits
++    mov_write_string_metadata(s, pb, "\251thx", "thanks"            , 1);
++    mov_write_string_metadata(s, pb, "\251url", "URL"               , 1); // Online extras
++    mov_write_string_metadata(s, pb, "\251xpd", "executive_producer", 1);
++
++    mov_write_string_metadata(s, pb, "sonm", "sort_name"        , 1);
++    mov_write_string_metadata(s, pb, "soar", "sort_artist"      , 1);
++    mov_write_string_metadata(s, pb, "soaa", "sort_album_artist", 1);
++    mov_write_string_metadata(s, pb, "soal", "sort_album"       , 1);
++    mov_write_string_metadata(s, pb, "soco", "sort_composer"    , 1);
++    mov_write_string_metadata(s, pb, "sosn", "sort_show"        , 1);
++
++    mov_write_string_metadata(s, pb, "\251enc", "encoder"       , 1); // Encoded by
++    mov_write_string_metadata(s, pb, "purd",    "purchase_date" , 1);
++
++    mov_write_int8_metadata  (s, pb, "itnu",    "itunes_u"      , 1);
++    mov_write_int8_metadata  (s, pb, "pcst",    "podcast"       , 1);
++    mov_write_string_metadata(s, pb, "catg",    "category"      , 1);
++
++    mov_write_string_metadata(s, pb, "apID",    "account_id"    , 1);
++    mov_write_int8_metadata  (s, pb, "akID",    "account_type"  , 1);
++    mov_write_int8_metadata  (s, pb, "sfID",    "itunes_country", 4);
++    mov_write_int8_metadata  (s, pb, "cnID",    "content_id"    , 4);
++    mov_write_int8_metadata  (s, pb, "atID",    "artist_id"     , 4);
++    mov_write_int8_metadata  (s, pb, "plID",    "playlist_id"   , 8);
++    mov_write_int8_metadata  (s, pb, "geID",    "genre_id"      , 4);
++    mov_write_int8_metadata  (s, pb, "cmID",    "composer_id"   , 4);
++    mov_write_string_metadata(s, pb, "xid ",    "xid"           , 1);
++
+     mov_write_covr(pb, s);
+     mov_write_trkn_tag(pb, mov, s, 0); // track number
+     mov_write_trkn_tag(pb, mov, s, 1); // disc number
+-- 
+2.39.5 (Apple Git-154)
+

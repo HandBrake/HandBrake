@@ -32,10 +32,6 @@
 @property (nonatomic) HBQueueInfoViewController *infoViewController;
 @property (nonatomic) HBQueueMultiSelectionViewController *multiSelectionViewController;
 
-/// Whether the window is visible or occluded,
-/// useful to avoid updating the UI needlessly
-@property (nonatomic) BOOL visible;
-
 @property (nonatomic) HBQueueToolbarDelegate *toolbarDelegate;
 
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
@@ -60,7 +56,9 @@
     if (self = [super initWithWindowNibName:@"Queue"])
     {
         _queue = queue;
-        _sendQueue = dispatch_queue_create("fr.handbrake.SendToQueue", DISPATCH_QUEUE_SERIAL);
+        _sendQueue = dispatch_queue_create("fr.handbrake.SendToQueue",
+                                           dispatch_queue_attr_make_with_autorelease_frequency(DISPATCH_QUEUE_SERIAL,
+                                                                                               DISPATCH_AUTORELEASE_FREQUENCY_WORK_ITEM));
 
         if (@available(macOS 10.14, *))
         {
@@ -285,11 +283,6 @@
 - (BOOL)validateToolbarItem:(NSToolbarItem *)theItem
 {
     return [self validateUserIterfaceItemForAction:theItem.action];
-}
-
-- (void)windowDidChangeOcclusionState:(NSNotification *)notification
-{
-    self.visible = self.window.occlusionState & NSWindowOcclusionStateVisible ? YES : NO;
 }
 
 #pragma mark - Private queue editing methods

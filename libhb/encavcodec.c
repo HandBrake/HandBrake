@@ -1,6 +1,6 @@
 /* encavcodec.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
@@ -84,6 +84,11 @@ hb_work_object_t hb_encavcodec =
     encavcodecClose
 };
 
+static const char * const empty_tune_names[] =
+{
+    "none", NULL
+};
+
 static const char * const vpx_preset_names[] =
 {
     "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow", NULL
@@ -91,7 +96,7 @@ static const char * const vpx_preset_names[] =
 
 static const char * const vp9_tune_names[] = 
 {
-    "screen", "film", NULL 
+    "none", "screen", "film", NULL
 };
 
 static const char * const h264_qsv_profile_name[] =
@@ -681,6 +686,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             snprintf(quality, 7, "%d", (int)job->vquality);
             av_dict_set(&av_opts, "rate_control", "quality", 0);
             av_dict_set(&av_opts, "quality", quality, 0);
+            if (!av_dict_get(av_opts, "scenario", NULL, 0))
+            {
+                av_dict_set(&av_opts, "scenario", "archive", 0);
+            }
         }
         else
         {
@@ -1680,7 +1689,7 @@ const char* const* hb_av_tune_get_names(int encoder)
         case HB_VCODEC_FFMPEG_VP9_10BIT:
             return vp9_tune_names;
         default:
-            return NULL;
+            return empty_tune_names;
     }
 }
 

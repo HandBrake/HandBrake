@@ -1,6 +1,6 @@
 /* common.h
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -371,6 +371,14 @@ struct hb_dovi_conf_s
     unsigned dv_bl_signal_compatibility_id;
 };
 
+typedef enum
+{
+    HB_HDR_DYNAMIC_METADATA_NONE      = 0,
+    HB_HDR_DYNAMIC_METADATA_HDR10PLUS = 1 << 1,
+    HB_HDR_DYNAMIC_METADATA_DOVI      = 1 << 2,
+    HB_HDR_DYNAMIC_METADATA_ALL       = HB_HDR_DYNAMIC_METADATA_HDR10PLUS | HB_HDR_DYNAMIC_METADATA_DOVI
+} hb_hdr_dynamic_metadata_mode_t;
+
 int hb_str_ends_with(const char *base, const char *str);
 
 /*******************************************************************************
@@ -436,6 +444,11 @@ const char* hb_video_quality_get_name(uint32_t codec);
 int         hb_video_quality_is_supported(uint32_t codec);
 int         hb_video_bitrate_is_supported(uint32_t codec);
 int         hb_video_multipass_is_supported(uint32_t codec, int constant_quality);
+
+int                hb_video_hdr_dynamic_metadata_is_supported(uint32_t codec, int hdr_dynamic_metadata, int profile);
+
+int                hb_hdr_dynamic_metadata_get_from_name(const char *name);
+const char*        hb_hdr_dynamic_metadata_get_name(int hdr_dynamic_metadata);
 
 int                hb_video_encoder_is_supported(int encoder);
 int                hb_video_encoder_get_count_of_analysis_passes(int encoder);
@@ -702,7 +715,7 @@ struct hb_job_s
 #define HB_COLR_PRI_SMPTE431     11
 #define HB_COLR_PRI_SMPTE432     12
 #define HB_COLR_PRI_JEDEC_P22    22
-// 0, 3-4, 7-8, 10-65535: reserved/not implemented
+// 0, 3, 19-65535: reserved/not implemented
 #define HB_COLR_TRA_UNSET       -1
 #define HB_COLR_TRA_BT709        1 // also use for bt470m, bt470bg, smpte170m, bt2020_10 and bt2020_12
 #define HB_COLR_TRA_UNDEF        2
@@ -721,7 +734,7 @@ struct hb_job_s
 #define HB_COLR_TRA_SMPTEST2084  16
 #define HB_COLR_TRA_SMPTE428     17
 #define HB_COLR_TRA_ARIB_STD_B67 18 //known as "Hybrid log-gamma"
-// 0, 3-6, 8-15, 17-65535: reserved/not implemented
+// 0, 3, 18-65535: reserved/not implemented
 #define HB_COLR_MAT_UNSET       -1
 #define HB_COLR_MAT_RGB          0
 #define HB_COLR_MAT_BT709        1
@@ -737,6 +750,9 @@ struct hb_job_s
 #define HB_COLR_MAT_CD_NCL       12 // chromaticity derived non-constant lum
 #define HB_COLR_MAT_CD_CL        13 // chromaticity derived constant lum
 #define HB_COLR_MAT_ICTCP        14 // ITU-R BT.2100-0, ICtCp
+#define HB_COLR_MAT_IPT_C2       15 // SMPTE ST 2128, IPT-C2
+#define HB_COLR_MAT_YCGCO_RE     16 // YCgCo-R, even addition of bits
+#define HB_COLR_MAT_YCGCO_RO     17 // YCgCo-R, odd addition of bits
 // 0, 3-5, 8, 11-65535: reserved/not implemented
 #define HB_COLR_RANGE_UNSET     -1
 #define HB_COLR_RANGE_LIMITED    1
@@ -747,7 +763,7 @@ struct hb_job_s
     hb_ambient_viewing_environment_metadata_t ambient;
     hb_dovi_conf_t dovi;
 
-    enum {NONE = 0x0, ALL = 0x3, DOVI = 0x1, HDR_10_PLUS = 0x2} passthru_dynamic_hdr_metadata;
+    hb_hdr_dynamic_metadata_mode_t passthru_dynamic_hdr_metadata;
 
 
     hb_list_t     * list_chapter;
@@ -1600,9 +1616,12 @@ struct hb_blend_object_s
     char                * name;
 
 #ifdef __LIBHB__
-    int                (* init)       ( hb_blend_object_t *, int in_pix_fmt, int in_chroma_location, int sub_pix_fmt );
+    int                (* init)       ( hb_blend_object_t *, int in_width, int in_height,
+                                        int in_pix_fmt, int in_chroma_location,
+                                        int in_color_range, int overlay_pix_fmt );
     hb_buffer_t *      (* work)       ( hb_blend_object_t *,
-                                        hb_buffer_t *, hb_buffer_list_t * );
+                                        hb_buffer_t *, hb_buffer_list_t *,
+                                        int changed );
     void               (* close)      ( hb_blend_object_t * );
 
     hb_blend_private_t * private_data;

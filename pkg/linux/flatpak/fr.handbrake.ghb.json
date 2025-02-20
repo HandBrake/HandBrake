@@ -13,6 +13,7 @@
         "--filesystem=xdg-run/gvfs",
         "--filesystem=xdg-run/gvfsd",
         "--talk-name=org.gtk.vfs.*",
+        "--talk-name=org.freedesktop.Flatpak",
         "--system-talk-name=org.freedesktop.login1",
         "--system-talk-name=org.freedesktop.UPower",
         "--env=PATH=/app/bin:/app/extensions/bin:/usr/bin",

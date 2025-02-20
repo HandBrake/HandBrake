@@ -20,6 +20,7 @@ namespace HandBrakeWPF.Services
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -343,6 +344,7 @@ namespace HandBrakeWPF.Services
 
             defaults.Add(UserSettingConstants.ExcludedExtensions, new List<string> { "png", "jpg", "srt", "ass", "ssa", "txt" });
             defaults.Add(UserSettingConstants.RecursiveFolderScan, false);
+            defaults.Add(UserSettingConstants.DefaultRangeMode, DefaultRangeMode.Chapters);
             
             // Preview
             defaults.Add(UserSettingConstants.LastPreviewDuration, 30);

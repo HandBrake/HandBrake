@@ -401,6 +401,163 @@ HB_OBJC_DIRECT_MEMBERS
 
 #pragma mark - Preview images
 
+static void pix_buf_callback(void * CV_NULLABLE releaseRefCon,
+                             const void * CV_NULLABLE dataPtr, size_t dataSize,
+                             size_t numberOfPlanes, const void * CV_NULLABLE planeAddresses[CV_NULLABLE])
+{
+    hb_image_t *image = (hb_image_t *)releaseRefCon;
+    if (image)
+    {
+        hb_image_close(&image);
+    }
+}
+
+- (nullable CVPixelBufferRef)copyPixelBufferAtIndex:(NSUInteger)index job:(HBJob *)job CF_RETURNS_RETAINED
+{
+    CVPixelBufferRef pix_buf = NULL;
+
+    hb_job_t *hb_job = job.hb_job;
+    hb_dict_t *job_dict = hb_job_to_dict(hb_job);
+    hb_job_close(&hb_job);
+
+    hb_image_t *image = hb_get_preview(_hb_handle, job_dict, (int)index, 0, -1);
+    hb_value_free(&job_dict);
+
+    if (image)
+    {
+        OSType pixelFormatType = kCVPixelFormatType_420YpCbCr8Planar;
+        size_t numberOfPlanes = 3;
+
+        void *planeBaseAddress[3] = {image->plane[0].data, image->plane[1].data, image->plane[2].data};
+        size_t planeWidth[3] = {image->plane[0].width, image->plane[1].width, image->plane[2].width};
+        size_t planeHeight[3] = {image->plane[0].height, image->plane[1].height, image->plane[2].height};
+        size_t planeBytesPerRow[3] = {image->plane[0].stride, image->plane[1].stride, image->plane[2].stride};
+
+        CVReturn err = CVPixelBufferCreateWithPlanarBytes(
+                                                 kCFAllocatorDefault,
+                                                 image->width,
+                                                 image->height,
+                                                 pixelFormatType,
+                                                 image->data,
+                                                 0,
+                                                 numberOfPlanes,
+                                                 planeBaseAddress,
+                                                 planeWidth,
+                                                 planeHeight,
+                                                 planeBytesPerRow,
+                                                 pix_buf_callback,
+                                                 image,
+                                                 NULL,
+                                                 &pix_buf);
+
+        if (err != kCVReturnSuccess)
+        {
+            hb_image_close(&image);
+        }
+
+        CFStringRef prim = CVColorPrimariesGetStringForIntegerCodePoint(image->color_prim);
+        CFStringRef transfer = CVTransferFunctionGetStringForIntegerCodePoint(image->color_transfer);
+        CFStringRef matrix = CVYCbCrMatrixGetStringForIntegerCodePoint(image->color_matrix);
+
+        if (prim)
+        {
+            CVBufferSetAttachment(pix_buf, kCVImageBufferColorPrimariesKey, prim, kCVAttachmentMode_ShouldPropagate);
+        }
+        if (transfer)
+        {
+            CVBufferSetAttachment(pix_buf, kCVImageBufferTransferFunctionKey, transfer, kCVAttachmentMode_ShouldPropagate);
+        }
+        if (matrix)
+        {
+            CVBufferSetAttachment(pix_buf, kCVImageBufferYCbCrMatrixKey, matrix, kCVAttachmentMode_ShouldPropagate);
+        }
+
+        hb_rational_t par = { job.picture.parNum, job.picture.parDen };
+
+        int scaled_width  = image->width;
+        int scaled_height = image->height;
+
+        if (par.num >= par.den)
+        {
+            scaled_width = scaled_width * par.num / par.den;
+        }
+        else
+        {
+            scaled_height = scaled_height * par.den / par.num;
+        }
+
+        CFNumberRef display_width  = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &scaled_width);
+        CFNumberRef display_height = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &scaled_height);
+
+        const void *display_size_keys[2] =
+        {
+            kCVImageBufferDisplayWidthKey, kCVImageBufferDisplayHeightKey
+        };
+
+        const void *display_size_values[2] =
+        {
+            display_width, display_height
+        };
+
+        CFDictionaryRef display_size = CFDictionaryCreate(kCFAllocatorDefault,
+                                                          display_size_keys,
+                                                          display_size_values,
+                                                          2,
+                                                          &kCFTypeDictionaryKeyCallBacks,
+                                                          &kCFTypeDictionaryValueCallBacks);
+
+        CVBufferSetAttachment(pix_buf, kCVImageBufferDisplayDimensionsKey, display_size, kCVAttachmentMode_ShouldPropagate);
+
+        CFRelease(display_width);
+        CFRelease(display_height);
+        CFRelease(display_size);
+
+        CFNumberRef par_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &par.num);
+        CFNumberRef par_den = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &par.den);
+
+
+        const void *par_keys[2] =
+        {
+            kCVImageBufferPixelAspectRatioHorizontalSpacingKey, kCVImageBufferPixelAspectRatioVerticalSpacingKey
+        };
+
+        const void *par_values[2] =
+        {
+            par_num, par_den
+        };
+
+        CFDictionaryRef aspect_ratio = CFDictionaryCreate(kCFAllocatorDefault,
+                                                          par_keys,
+                                                          par_values,
+                                                          2,
+                                                          &kCFTypeDictionaryKeyCallBacks,
+                                                          &kCFTypeDictionaryValueCallBacks);
+
+        CVBufferSetAttachment(pix_buf, kCVImageBufferPixelAspectRatioKey, aspect_ratio, kCVAttachmentMode_ShouldPropagate);
+
+        CFRelease(par_num);
+        CFRelease(par_den);
+        CFRelease(aspect_ratio);
+    }
+
+    return pix_buf;
+}
+
+static const void * cgimage_get_byte_pointer_callback(void *info)
+{
+    hb_image_t *image = (hb_image_t *)info;
+    return (const void *)image->plane[0].data;
+}
+
+static void cgimage_release_byte_pointer_callback(void *info, const void *pointer)
+{
+    hb_image_t *image = (hb_image_t *)info;
+    if (image)
+    {
+        hb_image_close(&image);
+    }
+}
+
 - (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index job:(HBJob *)job CF_RETURNS_RETAINED
 {
     CGImageRef img = NULL;
@@ -408,33 +565,20 @@ HB_OBJC_DIRECT_MEMBERS
     hb_job_t *hb_job = job.hb_job;
     hb_dict_t *job_dict = hb_job_to_dict(hb_job);
     hb_job_close(&hb_job);
-    hb_image_t *image = hb_get_preview3(_hb_handle, (int)index, job_dict);
+
+    hb_image_t *image = hb_get_preview(_hb_handle, job_dict, (int)index, 1, 2);
+    hb_value_free(&job_dict);
 
     if (image)
     {
-        // Create an CGImageRef and copy the libhb image into it.
-        // The image data returned by hb_get_preview3 is 4 bytes per pixel, BGRA format.
-        // Alpha is ignored.
-        CFMutableDataRef imgData = CFDataCreateMutable(kCFAllocatorDefault, 0);
-        CFDataSetLength(imgData, 3 * image->width * image->height);
+        // Wrap the hb_image_t in a CGImageRef.
+        // The image data returned by hb_get_preview
+        // is 3 bytes per pixel, AV_PIX_FMT_RGB24 format.
+        CGDataProviderDirectCallbacks callbacks = {0};
+        callbacks.getBytePointer = cgimage_get_byte_pointer_callback;
+        callbacks.releaseBytePointer = cgimage_release_byte_pointer_callback;
 
-        UInt8 *src_line = image->data;
-        UInt8 *dst = CFDataGetMutableBytePtr(imgData);
-        for (int r = 0; r < image->height; r++)
-        {
-            UInt8 *src = src_line;
-            for (int c = 0; c < image->width; c++)
-            {
-                *dst++ = src[2];
-                *dst++ = src[1];
-                *dst++ = src[0];
-                src += 4;
-            }
-            src_line += image->plane[0].stride;
-        }
-
-        CGDataProviderRef provider = CGDataProviderCreateWithCFData(imgData);
-
+        CGDataProviderRef dataProvider = CGDataProviderCreateDirect(image, image->plane[0].size, &callbacks);
         CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNone;
         CGColorSpaceRef colorSpace = copyColorSpace(image->color_prim,
                                                     image->color_transfer,
@@ -443,23 +587,18 @@ HB_OBJC_DIRECT_MEMBERS
         img = CGImageCreate(image->width,
                             image->height,
                             8,
-                            24,
-                            image->width * 3,
+                            8 * 3,
+                            image->plane[0].stride,
                             colorSpace,
                             bitmapInfo,
-                            provider,
+                            dataProvider,
                             NULL,
                             NO,
                             kCGRenderingIntentDefault);
 
         CGColorSpaceRelease(colorSpace);
-        CGDataProviderRelease(provider);
-        CFRelease(imgData);
-
-        hb_image_close(&image);
+        CGDataProviderRelease(dataProvider);
     }
-
-    hb_value_free(&job_dict);
 
     return img;
 }

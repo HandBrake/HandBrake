@@ -1,0 +1,75 @@
+From 2f4b1e3b6818ade62ae19e0abdcefdd50d401ad8 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Thu, 13 Feb 2025 09:46:30 +0100
+Subject: [PATCH 2/2] avformat/movenc: write iTunEXTC and iTunMOVI metadata
+
+---
+ libavformat/movenc.c | 45 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index 11df7b0368..c45f15ad77 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -4552,6 +4552,48 @@ static int mov_write_trkn_tag(AVIOContext *pb, MOVMuxContext *mov,
+     return size;
+ }
+ 
++/* iTunes iTMF metadata */
++static int mov_write_itmf_tag(AVIOContext *pb, AVFormatContext *s,
++                              const char *name, const char *tag)
++{
++    AVDictionaryEntry *t = av_dict_get(s->metadata, tag, NULL, 0);
++    uint64_t size = 0;
++    if (t) {
++        size_t name_len = strlen(name);
++        size_t value_len = strlen(t->value);
++        size = 8 + 28 + 12 + name_len + 16 + value_len;
++
++        if (size > INT_MAX) {
++            av_log(s, AV_LOG_WARNING,
++                   "Unable to write %s, invalid value len %ld\n",
++                   name, value_len);
++            return 0;
++        }
++
++        avio_wb32(pb, size);           // size
++        ffio_wfourcc(pb, "----");      // type
++
++        avio_wb32(pb, 28);             // size
++        ffio_wfourcc(pb, "mean");      // type
++        avio_wb32(pb, 0);              // version + flags
++        avio_write(pb, "com.apple.iTunes", 16);
++
++        avio_wb32(pb, 12 + name_len);  // size
++        ffio_wfourcc(pb, "name");      // type
++        avio_wb32(pb, 0);              // version + flags
++        avio_write(pb, name, name_len);
++
++        avio_wb32(pb, 16 + value_len); // size
++        ffio_wfourcc(pb, "data");      // type
++        avio_wb16(pb, 0);              // typeReserved
++        avio_w8(pb, 0);                // typeSetIdentifier
++        avio_w8(pb, 1);                // typeCode = UTF-8
++        avio_wb32(pb, 0);              // locale
++        avio_write(pb, t->value, value_len);
++    }
++    return size;
++}
++
+ static int mov_write_int8_metadata(AVFormatContext *s, AVIOContext *pb,
+                                    const char *name, const char *tag,
+                                    int len)
+@@ -4705,6 +4747,9 @@ static int mov_write_ilst_tag(AVIOContext *pb, MOVMuxContext *mov,
+     mov_write_trkn_tag(pb, mov, s, 0); // track number
+     mov_write_trkn_tag(pb, mov, s, 1); // disc number
+     mov_write_tmpo_tag(pb, s);
++    mov_write_itmf_tag(pb, s, "iTunEXTC", "iTunEXTC");
++    mov_write_itmf_tag(pb, s, "iTunMOVI", "iTunMOVI");
++
+     return update_size(pb, pos);
+ }
+ 
+-- 
+2.39.5 (Apple Git-154)
+

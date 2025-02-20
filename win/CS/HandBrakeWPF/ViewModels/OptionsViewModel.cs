@@ -122,8 +122,14 @@ namespace HandBrakeWPF.ViewModels
         private BindingList<string> excludedFileExtensions;
         private bool recursiveFolderScan;
         private bool keepDuplicateTitles;
-
         private bool maxDurationEnabled;
+        private DefaultRangeMode selectedDefaultRangeMode;
+
+        private string queueDoneAction;
+
+        private string queueDoneArguments;
+
+        private bool queueDoneCustomActionEnabled;
 
         public OptionsViewModel(
             IUserSettingService userSettingService,
@@ -392,8 +398,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SendFileAfterEncode);
             }
         }
-
-
+        
         public WhenDone WhenDone
         {
             get => this.whenDone;
@@ -402,6 +407,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.whenDone = value;
                 this.NotifyOfPropertyChange(() => this.WhenDone);
+                this.NotifyOfPropertyChange(() => this.IsQueueDoneCustomActionEnabled);
             }
         }
 
@@ -411,6 +417,66 @@ namespace HandBrakeWPF.ViewModels
 
         public bool SendSystemNotificationOnQueueDone { get; set; }
 
+        public bool IsQueueDoneCustomActionEnabled => this.WhenDone == WhenDone.CustomAction;
+
+        public bool QueueDoneCustomActionEnabled
+        {
+            get => this.queueDoneCustomActionEnabled;
+            set
+            {
+                if (value == this.queueDoneCustomActionEnabled)
+                {
+                    return;
+                }
+
+                this.queueDoneCustomActionEnabled = value;
+                this.NotifyOfPropertyChange(() => this.QueueDoneCustomActionEnabled);
+            }
+        }
+
+        public string QueueDoneAction
+        {
+            get => this.queueDoneAction;
+            set
+            {
+                if (value == this.queueDoneAction)
+                {
+                    return;
+                }
+
+                this.queueDoneAction = value;
+                this.NotifyOfPropertyChange(() => this.QueueDoneAction);
+            }
+        }
+
+        public string QueueDoneActionFullPath { get; set; }
+
+        public string QueueDoneArguments
+        {
+            get => this.queueDoneArguments;
+            set
+            {
+                if (value == this.queueDoneArguments)
+                {
+                    return;
+                }
+
+                this.queueDoneArguments = value;
+                this.NotifyOfPropertyChange(() => this.QueueDoneArguments);
+            }
+        }
+
+        public BindingList<PlaceHolderBucket> QueueDoneArgumentsOptions
+        {
+            get
+            {
+                return new BindingList<PlaceHolderBucket>
+                       {
+                           new PlaceHolderBucket { Name = Constants.AutonameOutputFolder },
+                       };
+            }
+        }
+        
         /* Output Files */
 
         public string AutoNameDefaultPath
@@ -577,6 +643,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     new PlaceHolderBucket { Name = Constants.Source },
                     new PlaceHolderBucket { Name = Constants.Title },
+                    new PlaceHolderBucket { Name = Constants.Angle },
                     new PlaceHolderBucket { Name = Constants.Chapters},
                     new PlaceHolderBucket { Name = Constants.CreationDate },
                     new PlaceHolderBucket { Name = Constants.CreationTime },
@@ -609,7 +676,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
         public BindingList<PlaceHolderBucket> WhenDoneArguments
         {
             get
@@ -618,7 +684,8 @@ namespace HandBrakeWPF.ViewModels
                        {
                            new PlaceHolderBucket { Name = Constants.SourceArg },
                            new PlaceHolderBucket { Name = Constants.DestinationArg },
-                           new PlaceHolderBucket { Name = Constants.ExitCodeArg }
+                           new PlaceHolderBucket { Name = Constants.ExitCodeArg },
+                           new PlaceHolderBucket { Name = Constants.DestinationFolder }
                        };
             }
         }
@@ -973,6 +1040,23 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public BindingList<DefaultRangeMode> DefaultRangeModes { get; } = new BindingList<DefaultRangeMode>(EnumHelper<DefaultRangeMode>.GetEnumList().ToList());
+
+        public DefaultRangeMode SelectedDefaultRangeMode
+        {
+            get => this.selectedDefaultRangeMode;
+            set
+            {
+                if (value == this.selectedDefaultRangeMode)
+                {
+                    return;
+                }
+
+                this.selectedDefaultRangeMode = value;
+                this.NotifyOfPropertyChange(() => this.SelectedDefaultRangeMode);
+            }
+        }
+
         /* Video */
         public bool EnableDirectXDecoding
         {
@@ -1113,7 +1197,19 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.updateAvailable = value;
                 this.NotifyOfPropertyChange(() => this.UpdateAvailable);
+                this.NotifyOfPropertyChange(() => this.IsPortableModeUpdateAvailable);
+                this.NotifyOfPropertyChange(() => this.DownloadAvailable);
             }
+        }
+
+        public bool DownloadAvailable
+        {
+            get => !Portable.IsPortable() && UpdateAvailable;
+        }
+
+        public bool IsPortableModeUpdateAvailable
+        {
+            get => Portable.IsPortable() && UpdateAvailable;
         }
 
         public int DownloadProgressPercentage
@@ -1214,6 +1310,29 @@ namespace HandBrakeWPF.ViewModels
                 this.SendFileTo = Path.GetFileNameWithoutExtension(dialog.FileName);
                 this.sendFileToPath = dialog.FileName;
             }
+        }
+
+        public void BrowseQueueDoneAction()
+        {
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*", FileName = this.sendFileToPath };
+            bool? dialogResult = dialog.ShowDialog();
+            if (dialogResult.HasValue && dialogResult.Value)
+            {
+                this.QueueDoneAction = Path.GetFileNameWithoutExtension(dialog.FileName);
+                this.QueueDoneActionFullPath = dialog.FileName;
+            }
+        }
+
+        public void ClearQueueDoneAction()
+        {
+            this.QueueDoneAction = null;
+            this.QueueDoneActionFullPath = null;
+        }
+
+        public void ClearSendFileToAction()
+        {
+            this.SendFileTo = null;
+            this.SendFileToPath = null;
         }
 
         public void BrowseAutoNamePath()
@@ -1413,7 +1532,11 @@ namespace HandBrakeWPF.ViewModels
             this.PlaySoundWhenQueueDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenQueueDone);
             this.SendSystemNotificationOnEncodeDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.NotifyOnEncodeDone);
             this.SendSystemNotificationOnQueueDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.NotifyOnQueueDone);
-
+            this.QueueDoneCustomActionEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.QueueDoneCustomActionEnabled);
+            this.QueueDoneAction = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.QueueDoneAction)) ?? string.Empty;
+            this.QueueDoneActionFullPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.QueueDoneAction) ?? string.Empty;
+            this.QueueDoneArguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.QueueDoneArguments);
+            
             // #############################
             // Output Settings
             // #############################
@@ -1556,6 +1679,8 @@ namespace HandBrakeWPF.ViewModels
             this.ExcludedFileExtensions = new BindingList<string>(userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions));
             this.RecursiveFolderScan = userSettingService.GetUserSetting<bool>(UserSettingConstants.RecursiveFolderScan);
 
+            this.SelectedDefaultRangeMode = userSettingService.GetUserSetting<DefaultRangeMode>(UserSettingConstants.DefaultRangeMode);
+
             // #############################
             // Safe Mode
             // #############################
@@ -1651,9 +1776,6 @@ namespace HandBrakeWPF.ViewModels
             /* General */
             this.userSettingService.SetUserSetting(UserSettingConstants.UpdateStatus, this.CheckForUpdates);
             this.userSettingService.SetUserSetting(UserSettingConstants.DaysBetweenUpdateCheck, this.CheckForUpdatesFrequency);
-            this.userSettingService.SetUserSetting(UserSettingConstants.SendFileTo, this.SendFileToPath);
-            this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, this.SendFileAfterEncode);
-            this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowStatusInTitleBar, this.ShowStatusInTitleBar);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowPreviewOnSummaryTab, this.ShowPreviewOnSummaryTab);
             this.userSettingService.SetUserSetting(UserSettingConstants.DarkThemeMode, this.DarkThemeMode);
@@ -1673,6 +1795,12 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenDoneAudioFile, this.WhenDoneAudioFileFullPath);
             this.userSettingService.SetUserSetting(UserSettingConstants.NotifyOnEncodeDone, this.SendSystemNotificationOnEncodeDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.NotifyOnQueueDone, this.SendSystemNotificationOnQueueDone);
+            this.userSettingService.SetUserSetting(UserSettingConstants.SendFileTo, this.SendFileToPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, this.SendFileAfterEncode);
+            this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);
+            this.userSettingService.SetUserSetting(UserSettingConstants.QueueDoneCustomActionEnabled, this.QueueDoneCustomActionEnabled);
+            this.userSettingService.SetUserSetting(UserSettingConstants.QueueDoneAction, this.QueueDoneActionFullPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.QueueDoneArguments, this.QueueDoneArguments);
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);
@@ -1740,6 +1868,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationEnabled, this.RemoteServiceEnabled);
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationPort, this.RemoteServicePort);
             this.userSettingService.SetUserSetting(UserSettingConstants.SimultaneousEncodes, this.SimultaneousEncodes);
+            this.userSettingService.SetUserSetting(UserSettingConstants.DefaultRangeMode, this.SelectedDefaultRangeMode);
         }
 
         public void LaunchHelp()
@@ -1753,11 +1882,6 @@ namespace HandBrakeWPF.ViewModels
             if (info.NewVersionAvailable)
             {
                 this.UpdateMessage = Resources.OptionsViewModel_NewUpdate;
-                this.UpdateAvailable = true;
-            }
-            else if (Environment.Is64BitOperatingSystem && !System.Environment.Is64BitProcess)
-            {
-                this.UpdateMessage = Resources.OptionsViewModel_64bitAvailable;
                 this.UpdateAvailable = true;
             }
             else

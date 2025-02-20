@@ -1,6 +1,6 @@
 /* encx265.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -217,7 +217,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /*
      * HDR10 Static metadata
      */
-    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
+    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084 && job->color_matrix == HB_COLR_MAT_BT2020_NCL)
     {
         if (depth > 8)
         {
@@ -493,7 +493,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /*
      * Update and set Dolby Vision level
      */
-    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
     {
         char dolbyVisionProfile[256];
         snprintf(dolbyVisionProfile, sizeof(dolbyVisionProfile),
@@ -713,7 +713,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
         for (int i = 0; i < in->nb_side_data; i++)
         {
             const AVFrameSideData *side_data = in->side_data[i];
-            if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS &&
+            if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_HDR10PLUS &&
                 side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
             {
                 uint8_t *payload = NULL;
@@ -743,7 +743,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
                 sei_payload->payloadType = USER_DATA_REGISTERED_ITU_T_T35;
                 sei->numPayloads++;
             }
-            if (job->passthru_dynamic_hdr_metadata & DOVI &&
+            if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI &&
                 side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
             {
                 x265_dolby_vision_rpu *rpu = &pic_in.rpu;

@@ -374,9 +374,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.NotifyOfPropertyChange(() => this.ScannedTrack);
                 this.NotifyOfPropertyChange(() => this.TrackReference);
 
-                if (string.IsNullOrEmpty(this.TrackName))
+                if (!string.IsNullOrEmpty(this.scannedTrack?.Name))
                 {
-                    this.TrackName = !string.IsNullOrEmpty(this.scannedTrack?.Name) ? this.scannedTrack.Name : null;
+                    this.TrackName = this.scannedTrack.Name;
                 }
                 
                 this.GetDefaultMixdownIfNull();

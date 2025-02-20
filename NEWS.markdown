@@ -10,6 +10,60 @@ Download available from Microsoft:
 - [For x64 (AMD or Intel CPUs)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe)
 - [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-arm64.exe)
 
+## HandBrake 1.10.0
+
+#### General
+
+- Added new "Social 10MB" presets.
+
+### Windows
+
+- Added a new preference "Default Range Mode for titles". See Preferences -> Advanced (#6385)
+- Added a new preference to run a custom action when the queue completes. See Preferences -> When Done (#4851)
+- Added "{destination_folder}" as option on the "Encode Completed" "Send File To" option.
+- Updated Auto Naming Preferences to add "{angle}" as a filename generation option. (#6086)
+- Minor Performance Optimisations for ARM64 devices running Windows
+- Minor UI improvements throughout the UI. 
+- Various bug fixes and improvements. (#6524, #6517, #6514, #6477, #6473, #6086)
+
+
+## HandBrake 1.9.1
+
+### All platforms
+
+#### General
+
+- Fixed FFV1 pixel format selection when an hardware decoder is used (#6565)
+- Fixed an issue that could happen when chapters titles are not UTF-8 (#6489)
+- Fixed gcc14 aarch64 build failures (#6463)
+
+#### Subtitles
+
+- Improved support for SRT files with overlapping subtitles (#6155)
+
+#### Audio
+
+- Fixed AC3 and EAC3 extradata in MKV (#6582)
+
+#### Third-party libraries
+
+- nv-codec-headers: Harden DLL loading so that it only uses system32 for the search path on Windows (#6548)
+
+- Updated libraries
+  - libdav1d 1.5.1 (AV1 video decoding)
+  - HarfBuzz 10.2.0 (subtitles)
+  - libjpeg-turbo 3.1.0 (preview image compression)
+  
+### Windows
+
+- Fix an issue with the autoname function not updating when title is the only option (#6517)
+- Fix an issue where the audio encoder may not display correctly after a queue has been imported and queue item edited. This may exhibit in other scenarios as well (#6524)
+- Fix an issue with titlebar / taskbar progress erroneously showing with multi-instance encodes (#6477)
+- Fix a crash when importing chapters where there is a chapter count mis-match (#6514)
+- Fixed an issue with autoname pre/postfix option where it would apply regardless of file path collision.
+- Fixed an issue where the crop controls would not enable correctly when editing jobs (#6614)
+
+
 ## HandBrake 1.9.0
 
 ### All platforms
@@ -17,7 +71,7 @@ Download available from Microsoft:
 #### General
 
 - Added Intel QSV VVC (hardware) video decoder
-- Added an option to enable AV1 screen content coding(SCC) on Intel Lunar Lake QSV AV1 encoder
+- Added an option to enable AV1 screen content coding (SCC) on Intel Lunar Lake QSV AV1 encoder
 - Added support for lossless VP9 encoding
 - Added a preference to keep duplicated Blu-ray titles
 - Added support for Max Duration of Scan titles for disc based sources (#6304)
@@ -65,7 +119,7 @@ Download available from Microsoft:
 - Miscellaneous bug fixes and improvements
 - Updated existing translations
 - Added new translations
-  - Swedish
+  - Swedish (Svenska)
 
 ### Windows
 
@@ -77,7 +131,7 @@ Download available from Microsoft:
 - Miscellaneous bug fixes and improvements
 - Updated existing translations
 - Added new translations
-  - Swedish
+  - Swedish (Svenska)
 
 
 ## HandBrake 1.8.2

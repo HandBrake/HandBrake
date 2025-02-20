@@ -5,10 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
+             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
 
     <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+
         <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Margin" Value="0,5,0,0"></Setter>
         </Style>
@@ -44,7 +47,8 @@
                       KeyboardNavigation.TabNavigation="Continue"
                       KeyDown="MetadataList_OnKeyDown"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      SelectionMode="Single">
+                      SelectionMode="Single"
+                      Grid.IsSharedSizeScope="true">
 
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}" >
@@ -61,12 +65,20 @@
                     </Style>
                 </ListView.Resources>
 
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static Properties:Resources.MetaData_Add}" Command="{Binding RelayCommand}" CommandParameter="Add" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+
                 <ListView.View>
                     <GridView AllowsColumnReorder="False">
                         <GridViewColumn Header="" Width="10" />
                         <!-- TODO Localise if we ever decide to enable this functionality in the UI.-->
+                        <GridViewColumn Header="Enabled" Width="60" />
                         <GridViewColumn Header="Annotation" Width="170" />
                         <GridViewColumn Header="Value" Width="250" />
+                        <GridViewColumn Header="" Width="50" />
                     </GridView>
                 </ListView.View>
 
@@ -87,14 +99,39 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="60" />
                                 <ColumnDefinition Width="170" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="50" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="1" Text="{Binding Annotation}" HorizontalAlignment="Left" Margin="0,0,0,0" />
+                            <CheckBox Grid.Column="1" IsChecked="{Binding Enabled}" VerticalAlignment="Center" HorizontalAlignment="Left" />
 
-                            <TextBox Grid.Column="2" Text="{Binding Value}" x:Name="metadataValue" behaviours:TextBoxBehavior.TripleClickSelectAll="True" 
-                                     TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="0,2,0,2" PreviewMouseDown="MetadataValue_OnPreviewMouseDown" />
+                            <!-- Annotation -->
+                            <TextBlock Grid.Column="2" Text="{Binding Annotation}" HorizontalAlignment="Left" Margin="0,0,0,0"
+                                       Visibility="{Binding IsNew, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
+                                       />
+
+                            <TextBox Grid.Column="2" Text="{Binding Annotation}"  behaviours:TextBoxBehavior.TripleClickSelectAll="True" 
+                                     Visibility="{Binding IsNew, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center"
+                                     TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="0,2,0,2" Margin="1,1,10,1"  />
+                         
+
+                            <!-- Value -->
+                            <TextBox Grid.Column="3" Text="{Binding Value}" x:Name="metadataValue" behaviours:TextBoxBehavior.TripleClickSelectAll="True" 
+                                     TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="0,2,0,2" Margin="1" PreviewMouseDown="MetadataValue_OnPreviewMouseDown" />
+
+
+                            <!--  Delete  -->
+                            <StackPanel Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" Visibility="{Binding IsNew, Converter={StaticResource boolToVisConverter}}">
+
+                                <Button Style="{StaticResource TransparentButtonStyle}" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"          
+                                        CommandParameter="{Binding}">
+                                    <Button.Content>
+                                        <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png" />
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
 
                         </Grid>
 

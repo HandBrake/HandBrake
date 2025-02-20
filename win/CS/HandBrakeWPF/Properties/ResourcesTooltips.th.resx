@@ -163,15 +163,13 @@ HQDN3D เป็นฟิลเตอร์กรองความถี่ต�
 แหล่ง Blu-ray และ DVD มักมีหลายชื่อ ซึ่งยาวที่สุดมักจะเป็นคุณสมบัติหลัก</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>อะนามอร์ฟิค ให้มิติการจัดเก็บโดยพลการในขณะที่รักษาลักษณะเดิมไว้ในระหว่างการเล่น
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-ไม่มีปิดการใช้งาน anamorphic ขนาดการจัดเก็บวิดีโอและขนาดการแสดงผลจะเหมือนกัน มีประโยชน์สำหรับความเข้ากันได้กับอุปกรณ์รุ่นเก่าบางรุ่นเท่านั้น
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-อัตโนมัติเพิ่มความละเอียดในการจัดเก็บสูงสุดในขณะที่รักษาอัตราส่วนการแสดงผลเดิม แนะนำ.
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-คลายออกนั้นคล้ายกับอัตโนมัติ แต่พยายามรักษาอัตราส่วนพื้นที่จัดเก็บ ซึ่งอาจส่งผลให้สูญเสียความละเอียดในการจัดเก็บเล็กน้อยเมื่อเทียบกับอัตโนมัติ
-
-กำหนดเองช่วยให้ตั้งค่าพารามิเตอร์ทั้งหมดด้วยตนเอง มีประโยชน์สำหรับการแก้ไขด้านการแสดงผลที่มาที่ไม่ถูกต้อง และสำหรับมืออาชีพที่ต้องการการควบคุมขั้นสูงในขั้นตอนหลังการผลิต</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>ครอบตัดขอบสีดำรอบขอบของวิดีโอโดยอัตโนมัติ</value>
@@ -263,12 +261,15 @@ HQDN3D เป็นฟิลเตอร์กรองความถี่ต�
     <value>เปิดใช้งานเอาต์พุตอัตราเฟรมแบบแปรผันด้วยอัตราสูงสุดที่กำหนดโดยการตั้งค่าอัตราเฟรม</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>ปรับการตั้งค่าตัวเข้ารหัสเพื่อแลกประสิทธิภาพการบีบอัดกับความเร็วในการเข้ารหัส
+    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
 
-สิ่งนี้กำหนดการตั้งค่าตัวเข้ารหัสเริ่มต้นของคุณ
-การปรับแต่ง โปรไฟล์ ระดับ และสตริงตัวเลือกขั้นสูงจะถูกนำไปใช้กับสิ่งนี้
-โดยทั่วไปคุณควรตั้งค่าตัวเลือกนี้ให้ช้าที่สุดที่คุณสามารถทนได้ตั้งแต่ช้ากว่า
-การตั้งค่าจะส่งผลให้ไฟล์มีคุณภาพดีขึ้นหรือมีขนาดเล็กลง</value>
+This establishes your default encoder settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.
+
+Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
+or to the left to increase encoding speed at the expense of compression efficiency.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>ตั้งค่าและรับรองการปฏิบัติตามโปรไฟล์ที่ระบุ
@@ -559,5 +560,14 @@ Bitrate will vary source to source.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Dash (-), Period (.) and Comma (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Use highest resolution permitted by above settings</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Changing the displays size will stretch the video</value>
   </data>
 </root>
