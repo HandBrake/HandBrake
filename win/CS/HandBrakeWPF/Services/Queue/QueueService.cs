@@ -81,6 +81,8 @@ namespace HandBrakeWPF.Services.Queue
             this.logInstanceManager = logInstanceManager;
             this.portService = portService;
 
+            this.logInstanceManager.SetQueue(this);
+
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
             this.queueFile = string.Format("{0}{1}.json", QueueRecoveryHelper.QueueFileName, GeneralUtilities.ProcessId);
 
