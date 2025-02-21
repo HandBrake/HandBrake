@@ -2668,6 +2668,9 @@ La causa potrebbe essere dovuta al tipo di file contenitore selezionato. Consigl
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Preferisci l'uso di Nvidia NVDec per la decodifica quando si usa la codifica NVEnc e l'hardware è disponibile all'uso.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Preferisci l'uso di AMD AMFDec per la decodifica quando si usa la codifica AMFEnc e l'hardware è disponibile all'uso.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Supporto Hardware</value>
   </data>

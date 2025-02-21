@@ -2667,6 +2667,9 @@ HandBrakeエンコードサポートは設定から最有効化できます。</
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>ハードウェアが利用可能でNVEncエンコーダを使用するときの、映像のデコードにNvidia NVDecを使用する。</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>ハードウェアが利用可能でAMFEncエンコーダを使用するときの、映像のデコードにAMD AMFDecを使用する。</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>ハードウェアサポート</value>
   </data>

@@ -1,0 +1,94 @@
+From a9f8ff1cb9a8cbff014a7dfa83e6bb1dc80417bc Mon Sep 17 00:00:00 2001
+From: nyanmisaka <nst799610810@gmail.com>
+Date: Mon, 20 Jan 2025 17:32:23 +0100
+Subject: [PATCH] avcodec/amfdec: Add VP9 AMF decoder
+
+---
+ configure              |  1 +
+ libavcodec/Makefile    |  1 +
+ libavcodec/allcodecs.c |  1 +
+ libavcodec/amfdec.c    | 16 ++++++++++++----
+ 4 files changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/configure b/configure
+index 2c4219a..d324c64 100755
+--- a/configure
++++ b/configure
+@@ -3429,6 +3429,7 @@ vp8_vaapi_encoder_deps="VAEncPictureParameterBufferVP8"
+ vp8_vaapi_encoder_select="vaapi_encode"
+ vp8_v4l2m2m_decoder_deps="v4l2_m2m vp8_v4l2_m2m"
+ vp8_v4l2m2m_encoder_deps="v4l2_m2m vp8_v4l2_m2m"
++vp9_amf_decoder_deps="amf"
+ vp9_cuvid_decoder_deps="cuvid"
+ vp9_mediacodec_decoder_deps="mediacodec"
+ vp9_mediacodec_encoder_deps="mediacodec"
+diff --git a/libavcodec/Makefile b/libavcodec/Makefile
+index fdc7bf8..d6b4d31 100644
+--- a/libavcodec/Makefile
++++ b/libavcodec/Makefile
+@@ -796,6 +796,7 @@ OBJS-$(CONFIG_VP8_V4L2M2M_ENCODER)     += v4l2_m2m_enc.o
+ OBJS-$(CONFIG_VP9_DECODER)             += vp9.o vp9data.o vp9dsp.o vp9lpf.o vp9recon.o \
+                                           vp9block.o vp9prob.o vp9mvs.o vpx_rac.o \
+                                           vp9dsp_8bpp.o vp9dsp_10bpp.o vp9dsp_12bpp.o
++OBJS-$(CONFIG_VP9_AMF_DECODER)         += amfdec.o
+ OBJS-$(CONFIG_VP9_CUVID_DECODER)       += cuviddec.o
+ OBJS-$(CONFIG_VP9_MEDIACODEC_DECODER)  += mediacodecdec.o
+ OBJS-$(CONFIG_VP9_MEDIACODEC_ENCODER)  += mediacodecenc.o
+diff --git a/libavcodec/allcodecs.c b/libavcodec/allcodecs.c
+index 821290b..c83c332 100644
+--- a/libavcodec/allcodecs.c
++++ b/libavcodec/allcodecs.c
+@@ -890,6 +890,7 @@ extern const FFCodec ff_vp8_mediacodec_encoder;
+ extern const FFCodec ff_vp8_qsv_decoder;
+ extern const FFCodec ff_vp8_v4l2m2m_encoder;
+ extern const FFCodec ff_vp8_vaapi_encoder;
++extern const FFCodec ff_vp9_amf_decoder;
+ extern const FFCodec ff_vp9_cuvid_decoder;
+ extern const FFCodec ff_vp9_mediacodec_decoder;
+ extern const FFCodec ff_vp9_mediacodec_encoder;
+diff --git a/libavcodec/amfdec.c b/libavcodec/amfdec.c
+index c0a312a..a7f98ec 100644
+--- a/libavcodec/amfdec.c
++++ b/libavcodec/amfdec.c
+@@ -89,6 +89,9 @@ static int amf_init_decoder(AVCodecContext *avctx)
+     AMFBuffer               *buffer;
+     amf_int64               color_profile;
+     int                     pool_size = 36;
++    // way-around for older drivers that don't support dynamic bitness detection -
++    // define HEVC and VP9 10-bit based on container info
++    int                     no_bitness_detect = amf_legacy_driver_no_bitness_detect(amf_device_ctx);
+ 
+     ctx->drain = 0;
+     ctx->resolution_changed = 0;
+@@ -99,13 +102,17 @@ static int amf_init_decoder(AVCodecContext *avctx)
+             break;
+         case AV_CODEC_ID_HEVC: {
+             codec_id = AMFVideoDecoderHW_H265_HEVC;
+-            // way-around for older drivers that don't support dynamic butness detection -
+-            // define HEVC 10-bit based on container info
+-            if(amf_legacy_driver_no_bitness_detect(amf_device_ctx)){
++            if(no_bitness_detect){
+                 if(avctx->pix_fmt == AV_PIX_FMT_YUV420P10)
+                     codec_id = AMFVideoDecoderHW_H265_MAIN10;
+             }
+-
++        } break;
++        case AV_CODEC_ID_VP9: {
++            codec_id = AMFVideoDecoderHW_VP9;
++            if(no_bitness_detect){
++                if(avctx->pix_fmt == AV_PIX_FMT_YUV420P10)
++                    codec_id = AMFVideoDecoderHW_VP9_10BIT;
++            }
+         } break;
+         case AV_CODEC_ID_AV1:
+             codec_id = AMFVideoDecoderHW_AV1;
+@@ -713,4 +720,5 @@ const FFCodec ff_##x##_amf_decoder = { \
+ 
+ DEFINE_AMF_DECODER(h264, H264, "h264_mp4toannexb")
+ DEFINE_AMF_DECODER(hevc, HEVC, NULL)
++DEFINE_AMF_DECODER(vp9, VP9, NULL)
+ DEFINE_AMF_DECODER(av1, AV1, NULL)
+\ No newline at end of file
+-- 
+2.34.1
+

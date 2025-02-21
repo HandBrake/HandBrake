@@ -2660,6 +2660,9 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>当使用 NVEnc 编码器且硬件可以使用时，优先使用 Nvidia NVDec 来解码视频。</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>当使用 AMFEnc 编码器且硬件可以使用时，优先使用 AMD AMFDec 来解码视频。</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>硬件支持</value>
   </data>

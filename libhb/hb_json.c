@@ -1021,13 +1021,15 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
 
     int title_index, hw_decode, keep_duplicate_titles;
     const char *path = NULL;
+    hw_decode = 0;
 
-    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i, s?i, s?b}}",
+    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i, s?b}, s:{s?i}}",
                             "Source",
                                 "Path",     unpack_s(&path),
                                 "Title",    unpack_i(&title_index),
-                                "HWDecode", unpack_i(&hw_decode),
-                                "KeepDuplicateTitles", unpack_b(&keep_duplicate_titles)
+                                "KeepDuplicateTitles", unpack_b(&keep_duplicate_titles),
+                            "Video",
+                                "HardwareDecode", unpack_i(&hw_decode)
                            );
     if (result < 0)
     {

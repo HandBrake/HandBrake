@@ -2668,6 +2668,9 @@ Cela peut être aux limitations du container de fichier sélectionné. Veuillez 
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Privilégier l'utilisation de Nvidia NVDec pour le décodage vidéo lorsque que l'encodeur NVEnv est utilisé et que le support matériel est disponible.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Privilégier l'utilisation de AMD AMFDec pour le décodage vidéo lorsque que l'encodeur AMFEnv est utilisé et que le support matériel est disponible.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Support matériel</value>
   </data>
