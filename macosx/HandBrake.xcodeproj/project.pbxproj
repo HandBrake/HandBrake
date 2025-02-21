@@ -204,6 +204,8 @@
 		A93341EF243E15BE003A82C2 /* HandBrakeXPCService3.xpc in Copy Files */ = {isa = PBXBuildFile; fileRef = A93341D5243E158B003A82C2 /* HandBrakeXPCService3.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A93341F0243E15BE003A82C2 /* HandBrakeXPCService4.xpc in Copy Files */ = {isa = PBXBuildFile; fileRef = A93341E6243E158E003A82C2 /* HandBrakeXPCService4.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A93341F1243E15CE003A82C2 /* HandBrakeXPCService.xpc in Copy Files */ = {isa = PBXBuildFile; fileRef = A964D39522FDE8EE00DFCAEA /* HandBrakeXPCService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A935B1662D68B68C00486A51 /* libcpuinfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A935B1652D68B67F00486A51 /* libcpuinfo.a */; };
+		A935B1672D68B6D300486A51 /* libcpuinfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A935B1652D68B67F00486A51 /* libcpuinfo.a */; };
 		A939DD8B1FC8826A00135F2A /* HBPresetsMenuBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */; };
 		A93CD3172C47CAFC00B11335 /* HBTitleSelectionRange.m in Sources */ = {isa = PBXBuildFile; fileRef = A93CD3162C47CAFC00B11335 /* HBTitleSelectionRange.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
@@ -615,6 +617,7 @@
 		A93341C4243E1583003A82C2 /* HandBrakeXPCService2.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = HandBrakeXPCService2.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93341D5243E158B003A82C2 /* HandBrakeXPCService3.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = HandBrakeXPCService3.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93341E6243E158E003A82C2 /* HandBrakeXPCService4.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = HandBrakeXPCService4.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
+		A935B1652D68B67F00486A51 /* libcpuinfo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcpuinfo.a; path = external/contrib/lib/libcpuinfo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A939DD891FC8826A00135F2A /* HBPresetsMenuBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPresetsMenuBuilder.h; sourceTree = "<group>"; };
 		A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBPresetsMenuBuilder.m; sourceTree = "<group>"; };
 		A93B0DF61C804CF50051A3FA /* NSDictionary+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+HBAdditions.h"; sourceTree = "<group>"; };
@@ -1274,6 +1277,7 @@
 				A9AB9AA821181CC700BB3C7E /* CoreVideo.framework in Frameworks */,
 				A9AB9AA621181CA900BB3C7E /* VideoToolbox.framework in Frameworks */,
 				A9ABD1A91E2A0F8200EC8B65 /* CoreGraphics.framework in Frameworks */,
+				A935B1672D68B6D300486A51 /* libcpuinfo.a in Frameworks */,
 				A9ABD1A71E2A0F7500EC8B65 /* CoreText.framework in Frameworks */,
 				273F203014ADB9790021BE6D /* AudioToolbox.framework in Frameworks */,
 				273F203314ADB9F00021BE6D /* CoreServices.framework in Frameworks */,
@@ -1377,6 +1381,7 @@
 				A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */,
 				1CBC683520BE014800A26CC2 /* liblzma.a in Frameworks */,
 				1C53DE8D20BD598D006BBCA8 /* libspeex.a in Frameworks */,
+				A935B1662D68B68C00486A51 /* libcpuinfo.a in Frameworks */,
 				1C0695AF20BD193D001543DA /* libswresample.a in Frameworks */,
 				A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */,
 				A99E13392833B97A0006D720 /* libSvtAv1Enc.a in Frameworks */,
@@ -1421,7 +1426,6 @@
 		271BA4C714B1236D00BC1D2C /* Static Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				A9E34AD4297871FE00C5DD82 /* libdovi.a */,
 				1CDCF0C1241F28D400FB62C6 /* libturbojpeg.a */,
 				1C280BF320BD58DD00D5ECC2 /* libspeex.a */,
 				1CBC683320BE014800A26CC2 /* liblzma.a */,
@@ -1450,6 +1454,7 @@
 				A9E165511C523016003EF30E /* libavfilter.a */,
 				1C15C82B1CD7722500368223 /* libharfbuzz.a */,
 				A9935867256C349B00A6875E /* libzimg.a */,
+				A935B1652D68B67F00486A51 /* libcpuinfo.a */,
 				A99E13372833B97A0006D720 /* libSvtAv1Enc.a */,
 			);
 			name = "Static Libraries";
@@ -1600,6 +1605,7 @@
 			isa = PBXGroup;
 			children = (
 				277EFE9217ED799E001D4A6A /* libfdk-aac.a */,
+				A9E34AD4297871FE00C5DD82 /* libdovi.a */,
 				22CC9E74191EBEA500C69D81 /* libx265.a */,
 			);
 			name = "Static Libraries (optional)";
