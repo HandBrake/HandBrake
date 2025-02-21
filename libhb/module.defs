@@ -1,4 +1,4 @@
-__deps__ := BZIP2 LIBVPX SVT-AV1 FFMPEG FREETYPE LAME LIBASS \
+__deps__ := BZIP2 CPUINFO LIBVPX SVT-AV1 FFMPEG FREETYPE LAME LIBASS \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBTHEORA LIBVORBIS LIBOGG \
     X264 X265 ZLIB LIBBLURAY FDKAAC LIBVPL LIBGNURX JANSSON \
     HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D LIBJPEGTURBO LIBDOVI
@@ -116,7 +116,7 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        ass avformat avfilter avcodec avutil swresample dvdnav dvdread \
+        ass avformat avfilter avcodec avutil swresample cpuinfo dvdnav dvdread \
         freetype mp3lame swscale vpx theora vorbis vorbisenc ogg x264 \
         bluray jansson harfbuzz opus speex dav1d turbojpeg zimg SvtAv1Enc, \
         $(CONTRIB.build/)lib/lib$(n).a )
