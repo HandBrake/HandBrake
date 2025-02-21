@@ -231,7 +231,7 @@ int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx, hb
         }
         else
         {
-            *hw_device_ctx = av_buffer_ref(ctx);
+            *hw_device_ctx = ctx;
         }
     }
 
