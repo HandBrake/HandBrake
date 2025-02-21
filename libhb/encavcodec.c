@@ -489,7 +489,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             if (job->vbitrate == pv->qsv_data.param.rc.vbv_max_bitrate)
             {
                 char maxrate[7];
-                snprintf(maxrate, 7, "%.2f", context->bit_rate);
+                snprintf(maxrate, 7, "%d", context->bit_rate);
                 av_dict_set( &av_opts, "maxrate", maxrate, 0 );
             }
         }
