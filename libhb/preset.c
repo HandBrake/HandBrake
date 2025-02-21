@@ -2974,6 +2974,23 @@ static void und_to_any(hb_value_array_t * list)
     }
 }
 
+static void import_av1_preset_settings_63_0_0(hb_value_t *preset)
+{
+    const char *enc = hb_dict_get_string(preset, "VideoEncoder");
+    int codec = hb_video_encoder_get_from_name(enc);
+
+    if (codec == HB_VCODEC_SVT_AV1 || codec == HB_VCODEC_SVT_AV1_10BIT)
+    {
+        const char *value = hb_dict_get_string(preset, "VideoPreset");
+        int video_preset = value ? atoi(value) : 0;
+
+        if (video_preset > 10)
+        {
+            hb_dict_set_string(preset, "VideoPreset", "10");
+        }
+    }
+}
+
 static void import_svt_av1_tune_61_0_0(hb_value_t *preset)
 {
     const char *enc = hb_dict_get_string(preset, "VideoEncoder");
@@ -3749,9 +3766,17 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+
+static void import_63_0_0(hb_value_t *preset)
+{
+    import_av1_preset_settings_63_0_0(preset);
+}
+
 static void import_61_0_0(hb_value_t *preset)
 {
     import_svt_av1_tune_61_0_0(preset);
+
+    import_63_0_0(preset);
 }
 
 static void import_60_0_0(hb_value_t *preset)
@@ -3989,6 +4014,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 61, 0, 0) <= 0)
         {
             import_61_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 63, 0, 0) <= 0)
+        {
+            import_63_0_0(preset);
             result = 1;
         }
 
