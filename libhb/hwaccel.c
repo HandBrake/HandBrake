@@ -312,7 +312,7 @@ AVBufferRef *hb_hwaccel_init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
     frames_ctx->width = width;
     frames_ctx->height = height;
 
-    if(initial_pool_size > 0)
+    if (initial_pool_size > 0)
     {
         frames_ctx->initial_pool_size = initial_pool_size;
     }

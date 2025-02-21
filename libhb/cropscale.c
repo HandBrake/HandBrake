@@ -97,7 +97,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_t * avsettings = hb_dict_init();
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if(init->hw_pix_fmt == AV_PIX_FMT_QSV)
+    if (init->hw_pix_fmt == AV_PIX_FMT_QSV)
     {
         if (top > 0 || bottom > 0 || left > 0 || right > 0)
         {
