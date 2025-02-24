@@ -110,7 +110,7 @@ const char *metadata_keys[][META_MUX_LAST] =
     {"ShowWorkAndMovement", "show_work_and_movement", NULL,                                   NULL},
 
     {"LinearNotes",         "linear_notes",           NULL,                                   NULL},
-    {"RecordCompany",       "make",                   NULL,                                   NULL},
+    {"RecordCompany",       "make",                   "com.apple.quicktime.make",             NULL},
     {"OriginalArtist",      "original_artist",        "com.apple.quicktime.originalartist",   NULL},
     {"PhonogramRights",     "phonogram_rights",       "com.apple.quicktime.phonogramrights",  NULL},
     {"Producer",            "producer",               "com.apple.quicktime.producer",         "PRODUCER"},
@@ -1129,6 +1129,19 @@ static int avformatInit( hb_mux_object_t * m )
                         av_dict_set(&m->oc->metadata, mux_key, str, 0);
                     }
                 }
+            }
+        }
+
+        if (job->mux == HB_MUX_AV_MP4)
+        {
+            // Set the location tag language to undefined,
+            // Apple software seems to require it
+            hb_value_t *location = hb_dict_get(job->metadata->dict, "Location");
+            if (location)
+            {
+                char *str = hb_value_get_string_xform(location);
+                av_dict_set(&m->oc->metadata, "location-und", str, 0);
+                free(str);
             }
         }
 
