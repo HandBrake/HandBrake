@@ -115,6 +115,7 @@ namespace HandBrakeWPF.Services
                 {
                     window.Owner = Application.Current.MainWindow;
                     window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                    window.ResizeMode = ResizeMode.NoResize;
                 }
             
                 window.ShowDialog();
