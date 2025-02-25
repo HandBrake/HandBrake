@@ -1,0 +1,31 @@
+From 95676fcc5c7141124a10bab0498110aed88680ce Mon Sep 17 00:00:00 2001
+From: galinart <artem.galin@intel.com>
+Date: Thu, 17 Oct 2024 16:17:36 +0100
+Subject: [PATCH] libavcodec/qsvenc.c: update has_b_frames value after
+ initialization of encoder
+
+---
+ libavcodec/qsvenc.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/libavcodec/qsvenc.c b/libavcodec/qsvenc.c
+index 8200a14..c2bb5e5 100644
+--- a/libavcodec/qsvenc.c
++++ b/libavcodec/qsvenc.c
+@@ -1842,6 +1842,13 @@ int ff_qsv_enc_init(AVCodecContext *avctx, QSVEncContext *q)
+         return ret;
+     }
+ 
++    // Update AVCodecContext with actual encoding parameters
++    mfxInfoMFX *info = &q->param.mfx;
++    avctx->has_b_frames = 0;
++    if (info->GopRefDist > 1) {
++        avctx->has_b_frames = info->GopRefDist - 1;
++    }
++
+     q->avctx = avctx;
+ 
+     return 0;
+-- 
+2.25.1
+
