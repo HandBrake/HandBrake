@@ -23,6 +23,7 @@
 #ifdef __APPLE__
 #include "platform/macosx/vt_common.h"
 #endif
+#include "handbrake/vce_common.h"
 
 typedef struct
 {
@@ -154,7 +155,6 @@ static void work_func( void * _work )
             hb_qsv_setup_job(job);
         }
 #endif
-
         hb_job_setup_passes(job->h, job, passes);
         hb_job_close(&job);
 
@@ -1449,6 +1449,10 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
         hb_qsv_sanitize_filter_list(job);
     }
 #endif
+    if (hb_vce_dec_is_enabled(job))
+    {
+        hb_vce_sanitize_filter_list(job);
+    }
 }
 
 static enum AVPixelFormat match_pix_fmt(enum AVPixelFormat pix_fmt,
