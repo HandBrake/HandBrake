@@ -49,27 +49,67 @@ static void build_gamma_lut(hb_motion_metric_private_t *pv)
     }
 }
 
+#define APPROX(a, b, c, d) ((((a + b + 1) >> 1) + ((c + d + 1) >> 1) + 1) >> 1)
+#define APPROX_FRAME_DATA(nbits)                                                                                \
+static void approximate_frame_data##_##nbits(const uint##nbits##_t* source, uint##nbits##_t* dest,              \
+    int source_stride, int dest_stride, int width, int height)                                                  \
+{                                                                                                               \
+    for (int ii = 0; ii < height; ii++)                                                                         \
+    {                                                                                                           \
+        const uint##nbits##_t* approx_buf = source + source_stride;                                             \
+        for (int jj = 0; jj < width; jj++)                                                                      \
+        {                                                                                                       \
+            dest[jj] = APPROX(source[2 * jj], approx_buf[2 * jj], source[2 * jj + 1], approx_buf[2 * jj + 1]);  \
+        }                                                                                                       \
+        source += source_stride * 2;                                                                            \
+        dest += dest_stride;                                                                                    \
+    }                                                                                                           \
+}                                                                                                               \
+
+APPROX_FRAME_DATA(8)
+APPROX_FRAME_DATA(16)
+
 // Compute the sum of squared errors for a 16x16 block
 // Gamma adjusts pixel values so that less visible differences
 // count less.
 #if defined (__aarch64__) && !defined(__APPLE__)
 static
-float motion_metric_neon_8(hb_motion_metric_private_t *pv,
-                                     hb_buffer_t *a, hb_buffer_t *b)
+float motion_metric_neon_8(hb_motion_metric_private_t *pv, hb_buffer_t *a, hb_buffer_t *b)
 {
-    int bw = a->f.width / 16;
-    int bh = a->f.height / 16;
-    int stride_a = a->plane[0].stride / pv->bps;
-    int stride_b = b->plane[0].stride / pv->bps;
-    const uint8_t *pa = (const uint8_t *)a->plane[0].data;
-    const uint8_t *pb = (const uint8_t *)b->plane[0].data;
+    int approx_width = a->f.width / 4;
+    int approx_height = a->f.height / 4;
+    intptr_t approx_stride_a = approx_width;
+    intptr_t approx_stride_b = approx_width;
+
+    uint8_t *approx_buf_a = malloc(approx_width * approx_height);
+    uint8_t *approx_buf_b = malloc(approx_width * approx_height);
+
+    if (!approx_buf_a || !approx_buf_b)
+    {
+        if (approx_buf_a) free(approx_buf_a);
+        if (approx_buf_b) free(approx_buf_b);
+        hb_log("Allocation failed");
+        return 0.0f;
+    }
+    approximate_frame_data_8((const uint8_t *)a->plane[0].data, approx_buf_a,
+        a->plane[0].stride, approx_stride_a, approx_width, approx_height);
+    approximate_frame_data_8((const uint8_t *)b->plane[0].data, approx_buf_b,
+        b->plane[0].stride, approx_stride_b, approx_width, approx_height);
+
+    // Proceed with the motion metric computation on downscaled buffers
+    int bw = approx_width / 16;
+    int bh = approx_height / 16;
+
+    approx_stride_a = approx_stride_a / pv->bps;
+    approx_stride_b = approx_stride_b / pv->bps;
+
     uint64_t sum = 0;
     for (int y = 0; y < bh; y++)
     {
         for (int x = 0; x < bw; x++)
         {
-            const uint8_t *ra = pa + y * 16 * stride_a + x * 16;
-            const uint8_t *rb = pb + y * 16 * stride_b + x * 16;
+            const uint8_t *ra = approx_buf_a + y * 16 * approx_stride_a + x * 16;
+            const uint8_t *rb = approx_buf_b + y * 16 * approx_stride_b + x * 16;
 
             for (int yy = 0; yy < 16; yy++)
             {
@@ -106,12 +146,14 @@ float motion_metric_neon_8(hb_motion_metric_private_t *pv,
                 sum += vaddvq_u32(vsq2);
                 sum += vaddvq_u32(vsq3);
 
-                ra += stride_a;
-                rb += stride_b;
+                ra += approx_stride_a;
+                rb += approx_stride_b;
             }
         }
     }
-    return (float)sum / (a->f.width * a->f.height);
+    free(approx_buf_a);
+    free(approx_buf_b);
+    return (float)sum / (approx_width * approx_height);
 }
 #endif
 
@@ -146,25 +188,45 @@ DEF_SSE_BLOCK16(16)
 static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,         \
                                      hb_buffer_t *a, hb_buffer_t *b)         \
 {                                                                            \
-    int bw = a->f.width / 16;                                                \
-    int bh = a->f.height / 16;                                               \
+    int approx_width = a->f.width / 4;                                       \
+    int approx_height = a->f.height / 4;                                     \
+    int approx_stride_a = approx_width;                                      \
+    int approx_stride_b = approx_width;                                      \
     int stride_a = a->plane[0].stride / pv->bps;                             \
     int stride_b = b->plane[0].stride / pv->bps;                             \
-    const uint##nbits##_t *pa = (const uint##nbits##_t *)a->plane[0].data;   \
-    const uint##nbits##_t *pb = (const uint##nbits##_t *)b->plane[0].data;   \
+    uint##nbits##_t *approx_buf_a = malloc(approx_width * approx_height *    \
+                    sizeof(uint##nbits##_t));                                \
+    uint##nbits##_t *approx_buf_b = malloc(approx_width * approx_height *    \
+                    sizeof(uint##nbits##_t));                                \
+    if (!approx_buf_a || !approx_buf_b)                                      \
+    {                                                                        \
+        if (approx_buf_a) free(approx_buf_a);                                \
+        if (approx_buf_b) free(approx_buf_b);                                \
+        hb_log("Allocation failed");                                         \
+        return 0.0f;                                                         \
+    }                                                                        \
+    approximate_frame_data##_##nbits(                                        \
+        (const uint##nbits##_t *)a->plane[0].data, approx_buf_a,             \
+        stride_a, approx_stride_a, approx_width, approx_height);             \
+    approximate_frame_data##_##nbits(                                        \
+        (const uint##nbits##_t *)b->plane[0].data, approx_buf_b,             \
+        stride_b, approx_stride_b, approx_width, approx_height);             \
+    int bw = approx_width / 16;                                              \
+    int bh = approx_height / 16;                                             \
     uint64_t sum = 0;                                                        \
-                                                                             \
     for (int y = 0; y < bh; y++)                                             \
     {                                                                        \
         for (int x = 0; x < bw; x++)                                         \
         {                                                                    \
             sum += sse_block16##_##nbits(pv->gamma_lut,                      \
-                                         pa + y * 16 * stride_a + x * 16,    \
-                                         pb + y * 16 * stride_b + x * 16,    \
-                                         stride_a, stride_b);                \
+                        approx_buf_a + y * 16 * approx_stride_a + x * 16,    \
+                        approx_buf_b + y * 16 * approx_stride_b + x * 16,    \
+                        approx_stride_a, approx_stride_b);                   \
         }                                                                    \
     }                                                                        \
-    return (float)sum / (a->f.width * a->f.height);                          \
+    free(approx_buf_a);                                                      \
+    free(approx_buf_b);                                                      \
+    return (float)sum / (approx_width * approx_height);                      \
 }                                                                            \
 
 #if !(defined (__aarch64__) && !defined(__APPLE__))
