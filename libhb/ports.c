@@ -604,6 +604,7 @@ void hb_get_user_config_filename( char name[1024], char *fmt, ... )
  ***********************************************************************/
 static pthread_once_t tmp_control = PTHREAD_ONCE_INIT;
 static char *tmp_dirname = NULL;
+static const char *tmp_override = NULL;
 
 static void
 hb_init_temporary_directory (void)
@@ -611,14 +612,20 @@ hb_init_temporary_directory (void)
     char *path, *base, *p;
 
 #if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
-    base = malloc(MAX_PATH);
-    int i_size = GetTempPath(MAX_PATH, base);
-    if (i_size <= 0 || i_size >= MAX_PATH)
+    if (tmp_override != NULL && tmp_override[0] != 0)
     {
-        if (getcwd(base, MAX_PATH) == NULL)
-            strcpy(base, "c:"); /* Bad fallback but ... */
+        base = strdup(tmp_override);
     }
-
+    else
+    {
+        base = malloc(MAX_PATH);
+        int i_size = GetTempPath(MAX_PATH, base);
+        if (i_size <= 0 || i_size >= MAX_PATH)
+        {
+            if (getcwd(base, MAX_PATH) == NULL)
+                strcpy(base, "c:"); /* Bad fallback but ... */
+        }
+    }
     /* c:/path/ works like a charm under cygwin(win32?) so use it */
     while ((p = strchr(base, '\\')))
         *p = '/';
@@ -631,8 +638,10 @@ hb_init_temporary_directory (void)
     hb_mkdir(path);
     free(base);
 #else
-    if ((p = getenv("TMPDIR")) != NULL ||
-        (p = getenv("TEMP"))   != NULL)
+    if (tmp_override != NULL && tmp_override[0] != '\0')
+        base = strdup(tmp_override);
+    else if ((p = getenv("TMPDIR")) != NULL ||
+             (p = getenv("TEMP"))   != NULL)
         base = strdup(p);
     else
         base = strdup("/tmp");
@@ -650,6 +659,18 @@ hb_init_temporary_directory (void)
     free(base);
 #endif
     tmp_dirname = path;
+}
+
+/************************************************************************
+ * Sets the location of the temporary directory. This function must be
+ * called before the first use of hb_get_temporary_directory().
+ ***********************************************************************/
+void
+hb_set_temporary_directory (const char *tmp_dir)
+{
+    tmp_override = tmp_dir;
+    pthread_once(&tmp_control, hb_init_temporary_directory);
+    tmp_override = NULL;
 }
 
 const char *
@@ -1486,7 +1507,7 @@ static int try_va_interface(hb_display_t * hbDisplay,
 {
     if (interface_name != NULL)
     {
-        setenv("LIBVA_DRIVER_NAME", interface_name, 1);
+        vaSetDriverName(hbDisplay->vaDisplay, (char *) interface_name);
     }
 
     hbDisplay->vaDisplay = vaGetDisplayDRM(hbDisplay->vaFd);
@@ -1529,15 +1550,19 @@ hb_display_t * hb_display_init(const char         * driver_name,
     {
         // Use only environment if it's set
         hb_log("hb_display_init: using VA driver '%s'", env);
-        if (try_va_interface(hbDisplay, NULL) != 0)
+        if (try_va_interface(hbDisplay, NULL) == 0)
         {
-            close(hbDisplay->vaFd);
-            free(hbDisplay);
-            return NULL;
+            return hbDisplay;
         }
     }
     else
     {
+        // Try default
+        hb_log("hb_display_init: attempting VA default driver");
+        if (try_va_interface(hbDisplay, NULL) == 0)
+        {
+            return hbDisplay;
+        }
         // Try list of VA driver names
         for (ii = 0; interface_names[ii] != NULL; ii++)
         {
@@ -1548,17 +1573,11 @@ hb_display_t * hb_display_init(const char         * driver_name,
                 return hbDisplay;
             }
         }
-        // Try default
-        unsetenv("LIBVA_DRIVER_NAME");
-        hb_log("hb_display_init: attempting VA default driver");
-        if (try_va_interface(hbDisplay, NULL) != 0)
-        {
-            close(hbDisplay->vaFd);
-            free(hbDisplay);
-            return NULL;
-        }
     }
-    return hbDisplay;
+    // No working VA driver found
+    close(hbDisplay->vaFd);
+    free(hbDisplay);
+    return NULL;
 }
 
 void hb_display_close(hb_display_t ** _d)
