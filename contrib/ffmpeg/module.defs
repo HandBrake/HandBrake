@@ -195,8 +195,12 @@ ifeq (1,$(FEATURE.mf))
 FFMPEG.CONFIGURE.extra += \
       --enable-hwaccel=h264_d3d11va \
       --enable-hwaccel=hevc_d3d11va \
+      --enable-hwaccel=av1_d3d11va \
+      --enable-hwaccel=vp9_d3d11va \
       --enable-hwaccel=h264_d3d11va2 \
       --enable-hwaccel=hevc_d3d11va2 \
+      --enable-hwaccel=av1_d3d11va2 \
+      --enable-hwaccel=vp9_d3d11va2 \
       --enable-encoder=h264_mf \
       --enable-encoder=hevc_mf \
       --enable-encoder=av1_mf
