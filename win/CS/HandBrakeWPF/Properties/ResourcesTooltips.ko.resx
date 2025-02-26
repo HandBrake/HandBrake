@@ -163,15 +163,13 @@ HQDN3D는 적응형 low-pass 필터로 NLMeans보다 빠르지만 세부 사항�
 Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그 중 가장 긴 것은 일반적으로 주요 기능이다.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>아나모픽은 재생하는 동안 원래의 화면을 유지하면서 임의의 저장 해상도를 허용합니다.
+    <value>아나모픽은 재생 중에 원본 화면을 유지하면서 임의의 저장 크기를 허용합니다.
 
-없음은 아나모픽을 비활성화합니다. 비디오 저장 해상도와 화면 해상도는 동일합니다. 특정한 기존 장치들과의 호환성에만 유용합니다.
+없음은 아나모픽을 비활성화합니다. 동영상 저장 크기와 표시 크기는 동일하게 유지됩니다. 특정 레거시 장치와의 호환성에만 유용합니다.
 
-자동은 원래 화면 종횡비를 유지하면서 저장 해상도를 최대화합니다. 추천합니다.
+자동은 원래 디스플레이 종횡비를 유지하면서 저장소 해상도를 최대화합니다. 권장.
 
-루스는 자동과 비슷하지만 저장 종횡비를 유지하려고 합니다. 이로 인해 자동에 비해 약간의 저장 해상도 손실이 발생할 수 있습니다.
-
-사용자 지정은 모든 매개 변수를 수동으로 설정할 수 있습니다. 잘못된 원본 디스플레이 화면을 수정하고 포스트 프로덕션에서 고급 제어가 필요한 전문가에게 유용합니다.</value>
+사용자 지정은 모든 매개변수를 수동으로 설정할 수 있습니다. 잘못된 소스 디스플레이 비율을 수정하거나 포스트 프로덕션에서 고급 제어가 필요한 전문가에게 유용합니다.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>비디오 가장자리 주위에 검은 색 테두리를 자동으로 자릅니다.</value>
@@ -261,12 +259,15 @@ Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그
     <value>프레임 속도 설정에 의해 결정된 최고 속도로 가변 프레임 속도 출력을 활성화합니다.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>인코더 설정을 인코딩 속도와 비교하여 압축 효율을 유지하도록 바꾸십시오.
+    <value>인코더 설정을 조정하여 인코딩 속도와 압축 효율의 균형을 맞출 수 있습니다.
 
 이렇게 하면 기본 인코더 설정이 설정됩니다.
-음정, 개요, 수준, 고급 옵션 문자열이 해당 설정에서 적용될 것입니다.
-느린 설정은 품질이 향상되거나 파일의 크기가 작아지기 때문에 일반적으로 
-이 옵션을 가장 느리게 설정해야 합니다.</value>
+곡, 프로필, 레벨 및 고급 옵션 문자열이 여기에 적용됩니다.
+일반적으로 이 옵션을 느리게 설정하면 품질이 떨어지거나 크기가 작아지므로
+설정할수록 화질이 좋아지거나 파일 크기가 작아지므로 일반적으로 감당할 수 있는 가장 느린 속도로 설정하는 것이 좋습니다.
+
+슬라이더를 오른쪽으로 조정하여 인코딩 속도를 희생하는 대신 압축 효율을 높이세요,
+또는 압축 효율을 희생하여 인코딩 속도를 높이려면 왼쪽으로 조정합니다.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>지정된 프로필을 설정하고 준수 여부를 확인합니다.
@@ -289,14 +290,12 @@ FFMpeg와 Theora의 척도는 더 선형적입니다.
 이 인코더들은 무손실 모드를 갖고 있지 않습니다.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>멀티 패스 인코딩의 분석 패스에서 작업 속도를 높이는 설정을 사용합니다.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>멀티 패스 인코딩을 수행합니다.
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+'비트 전송률' 옵션은 필수입니다. 분석 패스가 진행되는 동안 동영상에 대한 통계가 수집됩니다. 그런 다음 최종 패스에서 이러한 통계를 사용하여 비트레이트 할당 결정을 내립니다.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>가변 프레임 속도 출력을 활성화합니다. VFR은 일부 재생기와 호환되지 않습니다.</value>
@@ -510,27 +509,27 @@ HB_EXIT_CODE
 작업을 수행하기 전에 출력 파일의 유효성을 검사하는 것이 좋습니다.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>출력 파일의 형식입니다. 지원되는 모든 파일 시스템 문자 외에도 제목을 변경하거나 소스를 스캔하거나 특정 설정을 업데이트할 때 대체할 자리 표시자를 사용할 수 있습니다.
 
-{source} - Name of the source file.
-{title} - Integer value. This is representative of a disc title number.
-{chapters} - The range of chapters selected.
-{creation-date} - The date that the source file was created on (if available).
-{creation-time} - The time that the source file was created on (if available).
-{modification-date} - The date that the source file was last modified on (if available).
-{modification-time} - The time that the source file was last modified on (if available).
-{date} - Today. Set at time of adding to the queue.
-{time} - Today. Set at time of adding to the queue.
-{quality_bitrate} - The RF/CQ number, or bitrate
-{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
-{preset} - Name of the preset selected.
-{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
-{width} - The output storage width
-{height} - The output storage height
-{codec} - Display the video format.
-{encoder} - Display the short format key of the encoder used.
+{source} - 소스 파일의 이름입니다.
+{title} - 정수 값입니다. 디스크 타이틀 번호를 나타냅니다.
+{chapters} - 선택한 챕터의 범위입니다.
+{creation-date}  - 소스 파일을 생성한 날짜(사용 가능한 경우)입니다.
+{creation-time} - 소스 파일을 생성한 시간(사용 가능한 경우).
+{modification-date}- 소스 파일을 마지막으로 수정한 날짜입니다(사용 가능한 경우).
+{modification-time}- 소스 파일을 마지막으로 수정한 시간(사용 가능한 경우).
+{date}  - 오늘입니다. 대기열에 추가할 때 설정합니다.
+{time}- 오늘. 대기열에 추가할 때 설정합니다.
+{quality_bitrate} - RF/CQ 번호 또는 비트 전송률입니다.
+{quality_type}  - 비디오 탭에서 선택한 품질 모드에 따라 “kbps” 또는 “Q”를 출력합니다.
+{preset} - 선택한 사전 설정의 이름입니다.
+{encode_bit_depth} - 정수 값(예: 8, 10 또는 12)
+{width}  - 출력 저장 너비
+{height} - 출력 저장소 높이
+{codec}- 동영상 포맷을 표시합니다.
+{encoder} - 사용된 인코더의 짧은 형식 키를 표시합니다.
 
-Any illegal path characters will be removed automatically.</value>
+잘못된 경로 문자는 자동으로 제거됩니다.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>오른쪽에서 왼쪽으로 사용되는 언어의 경우 두 가지 모드 중 하나를 활성화할 수 있습니다. "텍스트만"은 오른쪽에서 왼쪽 스타일로만 텍스트를 렌더링합니다. "전체 사용자 인터페이스"는 모든 컨트롤을 오른쪽에서 왼쪽으로 렌더링합니다.
@@ -551,9 +550,18 @@ Any illegal path characters will be removed automatically.</value>
 {source} - 원본 파일의 이름입니다.</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
-    <value>Launches the documentation website located at https://handbrake.fr/docs</value>
+    <value>문서 웹사이트(https://handbrake.fr/docs)를 시작합니다.</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Dash (-), Period (.) and Comma (,)</value>
+    <value>대시(-), 마침표(.) 및 쉼표(,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>위 설정에서 허용하는 최고 해상도 사용</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>활성화하지 않으면 스케일링된 차원이 원본 차원으로 제한됩니다.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>디스플레이 크기를 변경하면 동영상이 늘어납니다.</value>
   </data>
 </root>

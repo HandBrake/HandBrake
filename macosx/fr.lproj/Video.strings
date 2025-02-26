@@ -40,9 +40,6 @@
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
 "F3s-qR-qeE.title" = "Qualité :";
 
-/* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices."; ObjectID = "fue-2d-Bjn"; */
-"fue-2d-Bjn.ibShadowedToolTip" = "Préréglage de l'encodeur vidéo. Ajuste les paramètres de l'encodeur pour ajuster l'efficacité de la compression et la vitesse de codage. Les préréglages d'encodeur plus lents peuvent utiliser des paramètres moins compatibles avec certains appareils.";
-
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "Régler :";
 

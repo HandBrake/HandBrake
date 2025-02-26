@@ -1,6 +1,6 @@
 /* callbacks.h
  *
- * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
+ * Copyright (C) 2008-2025 John Stebbins <stebbins@stebbins>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -43,6 +43,9 @@ gboolean ghb_file_menu_add_dvd(signal_user_data_t *ud);
 void ghb_countdown_dialog_show(const gchar *message, const char *action,
     GSourceFunc action_func, int timeout, signal_user_data_t *ud);
 gboolean ghb_question_dialog_run(GtkWindow *parent, GhbActionStyle accept_style,
+     const char *accept_button, const char *cancel_button,
+     const char *title, const char *format, ...) G_GNUC_PRINTF(6, 7);
+GtkMessageDialog *ghb_question_dialog_new(GtkWindow *parent, GhbActionStyle accept_style,
      const char *accept_button, const char *cancel_button,
      const char *title, const char *format, ...) G_GNUC_PRINTF(6, 7);
 void ghb_alert_dialog_show(GtkMessageType type, const char *title,

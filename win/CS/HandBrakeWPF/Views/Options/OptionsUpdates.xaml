@@ -49,17 +49,28 @@
 
         <StackPanel Margin="20,0,0,0" Orientation="Horizontal">
             <Button Content="{x:Static Properties:Resources.Options_CheckForUpdates}" MaxWidth="130" Margin="0,0,5,0" Command="{Binding RelayCommand}" CommandParameter="PerformUpdateCheck" />
-            <Button Content="{x:Static Properties:Resources.Options_DownloadUpdates}" Width="120" Command="{Binding RelayCommand}" CommandParameter="DownloadUpdate" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
+            <Button Content="{x:Static Properties:Resources.Options_DownloadUpdates}" Width="120" Command="{Binding RelayCommand}" CommandParameter="DownloadUpdate" Visibility="{Binding DownloadAvailable, Converter={StaticResource boolToVisConverter}}" />
         </StackPanel>
 
         <StackPanel Margin="20,10,0,0" Orientation="Horizontal">
             <ProgressBar Minimum="0" Maximum="100" Height="20" Width="400" Value="{Binding DownloadProgressPercentage}" 
-                                 Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
+                                 Visibility="{Binding DownloadAvailable, Converter={StaticResource boolToVisConverter}}" />
 
         </StackPanel>
 
         <TextBlock Text="{Binding UpdateMessage}" Margin="20,5,10,0" VerticalAlignment="Center" TextWrapping="Wrap" />
 
+        <Grid Visibility="{Binding IsPortableModeUpdateAvailable, Converter={StaticResource boolToVisConverter}}" Margin="20,5,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image Source="../Images/warningsmall.png" Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0" />
+            <TextBlock Text="{x:Static Properties:Resources.OptionsViewModel_PortableMode}" TextWrapping="Wrap" Grid.Column="1" Style="{StaticResource subHeader}" />
+
+        </Grid>
+        
         <TextBlock Text="{x:Static Properties:Resources.OptionsViewModel_UpdateNotice}" Margin="20,10,10,0" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" TextWrapping="Wrap" />
 
     </StackPanel>

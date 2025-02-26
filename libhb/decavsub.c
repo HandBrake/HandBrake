@@ -1,6 +1,6 @@
 /* decavsub.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -619,23 +619,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
                     int xx, yy;
                     uint32_t argb, ayuv;
 
-                    typedef int (*csp_f)(int);
-                    csp_f rgb2yuv_fn;
-
-                    switch (ctx->job->color_matrix)
-                    {
-                        case HB_COLR_MAT_BT470BG:
-                        case HB_COLR_MAT_SMPTE170M:
-                        case HB_COLR_MAT_FCC:
-                            rgb2yuv_fn = hb_rgb2yuv;
-                            break;
-                        case HB_COLR_MAT_BT2020_NCL:
-                        case HB_COLR_MAT_BT2020_CL: //wrong
-                            rgb2yuv_fn = hb_rgb2yuv_bt2020;
-                            break;
-                        default: //assume 709 for the rest
-                            rgb2yuv_fn = hb_rgb2yuv_bt709;
-                    }
+                    hb_csp_convert_f rgb2yuv_fn = hb_get_rgb2yuv_function(ctx->job->color_matrix);
 
                     //Convert the palette at once to YUV
                     for (xx = 0; xx < rect->nb_colors; xx++)

@@ -1,6 +1,6 @@
 /* rendersub.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -39,6 +39,7 @@ struct hb_filter_private_s
     int                sws_height;
 
     hb_buffer_list_t   rendered_sub_list;
+    int                changed;
 
     // VOBSUB && PGSSUB
     hb_buffer_list_t   sub_list; // List of active subs
@@ -49,6 +50,7 @@ struct hb_filter_private_s
     ASS_Track         *ssa_track;
     uint8_t            script_initialized;
     hb_box_vec_t       boxes;
+    hb_csp_convert_f   rgb2yuv_fn;
 
     // SRT
     int                line;
@@ -461,7 +463,7 @@ static int vobsub_work(hb_filter_object_t *filter,
     render_vobsubs(pv, in);
 
     *buf_in = NULL;
-    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list);
+    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list, 1);
 
     hb_buffer_list_close(&pv->rendered_sub_list);
 
@@ -501,7 +503,7 @@ static hb_buffer_t * compose_subsample_ass(hb_filter_private_t *pv, const ASS_Im
             x <= frame->dst_x && x + width >= frame->dst_x + frame->w &&
             y <= frame->dst_y && y + height >= frame->dst_y + frame->h)
         {
-            const int yuv = hb_rgb2yuv_bt709(frame->color >> 8);
+            const int yuv = pv->rgb2yuv_fn(frame->color >> 8);
 
             const unsigned frame_y = (yuv >> 16) & 0xff;
             const unsigned frame_v = (yuv >> 8 ) & 0xff;
@@ -658,6 +660,7 @@ static void render_ssa_subs(hb_filter_private_t *pv, int64_t start)
             }
         }
     }
+    pv->changed = changed;
 }
 
 static void ssa_log(int level, const char *fmt, va_list args, void *data)
@@ -806,6 +809,40 @@ static void ssa_close(hb_filter_object_t *filter)
     filter->private_data = NULL;
 }
 
+static void ssa_work_init(hb_filter_private_t *pv, const hb_data_t *sub_data)
+{
+    // NOTE: The codec extradata is expected to be in MKV format
+    // I would like to initialize this in ssa_post_init, but when we are
+    // transcoding text subtitles to SSA, the extradata does not
+    // get initialized until the decoder is initialized.  Since
+    // decoder initialization happens after filter initialization,
+    // we need to postpone this.
+    ass_process_codec_private(pv->ssa_track, (const char *)sub_data->bytes, sub_data->size);
+
+    switch(pv->ssa_track->YCbCrMatrix)
+    {
+    case YCBCR_DEFAULT: //No YCbCrMatrix header: VSFilter default
+    case YCBCR_FCC_TV:  //FCC is almost the same as 601
+    case YCBCR_FCC_PC:
+    case YCBCR_BT601_TV:
+    case YCBCR_BT601_PC:
+        pv->rgb2yuv_fn = hb_rgb2yuv;
+        break;
+    case YCBCR_BT709_TV:
+    case YCBCR_BT709_PC:
+    case YCBCR_SMPTE240M_TV:
+    case YCBCR_SMPTE240M_PC:  //240M is almost the same as 709
+        pv->rgb2yuv_fn = hb_rgb2yuv_bt709;
+        break;
+    //use video csp
+    case YCBCR_UNKNOWN://cannot parse
+    case YCBCR_NONE:   //explicitely requested no override
+    default:
+        pv->rgb2yuv_fn = hb_get_rgb2yuv_function(pv->input.color_matrix);
+        break;
+    }
+}
+
 static int ssa_work(hb_filter_object_t *filter,
                     hb_buffer_t **buf_in,
                     hb_buffer_t **buf_out)
@@ -816,15 +853,7 @@ static int ssa_work(hb_filter_object_t *filter,
 
     if (!pv->script_initialized)
     {
-        // NOTE: The codec extradata is expected to be in MKV format
-        // I would like to initialize this in ssa_post_init, but when we are
-        // transcoding text subtitles to SSA, the extradata does not
-        // get initialized until the decoder is initialized.  Since
-        // decoder initialization happens after filter initialization,
-        // we need to postpone this.
-        ass_process_codec_private(pv->ssa_track,
-                                  (char *)filter->subtitle->extradata->bytes,
-                                  filter->subtitle->extradata->size);
+        ssa_work_init(pv, filter->subtitle->extradata);
         pv->script_initialized = 1;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -855,7 +884,7 @@ static int ssa_work(hb_filter_object_t *filter,
     render_ssa_subs(pv, in->s.start);
 
     *buf_in  = NULL;
-    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list);
+    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list, pv->changed);
 
     return HB_FILTER_OK;
 }
@@ -906,9 +935,7 @@ static int textsub_work(hb_filter_object_t *filter,
 
     if (!pv->script_initialized)
     {
-        ass_process_codec_private(pv->ssa_track,
-                                  (char *)filter->subtitle->extradata->bytes,
-                                  filter->subtitle->extradata->size);
+        ssa_work_init(pv, filter->subtitle->extradata);
         pv->script_initialized = 1;
     }
 
@@ -995,7 +1022,7 @@ static int textsub_work(hb_filter_object_t *filter,
     render_ssa_subs(pv, in->s.start);
 
     *buf_in  = NULL;
-    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list);
+    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list, pv->changed);
 
     return HB_FILTER_OK;
 }
@@ -1106,18 +1133,23 @@ static int pgssub_work(hb_filter_object_t *filter,
     render_pgs_subs(pv, in);
 
     *buf_in = NULL;
-    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list);
+    *buf_out = pv->blend->work(pv->blend, in, &pv->rendered_sub_list, 1);
 
     hb_buffer_list_close(&pv->rendered_sub_list);
 
     return HB_FILTER_OK;
 }
 
-static hb_blend_object_t * hb_blend_init(int hw_pixfmt, int in_pix_fmt, int in_chroma_location, int sub_pix_fmt)
+static hb_blend_object_t * hb_blend_init(hb_filter_init_t init, int sub_pix_fmt)
 {
     hb_blend_object_t *blend;
-    switch (hw_pixfmt)
+    switch (init.hw_pix_fmt)
     {
+#if defined(__APPLE__)
+        case AV_PIX_FMT_VIDEOTOOLBOX:
+            blend = &hb_blend_vt;
+            break;
+#endif
         default:
             blend = &hb_blend;
             break;
@@ -1131,7 +1163,9 @@ static hb_blend_object_t * hb_blend_init(int hw_pixfmt, int in_pix_fmt, int in_c
     }
 
     memcpy(blend_copy, blend, sizeof(hb_blend_object_t));
-    if (blend_copy->init(blend_copy, in_pix_fmt, in_chroma_location, sub_pix_fmt))
+    if (blend_copy->init(blend_copy, init.geometry.width, init.geometry.height,
+                         init.pix_fmt, init.chroma_location,
+                         init.color_range, sub_pix_fmt))
     {
         free(blend_copy);
         hb_error("render_sub: blend init failed");
@@ -1255,9 +1289,7 @@ static int hb_rendersub_post_init(hb_filter_object_t *filter, hb_job_t *job)
         return 1;
     }
 
-    pv->blend = hb_blend_init(pv->input.hw_pix_fmt,
-                              pv->input.pix_fmt, pv->input.chroma_location,
-                              pv->pix_fmt_alpha);
+    pv->blend = hb_blend_init(pv->input, pv->pix_fmt_alpha);
 
     if (pv->blend == NULL)
     {

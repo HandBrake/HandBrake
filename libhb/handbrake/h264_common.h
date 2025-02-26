@@ -1,6 +1,6 @@
 /* h264_common.h
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -10,6 +10,8 @@
 #ifndef HANDBRAKE_H264_COMMON_H
 #define HANDBRAKE_H264_COMMON_H
 
+static const char * const hb_x264_tune_names[]          = {
+    "none", "film", "animation", "grain", "stillimage", "psnr", "ssim", "fastdecode", "zerolatency", NULL };
 static const char * const hb_h264_profile_names_8bit[]  = {
     "auto", "baseline", "main", "high", NULL, };
 static const char * const hb_x264_profile_names_8bit[] = {

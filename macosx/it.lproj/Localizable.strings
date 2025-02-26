@@ -373,7 +373,7 @@ Preview -> window title */
 "Preview - %@ %@" = "Anteprima - %1$@ %2$@";
 
 /* Preview -> accessibility label */
-"Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Immagine di anteprima, Dimensione: %1$zu x %2$zu, Scala: %3$.0f%%";
+"Preview Image, Size: %f x %f, Scale: %.0f%%" = "Immagine di anteprima, Dimensione: %1$f x %2$f, Scala: %3$.0f%%";
 
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "Metti il computer in stop";

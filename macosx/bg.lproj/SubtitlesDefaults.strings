@@ -52,6 +52,9 @@
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NJl-q3-zXL"; */
 "NJl-q3-zXL.title" = "Опции:";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
+"oiD-QI-wly.ibShadowedToolTip" = "Поведение при избор на писта.\n\nПо подразбиране няма да се избират аудиописти.\n\nFirst Matching Selected Languages (Първа, съответстваща на избраните езици) добавя първата аудиописта, съответстваща на всеки от избраните езици в източника.\n\nAll Matching Selected Languages (Всички, съответстващи на избраните езици) добавя всички аудиопътеки, съответстващи на всеки от избраните езици в източника.";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default."; ObjectID = "OOC-GZ-OFA"; */
 "OOC-GZ-OFA.ibShadowedToolTip" = "\"Търсене на чуждо аудио\" сканира източника за кратки поредици от чуждо аудио, които се показват по подразбиране.";
 

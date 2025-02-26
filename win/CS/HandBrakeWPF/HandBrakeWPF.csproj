@@ -9,7 +9,7 @@
     <Authors>HandBrake Team</Authors>
     <Company>HandBrake Team</Company>
     <Product>HandBrake</Product>
-    <Copyright>Copyright © 2003-2024 HandBrake Team</Copyright>
+    <Copyright>Copyright © 2003-2025 HandBrake Team</Copyright>
     <Description>HandBrake is an open-source, GPL-licensed, multiplatform,video transcoder.</Description>
     <PackageProjectUrl>https://handbrake.fr</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HandBrake/HandBrake</RepositoryUrl>
@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <None Remove="handbrakepineapple.ico" />
+    <None Remove="Views\Images\close_no_ring.png" />
     <None Remove="Views\Images\Dark\Reorder.png" />
     <None Remove="Views\Images\error.png" />
     <None Remove="Views\Images\Light\Reorder.png" />
@@ -52,11 +53,12 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Autofac" Version="8.0.0" />
+	<PackageReference Include="Autofac" Version="8.1.1" />
     <PackageReference Include="gong-wpf-dragdrop" Version="3.2.1" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
-    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
+    <PackageReference Include="System.Management" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,6 +71,7 @@
     <Resource Include="handbrakepineapple.ico" />
     <Resource Include="Views\Images\close64.png" />
     <Resource Include="Views\Images\close64_dark.png" />
+    <Resource Include="Views\Images\close_no_ring.png" />
     <Resource Include="Views\Images\Complete.png" />
     <Resource Include="Views\Images\Dark\Activity.png" />
     <Resource Include="Views\Images\Dark\Activity2.png" />

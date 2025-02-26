@@ -7,11 +7,17 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "First second to encode."; ObjectID = "5mE-y0-UqZ"; */
 "5mE-y0-UqZ.ibShadowedToolTip" = "First second to encode.";
 
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "6gI-bi-QlH"; */
+"6gI-bi-QlH.title" = " доки";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in seconds"; ObjectID = "7ug-HX-q9j"; */
 "7ug-HX-q9j.ibExternalAccessibilityDescription" = "End time in seconds";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "7ug-HX-q9j"; */
 "7ug-HX-q9j.ibShadowedToolTip" = "Last second to encode.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "9A3-Zn-guz"; */
+"9A3-Zn-guz.title" = "Обрізний кінець";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "aeA-ul-8yt"; */
 "aeA-ul-8yt.ibExternalAccessibilityDescription" = "End time in frames";
@@ -25,11 +31,17 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "aM2-P8-m4w"; */
 "aM2-P8-m4w.ibShadowedToolTip" = "Source range selection. By default, all chapters are selected and the entire source is encoded.";
 
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "eap-Rn-0qW"; */
+"eap-Rn-0qW.title" = " доки";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "eoO-dc-hc3"; */
 "eoO-dc-hc3.ibExternalAccessibilityDescription" = "Start Chapter";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "eoO-dc-hc3"; */
 "eoO-dc-hc3.ibShadowedToolTip" = "First chapter to encode.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "gKJ-mm-7Zy"; */
+"gKJ-mm-7Zy.title" = "Обрізний кінець";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "guU-KE-TeY"; */
 "guU-KE-TeY.ibExternalAccessibilityDescription" = "Start time in frames";
@@ -42,4 +54,10 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "OHn-dK-gFi"; */
 "OHn-dK-gFi.ibShadowedToolTip" = "Last chapter to encode.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "tOX-Dr-TiC"; */
+"tOX-Dr-TiC.title" = "Обрізний кінець";
+
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "YpG-jj-qV2"; */
+"YpG-jj-qV2.title" = " доки";
 

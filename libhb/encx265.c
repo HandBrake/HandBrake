@@ -1,6 +1,6 @@
 /* encx265.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -217,7 +217,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /*
      * HDR10 Static metadata
      */
-    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
+    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084 && job->color_matrix == HB_COLR_MAT_BT2020_NCL)
     {
         if (depth > 8)
         {
@@ -463,10 +463,10 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /* statsfile (but not 2-pass) */
     if (param->logLevel >= X265_LOG_DEBUG)
     {
-        if (param->csvfn == NULL)
+        if (param->csvfn[0] == '\0')
         {
             pv->csvfn = hb_get_temporary_filename("x265.csv");
-            param->csvfn = strdup(pv->csvfn);
+            snprintf(param->csvfn, X265_MAX_STRING_SIZE, "%s", pv->csvfn);
         }
         else
         {
@@ -493,7 +493,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /*
      * Update and set Dolby Vision level
      */
-    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
     {
         char dolbyVisionProfile[256];
         snprintf(dolbyVisionProfile, sizeof(dolbyVisionProfile),
@@ -687,19 +687,11 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
 {
     hb_work_private_t *pv = w->private_data;
     hb_job_t *job         = pv->job;
-
-    x265_picture pic_in;
-    x265_picture  pic_layers_out[MAX_SCALABLE_LAYERS];
-    x265_picture *pic_lyrptr_out[MAX_SCALABLE_LAYERS];
+    x265_picture pic_in, pic_out;
 
     x265_nal *nal;
     uint32_t nnal;
     int ret;
-
-    for (int i = 0; i < MAX_SCALABLE_LAYERS; i++)
-    {
-        pic_lyrptr_out[i] = &pic_layers_out[i];
-    }
 
     pv->api->picture_init(pv->param, &pic_in);
 
@@ -721,7 +713,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
         for (int i = 0; i < in->nb_side_data; i++)
         {
             const AVFrameSideData *side_data = in->side_data[i];
-            if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS &&
+            if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_HDR10PLUS &&
                 side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
             {
                 uint8_t *payload = NULL;
@@ -751,7 +743,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
                 sei_payload->payloadType = USER_DATA_REGISTERED_ITU_T_T35;
                 sei->numPayloads++;
             }
-            if (job->passthru_dynamic_hdr_metadata & DOVI &&
+            if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI &&
                 side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
             {
                 x265_dolby_vision_rpu *rpu = &pic_in.rpu;
@@ -786,7 +778,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     pv->last_stop = in->s.stop;
     save_frame_info(pv, in);
 
-    ret = pv->api->encoder_encode(pv->x265, &nal, &nnal, &pic_in, pic_lyrptr_out);
+    ret = pv->api->encoder_encode(pv->x265, &nal, &nnal, &pic_in, &pic_out);
 
     for (int i = 0; i < sei->numPayloads; i++)
     {
@@ -796,7 +788,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
 
     if (ret > 0)
     {
-        return nal_encode(w, pic_lyrptr_out[0], nal, nnal);
+        return nal_encode(w, &pic_out, nal, nnal);
     }
     return NULL;
 }
@@ -810,22 +802,16 @@ int encx265Work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out
     {
         uint32_t nnal;
         x265_nal *nal;
-        x265_picture  pic_layers_out[MAX_SCALABLE_LAYERS];
-        x265_picture *pic_lyrptr_out[MAX_SCALABLE_LAYERS];
+        x265_picture pic_out;
         hb_buffer_list_t list;
 
         hb_buffer_list_clear(&list);
 
-        for (int i = 0; i < MAX_SCALABLE_LAYERS; i++)
-        {
-            pic_lyrptr_out[i] = &pic_layers_out[i];
-        }
-
         // flush delayed frames
         while (pv->api->encoder_encode(pv->x265, &nal,
-                                       &nnal, NULL, pic_lyrptr_out) > 0)
+                                       &nnal, NULL, &pic_out) > 0)
         {
-            hb_buffer_t *buf = nal_encode(w, pic_lyrptr_out[0], nal, nnal);
+            hb_buffer_t *buf = nal_encode(w, &pic_out, nal, nnal);
             hb_buffer_list_append(&list, buf);
         }
         // add the EOF to the end of the chain

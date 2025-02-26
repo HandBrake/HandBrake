@@ -1,6 +1,6 @@
 /* decavcodec.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
@@ -1350,6 +1350,28 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
             AVContentLightMetadata *coll = (AVContentLightMetadata *)sd->data;
             pv->title->coll.max_cll = coll->MaxCLL;
             pv->title->coll.max_fall = coll->MaxFALL;
+        }
+
+        // Check for Dolby Vision and store the first RPU found
+        // eventually to attach to the the initial black buffer
+        if (pv->title->initial_rpu == NULL)
+        {
+            int type = AV_FRAME_DATA_DOVI_RPU_BUFFER;
+            sd = av_frame_get_side_data(pv->frame, type);
+
+            if (sd == NULL)
+            {
+                type = AV_FRAME_DATA_DOVI_RPU_BUFFER_T35;
+                sd = av_frame_get_side_data(pv->frame, type);
+            }
+
+            if (sd != NULL && sd->size > 0)
+            {
+                hb_data_t *rpu = hb_data_init(sd->size);
+                memcpy(rpu->bytes, sd->data, sd->size);
+                pv->title->initial_rpu = rpu;
+                pv->title->initial_rpu_type = type;
+            }
         }
 
         // Check for HDR Plus dynamic metadata

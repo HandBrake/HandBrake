@@ -520,7 +520,20 @@ namespace HandBrakeWPF.ViewModels
                                                 ? this.selectedTitle.Chapters.Last().ChapterNumber
                                                 : 1;
 
-                    this.SelectedPointToPoint = PointToPointMode.Chapters;
+                    DefaultRangeMode defaultRangeMode = this.userSettingService.GetUserSetting<DefaultRangeMode>(UserSettingConstants.DefaultRangeMode);
+                    switch (defaultRangeMode)
+                    {
+                        case DefaultRangeMode.Chapters:
+                            this.SelectedPointToPoint = PointToPointMode.Chapters;
+                            break;
+                        case DefaultRangeMode.Frames:
+                            this.SelectedPointToPoint = PointToPointMode.Frames;
+                            break;
+                        case DefaultRangeMode.Seconds:
+                            this.SelectedPointToPoint = PointToPointMode.Seconds;
+                            break;
+                    }
+
                     this.SelectedAngle = 1;
 
                     this.TriggerAutonameChange(ChangedOption.Source);
@@ -543,6 +556,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.CurrentTask.Angle = value;
                 this.NotifyOfPropertyChange(() => this.SelectedAngle);
+
+                this.TriggerAutonameChange(ChangedOption.Angle);
             }
         }
 
@@ -951,6 +966,12 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /* Menu and Toolbar */
+
+        public void OpenAutonamePreferences()
+        {
+            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
+            command.Execute(OptionsTab.OutputFiles);
+        }
 
         public void OpenAboutApplication()
         {
@@ -2206,7 +2227,7 @@ namespace HandBrakeWPF.ViewModels
 
             bool is_execute = false;
             
-            if ((autonameFormat.Contains(Constants.Source) || autonameFormat.Contains(Constants.SourcePath) || autonameFormat.Contains(Constants.SourceFolderName)) && option == ChangedOption.Source)
+            if ((autonameFormat.Contains(Constants.Source) || autonameFormat.Contains(Constants.SourcePath) || autonameFormat.Contains(Constants.SourceFolderName) || autonameFormat.Contains(Constants.Title)) && option == ChangedOption.Source)
             {
                 is_execute = true;
             }
@@ -2242,6 +2263,11 @@ namespace HandBrakeWPF.ViewModels
             }
 
             if ((autonameFormat.Contains(Constants.StorageWidth) || autonameFormat.Contains(Constants.StorageHeight)) && option == ChangedOption.Dimensions)
+            {
+                is_execute = true;
+            }
+
+            if (autonameFormat.Contains(Constants.Angle))
             {
                 is_execute = true;
             }
@@ -2512,11 +2538,15 @@ namespace HandBrakeWPF.ViewModels
                         this.windowsTaskbar.SetNoProgress();
                         this.ProgramStatusLabel = string.Format(Resources.Main_QueueMultiJobStatus, this.queueProcessor.CompletedCount, Environment.NewLine, queueJobStatuses.Count, this.queueProcessor.Count);
 
+                        this.WindowTitle = Resources.HandBrake_Title; // Percentage is not available when multiple jobs are running. 
+                        this.windowsTaskbar.SetTaskBarProgress(0);
+
                         this.notifyIconService.SetTooltip(string.Format(Resources.TaskTrayStatusManyTitle, Resources.HandBrake_Title, queueJobStatuses.Count));
                         this.IsMultiProcess = true;
                         this.NotifyOfPropertyChange(() => this.IsMultiProcess);
                     }
-                });
+                }
+                );
         }
 
         private void UserSettingServiceSettingChanged(object sender, SettingChangedEventArgs e)

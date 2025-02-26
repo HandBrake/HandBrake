@@ -2,7 +2,7 @@
 "12K-c3-Z7A.ibShadowedToolTip" = "Fighjulata di a scala per riempie l’affissera.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Encode and play a preview video using current settings."; ObjectID = "16b-R9-bBU"; */
-"16b-R9-bBU.ibShadowedToolTip" = "Cudificà è leghje una video di fighjulata impieghendu e preferenze attuale.";
+"16b-R9-bBU.ibShadowedToolTip" = "Cudificà è leghje una video di fighjulata impieghendu i parametri attuale.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Duration to encode in seconds."; ObjectID = "ASA-X8-16P"; */
 "ASA-X8-16P.ibShadowedToolTip" = "Durata in seconde per a cudificazione.";
@@ -11,7 +11,7 @@
 "ksF-Ma-hB1.title" = "sec";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Show cropping settings"; ObjectID = "mV7-hU-tMt"; */
-"mV7-hU-tMt.ibShadowedToolTip" = "Affissà e preferenze di rifilatura";
+"mV7-hU-tMt.ibShadowedToolTip" = "Affissà i parametri di rifilatura";
 
 /* Class = "NSButtonCell"; title = "Crop"; ObjectID = "NWd-Lq-c1A"; */
 "NWd-Lq-c1A.title" = "Rifilà";

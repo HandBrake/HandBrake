@@ -1,6 +1,6 @@
 /* muxavformat.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -58,6 +58,7 @@ enum
 {
     META_HB,
     META_MUX_MP4,
+    META_MUX_MOV,
     META_MUX_MKV,
     META_MUX_WEBM,
     META_MUX_LAST
@@ -65,16 +66,77 @@ enum
 
 const char *metadata_keys[][META_MUX_LAST] =
 {
-    {"Name",            "title",        "TITLE"},
-    {"Artist",          "artist",       "ARTIST"},
-    {"AlbumArtist",     "album_artist", "DIRECTOR"},
-    {"Composer",        "composer",     "COMPOSER"},
-    {"ReleaseDate",     "date",         "DATE_RELEASED"},
-    {"Comment",         "comment",      "SUMMARY"},
-    {"Album",           "album",        NULL},
-    {"Genre",           "genre",        "GENRE"},
-    {"Description",     "description",  "DESCRIPTION"},
-    {"LongDescription", "synopsis",     "SYNOPSIS"},
+    {"Name",                "title",                  "com.apple.quicktime.displayname",      "TITLE"},
+    {"Artist",              "artist",                 "com.apple.quicktime.artist",           "ARTIST"},
+    {"AlbumArtist",         "album_artist",           NULL,                                   NULL},
+    {"Album",               "album",                  "com.apple.quicktime.album",            NULL},
+    {"Genre",               "genre",                  "com.apple.quicktime.genre",            "GENRE"},
+    {"ReleaseDate",         "date",                   "com.apple.quicktime.creationdate",     "DATE_RELEASED"},
+    {"CreationTime",        "creation_time",          NULL,                                   NULL},
+    {"Track",               "track",                  "com.apple.quicktime.track",            NULL},
+    {"Show",                "show",                   NULL,                                   NULL},
+    {"Network",             "network",                NULL,                                   NULL},
+    {"Episode ID",          "episode_id",             NULL,                                   NULL},
+    {"Episode Sort",        "episode_sort",           NULL,                                   NULL},
+    {"Season Number",       "season_number",          NULL,                                   NULL},
+    {"Rating",              "rating",                 NULL,                                   NULL},
+    {"Media Type",          "media_type",             NULL,                                   NULL},
+    {"HD Video",            "hd_video",               NULL,                                   NULL},
+    {"Description",         "description",            "com.apple.quicktime.description",      "DESCRIPTION"},
+    {"LongDescription",     "synopsis",               "com.apple.quicktime.information",      "SYNOPSIS"},
+    {"SeriesDescription",   "series_description",     NULL,                                   NULL},
+    {"Comment",             "comment",                "com.apple.quicktime.comment",          "SUMMARY"},
+    {"Grouping",            "grouping",               NULL,                                   NULL},
+    {"Compilation",         "compilation",            NULL,                                   NULL},
+    {"Tempo",               "tmpo",                   NULL,                                   "BPM"},
+
+    {"Subtitle",            "subtitle",               NULL,                                   "SUBTITLE"},
+    {"SongDescription",     "song_description",       NULL,                                   NULL},
+    {"Director",            "director",               "com.apple.quicktime.director",         "DIRECTOR"},
+    {"ArtDirector",         "art_director",           NULL,                                   "DIRECTOR_OF_PHOTOGRAPHY"},
+    {"Composer",            "composer",               "com.apple.quicktime.composer",         "COMPOSER"},
+    {"Arranger",            "arranger",               "com.apple.quicktime.arranger",         "ARRANGER"},
+    {"Author",              "author",                 "com.apple.quicktime.author",           "WRITTEN_BY"},
+    {"Acknowledgement",     "acknowledgement",        NULL,                                   NULL},
+    {"Conductor",           "conductor",              NULL,                                   "CONDUCTOR"},
+    {"Lyrics",              "lyrics",                 NULL,                                   "LYRICS"},
+    {"Keywords",            "keywords",               "com.apple.quicktime.keywords",         "KEYWORDS"},
+    {"Copyright",           "copyright",              "com.apple.quicktime.copyright",        "COPYRIGHT"},
+
+    {"WorkName",            "work_name",              NULL,                                   NULL},
+    {"MovementName",        "movement_name",          NULL,                                   NULL},
+    {"MovementNumber",      "movement_number",        NULL,                                   NULL},
+    {"MovementShow",        "movement_count",         NULL,                                   NULL},
+    {"ShowWorkAndMovement", "show_work_and_movement", NULL,                                   NULL},
+
+    {"LinearNotes",         "linear_notes",           NULL,                                   NULL},
+    {"RecordCompany",       "make",                   "com.apple.quicktime.make",             NULL},
+    {"OriginalArtist",      "original_artist",        "com.apple.quicktime.originalartist",   NULL},
+    {"PhonogramRights",     "phonogram_rights",       "com.apple.quicktime.phonogramrights",  NULL},
+    {"Producer",            "producer",               "com.apple.quicktime.producer",         "PRODUCER"},
+    {"Performers",          "performers",             "com.apple.quicktime.performer",        NULL},
+    {"Publisher",           "publisher",              "com.apple.quicktime.publisher",        "PUBLISHER"},
+    {"SoundEngineer",       "sound_engineer",         NULL,                                   "SOUND_ENGINEER"},
+    {"Soloist",             "soloist",                NULL,                                   "LEAD_PERFORMER"},
+    {"Credits",             "original_source",        "com.apple.quicktime.credits",          NULL},
+    {"Thanks",              "thanks",                 NULL,                                   "THANKS_TO"},
+    {"OnlineExtra",         "URL",                    NULL,                                   NULL},
+    {"ExecutiveProducer",   "executive_producer",     NULL,                                   "EXECUTIVE_PRODUCER"},
+
+    {"iTunesU",             "itunes_u",               NULL,                                   NULL},
+    {"Podcast",             "podcast",                NULL,                                   NULL},
+    {"Category",            "category",               NULL,                                   NULL},
+
+    {"ContentID",           "content_id",             NULL,                                   NULL},
+    {"ArtistID",            "artist_id",              NULL,                                   NULL},
+    {"PlaylistID",          "playlist_id",            NULL,                                   NULL},
+    {"GenreID",             "genre_id",               NULL,                                   NULL},
+    {"ComposerID",          "composer_id",            NULL,                                   NULL},
+    {"XID",                 "xid",                    NULL,                                   NULL},
+
+    {"iTunEXTC",            "iTunEXTC",               NULL,                                   NULL},
+    {"iTunMOVI",            "iTunMOVI",               NULL,                                   NULL},
+    {"Location",            "location",               "com.apple.quicktime.location.ISO6709", NULL},
     {NULL}
 };
 
@@ -461,7 +523,7 @@ static int avformatInit( hb_mux_object_t * m )
                                 sizeof(AVAmbientViewingEnvironment), 0);
     }
 
-    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
     {
         if (job->dovi.dv_profile == 5 && job->mux == HB_MUX_AV_MP4)
         {
@@ -552,6 +614,10 @@ static int avformatInit( hb_mux_object_t * m )
             track->st->time_base = m->time_base;
         }
 
+        // Some containers don't need metadata for some audio formats,
+        // and for some formats extradata will be generated automatically,
+        // set only what's needed
+        int need_extradata = 0;
         switch (audio->config.out.codec & HB_ACODEC_MASK)
         {
             case HB_ACODEC_DCA:
@@ -576,17 +642,21 @@ static int avformatInit( hb_mux_object_t * m )
                 break;
             case HB_ACODEC_VORBIS:
                 track->st->codecpar->codec_id = AV_CODEC_ID_VORBIS;
+                need_extradata = 1;
                 break;
             case HB_ACODEC_OPUS:
                 track->st->codecpar->codec_id = AV_CODEC_ID_OPUS;
+                need_extradata = 1;
                 break;
             case HB_ACODEC_FFALAC:
             case HB_ACODEC_FFALAC24:
                 track->st->codecpar->codec_id = AV_CODEC_ID_ALAC;
+                need_extradata = 1;
                 break;
             case HB_ACODEC_FFFLAC:
             case HB_ACODEC_FFFLAC24:
                 track->st->codecpar->codec_id = AV_CODEC_ID_FLAC;
+                need_extradata = 1;
                 break;
             case HB_ACODEC_FFAAC:
             case HB_ACODEC_CA_AAC:
@@ -594,6 +664,7 @@ static int avformatInit( hb_mux_object_t * m )
             case HB_ACODEC_FDK_AAC:
             case HB_ACODEC_FDK_HAAC:
                 track->st->codecpar->codec_id = AV_CODEC_ID_AAC;
+                need_extradata = 1;
 
                 // AAC from pass-through source may be ADTS.
                 // Therefore inserting "aac_adtstoasc" bitstream filter is
@@ -623,9 +694,14 @@ static int avformatInit( hb_mux_object_t * m )
                 goto error;
         }
 
-        if (set_extradata(audio->priv.extradata, &track->st->codecpar->extradata, &track->st->codecpar->extradata_size))
+        if (need_extradata)
         {
-            goto error;
+            if (set_extradata(audio->priv.extradata,
+                              &track->st->codecpar->extradata,
+                              &track->st->codecpar->extradata_size))
+            {
+                goto error;
+            }
         }
 
         if (track->bitstream_context != NULL)
@@ -1055,17 +1131,106 @@ static int avformatInit( hb_mux_object_t * m )
                 }
             }
         }
+
+        if (job->mux == HB_MUX_AV_MP4)
+        {
+            // Set the location tag language to undefined,
+            // Apple software seems to require it
+            hb_value_t *location = hb_dict_get(job->metadata->dict, "Location");
+            if (location)
+            {
+                char *str = hb_value_get_string_xform(location);
+                av_dict_set(&m->oc->metadata, "location-und", str, 0);
+                free(str);
+            }
+        }
+
+        if (job->mux == HB_MUX_AV_MP4 || job->mux == HB_MUX_AV_MKV)
+        {
+            hb_list_t *list_coverart = job->metadata->list_coverart;
+            for (int ii = 0; ii < hb_list_count(list_coverart); ii++)
+            {
+                hb_coverart_t *art = hb_list_item(list_coverart, ii);
+
+                enum AVCodecID codec_id = AV_CODEC_ID_NONE;
+                const char *mimetype;
+                const char *filename;
+
+                switch (art->type)
+                {
+                    case HB_ART_PNG:
+                        codec_id = AV_CODEC_ID_PNG;
+                        mimetype = "image/png";
+                        filename = "cover.png";
+                        break;
+                    case HB_ART_JPEG:
+                        codec_id = AV_CODEC_ID_MJPEG;
+                        mimetype = "image/jpeg";
+                        filename = "cover.jpg";
+                        break;
+                    default:
+                        break;
+                }
+
+                if (codec_id != AV_CODEC_ID_NONE)
+                {
+                    AVStream *st = avformat_new_stream(m->oc, NULL);
+                    if (st == NULL)
+                    {
+                        hb_error("Could not initialize cover art stream");
+                        goto error;
+                    }
+
+                    if (job->mux == HB_MUX_AV_MKV)
+                    {
+                        st->codecpar->codec_type = AVMEDIA_TYPE_ATTACHMENT;
+                        st->codecpar->codec_id = codec_id;
+
+                        av_dict_set(&st->metadata, "mimetype", mimetype, 0);
+                        av_dict_set(&st->metadata, "filename", filename, 0);
+
+                        size_t   priv_size = art->size;
+                        uint8_t *priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                        if (priv_data == NULL)
+                        {
+                            hb_error("Cover art extradata: malloc failure");
+                            goto error;
+                        }
+                        memcpy(priv_data, art->data, priv_size);
+
+                        st->codecpar->extradata = priv_data;
+                        st->codecpar->extradata_size = priv_size;
+                    }
+                    else if (job->mux == HB_MUX_AV_MP4)
+                    {
+                        st->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
+                        st->codecpar->codec_id = codec_id;
+                        st->codecpar->width  = 640;
+                        st->codecpar->height = 360;
+                        st->disposition = AV_DISPOSITION_ATTACHED_PIC;
+                    }
+                }
+
+                // Write only the first
+                // cover art for now
+                break;
+            }
+        }
+    }
+
+    if (av_dict_get(m->oc->metadata, "creation_time", NULL, 0) == NULL)
+    {
+        time_t now = time(NULL);
+        struct tm *now_utc = gmtime(&now);
+        char now_8601[24];
+        strftime(now_8601, sizeof(now_8601), "%Y-%m-%dT%H:%M:%SZ", now_utc);
+        av_dict_set(&m->oc->metadata, "creation_time", now_8601, 0);
     }
 
     char tool_string[80];
     snprintf(tool_string, sizeof(tool_string), "HandBrake %s %i",
              HB_PROJECT_VERSION, HB_PROJECT_BUILD);
     av_dict_set(&m->oc->metadata, "encoding_tool", tool_string, 0);
-    time_t now = time(NULL);
-    struct tm * now_utc = gmtime(&now);
-    char now_8601[24];
-    strftime(now_8601, sizeof(now_8601), "%Y-%m-%dT%H:%M:%SZ", now_utc);
-    av_dict_set(&m->oc->metadata, "creation_time", now_8601, 0);
 
     ret = avformat_write_header(m->oc, &av_opts);
     if( ret < 0 )
@@ -1498,6 +1663,22 @@ static int avformatEnd(hb_mux_object_t *m)
                 break;
             default:
                 break;
+        }
+    }
+
+    // Write MP4 cover art
+    if (job->mux == HB_MUX_AV_MP4 && job->metadata && job->metadata->dict)
+    {
+        hb_list_t *list_coverart = job->metadata->list_coverart;
+        for (int ii = 0; ii < hb_list_count(list_coverart); ii++)
+        {
+            hb_coverart_t *art = hb_list_item(list_coverart, ii);
+            m->pkt->data = art->data;
+            m->pkt->size = art->size;
+            m->pkt->stream_index = m->ntracks;
+            av_interleaved_write_frame(m->oc, m->pkt);
+            av_packet_unref(m->pkt);
+            break;
         }
     }
 

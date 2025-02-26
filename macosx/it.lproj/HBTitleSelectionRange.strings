@@ -7,11 +7,17 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "First second to encode."; ObjectID = "5mE-y0-UqZ"; */
 "5mE-y0-UqZ.ibShadowedToolTip" = "Il primo secondo da cui convertire.";
 
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "6gI-bi-QlH"; */
+"6gI-bi-QlH.title" = "A";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in seconds"; ObjectID = "7ug-HX-q9j"; */
 "7ug-HX-q9j.ibExternalAccessibilityDescription" = "Il tempo finale in secondi";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "7ug-HX-q9j"; */
 "7ug-HX-q9j.ibShadowedToolTip" = "Ultimo secondo da convertire";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "9A3-Zn-guz"; */
+"9A3-Zn-guz.title" = "Taglia dalla fine";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "aeA-ul-8yt"; */
 "aeA-ul-8yt.ibExternalAccessibilityDescription" = "Tempo finale in fotogrammi.";
@@ -25,11 +31,17 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "aM2-P8-m4w"; */
 "aM2-P8-m4w.ibShadowedToolTip" = "Selezione dell'intervallo della sorgente. Di default, tutte i capitolo sono selezionati e l'intera durata della sorgente è convertita.";
 
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "eap-Rn-0qW"; */
+"eap-Rn-0qW.title" = "A";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "eoO-dc-hc3"; */
 "eoO-dc-hc3.ibExternalAccessibilityDescription" = "Capitolo iniziale";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "eoO-dc-hc3"; */
 "eoO-dc-hc3.ibShadowedToolTip" = "Primo capitolo da convertire.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "gKJ-mm-7Zy"; */
+"gKJ-mm-7Zy.title" = "Taglia dalla fine";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "guU-KE-TeY"; */
 "guU-KE-TeY.ibExternalAccessibilityDescription" = "Tempo di inizio in fotogrammi";
@@ -42,4 +54,10 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "OHn-dK-gFi"; */
 "OHn-dK-gFi.ibShadowedToolTip" = "Ultimo capitolo da convertire.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "tOX-Dr-TiC"; */
+"tOX-Dr-TiC.title" = "Taglia dalla fine";
+
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "YpG-jj-qV2"; */
+"YpG-jj-qV2.title" = "A";
 

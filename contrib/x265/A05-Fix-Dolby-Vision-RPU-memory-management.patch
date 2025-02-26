@@ -1,0 +1,56 @@
+From 3a71553731ce49117397ada92ffd858cc550195a Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Fri, 22 Nov 2024 10:51:25 +0100
+Subject: [PATCH 5/5] Fix Dolby Vision RPU memory management
+
+---
+ source/common/frame.cpp    |  5 +++++
+ source/encoder/encoder.cpp | 13 +++++++++++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/source/common/frame.cpp b/source/common/frame.cpp
+index 200717425..1244fdc24 100644
+--- a/source/common/frame.cpp
++++ b/source/common/frame.cpp
+@@ -370,6 +370,11 @@ void Frame::destroy()
+         delete[] m_userSEI.payloads;
+     }
+ 
++    if (m_rpu.payloadSize)
++    {
++        delete[] m_rpu.payload;
++    }
++
+     if (m_ctuInfo)
+     {
+         uint32_t widthInCU = (m_param->sourceWidth + m_param->maxCUSize - 1) >> m_param->maxLog2CUSize;
+diff --git a/source/encoder/encoder.cpp b/source/encoder/encoder.cpp
+index 752e41a8a..8117a90b2 100644
+--- a/source/encoder/encoder.cpp
++++ b/source/encoder/encoder.cpp
+@@ -1681,11 +1681,20 @@ int Encoder::encode(const x265_picture* pic_in, x265_picture* pic_out)
+         }
+         copyUserSEIMessages(inFrame[0], inputPic[0]);
+ 
+-        /*Copy Dolby Vision RPU from inputPic to frame*/
++        /* Copy Dolby Vision RPU from inputPic to frame. */
++        if (inFrame[0]->m_rpu.payload && inFrame[0]->m_rpu.payloadSize < inputPic[0]->rpu.payloadSize)
++        {
++            delete[] inFrame[0]->m_rpu.payload;
++            inFrame[0]->m_rpu.payload = NULL;
++        }
++
+         if (inputPic[0]->rpu.payloadSize)
+         {
++            if (inFrame[0]->m_rpu.payload == NULL)
++            {
++                inFrame[0]->m_rpu.payload = new uint8_t[inputPic[0]->rpu.payloadSize];
++            }
+             inFrame[0]->m_rpu.payloadSize = inputPic[0]->rpu.payloadSize;
+-            inFrame[0]->m_rpu.payload = new uint8_t[inputPic[0]->rpu.payloadSize];
+             memcpy(inFrame[0]->m_rpu.payload, inputPic[0]->rpu.payload, inputPic[0]->rpu.payloadSize);
+         }
+ 
+-- 
+2.39.5 (Apple Git-154)
+

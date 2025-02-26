@@ -1,6 +1,6 @@
 /* stream.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -10,12 +10,14 @@
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <iconv.h>
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/lang.h"
 #include "handbrake/extradata.h"
 #include "libbluray/bluray.h"
+#include "libavutil/parseutils.h"
 
 #define min(a, b) a < b ? a : b
 #define HB_MAX_PROBE_SIZE (1*1024*1024)
@@ -5924,6 +5926,51 @@ static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int i
     hb_list_add(title->list_attachment, attachment);
 }
 
+static void add_ffmpeg_coverart(hb_title_t *title, hb_stream_t *stream, int id)
+{
+    int type = HB_ART_UNDEFINED;
+    AVStream *st = stream->ffmpeg_ic->streams[id];
+    AVCodecParameters *codecpar = st->codecpar;
+
+    switch (codecpar->codec_id)
+    {
+        case AV_CODEC_ID_PNG:
+            type = HB_ART_PNG;
+            break;
+        case AV_CODEC_ID_MJPEG:
+            type = HB_ART_JPEG;
+            break;
+        default:
+            break;
+    }
+
+    if (type != HB_ART_UNDEFINED)
+    {
+        hb_metadata_add_coverart(title->metadata,
+                                 st->attached_pic.data,
+                                 st->attached_pic.size,
+                                 type);
+    }
+}
+
+static void ffmpeg_decdate(const char *hb_key, const char *av_key,
+                          AVDictionary *m, hb_title_t *title)
+{
+    int64_t parsed_timestamp;
+    AVDictionaryEntry *tag = NULL;
+    if ((tag = av_dict_get(m, av_key, NULL, 0)) &&
+        av_parse_time(&parsed_timestamp, tag->value, 0) >= 0)
+    {
+        struct tm dt = {0};
+        if (av_small_strptime(tag->value, "%Y-%m-%dT%H:%M:%S", &dt))
+        {
+            char buf[64];
+            strftime(buf, sizeof(buf), "%Y-%m-%dT%H:%M:%S+0000", &dt);
+            hb_update_meta_dict(title->metadata->dict, hb_key, buf);
+        }
+    }
+}
+
 static int ffmpeg_decmetadata( AVDictionary *m, hb_title_t *title )
 {
     int result = 0;
@@ -5938,6 +5985,26 @@ static int ffmpeg_decmetadata( AVDictionary *m, hb_title_t *title )
             hb_update_meta_dict(title->metadata->dict, hb_key, tag->value);
         }
     }
+
+    // Android creation time to release date
+    if (hb_dict_get(title->metadata->dict, "ReleaseDate") == NULL)
+    {
+        if (av_dict_get(m, "com.android.version", NULL, 0) ||
+            av_dict_get(m, "firmware", NULL, 0))
+        {
+            ffmpeg_decdate("ReleaseDate", "creation_time", m, title);
+        }
+    }
+
+    // MXF modification date to creation time
+    if (hb_dict_get(title->metadata->dict, "CreationTime") == NULL)
+    {
+        if (av_dict_get(m, "modification_date", NULL, 0))
+        {
+            ffmpeg_decdate("CreationTime", "modification_date", m, title);
+        }
+    }
+
     return result;
 }
 
@@ -6088,11 +6155,23 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
         {
             add_ffmpeg_attachment( title, stream, i );
         }
+        else if (st->codecpar->codec_type == AVMEDIA_TYPE_VIDEO &&
+                 st->disposition & AV_DISPOSITION_ATTACHED_PIC &&
+                 (st->disposition & AV_DISPOSITION_TIMED_THUMBNAILS) == 0)
+        {
+            add_ffmpeg_coverart(title, stream, i);
+        }
     }
     find_ffmpeg_fallback_audio(title);
 
     title->container_name = strdup( ic->iformat->name );
     title->data_rate = ic->bit_rate;
+
+    iconv_t iconv_context;
+    iconv_context = iconv_open("utf-8", "utf-8");
+
+    size_t utf8_buf_size = 2048;
+    char *utf8_buf = malloc(utf8_buf_size);
 
     hb_deep_log( 2, "Found ffmpeg %d chapters, container=%s", ic->nb_chapters, ic->iformat->name );
 
@@ -6131,10 +6210,34 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 chapter->seconds = ( seconds % 60 );
 
                 tag = av_dict_get( m->metadata, "title", NULL, 0 );
+                int valid = tag && tag->value && tag->value[0];
+
+                if (valid)
+                {
+                    // Detect if the chapter title is a valid UTF-8 string
+                    char *p, *q;
+                    size_t in_size, out_size, retval;
+
+                    in_size = strlen(tag->value);
+                    out_size = in_size;
+
+                    if (utf8_buf_size < in_size)
+                    {
+                        utf8_buf = realloc(utf8_buf, in_size + 1);
+                        utf8_buf_size = in_size + 1;
+                    }
+
+                    p = tag->value;
+                    q = utf8_buf;
+
+                    retval = iconv(iconv_context, &p, &in_size, &q, &out_size);
+                    valid = retval != (size_t) -1;
+                }
+
                 /* Ignore generic chapter names set by MakeMKV
                  * ("Chapter 00" etc.).
                  * Our default chapter names are better. */
-                if( tag && tag->value && tag->value[0] &&
+                if (valid &&
                     ( strncmp( "Chapter ", tag->value, 8 ) ||
                       strlen( tag->value ) > 11 ) )
                 {
@@ -6154,6 +6257,9 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 hb_list_add( title->list_chapter, chapter );
             }
     }
+
+    iconv_close(iconv_context);
+    free(utf8_buf);
 
     /*
      * Fill the metadata.

@@ -19,7 +19,8 @@
             "buildsystem": "cmake-ninja",
             "builddir": true,
             "config-opts": [
-                "-DCMAKE_BUILD_TYPE=Release"
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_INSTALL_LIBDIR=lib"
             ],
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
@@ -77,6 +78,7 @@
             "builddir": true,
             "config-opts": [
                 "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_INSTALL_LIBDIR=lib",
                 "-DMEDIA_RUN_TEST_SUITE=OFF",
                 "-DENABLE_PRODUCTION_KMD=ON"
             ],
@@ -92,6 +94,7 @@
             "builddir": true,
             "config-opts": [
                 "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_INSTALL_LIBDIR=lib",
                 "-DBUILD_SAMPLES=OFF",
                 "-DBUILD_TESTS=OFF",
                 "-DBUILD_TOOLS=OFF",
@@ -127,7 +130,8 @@
             "buildsystem": "cmake-ninja",
             "builddir": true,
             "config-opts": [
-                "-DCMAKE_BUILD_TYPE=Release"
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_INSTALL_LIBDIR=lib"
             ],
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",

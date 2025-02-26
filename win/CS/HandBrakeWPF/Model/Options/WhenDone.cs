@@ -35,5 +35,8 @@ namespace HandBrakeWPF.Model.Options
 
         [DisplayName(typeof(Resources), "WhenDone_QuitHandBrake")]
         QuickHandBrake = 6,
+
+        [DisplayName(typeof(Resources), "WhenDone_CustomAction")]
+        CustomAction = 7,
     }
 }

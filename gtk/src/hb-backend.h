@@ -1,6 +1,6 @@
 /* hb-backend.h
  *
- * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
+ * Copyright (C) 2008-2025 John Stebbins <stebbins@stebbins>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -124,8 +124,8 @@ gint ghb_get_scan_state(void);
 gint ghb_get_queue_state(void);
 void ghb_get_status(ghb_status_t *status);
 void ghb_track_status(void);
-void ghb_backend_scan(const char *path, int titleindex, int preview_count, uint64_t min_duration, gboolean keep_duplicate_titles);
-void ghb_backend_scan_list(GListModel *files, int titleindex, int preview_count, uint64_t min_duration, gboolean keep_duplicate_titles);
+void ghb_backend_scan(const char *path, int titleindex, int preview_count, uint64_t min_duration, uint64_t max_duration, gboolean keep_duplicate_titles);
+void ghb_backend_scan_list(GListModel *files, int titleindex, int preview_count, uint64_t min_duration, uint64_t max_duration, gboolean keep_duplicate_titles);
 void ghb_backend_scan_stop(void);
 hb_list_t * ghb_get_title_list(void);
 void ghb_par_init(signal_user_data_t *ud);

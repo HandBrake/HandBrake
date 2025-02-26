@@ -1,0 +1,24 @@
+/* Class = "NSTextFieldCell"; title = "Statistics"; ObjectID = "aCP-yp-iZy"; */
+"aCP-yp-iZy.title" = "Statistik";
+
+/* Class = "NSTextFieldCell"; title = "Summary"; ObjectID = "cx1-rC-AMC"; */
+"cx1-rC-AMC.title" = "Sammandrag";
+
+/* Class = "NSButtonCell"; title = "Edit"; ObjectID = "erY-5X-50l"; */
+"erY-5X-50l.title" = "Redigera";
+
+/* Class = "NSTextFieldCell"; title = "Summary"; ObjectID = "GaR-qk-UW7"; */
+"GaR-qk-UW7.title" = "Sammandrag";
+
+/* Class = "NSButtonCell"; title = "Reset"; ObjectID = "hgl-N3-x4S"; */
+"hgl-N3-x4S.title" = "Nollställ";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Reset the job state"; ObjectID = "oq4-g0-srt"; */
+"oq4-g0-srt.ibShadowedToolTip" = "Nollställ jobbtillstånd";
+
+/* Class = "NSTextFieldCell"; title = "Statistics"; ObjectID = "S15-bh-qKU"; */
+"S15-bh-qKU.title" = "Statistik";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Open the job in the main window for editing"; ObjectID = "Z14-gh-hWn"; */
+"Z14-gh-hWn.ibShadowedToolTip" = "Öppna jobbet i huvudfönstret för redigering";
+

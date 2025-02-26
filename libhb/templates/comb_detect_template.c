@@ -1,6 +1,6 @@
 /* comb_detect_template.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -270,7 +270,7 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                 mask_vec = vandq_u32(mask_vec, condition);
                 mask_vec = vandq_u32(mask_vec, v_one);
 
-                vst1q_u32(&mask32, mask_vec);
+                vst1q_u32(mask32, mask_vec);
 
                 mask[0] = mask32[0];
                 mask[1] = mask32[1];
@@ -550,7 +550,7 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                         mask_vec = vandq_u32(mask_vec, condition);
                         mask_vec = vandq_u32(mask_vec, v_one);
 
-                        vst1q_u32(&mask32, mask_vec);
+                        vst1q_u32(mask32, mask_vec);
 
                         mask[0] = mask32[0];
                         mask[1] = mask32[1];
@@ -568,7 +568,7 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                         mask_vec = vandq_u32(mask_vec, condition);
                         mask_vec = vandq_u32(mask_vec, v_one);
 
-                        vst1q_u32(&mask32, mask_vec);
+                        vst1q_u32(mask32, mask_vec);
 
                         mask[0] = mask32[0];
                         mask[1] = mask32[1];
@@ -585,7 +585,7 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                         mask_vec = vandq_u32(mask_vec, condition);
                         mask_vec = vandq_u32(mask_vec, v_one);
 
-                        vst1q_u32(&mask32, mask_vec);
+                        vst1q_u32(mask32, mask_vec);
 
                         mask[0] = mask32[0];
                         mask[1] = mask32[1];

@@ -1,6 +1,6 @@
 /* hb-backend.c
  *
- * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
+ * Copyright (C) 2008-2025 John Stebbins <stebbins@stebbins>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -2030,9 +2030,10 @@ preset_category_opts_set(signal_user_data_t *ud, const char *opt_name,
         const char * name;
         hb_value_t * folder = hb_value_array_get(presets, ii);
 
-        if (!hb_value_get_bool(hb_dict_get(folder, "Folder")))
+        if (!hb_value_get_bool(hb_dict_get(folder, "Folder")) ||
+            hb_value_get_int(hb_dict_get(folder, "Type")) != 1)
         {
-            // Only list folders
+            // Only list custom folders
             continue;
         }
 
@@ -2540,14 +2541,6 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
     GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
-
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter,
-                       0, _("None"),
-                       1, TRUE,
-                       2, "none",
-                       3, (gdouble)0,
-                       -1);
 
     for (ii = 0; ii < count; ii++)
     {
@@ -3545,11 +3538,11 @@ get_path_list(GListModel *files)
 }
 
 void
-ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uint64_t min_duration, gboolean keep_duplicate_titles)
+ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uint64_t min_duration, uint64_t max_duration, gboolean keep_duplicate_titles)
 {
     hb_list_t *path_list = get_path_list(files);
     hb_list_t *extensions = ghb_get_excluded_extensions_list();
-    hb_scan(h_scan, path_list, titleindex, preview_count, 1, min_duration, 0,
+    hb_scan(h_scan, path_list, titleindex, preview_count, 1, min_duration, max_duration,
                  0, 0, extensions, 0, keep_duplicate_titles);
     ghb_free_list(path_list);
     ghb_free_list(extensions);
@@ -3564,12 +3557,12 @@ ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uin
 }
 
 void
-ghb_backend_scan (const char *path, int titleindex, int preview_count, uint64_t min_duration, gboolean keep_duplicate_titles)
+ghb_backend_scan (const char *path, int titleindex, int preview_count, uint64_t min_duration, uint64_t max_duration, gboolean keep_duplicate_titles)
 {
     hb_list_t *path_list = hb_list_init();
     hb_list_add(path_list, (void *)path);
     hb_list_t *extensions = ghb_get_excluded_extensions_list();
-    hb_scan(h_scan, path_list, titleindex, preview_count, 1, min_duration, 0,
+    hb_scan(h_scan, path_list, titleindex, preview_count, 1, min_duration, max_duration,
                  0, 0, extensions, 0, keep_duplicate_titles);
     hb_list_close(&path_list);
     ghb_free_list(extensions);

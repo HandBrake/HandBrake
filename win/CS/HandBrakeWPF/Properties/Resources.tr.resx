@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -144,7 +144,7 @@ Yok: Resim ayarları ön ayarda saklanmaz. Bir kaynak yüklenirken kaynak çöz�
 
 Özel: İsteğe bağlı olarak Maksimum genişlik ve Yükseklik ayarlayabilirsiniz. Bunu yaparken bir kodlama bu değerlerden küçük veya bunlara eşit olacaktır. En Boy Oranını Koru otomatik olarak açılacaktır. 
 
-Kaynak Maksimum: Mümkün olduğunda her zaman kaynak çözünürlüğünde kodlar.</value>
+Maksimum Kaynak: Mümkün olduğunda her zaman kaynak çözünürlüğünde kodlar.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
     <value>Bu program özgür bir yazılımdır; lisansın 2 sürümünü ve/veya
@@ -152,19 +152,20 @@ Kaynak Maksimum: Mümkün olduğunda her zaman kaynak çözünürlüğünde kodl
 tarafından yayınlanan GNU Genel Kamu Lisansı koşulları altında
 yeniden dağıtabilir ve/veya değiştirebilirsiniz.
 
-Bu program faydalı olacağı umuduyla dağıtılmıştır.
+Bu program faydalı olması umuduyla dağıtılmıştır.
 Ancak HERHANGİ BİR TİCARÎ veya
 BELİRLİ BİR AMACA UYGUNLUK GARANTİSİ yoktur.
 Daha fazla bilgi için GNU Genel Kamu Lisansına bakın.
 
 Bu programla birlikte GNU Genel Kamu Lisansının bir
-kopyasını almış olmalısınız; değilse, Özgür Yazılım'a yazın
+kopyasını almış olmalısınız; kopyanız yoksa, Özgür Yazılım'a yazabilirsiniz.
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. 
 
-Kısmi Çeviri Düzenlemesi: Bulentbt5 </value>
+Çeviri: Bulentbt5
+bulentbt5@gmail.com</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
-    <value>UYARI: Otomatik dosya adlandırma açık değil. Lütfen bunu seçeneklerde etkinleştirin.</value>
+    <value>UYARI: Otomatik dosya adlandırma açık değil. Lütfen seçeneklerde etkinleştirin.</value>
   </data>
   <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
     <value>UYARI: Şu anda otomatik ses ve altyazı parçası seçme ayarınız yok. Varsayılan parça seçimi davranışını seçeneklerde ayarlayabilirsiniz.</value>
@@ -242,10 +243,10 @@ Kısmi Çeviri Düzenlemesi: Bulentbt5 </value>
     <value>Seçilen ön ayarı güncellemek istediğinizden emin misiniz?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>Ön ayar şimdi geçerli ayarlarınızla güncellendi.</value>
+    <value>Ön ayar, şu anki geçerli ayarlarınızla güncellendi.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>HandBrake yerleşik ön ayarlarınızın güncel olmadığını belirledi ... Bu ön ayar şimdi güncellenecek.
+    <value>HandBrake yerleşik ön ayarlarınızın güncel olmadığını belirledi... Bu ön ayar şimdi güncellenecek.
 Özel ön ayarlarınız güncellenmedi, bu yüzden silip yeniden ekleyerek bunları yeniden oluşturmanız gerekebilir. 
 Önceki user_presets.xml dosyası yedeklendi.</value>
   </data>
@@ -310,10 +311,10 @@ Tüm değerleri bu ön ayardan içe aktarmak mümkün olmayabilir.
 Devam etmek istiyor musunuz?</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>Ön ayar içe alınamdı!</value>
+    <value>Ön ayar içe aktarılamadı!</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>Ön ayar bozulmuş gibi veya HandBrake'nin eski bir sürümünden içe alınamıyor.</value>
+    <value>Ön ayar bozulmuş gibi veya HandBrake'nin eski bir sürümüne ait olduğu için içe alınamıyor.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
     <value>Sıraya eklemeden önce çıktı dosyasının hedef yolunu ayarlamanız gerekir.</value>
@@ -343,27 +344,26 @@ Devam etmek istiyor musunuz?</value>
     <value>Seçilen ön ayar içe alınamıyor!</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>Ön ayar bozuk veya desteklenmeyen daha eski bir HandBrake sürümünden olabilir. 
-Eski sürümlerdeki ön ayarlar geçerli sürümde yeniden oluşturulmalıdır.</value>
+    <value>Ön ayar bozuk veya desteklenmeyen daha eski bir HandBrake sürümüne ait olabilir. 
+Eski sürümlerdeki ön ayarların güncel sürümde yeniden oluşturulması gerekiyor.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
     <value>Video kodlayıcısına aktarılabilen gelişmiş ek komutlar.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>Yok - Yalnızca kapsayıcının formatı desteklemediği parçalar yazılacaktır.
+    <value>Hiçbiri - Yalnızca kapsayıcının formatı desteklemediği parçalar yazılacaktır.
 Yabancı Ses Parçası - Varsa Yabancı Ses parçası yazılacaktır.  
-İlk Parça - İlk parça kaydedilecektir.
-Yabancı Ses Tercih Edilir, Aksi takdirde Önce - Yabancı ses parçası mevcutsa belleğe yazılır, aksi takdirde ilk parça seçilir.</value>
+İlk Parça - İlk parça yazılacaktır.
+Yabancı Ses Tercih Et, Aksi Takdirde İlk Parça - Yabancı ses parçası mevcutsa yazılır, aksi takdirde ilk parça seçilir.</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
     <value>WebM Altyazı Uyumluluğu</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>HandBrake'deki WebM yalnızca yanan altyazıları destekler.
-
+    <value>HandBrake'de yalnızca WebM olarak yazdırılmış altyazıları destekler.
 Altyazı seçimlerinizi değiştirmelisiniz.
 
-Devam ederseniz, yanmayan alt yazılarınız kaybolur.</value>
+Devam ederseniz, yazdırılmamış alt yazılarınız kaybolacaktır.</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
     <value>Geçerli bir kaynak veya başlık bulunamadı.</value>
@@ -391,7 +391,7 @@ Etkinlik günlüğünde daha fazla bilgi bulabilirsiniz.</value>
     <value>Varsayılan ön ayarı silemezsiniz. Lütfen ilk önce varsayılan olarak başka bir ön ayar ayarlayın.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>Ön ayarı silmek istediğinizden emin misiniz: </value>
+    <value>Ön ayarı silmek istediğinizden emin misiniz? </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>Kodlanıyor: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Ort FPS: {4:000.0},  Kalan Süre: {5},  Geçen: {6} {7}</value>
@@ -430,10 +430,10 @@ Etkinlik günlüğünde daha fazla bilgi bulabilirsiniz.</value>
     <value>Bölüm İşaretleyicileri dosyası kaydedilemiyor! </value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
-    <value>Bölüm işaretleyici isimleri kodunuzda kaydedilmeyecektir.</value>
+    <value>Bölüm işaretleyici isimleri kodlamanıza kaydedilmeyecektir.</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>Aşağıdaki '{0}' eylemi {1} saniye içinde gerçekleşecektir.</value>
+    <value>Aşağıdaki '{0}' eylemini {1} saniye içinde gerçekleşecektir.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
     <value>Eğer sorun devam ederse HandBreak'i yeninden başlatmayı deneyin.</value>
@@ -447,12 +447,8 @@ Etkinlik günlüğünde daha fazla bilgi bulabilirsiniz.</value>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
     <value>Harika! Yeni Bir Güncelleme Var! Sürüm notları için web sitesini kontrol edebilirsiniz.</value>
   </data>
-  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>Sisteminiz, HandBrake'nin 64 bit sürümünü destekliyor! Bu, 32 bit sürümde performans ve kararlılık geliştirmeleri sunar.
-    Lütfen sürüm notları için web sitesini kontrol ediniz.</value>
-  </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
-    <value>Şu anda yeni bir güncelleme yok.</value>
+    <value>Şimdilik yeni bir güncelleme yok.</value>
   </data>
   <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
     <value>Güncelleme İndirildi</value>
@@ -532,7 +528,7 @@ HandBrake'den çıkmak istediğinize emin misiniz?</value>
     <value>Önceki önizleme dosyası silinemiyor. Medya yürütücünüzde hala açık bir önizlemeniz olabilir. Lütfen bunu kapatın.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>Önizleme oluşturmadan önce ilk önce bir kaynağı taramanız ve kodunuzu ayarlamalısınız.</value>
+    <value>Önizleme oluşturmadan önce ilk önce bir kaynağı taramanız ve kodlamanızı ayarlamalısınız.</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Önizleme dosyası bulunamadı. Dosya silindi ya da kodlama başarısız oldu. Ayrıntılar için etkinlik günlüğünü kontrol edin.</value>
@@ -608,7 +604,7 @@ Bölüm adlarını hâlâ içe aktarmak istiyor musunuz?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
     <value>Bölümlerin kaynak medyada bildirilen süresi 
-ve girdi dosyasındaki bölümlerin süresi büyük ölçüde farklılık gösterir.
+ve girdi dosyasındaki bölümlerin süresi büyük ölçüde farklılık gösteriyor.
 
 Bu bölüm dosyasının farklı bir kaynak medyadan üretilmiş olması çok muhtemeldir.
 
@@ -694,10 +690,10 @@ Devam etmek istiyor musunuz? </value>
     <value>Sıra dosyası geri yüklenemiyor.</value>
   </data>
   <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
-    <value>Dosya bozulmuş veya HandBrake'nin daha eski bir uyumsuz sürümünden olabilir</value>
+    <value>Dosya bozulmuş veya HandBrake'nin daha eski bir uyumsuz sürümüne ait olabilir</value>
   </data>
   <data name="Queue_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake zaten bir dosyayı kodluyor.</value>
+    <value>HandBrake zaten bir dosyayı kodlamaktadır.</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>Lütfen şu anki kodlamayı durdurun. Sorun devam ederse, lütfen HandBrake'yi yeniden başlatın.</value>
@@ -2299,7 +2295,7 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Durdur</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Girdiğiniz kategori adı zaten mevcut. Lütfen farklı bir isim seçin.</value>
@@ -2544,10 +2540,10 @@ Tercihler -&gt; Genel -&gt; Güncellemeleri Kontrol Et bölümündeki seçenekle
 Yalnızca mevcut sürümdeki kuyruk dosyaları desteklenir.</value>
   </data>
   <data name="Notifications_EncodeDone" xml:space="preserve">
-    <value>HandBrake kodlamanız tamamlandı!</value>
+    <value>HandBrake kodlamayı tamamladı!</value>
   </data>
   <data name="Notifications_QueueDone" xml:space="preserve">
-    <value>HandBrake görev sıranız tamamlandı!</value>
+    <value>HandBrake sıra görevini bitirdi!</value>
   </data>
   <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
     <value>Bu aynı zamanda 'Bittiğinde' sekmesindeki Windows görev çubuğu bildirimlerini göster seçeneklerini de devre dışı bırakacaktır. Bu özelliği yeniden etkinleştirmek istiyorsanız bunları yeniden etkinleştirin.</value>
@@ -2868,16 +2864,16 @@ Birden fazla eşzamanlı kodlamaya izin vermek için, Araçlar Menüsü -&gt; Te
     <value>Günlük Penceresini Aç</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Özel</value>
@@ -2917,5 +2913,33 @@ Birden fazla eşzamanlı kodlamaya izin vermek için, Araçlar Menüsü -&gt; Te
   </data>
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
     <value>Maksimum DVD ve Blu-ray başlık süresi saniye cinsinden. Daha uzun başlıklar atlanacaktır:</value>
+  </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>Bölümler</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>Saniye</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>Çerçeveler</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Başlıklar için Varsayılan Aralık Modu:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Özel Eylem</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>'Özel Eylem' Yapılandırması:</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Otomatik Adlandırma Tercihlerini Aç</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Komut / Yürütülebilir Dosyayı Çalıştır:</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="OptionsViewModel_PortableMode" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
 </root>

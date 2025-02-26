@@ -53,7 +53,9 @@
 
         _imagesCount = [_scanCore imagesCountForTitle:self.job.title];
 
-        _queue = dispatch_queue_create("fr.handbrake.PreviewQueue", DISPATCH_QUEUE_SERIAL);
+        _queue = dispatch_queue_create("fr.handbrake.PreviewQueue",
+                                       dispatch_queue_attr_make_with_autorelease_frequency(DISPATCH_QUEUE_SERIAL,
+                                                                                           DISPATCH_AUTORELEASE_FREQUENCY_WORK_ITEM));
         _group = dispatch_group_create();
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
@@ -75,11 +77,11 @@
 #pragma mark Preview images
 
 /**
- * Returns the picture preview at the specified index
+ * Returns the picture preview CVPixelBuffer at the specified index
  *
  * @param index picture index in title.
  */
-- (nullable CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache
+- (nullable CVPixelBufferRef)copyPixelBufferAtIndex:(NSUInteger)index shouldCache:(BOOL)cache
 {
     if (index >= self.imagesCount)
     {
@@ -88,31 +90,65 @@
 
     // The preview for the specified index may not currently exist, so this method
     // generates it if necessary.
-    CGImageRef theImage = (__bridge CGImageRef)([_previewsCache objectForKey:@(index)]);
+    CVPixelBufferRef pixelBuffer = (__bridge CVPixelBufferRef)([_previewsCache objectForKey:@(index)]);
 
-    if (!theImage)
+    if (!pixelBuffer)
     {
-        theImage = [self.scanCore copyImageAtIndex:index job:self.job];
-        if (cache && theImage)
+        pixelBuffer = [self.scanCore copyPixelBufferAtIndex:index job:self.job];
+        if (cache && pixelBuffer)
         {
             // The cost is the number of pixels of the image
-            NSUInteger previewCost = CGImageGetWidth(theImage) * CGImageGetHeight(theImage);
-            [self.previewsCache setObject:(__bridge id)(theImage) forKey:@(index) cost:previewCost];
+            NSUInteger previewCost = CVPixelBufferGetWidth(pixelBuffer) * CVPixelBufferGetHeight(pixelBuffer);
+            [self.previewsCache setObject:(__bridge id)(pixelBuffer) forKey:@(index) cost:previewCost];
         }
     }
     else
     {
-        CFRetain(theImage);
+        CFRetain(pixelBuffer);
     }
 
-    return theImage;
+    return pixelBuffer;
+}
+
+/**
+ * Returns the picture preview at the specified index
+ *
+ * @param index picture index in title.
+ */
+- (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index shouldCache:(BOOL)cache
+{
+    if (index >= self.imagesCount)
+    {
+        return nil;
+    }
+
+    // The preview for the specified index may not currently exist, so this method
+    // generates it if necessary.
+    CGImageRef image = (__bridge CGImageRef)([_previewsCache objectForKey:@(index)]);
+
+    if (!image)
+    {
+        image = [self.scanCore copyImageAtIndex:index job:self.job];
+        if (cache && image)
+        {
+            // The cost is the number of pixels of the image
+            NSUInteger previewCost = CGImageGetWidth(image) * CGImageGetHeight(image);
+            [self.previewsCache setObject:(__bridge id)(image) forKey:@(index) cost:previewCost];
+        }
+    }
+    else
+    {
+        CFRetain(image);
+    }
+
+    return image;
 }
 
 /**
  * Purges all images from the cache. The next call to imageAtIndex: will cause a new
  * image to be generated.
  */
-- (void) purgeImageCache
+- (void)purgeImageCache
 {
     [self.previewsCache removeAllObjects];
 }

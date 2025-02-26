@@ -1,6 +1,6 @@
 /* fifo.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
@@ -19,6 +19,7 @@
 #ifdef __APPLE__
 #include <CoreMedia/CoreMedia.h>
 #include "platform/macosx/vt_common.h"
+#include "platform/macosx/cv_utils.h"
 #endif
 
 #ifndef SYS_DARWIN
@@ -634,7 +635,7 @@ int hb_buffer_is_writable(const hb_buffer_t *buf)
             return 1;
 #ifdef __APPLE__
         case COREMEDIA:
-            return CFGetRetainCount(buf->storage);
+            return hb_cv_get_io_surface_usage_count(buf) == 1;
 #endif
         default:
             return 0;

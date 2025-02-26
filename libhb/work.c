@@ -1,6 +1,6 @@
 /* work.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -699,7 +699,7 @@ void hb_display_job_info(hb_job_t *job)
             }
         }
 
-        if (job->passthru_dynamic_hdr_metadata & DOVI)
+        if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
         {
             hb_log("     + dolby vision configuration record: version: %d.%d, profile: %d, level: %d, rpu flag: %d, el flag: %d, bl flag: %d, compatibility id: %d",
                    job->dovi.dv_version_major,
@@ -712,7 +712,7 @@ void hb_display_job_info(hb_job_t *job)
                    job->dovi.dv_bl_signal_compatibility_id);
         }
 
-        if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS)
+        if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_HDR10PLUS)
         {
             hb_log("     + hdr10+ dynamic metadata");
 
@@ -1451,6 +1451,43 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
 #endif
 }
 
+static enum AVPixelFormat match_pix_fmt(enum AVPixelFormat pix_fmt,
+                                        const enum AVPixelFormat *encoder_pix_fmts,
+                                        int keep_chroma,
+                                        int keep_depth)
+{
+    while (*encoder_pix_fmts != AV_PIX_FMT_NONE)
+    {
+        int match = 1;
+
+        const AVPixFmtDescriptor *input_desc = av_pix_fmt_desc_get(pix_fmt);
+        const AVPixFmtDescriptor *pix_fmt_desc = av_pix_fmt_desc_get(*encoder_pix_fmts);
+
+        if (keep_chroma)
+        {
+            match &= pix_fmt_desc->log2_chroma_w >= input_desc->log2_chroma_w &&
+                     pix_fmt_desc->log2_chroma_h >= input_desc->log2_chroma_h;
+        }
+
+        if (keep_depth)
+        {
+            int input_depth = hb_get_bit_depth(pix_fmt);
+            int candidate_depth = hb_get_bit_depth(*encoder_pix_fmts);
+
+            match &= input_depth == candidate_depth;
+        }
+
+        if (match)
+        {
+            return *encoder_pix_fmts;
+        }
+
+        encoder_pix_fmts++;
+    }
+
+    return AV_PIX_FMT_NONE;
+}
+
 static void sanitize_filter_list_post(hb_job_t *job)
 {
 #ifdef __APPLE__
@@ -1465,23 +1502,20 @@ static void sanitize_filter_list_post(hb_job_t *job)
     {
         // Some encoders require a specific input pixel format
         // that could be different from the current pipeline format.
-        const int *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec, job->encoder_profile);
-        int encoder_pix_fmt = *encoder_pix_fmts;
+        const enum AVPixelFormat *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec,job->encoder_profile);
 
         // Prefer a pixel format with the
-        // same chroma subsampling
-        while (*encoder_pix_fmts != AV_PIX_FMT_NONE)
-        {
-            const AVPixFmtDescriptor *input_desc = av_pix_fmt_desc_get(job->input_pix_fmt);
-            const AVPixFmtDescriptor *pix_fmt_desc = av_pix_fmt_desc_get(*encoder_pix_fmts);
+        // same chroma subsampling and depth
+        enum AVPixelFormat encoder_pix_fmt = match_pix_fmt(job->input_pix_fmt, encoder_pix_fmts, 1, 1);
 
-            if (pix_fmt_desc->log2_chroma_w >= input_desc->log2_chroma_w &&
-                pix_fmt_desc->log2_chroma_h >= input_desc->log2_chroma_h)
-            {
-                encoder_pix_fmt = *encoder_pix_fmts;
-                break;
-            }
-            encoder_pix_fmts++;
+        if (encoder_pix_fmt == AV_PIX_FMT_NONE)
+        {
+            encoder_pix_fmt = match_pix_fmt(job->input_pix_fmt, encoder_pix_fmts, 1, 0);
+        }
+
+        if (encoder_pix_fmt == AV_PIX_FMT_NONE)
+        {
+            encoder_pix_fmt = match_pix_fmt(job->input_pix_fmt, encoder_pix_fmts, 0, 0);
         }
 
         hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
@@ -1507,29 +1541,26 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
 {
     hb_list_t *list = job->list_filter;
 
-    if (hb_filter_find(list, HB_FILTER_ROTATE)     != NULL ||
-        hb_filter_find(list, HB_FILTER_COLORSPACE) != NULL)
+    if (hb_filter_find(list, HB_FILTER_COLORSPACE) != NULL)
     {
-        job->passthru_dynamic_hdr_metadata = NONE;
+        job->passthru_dynamic_hdr_metadata = HB_HDR_DYNAMIC_METADATA_NONE;
         return;
     }
 
-    if (job->vcodec != HB_VCODEC_X265_10BIT    &&
-        job->vcodec != HB_VCODEC_VT_H265_10BIT &&
-        job->vcodec != HB_VCODEC_SVT_AV1_10BIT)
+    if (job->title->hdr_10_plus == 0 ||
+        hb_video_hdr_dynamic_metadata_is_supported(job->vcodec,
+                                                   HB_HDR_DYNAMIC_METADATA_HDR10PLUS,
+                                                   0) == 0)
     {
-        job->passthru_dynamic_hdr_metadata &= ~HDR_10_PLUS;
+        job->passthru_dynamic_hdr_metadata &= ~HB_HDR_DYNAMIC_METADATA_HDR10PLUS;
     }
 
-    if ((job->dovi.dv_profile != 5 &&
-         job->dovi.dv_profile != 7 &&
-         job->dovi.dv_profile != 8 &&
-         job->dovi.dv_profile != 10) ||
-        (job->vcodec != HB_VCODEC_X265_10BIT &&
-         job->vcodec != HB_VCODEC_VT_H265_10BIT &&
-         job->vcodec != HB_VCODEC_SVT_AV1_10BIT))
+    if (job->title->dovi.dv_profile == 0 ||
+        hb_video_hdr_dynamic_metadata_is_supported(job->vcodec,
+                                                   HB_HDR_DYNAMIC_METADATA_DOVI,
+                                                   job->dovi.dv_profile) == 0)
     {
-        job->passthru_dynamic_hdr_metadata &= ~DOVI;
+        job->passthru_dynamic_hdr_metadata &= ~HB_HDR_DYNAMIC_METADATA_DOVI;
     }
 
     if ((job->dovi.dv_profile == 8 || job->dovi.dv_profile == 10) &&
@@ -1538,11 +1569,11 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         if (job->mastering.has_primaries == 0 && job->mastering.has_luminance == 0)
         {
             hb_log("work: missing mastering metadata, disabling Dolby Vision");
-            job->passthru_dynamic_hdr_metadata &= ~DOVI;
+            job->passthru_dynamic_hdr_metadata &= ~HB_HDR_DYNAMIC_METADATA_DOVI;
         }
     }
 
-    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
     {
 #if HB_PROJECT_FEATURE_LIBDOVI
         int mode = 0;
@@ -1580,16 +1611,36 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
             }
         }
 
+        int angle = 0, hflip = 0;
         double scale_factor_x = 1, scale_factor_y = 1;
         int crop_top = 0, crop_bottom = 0, crop_left = 0, crop_right = 0;
         int pad_top = 0, pad_bottom = 0, pad_left = 0, pad_right = 0;
 
-        hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+        hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_ROTATE);
         if (filter != NULL)
         {
             hb_dict_t *settings = filter->settings;
             if (settings != NULL)
             {
+                angle = hb_dict_get_int(settings, "angle");
+                hflip = hb_dict_get_int(settings, "hflip");
+            }
+        }
+
+        filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+        if (filter != NULL)
+        {
+            hb_dict_t *settings = filter->settings;
+            if (settings != NULL)
+            {
+                hb_geometry_crop_t title_geo = {0};
+                title_geo.geometry = job->title->geometry;
+
+                if (angle || hflip)
+                {
+                    hb_rotate_geometry(&title_geo, &title_geo, angle, hflip);
+                }
+
                 int width  = hb_dict_get_int(settings, "width");
                 int height = hb_dict_get_int(settings, "height");
                 crop_top    = hb_dict_get_int(settings, "crop-top");
@@ -1597,8 +1648,8 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
                 crop_left   = hb_dict_get_int(settings, "crop-left");
                 crop_right  = hb_dict_get_int(settings, "crop-right");
 
-                scale_factor_x = (float)(job->title->geometry.width - crop_right - crop_left) / width;
-                scale_factor_y = (float)(job->title->geometry.height - crop_top - crop_bottom) / height;
+                scale_factor_x = (float)(title_geo.geometry.width - crop_right - crop_left) / width;
+                scale_factor_y = (float)(title_geo.geometry.height - crop_top - crop_bottom) / height;
             }
         }
 
@@ -1616,17 +1667,19 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         }
 
         filter = hb_filter_init(HB_FILTER_RPU);
-        char *settings = hb_strdup_printf("mode=%d:scale-factor-x=%f:scale-factor-y=%f:"
+        char *settings = hb_strdup_printf("mode=%d:angle=%d:hflip=%d:"
+                                          "scale-factor-x=%f:scale-factor-y=%f:"
                                           "crop-top=%d:crop-bottom=%d:crop-left=%d:crop-right=%d:"
                                           "pad-top=%d:pad-bottom=%d:pad-left=%d:pad-right=%d",
-                                          mode, scale_factor_x, scale_factor_y,
+                                          mode, angle, hflip,
+                                          scale_factor_x, scale_factor_y,
                                           crop_top, crop_bottom, crop_left, crop_right,
                                           pad_top, pad_bottom, pad_left, pad_right);
         hb_add_filter(job, filter, settings);
         free(settings);
 #else
         hb_log("work: libdovi not available, disabling Dolby Vision");
-        job->passthru_dynamic_hdr_metadata &= ~DOVI;
+        job->passthru_dynamic_hdr_metadata &= ~HB_HDR_DYNAMIC_METADATA_DOVI;
 #endif
     }
 }
@@ -1734,7 +1787,7 @@ static void do_job(hb_job_t *job)
         init.color_matrix = title->color_matrix;
         // Dolby Vision profile 5 requires full range
         // TODO: find a better way to handle this
-        init.color_range = job->passthru_dynamic_hdr_metadata & DOVI &&
+        init.color_range = job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI &&
                             (job->dovi.dv_profile == 5 ||
                              (job->dovi.dv_profile == 10 && job->dovi.dv_bl_signal_compatibility_id == 0)) ?
                             title->color_range : AVCOL_RANGE_MPEG;
@@ -1828,7 +1881,7 @@ static void do_job(hb_job_t *job)
     hb_reduce(&job->vrate.num, &job->vrate.den,
                job->vrate.num,  job->vrate.den);
 
-    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
     {
         // Dolby Vision level needs to be updated now that
         // the final width, height and frame rate is known

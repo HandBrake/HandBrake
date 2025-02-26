@@ -154,6 +154,23 @@
     }
     job->multipass = self.video.multiPass;
 
+    switch (self.video.passthruHDRDynamicMetadata)
+    {
+        case HBVideoHDRDynamicMetadataPassthruOff:
+            job->passthru_dynamic_hdr_metadata = HB_HDR_DYNAMIC_METADATA_NONE;
+            break;
+        case HBVideoHDRDynamicMetadataPassthruHDR10Plus:
+            job->passthru_dynamic_hdr_metadata = HB_HDR_DYNAMIC_METADATA_HDR10PLUS;
+            break;
+        case HBVideoHDRDynamicMetadataPassthruDolbyVision:
+            job->passthru_dynamic_hdr_metadata = HB_HDR_DYNAMIC_METADATA_DOVI;
+            break;
+        case HBVideoHDRDynamicMetadataPassthruAll:
+        default:
+            job->passthru_dynamic_hdr_metadata = HB_HDR_DYNAMIC_METADATA_ALL;
+            break;
+    }
+
     if (hb_video_encoder_get_presets(self.video.encoder) != NULL)
     {
         // advanced x264/x265 options

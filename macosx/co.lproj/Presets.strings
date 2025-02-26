@@ -1,5 +1,5 @@
 /* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[0] = "Create a new custom preset based on the currently selected settings."; ObjectID = "0di-xq-jgi"; */
-"0di-xq-jgi.ibShadowedToolTips[0]" = "Creà una nova prerigatura cù e preferenze selezziunate attualmente.";
+"0di-xq-jgi.ibShadowedToolTips[0]" = "Creà una nova prerigatura cù i parametri selezziunati attualmente.";
 
 /* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[1] = "Delete the selected preset."; ObjectID = "0di-xq-jgi"; */
 "0di-xq-jgi.ibShadowedToolTips[1]" = "Squassà a prerigatura selezziunata.";
@@ -10,11 +10,17 @@
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
 "cm5-Kl-dB3.title" = "Reinizià e prerigature ufficiale";
 
+/* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "cUW-79-8BY"; */
+"cUW-79-8BY.title" = "Sceglie cum’è predefinizione";
+
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "D2t-YG-Frn"; */
 "D2t-YG-Frn.title" = "Sceglie cum’è predefinizione";
 
 /* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
 "Io0-Vm-Qez.title" = "Nova categuria";
+
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "k6z-1U-qsp"; */
+"k6z-1U-qsp.title" = "Rinuminà…";
 
 /* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
 "LQk-kD-5sj.title" = "Listinu di l’azzioni nant’à e prerigature";
@@ -22,17 +28,23 @@
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
 "LUl-ag-Iu6.title" = "Impurtà…";
 
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "M33-MU-aWd"; */
+"M33-MU-aWd.title" = "Espurtà…";
+
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
 "oBC-Nh-TwB.title" = "Cellula di vista di tavula";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
 "r4V-6L-SO8.title" = "Prerigature";
 
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "ryC-EH-q4k"; */
+"ryC-EH-q4k.title" = "Rinuminà…";
+
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Presets"; ObjectID = "uad-bt-uKD"; */
 "uad-bt-uKD.ibExternalAccessibilityDescription" = "Prerigature";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset."; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibShadowedToolTip" = "E prerigature sò gruppi di preferenze di cudificazione custruiti per scenarii specifichi. Selezziunate quella chì currisponde u più à u vostru bisognu.\n\nRimpiazzeghja tutte e preferenze di cudificazione. E preferenze ponu esse adattate dopu a selezzione di a prerigatura.";
+"uad-bt-uKD.ibShadowedToolTip" = "E prerigature sò gruppi di parametri di cudificazione custruiti per scenarii specifichi. Selezziunate quella chì currisponde u più à u vostru bisognu.\n\nRimpiazzeghja tutti i parametri di cudificazione. I parametri ponu esse adattati dopu a selezzione di a prerigatura.";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
 "xEQ-Un-J0n.title" = "Espurtà…";

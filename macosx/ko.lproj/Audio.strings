@@ -67,6 +67,9 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "LLW-KN-65P"; */
 "LLW-KN-65P.ibExternalAccessibilityDescription" = "믹스다운";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.\n\nDolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility."; ObjectID = "LLW-KN-65P"; */
+"LLW-KN-65P.ibShadowedToolTip" = "믹스다운 유형. 멀티채널 오디오를 더 적은 수의 채널로 믹싱하는 방법 또는 원래 채널을 유지할지 여부를 제어합니다.\n\n돌비 서라운드 및 돌비 프로 로직 II는 멀티 채널 오디오를 스테레오로 변환하고 스테레오 호환성을 유지하면서 호환 장비에서 서라운드 재생을 위해 추가 채널을 매트릭스 인코딩합니다.";
+
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "lnO-sZ-6xv"; */
 "lnO-sZ-6xv.headerCell.title" = "코덱";
 
@@ -121,6 +124,12 @@
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "U4U-1b-rQF"; */
 "U4U-1b-rQF.title" = "텍스트 셀";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track."; ObjectID = "vFP-nq-IQg"; */
+"vFP-nq-IQg.ibShadowedToolTip" = "오디오 트랙 선택 동작을 구성합니다. 이러한 설정은 오디오 트랙 목록에 추가될 트랙과 각 트랙에 사용되는 설정에 영향을 줍니다.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Reload the audio tracks list using the configured Selection Behavior."; ObjectID = "wcL-rL-aYS"; */
+"wcL-rL-aYS.ibShadowedToolTip" = "구성된 선택 동작을 사용하여 오디오 트랙 목록을 다시 로드합니다.";
+
 /* Class = "NSTableView"; ibExternalAccessibilityDescription = "Audio tracks"; ObjectID = "yix-PF-sqH"; */
 "yix-PF-sqH.ibExternalAccessibilityDescription" = "오디오 트랙";
 
@@ -132,4 +141,7 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "yPh-4R-HRQ"; */
 "yPh-4R-HRQ.ibShadowedToolTip" = "다이내믹 레인지 압축. 큰 소리와 작은 소리 사이의 볼륨 차이를 줄입니다. 다른 포맷으로 인코딩할 때 AC-3 가 소스트랙일 때만 적용됩니다.\n\n0: 적용하지 않음.\n1: 소스 트랙에 내장된 압축힌트에 따라 DRC 적용.\n\n1보다 큰 값은 작은 소리의 볼륨을 높입니다. 2.5보다 큰 값은 대부분 불필요하며 소리 왜곡을 일으킬 수 있습니다.";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Audio tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the audio Selection Behavior dialog."; ObjectID = "Yzu-Rk-hTv"; */
+"Yzu-Rk-hTv.ibShadowedToolTip" = "오디오 트랙 목록. 트랙 선택 동작 및 설정은 선택한 프리셋에서 로드되며 오디오 선택 동작 대화 상자를 사용하여 구성할 수 있습니다.";
 

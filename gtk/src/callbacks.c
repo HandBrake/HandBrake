@@ -1,6 +1,6 @@
 /* callbacks.c
  *
- * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
+ * Copyright (C) 2008-2025 John Stebbins <stebbins@stebbins>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -455,7 +455,9 @@ static GhbBinding widget_bindings[] =
     {"CustomTmpEnable", "active", NULL, "CustomTmpDir", "sensitive"},
     {"PresetCategory", "active-id", "new", "PresetCategoryName", "visible"},
     {"PresetCategory", "active-id", "new", "PresetCategoryEntryLabel", "visible"},
-    {"DiskFreeCheck", "active", NULL, "DiskFreeLimitGB", "sensitive"}
+    {"DiskFreeCheck", "active", NULL, "DiskFreeLimitGB", "sensitive"},
+    {"LimitMaxDuration", "active", NULL, "MaxTitleDuration", "sensitive"},
+    {"SendFileTo", "active", NULL, "SendFileToTarget", "sensitive"}
 };
 
 void
@@ -1068,7 +1070,14 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 const char *codec;
                 vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
                 codec = hb_video_encoder_get_name(vcodec);
-                g_string_append_len(str, codec, strcspn(codec, " ("));
+                if (codec)
+                {
+                    g_string_append_len(str, codec, strcspn(codec, " ("));
+                }
+                else
+                {
+                    g_string_append(str, "None");
+                }
 
                 p += strlen("{codec}");
             }
@@ -1493,8 +1502,10 @@ start_scan (signal_user_data_t *ud, const char *path, int title_id, int preview_
     gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
     widget = ghb_builder_widget("sourcetoolmenubutton");
     gtk_widget_set_sensitive(widget, false);
+    gboolean limit_max_duration = ghb_dict_get_bool(ud->prefs, "LimitMaxDuration");
     ghb_backend_scan(path, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"),
+            limit_max_duration ? 90000L * ghb_dict_get_int(ud->prefs, "MaxTitleDuration") : 0,
             ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
 }
 
@@ -1514,8 +1525,10 @@ start_scan_list (signal_user_data_t *ud, GListModel *files, int title_id, int pr
     gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
     widget = ghb_builder_widget("sourcetoolmenubutton");
     gtk_widget_set_sensitive(widget, false);
+    gboolean limit_max_duration = ghb_dict_get_bool(ud->prefs, "LimitMaxDuration");
     ghb_backend_scan_list(files, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"),
+            limit_max_duration ? 90000L * ghb_dict_get_int(ud->prefs, "MaxTitleDuration") : 0,
             ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
 }
 
@@ -3932,13 +3945,12 @@ ghb_countdown_dialog_show (const gchar *message, const gchar *action,
     gtk_widget_show(dialog);
 }
 
-gboolean
-ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
-                         const char *accept_button, const char *cancel_button,
-                         const char *title, const char *format, ...)
+G_GNUC_PRINTF(6, 0) static GtkMessageDialog *
+question_dialog_va (GtkWindow *parent, GhbActionStyle accept_style,
+                    const char *accept_button, const char *cancel_button,
+                    const char *title, const char *format, va_list va_args)
 {
     GtkWidget *dialog, *button;
-    GtkResponseType response;
 
     if (parent == NULL)
     {
@@ -3952,12 +3964,9 @@ ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
                                     "%s", title);
     if (format)
     {
-        va_list args;
         char *message;
 
-        va_start(args, format);
-        message = g_strdup_vprintf(format, args);
-        va_end(args);
+        message = g_strdup_vprintf(format, va_args);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
         g_free(message);
     }
@@ -3984,6 +3993,39 @@ ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
             break;
         }
     }
+    return GTK_MESSAGE_DIALOG(dialog);
+}
+
+GtkMessageDialog *
+ghb_question_dialog_new (GtkWindow *parent, GhbActionStyle accept_style,
+                         const char *accept_button, const char *cancel_button,
+                         const char *title, const char *format, ...)
+{
+    va_list args;
+    GtkMessageDialog *dialog;
+
+    va_start(args, format);
+    dialog = question_dialog_va(parent, accept_style, accept_button,
+                                cancel_button, title, format, args);
+    va_end(args);
+
+    return dialog;
+}
+
+gboolean
+ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
+                         const char *accept_button, const char *cancel_button,
+                         const char *title, const char *format, ...)
+{
+    va_list args;
+    GtkMessageDialog *dialog;
+    GtkResponseType response;
+
+    va_start(args, format);
+    dialog = question_dialog_va(parent, accept_style, accept_button,
+                                cancel_button, title, format, args);
+    va_end(args);
+
     response = ghb_dialog_run(GTK_DIALOG(dialog));
     gtk_window_destroy(GTK_WINDOW(dialog));
     if (response == GTK_RESPONSE_ACCEPT)
@@ -4444,6 +4486,57 @@ searching_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
 }
 
 static void
+send_to_external_app(gint index, signal_user_data_t * ud)
+{
+    gboolean send_file_to = ghb_dict_get_bool(ud->prefs, "SendFileTo");
+    const gchar * send_file_to_target = ghb_dict_get_string(ud->prefs, "SendFileToTarget");
+    if (send_file_to && send_file_to_target != NULL && send_file_to_target[0] != '\0')
+    {
+        GhbValue *queueDict, *jobDict, *destDict;
+        queueDict = ghb_array_get(ud->queue, index);
+        jobDict = ghb_dict_get(queueDict, "Job");
+        destDict = ghb_dict_get(jobDict, "Destination");
+
+        gchar * file = g_shell_quote(ghb_dict_get_string(destDict, "File"));
+        gchar * command_str;
+        if (g_access("/.flatpak-info", F_OK) == 0)
+        {
+            command_str = g_strjoin(" ", "flatpak-spawn", "--host", "--", send_file_to_target, file, NULL);
+        }
+        else
+        {
+            command_str = g_strjoin(" ", send_file_to_target, file, NULL);
+        }
+
+        gchar ** command_array = NULL;
+        GError * error = NULL;
+        ghb_log("Running command `%s`", command_str);
+        if (g_shell_parse_argv(command_str, NULL, &command_array, &error))
+        {
+            g_spawn_async(
+                NULL,
+                command_array,
+                NULL,
+                G_SPAWN_SEARCH_PATH | G_SPAWN_STDERR_TO_DEV_NULL | G_SPAWN_STDOUT_TO_DEV_NULL,
+                NULL,
+                NULL,
+                NULL, 
+                &error);
+            g_strfreev(command_array);
+        }
+
+        if (error != NULL)
+        {
+            ghb_log("Failed to run command `%s`: %s", command_str, error->message);
+            g_error_free(error);
+        }
+        
+        g_free(command_str);
+        g_free(file);
+    }
+}
+
+static void
 ghb_backend_events(signal_user_data_t *ud)
 {
     ghb_status_t     status;
@@ -4616,6 +4709,7 @@ ghb_backend_events(signal_user_data_t *ud)
             case GHB_ERROR_NONE:
                 gtk_label_set_text(work_status, _("Encode Done!"));
                 qstatus = GHB_QUEUE_DONE;
+                send_to_external_app(index, ud);
                 ghb_send_notification (GHB_NOTIFY_ITEM_DONE, index, ud);
                 break;
             case GHB_ERROR_CANCELED:
@@ -4648,7 +4742,7 @@ ghb_backend_events(signal_user_data_t *ud)
         if (ghb_dict_get_bool(ud->prefs, "RemoveFinishedJobs") &&
             status.queue.error == GHB_ERROR_NONE)
         {
-            ghb_queue_remove_row(ud, index);
+            ghb_queue_remove_row_at_index(index);
         }
         if (ghb_get_cancel_status() != GHB_CANCEL_ALL &&
             ghb_get_cancel_status() != GHB_CANCEL_FINISH)
@@ -5662,14 +5756,4 @@ log_directory_action_cb (GSimpleAction *action, GVariant *param, signal_user_dat
         return;
 
     ghb_browse_uri(uri);
-}
-
-G_MODULE_EXPORT void
-string_list_changed_cb (GtkStringList *self, guint position,
-                        guint removed, guint added, gpointer user_data)
-{
-    for (int i = 0; i < g_list_model_get_n_items(G_LIST_MODEL(self)); i++)
-    {
-         printf("String: %s\n", gtk_string_list_get_string(self, i));
-    }
 }

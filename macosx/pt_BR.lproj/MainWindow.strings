@@ -7,6 +7,9 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
 "3w9-Iu-3u2.ibShadowedToolTip" = "Título para varrer.";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Recursively scan and open the content of every sub-folder."; ObjectID = "5hE-Ri-tcZ"; */
+"5hE-Ri-tcZ.ibShadowedToolTip" = "Examinar e abrir recursivamente o conteúdo de cada subpasta.";
+
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "6E4-AG-PEh"; */
 "6E4-AG-PEh.title" = "0";
 
@@ -153,6 +156,9 @@
 
 /* Class = "NSButtonCell"; title = "Scan only title:"; ObjectID = "eQA-t2-FcV"; */
 "eQA-t2-FcV.title" = "Digitalize apenas o título:";
+
+/* Class = "NSButtonCell"; title = "Recursively scan folders"; ObjectID = "Hwu-gp-tRZ"; */
+"Hwu-gp-tRZ.title" = "Examinar pastas recursivamente";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "Iat-pL-ttI"; */
 "Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "";

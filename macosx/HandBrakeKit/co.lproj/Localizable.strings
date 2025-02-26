@@ -162,7 +162,7 @@ Subtitles description */
 "Default" = "Predefinitu";
 
 /* Video description */
-"default settings" = "preferenze predefinite";
+"default settings" = "parametri predefiniti";
 
 /* HBFilters -> invalid filter custom settings error recovery suggestion */
 "Default: " = "Predefinizione : ";
@@ -227,34 +227,34 @@ HBJob -> filters short description */
 "HQDN3D" = "HQDN3D";
 
 /* HBFilters -> invalid Bwdif custom string description */
-"Invalid Bwdif custom settings." = "Preferenze persunalizate Bwdif inaccettevule.";
+"Invalid Bwdif custom settings." = "Parametri persunalizati Bwdif inaccettevule.";
 
 /* HBFilters -> invalid chroma smooth custom string description */
-"Invalid chroma smooth custom settings." = "Preferenze persunalizate d’allisciata cromatica inaccettevule.";
+"Invalid chroma smooth custom settings." = "Parametri persunalizati d’allisciata cromatica inaccettevule.";
 
 /* HBFilters -> invalid chroma smooth custom string description */
-"Invalid colorspace custom settings." = "Preferenze persunalizate di spaziu culorimetricu inaccettevule.";
+"Invalid colorspace custom settings." = "Parametri persunalizati di spaziu culorimetricu inaccettevule.";
 
 /* HBFilters -> invalid comb detect custom string description */
-"Invalid custom comb detect settings." = "Preferenze persunalizate di pettinera inaccettevule.";
+"Invalid custom comb detect settings." = "Parametri persunalizati di pettinera inaccettevule.";
 
 /* HBFilters -> invalid detelecine custom string description */
-"Invalid custom detelecine settings." = "Preferenze persunalizate di detelesinema inaccettevule.";
+"Invalid custom detelecine settings." = "Parametri persunalizati di detelesinema inaccettevule.";
 
 /* HBFilters -> invalid denoise custom string description */
-"Invalid custom HQDN3D settings" = "Preferenze persunalizate HQDN3D inaccettevule";
+"Invalid custom HQDN3D settings" = "Parametri persunalizati HQDN3D inaccettevule";
 
 /* HBFilters -> invalid denoise custom string description */
-"Invalid custom NLMeans settings" = "Preferenze persunalizate NLMeans inaccettevule";
+"Invalid custom NLMeans settings" = "Parametri persunalizati NLMeans inaccettevule";
 
 /* HBFilters -> invalid deblock custom string description */
-"Invalid deblock custom settings." = "Preferenze persunalizate di sblucchime inaccettevule.";
+"Invalid deblock custom settings." = "Parametri persunalizati di sblucchime inaccettevule.";
 
 /* HBFilters -> invalid Decomb custom string description */
-"Invalid Decomb custom settings." = "Preferenze persunalizate di dipettinera inaccettevule.";
+"Invalid Decomb custom settings." = "Parametri persunalizati di dipettinera inaccettevule.";
 
 /* HBFilters -> invalid lapsharp custom string description */
-"Invalid lapsharp custom settings." = "Preferenze persunalizate lapsharp inaccettevule.";
+"Invalid lapsharp custom settings." = "Parametri persunalizati lapsharp inaccettevule.";
 
 /* HBJob -> invalid name error description */
 "Invalid name" = "Nome inaccettevule";
@@ -263,10 +263,10 @@ HBJob -> filters short description */
 "Invalid preset" = "Prerigatura inaccettevule";
 
 /* HBFilters -> invalid unsharp custom string description */
-"Invalid unsharp custom settings." = "Preferenze persunalizate unsharp inaccettevule.";
+"Invalid unsharp custom settings." = "Parametri persunalizati unsharp inaccettevule.";
 
 /* HBFilters -> invalid Yadif custom string description */
-"Invalid Yadif custom settings." = "Preferenze persunalizate Yadif inaccettevule.";
+"Invalid Yadif custom settings." = "Parametri persunalizati Yadif inaccettevule.";
 
 /* HBFilters -> filter display name */
 "Lapsharp" = "Lapsharp";
@@ -342,7 +342,7 @@ HBFilters -> off display name */
 "Profile: %@" = "Prufilu : %@";
 
 /* Range description */
-"Range:" = "Stesa :";
+"Range:" = "Intervallu :";
 
 /* HBVideo -> frame rates display name */
 "Same as source" = "Listessa chì a fonte";

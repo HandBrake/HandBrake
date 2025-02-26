@@ -1,6 +1,6 @@
 /* internal.h
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -463,12 +463,13 @@ extern hb_filter_object_t hb_filter_unsharp_vt;
 #endif
 
 extern hb_motion_metric_object_t hb_motion_metric;
+extern hb_blend_object_t hb_blend;
 
 #if defined(__APPLE__)
 extern hb_motion_metric_object_t hb_motion_metric_vt;
+extern hb_blend_object_t hb_blend_vt;
 #endif
 
-extern hb_blend_object_t hb_blend;
 
 extern hb_work_object_t * hb_objects;
 

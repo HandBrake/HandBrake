@@ -68,7 +68,7 @@
 "9hH-As-JSa.ibExternalAccessibilityDescription" = "Larghezza di cambiamentu di scala";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video scaled width. This is the number of pixels wide to be encoded. Scaled width may differ from display width depending on anamorphic settings and fill settings"; ObjectID = "9hH-As-JSa"; */
-"9hH-As-JSa.ibShadowedToolTip" = "Larghezza di cambiamentu di scala di a video. Ghjè a larghezza à cudificà in numeru di pixel. A larghezza di cambiamentu di scala pò esse sfarente di quella di l’affissera secondu à e preferenze anamorfiche è quelle di u riempiimentu";
+"9hH-As-JSa.ibShadowedToolTip" = "Larghezza di cambiamentu di scala di a video. Ghjè a larghezza à cudificà in numeru di pixel. A larghezza di cambiamentu di scala pò esse sfarente di quella di l’affissera secondu à i parametri anamorfichi è quelli di u riempiimentu";
 
 /* Class = "NSMenuItem"; title = "480p NTSC SD"; ObjectID = "21C-Hg-mk4"; */
 "21C-Hg-mk4.title" = "480p NTSC SD";
@@ -158,7 +158,7 @@
 "FGm-oJ-FVW.ibShadowedToolTip" = "L’altezza massima cù quella a video serà arregistrata.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Use highest resolution permitted by above settings"; ObjectID = "fjj-ZH-nqb"; */
-"fjj-ZH-nqb.ibShadowedToolTip" = "Impiegà a risuluzione a più alta permessa da e preferenze insù";
+"fjj-ZH-nqb.ibShadowedToolTip" = "Impiegà a risuluzione a più alta permessa da i parametri insù";
 
 /* Class = "NSMenuItem"; title = "White"; ObjectID = "fQM-vV-sUg"; */
 "fQM-vV-sUg.title" = "Biancu";
@@ -176,7 +176,7 @@
 "Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "Altezza di l’allucamentu";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video scaled height. This is the number of pixels tall to be encoded. Scaled height may differ from display height depending on anamorphic settings and fill settings"; ObjectID = "Hkl-7Z-J2e"; */
-"Hkl-7Z-J2e.ibShadowedToolTip" = "Altezza di cambiamentu di scala di a video. Ghjè l’altezza à cudificà in numeru di pixel. L’altezza di cambiamentu di scala pò esse sfarente di quella di l’affissera secondu à e preferenze anamorfiche è quelle di u riempiimentu";
+"Hkl-7Z-J2e.ibShadowedToolTip" = "Altezza di cambiamentu di scala di a video. Ghjè l’altezza à cudificà in numeru di pixel. L’altezza di cambiamentu di scala pò esse sfarente di quella di l’affissera secondu à i parametri anamorfichi è quelli di u riempiimentu";
 
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
 "hN1-S9-zl8.title" = "x";
@@ -332,7 +332,7 @@
 "vb2-DA-Pgr.title" = "Rutazione :";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "How to apply crop settings"; ObjectID = "vfx-ON-9ys"; */
-"vfx-ON-9ys.ibShadowedToolTip" = "Cumu appiecà e preferenze di rifilatura";
+"vfx-ON-9ys.ibShadowedToolTip" = "Cumu appiecà i parametri di rifilatura";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Add a border around the video"; ObjectID = "vKr-fn-Ujh"; */
 "vKr-fn-Ujh.ibShadowedToolTip" = "Aghjunghje un bordu à u giru di a video";
@@ -344,7 +344,7 @@
 "vzz-ej-1nx.title" = "Persunalizatu";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.\n\nAutomatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.\n\nNone disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.\n\nCustom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production."; ObjectID = "w1f-3S-up0"; */
-"w1f-3S-up0.ibShadowedToolTip" = "« Anamorficu » permette dimensioni arbitrarie d’allucamentu tuttu preservendu l’aspettu d’origine durante a ripruduzzione.\n\n- « Automatic » megliureghja a risuluzione d’allucamentu tuttu preservendu e prupurzioni d’affissera d’origine. Ricumandatu.\n\n- « None » disattiveghja « Anamorficu ». E dimensioni d’allucamentu di a video è quelle di l’affissera seranu uguale. Solu ghjuvevule per a cumpatibilità cù certi apparechji anziani.\n\n- « Custom » permette di definisce dapervoi tutte e preferenze. Ghjuvevule per currege un aspettu incurrettu d’affissera di a fonte è per i prufessiunali chì anu bisognu d’un cuntrollu espertu in post-pruduzzione.";
+"w1f-3S-up0.ibShadowedToolTip" = "« Anamorficu » permette dimensioni arbitrarie d’allucamentu tuttu preservendu l’aspettu d’origine durante a ripruduzzione.\n\n- « Automatic » megliureghja a risuluzione d’allucamentu tuttu preservendu e prupurzioni d’affissera d’origine. Ricumandatu.\n\n- « None » disattiveghja « Anamorficu ». E dimensioni d’allucamentu di a video è quelle di l’affissera seranu uguale. Solu ghjuvevule per a cumpatibilità cù certi apparechji anziani.\n\n- « Custom » permette di definisce dapervoi tutti i parametri. Ghjuvevule per currege un aspettu incurrettu d’affissera di a fonte è per i prufessiunali chì anu bisognu d’un cuntrollu espertu in post-pruduzzione.";
 
 /* Class = "NSMenuItem"; title = "Width (Pillarbox)"; ObjectID = "W5p-nd-4WK"; */
 "W5p-nd-4WK.title" = "Larghezza (Pillarbox)";

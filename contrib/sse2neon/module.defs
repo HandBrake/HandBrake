@@ -1,11 +1,11 @@
 $(eval $(call import.MODULE.defs,SSE2NEON,sse2neon))
 $(eval $(call import.CONTRIB.defs,SSE2NEON))
 
-SSE2NEON.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/sse2neon-1.7.0.tar.gz
-SSE2NEON.FETCH.url      += https://github.com/DLTcollab/sse2neon/archive/refs/tags/v1.7.0.tar.gz
-SSE2NEON.FETCH.sha256    = cee6d54922dbc9d4fa57749e3e4b46161b7f435a22e592db9da008051806812a
-SSE2NEON.FETCH.basename  = sse2neon-1.7.0.tar.gz
-SSE2NEON.EXTRACT.tarbase = sse2neon-1.7.0
+SSE2NEON.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/sse2neon-1.8.0.tar.gz
+SSE2NEON.FETCH.url      += https://github.com/DLTcollab/sse2neon/archive/refs/tags/v1.8.0.tar.gz
+SSE2NEON.FETCH.sha256    = e251746e3b761f3f0de1ad462b1efe53532341b6b0498d394765fceb85ce8a46
+SSE2NEON.FETCH.basename  = sse2neon-1.8.0.tar.gz
+SSE2NEON.EXTRACT.tarbase = sse2neon-1.8.0
 
 SSE2NEON.CONFIGURE = $(TOUCH.exe) $@
 SSE2NEON.BUILD     = $(TOUCH.exe) $@

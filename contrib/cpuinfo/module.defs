@@ -1,0 +1,47 @@
+$(eval $(call import.MODULE.defs,CPUINFO,cpuinfo))
+$(eval $(call import.CONTRIB.defs,CPUINFO))
+
+CPUINFO.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/cpuinfo-b73ae6c.tar.gz
+CPUINFO.FETCH.sha256  = 589c9241d361667ef9a2f2ee68846795949331f13ed7acc86f5d3cc4b856b6a8
+
+CPUINFO.build_dir             = build
+CPUINFO.CONFIGURE.exe         = cmake
+CPUINFO.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(CPUINFO.CONFIGURE.prefix)"
+CPUINFO.CONFIGURE.deps        =
+CPUINFO.CONFIGURE.static      =
+CPUINFO.CONFIGURE.shared      = -DCPUINFO_LIBRARY_TYPE=static -DCPUINFO_BUILD_TOOLS=OFF -DCPUINFO_BUILD_UNIT_TESTS=OFF \
+                                -DCPUINFO_BUILD_MOCK_TESTS=OFF -DCPUINFO_BUILD_BENCHMARKS=OFF
+CPUINFO.CONFIGURE.extra       = -DCMAKE_INSTALL_LIBDIR=lib
+
+ifneq (none,$(CPUINFO.GCC.g))
+    CPUINFO.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+else
+    CPUINFO.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
+endif
+
+ifeq (darwin,$(HOST.system))
+    CPUINFO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+    CPUINFO.CONFIGURE.extra += -DCMAKE_OSX_ARCHITECTURES=$(HOST.machine)
+endif
+
+ifeq (1,$(HOST.cross))
+    ifeq (mingw,$(HOST.system))
+        CPUINFO.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
+        CPUINFO.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
+        CPUINFO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+        CPUINFO.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(CPUINFO.GCC.gcc)
+        CPUINFO.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(CPUINFO.GCC.gxx)
+        CPUINFO.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
+        CPUINFO.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(CPUINFO.CONFIGURE.host)"
+    else ifeq ($(HOST.system),darwin)
+        CPUINFO.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(CPUINFO.CONFIGURE.host)"
+    else
+        CPUINFO.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(CPUINFO.CONFIGURE.host)"
+    endif
+    CPUINFO.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(CPUINFO.CONFIGURE.build)"
+else
+    CPUINFO.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(CPUINFO.CONFIGURE.host)"
+endif
+
+## find CMakeLists.txt
+CPUINFO.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(CPUINFO.EXTRACT.dir/))"

@@ -397,6 +397,11 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public bool VideoTurboMultiPass { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating which dynamic metadata formats to preserve.
+        /// </summary>
+        public string VideoPasshtruHDRDynamicMetadata { get; set; }
+
+        /// <summary>
         /// Gets or sets the x 264 option.
         /// </summary>
         public string x264Option { get; set; }

@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)displayPreviewAtIndex:(NSUInteger)idx;
 
-- (void)toggleScaleToScreen;
+- (void)setScaleToScreen:(BOOL)scaleToscreen;
+
 - (void)showCroppingSettings:(id)sender;
 
 - (void)createMoviePreviewWithPictureIndex:(NSUInteger)index duration:(NSUInteger)duration;

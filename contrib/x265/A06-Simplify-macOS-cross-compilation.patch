@@ -1,29 +1,26 @@
-From 0d8bab0c3c5ec3b5676821f95b0e279a9713d4bf Mon Sep 17 00:00:00 2001
+From 4a56a4255cbbc008c1973eb74ab26bfbea204103 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
-Date: Fri, 13 Sep 2024 16:10:16 +0200
-Subject: [PATCH 6/6] Simplify macOS cross-compilation
+Date: Fri, 22 Nov 2024 11:05:34 +0100
+Subject: [PATCH] Simplify macOS cross-compilation
 
 ---
- source/CMakeLists.txt | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ source/CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
-index 37b83f959..f14fc0bd1 100755
+index 5c6dda9e8..a31cde199 100755
 --- a/source/CMakeLists.txt
 +++ b/source/CMakeLists.txt
-@@ -334,7 +334,11 @@ if(GCC)
-             set(ARM_ARGS -O3 -march=armv9-a+i8mm+sve2)
-             add_definitions(-DHAVE_SVE2=1)
-         endif()
--        set(ARM_ARGS ${ARM_ARGS} -fPIC)
+@@ -736,6 +736,9 @@ if((MSVC_IDE OR XCODE OR GCC) AND ENABLE_ASSEMBLY)
+    elseif(ARM64 OR CROSS_COMPILE_ARM64)
+     # compile ARM64 arch asm files here
+         enable_language(ASM)
 +        if(APPLE)
-+            set(ARM_ARGS ${ARM_ARGS} -fPIC -arch ${CMAKE_OSX_ARCHITECTURES})
-+        else()
-+            set(ARM_ARGS ${ARM_ARGS} -fPIC)
++            set(ARM_ARGS ${ARM_ARGS} -arch ${CMAKE_OSX_ARCHITECTURES})
 +        endif()
-         # Do not allow implicit vector type conversions in Clang builds (this
-         # is already the default in GCC builds).
-         check_cxx_compiler_flag(-flax-vector-conversions=none CC_HAS_FLAX_VEC_CONV_NONE)
+         foreach(ASM ${ARM_ASMS})
+             set(ASM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/aarch64/${ASM})
+             list(APPEND ASM_SRCS ${ASM_SRC})
 -- 
-2.39.3 (Apple Git-146)
+2.39.5 (Apple Git-154)
 

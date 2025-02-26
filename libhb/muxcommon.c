@@ -1,6 +1,6 @@
 /* muxcommon.c
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -578,6 +578,8 @@ static void muxClose( hb_work_object_t * muxer )
                         frames_total );
             }
         }
+
+        hb_system_backup_set_excluded(job->file, 0);
     }
 
     for (i = 0; i < mux->ntracks; ++i)
@@ -686,6 +688,7 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
         if( mux->m )
         {
             mux->m->init( mux->m );
+            hb_system_backup_set_excluded(job->file, 1);
         }
     }
 

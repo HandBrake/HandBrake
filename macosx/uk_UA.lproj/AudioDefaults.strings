@@ -166,6 +166,12 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibShadowedToolTip" = "Частота дискретизації аудіо в кілогерцах (кГц). Рекомендується опція 'Авто'.";
 
+/* Class = "NSButtonCell"; title = "Vorbis"; ObjectID = "rXl-qc-MHk"; */
+"rXl-qc-MHk.title" = "Vorbis";
+
+/* Class = "NSButtonCell"; title = "ALAC"; ObjectID = "S0X-gJ-f6A"; */
+"S0X-gJ-f6A.title" = "ALAC";
+
 /* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
 "s6s-EH-5CB.title" = "Автоматичне Passthru:";
 

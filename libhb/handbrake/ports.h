@@ -1,6 +1,6 @@
 /* ports.h
 
-   Copyright (c) 2003-2024 HandBrake Team
+   Copyright (c) 2003-2025 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -210,6 +210,11 @@ hb_net_t * hb_net_open( char * address, int port );
 int        hb_net_send( hb_net_t *, char * );
 int        hb_net_recv( hb_net_t *, char *, int );
 void       hb_net_close( hb_net_t ** );
+
+/************************************************************************
+* OS Backup Include / Exclude
+***********************************************************************/
+void hb_system_backup_set_excluded(const char *path, int exclude);
 
 /************************************************************************
 * OS Sleep Allow / Prevent
