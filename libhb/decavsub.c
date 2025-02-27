@@ -68,15 +68,19 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     ctx->context               = context;
     context->pkt_timebase.num = ctx->subtitle->timebase.num;
     context->pkt_timebase.den = ctx->subtitle->timebase.den;
-    context->extradata        = av_malloc(ctx->subtitle->extradata->size);
-    if (context->extradata == NULL)
+
+    if (ctx->subtitle->extradata && ctx->subtitle->extradata->size)
     {
-        hb_error("decavsubInit: av_malloc extradata failed");
-        goto fail;
+        context->extradata = av_malloc(ctx->subtitle->extradata->size);
+        if (context->extradata == NULL)
+        {
+            hb_error("decavsubInit: av_malloc extradata failed");
+            goto fail;
+        }
+        memcpy(context->extradata, ctx->subtitle->extradata,
+               ctx->subtitle->extradata->size);
+        context->extradata_size = ctx->subtitle->extradata->size;
     }
-    memcpy(context->extradata, ctx->subtitle->extradata,
-                               ctx->subtitle->extradata->size);
-    context->extradata_size   = ctx->subtitle->extradata->size;
 
     // Set decoder opts...
     AVDictionary * av_opts = NULL;
