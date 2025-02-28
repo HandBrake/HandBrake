@@ -365,6 +365,10 @@ hb_work_object_t* hb_subtitle_encoder(hb_handle_t *h, int codec)
             w = hb_get_work(h, WORK_ENCAVSUB);
             w->codec_param = AV_CODEC_ID_MOV_TEXT;
             break;
+        case HB_SCODEC_SRT:
+            w = hb_get_work(h, WORK_ENCAVSUB);
+            w->codec_param = AV_CODEC_ID_SUBRIP;
+            break;
         default:
             break;
     }
@@ -1126,10 +1130,16 @@ static int sanitize_subtitles( hb_job_t * job )
             }
         }
         else if (subtitle->format        == TEXTSUB &&
-                 subtitle->config.codec  == HB_SCODEC_PASS &&
-                 job->mux                == HB_MUX_AV_MP4)
+                 subtitle->config.codec  == HB_SCODEC_PASS)
         {
-            subtitle->config.codec = HB_SCODEC_TX3G;
+            if (job->mux == HB_MUX_AV_MP4)
+            {
+                subtitle->config.codec = HB_SCODEC_TX3G;
+            }
+            else
+            {
+                subtitle->config.codec = HB_SCODEC_SRT;
+            }
         }
         /* Adjust output track number, in case we removed one.
          * Output tracks sadly still need to be in sequential order.

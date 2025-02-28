@@ -339,6 +339,7 @@ struct hb_subtitle_config_s
     enum subtitle_output_codec {
         HB_SCODEC_PASS = 0,
         HB_SCODEC_SSA,
+        HB_SCODEC_SRT,
         HB_SCODEC_TX3G,
         HB_SCODEC_PGS,
         HB_SCODEC_DVD,
