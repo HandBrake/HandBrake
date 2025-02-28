@@ -2664,6 +2664,9 @@ Això pot ser a causa de les limitacions del contenidor del fitxer que heu selec
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Dona preferència a l'ús de Nvidia NVDec per a descodificar vídeos quan utilitzeu el codificador NVEnc i el maquinari estigui disponible.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Dona preferència a l'ús de AMD AMFDec per a descodificar vídeos quan utilitzeu el codificador AMFEnc i el maquinari estigui disponible.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Assistència de programari</value>
   </data>

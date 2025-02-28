@@ -2666,6 +2666,9 @@ Isso pode ser devido a limitações do contêiner de arquivo selecionado. Consul
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Prefira o uso do NVDec da Nvidia para fazer a decodificação de vídeo quando estiver usando o codificador NVEnc e o hardware estiver disponível para uso.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Prefira o uso do AMFDec da AMD para fazer a decodificação de vídeo quando estiver usando o codificador AMFEnc e o hardware estiver disponível para uso.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Compatibilidade de hardware</value>
   </data>

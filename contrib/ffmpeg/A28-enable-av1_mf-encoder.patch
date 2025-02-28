@@ -1,8 +1,8 @@
 diff --git a/configure b/configure
-index d77a55b653..810d34dc06 100755
+index 89c37e2..2eda127 100755
 --- a/configure
 +++ b/configure
-@@ -3336,6 +3336,7 @@ av1_cuvid_decoder_deps="cuvid CUVIDAV1PICPARAMS"
+@@ -3337,6 +3337,7 @@ av1_cuvid_decoder_deps="cuvid CUVIDAV1PICPARAMS"
  av1_mediacodec_decoder_deps="mediacodec"
  av1_mediacodec_encoder_deps="mediacodec"
  av1_mediacodec_encoder_select="extract_extradata_bsf"
@@ -11,19 +11,19 @@ index d77a55b653..810d34dc06 100755
  av1_nvenc_encoder_select="atsc_a53"
  av1_qsv_decoder_select="qsvdec"
 diff --git a/libavcodec/allcodecs.c b/libavcodec/allcodecs.c
-index aa0fc47647..f5317616b7 100644
+index 821290b..c27a298 100644
 --- a/libavcodec/allcodecs.c
 +++ b/libavcodec/allcodecs.c
-@@ -838,6 +838,7 @@ extern const FFCodec ff_av1_nvenc_encoder;
- extern const FFCodec ff_av1_qsv_decoder;
+@@ -839,6 +839,7 @@ extern const FFCodec ff_av1_qsv_decoder;
  extern const FFCodec ff_av1_qsv_encoder;
  extern const FFCodec ff_av1_amf_encoder;
+ extern const FFCodec ff_av1_amf_decoder;
 +extern const FFCodec ff_av1_mf_encoder;
  extern const FFCodec ff_av1_vaapi_encoder;
  extern const FFCodec ff_libopenh264_encoder;
  extern const FFCodec ff_libopenh264_decoder;
 diff --git a/libavcodec/mf_utils.c b/libavcodec/mf_utils.c
-index 48e3a63efc..ff44130ca9 100644
+index 48e3a63..ff44130 100644
 --- a/libavcodec/mf_utils.c
 +++ b/libavcodec/mf_utils.c
 @@ -240,6 +240,7 @@ static struct GUID_Entry guid_names[] = {
@@ -43,7 +43,7 @@ index 48e3a63efc..ff44130ca9 100644
      case AV_CODEC_ID_HEVC:              return &ff_MFVideoFormat_HEVC;
      case AV_CODEC_ID_AC3:               return &MFAudioFormat_Dolby_AC3;
 diff --git a/libavcodec/mf_utils.h b/libavcodec/mf_utils.h
-index 387c005f38..a59b36d015 100644
+index 387c005..a59b36d 100644
 --- a/libavcodec/mf_utils.h
 +++ b/libavcodec/mf_utils.h
 @@ -113,6 +113,7 @@ DEFINE_GUID(ff_MF_SA_MINIMUM_OUTPUT_SAMPLE_COUNT_PROGRESSIVE, 0xf5523a5, 0x1cb2,
@@ -55,7 +55,7 @@ index 387c005f38..a59b36d015 100644
  
  // This enum is missing from mingw-w64's codecapi.h by v7.0.0.
 diff --git a/libavcodec/mfenc.c b/libavcodec/mfenc.c
-index b8f8a25f43..c062d87f11 100644
+index b8f8a25..c062d87 100644
 --- a/libavcodec/mfenc.c
 +++ b/libavcodec/mfenc.c
 @@ -1315,3 +1315,4 @@ static const FFCodecDefault defaults[] = {

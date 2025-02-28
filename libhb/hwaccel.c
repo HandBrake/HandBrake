@@ -10,6 +10,7 @@
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/nvenc_common.h"
+#include "handbrake/vce_common.h"
 
 #ifdef __APPLE__
 #include "platform/macosx/vt_common.h"
@@ -88,6 +89,11 @@ int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx)
     else if (hw_decode & HB_DECODE_SUPPORT_MF)
     {
         hw_type = av_hwdevice_find_type_by_name("d3d11va");
+    }
+    else if (hw_decode & HB_DECODE_SUPPORT_AMFDEC)
+    {
+        hw_type = av_hwdevice_find_type_by_name("amf");
+        pix_fmt = AV_PIX_FMT_AMF_SURFACE;
     }
 
     if (hw_type != AV_HWDEVICE_TYPE_NONE)
@@ -261,6 +267,10 @@ static int is_encoder_supported(int encoder_id)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
+        case HB_VCODEC_FFMPEG_VCE_H264:
+        case HB_VCODEC_FFMPEG_VCE_H265:
+        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
+        case HB_VCODEC_FFMPEG_VCE_AV1:
             return 1;
         default:
             return 0;
@@ -280,6 +290,10 @@ static int are_filters_supported(hb_list_t *filters, int hw_decode)
     if (hw_decode & HB_DECODE_SUPPORT_NVDEC)
     {
         ret = hb_nvenc_are_filters_supported(filters);
+    }
+    else if (hw_decode & HB_DECODE_SUPPORT_AMFDEC)
+    {
+        ret = hb_vce_are_filters_supported(filters);
     }
 
     return ret;
