@@ -848,6 +848,15 @@ struct hb_job_s
 #endif
     } qsv;
 
+    // AMF-specific settings
+    struct
+    {
+        int num_sw_filters;
+        int num_hw_filters;
+        int converter_needed;
+        int converter_inserted;
+    } amf;
+
     int hw_decode;
     int keep_duplicate_titles;
 
@@ -1272,8 +1281,9 @@ struct hb_title_s
 #define HB_DECODE_SUPPORT_NVDEC          0x04
 #define HB_DECODE_SUPPORT_VIDEOTOOLBOX   0x08
 #define HB_DECODE_SUPPORT_MF             0x10 // Windows Media Foundation
+#define HB_DECODE_SUPPORT_AMFDEC         0x20
 
-#define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX | HB_DECODE_SUPPORT_MF)
+#define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX | HB_DECODE_SUPPORT_MF | HB_DECODE_SUPPORT_AMFDEC)
 #define HB_DECODE_SUPPORT_FORCE_HW       0x80000000
 
     hb_metadata_t * metadata;

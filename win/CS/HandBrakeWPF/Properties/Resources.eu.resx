@@ -2665,6 +2665,9 @@ Hautatu duzun fitxategi edukiontziaren mugengatik izan daiteke. Mesedez, begirat
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Erabili Nvidia NVDec bideoa kodetzeko NVEnc kodetzailea erabiltzean eta hardwarea erabiltzeko erabilgarri dagoenean.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Erabili AMD AMFDec bideoa kodetzeko AMFEnc kodetzailea erabiltzean eta hardwarea erabiltzeko erabilgarri dagoenean.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Hardware laguntza</value>
   </data>

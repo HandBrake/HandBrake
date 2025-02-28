@@ -2667,6 +2667,9 @@ Może to wynikać z ograniczeń wybranego kontenera plików. Więcej informacji 
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Preferuj użycie Nvidia NVDec do dekodowania wideo podczas korzystania z kodera NVEnc, a sprzęt jest dostępny do użycia.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Preferuj użycie AMD AMFDec do dekodowania wideo podczas korzystania z kodera AMFEnc, a sprzęt jest dostępny do użycia.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Wsparcie sprzętowe</value>
   </data>

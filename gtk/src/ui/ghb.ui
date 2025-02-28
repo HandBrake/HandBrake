@@ -3746,6 +3746,21 @@ Overrides all other settings.</property>
                                   </object>
                                 </child>
                                 <child>
+                                  <object class="GtkCheckButton" id="AmfHwDecode">
+                                    <property name="label" translatable="yes">Prefer AMD AMFDec for decoding</property>
+                                    <property name="focusable">1</property>
+                                    <property name="tooltip-text" translatable="yes">Enable to prioritize AMD AMF for video decoding.</property>
+                                    <property name="halign">start</property>
+                                    <property name="margin-start">2</property>
+                                    <signal name="toggled" handler="video_setting_changed_cb" swapped="no"/>
+                                  <layout>
+                                    <property name="row">4</property>
+                                    <property name="column">0</property>
+                                    <property name="column-span">2</property>
+                                  </layout>
+                                  </object>
+                                </child>
+                                <child>
                                   <object class="GtkBox" id="hbox43">
                                     <property name="spacing">5</property>
                                     <child>

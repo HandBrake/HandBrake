@@ -4508,6 +4508,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);
 #endif
+    memset(&job->amf, 0, sizeof(job->amf));
 }
 
 int hb_output_color_prim(hb_job_t * job)
@@ -6879,6 +6880,11 @@ static int pix_hw_fmt_is_supported(hb_job_t *job, int pix_fmt)
         {
             return 1;
         }
+        if (pix_fmt == AV_PIX_FMT_AMF_SURFACE &&
+            job->hw_decode & HB_DECODE_SUPPORT_AMFDEC)
+        {
+            return 1;
+        }
     }
 
     return 0;
@@ -6886,7 +6892,7 @@ static int pix_hw_fmt_is_supported(hb_job_t *job, int pix_fmt)
 
 static const enum AVPixelFormat hw_pipeline_pix_fmts[] =
 {
-    AV_PIX_FMT_QSV, AV_PIX_FMT_CUDA, AV_PIX_FMT_VIDEOTOOLBOX, AV_PIX_FMT_D3D11, AV_PIX_FMT_NONE
+    AV_PIX_FMT_QSV, AV_PIX_FMT_CUDA, AV_PIX_FMT_VIDEOTOOLBOX, AV_PIX_FMT_D3D11, AV_PIX_FMT_AMF_SURFACE, AV_PIX_FMT_NONE
 };
 
 int hb_get_best_hw_pix_fmt(hb_job_t *job)

@@ -449,6 +449,7 @@ static GhbBinding widget_bindings[] =
     {"PictureDetelecine", "active-id", "custom10", "PictureDetelecineCustom", "visible"},
     {"PictureColorspacePreset", "active-id", "custom11", "PictureColorspaceCustom", "visible"},
     {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit", "x264FastDecode", "visible"},
+    {"VideoEncoder", "active-id", "vce_av1|vce_h264|vce_h265|vce_h265_10bit", "AmfHwDecode", "visible"},
     {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|VP8|VP9|VP9_10bit|qsv_av1|qsv_av1_10bit|qsv_h264|qsv_h265|qsv_h265_10bit", "VideoOptionExtraWindow", "visible"},
     {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|VP8|VP9|VP9_10bit|qsv_av1|qsv_av1_10bit|qsv_h264|qsv_h265|qsv_h265_10bit", "VideoOptionExtraLabel", "visible"},
     {"auto_name", "active", NULL, "autoname_box", "sensitive"},
@@ -1506,6 +1507,7 @@ start_scan (signal_user_data_t *ud, const char *path, int title_id, int preview_
     ghb_backend_scan(path, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"),
             limit_max_duration ? 90000L * ghb_dict_get_int(ud->prefs, "MaxTitleDuration") : 0,
+            0,
             ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
 }
 
@@ -1529,6 +1531,7 @@ start_scan_list (signal_user_data_t *ud, GListModel *files, int title_id, int pr
     ghb_backend_scan_list(files, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"),
             limit_max_duration ? 90000L * ghb_dict_get_int(ud->prefs, "MaxTitleDuration") : 0,
+            0,
             ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
 }
 
@@ -2415,6 +2418,11 @@ ghb_update_summary_info(signal_user_data_t *ud)
     else if (ghb_dict_get_bool(ud->settings, "VideoFramerateVFR"))
     {
         g_string_append_printf(str, " %s", _("VFR"));
+    }
+
+    if (strstr(video_encoder->name, "(AMD VCE)") != NULL && ghb_dict_get_bool(ud->settings, "AmfHwDecode"))
+    {
+        g_string_append_printf(str, " %s", _("AMF Decoder"));
     }
 
     // Audio Tracks (show at most 3 tracks)

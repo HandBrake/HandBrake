@@ -2671,6 +2671,9 @@ Tämä voi johtua valitun tiedostosäilön rajoituksista. Katso lisätietoa ohje
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Suosi NVidian NVDeciä videon koodauksenpurkuun, kun käytetään NVEnc-koodausta ja laitteisto on käytettävissä. </value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Suosi AMDn AMFDeciä videon koodauksenpurkuun, kun käytetään AMFEnc-koodausta ja laitteisto on käytettävissä. </value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Laitetuki</value>
   </data>

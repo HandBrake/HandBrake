@@ -2668,6 +2668,9 @@ Bu, seçtiğiniz dosya kapsayıcısının sınırlamaları nedeniyle olabilir. D
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>NVEnc kodlayıcı kullanıldığında ve donanım kullanıma hazır olduğunda video kod çözme için Nvidia NVDec kullanımını tercih et</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>AMFEnc kodlayıcı kullanıldığında ve donanım kullanıma hazır olduğunda video kod çözme için AMD AMFDec kullanımını tercih edin.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Donanım Desteği</value>
   </data>

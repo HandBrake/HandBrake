@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EncodeTaskFactory.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
@@ -101,12 +101,17 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             bool nvdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
+            bool amfdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableAmfDecSupport);
             bool directx = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
 
             int hwDecode = 0;
             if (nvdec)
             {
                 hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
+            }
+            if (amfdec)
+            {
+                hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_AMFDEC;
             }
 
             if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
@@ -298,6 +303,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsNVDecAvailable &&  this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport) && job.VideoEncoder.IsNVEnc)
             {
                 video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
+            }
+
+            //use AMFDec to scan and detect format
+            if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsAMFDecAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableAmfDecSupport) && job.VideoEncoder.IsVCN)
+            {
+                video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_AMFDEC;
             }
 
             if (HandBrakeHardwareEncoderHelper.IsDirectXAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding))

@@ -92,6 +92,7 @@ namespace HandBrakeWPF
         public const string ForceDisableHardwareSupport = "ForceDisableHardwareSupport";
         public const string IsUpdateAvailableBuild = "IsUpdateAvailableBuild";
         public const string EnableNvDecSupport = "EnableNvDecSupport";
+        public const string EnableAmfDecSupport = "EnableAmfDecSupport";
         public const string UseIsoDateFormat = "UseIsoDateFormat";
         public const string ExtendedQueueDisplay = "ExtendedQueueDisplay";
         public const string HardwareDetectTimeoutSeconds = "HardwareDetectTimeoutSeconds";
