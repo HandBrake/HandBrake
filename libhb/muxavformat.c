@@ -201,12 +201,13 @@ const char * get_subtitle_muxer(int source)
     {
         case CC608SUB:
         case CC708SUB:
-        case UTF8SUB:
-        case TX3GSUB:
         case SSASUB:
-        case IMPORTSRT:
         case IMPORTSSA:
             return "ass";
+        case UTF8SUB:
+        case TX3GSUB:
+        case IMPORTSRT:
+            return "srt";
         case PGSSUB:
             return "sup";
     }
@@ -946,10 +947,7 @@ static int avformatInit( hb_mux_object_t * m )
 
             case CC608SUB:
             case CC708SUB:
-            case TX3GSUB:
-            case UTF8SUB:
             case SSASUB:
-            case IMPORTSRT:
             case IMPORTSSA:
             {
                 if (job->mux == HB_MUX_AV_MP4 &&
@@ -961,6 +959,22 @@ static int avformatInit( hb_mux_object_t * m )
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_ASS;
                     need_fonts = 1;
+                }
+                need_extradata = 1;
+            } break;
+
+            case TX3GSUB:
+            case UTF8SUB:
+            case IMPORTSRT:
+            {
+                if (job->mux == HB_MUX_AV_MP4 &&
+                    subtitle->config.external_filename == NULL)
+                {
+                    track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
+                }
+                else
+                {
+                    track->st->codecpar->codec_id = AV_CODEC_ID_SUBRIP;
                 }
                 need_extradata = 1;
             } break;
@@ -1211,10 +1225,6 @@ static int avformatInit( hb_mux_object_t * m )
     return 0;
 
 error:
-    av_dict_free(&av_opts);
-    free(job->mux_data);
-    job->mux_data = NULL;
-    avformat_free_context(m->oc);
     for (ii = 0; ii < m->ntracks; ii++)
     {
         if (m->tracks[ii]->oc != NULL)
@@ -1222,6 +1232,10 @@ error:
             avformat_free_context(m->tracks[ii]->oc);
         }
     }
+    av_dict_free(&av_opts);
+    free(job->mux_data);
+    job->mux_data = NULL;
+    avformat_free_context(m->oc);
     *job->done_error = HB_ERROR_INIT;
     *job->die = 1;
     return -1;
