@@ -8324,5 +8324,59 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to Choose Log file in activity log.
+        /// </summary>
+        public static string LogView_ChooseLogFile {
+            get {
+                return ResourceManager.GetString("LogView_ChooseLogFile", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to autoscroll ScanLog.
+        /// </summary>
+        public static string LogView_AutoScrolling {
+            get {
+                return ResourceManager.GetString("LogView_AutoScrolling", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to Debug menu.
+        /// </summary>
+        public static string MainView_DebugMenu {
+            get {
+                return ResourceManager.GetString("MainView_DebugMenu", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to export debug data.
+        /// </summary>
+        public static string MainView_DebugExportData {
+            get {
+                return ResourceManager.GetString("MainView_DebugExportData", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to import debug data.
+        /// </summary>
+        public static string MainView_DebugImportData {
+            get {
+                return ResourceManager.GetString("MainView_DebugImportData", resourceCulture);
+            }
+        }
+        
+		/// <summary>
+        ///   Looks up a localized string similar to Add to Queue - QualitySweep.
+        /// </summary>
+        public static string MainView_DebugQualitySweep {
+            get {
+                return ResourceManager.GetString("MainView_DebugQualitySweep", resourceCulture);
+            }
+        }
     }
 }
