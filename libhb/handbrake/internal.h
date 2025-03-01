@@ -397,6 +397,7 @@ hb_data_t * hb_data_dup(const hb_data_t *src);
 enum
 {
     WORK_NONE = 0,
+    WORK_PASS,
     WORK_SYNC_VIDEO,
     WORK_SYNC_AUDIO,
     WORK_SYNC_SUBTITLE,
@@ -422,7 +423,8 @@ enum
     WORK_ENCAVCODEC_AUDIO,
     WORK_MUX,
     WORK_READER,
-    WORK_DECAVSUB
+    WORK_DECAVSUB,
+    WORK_ENCAVSUB
 };
 
 extern hb_filter_object_t hb_filter_detelecine;
