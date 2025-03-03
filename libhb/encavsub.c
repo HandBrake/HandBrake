@@ -97,15 +97,6 @@ hb_encavsub_context_t * encavsubInit(hb_work_object_t *w, hb_job_t *job)
     ctx->context   = context;
     context->codec = codec;
 
-    if (ctx->subtitle->source == TX3GSUB &&
-        w->codec_param == AV_CODEC_ID_SUBRIP)
-    {
-        // Replace the SSA header to avoid subrip
-        // adding superfluos and wrong font info
-        hb_set_ssa_extradata(&ctx->subtitle->extradata, "Arial", 16,
-                             job->width, job->height);
-    }
-
     // TEXT subtitle encoders require SSA header
     context->subtitle_header = av_malloc(ctx->subtitle->extradata->size + 1);
     if (context->subtitle_header == NULL)
