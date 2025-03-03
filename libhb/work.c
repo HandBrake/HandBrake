@@ -2248,6 +2248,7 @@ cleanup:
         {
             hb_fifo_close( &subtitle->fifo_in );
             hb_fifo_close( &subtitle->fifo_raw );
+            hb_fifo_close( &subtitle->fifo_sync );
             hb_fifo_close( &subtitle->fifo_out );
         }
     }

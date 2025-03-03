@@ -640,6 +640,7 @@ hb_subtitle_style_context_t * hb_subtitle_style_init(const uint8_t * ssa_buf, in
         }
     }
     ssa_style_reset(ctx);
+    free(ssa_header);
     return ctx;
 }
 
