@@ -891,26 +891,11 @@ static int ssa_work(hb_filter_object_t *filter,
 
 static int cc608sub_post_init(hb_filter_object_t *filter, hb_job_t *job)
 {
-    // Text subtitles for which we create a dummy ASS header need
-    // to have the header rewritten with the correct dimensions.
-    int height = job->title->geometry.height - job->crop[0] - job->crop[1];
-    int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    int safe_height = 0.8 * job->title->geometry.height;
-    // Use fixed width font for CC
-    hb_set_ssa_extradata(&filter->subtitle->extradata, HB_FONT_MONO,
-                         .08 * safe_height, width, height);
     return ssa_post_init(filter, job);
 }
 
 static int textsub_post_init(hb_filter_object_t *filter, hb_job_t *job)
 {
-    // Text subtitles for which we create a dummy ASS header need
-    // to have the header rewritten with the correct dimensions.
-    int height = job->title->geometry.height - job->crop[0] - job->crop[1];
-    int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    hb_set_ssa_extradata(&filter->subtitle->extradata, HB_FONT_SANS,
-                         .066 * job->title->geometry.height,
-                         width, height);
     return ssa_post_init(filter, job);
 }
 

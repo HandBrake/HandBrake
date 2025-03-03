@@ -352,8 +352,35 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
     return w;
 }
 
+hb_work_object_t* hb_subtitle_encoder(hb_handle_t *h, int codec)
+{
+    hb_work_object_t *w = NULL;
+
+    switch (codec)
+    {
+        case HB_SCODEC_PASS:
+            w = hb_get_work(h, WORK_PASS);
+            break;
+        case HB_SCODEC_TX3G:
+            w = hb_get_work(h, WORK_ENCTX3GSUB);
+            break;
+        case HB_SCODEC_SRT:
+            w = hb_get_work(h, WORK_ENCAVSUB);
+            w->codec_param = AV_CODEC_ID_SUBRIP;
+            break;
+        default:
+            break;
+    }
+
+    return w;
+}
+
 hb_work_object_t* hb_audio_encoder(hb_handle_t *h, int codec)
 {
+    if (codec & HB_ACODEC_PASS_FLAG)
+    {
+        return hb_get_work(h, WORK_PASS);
+    }
     switch (codec)
     {
         case HB_ACODEC_LAME:    return hb_get_work(h, WORK_ENCAVCODEC_AUDIO);
@@ -1084,9 +1111,7 @@ static int sanitize_subtitles( hb_job_t * job )
                 one_burned = 1;
             }
         }
-
-        if (subtitle->config.dest == PASSTHRUSUB &&
-            !hb_subtitle_can_pass(subtitle->source, job->mux))
+        else if (hb_subtitle_must_burn(subtitle, job->mux))
         {
             if (!one_burned)
             {
@@ -1101,6 +1126,20 @@ static int sanitize_subtitles( hb_job_t * job )
                 hb_list_rem(job->list_subtitle, subtitle);
                 free(subtitle);
                 continue;
+            }
+        }
+        else if (subtitle->format        == TEXTSUB &&
+                 subtitle->config.codec  == HB_SCODEC_PASS)
+        {
+            if (job->mux == HB_MUX_AV_MP4)
+            {
+                subtitle->config.codec = HB_SCODEC_TX3G;
+            }
+            else if (subtitle->source == UTF8SUB ||
+                     subtitle->source == SRTSUB  ||
+                     subtitle->source == TX3GSUB)
+            {
+                subtitle->config.codec = HB_SCODEC_SRT;
             }
         }
         /* Adjust output track number, in case we removed one.
@@ -1940,7 +1979,7 @@ static void do_job(hb_job_t *job)
         }
     }
 
-    // Subtitle fifos must be initialized before sync
+    // Subtitle decoder and sync fifos must be initialized before sync
     for (i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
         subtitle = hb_list_item( job->list_subtitle, i );
@@ -1969,7 +2008,8 @@ static void do_job(hb_job_t *job)
         if (!job->indepth_scan)
         {
             // When doing subtitle indepth scan, the pipeline ends at sync
-            subtitle->fifo_out = hb_fifo_init( FIFO_UNBOUNDED, FIFO_UNBOUNDED_WAKE );
+            subtitle->fifo_sync = hb_fifo_init( FIFO_UNBOUNDED, FIFO_SMALL_WAKE );
+            subtitle->fifo_out  = hb_fifo_init( FIFO_UNBOUNDED, FIFO_SMALL_WAKE);
         }
 
         w->fifo_in = subtitle->fifo_in;
@@ -2003,28 +2043,45 @@ static void do_job(hb_job_t *job)
             /*
             * Audio Encoder Thread
             */
-            if ( !(audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
+            w = hb_audio_encoder( job->h, audio->config.out.codec);
+            if (w == NULL)
             {
-                /*
-                * Add the encoder thread if not doing passthru
-                */
-                w = hb_audio_encoder( job->h, audio->config.out.codec);
-                if (w == NULL)
-                {
-                    hb_error("Invalid audio codec: %#x", audio->config.out.codec);
-                    w = NULL;
-                    *job->done_error = HB_ERROR_WRONG_INPUT;
-                    *job->die = 1;
-                    goto cleanup;
-                }
-                w->init_delay = &audio->priv.init_delay;
-                w->extradata  = &audio->priv.extradata;
-                w->fifo_in  = audio->priv.fifo_sync;
-                w->fifo_out = audio->priv.fifo_out;
-                w->audio    = audio;
-
-                hb_list_add( job->list_work, w );
+                hb_error("Invalid audio codec: %#x", audio->config.out.codec);
+                w = NULL;
+                *job->done_error = HB_ERROR_WRONG_INPUT;
+                *job->die = 1;
+                goto cleanup;
             }
+            w->init_delay = &audio->priv.init_delay;
+            w->fifo_in    = audio->priv.fifo_sync;
+            w->fifo_out   = audio->priv.fifo_out;
+            w->extradata  = &audio->priv.extradata;
+            w->audio      = audio;
+
+            hb_list_add( job->list_work, w );
+        }
+
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+        {
+            subtitle = hb_list_item(job->list_subtitle, i);
+
+            /*
+            * Subtitle Encoder Thread
+            */
+            w = hb_subtitle_encoder( job->h, subtitle->config.codec);
+            if (w == NULL)
+            {
+                hb_error("Invalid subtitle codec: %#x", subtitle->config.codec);
+                w = NULL;
+                *job->done_error = HB_ERROR_WRONG_INPUT;
+                *job->die = 1;
+                goto cleanup;
+            }
+            w->fifo_in  = subtitle->fifo_sync;
+            w->fifo_out = subtitle->fifo_out;
+            w->subtitle = subtitle;
+
+            hb_list_add( job->list_work, w );
         }
 
         /* Set up the video filter fifo pipeline */
@@ -2071,7 +2128,6 @@ static void do_job(hb_job_t *job)
         w->extradata  = &job->extradata;
 
         hb_list_add( job->list_work, w );
-
     }
 
     // Add Muxer work object
@@ -2194,6 +2250,7 @@ cleanup:
         {
             hb_fifo_close( &subtitle->fifo_in );
             hb_fifo_close( &subtitle->fifo_raw );
+            hb_fifo_close( &subtitle->fifo_sync );
             hb_fifo_close( &subtitle->fifo_out );
         }
     }

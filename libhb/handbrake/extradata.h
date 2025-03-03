@@ -19,9 +19,6 @@ int hb_set_extradata(hb_data_t **extradata, const uint8_t *bytes, size_t length)
 int hb_set_h264_extradata(hb_data_t **extradata, uint8_t *sps, size_t sps_length, uint8_t *pps, size_t pps_length);
 int hb_set_xiph_extradata(hb_data_t **extradata, uint8_t headers[3][HB_CONFIG_MAX_SIZE]);
 
-int hb_set_text_extradata(hb_data_t **extradata, const uint8_t *bytes, size_t length);
-int hb_set_ssa_extradata(hb_data_t **extradata, const char *font, int fs, int w, int h);
-
 int hb_parse_av1_extradata(hb_data_t *extradata, int *level_idx, int *high_tier);
 int hb_parse_h265_extradata(hb_data_t *extradata, int *level_idc, int *high_tier);
 

@@ -12,11 +12,11 @@
 
 #include "handbrake/handbrake.h"
 
-typedef struct hb_avsub_context_s hb_avsub_context_t;
+typedef struct hb_decavsub_context_s hb_decavsub_context_t;
 
-hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job );
-int                  decavsubWork( hb_avsub_context_t * ctx,
+hb_decavsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job );
+int                     decavsubWork( hb_decavsub_context_t * ctx,
                                    hb_buffer_t ** in, hb_buffer_t ** out );
-void                 decavsubClose( hb_avsub_context_t * ctx );
+void                    decavsubClose( hb_decavsub_context_t * ctx );
 
 #endif // HANDBRAKE_DECAVSUB_H

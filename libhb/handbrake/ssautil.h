@@ -20,9 +20,9 @@ typedef struct hb_tx3g_style_context_s hb_tx3g_style_context_t;
 #define HB_STYLE_FLAG_BOLD      0x0002
 #define HB_STYLE_FLAG_UNDERLINE 0x0004
 
-hb_subtitle_style_context_t * hb_subtitle_style_init(const char * ssa_header);
+hb_subtitle_style_context_t * hb_subtitle_style_init(const uint8_t * ssa_buf, int size);
 hb_tx3g_style_context_t     * hb_tx3g_style_init(
-                                        int height, const char * ssa_header);
+                                        int height, const uint8_t * ssa_buf, int size);
 void hb_subtitle_style_close(hb_subtitle_style_context_t ** ctx);
 void hb_tx3g_style_close(hb_tx3g_style_context_t ** ctx);
 

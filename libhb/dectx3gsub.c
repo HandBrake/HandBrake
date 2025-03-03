@@ -259,11 +259,22 @@ static int dectx3gInit( hb_work_object_t * w, hb_job_t * job )
     // parse w->subtitle->extradata txg3 sample description into
     // SSA format and replace extradata.
     // For now we just create a generic SSA Script Info.
-    int height = job->title->geometry.height - job->crop[0] - job->crop[1];
-    int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    hb_set_ssa_extradata(&w->subtitle->extradata, HB_FONT_SANS,
-                         .066 * job->title->geometry.height,
-                         width, height);
+    const char *ssa_header =
+        "[Script Info]\r\n"
+        "ScriptType: v4.00+\r\n"
+        "PlayResX: 384\r\n"
+        "PlayResY: 288\r\n"
+        "ScaledBorderAndShadow: yes\r\n"
+        "YCbCr Matrix: None\r\n"
+        "\r\n"
+        "[V4+ Styles]\r\n"
+        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\r\n"
+        "Style: Default,Arial,16,&Hffffff,&Hffffff,&H0,&H0,0,0,0,0,100,100,0,0,1,1,0,2,10,10,10,1\r\n"
+        "\r\n"
+        "[Events]\r\n"
+        "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\r\n";
+
+    hb_set_extradata(&w->subtitle->extradata, (const uint8_t *)ssa_header, strlen(ssa_header));
 
     return 0;
 }

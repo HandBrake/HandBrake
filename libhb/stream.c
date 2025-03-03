@@ -5802,7 +5802,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->format = TEXTSUB;
             subtitle->source = TX3GSUB;
             subtitle->config.dest = PASSTHRUSUB;
-            subtitle->codec = WORK_DECTX3GSUB;
+            subtitle->codec       = WORK_DECTX3GSUB;
             break;
         case AV_CODEC_ID_ASS:
             subtitle->format      = TEXTSUB;
@@ -5846,7 +5846,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     // Copy the extradata for the subtitle track
     if (codecpar->extradata != NULL)
     {
-        hb_set_text_extradata(&subtitle->extradata, codecpar->extradata, codecpar->extradata_size);
+        hb_set_extradata(&subtitle->extradata, codecpar->extradata, codecpar->extradata_size);
     }
 
     if (st->disposition & AV_DISPOSITION_DEFAULT)
