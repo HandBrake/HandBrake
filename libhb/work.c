@@ -362,8 +362,7 @@ hb_work_object_t* hb_subtitle_encoder(hb_handle_t *h, int codec)
             w = hb_get_work(h, WORK_PASS);
             break;
         case HB_SCODEC_TX3G:
-            w = hb_get_work(h, WORK_ENCAVSUB);
-            w->codec_param = AV_CODEC_ID_MOV_TEXT;
+            w = hb_get_work(h, WORK_ENCTX3GSUB);
             break;
         case HB_SCODEC_SRT:
             w = hb_get_work(h, WORK_ENCAVSUB);
