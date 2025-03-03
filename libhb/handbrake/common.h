@@ -1458,6 +1458,7 @@ extern hb_work_object_t hb_decvobsub;
 extern hb_work_object_t hb_decsrtsub;
 extern hb_work_object_t hb_decutf8sub;
 extern hb_work_object_t hb_dectx3gsub;
+extern hb_work_object_t hb_enctx3gsub;
 extern hb_work_object_t hb_decssasub;
 extern hb_work_object_t hb_decavsub;
 extern hb_work_object_t hb_encavsub;
