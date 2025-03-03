@@ -1135,7 +1135,9 @@ static int sanitize_subtitles( hb_job_t * job )
             {
                 subtitle->config.codec = HB_SCODEC_TX3G;
             }
-            else
+            else if (subtitle->source == UTF8SUB ||
+                     subtitle->source == SRTSUB  ||
+                     subtitle->source == TX3GSUB)
             {
                 subtitle->config.codec = HB_SCODEC_SRT;
             }
