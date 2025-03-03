@@ -316,11 +316,13 @@ namespace HandBrakeWPF.Services
             // Video
             bool intelDefaultSetting = HandBrakeHardwareEncoderHelper.IsQsvAvailable;
             bool nvidiaDefaultSetting = HandBrakeHardwareEncoderHelper.IsNVEncH264Available;
+           bool amfDefaultSetting = HandBrakeHardwareEncoderHelper.IsAMFDecAvailable;
 
             defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, intelDefaultSetting);
             defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, false);
             defaults.Add(UserSettingConstants.UseQSVDecodeForNonQSVEnc, false);
             defaults.Add(UserSettingConstants.EnableNvDecSupport, nvidiaDefaultSetting);
+            defaults.Add(UserSettingConstants.EnableAmfDecSupport, amfDefaultSetting);
             defaults.Add(UserSettingConstants.EnableQuickSyncLowPower, true);
             defaults.Add(UserSettingConstants.EnableDirectXDecoding, SystemInfo.IsArmDevice);
 

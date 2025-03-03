@@ -2668,6 +2668,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Віддавайте перевагу використанню Nvidia NVDec для декодування відео, якщо використовується кодер NVEnc і апаратне забезпечення доступне для використання.</value>
   </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>Віддавайте перевагу використанню AMD AMFDec для декодування відео, якщо використовується кодер AMFenc і апаратне забезпечення доступне для використання.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Апаратна підтримка</value>
   </data>

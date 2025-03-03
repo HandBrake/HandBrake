@@ -2670,6 +2670,9 @@ Dies kann auf Einschränkungen des von Ihnen gewählten Datei-Containers zurück
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Bevorzugt die Verwendung von Nvidia NVDec für die Dekodierung von Videos, wenn der NVEnc-Encoder verwendet wird und die Hardware dafür verfügbar ist.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Bevorzugt die Verwendung von AMD AMFDec für die Dekodierung von Videos, wenn der AMFEnc-Encoder verwendet wird und die Hardware dafür verfügbar ist.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Hardware-Unterstützung</value>
   </data>
