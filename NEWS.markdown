@@ -15,7 +15,7 @@ Download available from Microsoft:
 #### General
 
 - Added new "Social 10MB" presets
-- Preserve additional metadata, including:
+- Improved metadata passthru, preserving additional metadata including:
     - Creation date
     - Cover art
     - Location
@@ -24,10 +24,15 @@ Download available from Microsoft:
 
 - Added an option to disable Dolby Vision and HDR10+ passthru
 
+#### Subtitles
+
+- SubRip/UTF-8 subtitles are now passed through to MKV without conversion to SSA
+
 #### Third-party libraries
 
 - Updated libraries
-  - HarfBuzz 10.2.0 (subtitles)
+  - FFmpeg 7.1.1 (decoding and filters)
+  - HarfBuzz 10.4.0 (subtitles)
   - nv-codec-headers 13.0.19.0 (Nvidia NVENC encoding)
   - oneVPL 2.14.0 (Intel QSV video encoding/decoding)
   - SVT-AV1 3.0.0 (AV1 video encoding)
