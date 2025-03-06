@@ -136,9 +136,20 @@
         job->chapter_markers = 0;
     }
 
-    if (self.metadataPassthru == NO && job->metadata && job->metadata->dict)
+    if (self.metadataPassthru == NO && job->metadata)
     {
-        hb_dict_clear(job->metadata->dict);
+        if (job->metadata->dict)
+        {
+            hb_dict_clear(job->metadata->dict);
+        }
+        if (job->metadata->list_coverart)
+        {
+            int count = hb_list_count(job->metadata->list_coverart);
+            for (int i = 0; i < count; i++)
+            {
+                hb_metadata_rem_coverart(job->metadata, 0);
+            }
+        }
     }
 
     if (job->vcodec & HB_VCODEC_H264_MASK)
