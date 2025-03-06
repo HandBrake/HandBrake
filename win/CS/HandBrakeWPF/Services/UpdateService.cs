@@ -130,7 +130,8 @@ namespace HandBrakeWPF.Services
                                 DownloadFile = reader.DownloadFile,
                                 Build = reader.Build,
                                 Version = reader.Version,
-                                Signature = reader.Hash
+                                Signature = reader.Signature,
+                                UseLargerKey = reader.IsLargerKey
                             };
 
                         this.userSettingService.SetUserSetting(UserSettingConstants.IsUpdateAvailableBuild, latest);
@@ -148,11 +149,8 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// Download the update file.
         /// </summary>
-        /// <param name="url">
-        /// The url.
-        /// </param>
-        /// <param name="expectedSignature">
-        /// The expected DSA SHA265 Signature
+        /// <param name="update">
+        /// Update Check Information
         /// </param>
         /// <param name="completed">
         /// The complete.
@@ -160,7 +158,7 @@ namespace HandBrakeWPF.Services
         /// <param name="progress">
         /// The progress.
         /// </param>
-        public void DownloadFile(string url, string expectedSignature, Action<DownloadStatus> completed, Action<DownloadStatus> progress)
+        public void DownloadFile(UpdateCheckInformation update, Action<DownloadStatus> completed, Action<DownloadStatus> progress)
         {
             ThreadPool.QueueUserWorkItem(
                delegate
@@ -169,11 +167,10 @@ namespace HandBrakeWPF.Services
                    {
                        string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
 
-
-                       Task.Run(() => DownloadSetupFile(url, progress, tempPath)).GetAwaiter().GetResult();
+                       Task.Run(() => DownloadSetupFile(update.DownloadFile, progress, tempPath)).GetAwaiter().GetResult();
 
                        completed(
-                           this.VerifyDownload(expectedSignature, tempPath)
+                           this.VerifyDownload(update.Signature, tempPath, update.UseLargerKey)
                                ? new DownloadStatus { WasSuccessful = true, Message = "Download Complete." } :
                                  new DownloadStatus
                                    {
@@ -191,10 +188,11 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// Verify the HandBrake download is Valid.
         /// </summary>
-        /// <param name="signature">The DSA SHA256 Signature from the appcast</param>
+        /// <param name="signature">The RSA SHA256 Signature from the appcast</param>
         /// <param name="updateFile">Path to the downloaded update file</param>
+        /// <param name="useLargerKey">Use the 4096 bit key</param>
         /// <returns>True if the file is valid, false otherwise.</returns>
-        public bool VerifyDownload(string signature, string updateFile)
+        public bool VerifyDownload(string signature, string updateFile, bool useLargerKey)
         {
             // Sanity Checks
             if (!File.Exists(updateFile))
@@ -208,25 +206,15 @@ namespace HandBrakeWPF.Services
             }
 
             // Fetch our Public Key
-            string publicKey;
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("HandBrakeWPF.public.key"))
-            {
-                if (stream == null)
-                {
-                    return false;
-                }
+            // For now, we'll have the ability to fall-back to the old key if there is a problem. 
+            // This ability will be removed later.
+            string publicKey = GetPulicKey(useLargerKey ? "HandBrakeWPF.public.4096.key" : "HandBrakeWPF.public.key");
 
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    publicKey = reader.ReadToEnd();
-                }
-            }
-            
             // Verify the file against the Signature. 
             try
             {
                 byte[] file = File.ReadAllBytes(updateFile);
-                using (RSACryptoServiceProvider verifyProvider = new RSACryptoServiceProvider())
+                using (RSACryptoServiceProvider verifyProvider = new RSACryptoServiceProvider(4096))
                 {
                     verifyProvider.FromXmlString(publicKey);
                     return verifyProvider.VerifyData(file, "SHA256", Convert.FromBase64String(signature));
@@ -303,6 +291,25 @@ namespace HandBrakeWPF.Services
             }
 
             return true;
+        }
+
+        private string GetPulicKey(string keyFile)
+        {
+            string publicKey;
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(keyFile))
+            {
+                if (stream == null)
+                {
+                    return null;
+                }
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    publicKey = reader.ReadToEnd();
+                }
+            }
+
+            return publicKey;
         }
     }
 }

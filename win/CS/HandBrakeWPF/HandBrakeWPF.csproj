@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <None Remove="handbrakepineapple.ico" />
+    <None Remove="public.4096.key" />
     <None Remove="Views\Images\close_no_ring.png" />
     <None Remove="Views\Images\Dark\Reorder.png" />
     <None Remove="Views\Images\error.png" />
@@ -134,6 +135,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="public.4096.key" />
     <EmbeddedResource Include="public.key" />
   </ItemGroup>
 

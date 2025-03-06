@@ -37,11 +37,8 @@ namespace HandBrakeWPF.Services.Interfaces
         /// <summary>
         /// Download the update file.
         /// </summary>
-        /// <param name="url">
-        /// The url.
-        /// </param>
-        /// <param name="expectedSHA1Hash">
-        /// The expected SHA-1 Hash.
+        /// <param name="update">
+        /// Update Check Information
         /// </param>
         /// <param name="completed">
         /// The complete.
@@ -49,6 +46,6 @@ namespace HandBrakeWPF.Services.Interfaces
         /// <param name="progress">
         /// The progress.
         /// </param>
-        void DownloadFile(string url, string expectedSHA1Hash, Action<DownloadStatus> completed, Action<DownloadStatus> progress);
+        void DownloadFile(UpdateCheckInformation update, Action<DownloadStatus> completed, Action<DownloadStatus> progress);
     }
 }

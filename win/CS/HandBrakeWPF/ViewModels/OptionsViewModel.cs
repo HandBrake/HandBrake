@@ -1387,7 +1387,7 @@ namespace HandBrakeWPF.ViewModels
         public void DownloadUpdate()
         {
             this.UpdateMessage = Resources.OptionsView_PreparingUpdate;
-            this.updateService.DownloadFile(this.updateInfo.DownloadFile, this.updateInfo.Signature, this.DownloadComplete, this.DownloadProgress);
+            this.updateService.DownloadFile(this.updateInfo, this.DownloadComplete, this.DownloadProgress);
         }
 
         public void PerformUpdateCheck()
