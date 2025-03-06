@@ -5979,7 +5979,7 @@ hb_metadata_t *hb_metadata_copy( const hb_metadata_t *src )
             {
                 hb_coverart_t *art = hb_list_item( src->list_coverart, ii );
                 hb_metadata_add_coverart(
-                        metadata, art->data, art->size, art->type );
+                        metadata, art->data, art->size, art->type, art->name );
             }
         }
     }
@@ -6008,6 +6008,7 @@ void hb_metadata_close( hb_metadata_t **_m )
             while( ( art = hb_list_item( m->list_coverart, 0 ) ) )
             {
                 hb_list_rem( m->list_coverart, art );
+                free( art->name );
                 free( art->data );
                 free( art );
             }
@@ -6036,7 +6037,9 @@ void hb_update_meta_dict(hb_dict_t * dict, const char * key, const char * value)
     }
 }
 
-void hb_metadata_add_coverart( hb_metadata_t *metadata, const uint8_t *data, int size, int type )
+void hb_metadata_add_coverart( hb_metadata_t *metadata,
+                               const uint8_t *data, int size,
+                               int type, const char *name )
 {
     if ( metadata )
     {
@@ -6045,6 +6048,10 @@ void hb_metadata_add_coverart( hb_metadata_t *metadata, const uint8_t *data, int
             metadata->list_coverart = hb_list_init();
         }
         hb_coverart_t *art = calloc( 1, sizeof(hb_coverart_t) );
+        if (name)
+        {
+            art->name = strdup( name );
+        }
         art->data = malloc( size );
         memcpy( art->data, data, size );
         art->size = size;
@@ -6061,6 +6068,7 @@ void hb_metadata_rem_coverart( hb_metadata_t *metadata, int idx )
         if ( art )
         {
             hb_list_rem( metadata->list_coverart, art );
+            free( art->name );
             free( art->data );
             free( art );
         }

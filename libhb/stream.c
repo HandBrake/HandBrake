@@ -5946,10 +5946,11 @@ static void add_ffmpeg_coverart(hb_title_t *title, hb_stream_t *stream, int id)
 
     if (type != HB_ART_UNDEFINED)
     {
+        const char *name = get_ffmpeg_metadata_value(st->metadata, "filename");
         hb_metadata_add_coverart(title->metadata,
                                  st->attached_pic.data,
                                  st->attached_pic.size,
-                                 type);
+                                 type, name);
     }
 }
 

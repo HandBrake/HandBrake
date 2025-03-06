@@ -1068,47 +1068,51 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
-    if( job->metadata && job->metadata->dict )
+    if (job->metadata)
     {
         hb_deep_log(2, "Writing Metadata to output file...");
-        hb_dict_iter_t iter = hb_dict_iter_init(job->metadata->dict);
 
-        while (iter != HB_DICT_ITER_DONE)
+        if (job->metadata->dict)
         {
-            const char * key;
-            hb_value_t * val;
+            hb_dict_iter_t iter = hb_dict_iter_init(job->metadata->dict);
 
-            hb_dict_iter_next_ex(job->metadata->dict, &iter, &key, &val);
-            if (key != NULL && val != NULL)
+            while (iter != HB_DICT_ITER_DONE)
             {
-                const char * str = hb_value_get_string(val);
+                const char *key;
+                hb_value_t *val;
 
-                if (str != NULL)
+                hb_dict_iter_next_ex(job->metadata->dict, &iter, &key, &val);
+                if (key != NULL && val != NULL)
                 {
-                    const char * mux_key = lookup_meta_mux_key(meta_mux, key);
+                    const char *str = hb_value_get_string(val);
 
-                    if (mux_key != NULL)
+                    if (str != NULL)
                     {
-                        av_dict_set(&m->oc->metadata, mux_key, str, 0);
+                        const char *mux_key = lookup_meta_mux_key(meta_mux, key);
+
+                        if (mux_key != NULL)
+                        {
+                            av_dict_set(&m->oc->metadata, mux_key, str, 0);
+                        }
                     }
+                }
+            }
+
+            if (job->mux == HB_MUX_AV_MP4)
+            {
+                // Set the location tag language to undefined,
+                // Apple software seems to require it
+                hb_value_t *location = hb_dict_get(job->metadata->dict, "Location");
+                if (location)
+                {
+                    char *str = hb_value_get_string_xform(location);
+                    av_dict_set(&m->oc->metadata, "location-und", str, 0);
+                    free(str);
                 }
             }
         }
 
-        if (job->mux == HB_MUX_AV_MP4)
-        {
-            // Set the location tag language to undefined,
-            // Apple software seems to require it
-            hb_value_t *location = hb_dict_get(job->metadata->dict, "Location");
-            if (location)
-            {
-                char *str = hb_value_get_string_xform(location);
-                av_dict_set(&m->oc->metadata, "location-und", str, 0);
-                free(str);
-            }
-        }
-
-        if (job->mux == HB_MUX_AV_MP4 || job->mux == HB_MUX_AV_MKV)
+        if (job->metadata->list_coverart)
         {
             hb_list_t *list_coverart = job->metadata->list_coverart;
             for (int ii = 0; ii < hb_list_count(list_coverart); ii++)
@@ -1124,12 +1128,12 @@ static int avformatInit( hb_mux_object_t * m )
                     case HB_ART_PNG:
                         codec_id = AV_CODEC_ID_PNG;
                         mimetype = "image/png";
-                        filename = "cover.png";
+                        filename = art->name ? art->name : "cover.png";
                         break;
                     case HB_ART_JPEG:
                         codec_id = AV_CODEC_ID_MJPEG;
                         mimetype = "image/jpeg";
-                        filename = "cover.jpg";
+                        filename = art->name ? art->name : "cover.jpg";
                         break;
                     default:
                         break;
@@ -1144,7 +1148,15 @@ static int avformatInit( hb_mux_object_t * m )
                         goto error;
                     }
 
-                    if (job->mux == HB_MUX_AV_MKV)
+                    if (job->mux == HB_MUX_AV_MP4)
+                    {
+                        st->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
+                        st->codecpar->codec_id = codec_id;
+                        st->codecpar->width  = 640;
+                        st->codecpar->height = 360;
+                        st->disposition = AV_DISPOSITION_ATTACHED_PIC;
+                    }
+                    else
                     {
                         st->codecpar->codec_type = AVMEDIA_TYPE_ATTACHMENT;
                         st->codecpar->codec_id = codec_id;
@@ -1164,19 +1176,7 @@ static int avformatInit( hb_mux_object_t * m )
                         st->codecpar->extradata = priv_data;
                         st->codecpar->extradata_size = priv_size;
                     }
-                    else if (job->mux == HB_MUX_AV_MP4)
-                    {
-                        st->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
-                        st->codecpar->codec_id = codec_id;
-                        st->codecpar->width  = 640;
-                        st->codecpar->height = 360;
-                        st->disposition = AV_DISPOSITION_ATTACHED_PIC;
-                    }
                 }
-
-                // Write only the first
-                // cover art for now
-                break;
             }
         }
     }
@@ -1614,7 +1614,7 @@ static int avformatEnd(hb_mux_object_t *m)
     }
 
     // Write MP4 cover art
-    if (job->mux == HB_MUX_AV_MP4 && job->metadata && job->metadata->dict)
+    if (job->mux == HB_MUX_AV_MP4 && job->metadata)
     {
         hb_list_t *list_coverart = job->metadata->list_coverart;
         for (int ii = 0; ii < hb_list_count(list_coverart); ii++)
@@ -1622,10 +1622,9 @@ static int avformatEnd(hb_mux_object_t *m)
             hb_coverart_t *art = hb_list_item(list_coverart, ii);
             m->pkt->data = art->data;
             m->pkt->size = art->size;
-            m->pkt->stream_index = m->ntracks;
+            m->pkt->stream_index = m->ntracks + ii;
             av_interleaved_write_frame(m->oc, m->pkt);
             av_packet_unref(m->pkt);
-            break;
         }
     }
 

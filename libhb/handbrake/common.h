@@ -193,7 +193,9 @@ hb_metadata_t * hb_metadata_copy(const hb_metadata_t *src);
 void hb_metadata_close(hb_metadata_t **metadata);
 void hb_update_meta_dict(hb_dict_t * dict, const char * key, const char * value);
 const char * hb_lookup_meta_key(const char * mux_key);
-void hb_metadata_add_coverart( hb_metadata_t *metadata, const uint8_t *data, int size, int type );
+void hb_metadata_add_coverart( hb_metadata_t *metadata,
+                               const uint8_t *data, int size,
+                               int type, const char *name );
 void hb_metadata_rem_coverart( hb_metadata_t *metadata, int ii );
 
 hb_chapter_t *hb_chapter_copy(const hb_chapter_t *src);
@@ -1205,6 +1207,7 @@ struct hb_attachment_s
 
 struct hb_coverart_s
 {
+    char    *name;
     uint8_t *data;
     uint32_t size;
     enum arttype {
