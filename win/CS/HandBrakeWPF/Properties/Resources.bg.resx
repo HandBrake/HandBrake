@@ -2666,6 +2666,9 @@ You can drag/drop or enter the text above.</value>
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Предпочитай употребата на Nvidia NVDec за декодиране на видеото, когато NVEnc енкодера и хардуерната поддръжка за него са налични.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Предпочитай употребата на AMD AMFDec за декодиране на видеото, когато AMFEnc енкодера и хардуерната поддръжка за него са налични.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Хардуерна поддръжка</value>
   </data>

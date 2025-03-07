@@ -2668,6 +2668,9 @@ Dit kan te wijten zijn aan beperkingen van de geselecteerde bestandscontainer. Z
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Gebruik, als de hardware beschikbaar is, Nvidia NVDec en NVEnc voor respectievelijk het decoderen en coderen van video.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Gebruik, als de hardware beschikbaar is, AMD AMFDec en AMFEnc voor respectievelijk het decoderen en coderen van video.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Hardwareondersteuning</value>
   </data>

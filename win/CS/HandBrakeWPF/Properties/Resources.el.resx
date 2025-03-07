@@ -2690,6 +2690,9 @@ You can drag/drop or enter the text above.</value>
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Προτιμήστε τη χρήση του Nvidia NVDec για την αποκωδικοποίηση βίντεο κατά τη χρήση του κωδικοποιητή NVEnc και το υλικό είναι διαθέσιμο για χρήση.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Προτιμήστε τη χρήση του AMD AMFDec για την αποκωδικοποίηση βίντεο κατά τη χρήση του κωδικοποιητή AMFEnc και το υλικό είναι διαθέσιμο για χρήση.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Υποστήριξη Υλικού</value>
   </data>

@@ -2663,6 +2663,9 @@ Forse, ghjè una limitazione nant’à u cuntenidore di schedariu chì vo avete 
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Preferisce l’usu di NVDec di Nvidia per discudificà e video quandu s’impiegheghja u cudificatore NVEnc è chì l’usu di u materiale hè pussibule.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Preferisce l’usu di AMFDec di AMD per discudificà e video quandu s’impiegheghja u cudificatore AMFEnc è chì l’usu di u materiale hè pussibule.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Adopru di u materiale</value>
   </data>

@@ -2669,6 +2669,9 @@ Esto puede deberse a limitaciones del contenedor de archivos que ha seleccionado
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Preferir el uso de Nvidia NVDec para decodificar vídeo cuando se utiliza el codificador NVEnc y el hardware está disponible para su uso.</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Preferir el uso de AMD AMFDec para decodificar vídeo cuando se utiliza el codificador AMFEnc y el hardware está disponible para su uso.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Soporte de hardware</value>
   </data>

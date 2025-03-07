@@ -10,6 +10,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/hwaccel.h"
+#include "handbrake/vce_common.h"
 
 typedef struct
 {
@@ -722,6 +723,11 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     {
         hw_decode = HB_DECODE_SUPPORT_MF;
     }
+    else if (data->hw_decode & HB_DECODE_SUPPORT_AMFDEC
+            && hb_check_amfdec_available())
+    {
+        hw_decode = HB_DECODE_SUPPORT_AMFDEC;
+    }
 
     void *hw_device_ctx = NULL;
     if (hw_decode)
@@ -1403,6 +1409,7 @@ skip_preview:
             hb_log("scan: supported video decoders:%s%s%s",
                    !(title->video_decode_support & HB_DECODE_SUPPORT_SW)      ? "" : " avcodec",
                    !(title->video_decode_support & HB_DECODE_SUPPORT_QSV)     ? "" : " qsv",
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_AMFDEC)  ? "" : " amfdec",
                    !(title->video_decode_support & HB_DECODE_SUPPORT_HWACCEL) ? "" : " hwaccel");
         }
 

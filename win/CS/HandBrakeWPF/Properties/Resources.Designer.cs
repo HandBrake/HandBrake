@@ -4163,6 +4163,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prefer use of AMD AMFDec for decoding video when using the AMFEnc encoder and the hardware is available for use..
+        /// </summary>
+        public static string OptionsView_EnableAmfDecSupport {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableAmfDecSupport", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Allow use of DirectX Decoding.
         /// </summary>
         public static string OptionsView_EnableDirectXDecoding {

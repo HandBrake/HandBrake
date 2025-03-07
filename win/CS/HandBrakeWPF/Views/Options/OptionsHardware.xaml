@@ -127,6 +127,10 @@
                 <StackPanel Orientation="Vertical" Visibility="{Binding IsVceAvailable, Converter={StaticResource boolToVisConverter}}">
                     <TextBlock Text="AMD VCN" Style="{StaticResource subHeader}" Margin="0,15,0,0" />
                     <TextBlock Text="{x:Static Properties:Resources.OptionsView_Available}" Margin="25,5,0,0" />
+
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableAmfDecSupport}" Margin="25,5,0,0" IsEnabled="{Binding IsVceAvailable}"
+                              Visibility="{Binding IsAmfdecAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableAmfDecSupport}" />
+
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Visibility="{Binding IsVceAvailable, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
                     <TextBlock Text="AMD VCN" Style="{StaticResource subHeader}" Margin="0,15,0,0" />

@@ -2662,6 +2662,9 @@ This may be due to limitations of the file container you have selected. Please s
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Prefer use of Nvidia NVDec for decoding video when using the NVEnc encoder and the hardware is available for use.</value>
   </data>
+  <data name="OptionsView_EnableAMfDecSupport" xml:space="preserve">
+    <value>Prefer use of AMD AMFDec for decoding video when using the AMFEnc encoder and the hardware is available for use.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Hardware Support</value>
   </data>

@@ -262,6 +262,12 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_vce_h265_available", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_vce_h265_available();
 
+        [DllImport("hb", EntryPoint = "hb_vce_av1_available", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_vce_av1_available();
+
+        [DllImport("hb", EntryPoint = "hb_check_amfdec_available", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_check_amfdec_available();
+
         [DllImport("hb", EntryPoint = "hb_nvenc_h264_available", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_nvenc_h264_available();
 

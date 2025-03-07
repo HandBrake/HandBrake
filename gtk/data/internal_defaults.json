@@ -63,7 +63,8 @@
         "PictureDeinterlaceDecomb": false,
         "VideoPresetSlider": 0,
         "x264ZeroLatency": false,
-        "x264FastDecode": false
+        "x264FastDecode": false,
+        "AmfHwDecode": false
     },
     "Preferences": {
         "ActivityFontSize": 8,
