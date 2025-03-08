@@ -214,6 +214,7 @@ static int      hw_decode          = -1;
 static int      keep_duplicate_titles = 0;
 static int      hdr_dynamic_metadata_disable = 0;
 static char *   hdr_dynamic_metadata  = NULL;
+static int      metadata_passthru = -1;
 
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
@@ -1409,6 +1410,10 @@ static void ShowHelp(void)
 "       --align-av          Add audio silence or black video frames to start\n"
 "                           of streams so that all streams start at exactly\n"
 "                           the same time\n"
+"   --keep-metadata         Preserve the source's common metadata\n"
+"   --no-metadata           Disable preset 'keep-metadata'\n"
+"                           of streams so that all streams start at exactly\n"
+"                           the same time\n"
 "   --inline-parameter-sets Create adaptive streaming compatible output.\n"
 "                           Inserts parameter sets (SPS and PPS) inline\n"
 "                           in the video stream before each IDR.\n"
@@ -2292,6 +2297,8 @@ static int ParseOptions( int argc, char ** argv )
             { "no-inline-parameter-sets", no_argument, &inline_parameter_sets, 0 },
             { "align-av",    no_argument,       &align_av_start, 1 },
             { "no-align-av", no_argument,       &align_av_start, 0 },
+            { "keep-metadata", no_argument,     &metadata_passthru, 1 },
+            { "no-metadata",   no_argument,     &metadata_passthru, 0 },
             { "audio-lang-list", required_argument, NULL, AUDIO_LANG_LIST },
             { "all-audio",   no_argument,       &audio_all, 1 },
             { "first-audio", no_argument,       &audio_all, 0 },
@@ -3812,6 +3819,10 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "AlignAVStart", hb_value_bool(align_av_start));
     }
+    if (metadata_passthru != -1)
+    {
+        hb_dict_set(preset, "MetadataPassthru", hb_value_bool(metadata_passthru));
+    }
     if (inline_parameter_sets != -1)
     {
         hb_dict_set(preset, "InlineParameterSets",
@@ -4998,6 +5009,15 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         if (range_seek_points)
             hb_dict_set(range_dict, "SeekPoints",
                     hb_value_int(range_seek_points));
+    }
+
+    if (hb_value_get_bool(hb_dict_get(preset_dict, "MetadataPassthru")) == 0)
+    {
+        hb_dict_t *metadata_dict = hb_dict_get(job_dict, "Metadata");
+        hb_dict_clear(metadata_dict);
+
+        hb_dict_t *arts_array = hb_dict_get(job_dict, "CoverArts");
+        hb_value_array_clear(arts_array);
     }
 
     hb_dict_t *source_dict = hb_dict_get(job_dict, "Source");
