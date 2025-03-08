@@ -43,6 +43,8 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// </summary>
         public Dictionary<string, string> Metadata { get; set; }
 
+        public List<CoverArt> CoverArts { get; set; }
+
         /// <summary>
         /// Gets or sets the sequence id.
         /// </summary>

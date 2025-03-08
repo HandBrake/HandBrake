@@ -118,7 +118,7 @@
                          
 
                             <!-- Value -->
-                            <TextBox Grid.Column="3" Text="{Binding Value}" x:Name="metadataValue" behaviours:TextBoxBehavior.TripleClickSelectAll="True" 
+                            <TextBox Grid.Column="3" Text="{Binding Value}" x:Name="metadataValue" behaviours:TextBoxBehavior.TripleClickSelectAll="True" MaxHeight="100"
                                      TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="0,2,0,2" Margin="1" PreviewMouseDown="MetadataValue_OnPreviewMouseDown" />
 
 

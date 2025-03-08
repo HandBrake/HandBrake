@@ -24,7 +24,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Utilities;
 
     using AudioEncoderRateType = Model.Models.AudioEncoderRateType;
     using AudioTrack = Model.Models.AudioTrack;
@@ -64,12 +63,29 @@ namespace HandBrakeWPF.Services.Encode.Factories
                                           Filters = CreateFilters(job),
                                           PAR = CreatePAR(job),
                                           Metadata = CreateMetadata(job),
+                                          CoverArts = CreateCoverArts(job),
                                           Source = CreateSource(job),
                                           Subtitle = CreateSubtitle(job),
                                           Video = CreateVideo(job)
                                       };
 
             return encode;
+        }
+
+        private List<CoverArt> CreateCoverArts(EncodeTask job)
+        {
+            if (job.CoverArts != null && job.PassthruMetadataEnabled)
+            {
+                List<CoverArt> coverArts = new List<CoverArt>();
+                foreach (var item in job.CoverArts)
+                {
+                    coverArts.Add(item); // TODO: Support enable / disable of individual files
+                }
+
+                return coverArts;
+            }
+
+            return new List<CoverArt>(); // Empty Coverarts will not pass through to the destination.  
         }
 
         private Source CreateSource(EncodeTask job)

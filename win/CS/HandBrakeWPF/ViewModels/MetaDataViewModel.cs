@@ -13,6 +13,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.ObjectModel;
     using System.Windows.Forms;
 
+    using HandBrake.Interop.Interop.Json.Shared;
+
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Services.Encode.Model;
@@ -63,6 +65,21 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public ObservableCollection<CoverArt> SourceCoverArts
+        {
+            get => this.task.CoverArts;
+            set
+            {
+                if (Equals(value, this.task.CoverArts))
+                {
+                    return;
+                }
+
+                this.task.CoverArts = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public void Add()
         {
             MetaDataValue value = new MetaDataValue("", "");
@@ -107,7 +124,17 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
+            this.SourceCoverArts.Clear();
+            if (selectedTitle.CoverArts != null)
+            {
+                foreach (var item in selectedTitle.CoverArts)
+                {
+                    this.SourceCoverArts.Add(item);
+                }
+            }
+
             this.NotifyOfPropertyChange(() => this.SourceMetadata);
+            this.NotifyOfPropertyChange(() => this.SourceCoverArts);
         }
 
         /// <summary>
