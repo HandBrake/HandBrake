@@ -5931,14 +5931,17 @@ static void add_ffmpeg_coverart(hb_title_t *title, hb_stream_t *stream, int id)
     int type = HB_ART_UNDEFINED;
     AVStream *st = stream->ffmpeg_ic->streams[id];
     AVCodecParameters *codecpar = st->codecpar;
+    char *name = get_ffmpeg_metadata_value(st->metadata, "filename");
 
     switch (codecpar->codec_id)
     {
         case AV_CODEC_ID_PNG:
             type = HB_ART_PNG;
+            name = name ? name : "cover.png";
             break;
         case AV_CODEC_ID_MJPEG:
             type = HB_ART_JPEG;
+            name = name ? name : "cover.jpg";
             break;
         default:
             break;
@@ -5946,7 +5949,6 @@ static void add_ffmpeg_coverart(hb_title_t *title, hb_stream_t *stream, int id)
 
     if (type != HB_ART_UNDEFINED)
     {
-        const char *name = get_ffmpeg_metadata_value(st->metadata, "filename");
         hb_metadata_add_coverart(title->metadata,
                                  st->attached_pic.data,
                                  st->attached_pic.size,
