@@ -63,6 +63,10 @@ hb_list_t   * hb_get_titles( hb_handle_t * );
    by the latest scan and title set data. */
 hb_title_set_t   * hb_get_title_set( hb_handle_t * );
 
+/* hb_get_title_coverart
+   returns the list of coverart files and byte data in hb_coverart_s */
+hb_list_t * hb_get_title_coverarts( hb_handle_t * h, int title );
+
 #ifdef __LIBHB__
 /* hb_detect_comb()
    Analyze a frame for interlacing artifacts, returns true if they're found.

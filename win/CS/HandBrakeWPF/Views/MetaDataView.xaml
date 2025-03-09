@@ -37,6 +37,7 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="250" />
             </Grid.ColumnDefinitions>
 
 
@@ -67,7 +68,8 @@
 
                 <ListView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="{x:Static Properties:Resources.MetaData_Add}" Command="{Binding RelayCommand}" CommandParameter="Add" />
+                        <!-- Maybe Later -->
+                        <!--<MenuItem Header="{x:Static Properties:Resources.MetaData_Add}" Command="{Binding RelayCommand}" CommandParameter="Add" />-->
                     </ContextMenu>
                 </ListView.ContextMenu>
 
@@ -115,7 +117,7 @@
                             <TextBox Grid.Column="2" Text="{Binding Annotation}"  behaviours:TextBoxBehavior.TripleClickSelectAll="True" 
                                      Visibility="{Binding IsNew, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center"
                                      TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="0,2,0,2" Margin="1,1,10,1"  />
-                         
+
 
                             <!-- Value -->
                             <TextBox Grid.Column="3" Text="{Binding Value}" x:Name="metadataValue" behaviours:TextBoxBehavior.TripleClickSelectAll="True" MaxHeight="100"
@@ -140,8 +142,56 @@
 
             </ListView>
 
+            <Grid Margin="5,0,5,0" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Row="0" Grid.RowSpan="2">
+
+                    <Border BorderBrush="DarkGray" Background="WhiteSmoke" BorderThickness="2" Canvas.ZIndex="1" 
+                            Margin="20,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" CornerRadius="2" Opacity="0.9">
+
+                        <CheckBox IsChecked="{Binding CoverArtImage.Enabled}" Canvas.ZIndex="1" Content="Enabled" VerticalAlignment="Top" HorizontalAlignment="Center" 
+                                  Visibility="{Binding CoverArtImage.IsNoCoverArt, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" Margin="8,5,8,5"  />
+                    </Border>
+                   
+
+                    <Image Source="{Binding CoverArtImage.Image}" Canvas.ZIndex="0">
+                    </Image>
+
+                    <TextBlock Text="No Cover Art" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding CoverArtImage.IsNoCoverArt, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
+                           FontWeight="SemiBold" FontSize="16" />
+                </Grid>
+
+                <Grid Grid.Row="1" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    
+                    <Button Grid.Column="1" Margin="0,0,0,10" Command="{Binding RelayCommand}" CommandParameter="PreviousCoverArt" Content="&lt; Previous" Padding="8,2"
+                            IsEnabled="{Binding IsNextAvailable}" Opacity="0.9" FontWeight="Bold"
+                            Visibility="{Binding CoverArtImage.IsNoCoverArt, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                    <Button Grid.Column="2" Margin="5,0,0,10" Command="{Binding RelayCommand}" CommandParameter="NextCoverArt" Content="Next &gt;" Padding="8,2"
+                            IsEnabled="{Binding IsBackAvailable}" Opacity="0.9" FontWeight="Bold"
+                            Visibility="{Binding CoverArtImage.IsNoCoverArt, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                </Grid>
+
+
+            </Grid>
+    
         </Grid>
 
     </Grid>
-    
+
 </UserControl>

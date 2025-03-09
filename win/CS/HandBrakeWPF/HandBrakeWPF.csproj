@@ -48,6 +48,7 @@
     <None Remove="public.4096.key" />
     <None Remove="Views\Images\close_no_ring.png" />
     <None Remove="Views\Images\Dark\Reorder.png" />
+    <None Remove="Views\Images\EmptyCoverArt.png" />
     <None Remove="Views\Images\error.png" />
     <None Remove="Views\Images\Light\Reorder.png" />
     <None Remove="Views\Images\pause_small.png" />
@@ -94,6 +95,7 @@
     <Resource Include="Views\Images\Dark\Source.png" />
     <Resource Include="Views\Images\Disc.png" />
     <Resource Include="Views\Images\disc_small.png" />
+    <Resource Include="Views\Images\EmptyCoverArt.png" />
     <Resource Include="Views\Images\error.png" />
     <Resource Include="Views\Images\ErrorX.png" />
     <Resource Include="Views\Images\information.png" />

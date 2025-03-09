@@ -10,9 +10,12 @@
 namespace HandBrakeWPF.Services.Scan
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.IO;
     using System.Linq;
     using System.Windows.Media.Imaging;
 
@@ -22,6 +25,7 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
+    using HandBrake.Interop.Interop.Json.Shared;
 
     using HandBrakeWPF.Instance;
     using HandBrakeWPF.Services.Encode.Factories;
@@ -114,6 +118,7 @@ namespace HandBrakeWPF.Services.Scan
             // Start the scan on a back
             this.ScanSource(sourcePaths, title, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
         }
+
 
         /// <summary>
         /// Kill the scan
@@ -213,7 +218,29 @@ namespace HandBrakeWPF.Services.Scan
 
             return bitmapImage;
         }
-        
+
+        public BitmapImage GetCoverArt(CoverArt artwork, int title)
+        {
+            RawCoverArtData rawImageData = this.instance.GetCoverArt(title, artwork.ID);
+            if (rawImageData != null)
+            {
+                try
+                {
+                    // File.WriteAllBytes("test.jpg", rawImageData.RawBitmapData); // Debug
+                    using (MemoryStream ms = new MemoryStream(rawImageData.RawBitmapData))
+                    {
+                        return BitmapUtilities.ConvertToBitmapImage(ms);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    Debug.WriteLine(exc);
+                }
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// The service log message.
         /// </summary>

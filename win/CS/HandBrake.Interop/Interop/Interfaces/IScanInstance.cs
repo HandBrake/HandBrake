@@ -59,6 +59,8 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// </returns>
         RawPreviewData GetPreview(JsonEncodeObject job, int previewNumber);
 
+        RawCoverArtData GetCoverArt(int title, int id);
+
         /// <summary>
         /// Starts a scan of the given path.
         /// </summary>

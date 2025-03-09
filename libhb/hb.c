@@ -483,6 +483,19 @@ hb_title_set_t * hb_get_title_set( hb_handle_t * h )
     return &h->title_set;
 }
 
+hb_list_t * hb_get_title_coverarts( hb_handle_t * h, int title )
+{
+    hb_title_t * sourceTitle = hb_list_item(h->title_set.list_title, title);
+    if (sourceTitle) 
+    {
+        hb_list_t * coverart = sourceTitle->metadata->list_coverart;
+        return coverart;
+    }
+    
+    hb_list_t * emptyList = hb_list_init();
+    return emptyList;
+}
+
 int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf, int format )
 {
     FILE    * file;
