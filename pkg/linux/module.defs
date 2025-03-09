@@ -106,15 +106,6 @@ PKG.gui.build.flatpak = $(STAGE.out.flatpak/)$(PKG.gui.name.flatpak)-$(HB.versio
 PKG.gui.flatpak = $(PKG.out.flatpak/)$(PKG.gui.name.flatpak)-$(HB.version)-$(HOST.machine).flatpak
 PKG.gui.debug.flatpak = $(PKG.out.flatpak/)$(PKG.gui.name.debug.flatpak)-$(HB.version)-$(HOST.machine).flatpak
 
-PKG.cli.name.flatpak = fr.handbrake.HandBrakeCLI
-PKG.cli.name.debug.flatpak = $(PKG.cli.name.flatpak).Debug
-PKG.cli.manifest.flathub = $(PKG.out.flatpak/)$(PKG.cli.name.flatpak).json
-PKG.cli.template.flatpak = $(PKG.flatpak/)$(PKG.cli.name.flatpak).json
-PKG.cli.manifest.flatpak = $(STAGE.out.flatpak/)$(PKG.cli.name.flatpak).json
-PKG.cli.build.flatpak = $(STAGE.out.flatpak/)$(PKG.cli.name.flatpak)-$(HB.version)-$(HOST.machine).build
-PKG.cli.flatpak = $(PKG.out.flatpak/)$(PKG.cli.name.flatpak)-$(HB.version)-$(HOST.machine).flatpak
-PKG.cli.debug.flatpak = $(PKG.out.flatpak/)$(PKG.cli.name.debug.flatpak)-$(HB.version)-$(HOST.machine).flatpak
-
 PKG.mediasdk.name.flatpak = fr.handbrake.ghb.Plugin.IntelMediaSDK
 PKG.mediasdk.manifest.flathub = $(PKG.out.flatpak/)$(PKG.mediasdk.name.flatpak).json
 PKG.mediasdk.metainfo.flatpak = $(PKG.flatpak/)$(PKG.mediasdk.name.flatpak).metainfo.xml
@@ -141,7 +132,6 @@ endif
 ###############################################################################
 
 BUILD.out += $(PKG.src.tar)
-BUILD.out += $(PKG.cli.flatpak)
 BUILD.out += $(PKG.gui.flatpak)
 BUILD.out += $(PKG.cli.deb)
 BUILD.out += $(PKG.gui.deb)
