@@ -172,6 +172,9 @@ endif
 ifeq (1,$(FEATURE.qsv))
   FFMPEG.CONFIGURE.extra += --enable-libvpl
   FFMPEG.CONFIGURE.extra += --enable-filter=vpp_qsv
+  FFMPEG.CONFIGURE.extra += --enable-encoder=hevc_qsv
+  FFMPEG.CONFIGURE.extra += --enable-encoder=h264_qsv
+  FFMPEG.CONFIGURE.extra += --enable-encoder=av1_qsv
 endif
 
 ifeq (1,$(FEATURE.vce))
