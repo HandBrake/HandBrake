@@ -60,27 +60,6 @@
                                            dispatch_queue_attr_make_with_autorelease_frequency(DISPATCH_QUEUE_SERIAL,
                                                                                                DISPATCH_AUTORELEASE_FREQUENCY_WORK_ITEM));
 
-        if (@available(macOS 10.14, *))
-        {
-            UNUserNotificationCenter *center = UNUserNotificationCenter.currentNotificationCenter;
-            center.delegate = self;
-
-            UNNotificationAction *action = [UNNotificationAction actionWithIdentifier:HBQueueItemNotificationShowAction
-                                                                                title:NSLocalizedString(@"Show", @"Notification -> Show in Finder")
-                                                                              options:UNNotificationActionOptionForeground];
-            UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:HBQueueItemNotificationShowCategory
-                                                                                      actions:@[action]
-                                                                            intentIdentifiers:@[]
-                                                                                      options:0];
-            [center setNotificationCategories:[NSSet setWithObject:category]];
-            [center requestAuthorizationWithOptions:UNAuthorizationOptionSound | UNAuthorizationOptionAlert
-                                  completionHandler:^(BOOL granted, NSError * _Nullable error) {}];
-        }
-        else
-        {
-            NSUserNotificationCenter.defaultUserNotificationCenter.delegate = self;
-        }
-
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueLowSpaceAlertNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
             [self queueLowDiskSpaceAlert];
         }];
@@ -105,6 +84,30 @@
     }
 
     return self;
+}
+
+- (void)initNotificationCenter
+{
+    if (@available(macOS 10.14, *))
+    {
+        UNUserNotificationCenter *center = UNUserNotificationCenter.currentNotificationCenter;
+        center.delegate = self;
+
+        UNNotificationAction *action = [UNNotificationAction actionWithIdentifier:HBQueueItemNotificationShowAction
+                                                                            title:NSLocalizedString(@"Show", @"Notification -> Show in Finder")
+                                                                          options:UNNotificationActionOptionForeground];
+        UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:HBQueueItemNotificationShowCategory
+                                                                                  actions:@[action]
+                                                                        intentIdentifiers:@[]
+                                                                                  options:0];
+        [center setNotificationCategories:[NSSet setWithObject:category]];
+        [center requestAuthorizationWithOptions:UNAuthorizationOptionSound | UNAuthorizationOptionAlert
+                              completionHandler:^(BOOL granted, NSError * _Nullable error) {}];
+    }
+    else
+    {
+        NSUserNotificationCenter.defaultUserNotificationCenter.delegate = self;
+    }
 }
 
 - (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window

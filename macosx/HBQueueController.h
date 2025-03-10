@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HBQueueController : NSWindowController <NSToolbarDelegate, NSWindowDelegate>
 
 - (instancetype)initWithQueue:(HBQueue *)queue;
+- (void)initNotificationCenter;
 
 @property (nonatomic, weak, readonly) HBQueue *queue;
-
 @property (nonatomic, weak, nullable) HBAppDelegate *delegate;
 
 - (IBAction)toggleStartCancel:(id)sender;
