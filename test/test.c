@@ -1516,6 +1516,7 @@ static void ShowHelp(void)
 "                           Use 'videotoolbox' to enable VideoToolbox    \n"
 #else
 "                           Use 'nvdec' to enable NVDec                  \n"
+"                           Use 'qsv' to enable QSV decoding             \n"
 #endif
 "   --disable-hw-decoding   Disable hardware decoding of the video track,\n"
 "                           forcing software decoding instead\n"
@@ -3246,6 +3247,13 @@ static int ParseOptions( int argc, char ** argv )
                         }
 #endif
                     }
+#if HB_PROJECT_FEATURE_QSV
+                    else if (!strcmp(optarg, "qsv"))
+                    {
+                        qsv_decode = 1;
+                        hw_decode = HB_DECODE_SUPPORT_QSV;
+                    }
+#endif
                     else if (!strcmp(optarg, "mf"))
                     {
                         hw_decode = HB_DECODE_SUPPORT_MF;
@@ -4420,6 +4428,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (qsv_decode != -1)
     {
         hb_dict_set(preset, "VideoQSVDecode", hb_value_int(qsv_decode));
+        hw_decode = qsv_decode ? HB_DECODE_SUPPORT_QSV : 0;
     }
 #endif
     if (hw_decode != -1)
