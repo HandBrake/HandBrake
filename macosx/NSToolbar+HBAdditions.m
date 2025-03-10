@@ -15,12 +15,14 @@
                                   symbolName:(NSString *)symbolName
                                        image:(NSString *)imageName
                                        style:(HBToolbarItemStyle)style
+                                      target:(nullable id)target
                                       action:(SEL)action
 {
     NSToolbarItem *item = [[HBToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
     item.label = label;
     item.paletteLabel = palettelabel ? palettelabel : label;
     item.toolTip = palettelabel;
+    item.target = target;
     item.action = action;
     [item HB_setSymbol:symbolName configuration:nil fallbackImage:imageName];
 

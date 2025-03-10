@@ -194,7 +194,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         self.window.toolbarStyle = NSWindowToolbarStyleExpanded;
     }
 
-    self.toolbarDelegate = [[HBControllerToolbarDelegate alloc] init];
+    self.toolbarDelegate = [[HBControllerToolbarDelegate alloc] initWithTarget:self];
 
     NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"HBMainWindowToolbar2"];
     toolbar.delegate = self.toolbarDelegate;

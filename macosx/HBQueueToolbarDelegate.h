@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBQueueToolbarDelegate : NSObject<NSToolbarDelegate>
 
+- (instancetype)initWithTarget:(id)target;
+
 - (void)updateToolbarButtonsState:(HBQueue *)queue toolbar:(NSToolbar *)toolbar;
 
 @end

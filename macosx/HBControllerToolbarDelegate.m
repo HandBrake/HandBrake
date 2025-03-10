@@ -15,6 +15,8 @@
 
 @interface HBControllerToolbarDelegate ()
 
+@property (nonatomic, nullable, weak) id target;
+
 @property (nonatomic, readonly) id redConf;
 @property (nonatomic, readonly) id greenConf;
 
@@ -22,11 +24,13 @@
 
 @implementation HBControllerToolbarDelegate
 
-- (instancetype)init
+- (instancetype)initWithTarget:(id)target
 {
     self = [super init];
     if (self)
     {
+        _target = target;
+
         if (@available(macOS 12.0, *))
         {
             _redConf = [NSImageSymbolConfiguration configurationWithPaletteColors:@[NSColor.systemRedColor]];
@@ -48,6 +52,7 @@
                                                 symbolName:@"film"
                                                      image:@"source"
                                                      style:style
+                                                    target:self.target
                                                     action:@selector(browseSources:)];
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_ADD])
@@ -64,12 +69,13 @@
         NSToolbarItem *item = [[HBToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
         item.label = label;
         item.paletteLabel = label;
+        item.target = self.target;
 
         if (@available(macOS 14, *))
         {
             NSImage *image = [NSImage imageWithSystemSymbolName:@"photo.badge.plus" accessibilityDescription:nil];
 
-            NSComboButton *button = [NSComboButton comboButtonWithImage:image menu:menu target:nil action:action];
+            NSComboButton *button = [NSComboButton comboButtonWithImage:image menu:menu target:self.target action:action];
             NSDictionary *items = NSDictionaryOfVariableBindings(button);
             NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[button(>=62)]" options:0 metrics:nil views:items];
             [NSLayoutConstraint activateConstraints:constraints];
@@ -82,7 +88,7 @@
 
             NSSegmentedControl *control = [HBSegmentedControl segmentedControlWithImages:@[image, image]
                                                                             trackingMode:NSSegmentSwitchTrackingMomentary
-                                                                                  target:nil action:action];
+                                                                                  target:self.target action:action];
             [control setWidth:36 forSegment:0];
             [control setMenu:menu forSegment:1];
             [control setShowsMenuIndicator:YES forSegment:1];
@@ -95,6 +101,7 @@
         {
             HBComboView *view = [[HBComboView alloc] initWithTitle:label
                                                              image:[NSImage imageNamed:@"addqueue"]
+                                                            target:self.target
                                                             action:action
                                                               menu:menu];
             item.view = view;
@@ -110,6 +117,7 @@
                                                 symbolName:@"play.fill"
                                                      image:@"encode"
                                                      style:style
+                                                    target:self.target
                                                     action:@selector(toggleStartCancel:)];
         if (@available(macOS 13.0, *))
         {
@@ -128,6 +136,7 @@
                                                 symbolName:@"pause.fill"
                                                      image:@"pauseencode"
                                                      style:style
+                                                    target:self.target
                                                     action:@selector(togglePauseResume:)];
         if (@available(macOS 13.0, *))
         {
@@ -145,6 +154,7 @@
                                                 symbolName:@"slider.horizontal.3"
                                                      image:@"presets"
                                                      style:style | HBToolbarItemStyleButton
+                                                    target:self.target
                                                     action:@selector(togglePresets:)];
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_PREVIEW])
@@ -155,6 +165,7 @@
                                                 symbolName:@"eye"
                                                      image:@"preview"
                                                      style:style
+                                                    target:self.target
                                                     action:@selector(showPreviewWindow:)];
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_QUEUE])
@@ -165,6 +176,7 @@
                                                 symbolName:@"photo.stack"
                                                      image:@"showqueue"
                                                      style:style | HBToolbarItemStyleButton
+                                                    target:nil
                                                     action:@selector(showQueueWindow:)];
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_ACTIVITY])
@@ -175,6 +187,7 @@
                                                 symbolName:@"text.viewfinder"
                                                      image:@"activity"
                                                      style:style
+                                                    target:nil
                                                     action:@selector(showOutputPanel:)];
     }
     return nil;

@@ -126,7 +126,7 @@
     }
 
     // Set up toolbar
-    self.toolbarDelegate = [[HBQueueToolbarDelegate alloc] init];
+    self.toolbarDelegate = [[HBQueueToolbarDelegate alloc] initWithTarget:self];
 
     NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"HBQueueWindowToolbar2"];
     toolbar.delegate = self.toolbarDelegate;

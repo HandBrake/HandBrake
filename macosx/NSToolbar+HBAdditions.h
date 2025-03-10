@@ -29,6 +29,7 @@ typedef NS_OPTIONS(NSUInteger, HBToolbarItemStyle) {
                                   symbolName:(NSString *)symbolName
                                        image:(NSString *)imageName
                                        style:(HBToolbarItemStyle)style
+                                      target:(nullable id)target
                                       action:(SEL)action;
 
 - (void)HB_setSymbol:(NSString *)symbolName configuration:(nullable id)configuration fallbackImage:(NSString *)imageName;
