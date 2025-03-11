@@ -148,8 +148,6 @@
 
         [self cleanPreviews];
     });
-
-    [self.queueController initNotificationCenter];
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)app
