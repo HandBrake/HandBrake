@@ -148,6 +148,30 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
         /* Audio Track Properties */
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Audio ScannedTrack
+        {
+            get
+            {
+                return this.scannedTrack;
+            }
+
+            set
+            {
+                this.scannedTrack = value;
+                this.NotifyOfPropertyChange(() => this.ScannedTrack);
+                this.NotifyOfPropertyChange(() => this.TrackReference);
+
+                // previously null should only happen on import / creation.
+                if (!string.IsNullOrEmpty(this.scannedTrack?.Name))
+                {
+                    this.TrackName = this.scannedTrack.Name;
+                }
+
+                this.GetDefaultMixdownIfNull();
+            }
+        }
+
         public double DRC
         {
             get
@@ -309,8 +333,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /* UI Only Properties */ 
-
         [JsonIgnore]
         public string AudioEncoderDisplayValue
         {
@@ -357,29 +379,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out samplerate);
 
                 this.SampleRate = samplerate;
-            }
-        }
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Audio ScannedTrack
-        {
-            get
-            {
-                return this.scannedTrack;
-            }
-
-            set
-            {
-                this.scannedTrack = value;
-                this.NotifyOfPropertyChange(() => this.ScannedTrack);
-                this.NotifyOfPropertyChange(() => this.TrackReference);
-
-                if (!string.IsNullOrEmpty(this.scannedTrack?.Name))
-                {
-                    this.TrackName = this.scannedTrack.Name;
-                }
-                
-                this.GetDefaultMixdownIfNull();
             }
         }
 
