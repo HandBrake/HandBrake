@@ -1116,6 +1116,49 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
     return NULL;
 }
 
+static uint8_t convert_pict_type(const AVPacket *pkt, uint16_t *sflags)
+{
+    const uint8_t *sd = av_packet_get_side_data(pkt, AV_PKT_DATA_QUALITY_STATS, NULL);
+
+    enum AVPictureType pict_type = sd ? sd[4] : AV_PICTURE_TYPE_NONE;
+
+    uint16_t flags = HB_FLAG_FRAMETYPE_REF;
+    uint8_t retval = 0;
+
+    switch (pict_type)
+    {
+        case AV_PICTURE_TYPE_B:
+            retval = HB_FRAME_B;
+            break;
+
+        case AV_PICTURE_TYPE_S:
+        case AV_PICTURE_TYPE_P:
+        case AV_PICTURE_TYPE_SP:
+            retval = HB_FRAME_P;
+            break;
+
+        case AV_PICTURE_TYPE_BI:
+        case AV_PICTURE_TYPE_SI:
+        case AV_PICTURE_TYPE_I:
+        default:
+            retval = HB_FRAME_I;
+            break;
+    }
+
+    if (pkt->flags & AV_PKT_FLAG_KEY)
+    {
+        flags |= HB_FLAG_FRAMETYPE_KEY;
+    }
+
+    if (pkt->flags & AV_PKT_FLAG_DISPOSABLE)
+    {
+        flags &= ~HB_FLAG_FRAMETYPE_REF;
+    }
+
+    *sflags = flags;
+    return retval;
+}
+
 static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
 {
     hb_work_private_t * pv = w->private_data;
@@ -1143,17 +1186,13 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
         out->s.start    = get_frame_start(pv, frameno);
         out->s.duration = get_frame_duration(pv, frameno);
         out->s.stop     = out->s.stop + out->s.duration;
-        // libav 12 deprecated context->coded_frame, so we can't determine
-        // the exact frame type any more. So until I can completely
-        // wire up ffmpeg with AV_PKT_DISPOSABLE_FRAME, all frames
-        // must be considered to potentially be reference frames
-        out->s.flags     = HB_FLAG_FRAMETYPE_REF;
-        out->s.frametype = 0;
-        if (pv->pkt->flags & AV_PKT_FLAG_KEY)
+        out->s.frametype = convert_pict_type(pv->pkt, &out->s.flags);
+
+        if (out->s.flags & HB_FLAG_FRAMETYPE_KEY)
         {
-            out->s.flags |= HB_FLAG_FRAMETYPE_KEY;
             hb_chapter_dequeue(pv->chapter_queue, out);
         }
+
         out = process_delay_list(pv, out);
 
         hb_buffer_list_append(list, out);
