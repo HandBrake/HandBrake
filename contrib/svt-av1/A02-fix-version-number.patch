@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 69ef380d..58f3bf7d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,7 +16,7 @@ if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
+                     "Please use the Build folder or create your own.")
+ endif()
+ 
+-project(svt-av1 VERSION 3.0.0
++project(svt-av1 VERSION 3.0.1
+     LANGUAGES C CXX)
+ 
+ set(VERSION_TAG "")
+diff --git a/Source/Lib/CMakeLists.txt b/Source/Lib/CMakeLists.txt
+index e1e69269..7d6a3be8 100644
+--- a/Source/Lib/CMakeLists.txt
++++ b/Source/Lib/CMakeLists.txt
+@@ -14,7 +14,7 @@
+ # Shared Encoder Version
+ set(ENC_VERSION_MAJOR 3)
+ set(ENC_VERSION_MINOR 0)
+-set(ENC_VERSION_PATCH 0)
++set(ENC_VERSION_PATCH 1)
+ set(ENC_VERSION ${ENC_VERSION_MAJOR}.${ENC_VERSION_MINOR}.${ENC_VERSION_PATCH})
+ 
+ add_library(common_lib INTERFACE)
