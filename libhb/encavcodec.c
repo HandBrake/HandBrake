@@ -1570,31 +1570,43 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
     {
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_NVENC_H264:
-        case HB_VCODEC_FFMPEG_QSV_H264:
         case HB_VCODEC_FFMPEG_MF_H264:
             level_names = hb_h264_level_names;
             level_values = hb_h264_level_values;
+            break;
+
+        case HB_VCODEC_FFMPEG_QSV_H264:
+            level_names = hb_qsv_h264_level_names;
+            level_values = hb_qsv_h264_levels;
             break;
 
         case HB_VCODEC_FFMPEG_VCE_H265:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
-        case HB_VCODEC_FFMPEG_QSV_H265:
-        case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
         case HB_VCODEC_FFMPEG_MF_H265:
             level_names = hb_h265_level_names;
             level_values = hb_h265_level_values;
             break;
 
+        case HB_VCODEC_FFMPEG_QSV_H265:
+        case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+            level_names = hb_qsv_h265_level_names;
+            level_values = hb_qsv_h265_levels;
+            break;
+
         case HB_VCODEC_FFMPEG_VCE_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
-        case HB_VCODEC_FFMPEG_QSV_AV1:
-        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
         case HB_VCODEC_FFMPEG_MF_AV1:
             level_names = hb_av1_level_names;
             level_values = hb_av1_level_values;
+            break;
+
+        case HB_VCODEC_FFMPEG_QSV_AV1:
+        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
+            level_names = hb_qsv_av1_level_names;
+            level_values = hb_qsv_av1_levels;
             break;
 
         case HB_VCODEC_FFMPEG_FFV1:

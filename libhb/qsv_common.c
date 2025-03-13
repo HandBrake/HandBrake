@@ -175,80 +175,6 @@ static hb_triplet_t hb_qsv_hyper_encode_modes[] =
     { "Hyper Encode adaptive", "adaptive",      MFX_HYPERMODE_ADAPTIVE, },
     { NULL,                                                             },
 };
-static hb_triplet_t hb_qsv_h264_levels[] =
-{
-    { "1.0", "1.0", MFX_LEVEL_AVC_1,  },
-    { "1b",  "1b",  MFX_LEVEL_AVC_1b, },
-    { "1.1", "1.1", MFX_LEVEL_AVC_11, },
-    { "1.2", "1.2", MFX_LEVEL_AVC_12, },
-    { "1.3", "1.3", MFX_LEVEL_AVC_13, },
-    { "2.0", "2.0", MFX_LEVEL_AVC_2,  },
-    { "2.1", "2.1", MFX_LEVEL_AVC_21, },
-    { "2.2", "2.2", MFX_LEVEL_AVC_22, },
-    { "3.0", "3.0", MFX_LEVEL_AVC_3,  },
-    { "3.1", "3.1", MFX_LEVEL_AVC_31, },
-    { "3.2", "3.2", MFX_LEVEL_AVC_32, },
-    { "4.0", "4.0", MFX_LEVEL_AVC_4,  },
-    { "4.1", "4.1", MFX_LEVEL_AVC_41, },
-    { "4.2", "4.2", MFX_LEVEL_AVC_42, },
-    { "5.0", "5.0", MFX_LEVEL_AVC_5,  },
-    { "5.1", "5.1", MFX_LEVEL_AVC_51, },
-    { "5.2", "5.2", MFX_LEVEL_AVC_52, },
-    { NULL,                           },
-};
-static const char * const hb_h264_qsv_level_names[] =
-{
-    "auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0",
-    "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", NULL,
-};
-static hb_triplet_t hb_qsv_h265_levels[] =
-{
-    { "1.0", "1.0", MFX_LEVEL_HEVC_1,  },
-    { "2.0", "2.0", MFX_LEVEL_HEVC_2,  },
-    { "2.1", "2.1", MFX_LEVEL_HEVC_21, },
-    { "3.0", "3.0", MFX_LEVEL_HEVC_3,  },
-    { "3.1", "3.1", MFX_LEVEL_HEVC_31, },
-    { "4.0", "4.0", MFX_LEVEL_HEVC_4,  },
-    { "4.1", "4.1", MFX_LEVEL_HEVC_41, },
-    { "5.0", "5.0", MFX_LEVEL_HEVC_5,  },
-    { "5.1", "5.1", MFX_LEVEL_HEVC_51, },
-    { "5.2", "5.2", MFX_LEVEL_HEVC_52, },
-    { "6.0", "6.0", MFX_LEVEL_HEVC_6,  },
-    { "6.1", "6.1", MFX_LEVEL_HEVC_61, },
-    { "6.2", "6.2", MFX_LEVEL_HEVC_62, },
-    { NULL,                            },
-};
-static const char * const hb_h265_qsv_level_names[] =
-{
-    "auto", "1.0", "2.0", "2.1", "3.0", "3.1", "4.0", "4.1",
-    "5.0", "5.1", "5.2", "6.0", "6.1", "6.2", NULL,
-};
-static hb_triplet_t hb_qsv_av1_levels[] =
-{
-    { "2.0", "2.0", MFX_LEVEL_AV1_2,   },
-    { "2.1", "2.1", MFX_LEVEL_AV1_21,  },
-    { "2.2", "2.2", MFX_LEVEL_AV1_22,  },
-    { "2.3", "2.3", MFX_LEVEL_AV1_23,  },
-    { "3.0", "3.0", MFX_LEVEL_AV1_3,   },
-    { "3.1", "3.1", MFX_LEVEL_AV1_31,  },
-    { "3.2", "3.2", MFX_LEVEL_AV1_32,  },
-    { "3.3", "3.3", MFX_LEVEL_AV1_33,  },
-    { "4.0", "4.0", MFX_LEVEL_AV1_4,   },
-    { "4.1", "4.1", MFX_LEVEL_AV1_41,  },
-    { "4.2", "4.2", MFX_LEVEL_AV1_42,  },
-    { "4.3", "4.3", MFX_LEVEL_AV1_43,  },
-    { "5.0", "5.0", MFX_LEVEL_AV1_5,   },
-    { "5.1", "5.1", MFX_LEVEL_AV1_51,  },
-    { "5.2", "5.2", MFX_LEVEL_AV1_52,  },
-    { "5.3", "5.3", MFX_LEVEL_AV1_53,  },
-    { NULL,                            },
-};
-static const char * const hb_av1_qsv_level_names[] =
-{
-    "auto", "2.0", "2.1", "2.2", "2.3", "3.0", "3.1", "3.2",
-    "3.3", "4.0", "4.1", "4.2", "4.3", "5.0", "5.1", "5.2",
-    "5.3", NULL,
-};
 
 static const enum AVPixelFormat hb_qsv_pix_fmts[] =
 {
@@ -3249,52 +3175,6 @@ int hb_qsv_profile_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char 
     return 0;
 }
 
-int hb_qsv_level_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char *level_key)
-{
-    hb_triplet_t *level = NULL;
-    if (level_key != NULL && *level_key && strcasecmp(level_key, "auto"))
-    {
-        switch (param->videoParam->mfx.CodecId)
-        {
-            case MFX_CODEC_AVC:
-                level = hb_triplet4key(hb_qsv_h264_levels, level_key);
-                break;
-
-            case MFX_CODEC_HEVC:
-                level = hb_triplet4key(hb_qsv_h265_levels, level_key);
-                break;
-
-            case MFX_CODEC_AV1:
-                level = hb_triplet4key(hb_qsv_av1_levels, level_key);
-                break;
-
-            default:
-                break;
-        }
-        if (level == NULL)
-        {
-            return -1;
-        }
-        if (param->videoParam->mfx.CodecId == MFX_CODEC_AVC)
-        {
-            if (info->capabilities & HB_QSV_CAP_MSDK_API_1_6)
-            {
-                param->videoParam->mfx.CodecLevel = FFMIN(MFX_LEVEL_AVC_52, level->value);
-            }
-            else
-            {
-                // Media SDK API < 1.6, MFX_LEVEL_AVC_52 unsupported
-                param->videoParam->mfx.CodecLevel = FFMIN(MFX_LEVEL_AVC_51, level->value);
-            }
-        }
-        else
-        {
-            param->videoParam->mfx.CodecLevel = level->value;
-        }
-    }
-    return 0;
-}
-
 const char* const* hb_qsv_preset_get_names()
 {
     if (hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index())) >= QSV_G3)
@@ -3330,13 +3210,13 @@ const char* const* hb_qsv_level_get_names(int encoder)
     switch (encoder)
     {
         case HB_VCODEC_FFMPEG_QSV_H264:
-            return hb_h264_qsv_level_names;
+            return hb_qsv_h264_level_names;
         case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
         case HB_VCODEC_FFMPEG_QSV_H265:
-            return hb_h265_qsv_level_names;
+            return hb_qsv_h265_level_names;
         case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
         case HB_VCODEC_FFMPEG_QSV_AV1:
-            return hb_av1_qsv_level_names;
+            return hb_qsv_av1_level_names;
         default:
             return NULL;
     }
@@ -3646,29 +3526,6 @@ const char* hb_qsv_profile_name(uint32_t codec_id, uint16_t profile_id)
             break;
     }
     return profile != NULL ? profile->name : NULL;
-}
-
-const char* hb_qsv_level_name(uint32_t codec_id, uint16_t level_id)
-{
-    hb_triplet_t *level = NULL;
-    switch (codec_id)
-    {
-        case MFX_CODEC_AVC:
-            level = hb_triplet4value(hb_qsv_h264_levels, level_id);
-            break;
-
-        case MFX_CODEC_HEVC:
-            level = hb_triplet4value(hb_qsv_h265_levels, level_id);
-            break;
-
-        case MFX_CODEC_AV1:
-            level = hb_triplet4value(hb_qsv_av1_levels, level_id);
-            break;
-
-        default:
-            break;
-    }
-    return level != NULL ? level->name : NULL;
 }
 
 const char* hb_qsv_frametype_name(uint16_t qsv_frametype)

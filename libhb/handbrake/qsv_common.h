@@ -31,6 +31,97 @@ int  hb_qsv_impl_set_preferred(const char *name);
 #define HB_QSV_MINVERSION_MAJOR HB_QSV_MSDK_VERSION_MAJOR
 #define HB_QSV_MINVERSION_MINOR HB_QSV_MSDK_VERSION_MINOR
 
+static const char * const hb_qsv_h264_level_names[] =
+{
+    "auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0",
+    "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",  NULL,
+};
+
+static const int hb_qsv_h264_levels[] =
+{
+    MFX_LEVEL_UNKNOWN,
+    MFX_LEVEL_AVC_1,
+    MFX_LEVEL_AVC_1b,
+    MFX_LEVEL_AVC_11,
+    MFX_LEVEL_AVC_12,
+    MFX_LEVEL_AVC_13,
+    MFX_LEVEL_AVC_2,
+    MFX_LEVEL_AVC_21,
+    MFX_LEVEL_AVC_22,
+    MFX_LEVEL_AVC_3,
+    MFX_LEVEL_AVC_31,
+    MFX_LEVEL_AVC_32,
+    MFX_LEVEL_AVC_4,
+    MFX_LEVEL_AVC_41,
+    MFX_LEVEL_AVC_42,
+    MFX_LEVEL_AVC_5,
+    MFX_LEVEL_AVC_51,
+    MFX_LEVEL_AVC_52,
+    MFX_LEVEL_AVC_6,
+    MFX_LEVEL_AVC_61,
+    MFX_LEVEL_AVC_62,
+};
+
+static const char * const hb_qsv_h265_level_names[] =
+{
+    "auto", "1.0", "2.0", "2.1", "3.0", "3.1", "4.0", "4.1",
+    "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",  NULL,
+};
+
+static const int hb_qsv_h265_levels[] =
+{
+    MFX_LEVEL_UNKNOWN,
+    MFX_LEVEL_HEVC_1,
+    MFX_LEVEL_HEVC_2,
+    MFX_LEVEL_HEVC_21,
+    MFX_LEVEL_HEVC_3,
+    MFX_LEVEL_HEVC_31,
+    MFX_LEVEL_HEVC_4,
+    MFX_LEVEL_HEVC_41,
+    MFX_LEVEL_HEVC_5,
+    MFX_LEVEL_HEVC_51,
+    MFX_LEVEL_HEVC_52,
+    MFX_LEVEL_HEVC_6,
+    MFX_LEVEL_HEVC_61,
+    MFX_LEVEL_HEVC_62
+};
+
+static const char * const hb_qsv_av1_level_names[] =
+{
+    "auto", "2.0", "2.1", "2.2", "2.3", "3.0", "3.1", "3.2",
+    "3.3", "4.0", "4.1", "4.2", "4.3", "5.0", "5.1", "5.2",
+    "5.3", "6.0", "6.1", "6.2", "6.3", "7.0", "7.1", "7.2", "7.3", NULL,
+};
+
+static const int hb_qsv_av1_levels[] =
+{
+    MFX_LEVEL_UNKNOWN,
+    MFX_LEVEL_AV1_2,
+    MFX_LEVEL_AV1_21,
+    MFX_LEVEL_AV1_22,
+    MFX_LEVEL_AV1_23,
+    MFX_LEVEL_AV1_3,
+    MFX_LEVEL_AV1_31,
+    MFX_LEVEL_AV1_32,
+    MFX_LEVEL_AV1_33,
+    MFX_LEVEL_AV1_4,
+    MFX_LEVEL_AV1_41,
+    MFX_LEVEL_AV1_42,
+    MFX_LEVEL_AV1_43,
+    MFX_LEVEL_AV1_5,
+    MFX_LEVEL_AV1_51,
+    MFX_LEVEL_AV1_52,
+    MFX_LEVEL_AV1_53,
+    MFX_LEVEL_AV1_6,
+    MFX_LEVEL_AV1_61,
+    MFX_LEVEL_AV1_62,
+    MFX_LEVEL_AV1_63,
+    MFX_LEVEL_AV1_7,
+    MFX_LEVEL_AV1_71,
+    MFX_LEVEL_AV1_72,
+    MFX_LEVEL_AV1_73,
+};
+
 /*
  * Get & store all available Intel Quick Sync information:
  *
@@ -232,7 +323,6 @@ int hb_qsv_param_default_preset     (AVDictionary* av_opts, hb_qsv_param_t *para
 int hb_qsv_param_default            (hb_qsv_param_t *param, hb_qsv_info_t *info);
 int hb_qsv_param_parse              (AVDictionary  **av_opts, hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job,  const char *key, const char *value);
 int hb_qsv_profile_parse            (hb_qsv_param_t *param,                            hb_qsv_info_t *info, const char *profile_key, const int codec);
-int hb_qsv_level_parse              (hb_qsv_param_t *param,                            hb_qsv_info_t *info, const char *level_key);
 int hb_qsv_param_parse_dx_index     (hb_job_t *job, const int dx_index);
 
 typedef struct
@@ -253,7 +343,6 @@ hb_triplet_t* hb_triplet4key  (hb_triplet_t *triplets, const char *key);
 const char* hb_qsv_codec_name    (uint32_t codec_id);
 const char* hb_qsv_profile_name  (uint32_t codec_id, uint16_t profile_id);
 const char* hb_qsv_level_name    (uint32_t codec_id, uint16_t level_id);
-const char* hb_qsv_frametype_name(uint16_t qsv_frametype);
 uint8_t     hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags);
 
 const char* hb_qsv_impl_get_name(int impl);
