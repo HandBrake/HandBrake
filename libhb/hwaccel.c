@@ -269,6 +269,7 @@ int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx, hb_job_t *job)
 
     AVHWFramesContext *frames_ctx = (AVHWFramesContext *)ctx->hw_frames_ctx->data;
     frames_ctx->format = job->hw_pix_fmt;
+    frames_ctx->sw_format = job->output_pix_fmt;
     frames_ctx->width = ctx->width;
     frames_ctx->height = ctx->height;
 
