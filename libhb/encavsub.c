@@ -177,7 +177,7 @@ void encavsubClose(hb_encavsub_context_t *ctx)
         return;
     }
     avcodec_free_context(&ctx->context);
-    free(ctx->buffer);
+    av_free(ctx->buffer);
     free(ctx);
 }
 
