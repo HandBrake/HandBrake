@@ -1575,10 +1575,12 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
             level_values = hb_h264_level_values;
             break;
 
+#if HB_PROJECT_FEATURE_QSV
         case HB_VCODEC_FFMPEG_QSV_H264:
             level_names = hb_qsv_h264_level_names;
             level_values = hb_qsv_h264_levels;
             break;
+#endif
 
         case HB_VCODEC_FFMPEG_VCE_H265:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
@@ -1589,11 +1591,13 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
             level_values = hb_h265_level_values;
             break;
 
+#if HB_PROJECT_FEATURE_QSV
         case HB_VCODEC_FFMPEG_QSV_H265:
         case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
             level_names = hb_qsv_h265_level_names;
             level_values = hb_qsv_h265_levels;
             break;
+#endif
 
         case HB_VCODEC_FFMPEG_VCE_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1:
@@ -1603,11 +1607,13 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
             level_values = hb_av1_level_values;
             break;
 
+#if HB_PROJECT_FEATURE_QSV
         case HB_VCODEC_FFMPEG_QSV_AV1:
         case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
             level_names = hb_qsv_av1_level_names;
             level_values = hb_qsv_av1_levels;
             break;
+#endif
 
         case HB_VCODEC_FFMPEG_FFV1:
             level_names = hb_ffv1_level_names;
