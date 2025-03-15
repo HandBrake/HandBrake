@@ -67,64 +67,37 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 #endif
 
     // Build filter input
-#if HB_PROJECT_FEATURE_QSV
-    // Need to handle preview as special case
-    if (hb_qsv_full_path_is_enabled(graph->job) && init->pix_fmt != AV_PIX_FMT_YUV420P)
-    {
-        enum AVPixelFormat pix_fmt = init->hw_pix_fmt;
-        if (pix_fmt == AV_PIX_FMT_NONE)
-        {
-            pix_fmt = init->pix_fmt;
-        }
-
-        par = av_buffersrc_parameters_alloc();
-        par->format = pix_fmt;
-        // TODO: qsv_vpp changes time_base, adapt settings to hb pipeline
-        par->frame_rate.num = init->time_base.den;
-        par->frame_rate.den = init->time_base.num;
-        par->width = init->geometry.width;
-        par->height = init->geometry.height;
-        par->sample_aspect_ratio.num = init->geometry.par.num;
-        par->sample_aspect_ratio.den = init->geometry.par.den;
-        par->time_base.num = init->time_base.num;
-        par->time_base.den = init->time_base.den;
-
-        filter_args = hb_strdup_printf(
-                "video_size=%dx%d:pix_fmt=%d:sar=%d/%d:"
-                "colorspace=%d:range=%d:"
-                "time_base=%d/%d:frame_rate=%d/%d",
-                init->geometry.width, init->geometry.height, pix_fmt,
-                init->geometry.par.num, init->geometry.par.den,
-                init->color_matrix, init->color_range,
-                init->time_base.num, init->time_base.den,
-                init->vrate.num, init->vrate.den);
-
-        AVBufferRef *hb_hw_frames_ctx = NULL;
-
-        if (pix_fmt == AV_PIX_FMT_QSV)
-        {
-            result = hb_qsv_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, init->pix_fmt, HB_QSV_POOL_SURFACE_SIZE, 0, &hb_hw_frames_ctx);
-            if (result < 0)
-            {
-                hb_error("hb_create_ffmpeg_pool failed");
-                goto fail;
-            }
-        }
-        else
-        {
-            hb_qsv_device_init(graph->job);
-            for (int i = 0; i < graph->avgraph->nb_filters; i++)
-            {
-                graph->avgraph->filters[i]->hw_device_ctx = av_buffer_ref(graph->job->qsv.ctx->hb_hw_device_ctx);
-            }
-        }
-        par->hw_frames_ctx = hb_hw_frames_ctx;
-    }
-    else
-#endif
     {
         enum AVPixelFormat pix_fmt = init->pix_fmt;
-        if (init->hw_pix_fmt == AV_PIX_FMT_CUDA)
+        if (init->hw_pix_fmt == AV_PIX_FMT_QSV)
+        {
+            par = av_buffersrc_parameters_alloc();
+            par->format = init->hw_pix_fmt;
+            // TODO: qsv_vpp changes time_base, adapt settings to hb pipeline
+            par->frame_rate.num = init->time_base.den;
+            par->frame_rate.den = init->time_base.num;
+
+            par->width = init->geometry.width;
+            par->height = init->geometry.height;
+
+            par->sample_aspect_ratio.num = init->geometry.par.num;
+            par->sample_aspect_ratio.den = init->geometry.par.den;
+
+            par->time_base.num = init->time_base.num;
+            par->time_base.den = init->time_base.den;
+            par->hw_frames_ctx = hb_hwaccel_init_hw_frames_ctx((AVBufferRef*)init->job->hw_device_ctx,
+                                                    init->pix_fmt,
+                                                    init->hw_pix_fmt,
+                                                    par->width,
+                                                    par->height,
+                                                            32);
+            if (!par->hw_frames_ctx)
+            {   
+                goto fail;
+            }
+            pix_fmt = init->hw_pix_fmt;
+        }
+        else if (init->hw_pix_fmt == AV_PIX_FMT_CUDA)
         {
             par = av_buffersrc_parameters_alloc();
             par->format = init->hw_pix_fmt;
@@ -136,7 +109,8 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
                                                     init->pix_fmt,
                                                     init->hw_pix_fmt,
                                                     par->width,
-                                                    par->height);
+                                                    par->height,
+                                                             0);
             if (!par->hw_frames_ctx)
             {   
                 goto fail;
@@ -317,15 +291,22 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
     {
         hb_buffer_t * buf;
 #if HB_PROJECT_FEATURE_QSV
-        if (hb_qsv_hw_filters_via_video_memory_are_enabled(graph->job))
+        if (hb_hwaccel_is_full_hardware_pipeline_enabled(graph->job) &&
+            hb_qsv_decode_is_enabled(graph->job))
         {
-            buf = hb_qsv_copy_avframe_to_video_buffer(graph->job, graph->frame, graph->out_time_base, 1);
+            AVBufferRef *hw_frames_ctx = av_buffersink_get_hw_frames_ctx(graph->output);
+            if (!hw_frames_ctx)
+            {
+                hb_error("hb_avfilter_get_buf: failed to get hw_frames_ctx from sink");
+            }
+            else
+            {
+                // copy hw frame ctx from filter graph for future encoder initialization
+                graph->job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx = av_buffer_ref(hw_frames_ctx);
+            }
         }
-        else
-#endif
-        {
-            buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
-        }
+ #endif
+        buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
         av_frame_unref(graph->frame);
         return buf;
     }

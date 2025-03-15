@@ -1408,6 +1408,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     if (job->qsv.ctx) {
         job->qsv.ctx->dx_index = adapter_index;
     }
+    // Prefer to use QSV decode when QSV encoder is enabled
+    if (!job->hw_decode && job->qsv.decode && hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec)) {
+        job->hw_decode = HB_DECODE_SUPPORT_QSV;
+    }
 #endif
     // If both vbitrate and vquality were specified, vbitrate is used;
     // we need to ensure the unused rate control mode is always set to an

@@ -267,13 +267,22 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
         case HB_VCODEC_X264_10BIT:
             w = hb_get_work(h, WORK_ENCX264);
             break;
-        case HB_VCODEC_QSV_H264:
-        case HB_VCODEC_QSV_H265:
-        case HB_VCODEC_QSV_H265_10BIT:
-        case HB_VCODEC_QSV_AV1:
-        case HB_VCODEC_QSV_AV1_10BIT:
-            w = hb_get_work(h, WORK_ENCQSV);
+#if HB_PROJECT_FEATURE_QSV
+        case HB_VCODEC_FFMPEG_QSV_H264:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_H264;
             break;
+        case HB_VCODEC_FFMPEG_QSV_H265:
+        case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_HEVC;
+            break;
+        case HB_VCODEC_FFMPEG_QSV_AV1:
+        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_AV1;
+            break;
+#endif
         case HB_VCODEC_THEORA:
             w = hb_get_work(h, WORK_ENCTHEORA);
             break;
@@ -611,11 +620,11 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X265_10BIT:
                 case HB_VCODEC_X265_12BIT:
                 case HB_VCODEC_X265_16BIT:
-                case HB_VCODEC_QSV_H264:
-                case HB_VCODEC_QSV_H265:
-                case HB_VCODEC_QSV_H265_10BIT:
-                case HB_VCODEC_QSV_AV1:
-                case HB_VCODEC_QSV_AV1_10BIT:
+                case HB_VCODEC_FFMPEG_QSV_H264:
+                case HB_VCODEC_FFMPEG_QSV_H265:
+                case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+                case HB_VCODEC_FFMPEG_QSV_AV1:
+                case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
                 case HB_VCODEC_FFMPEG_VCE_H264:
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
@@ -647,11 +656,11 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X265_8BIT:
                 case HB_VCODEC_X265_10BIT:
                 case HB_VCODEC_X265_12BIT:
-                case HB_VCODEC_QSV_H264:
-                case HB_VCODEC_QSV_H265:
-                case HB_VCODEC_QSV_H265_10BIT:
-                case HB_VCODEC_QSV_AV1:
-                case HB_VCODEC_QSV_AV1_10BIT:
+                case HB_VCODEC_FFMPEG_QSV_H264:
+                case HB_VCODEC_FFMPEG_QSV_H265:
+                case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+                case HB_VCODEC_FFMPEG_QSV_AV1:
+                case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
                 case HB_VCODEC_FFMPEG_VCE_H264:
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
@@ -1808,7 +1817,8 @@ static void do_job(hb_job_t *job)
         {
             hb_hwaccel_hw_ctx_init(job->title->video_codec_param,
                                    job->hw_decode,
-                                   &job->hw_device_ctx);
+                                   &job->hw_device_ctx,
+                                   job);
         }
 
         sanitize_dynamic_hdr_metadata_passthru(job);
@@ -2286,15 +2296,6 @@ cleanup:
 
     hb_buffer_pool_free();
     hb_hwaccel_hw_ctx_close(&job->hw_device_ctx);
-
-#if HB_PROJECT_FEATURE_QSV
-    if (!job->indepth_scan &&
-        (job->pass_id != HB_PASS_ENCODE_ANALYSIS) &&
-        hb_qsv_is_enabled(job))
-    {
-        hb_qsv_context_uninit(job);
-    }
-#endif
 }
 
 static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )

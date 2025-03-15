@@ -10,10 +10,95 @@
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/nvenc_common.h"
-
+#include "handbrake/qsv_common.h"
 #ifdef __APPLE__
 #include "platform/macosx/vt_common.h"
 #endif
+
+static int is_encoder_supported(int encoder_id)
+{
+    switch (encoder_id)
+    {
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+        case HB_VCODEC_FFMPEG_QSV_H264:
+        case HB_VCODEC_FFMPEG_QSV_H265:
+        case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+        case HB_VCODEC_FFMPEG_QSV_AV1:
+        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
+            return 1;
+        default:
+            return 0;
+    }
+}
+
+static int are_filters_supported(hb_job_t * job)
+{
+    int ret = 0;
+#ifdef __APPLE__
+    if (job->hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+    {
+        ret = hb_vt_are_filters_supported(job->list_filter);
+    }
+#endif
+    if (job->hw_decode & HB_DECODE_SUPPORT_NVDEC)
+    {
+        ret = hb_nvenc_are_filters_supported(job->list_filter);
+    }
+#if HB_PROJECT_FEATURE_QSV
+    if (job->hw_decode & HB_DECODE_SUPPORT_QSV)
+    {
+        ret = hb_qsv_are_filters_supported(job);
+    }
+#endif
+    return ret;
+}
+
+int hb_hwaccel_is_enabled(hb_job_t *job)
+{
+    return job != NULL &&
+           (
+              (
+                (job->title->video_decode_support & HB_DECODE_SUPPORT_HWACCEL) && 
+                (job->hw_decode & HB_DECODE_SUPPORT_HWACCEL)
+              )
+#if HB_PROJECT_FEATURE_QSV
+              || hb_qsv_decode_is_enabled(job)
+#endif
+           );
+}
+
+int hb_hwaccel_is_full_hardware_pipeline_enabled(hb_job_t *job)
+{
+    return hb_hwaccel_is_enabled(job) &&
+            are_filters_supported(job) &&
+            is_encoder_supported(job->vcodec);
+}
+
+int hb_hwaccel_decode_is_enabled(hb_job_t *job)
+{
+    if (job != NULL)
+    {
+        if (job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW)
+        {
+            return hb_hwaccel_is_enabled(job);
+        }
+        else
+        {
+            return hb_hwaccel_is_full_hardware_pipeline_enabled(job);
+        }
+    }
+    else
+    {
+        return 0;
+    }
+}
 
 enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name)
 {
@@ -24,6 +109,9 @@ enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name
 
     const AVCodec *codec = avcodec_find_decoder(codec_id);
     enum AVHWDeviceType hw_type = av_hwdevice_find_type_by_name(hwdevice_name);
+    if (hw_type == AV_HWDEVICE_TYPE_QSV) {
+        return 1;
+    }
 
     if (hw_type != AV_HWDEVICE_TYPE_NONE)
     {
@@ -56,6 +144,16 @@ enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPi
         {
             if (*p == job->hw_pix_fmt)
             {
+#if HB_PROJECT_FEATURE_QSV
+                if (*p == AV_PIX_FMT_QSV)
+                {
+                    if (job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx)
+                    {
+                        // in case if decoder and encoder have the same size
+                        ctx->hw_frames_ctx = av_buffer_ref(job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx);
+                    }
+                }
+#endif
                 return *p;
             }
         }
@@ -69,7 +167,7 @@ enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPi
     return AV_PIX_FMT_NONE;
 }
 
-int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx)
+int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx, hb_job_t *job)
 {
     enum AVHWDeviceType hw_type = AV_HWDEVICE_TYPE_NONE;
     enum AVPixelFormat pix_fmt = AV_PIX_FMT_NONE;
@@ -85,6 +183,22 @@ int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx)
     {
         hw_type = av_hwdevice_find_type_by_name("cuda");
     }
+#if HB_PROJECT_FEATURE_QSV
+    else if (hw_decode & HB_DECODE_SUPPORT_QSV)
+    {
+        AVBufferRef *ctx = NULL;
+        hw_type = av_hwdevice_find_type_by_name("qsv");
+        pix_fmt = AV_PIX_FMT_QSV;
+        err = hb_qsv_device_init(job, (void**)&ctx);
+        if (err < 0)
+        {
+            hb_error("hwaccel: failed to create hwdevice");
+            return err;
+        }
+        *hw_device_ctx = av_buffer_ref(ctx);
+        return err;
+    }
+#endif
     else if (hw_decode & HB_DECODE_SUPPORT_MF)
     {
         hw_type = av_hwdevice_find_type_by_name("d3d11va");
@@ -136,12 +250,21 @@ int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx, hb_job_t *job)
 {
     if (!ctx->hw_device_ctx)
     {
-        hb_error("hwaccel: failed to initialize hw frames context");
+        hb_error("hwaccel: failed to initialize hw frames context - no hw_device_ctx");
         return 1;
     }
 
     ctx->get_format = hw_hwaccel_get_hw_format;
     ctx->pix_fmt = job->hw_pix_fmt;
+#if HB_PROJECT_FEATURE_QSV
+    if (hb_hwaccel_is_full_hardware_pipeline_enabled(job) &&
+            hb_qsv_decode_is_enabled(job))
+    {
+        ctx->extra_hw_frames = 32;
+        ctx->sw_pix_fmt = job->input_pix_fmt;
+    }
+#endif
+
     ctx->hw_frames_ctx = av_hwframe_ctx_alloc(ctx->hw_device_ctx);
 
     AVHWFramesContext *frames_ctx = (AVHWFramesContext *)ctx->hw_frames_ctx->data;
@@ -150,9 +273,26 @@ int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx, hb_job_t *job)
     frames_ctx->width = ctx->width;
     frames_ctx->height = ctx->height;
 
+#if HB_PROJECT_FEATURE_QSV
+    if (hb_hwaccel_is_full_hardware_pipeline_enabled(job) &&
+            hb_qsv_decode_is_enabled(job))
+    {
+        // Use input pix format for decoder and filters frame pools, output frame pools are created by FFmpeg
+        frames_ctx->sw_format = job->input_pix_fmt;
+        frames_ctx->initial_pool_size = HB_QSV_POOL_FFMPEG_SURFACE_SIZE;
+        if (ctx->extra_hw_frames >= 0)
+        {
+            frames_ctx->initial_pool_size += ctx->extra_hw_frames;
+        }
+
+        AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
+        frames_hwctx->frame_type = MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET;
+    }
+#endif
+
     if (av_hwframe_ctx_init(ctx->hw_frames_ctx) != 0)
     {
-        hb_error("hwaccel: failed to initialize hw frames context");
+        hb_error("hwaccel: failed to initialize hw frames context - av_hwframe_ctx_init");
         return 1;
     }
 
@@ -163,7 +303,8 @@ AVBufferRef *hb_hwaccel_init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
                                        enum AVPixelFormat sw_fmt,
                                        enum AVPixelFormat hw_fmt,
                                        int width,
-                                       int height)
+                                       int height,
+                                       int initial_pool_size)
 {
     AVBufferRef *hw_frames_ctx = av_hwframe_ctx_alloc(hw_device_ctx);
     AVHWFramesContext *frames_ctx = (AVHWFramesContext*)hw_frames_ctx->data;
@@ -171,6 +312,11 @@ AVBufferRef *hb_hwaccel_init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
     frames_ctx->sw_format = sw_fmt;
     frames_ctx->width = width;
     frames_ctx->height = height;
+
+    if (initial_pool_size > 0)
+    {
+        frames_ctx->initial_pool_size = initial_pool_size;
+    }
     if (0 != av_hwframe_ctx_init(hw_frames_ctx))
     {
         hb_error("hwaccel: failed to initialize hw frames context");
@@ -194,7 +340,7 @@ static int hb_hwaccel_hwframe_init(hb_job_t *job, AVFrame **frame)
 
     *frame = av_frame_alloc();
     hw_frames_ctx = hb_hwaccel_init_hw_frames_ctx(hw_device_ctx, job->input_pix_fmt, job->hw_pix_fmt,
-                                       job->width, job->height);
+                                       job->width, job->height, 0);
     return av_hwframe_get_buffer(hw_frames_ctx, *frame, 0);
 }
 
@@ -247,75 +393,6 @@ hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_
     }
 
     return NULL;
-}
-
-static int is_encoder_supported(int encoder_id)
-{
-    switch (encoder_id)
-    {
-        case HB_VCODEC_FFMPEG_NVENC_H264:
-        case HB_VCODEC_FFMPEG_NVENC_H265:
-        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
-        case HB_VCODEC_FFMPEG_NVENC_AV1:
-        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
-        case HB_VCODEC_VT_H264:
-        case HB_VCODEC_VT_H265:
-        case HB_VCODEC_VT_H265_10BIT:
-            return 1;
-        default:
-            return 0;
-    }
-}
-
-static int are_filters_supported(hb_list_t *filters, int hw_decode)
-{
-    int ret = 0;
-
-#ifdef __APPLE__
-    if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
-    {
-        ret = hb_vt_are_filters_supported(filters);
-    }
-#endif
-    if (hw_decode & HB_DECODE_SUPPORT_NVDEC)
-    {
-        ret = hb_nvenc_are_filters_supported(filters);
-    }
-
-    return ret;
-}
-
-int hb_hwaccel_is_enabled(hb_job_t *job)
-{
-    return job != NULL &&
-           (job->title->video_decode_support & HB_DECODE_SUPPORT_HWACCEL) &&
-           (job->hw_decode & HB_DECODE_SUPPORT_HWACCEL);
-}
-
-int hb_hwaccel_is_full_hardware_pipeline_enabled(hb_job_t *job)
-{
-    return hb_hwaccel_is_enabled(job) &&
-            are_filters_supported(job->list_filter, job->hw_decode) &&
-            is_encoder_supported(job->vcodec);
-}
-
-int hb_hwaccel_decode_is_enabled(hb_job_t *job)
-{
-    if (job != NULL)
-    {
-        if (job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW)
-        {
-            return hb_hwaccel_is_enabled(job);
-        }
-        else
-        {
-            return hb_hwaccel_is_full_hardware_pipeline_enabled(job);
-        }
-    }
-    else
-    {
-        return 0;
-    }
 }
 
 #if HB_PROJECT_FEATURE_MF

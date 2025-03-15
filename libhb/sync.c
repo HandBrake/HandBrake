@@ -407,13 +407,6 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
                 }
             }
 
-#if HB_PROJECT_FEATURE_QSV
-            if (hb_qsv_get_memory_type(stream->common->job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
-            {
-                buf = hb_qsv_copy_video_buffer_to_hw_video_buffer(stream->common->job, buf, hb_qsv_hw_filters_via_video_memory_are_enabled(stream->common->job));
-            }
-            else
-#endif
             if (hb_hwaccel_is_full_hardware_pipeline_enabled(stream->common->job))
             {
                 buf = hb_hwaccel_copy_video_buffer_to_hw_video_buffer(stream->common->job, &buf);
@@ -421,13 +414,6 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
         }
         else
         {
-#if HB_PROJECT_FEATURE_QSV
-            if (hb_qsv_get_memory_type(stream->common->job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
-            {
-                buf = hb_qsv_buffer_dup(stream->common->job, buf, hb_qsv_hw_filters_via_video_memory_are_enabled(stream->common->job));
-            }
-            else
-#endif
             {
                 buf = hb_buffer_dup(buf);
             }
