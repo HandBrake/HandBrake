@@ -576,22 +576,6 @@ static void closePrivData( hb_work_private_t ** ppv )
         }
         if ( pv->context && pv->context->codec )
         {
-#if HB_PROJECT_FEATURE_QSV
-            /*
-             * FIXME: knowingly leaked.
-             *
-             * If we're using our FFmpeg QSV wrapper, qsv_decode_end() will call
-             * MFXClose() on the QSV session. Even if decoding is complete, we
-             * still need that session for QSV filtering and/or encoding, so we
-             * we can't close the context here until we implement a proper fix.
-             *
-             * Interestingly, this may cause crashes even when QSV-accelerated
-             * decoding and encoding sessions are independent (e.g. decoding via
-             * libavcodec, but encoding using libhb, without us requesting any
-             * form of communication between the two libmfx sessions).
-             */
-            //if (!(pv->qsv.decode && pv->job != NULL && (pv->job->vcodec & HB_VCODEC_QSV_MASK)))
-#endif
             hb_avcodec_free_context(&pv->context);
         }
         if ( pv->context )

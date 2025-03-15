@@ -109,7 +109,8 @@ enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name
 
     const AVCodec *codec = avcodec_find_decoder(codec_id);
     enum AVHWDeviceType hw_type = av_hwdevice_find_type_by_name(hwdevice_name);
-    if (hw_type == AV_HWDEVICE_TYPE_QSV) {
+    if (hw_type == AV_HWDEVICE_TYPE_QSV)
+    {
         return 1;
     }
 

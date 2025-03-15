@@ -3760,16 +3760,19 @@ int hb_qsv_device_init(hb_job_t *job, void **hw_device_ctx)
     AVDictionary *dict = NULL;
     AVBufferRef *ctx = NULL;
 
-    if(job)
+    if (job)
     {
         err = hb_qsv_ffmpeg_set_options(job, &dict);
         if (err < 0)
+        {
             return err;
+        }
     }
 
     err = av_hwdevice_ctx_create(&ctx, AV_HWDEVICE_TYPE_QSV,
                                  0, dict, 0);
-    if (err < 0) {
+    if (err < 0)
+    {
         hb_error("hb_qsv_device_init: error creating a QSV device %d", err);
         goto err_out;
     }
@@ -3777,7 +3780,9 @@ int hb_qsv_device_init(hb_job_t *job, void **hw_device_ctx)
     *hw_device_ctx = ctx;
 err_out:
     if (dict)
+    {
         av_dict_free(&dict);
+    }
 
     return err;
 }
