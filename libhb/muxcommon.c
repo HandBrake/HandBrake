@@ -693,7 +693,7 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
     }
 
     /* Initialize the work objects that will receive fifo data */
-    muxer->fifo_in = job->fifo_mpeg4;
+    muxer->fifo_in = job->fifo_out;
     if (add_mux_track(mux, job->mux_data, 1))
     {
         goto fail;

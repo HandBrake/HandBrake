@@ -882,11 +882,11 @@ struct hb_job_s
     int             init_delay;
     hb_data_t     * extradata;
 
-    hb_fifo_t     * fifo_mpeg2;   /* MPEG-2 video ES */
+    hb_fifo_t     * fifo_in;      /* Input to video decoder */
     hb_fifo_t     * fifo_raw;     /* Raw pictures */
     hb_fifo_t     * fifo_sync;    /* Raw pictures, framerate corrected */
     hb_fifo_t     * fifo_render;  /* Raw pictures, scaled */
-    hb_fifo_t     * fifo_mpeg4;   /* MPEG-4 video ES */
+    hb_fifo_t     * fifo_out;     /* Encoder video output, input to mux */
 
     hb_list_t     * list_work;
 

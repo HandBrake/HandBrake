@@ -1937,14 +1937,14 @@ static void do_job(hb_job_t *job)
         update_dolby_vision_level(job);
     }
 
-    job->fifo_mpeg2  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+    job->fifo_in     = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
     job->fifo_raw    = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
     if (!job->indepth_scan)
     {
         // When doing subtitle indepth scan, the pipeline ends at sync
         job->fifo_sync   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         job->fifo_render = NULL; // Attached to filter chain
-        job->fifo_mpeg4  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+        job->fifo_out    = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
     }
 
     result = sanitize_audio(job);
@@ -2036,7 +2036,7 @@ static void do_job(hb_job_t *job)
         *job->die = 1;
         goto cleanup;
     }
-    w->fifo_in  = job->fifo_mpeg2;
+    w->fifo_in  = job->fifo_in;
     w->fifo_out = job->fifo_raw;
     hb_list_add(job->list_work, w);
 
@@ -2132,7 +2132,7 @@ static void do_job(hb_job_t *job)
         else
             w->fifo_in  = job->fifo_sync;
 
-        w->fifo_out  =  job->fifo_mpeg4;
+        w->fifo_out  =  job->fifo_out;
 
         w->init_delay = &job->init_delay;
         w->extradata  = &job->extradata;
@@ -2248,10 +2248,10 @@ cleanup:
     hb_list_close( &job->list_work );
 
     /* Close fifos */
-    hb_fifo_close( &job->fifo_mpeg2 );
+    hb_fifo_close( &job->fifo_in );
     hb_fifo_close( &job->fifo_raw );
     hb_fifo_close( &job->fifo_sync );
-    hb_fifo_close( &job->fifo_mpeg4 );
+    hb_fifo_close( &job->fifo_out );
 
     for (i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
