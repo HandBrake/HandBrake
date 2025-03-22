@@ -24,6 +24,7 @@ namespace HandBrakeWPF.Startup
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Services.Scan;
     using HandBrakeWPF.Services.Scan.Interfaces;
+    using HandBrakeWPF.Services.Subtitles;
 
     using IEncode = Services.Encode.Interfaces.IEncode;
     using IWindowManager = Services.Interfaces.IWindowManager;
@@ -58,6 +59,9 @@ namespace HandBrakeWPF.Startup
             builder.RegisterType<LogInstanceManager>().As<ILogInstanceManager>().SingleInstance();
             builder.RegisterType<PortService>().As<IPortService>().SingleInstance();
             builder.RegisterType<NotificationService>().As<INotificationService>().SingleInstance();
+            builder.RegisterType<SubtitleRuleProcessor>().As<ISubtitleRuleProcessor>().SingleInstance();
+
+            
 
             // ViewModels
             Assembly assembly = typeof(AppBootstrapper).Assembly;
