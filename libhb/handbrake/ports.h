@@ -212,6 +212,11 @@ int        hb_net_recv( hb_net_t *, char *, int );
 void       hb_net_close( hb_net_t ** );
 
 /************************************************************************
+* OS Backup Include / Exclude
+***********************************************************************/
+void hb_system_backup_set_excluded(const char *path, int exclude);
+
+/************************************************************************
 * OS Sleep Allow / Prevent
 ***********************************************************************/
 void* hb_system_sleep_opaque_init();

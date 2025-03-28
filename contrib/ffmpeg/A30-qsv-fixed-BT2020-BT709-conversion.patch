@@ -1,0 +1,29 @@
+From 9ff8a988aeb77fc8501f27e28d924a350d52c8a8 Mon Sep 17 00:00:00 2001
+From: galinart <artem.galin@intel.com>
+Date: Fri, 21 Feb 2025 09:41:34 +0000
+Subject: [PATCH] fixed BT2020 -> BT709 conversion via VPP
+
+---
+ libavfilter/vf_vpp_qsv.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/libavfilter/vf_vpp_qsv.c b/libavfilter/vf_vpp_qsv.c
+index 7f05f1f..223e919 100644
+--- a/libavfilter/vf_vpp_qsv.c
++++ b/libavfilter/vf_vpp_qsv.c
+@@ -494,9 +494,9 @@ static int vpp_set_frame_ext_params(AVFilterContext *ctx, const AVFrame *in, AVF
+     outvsi_conf.Header.BufferId          = MFX_EXTBUFF_VIDEO_SIGNAL_INFO_OUT;
+     outvsi_conf.Header.BufferSz          = sizeof(mfxExtVideoSignalInfo);
+     outvsi_conf.VideoFullRange           = (out->color_range == AVCOL_RANGE_JPEG);
+-    outvsi_conf.ColourPrimaries          = (out->color_primaries == AVCOL_PRI_UNSPECIFIED) ? AVCOL_PRI_BT709 : out->color_primaries;
+-    outvsi_conf.TransferCharacteristics  = (out->color_trc == AVCOL_TRC_UNSPECIFIED) ? AVCOL_TRC_BT709 : out->color_trc;
+-    outvsi_conf.MatrixCoefficients       = (out->colorspace == AVCOL_SPC_UNSPECIFIED) ? AVCOL_SPC_BT709 : out->colorspace;
++    outvsi_conf.ColourPrimaries          = (out->color_primaries == AVCOL_PRI_UNSPECIFIED) ? invsi_conf.ColourPrimaries : out->color_primaries;
++    outvsi_conf.TransferCharacteristics  = (out->color_trc == AVCOL_TRC_UNSPECIFIED) ? invsi_conf.TransferCharacteristics : out->color_trc;
++    outvsi_conf.MatrixCoefficients       = (out->colorspace == AVCOL_SPC_UNSPECIFIED) ? invsi_conf.MatrixCoefficients : out->colorspace;
+     outvsi_conf.ColourDescriptionPresent = 1;
+ 
+     if (memcmp(&vpp->invsi_conf, &invsi_conf, sizeof(mfxExtVideoSignalInfo)) ||
+-- 
+2.25.1
+

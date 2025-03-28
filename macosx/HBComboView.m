@@ -18,7 +18,7 @@
 
 @implementation HBComboView
 
-- (instancetype)initWithTitle:(NSString *)title image:(NSImage *)image action:(SEL)action menu:(NSMenu *)menu
+- (instancetype)initWithTitle:(NSString *)title image:(NSImage *)image target:(id)target action:(SEL)action menu:(NSMenu *)menu
 {
     self = [super initWithFrame:NSMakeRect(0, 0, 72, 32)];
 
@@ -26,7 +26,7 @@
     {
         _action = action;
 
-        _button = [NSButton buttonWithImage:image target:nil action:action];
+        _button = [NSButton buttonWithImage:image target:target action:action];
         _button.bordered = NO;
         [self addSubview:_button];
 

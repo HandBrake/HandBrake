@@ -52,5 +52,5 @@ jobs:
     - name: Upload Package
       uses: actions/upload-artifact@v4
       with:
-        name: HandBrakeCLI
+        name: HandBrake
         path: ./build/pkg/flatpak/*.flatpak

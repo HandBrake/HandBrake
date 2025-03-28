@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Services.Scan.Factories
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Json.Scan;
+    using HandBrake.Interop.Interop.Json.Shared;
 
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Scan.Model;
@@ -144,6 +145,11 @@ namespace HandBrakeWPF.Services.Scan.Factories
             if (title.MetaData != null)
             {
                 converted.Metadata = metadata;
+            }
+            
+            if (title.CoverArts != null)
+            {
+                converted.CoverArts = new List<CoverArt>(title.CoverArts);
             }
 
             return converted;

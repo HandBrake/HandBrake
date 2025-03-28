@@ -25,10 +25,102 @@ int  hb_qsv_impl_set_preferred(const char *name);
 #include "vpl/mfxvideo.h"
 #include "handbrake/hb_dict.h"
 #include "handbrake/qsv_libav.h"
+#include "libavutil/hwcontext_qsv.h"
 
 /* Minimum Intel Media SDK version (currently 1.3, for Sandy Bridge support) */
 #define HB_QSV_MINVERSION_MAJOR HB_QSV_MSDK_VERSION_MAJOR
 #define HB_QSV_MINVERSION_MINOR HB_QSV_MSDK_VERSION_MINOR
+
+static const char * const hb_qsv_h264_level_names[] =
+{
+    "auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0",
+    "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",  NULL,
+};
+
+static const int hb_qsv_h264_levels[] =
+{
+    MFX_LEVEL_UNKNOWN,
+    MFX_LEVEL_AVC_1,
+    MFX_LEVEL_AVC_1b,
+    MFX_LEVEL_AVC_11,
+    MFX_LEVEL_AVC_12,
+    MFX_LEVEL_AVC_13,
+    MFX_LEVEL_AVC_2,
+    MFX_LEVEL_AVC_21,
+    MFX_LEVEL_AVC_22,
+    MFX_LEVEL_AVC_3,
+    MFX_LEVEL_AVC_31,
+    MFX_LEVEL_AVC_32,
+    MFX_LEVEL_AVC_4,
+    MFX_LEVEL_AVC_41,
+    MFX_LEVEL_AVC_42,
+    MFX_LEVEL_AVC_5,
+    MFX_LEVEL_AVC_51,
+    MFX_LEVEL_AVC_52,
+    MFX_LEVEL_AVC_6,
+    MFX_LEVEL_AVC_61,
+    MFX_LEVEL_AVC_62,
+};
+
+static const char * const hb_qsv_h265_level_names[] =
+{
+    "auto", "1.0", "2.0", "2.1", "3.0", "3.1", "4.0", "4.1",
+    "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",  NULL,
+};
+
+static const int hb_qsv_h265_levels[] =
+{
+    MFX_LEVEL_UNKNOWN,
+    MFX_LEVEL_HEVC_1,
+    MFX_LEVEL_HEVC_2,
+    MFX_LEVEL_HEVC_21,
+    MFX_LEVEL_HEVC_3,
+    MFX_LEVEL_HEVC_31,
+    MFX_LEVEL_HEVC_4,
+    MFX_LEVEL_HEVC_41,
+    MFX_LEVEL_HEVC_5,
+    MFX_LEVEL_HEVC_51,
+    MFX_LEVEL_HEVC_52,
+    MFX_LEVEL_HEVC_6,
+    MFX_LEVEL_HEVC_61,
+    MFX_LEVEL_HEVC_62
+};
+
+static const char * const hb_qsv_av1_level_names[] =
+{
+    "auto", "2.0", "2.1", "2.2", "2.3", "3.0", "3.1", "3.2",
+    "3.3", "4.0", "4.1", "4.2", "4.3", "5.0", "5.1", "5.2",
+    "5.3", "6.0", "6.1", "6.2", "6.3", "7.0", "7.1", "7.2", "7.3", NULL,
+};
+
+static const int hb_qsv_av1_levels[] =
+{
+    MFX_LEVEL_UNKNOWN,
+    MFX_LEVEL_AV1_2,
+    MFX_LEVEL_AV1_21,
+    MFX_LEVEL_AV1_22,
+    MFX_LEVEL_AV1_23,
+    MFX_LEVEL_AV1_3,
+    MFX_LEVEL_AV1_31,
+    MFX_LEVEL_AV1_32,
+    MFX_LEVEL_AV1_33,
+    MFX_LEVEL_AV1_4,
+    MFX_LEVEL_AV1_41,
+    MFX_LEVEL_AV1_42,
+    MFX_LEVEL_AV1_43,
+    MFX_LEVEL_AV1_5,
+    MFX_LEVEL_AV1_51,
+    MFX_LEVEL_AV1_52,
+    MFX_LEVEL_AV1_53,
+    MFX_LEVEL_AV1_6,
+    MFX_LEVEL_AV1_61,
+    MFX_LEVEL_AV1_62,
+    MFX_LEVEL_AV1_63,
+    MFX_LEVEL_AV1_7,
+    MFX_LEVEL_AV1_71,
+    MFX_LEVEL_AV1_72,
+    MFX_LEVEL_AV1_73,
+};
 
 /*
  * Get & store all available Intel Quick Sync information:
@@ -145,6 +237,14 @@ enum
 
 typedef struct
 {
+    const char *name;
+    const char *key;
+    const int value;
+}
+hb_triplet_t;
+
+typedef struct
+{
     /*
      * Supported mfxExtBuffer.BufferId values:
      *
@@ -170,7 +270,7 @@ typedef struct
     mfxExtCodingOption    codingOption;
     mfxExtCodingOption2   codingOption2;
     mfxExtVideoSignalInfo videoSignalInfo;
-    mfxExtHyperModeParam hyperEncodeParam;
+    hb_triplet_t*         hyperEncodeParam;
     mfxExtAV1ScreenContentTools av1ScreenContentToolsParam;
     mfxExtChromaLocInfo   chromaLocInfo;
     mfxExtMasteringDisplayColourVolume masteringDisplayColourVolume;
@@ -195,6 +295,7 @@ typedef struct
 
     // assigned via hb_qsv_param_default, may be shared with another structure
     mfxVideoParam *videoParam;
+    int low_power;
 } hb_qsv_param_t;
 
 static const char* const hb_qsv_preset_names1[] = { "speed", "balanced",            NULL, };
@@ -218,20 +319,22 @@ int   hb_qsv_atoi    (const char *str, int *err);
 float hb_qsv_atof    (const char *str, int *err);
 
 int hb_qsv_param_default_async_depth();
-int hb_qsv_param_default_preset     (hb_qsv_param_t *param, mfxVideoParam *videoParam, hb_qsv_info_t *info, const char *preset);
-int hb_qsv_param_default            (hb_qsv_param_t *param, mfxVideoParam *videoParam, hb_qsv_info_t *info);
-int hb_qsv_param_parse              (hb_qsv_param_t *param,                            hb_qsv_info_t *info, hb_job_t *job,  const char *key, const char *value);
+int hb_qsv_param_default_preset     (AVDictionary* av_opts, hb_qsv_param_t *param, mfxVideoParam *videoParam, hb_qsv_info_t *info, const char *preset);
+int hb_qsv_param_default            (hb_qsv_param_t *param, hb_qsv_info_t *info);
+int hb_qsv_param_parse              (AVDictionary  **av_opts, hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job,  const char *key, const char *value);
 int hb_qsv_profile_parse            (hb_qsv_param_t *param,                            hb_qsv_info_t *info, const char *profile_key, const int codec);
-int hb_qsv_level_parse              (hb_qsv_param_t *param,                            hb_qsv_info_t *info, const char *level_key);
 int hb_qsv_param_parse_dx_index     (hb_job_t *job, const int dx_index);
 
 typedef struct
 {
-    const char *name;
-    const char *key;
-    const int value;
-}
-hb_triplet_t;
+    hb_qsv_info_t      * qsv_info;
+    hb_qsv_param_t       param;
+    int                  async_depth;
+    int                  max_async_depth;
+    int                  is_sys_mem;
+    const AVCodec      * codec;
+    AVDictionary       * av_opts;
+} qsv_data_t;
 
 hb_triplet_t* hb_triplet4value(hb_triplet_t *triplets, const int  value);
 hb_triplet_t* hb_triplet4name (hb_triplet_t *triplets, const char *name);
@@ -240,7 +343,6 @@ hb_triplet_t* hb_triplet4key  (hb_triplet_t *triplets, const char *key);
 const char* hb_qsv_codec_name    (uint32_t codec_id);
 const char* hb_qsv_profile_name  (uint32_t codec_id, uint16_t profile_id);
 const char* hb_qsv_level_name    (uint32_t codec_id, uint16_t level_id);
-const char* hb_qsv_frametype_name(uint16_t qsv_frametype);
 uint8_t     hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags);
 
 const char* hb_qsv_impl_get_name(int impl);
@@ -248,31 +350,18 @@ int         hb_qsv_impl_get_num(int impl);
 const char* hb_qsv_impl_get_via_name(int impl);
 mfxIMPL     hb_qsv_dx_index_to_impl(int dx_index);
 
-/* Full QSV pipeline helpers */
+/* QSV pipeline helpers */
+const char * hb_map_qsv_preset_name(const char * preset);
+int hb_qsv_apply_encoder_options(qsv_data_t * qsv_data, hb_job_t * job, AVDictionary** av_opts);
 int hb_qsv_is_enabled(hb_job_t *job);
 hb_qsv_context* hb_qsv_context_init();
 void hb_qsv_context_uninit(hb_job_t *job);
+int hb_qsv_are_filters_supported(hb_job_t *job);
 int hb_qsv_sanitize_filter_list(hb_job_t *job);
-int hb_qsv_hw_frames_init(AVCodecContext *s);
-int hb_qsv_create_ffmpeg_dec_pool(hb_job_t * job, int width, int height, int sw_pix_fmt);
-int hb_qsv_create_ffmpeg_pool(hb_job_t *job, int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int pool_size, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
-int hb_qsv_create_ffmpeg_vpp_pool(hb_filter_init_t *init, int width, int height);
-int hb_qsv_hw_filters_via_system_memory_are_enabled(hb_job_t *job);
-int hb_qsv_hw_filters_via_video_memory_are_enabled(hb_job_t *job);
 int hb_qsv_get_memory_type(hb_job_t *job);
 int hb_qsv_full_path_is_enabled(hb_job_t *job);
-AVBufferRef *hb_qsv_create_mids(AVBufferRef *hw_frames_ref);
-hb_buffer_t * hb_qsv_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_buffer_t *in, const int is_vpp);
-hb_buffer_t * hb_qsv_buffer_dup(hb_job_t *job, hb_buffer_t *in, const int is_vpp);
-hb_buffer_t * hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, AVRational time_base, const int is_vpp);
-int hb_qsv_get_free_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, AVFrame* frame, QSVMid** out_mid);
-void hb_qsv_get_free_surface_from_pool_with_range(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const int start_index, const int end_index, QSVMid** out_mid, mfxFrameSurface1** out_surface);
-int hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, mfxFrameSurface1 *surface, QSVMid **out_mid);
-int hb_qsv_replace_surface_mid(HBQSVFramesContext* hb_qsv_frames_ctx, const QSVMid *mid, mfxFrameSurface1 *surface);
-int hb_qsv_release_surface_from_pool_by_surface_pointer(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const mfxFrameSurface1 *surface);
 int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags);
 enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts);
-void hb_qsv_uninit_dec(AVCodecContext *s);
 void hb_qsv_uninit_enc(hb_job_t *job);
 int hb_qsv_setup_job(hb_job_t *job);
 int hb_qsv_decode_h264_is_supported(int adapter_index);
@@ -281,7 +370,8 @@ int hb_qsv_decode_h265_10_bit_is_supported(int adapter_index);
 int hb_qsv_decode_av1_is_supported(int adapter_index);
 int hb_qsv_decode_vvc_is_supported(int adapter_index);
 int hb_qsv_decode_is_codec_supported(int adapter_index, int video_codec_param, int pix_fmt, int width, int height);
-int hb_qsv_device_init(hb_job_t *job);
+int hb_qsv_device_init(hb_job_t *job, void **hw_device_ctx);
+int hb_qsv_is_ffmpeg_supported_codec(int vcodec);
 
 #endif // __LIBHB__
 #endif // HB_PROJECT_FEATURE_QSV

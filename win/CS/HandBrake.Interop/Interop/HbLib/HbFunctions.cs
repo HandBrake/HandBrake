@@ -302,6 +302,9 @@ namespace HandBrake.Interop.Interop.HbLib
 
         [DllImport("hb", EntryPoint = "hb_get_preview_params_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_get_preview_params_json(int title_idx, int preview_idx, int deinterlace, ref hb_geometry_settings_s settings);
+        
+        [DllImport("hb", EntryPoint = "hb_get_title_coverarts", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_get_title_coverarts(IntPtr hbHandle, int title_index);
 
         [DllImport("hb", EntryPoint = "hb_presets_builtin_init", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_presets_builtin_init();

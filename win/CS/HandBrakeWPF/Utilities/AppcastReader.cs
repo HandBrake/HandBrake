@@ -40,9 +40,14 @@ namespace HandBrakeWPF.Utilities
         public string DownloadFile { get; private set; }
 
         /// <summary>
-        /// Gets the hash for verifying the download completed correctly.
+        /// Gets the Signature for verifying the download completed correctly.
         /// </summary>
-        public string Hash { get; private set; }
+        public string Signature { get; private set; }
+
+        /// <summary>
+        /// RSA 4096 rather than RSA 1024
+        /// </summary>
+        public bool IsLargerKey { get; private set; }
 
         /// <summary>
         /// Get the build information from the required appcasts. Run before accessing the public vars.
@@ -68,9 +73,23 @@ namespace HandBrakeWPF.Utilities
                     this.Version = verShort.Groups[1].Value;
                 }
                
-                this.DownloadFile = nodeItem["windows"].InnerText;
-                this.Hash = nodeItem["windowsHash"].InnerText;  
-                this.DescriptionUrl = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);
+                this.DownloadFile = nodeItem["windows"]?.InnerText;
+                this.Signature = nodeItem["windowsHash"]?.InnerText;
+
+                string descriptionUrl = nodeItem["sparkle:releaseNotesLink"]?.InnerText;
+                if (!string.IsNullOrEmpty(descriptionUrl))
+                {
+                    this.DescriptionUrl = new Uri(descriptionUrl);
+                }
+
+                // We now use a 4096bit key so we need to look for the new key in the appcast.
+                // IsLargerKey is a temporary fallback mechanism that we will remove in the following version. 
+                string modernSig = nodeItem["windowsSignature"]?.InnerText;
+                if (!string.IsNullOrEmpty(modernSig))
+                {
+                    this.Signature = modernSig;
+                    this.IsLargerKey = true;
+                }
             }
             catch (Exception)
             {

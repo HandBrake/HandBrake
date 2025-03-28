@@ -42,7 +42,7 @@ typedef struct srt_entry_s {
  */
 struct hb_work_private_s
 {
-    hb_avsub_context_t * ctx;
+    hb_decavsub_context_t * ctx;
     hb_job_t * job;
     FILE     * file;
     char       buf[1024];
@@ -496,6 +496,11 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
     {
         goto fail;
     }
+
+    // For SRT files, libav will generate an SSA subtitle header for us.
+    // We will copy it into subtitle extradata after the decoder is
+    // initialized
+
     pv->ctx = decavsubInit(w, job);
     if (pv->ctx == NULL)
     {
@@ -564,12 +569,6 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    // Generate generic SSA Script Info.
-    int height = job->title->geometry.height - job->crop[0] - job->crop[1];
-    int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    hb_set_ssa_extradata(&w->subtitle->extradata, HB_FONT_SANS,
-                         .066 * job->title->geometry.height,
-                         width, height);
     return 0;
 
 fail:

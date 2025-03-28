@@ -23,6 +23,7 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
+    using HandBrake.Interop.Interop.Json.Shared;
     using HandBrake.Interop.Interop.Json.State;
     using HandBrake.Interop.Utilities;
 
@@ -242,6 +243,28 @@ namespace HandBrake.Interop.Interop
             Marshal.FreeHGlobal(nativeJobPtrPtr);
 
             return preview;
+        }
+
+        public RawCoverArtData GetCoverArt(int title, int id)
+        {
+            int index = title - 1;
+            IntPtr listData = HBFunctions.hb_get_title_coverarts(this.Handle, index);
+            NativeList coverarts = new NativeList(listData);
+
+            if (coverarts.Count > 0 && coverarts.Count <=  (id+1))
+            {
+                hb_coverart_s coverArt = InteropUtilities.ToStructureFromPtr<hb_coverart_s>(coverarts[id]);
+                int dataSize = Convert.ToInt32(coverArt.size);
+
+                byte[] managedBuffer = new byte[coverArt.size];
+                Marshal.Copy(coverArt.data, managedBuffer, 0, dataSize);
+
+                RawCoverArtData rawData = new RawCoverArtData(managedBuffer);
+                rawData.CoverArtFileType = (CoverArtType)coverArt.type;
+                return rawData;
+            }
+
+            return null;
         }
 
         /// <summary>

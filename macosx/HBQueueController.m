@@ -60,7 +60,7 @@
                                            dispatch_queue_attr_make_with_autorelease_frequency(DISPATCH_QUEUE_SERIAL,
                                                                                                DISPATCH_AUTORELEASE_FREQUENCY_WORK_ITEM));
 
-        if (@available(macOS 10.14, *))
+        if (@available(macOS 10.15, *))
         {
             UNUserNotificationCenter *center = UNUserNotificationCenter.currentNotificationCenter;
             center.delegate = self;
@@ -123,7 +123,7 @@
     }
 
     // Set up toolbar
-    self.toolbarDelegate = [[HBQueueToolbarDelegate alloc] init];
+    self.toolbarDelegate = [[HBQueueToolbarDelegate alloc] initWithTarget:self];
 
     NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"HBQueueWindowToolbar2"];
     toolbar.delegate = self.toolbarDelegate;
@@ -439,7 +439,7 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
 
 - (void)showNotificationWithTitle:(NSString *)title description:(NSString *)description url:(NSURL *)fileURL playSound:(BOOL)playSound
 {
-    if (@available(macOS 10.14, *))
+    if (@available(macOS 10.15, *))
     {
         UNMutableNotificationContent *notification = [[UNMutableNotificationContent alloc] init];
         notification.title = title;

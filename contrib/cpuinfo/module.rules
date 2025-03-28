@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,CPUINFO))
+$(eval $(call import.CONTRIB.rules,CPUINFO))

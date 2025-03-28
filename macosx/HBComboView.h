@@ -10,7 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBComboView : NSView
 
-- (instancetype)initWithTitle:(NSString *)title image:(NSImage *)image action:(SEL)action menu:(NSMenu *)menu;
+- (instancetype)initWithTitle:(NSString *)title image:(NSImage *)image target:(id)target action:(SEL)action menu:(NSMenu *)menu;
 
 @property (strong) NSMenu *menu;
 

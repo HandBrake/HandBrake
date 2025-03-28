@@ -14,6 +14,7 @@ int hb_vt_is_constant_quality_available(int encoder);
 int hb_vt_is_multipass_available(int encoder);
 
 const int * hb_vt_get_pix_fmts(int encoder);
+int hb_vt_get_best_pix_fmt(int encoder, const char *profile);
 
 const char * const * hb_vt_preset_get_names(int encoder);
 const char * const * hb_vt_profile_get_names(int encoder);

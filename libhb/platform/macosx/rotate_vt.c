@@ -18,6 +18,7 @@ struct hb_filter_private_s
     VTPixelRotationSessionRef session;
 #pragma GCC diagnostic pop
     CVPixelBufferPoolRef      pool;
+    CFDictionaryRef           attachments;
 
     hb_filter_init_t          input;
     hb_filter_init_t          output;
@@ -136,6 +137,15 @@ static int rotate_vt_init(hb_filter_object_t *filter,
         return -1;
     }
 
+    CFMutableDictionaryRef attachments = CFDictionaryCreateMutable(NULL, 0,
+                                                                   &kCFTypeDictionaryKeyCallBacks,
+                                                                   &kCFTypeDictionaryValueCallBacks);
+    hb_cv_add_color_tag(attachments,
+                        init->color_prim, init->color_transfer,
+                        init->color_matrix, init->chroma_location);
+    pv->attachments = attachments;
+
+
     init->geometry.width  = width;
     init->geometry.height = height;
     init->geometry.par    = par;
@@ -166,6 +176,10 @@ static void rotate_vt_close(hb_filter_object_t *filter)
     {
         CVPixelBufferPoolRelease(pv->pool);
     }
+    if (pv->attachments)
+    {
+        CFRelease(pv->attachments);
+    }
 
     free(pv);
     filter->private_data = NULL;
@@ -194,9 +208,7 @@ static int rotate_vt_work(hb_filter_object_t *filter,
         hb_log("rotate_vt: extract_buf failed");
         return HB_FILTER_FAILED;
     }
-    hb_cv_add_color_tag(source_buf,
-                        pv->input.color_prim, pv->input.color_transfer,
-                        pv->input.color_matrix, pv->input.chroma_location);
+    hb_cv_set_attachments(source_buf, pv->attachments);
 
     CVPixelBufferRef dest_buf = NULL;
     err = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pv->pool, &dest_buf);

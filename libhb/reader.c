@@ -429,7 +429,7 @@ static void reader_send_eof( hb_work_private_t * r )
     int ii;
 
     // send eof buffers downstream to decoders to signal we're done.
-    push_buf(r, r->job->fifo_mpeg2, hb_buffer_eof_init());
+    push_buf(r, r->job->fifo_in, hb_buffer_eof_init());
 
     hb_audio_t *audio;
     for (ii = 0; (audio = hb_list_item(r->job->list_audio, ii)); ++ii)
@@ -689,7 +689,7 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
         }
         else
         {
-            r->fifos[0] = job->fifo_mpeg2;
+            r->fifos[0] = job->fifo_in;
             r->fifos[1] = NULL;
             return r->fifos;
         }

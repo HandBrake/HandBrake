@@ -112,25 +112,34 @@ int hb_cv_get_io_surface_usage_count(const hb_buffer_t *buf)
 
 CVPixelBufferPoolRef hb_cv_create_pixel_buffer_pool(int width, int height, enum AVPixelFormat pix_fmt, enum AVColorRange color_range)
 {
-    // CVPixelBuffer pool
-    // Set the Metal compatibility key
-    // to keep the buffer on the GPU memory
     OSType cv_pix_fmt = hb_cv_get_pixel_format(pix_fmt, color_range);
     CFNumberRef pix_fmt_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &cv_pix_fmt);
     CFNumberRef width_num   = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &width);
     CFNumberRef height_num  = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &height);
 
-    const void *attrs_keys[4] =
+    // Align the width and height to 16 to avoid VideoToolbox
+    // inserting an additional VTPixelTransferSession
+    int extend_width  = MULTIPLE_MOD_UP(width,  16) - width;
+    int extend_height = MULTIPLE_MOD_UP(height, 16) - height;
+
+    CFNumberRef extend_width_num  = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &extend_width);
+    CFNumberRef extend_height_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &extend_height);
+
+    const void *attrs_keys[6] =
     {
         kCVPixelBufferWidthKey,
         kCVPixelBufferHeightKey,
+        kCVPixelBufferExtendedPixelsRightKey,
+        kCVPixelBufferExtendedPixelsBottomKey,
         kCVPixelBufferPixelFormatTypeKey,
         kCVPixelBufferMetalCompatibilityKey
     };
-    const void *attrs_values[4] =
+    const void *attrs_values[6] =
     {
         width_num,
         height_num,
+        extend_width_num,
+        extend_height_num,
         pix_fmt_num,
         kCFBooleanTrue
     };
@@ -138,12 +147,14 @@ CVPixelBufferPoolRef hb_cv_create_pixel_buffer_pool(int width, int height, enum 
     CFDictionaryRef attrs = CFDictionaryCreate(kCFAllocatorDefault,
                                                attrs_keys,
                                                attrs_values,
-                                               4,
+                                               6,
                                                &kCFTypeDictionaryKeyCallBacks,
                                                &kCFTypeDictionaryValueCallBacks);
 
     CFRelease(width_num);
     CFRelease(height_num);
+    CFRelease(extend_width_num);
+    CFRelease(extend_height_num);
     CFRelease(pix_fmt_num);
 
     CVPixelBufferPoolRef pool;
@@ -268,7 +279,7 @@ CFStringRef hb_cv_chroma_loc_xlat(int chroma_location)
     }
 }
 
-void hb_cv_add_color_tag(CVPixelBufferRef pix_buf,
+void hb_cv_add_color_tag(CFMutableDictionaryRef attachments,
                          int color_prim, int color_transfer,
                          int color_matrix, int chroma_location)
 {
@@ -278,30 +289,33 @@ void hb_cv_add_color_tag(CVPixelBufferRef pix_buf,
     CFStringRef matrix     = hb_cv_colr_mat_xlat(color_matrix);
     CFStringRef chroma_loc = hb_cv_chroma_loc_xlat(chroma_location);
 
-    CVBufferRemoveAllAttachments(pix_buf);
-
     if (prim)
     {
-        CVBufferSetAttachment(pix_buf, kCVImageBufferColorPrimariesKey, prim, kCVAttachmentMode_ShouldPropagate);
+        CFDictionarySetValue(attachments, kCVImageBufferColorPrimariesKey, prim);
     }
     if (transfer)
     {
-        CVBufferSetAttachment(pix_buf, kCVImageBufferTransferFunctionKey, transfer, kCVAttachmentMode_ShouldPropagate);
+        CFDictionarySetValue(attachments, kCVImageBufferTransferFunctionKey, transfer);
     }
     if (gamma)
     {
-        CVBufferSetAttachment(pix_buf, kCVImageBufferGammaLevelKey, gamma, kCVAttachmentMode_ShouldPropagate);
+        CFDictionarySetValue(attachments, kCVImageBufferGammaLevelKey, gamma);
         CFRelease(gamma);
     }
     if (matrix)
     {
-        CVBufferSetAttachment(pix_buf, kCVImageBufferYCbCrMatrixKey, matrix, kCVAttachmentMode_ShouldPropagate);
+        CFDictionarySetValue(attachments, kCVImageBufferYCbCrMatrixKey, matrix);
     }
     if (chroma_loc)
     {
-        CVBufferSetAttachment(pix_buf, kCVImageBufferChromaLocationTopFieldKey, chroma_loc, kCVAttachmentMode_ShouldPropagate);
-        CVBufferSetAttachment(pix_buf, kCVImageBufferChromaLocationBottomFieldKey, chroma_loc, kCVAttachmentMode_ShouldPropagate);
+        CFDictionarySetValue(attachments, kCVImageBufferChromaLocationTopFieldKey, chroma_loc);
     }
+}
+
+void hb_cv_set_attachments(CVPixelBufferRef pix_buf, CFDictionaryRef attachments)
+{
+    CVBufferRemoveAllAttachments(pix_buf);
+    CVBufferSetAttachments(pix_buf, attachments, kCVAttachmentMode_ShouldPropagate);
 }
 
 int hb_cv_match_rgb_to_colorspace(int rgb,

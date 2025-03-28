@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Controls
         public MessageBoxWindow()
         {
             InitializeComponent();
+            this.ResizeMode = ResizeMode.NoResize;
         }
 
         protected override void OnSourceInitialized(EventArgs e)

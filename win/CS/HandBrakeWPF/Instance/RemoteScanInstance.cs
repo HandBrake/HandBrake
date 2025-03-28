@@ -80,6 +80,11 @@ namespace HandBrakeWPF.Instance
             return null;
         }
 
+        public RawCoverArtData GetCoverArt(int title, int id)
+        {
+            throw new NotImplementedException("Not Available in Remote Mode Yet.");
+        }
+
         public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, TimeSpan maxDuration, int titleIndex, List<string> fileExclusionList, int hwDecode, bool keepDuplicateTitles)
         {
             if (this.IsServerRunning())

@@ -136,9 +136,20 @@
         job->chapter_markers = 0;
     }
 
-    if (self.metadataPassthru == NO && job->metadata && job->metadata->dict)
+    if (self.metadataPassthru == NO && job->metadata)
     {
-        hb_dict_clear(job->metadata->dict);
+        if (job->metadata->dict)
+        {
+            hb_dict_clear(job->metadata->dict);
+        }
+        if (job->metadata->list_coverart)
+        {
+            int count = hb_list_count(job->metadata->list_coverart);
+            for (int i = 0; i < count; i++)
+            {
+                hb_metadata_rem_coverart(job->metadata, 0);
+            }
+        }
     }
 
     if (job->vcodec & HB_VCODEC_H264_MASK)
@@ -299,7 +310,7 @@
                 {
                     if (subTrack.fileURL)
                     {
-                        hb_subtitle_config_t sub_config;
+                        hb_subtitle_config_t sub_config = {0};
                         sub_config.name = subTrack.title.UTF8String;
                         sub_config.offset = subTrack.offset;
 
@@ -329,7 +340,7 @@
                 else
                 {
                     // We are setting a source subtitle so access the source subtitle info
-                    hb_subtitle_t * subt = (hb_subtitle_t *) hb_list_item(title->list_subtitle, sourceIdx);
+                    hb_subtitle_t *subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, sourceIdx);
 
                     if (subt != NULL)
                     {
@@ -416,8 +427,8 @@
     {
         if (audioTrack.isEnabled)
         {
-            hb_audio_config_t *audio = (hb_audio_config_t *)calloc(1, sizeof(*audio));
-            hb_audio_config_init(audio);
+            hb_audio_config_t audio = {0};
+            hb_audio_config_init(&audio);
 
             HBTitleAudioTrack *inputTrack = self.audio.sourceTracks[audioTrack.sourceTrackIdx];
 
@@ -425,44 +436,43 @@
                                    inputTrack.sampleRate :
                                    audioTrack.sampleRate);
 
-            audio->index = (int)audioTrack.sourceTrackIdx - 1;
+            audio.index = (int)audioTrack.sourceTrackIdx - 1;
 
             // We go ahead and assign values to our audio->out.<properties>
-            audio->out.track                     = audio->in.track;
-            audio->out.codec                     = audioTrack.encoder;
-            audio->out.compression_level         = hb_audio_compression_get_default(audio->out.codec);
-            audio->out.mixdown                   = audioTrack.mixdown;
-            audio->out.normalize_mix_level       = 0;
-            audio->out.bitrate                   = audioTrack.bitRate;
-            audio->out.samplerate                = sampleRateToUse;
-            audio->out.dither_method             = hb_audio_dither_get_default();
-            audio->out.name                      = audioTrack.title.UTF8String;
+            audio.out.track                     = audio.in.track;
+            audio.out.codec                     = audioTrack.encoder;
+            audio.out.compression_level         = hb_audio_compression_get_default(audio.out.codec);
+            audio.out.mixdown                   = audioTrack.mixdown;
+            audio.out.normalize_mix_level       = 0;
+            audio.out.bitrate                   = audioTrack.bitRate;
+            audio.out.samplerate                = sampleRateToUse;
+            audio.out.dither_method             = hb_audio_dither_get_default();
+            audio.out.name                      = audioTrack.title.UTF8String;
 
             // output is not passthru so apply gain
             if (!(audioTrack.encoder & HB_ACODEC_PASS_FLAG))
             {
-                audio->out.gain = audioTrack.gain;
+                audio.out.gain = audioTrack.gain;
             }
             else
             {
                 // output is passthru - the Gain dial is disabled so don't apply its value
-                audio->out.gain = 0;
+                audio.out.gain = 0;
             }
 
             if (hb_audio_can_apply_drc(inputTrack.codec,
                                        inputTrack.codecParam,
                                        audioTrack.encoder))
             {
-                audio->out.dynamic_range_compression = audioTrack.drc;
+                audio.out.dynamic_range_compression = audioTrack.drc;
             }
             else
             {
                 // source isn't AC3 or output is passthru - the DRC dial is disabled so don't apply its value
-                audio->out.dynamic_range_compression = 0;
+                audio.out.dynamic_range_compression = 0;
             }
 
-            hb_audio_add(job, audio);
-            free(audio);
+            hb_audio_add(job, &audio);
         }
     }
 

@@ -32,9 +32,11 @@ CFStringRef hb_cv_colr_mat_xlat(int color_matrix);
 CFStringRef hb_cv_colr_range_xlat(int color_range);
 CFStringRef hb_cv_chroma_loc_xlat(int chroma_location);
 
-void hb_cv_add_color_tag(CVPixelBufferRef pix_buf,
+void hb_cv_add_color_tag(CFMutableDictionaryRef attachments,
                          int color_prim, int color_transfer,
                          int color_matrix, int chroma_location);
+
+void hb_cv_set_attachments(CVPixelBufferRef pix_buf, CFDictionaryRef attachments);
 
 int hb_cv_match_rgb_to_colorspace(int rgb,
                                   int color_prim,

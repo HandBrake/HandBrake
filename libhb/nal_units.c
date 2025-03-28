@@ -481,7 +481,7 @@ size_t hb_sei_unit_write_isomp4(const uint8_t *sei,
 
 hb_buffer_t * hb_isomp4_hevc_nal_bitstream_insert_payloads(const uint8_t *data,
                                                            const size_t size,
-                                                           const hb_sei_t *seis,
+                                                                 hb_sei_t *seis,
                                                            const size_t sei_count,
                                                            const hb_nal_t *nals,
                                                            const size_t nal_count,
@@ -491,9 +491,6 @@ hb_buffer_t * hb_isomp4_hevc_nal_bitstream_insert_payloads(const uint8_t *data,
     const uint8_t *buf, *end;
     uint8_t *out_data;
     size_t out_size = 0, buf_size;
-
-    size_t sei_nalu_size[4];
-    uint8_t sei_written[4];
 
     if ((seis == NULL || sei_count == 0) &&
         (nals == NULL || nal_count == 0))
@@ -509,11 +506,12 @@ hb_buffer_t * hb_isomp4_hevc_nal_bitstream_insert_payloads(const uint8_t *data,
 
     for (int i = 0; i < sei_count; i++)
     {
-        size_t msg_size = get_sei_msg_bytes(seis[i].payload, seis[i].payload_size, seis[i].type);
-        sei_nalu_size[i] = nal_length_size + 2 + msg_size + 1;
-        sei_written[i] = 0;
+        hb_sei_t *sei = &seis[i];
+        size_t msg_size = get_sei_msg_bytes(sei->payload, sei->payload_size, sei->type);
+        sei->nalu_size = nal_length_size + 2 + msg_size + 1;
+        sei->written = 0;
 
-        out_size += sei_nalu_size[i];
+        out_size += sei->nalu_size;
     }
 
     for (int i = 0; i < nal_count; i++)
@@ -542,11 +540,12 @@ hb_buffer_t * hb_isomp4_hevc_nal_bitstream_insert_payloads(const uint8_t *data,
 
         for (int i = 0; i < sei_count; i++)
         {
-            if (!sei_written[i] && is_post_hevc_sei_nal_type(nal_type))
+            hb_sei_t *sei = &seis[i];
+            if (!sei->written && is_post_hevc_sei_nal_type(nal_type))
             {
-                out_data += hb_sei_unit_write_isomp4(seis[i].payload, seis[i].payload_size, seis[i].type,
-                                                     out_data, sei_nalu_size[i], nal_length_size);
-                sei_written[i] = 1;
+                out_data += hb_sei_unit_write_isomp4(sei->payload, sei->payload_size, sei->type,
+                                                     out_data, sei->nalu_size, nal_length_size);
+                sei->written = 1;
             }
         }
 

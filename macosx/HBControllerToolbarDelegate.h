@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBControllerToolbarDelegate : NSObject<NSToolbarDelegate>
 
+- (instancetype)initWithTarget:(id)target;
+
 - (void)updateToolbarButtonsStateForScanCore:(HBState)state toolbar:(NSToolbar *)toolbar;
 - (void)updateToolbarButtonsState:(HBQueue *)queue toolbar:(NSToolbar *)toolbar;
 - (void)updateToolbarQueueBadge:(NSString *)value toolbar:(NSToolbar *)toolbar;

@@ -158,11 +158,11 @@
                     <MenuItem Header="{x:Static Properties:Resources.MainView_About}" Command="{Binding RelayCommand}" CommandParameter="OpenAboutApplication" />
                 </MenuItem>
 
-                <MenuItem Header="Debug" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
-                    <MenuItem Header="Export Scan Data" Command="{Binding RelayCommand}" CommandParameter="ExportSourceData" />
-                    <MenuItem Header="Import Scan Data" Command="{Binding RelayCommand}" CommandParameter="ImportSourceData" />
+                <MenuItem Header="{x:Static Properties:Resources.MainView_DebugMenu}" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_DebugExportData}" Command="{Binding RelayCommand}" CommandParameter="ExportSourceData" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_DebugImportData}" Command="{Binding RelayCommand}" CommandParameter="ImportSourceData" />
                     <Separator/>
-                    <MenuItem Header="Add to Queue - Quality Sweep" Command="{Binding AddToQueueQualitySweepCommand}" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_DebugQualitySweep}" Command="{Binding AddToQueueQualitySweepCommand}" />
                 </MenuItem>
             </Menu>
 

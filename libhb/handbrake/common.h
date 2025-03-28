@@ -146,6 +146,8 @@ void hb_limit_rational( int *x, int *y, int64_t num, int64_t den, int limit );
 void hb_reduce64( int64_t *x, int64_t *y, int64_t num, int64_t den );
 void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int64_t limit );
 
+void hb_update_str( char **dst, const char *src );
+
 void hb_job_set_encoder_preset (hb_job_t *job, const char *preset);
 void hb_job_set_encoder_tune   (hb_job_t *job, const char *tune);
 void hb_job_set_encoder_options(hb_job_t *job, const char *options);
@@ -160,6 +162,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg);
 int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg);
 hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i);
 
+void hb_subtitle_config_copy(hb_subtitle_config_t *dst, const hb_subtitle_config_t *src);
 hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src);
 hb_list_t *hb_subtitle_list_copy(const hb_list_t *src);
 void hb_subtitle_close( hb_subtitle_t **sub );
@@ -170,8 +173,11 @@ int hb_import_subtitle_add( const hb_job_t * job,
 int hb_srt_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg,
                const char *lang);
 int hb_subtitle_can_force( int source );
+int hb_subtitle_can_export( int source );
 int hb_subtitle_can_burn( int source );
 int hb_subtitle_can_pass( int source, int mux );
+int hb_subtitle_must_burn(hb_subtitle_t * subtitle, int mux);
+int hb_subtitle_extradata_init(hb_subtitle_t * subtitle);
 
 int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder);
 int hb_audio_can_apply_drc2(hb_handle_t *h, int title_idx,
@@ -187,7 +193,9 @@ hb_metadata_t * hb_metadata_copy(const hb_metadata_t *src);
 void hb_metadata_close(hb_metadata_t **metadata);
 void hb_update_meta_dict(hb_dict_t * dict, const char * key, const char * value);
 const char * hb_lookup_meta_key(const char * mux_key);
-void hb_metadata_add_coverart( hb_metadata_t *metadata, const uint8_t *data, int size, int type );
+void hb_metadata_add_coverart( hb_metadata_t *metadata,
+                               const uint8_t *data, int size,
+                               int type, const char *name );
 void hb_metadata_rem_coverart( hb_metadata_t *metadata, int ii );
 
 hb_chapter_t *hb_chapter_copy(const hb_chapter_t *src);
@@ -329,6 +337,17 @@ struct hb_subtitle_config_s
     int          force;
     int          default_track;
     const char * name;
+    char       * external_filename;
+    enum subtitle_output_codec {
+        HB_SCODEC_PASS = 0,
+        HB_SCODEC_SSA,
+        HB_SCODEC_SRT,
+        HB_SCODEC_TX3G,
+        HB_SCODEC_PGS,
+        HB_SCODEC_DVD,
+        HB_SCODEC_VTT
+    } codec;
+    uint32_t     codec_param;    /* Per-codec config info */
 
     /* SRT subtitle tracks only */
     const char * src_filename;
@@ -655,14 +674,14 @@ struct hb_job_s
 #define HB_VCODEC_VT_H265           (0x00000051 | HB_VCODEC_VT_MASK | HB_VCODEC_H265_MASK)
 #define HB_VCODEC_VT_H265_10BIT     (0x00000052 | HB_VCODEC_VT_MASK | HB_VCODEC_H265_MASK)
 
-#define HB_VCODEC_QSV_H264          (0x00000060 | HB_VCODEC_QSV_MASK | HB_VCODEC_H264_MASK)
-#define HB_VCODEC_QSV_H265_8BIT     (0x00000061 | HB_VCODEC_QSV_MASK | HB_VCODEC_H265_MASK)
-#define HB_VCODEC_QSV_H265_10BIT    (0x00000062 | HB_VCODEC_QSV_MASK | HB_VCODEC_H265_MASK)
-#define HB_VCODEC_QSV_H265          HB_VCODEC_QSV_H265_8BIT
+#define HB_VCODEC_FFMPEG_QSV_H264          (0x00000060 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_QSV_MASK | HB_VCODEC_H264_MASK)
+#define HB_VCODEC_FFMPEG_QSV_H265_8BIT     (0x00000061 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_QSV_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_FFMPEG_QSV_H265_10BIT    (0x00000062 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_QSV_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_FFMPEG_QSV_H265          HB_VCODEC_FFMPEG_QSV_H265_8BIT
 
-#define HB_VCODEC_QSV_AV1_8BIT      (0x00000070 | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
-#define HB_VCODEC_QSV_AV1_10BIT     (0x00000071 | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
-#define HB_VCODEC_QSV_AV1           HB_VCODEC_QSV_AV1_8BIT
+#define HB_VCODEC_FFMPEG_QSV_AV1_8BIT      (0x00000070 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_FFMPEG_QSV_AV1_10BIT     (0x00000071 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_FFMPEG_QSV_AV1           HB_VCODEC_FFMPEG_QSV_AV1_8BIT
 
 /* define an invalid CQ value compatible with all CQ-capable codecs */
 #define HB_INVALID_VIDEO_QUALITY (-1000.)
@@ -863,11 +882,11 @@ struct hb_job_s
     int             init_delay;
     hb_data_t     * extradata;
 
-    hb_fifo_t     * fifo_mpeg2;   /* MPEG-2 video ES */
+    hb_fifo_t     * fifo_in;      /* Input to video decoder */
     hb_fifo_t     * fifo_raw;     /* Raw pictures */
     hb_fifo_t     * fifo_sync;    /* Raw pictures, framerate corrected */
     hb_fifo_t     * fifo_render;  /* Raw pictures, scaled */
-    hb_fifo_t     * fifo_mpeg4;   /* MPEG-4 video ES */
+    hb_fifo_t     * fifo_out;     /* Encoder video output, input to mux */
 
     hb_list_t     * list_work;
 
@@ -1165,9 +1184,10 @@ struct hb_subtitle_s
     // Codec private data for subtitles originating from FFMPEG sources
     hb_data_t   * extradata;
 
-    hb_fifo_t     * fifo_in;        /* SPU ES */
-    hb_fifo_t     * fifo_raw;       /* Decoded SPU */
-    hb_fifo_t     * fifo_out;       /* Correct Timestamps, ready to be muxed */
+    hb_fifo_t     * fifo_in;   /* Input to decoder */
+    hb_fifo_t     * fifo_raw;  /* Decoder output, input to sync */
+    hb_fifo_t     * fifo_sync; /* Sync output, input to encoder */
+    hb_fifo_t     * fifo_out;  /* Encoder output, input to mux */
     hb_mux_data_t * mux_data;
 #endif
 };
@@ -1187,6 +1207,7 @@ struct hb_attachment_s
 
 struct hb_coverart_s
 {
+    char    *name;
     uint8_t *data;
     uint32_t size;
     enum arttype {
@@ -1273,7 +1294,7 @@ struct hb_title_s
 #define HB_DECODE_SUPPORT_VIDEOTOOLBOX   0x08
 #define HB_DECODE_SUPPORT_MF             0x10 // Windows Media Foundation
 
-#define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX | HB_DECODE_SUPPORT_MF)
+#define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX | HB_DECODE_SUPPORT_QSV | HB_DECODE_SUPPORT_MF)
 #define HB_DECODE_SUPPORT_FORCE_HW       0x80000000
 
     hb_metadata_t * metadata;
@@ -1432,6 +1453,7 @@ struct hb_work_object_s
 #endif
 };
 
+extern hb_work_object_t hb_workpass;
 extern hb_work_object_t hb_sync_video;
 extern hb_work_object_t hb_sync_audio;
 extern hb_work_object_t hb_sync_subtitle;
@@ -1439,8 +1461,10 @@ extern hb_work_object_t hb_decvobsub;
 extern hb_work_object_t hb_decsrtsub;
 extern hb_work_object_t hb_decutf8sub;
 extern hb_work_object_t hb_dectx3gsub;
+extern hb_work_object_t hb_enctx3gsub;
 extern hb_work_object_t hb_decssasub;
 extern hb_work_object_t hb_decavsub;
+extern hb_work_object_t hb_encavsub;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encqsv;
 extern hb_work_object_t hb_encvt;

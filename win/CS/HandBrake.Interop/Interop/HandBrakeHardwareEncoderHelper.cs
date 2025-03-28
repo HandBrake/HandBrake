@@ -108,7 +108,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H264) > 0;
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_FFMPEG_QSV_H264) > 0;
                 }
                 catch (Exception)
                 {
@@ -124,7 +124,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H265) > 0;
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_FFMPEG_QSV_H265) > 0;
                 }
                 catch (Exception)
                 {
@@ -186,7 +186,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H265_10BIT) > 0;
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_FFMPEG_QSV_H265_10BIT) > 0;
                 }
                 catch (Exception)
                 {
@@ -202,7 +202,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_AV1) > 0;
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_FFMPEG_QSV_AV1) > 0;
                 }
                 catch (Exception)
                 {
@@ -218,7 +218,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_AV1_10BIT) > 0;
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_FFMPEG_QSV_AV1_10BIT) > 0;
                 }
                 catch (Exception)
                 {

@@ -24,6 +24,34 @@ namespace HandBrakeWPF.Utilities
     /// </summary>
     public class BitmapUtilities
     {
+        public static BitmapImage IntPtrToBitmapImage(IntPtr imagePtr, int length)
+        {
+            byte[] imageData = new byte[length];
+
+            Marshal.Copy(imagePtr, imageData, 0, length);
+
+            using (MemoryStream memoryStream = new MemoryStream(imageData))
+            {
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memoryStream;
+                bitmapImage.EndInit();
+                return bitmapImage;
+            }
+        }
+
+        public static BitmapImage ConvertToBitmapImage(MemoryStream memoryStream)
+        {
+            var wpfBitmap = new BitmapImage();
+            wpfBitmap.BeginInit();
+            wpfBitmap.CacheOption = BitmapCacheOption.OnLoad;
+            wpfBitmap.StreamSource = memoryStream;
+            wpfBitmap.EndInit();
+            wpfBitmap.Freeze();
+
+            return wpfBitmap;
+        }
+        
         /// <summary>
         /// Convert a Bitmap to a BitmapImagetype.
         /// </summary>

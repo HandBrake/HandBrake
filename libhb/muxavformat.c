@@ -13,7 +13,6 @@
 #include "libavutil/avstring.h"
 
 #include "handbrake/handbrake.h"
-#include "handbrake/ssautil.h"
 #include "handbrake/lang.h"
 #include "handbrake/hbffmpeg.h"
 
@@ -26,7 +25,8 @@ struct hb_mux_data_s
         MUX_TYPE_SUBTITLE
     } type;
 
-    AVStream    *st;
+    AVFormatContext * oc;
+    AVStream        * st;
 
     int64_t  duration;
 
@@ -36,7 +36,6 @@ struct hb_mux_data_s
     int16_t  current_chapter;
 
     AVBSFContext            * bitstream_context;
-    hb_tx3g_style_context_t * tx3g;
 };
 
 struct hb_mux_object_s
@@ -66,29 +65,77 @@ enum
 
 const char *metadata_keys[][META_MUX_LAST] =
 {
-    {"Name",            "title",         "com.apple.quicktime.displayname",      "TITLE"},
-    {"Artist",          "artist",        "com.apple.quicktime.artist",           "ARTIST"},
-    {"AlbumArtist",     "album_artist",  NULL,                                   "DIRECTOR"},
-    {"Album",           "album",         "com.apple.quicktime.album",            NULL},
-    {"Genre",           "genre",         "com.apple.quicktime.genre",            "GENRE"},
-    {"ReleaseDate",     "date",          "com.apple.quicktime.creationdate",     "DATE_RELEASED"},
-    {"CreationTime",    "creation_time", NULL,                                   NULL},
-    {"Track",           "track",         "com.apple.quicktime.track",            NULL},
-    {"Show",            "show",          NULL,                                   NULL},
-    {"Network",         "network",       NULL,                                   NULL},
-    {"Episode ID",      "episode_id",    NULL,                                   NULL},
-    {"Episode Sort",    "episode_sort",  NULL,                                   NULL},
-    {"Season Number",   "season_number", NULL,                                   NULL},
-    {"Media Type",      "media_type",    NULL,                                   NULL},
-    {"HD Video",        "hd_video",      NULL,                                   NULL},
-    {"Composer",        "composer",      "com.apple.quicktime.composer",         "COMPOSER"},
-    {"Comment",         "comment",       "com.apple.quicktime.comment",          "SUMMARY"},
-    {"Description",     "description",   "com.apple.quicktime.description",      "DESCRIPTION"},
-    {"LongDescription", "synopsis",      NULL,                                   "SYNOPSIS"},
-    {"Grouping",        "grouping",      NULL,                                   NULL},
-    {"Lyrics",          "lyrics",        NULL,                                   "LYRICS"},
-    {"Keywords",        "keywords",      "com.apple.quicktime.keywords",         "KEYWORDS"},
-    {"Copyright",       "copyright",     "com.apple.quicktime.copyright",        "COPYRIGHT"},
+    {"Name",                "title",                  "com.apple.quicktime.displayname",      "TITLE"},
+    {"Artist",              "artist",                 "com.apple.quicktime.artist",           "ARTIST"},
+    {"AlbumArtist",         "album_artist",           NULL,                                   NULL},
+    {"Album",               "album",                  "com.apple.quicktime.album",            NULL},
+    {"Genre",               "genre",                  "com.apple.quicktime.genre",            "GENRE"},
+    {"ReleaseDate",         "date",                   "com.apple.quicktime.creationdate",     "DATE_RELEASED"},
+    {"CreationTime",        "creation_time",          NULL,                                   NULL},
+    {"Track",               "track",                  "com.apple.quicktime.track",            NULL},
+    {"Show",                "show",                   NULL,                                   NULL},
+    {"Network",             "network",                NULL,                                   NULL},
+    {"Episode ID",          "episode_id",             NULL,                                   NULL},
+    {"Episode Sort",        "episode_sort",           NULL,                                   NULL},
+    {"Season Number",       "season_number",          NULL,                                   NULL},
+    {"Rating",              "rating",                 NULL,                                   NULL},
+    {"Media Type",          "media_type",             NULL,                                   NULL},
+    {"HD Video",            "hd_video",               NULL,                                   NULL},
+    {"Description",         "description",            "com.apple.quicktime.description",      "DESCRIPTION"},
+    {"LongDescription",     "synopsis",               "com.apple.quicktime.information",      "SYNOPSIS"},
+    {"SeriesDescription",   "series_description",     NULL,                                   NULL},
+    {"Comment",             "comment",                "com.apple.quicktime.comment",          "SUMMARY"},
+    {"Grouping",            "grouping",               NULL,                                   NULL},
+    {"Compilation",         "compilation",            NULL,                                   NULL},
+    {"Tempo",               "tmpo",                   NULL,                                   "BPM"},
+
+    {"Subtitle",            "subtitle",               NULL,                                   "SUBTITLE"},
+    {"SongDescription",     "song_description",       NULL,                                   NULL},
+    {"Director",            "director",               "com.apple.quicktime.director",         "DIRECTOR"},
+    {"ArtDirector",         "art_director",           NULL,                                   "DIRECTOR_OF_PHOTOGRAPHY"},
+    {"Composer",            "composer",               "com.apple.quicktime.composer",         "COMPOSER"},
+    {"Arranger",            "arranger",               "com.apple.quicktime.arranger",         "ARRANGER"},
+    {"Author",              "author",                 "com.apple.quicktime.author",           "WRITTEN_BY"},
+    {"Acknowledgement",     "acknowledgement",        NULL,                                   NULL},
+    {"Conductor",           "conductor",              NULL,                                   "CONDUCTOR"},
+    {"Lyrics",              "lyrics",                 NULL,                                   "LYRICS"},
+    {"Keywords",            "keywords",               "com.apple.quicktime.keywords",         "KEYWORDS"},
+    {"Copyright",           "copyright",              "com.apple.quicktime.copyright",        "COPYRIGHT"},
+
+    {"WorkName",            "work_name",              NULL,                                   NULL},
+    {"MovementName",        "movement_name",          NULL,                                   NULL},
+    {"MovementNumber",      "movement_number",        NULL,                                   NULL},
+    {"MovementShow",        "movement_count",         NULL,                                   NULL},
+    {"ShowWorkAndMovement", "show_work_and_movement", NULL,                                   NULL},
+
+    {"LinearNotes",         "linear_notes",           NULL,                                   NULL},
+    {"RecordCompany",       "make",                   "com.apple.quicktime.make",             NULL},
+    {"OriginalArtist",      "original_artist",        "com.apple.quicktime.originalartist",   NULL},
+    {"PhonogramRights",     "phonogram_rights",       "com.apple.quicktime.phonogramrights",  NULL},
+    {"Producer",            "producer",               "com.apple.quicktime.producer",         "PRODUCER"},
+    {"Performers",          "performers",             "com.apple.quicktime.performer",        NULL},
+    {"Publisher",           "publisher",              "com.apple.quicktime.publisher",        "PUBLISHER"},
+    {"SoundEngineer",       "sound_engineer",         NULL,                                   "SOUND_ENGINEER"},
+    {"Soloist",             "soloist",                NULL,                                   "LEAD_PERFORMER"},
+    {"Credits",             "original_source",        "com.apple.quicktime.credits",          NULL},
+    {"Thanks",              "thanks",                 NULL,                                   "THANKS_TO"},
+    {"OnlineExtra",         "URL",                    NULL,                                   NULL},
+    {"ExecutiveProducer",   "executive_producer",     NULL,                                   "EXECUTIVE_PRODUCER"},
+
+    {"iTunesU",             "itunes_u",               NULL,                                   NULL},
+    {"Podcast",             "podcast",                NULL,                                   NULL},
+    {"Category",            "category",               NULL,                                   NULL},
+
+    {"ContentID",           "content_id",             NULL,                                   NULL},
+    {"ArtistID",            "artist_id",              NULL,                                   NULL},
+    {"PlaylistID",          "playlist_id",            NULL,                                   NULL},
+    {"GenreID",             "genre_id",               NULL,                                   NULL},
+    {"ComposerID",          "composer_id",            NULL,                                   NULL},
+    {"XID",                 "xid",                    NULL,                                   NULL},
+
+    {"iTunEXTC",            "iTunEXTC",               NULL,                                   NULL},
+    {"iTunMOVI",            "iTunMOVI",               NULL,                                   NULL},
+    {"Location",            "location",               "com.apple.quicktime.location.ISO6709", NULL},
     {NULL}
 };
 
@@ -146,6 +193,26 @@ static char* lookup_lang_code(int mux, char *iso639_2)
             break;
     }
     return out;
+}
+
+const char * get_subtitle_muxer(int source)
+{
+    switch (source)
+    {
+        case CC608SUB:
+        case CC708SUB:
+        case SSASUB:
+        case IMPORTSSA:
+            return "ass";
+        case UTF8SUB:
+        case TX3GSUB:
+        case IMPORTSRT:
+            return "srt";
+        case PGSSUB:
+            return "sup";
+    }
+
+    return NULL;
 }
 
 static int set_extradata(hb_data_t *extradata, uint8_t **priv_data, int *priv_size)
@@ -298,10 +365,10 @@ static int avformatInit( hb_mux_object_t * m )
     {
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
-        case HB_VCODEC_QSV_H264:
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_NVENC_H264:
+        case HB_VCODEC_FFMPEG_QSV_H264:
         case HB_VCODEC_FFMPEG_MF_H264:
             track->st->codecpar->codec_id = AV_CODEC_ID_H264;
             if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
@@ -336,40 +403,11 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_FFMPEG_NVENC_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
         case HB_VCODEC_FFMPEG_VCE_AV1:
+        case HB_VCODEC_FFMPEG_QSV_AV1:
+        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
         case HB_VCODEC_FFMPEG_MF_AV1:
             track->st->codecpar->codec_id = AV_CODEC_ID_AV1;
             break;
-
-        case HB_VCODEC_QSV_AV1_10BIT:
-        case HB_VCODEC_QSV_AV1:
-        {
-            const AVBitStreamFilter  *bsf;
-            AVBSFContext             *ctx;
-            int                       ret;
-
-            track->st->codecpar->codec_id = AV_CODEC_ID_AV1;
-
-            bsf = av_bsf_get_by_name("extract_extradata");
-            ret = av_bsf_alloc(bsf, &ctx);
-            if (ret < 0)
-            {
-                hb_error("AV1 bitstream filter: alloc failure");
-                goto error;
-            }
-
-            track->bitstream_context = ctx;
-            if (track->bitstream_context != NULL)
-            {
-                avcodec_parameters_copy(track->bitstream_context->par_in,
-                                       track->st->codecpar);
-                ret = av_bsf_init(track->bitstream_context);
-                if (ret < 0)
-                {
-                    hb_error("AV1 bitstream filter: init failure");
-                    goto error;
-                }
-            }
-        } break;
 
         case HB_VCODEC_THEORA:
             track->st->codecpar->codec_id = AV_CODEC_ID_THEORA;
@@ -379,14 +417,14 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
-        case HB_VCODEC_QSV_H265:
-        case HB_VCODEC_QSV_H265_10BIT:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
         case HB_VCODEC_FFMPEG_VCE_H265:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_QSV_H265:
+        case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
         case HB_VCODEC_FFMPEG_MF_H265:
             track->st->codecpar->codec_id  = AV_CODEC_ID_HEVC;
             if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
@@ -780,21 +818,6 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
-    char * subidx_fmt =
-        "size: %dx%d\n"
-        "org: %d, %d\n"
-        "scale: 100%%, 100%%\n"
-        "alpha: 100%%\n"
-        "smooth: OFF\n"
-        "fadein/out: 50, 50\n"
-        "align: OFF at LEFT TOP\n"
-        "time offset: 0\n"
-        "forced subs: %s\n"
-        "palette: %06x, %06x, %06x, %06x, %06x, %06x, "
-        "%06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x\n"
-        "custom colors: OFF, tridx: 0000, "
-        "colors: 000000, 000000, 000000, 000000\n";
-
     int subtitle_default = -1;
     for( ii = 0; ii < hb_list_count( job->list_subtitle ); ii++ )
     {
@@ -818,10 +841,9 @@ static int avformatInit( hb_mux_object_t * m )
 
     for( ii = 0; ii < hb_list_count( job->list_subtitle ); ii++ )
     {
-        hb_subtitle_t * subtitle;
-        uint32_t        rgb[16];
-        char            subidx[2048];
-        int             len;
+        hb_subtitle_t   * subtitle;
+        AVFormatContext * oc;
+        const char      * subtitle_muxer_name = NULL;
 
         subtitle = hb_list_item( job->list_subtitle, ii );
         if (subtitle->config.dest != PASSTHRUSUB)
@@ -830,8 +852,39 @@ static int avformatInit( hb_mux_object_t * m )
         track = m->tracks[m->ntracks++] = calloc(1, sizeof( hb_mux_data_t ) );
         subtitle->mux_data = track;
 
+        if (subtitle->config.external_filename != NULL)
+        {
+            subtitle_muxer_name = get_subtitle_muxer(subtitle->source);
+            if (subtitle_muxer_name == NULL)
+            {
+                hb_error( "No muxer for subtitle source %d", subtitle->source );
+                goto error;
+            }
+            ret = avformat_alloc_output_context2(&track->oc, NULL,
+                subtitle_muxer_name, subtitle->config.external_filename);
+            if (ret < 0)
+            {
+                hb_error( "Could not initialize subtitle avformat context." );
+                goto error;
+            }
+
+            oc = track->oc;
+            ret = avio_open2(&oc->pb, subtitle->config.external_filename,
+                             AVIO_FLAG_WRITE, &track->oc->interrupt_callback,
+                             NULL);
+            if( ret < 0 )
+            {
+                hb_error( "subtitle avio_open2 failed, errno %d", ret);
+                goto error;
+            }
+        }
+        else
+        {
+            oc = m->oc;
+        }
+
         track->type = MUX_TYPE_SUBTITLE;
-        track->st = avformat_new_stream(m->oc, NULL);
+        track->st = avformat_new_stream(oc, NULL);
         if (track->st == NULL)
         {
             hb_error("Could not initialize subtitle stream");
@@ -843,33 +896,13 @@ static int avformatInit( hb_mux_object_t * m )
         track->st->codecpar->width = subtitle->width;
         track->st->codecpar->height = subtitle->height;
 
-        uint8_t *priv_data = NULL;
-        size_t   priv_size = 0;
+        int need_extradata = 0;
         switch (subtitle->source)
         {
             case VOBSUB:
             {
-                int jj;
                 track->st->codecpar->codec_id = AV_CODEC_ID_DVD_SUBTITLE;
-
-                for (jj = 0; jj < 16; jj++)
-                    rgb[jj] = hb_yuv2rgb(subtitle->palette[jj]);
-                len = snprintf(subidx, 2048, subidx_fmt,
-                        subtitle->width, subtitle->height,
-                        0, 0, "OFF",
-                        rgb[0], rgb[1], rgb[2], rgb[3],
-                        rgb[4], rgb[5], rgb[6], rgb[7],
-                        rgb[8], rgb[9], rgb[10], rgb[11],
-                        rgb[12], rgb[13], rgb[14], rgb[15]);
-
-                priv_size = len + 1;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
-                {
-                    hb_error("VOBSUB extradata: malloc failure");
-                    goto error;
-                }
-                memcpy(priv_data, subidx, priv_size);
+                need_extradata = 1;
             } break;
 
             case PGSSUB:
@@ -880,107 +913,56 @@ static int avformatInit( hb_mux_object_t * m )
             case DVBSUB:
             {
                 track->st->codecpar->codec_id = AV_CODEC_ID_DVB_SUBTITLE;
-                if (subtitle->extradata != NULL && subtitle->extradata->size)
-                {
-                    priv_size = subtitle->extradata->size;
-                    priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                    memcpy(priv_data, subtitle->extradata->bytes, priv_size);
-                }
+                need_extradata = 1;
             } break;
 
             case CC608SUB:
             case CC708SUB:
-            case TX3GSUB:
-            case UTF8SUB:
             case SSASUB:
-            case IMPORTSRT:
             case IMPORTSSA:
             {
-                if (job->mux == HB_MUX_AV_MP4)
+                if (job->mux == HB_MUX_AV_MP4 &&
+                    subtitle->config.external_filename == NULL)
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
-                    track->tx3g = hb_tx3g_style_init(
-                                job->height, (char*)subtitle->extradata);
                 }
                 else
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_ASS;
                     need_fonts = 1;
-
-                    if (subtitle->extradata && subtitle->extradata->size)
-                    {
-                        priv_size = subtitle->extradata->size;
-                        priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                        if (priv_data == NULL)
-                        {
-                            hb_error("SSA extradata: malloc failure");
-                            goto error;
-                        }
-                        memcpy(priv_data, subtitle->extradata->bytes, priv_size);
-                    }
                 }
+                need_extradata = 1;
+            } break;
+
+            case TX3GSUB:
+            case UTF8SUB:
+            case IMPORTSRT:
+            {
+                if (job->mux == HB_MUX_AV_MP4 &&
+                    subtitle->config.external_filename == NULL)
+                {
+                    track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
+                }
+                else
+                {
+                    track->st->codecpar->codec_id = AV_CODEC_ID_SUBRIP;
+                }
+                need_extradata = 1;
             } break;
 
             default:
                 continue;
         }
-        if (track->st->codecpar->codec_id == AV_CODEC_ID_MOV_TEXT)
+
+        if (need_extradata)
         {
-            // Build codec extradata for tx3g.
-            // If we were using a libav codec to generate this data
-            // this would (or should) be done for us.
-            uint8_t properties[] = {
-                0x00, 0x00, 0x00, 0x00,     // Display Flags
-                0x01,                       // Horiz. Justification
-                0xff,                       // Vert. Justification
-                0x00, 0x00, 0x00, 0xff,     // Bg color
-                0x00, 0x00, 0x00, 0x00,     // Default text box
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,     // Reserved
-                0x00, 0x01,                 // Font ID
-                0x00,                       // Font face
-                0x18,                       // Font size
-                0xff, 0xff, 0xff, 0xff,     // Fg color
-                // Font table:
-                0x00, 0x00, 0x00, 0x12,     // Font table size
-                'f','t','a','b',            // Tag
-                0x00, 0x01,                 // Count
-                0x00, 0x01,                 // Font ID
-                0x05,                       // Font name length
-                'A','r','i','a','l'         // Font name
-            };
-
-            int width, height, font_size;
-            width     = job->width * job->par.num / job->par.den;
-            font_size = 0.05 * job->height;
-            if (font_size < 12)
+            if (set_extradata(subtitle->extradata,
+                              &track->st->codecpar->extradata,
+                              &track->st->codecpar->extradata_size))
             {
-                font_size = 12;
-            }
-            else if (font_size > 255)
-            {
-                font_size = 255;
-            }
-            properties[25] = font_size;
-            height = 3 * font_size;
-            track->st->codecpar->width  = width;
-            track->st->codecpar->height = height;
-            properties[14] = height >> 8;
-            properties[15] = height & 0xff;
-            properties[16] = width >> 8;
-            properties[17] = width & 0xff;
-
-            priv_size = sizeof(properties);
-            priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-            if (priv_data == NULL)
-            {
-                hb_error("TX3G extradata: malloc failure");
                 goto error;
             }
-            memcpy(priv_data, properties, priv_size);
         }
-        track->st->codecpar->extradata = priv_data;
-        track->st->codecpar->extradata_size = priv_size;
 
         if (ii == subtitle_default)
         {
@@ -1057,34 +1039,51 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
-    if( job->metadata && job->metadata->dict )
+    if (job->metadata)
     {
         hb_deep_log(2, "Writing Metadata to output file...");
-        hb_dict_iter_t iter = hb_dict_iter_init(job->metadata->dict);
 
-        while (iter != HB_DICT_ITER_DONE)
+        if (job->metadata->dict)
         {
-            const char * key;
-            hb_value_t * val;
+            hb_dict_iter_t iter = hb_dict_iter_init(job->metadata->dict);
 
-            hb_dict_iter_next_ex(job->metadata->dict, &iter, &key, &val);
-            if (key != NULL && val != NULL)
+            while (iter != HB_DICT_ITER_DONE)
             {
-                const char * str = hb_value_get_string(val);
+                const char *key;
+                hb_value_t *val;
 
-                if (str != NULL)
+                hb_dict_iter_next_ex(job->metadata->dict, &iter, &key, &val);
+                if (key != NULL && val != NULL)
                 {
-                    const char * mux_key = lookup_meta_mux_key(meta_mux, key);
+                    const char *str = hb_value_get_string(val);
 
-                    if (mux_key != NULL)
+                    if (str != NULL)
                     {
-                        av_dict_set(&m->oc->metadata, mux_key, str, 0);
+                        const char *mux_key = lookup_meta_mux_key(meta_mux, key);
+
+                        if (mux_key != NULL)
+                        {
+                            av_dict_set(&m->oc->metadata, mux_key, str, 0);
+                        }
                     }
+                }
+            }
+
+            if (job->mux == HB_MUX_AV_MP4)
+            {
+                // Set the location tag language to undefined,
+                // Apple software seems to require it
+                hb_value_t *location = hb_dict_get(job->metadata->dict, "Location");
+                if (location)
+                {
+                    char *str = hb_value_get_string_xform(location);
+                    av_dict_set(&m->oc->metadata, "location-und", str, 0);
+                    free(str);
                 }
             }
         }
 
-        if (job->mux == HB_MUX_AV_MP4 || job->mux == HB_MUX_AV_MKV)
+        if (job->metadata->list_coverart)
         {
             hb_list_t *list_coverart = job->metadata->list_coverart;
             for (int ii = 0; ii < hb_list_count(list_coverart); ii++)
@@ -1100,12 +1099,12 @@ static int avformatInit( hb_mux_object_t * m )
                     case HB_ART_PNG:
                         codec_id = AV_CODEC_ID_PNG;
                         mimetype = "image/png";
-                        filename = "cover.png";
+                        filename = art->name ? art->name : "cover.png";
                         break;
                     case HB_ART_JPEG:
                         codec_id = AV_CODEC_ID_MJPEG;
                         mimetype = "image/jpeg";
-                        filename = "cover.jpg";
+                        filename = art->name ? art->name : "cover.jpg";
                         break;
                     default:
                         break;
@@ -1120,7 +1119,15 @@ static int avformatInit( hb_mux_object_t * m )
                         goto error;
                     }
 
-                    if (job->mux == HB_MUX_AV_MKV)
+                    if (job->mux == HB_MUX_AV_MP4)
+                    {
+                        st->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
+                        st->codecpar->codec_id = codec_id;
+                        st->codecpar->width  = 640;
+                        st->codecpar->height = 360;
+                        st->disposition = AV_DISPOSITION_ATTACHED_PIC;
+                    }
+                    else
                     {
                         st->codecpar->codec_type = AVMEDIA_TYPE_ATTACHMENT;
                         st->codecpar->codec_id = codec_id;
@@ -1140,19 +1147,7 @@ static int avformatInit( hb_mux_object_t * m )
                         st->codecpar->extradata = priv_data;
                         st->codecpar->extradata_size = priv_size;
                     }
-                    else if (job->mux == HB_MUX_AV_MP4)
-                    {
-                        st->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
-                        st->codecpar->codec_id = codec_id;
-                        st->codecpar->width  = 640;
-                        st->codecpar->height = 360;
-                        st->disposition = AV_DISPOSITION_ATTACHED_PIC;
-                    }
                 }
-
-                // Write only the first
-                // cover art for now
-                break;
             }
         }
     }
@@ -1185,9 +1180,29 @@ static int avformatInit( hb_mux_object_t * m )
     }
     av_dict_free( &av_opts );
 
+    for (ii = 0; ii < m->ntracks; ii++)
+    {
+        if (m->tracks[ii]->oc != NULL)
+        {
+            ret = avformat_write_header(m->tracks[ii]->oc, NULL);
+            if( ret < 0 )
+            {
+                hb_error( "muxavformat: avformat_write_header external track failed!");
+                goto error;
+            }
+        }
+    }
+
     return 0;
 
 error:
+    for (ii = 0; ii < m->ntracks; ii++)
+    {
+        if (m->tracks[ii]->oc != NULL)
+        {
+            avformat_free_context(m->tracks[ii]->oc);
+        }
+    }
     av_dict_free(&av_opts);
     free(job->mux_data);
     job->mux_data = NULL;
@@ -1237,10 +1252,12 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
 
 static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *buf)
 {
-    int64_t    dts, pts, duration = AV_NOPTS_VALUE;
-    hb_job_t * job     = m->job;
-    uint8_t  * sub_out = NULL;
+    int64_t           dts, pts, duration = AV_NOPTS_VALUE;
+    hb_job_t        * job     = m->job;
+    uint8_t         * sub_out = NULL;
+    AVFormatContext * oc;
 
+    oc = track->oc != NULL ? track->oc : m->oc;
     if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MP4))
     {
         // compute dts duration for MP4 files
@@ -1253,7 +1270,8 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     }
     if (buf == NULL)
     {
-        if (job->mux == HB_MUX_AV_MP4 && track->type == MUX_TYPE_SUBTITLE)
+        if (job->mux == HB_MUX_AV_MP4 &&
+            track->oc == NULL && track->type == MUX_TYPE_SUBTITLE)
         {
             // Write a final "empty" subtitle to terminate the last
             // subtitle that was written
@@ -1407,7 +1425,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
 
         case MUX_TYPE_SUBTITLE:
         {
-            if (job->mux == HB_MUX_AV_MP4)
+            if (job->mux == HB_MUX_AV_MP4 && track->oc == NULL)
             {
                 /* Write an empty sample */
                 if ( track->duration < pts )
@@ -1432,41 +1450,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                         *job->die = 1;
                         return -1;
                     }
-                }
-                if (track->st->codecpar->codec_id == AV_CODEC_ID_MOV_TEXT)
-                {
-                    uint8_t  * styleatom;
-                    uint16_t   stylesize = 0;
-                    uint8_t  * buffer;
-                    uint16_t   buffersize = 0;
-
-                    /*
-                     * Copy the subtitle into buffer stripping markup and
-                     * creating style atoms for them.
-                     */
-                    hb_muxmp4_process_subtitle_style(
-                        track->tx3g, buf->data, &buffer,
-                        &styleatom, &stylesize);
-
-                    if (buffer != NULL)
-                    {
-                        buffersize = strlen((char*)buffer);
-                        if (styleatom == NULL)
-                        {
-                            stylesize = 0;
-                        }
-                        sub_out = malloc(2 + buffersize + stylesize);
-
-                        /* Write the subtitle sample */
-                        memcpy(sub_out + 2, buffer, buffersize);
-                        memcpy(sub_out + 2 + buffersize, styleatom, stylesize);
-                        sub_out[0] = (buffersize >> 8) & 0xff;
-                        sub_out[1] = buffersize & 0xff;
-                        m->pkt->data = sub_out;
-                        m->pkt->size = buffersize + stylesize + 2;
-                    }
-                    free(buffer);
-                    free(styleatom);
                 }
             }
             if (m->pkt->data == NULL)
@@ -1508,7 +1491,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     }
 
     m->pkt->stream_index = track->st->index;
-    int ret = av_interleaved_write_frame(m->oc, m->pkt);
+    int ret = av_interleaved_write_frame(oc, m->pkt);
     av_packet_unref(m->pkt);
     if (sub_out != NULL)
     {
@@ -1517,10 +1500,10 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     // Many avformat muxer functions do not check the error status
     // of the AVIOContext.  So we need to check it ourselves to detect
     // write errors (like disk full condition).
-    if (ret < 0 || m->oc->pb->error != 0)
+    if (ret < 0 || oc->pb->error != 0)
     {
         char errstr[64];
-        av_strerror(ret < 0 ? ret : m->oc->pb->error, errstr, sizeof(errstr));
+        av_strerror(ret < 0 ? ret : oc->pb->error, errstr, sizeof(errstr));
         hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s'",
                  track->st->index, errstr);
         *job->done_error = HB_ERROR_UNKNOWN;
@@ -1554,10 +1537,6 @@ static int avformatEnd(hb_mux_object_t *m)
         if (m->tracks[ii]->bitstream_context)
         {
             av_bsf_free(&m->tracks[ii]->bitstream_context);
-        }
-        if (m->tracks[ii]->tx3g)
-        {
-            hb_tx3g_style_close(&m->tracks[ii]->tx3g);
         }
     }
 
@@ -1606,7 +1585,7 @@ static int avformatEnd(hb_mux_object_t *m)
     }
 
     // Write MP4 cover art
-    if (job->mux == HB_MUX_AV_MP4 && job->metadata && job->metadata->dict)
+    if (job->mux == HB_MUX_AV_MP4 && job->metadata)
     {
         hb_list_t *list_coverart = job->metadata->list_coverart;
         for (int ii = 0; ii < hb_list_count(list_coverart); ii++)
@@ -1614,10 +1593,9 @@ static int avformatEnd(hb_mux_object_t *m)
             hb_coverart_t *art = hb_list_item(list_coverart, ii);
             m->pkt->data = art->data;
             m->pkt->size = art->size;
-            m->pkt->stream_index = m->ntracks;
+            m->pkt->stream_index = m->ntracks + ii;
             av_interleaved_write_frame(m->oc, m->pkt);
             av_packet_unref(m->pkt);
-            break;
         }
     }
 
@@ -1626,6 +1604,18 @@ static int avformatEnd(hb_mux_object_t *m)
     avformat_free_context(m->oc);
     av_packet_free(&m->pkt);
     av_packet_free(&m->empty_pkt);
+    m->oc = NULL;
+
+    for (ii = 0; ii < m->ntracks; ii++)
+    {
+        if (m->tracks[ii]->oc != NULL)
+        {
+            av_write_trailer(m->tracks[ii]->oc);
+            avio_close(m->tracks[ii]->oc->pb);
+            avformat_free_context(m->tracks[ii]->oc);
+            m->tracks[ii]->oc = NULL;
+        }
+    }
 
     for (int i = 0; i < m->ntracks; i++)
     {
@@ -1635,7 +1625,6 @@ static int avformatEnd(hb_mux_object_t *m)
     }
 
     free(m->tracks);
-    m->oc = NULL;
 
     return 0;
 }

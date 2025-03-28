@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services.Scan.Model
     using System.Linq;
 
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
+    using HandBrake.Interop.Interop.Json.Shared;
 
     using Size = HandBrakeWPF.Model.Picture.Size;
 
@@ -33,6 +34,7 @@ namespace HandBrakeWPF.Services.Scan.Model
             this.Subtitles = new List<Subtitle>();
             this.Metadata = new Dictionary<string, string>();
             this.ColorInformation = new ColorInfo();
+            this.CoverArts = new List<CoverArt>();
         }
 
         #region Properties
@@ -53,6 +55,8 @@ namespace HandBrakeWPF.Services.Scan.Model
         public List<Subtitle> Subtitles { get; set; }
 
         public Dictionary<string, string> Metadata { get; set; }
+
+        public List<CoverArt> CoverArts { get; set; }
 
         /// <summary>
         /// Gets or sets The track number of this Title

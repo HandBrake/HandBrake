@@ -11,10 +11,6 @@
 #include "libavcodec/avcodec.h"
 
 #include "handbrake/handbrake.h"
-#if HB_PROJECT_FEATURE_QSV
-#include "handbrake/qsv_libav.h"
-#include "handbrake/qsv_common.h"
-#endif
 
 #ifdef __APPLE__
 #include <CoreMedia/CoreMedia.h>
@@ -1037,43 +1033,6 @@ void hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst )
     src->alloc = alloc;
 }
 
-#if HB_PROJECT_FEATURE_QSV
-static void free_qsv_resources(hb_buffer_t *b)
-{
-    // Reclaim QSV resources before dropping the buffer.
-    // when decoding without QSV, the QSV atom will be NULL.
-    if (b->storage != NULL && b->qsv_details.ctx != NULL)
-    {
-        AVFrame *frame = (AVFrame *)b->storage;
-        mfxFrameSurface1 *surface = (mfxFrameSurface1 *)frame->data[3];
-        if (surface)
-        {
-            hb_qsv_release_surface_from_pool_by_surface_pointer(b->qsv_details.qsv_frames_ctx, surface);
-            frame->data[3] = 0;
-        }
-    }
-    if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)
-    {
-        hb_qsv_stage *stage = hb_qsv_get_last_stage(b->qsv_details.qsv_atom);
-        if (stage != NULL)
-        {
-            hb_qsv_wait_on_sync(b->qsv_details.ctx, stage);
-            if (stage->out.sync->in_use > 0)
-            {
-                ff_qsv_atomic_dec(&stage->out.sync->in_use);
-            }
-            if (stage->out.p_surface->Data.Locked > 0)
-            {
-                ff_qsv_atomic_dec(&stage->out.p_surface->Data.Locked);
-            }
-        }
-        hb_qsv_flush_stages(b->qsv_details.ctx->pipes,
-                            (hb_qsv_list**)&b->qsv_details.qsv_atom, 1);
-    }
-}
-#endif
-
-
 static void free_buffer_resources(hb_buffer_t *b)
 {
     if (b->storage_type == AVFRAME)
@@ -1112,9 +1071,6 @@ void hb_buffer_close( hb_buffer_t ** _b )
         hb_unlock(buffers.lock);
 #endif
 
-#if HB_PROJECT_FEATURE_QSV
-        free_qsv_resources(b);
-#endif
         free_buffer_resources(b);
 
         if (buffer_pool && !hb_fifo_is_full(buffer_pool))

@@ -267,13 +267,22 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
         case HB_VCODEC_X264_10BIT:
             w = hb_get_work(h, WORK_ENCX264);
             break;
-        case HB_VCODEC_QSV_H264:
-        case HB_VCODEC_QSV_H265:
-        case HB_VCODEC_QSV_H265_10BIT:
-        case HB_VCODEC_QSV_AV1:
-        case HB_VCODEC_QSV_AV1_10BIT:
-            w = hb_get_work(h, WORK_ENCQSV);
+#if HB_PROJECT_FEATURE_QSV
+        case HB_VCODEC_FFMPEG_QSV_H264:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_H264;
             break;
+        case HB_VCODEC_FFMPEG_QSV_H265:
+        case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_HEVC;
+            break;
+        case HB_VCODEC_FFMPEG_QSV_AV1:
+        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_AV1;
+            break;
+#endif
         case HB_VCODEC_THEORA:
             w = hb_get_work(h, WORK_ENCTHEORA);
             break;
@@ -352,8 +361,35 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
     return w;
 }
 
+hb_work_object_t* hb_subtitle_encoder(hb_handle_t *h, int codec)
+{
+    hb_work_object_t *w = NULL;
+
+    switch (codec)
+    {
+        case HB_SCODEC_PASS:
+            w = hb_get_work(h, WORK_PASS);
+            break;
+        case HB_SCODEC_TX3G:
+            w = hb_get_work(h, WORK_ENCTX3GSUB);
+            break;
+        case HB_SCODEC_SRT:
+            w = hb_get_work(h, WORK_ENCAVSUB);
+            w->codec_param = AV_CODEC_ID_SUBRIP;
+            break;
+        default:
+            break;
+    }
+
+    return w;
+}
+
 hb_work_object_t* hb_audio_encoder(hb_handle_t *h, int codec)
 {
+    if (codec & HB_ACODEC_PASS_FLAG)
+    {
+        return hb_get_work(h, WORK_PASS);
+    }
     switch (codec)
     {
         case HB_ACODEC_LAME:    return hb_get_work(h, WORK_ENCAVCODEC_AUDIO);
@@ -584,11 +620,11 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X265_10BIT:
                 case HB_VCODEC_X265_12BIT:
                 case HB_VCODEC_X265_16BIT:
-                case HB_VCODEC_QSV_H264:
-                case HB_VCODEC_QSV_H265:
-                case HB_VCODEC_QSV_H265_10BIT:
-                case HB_VCODEC_QSV_AV1:
-                case HB_VCODEC_QSV_AV1_10BIT:
+                case HB_VCODEC_FFMPEG_QSV_H264:
+                case HB_VCODEC_FFMPEG_QSV_H265:
+                case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+                case HB_VCODEC_FFMPEG_QSV_AV1:
+                case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
                 case HB_VCODEC_FFMPEG_VCE_H264:
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
@@ -620,11 +656,11 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X265_8BIT:
                 case HB_VCODEC_X265_10BIT:
                 case HB_VCODEC_X265_12BIT:
-                case HB_VCODEC_QSV_H264:
-                case HB_VCODEC_QSV_H265:
-                case HB_VCODEC_QSV_H265_10BIT:
-                case HB_VCODEC_QSV_AV1:
-                case HB_VCODEC_QSV_AV1_10BIT:
+                case HB_VCODEC_FFMPEG_QSV_H264:
+                case HB_VCODEC_FFMPEG_QSV_H265:
+                case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+                case HB_VCODEC_FFMPEG_QSV_AV1:
+                case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
                 case HB_VCODEC_FFMPEG_VCE_H264:
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
@@ -1084,9 +1120,7 @@ static int sanitize_subtitles( hb_job_t * job )
                 one_burned = 1;
             }
         }
-
-        if (subtitle->config.dest == PASSTHRUSUB &&
-            !hb_subtitle_can_pass(subtitle->source, job->mux))
+        else if (hb_subtitle_must_burn(subtitle, job->mux))
         {
             if (!one_burned)
             {
@@ -1101,6 +1135,20 @@ static int sanitize_subtitles( hb_job_t * job )
                 hb_list_rem(job->list_subtitle, subtitle);
                 free(subtitle);
                 continue;
+            }
+        }
+        else if (subtitle->format        == TEXTSUB &&
+                 subtitle->config.codec  == HB_SCODEC_PASS)
+        {
+            if (job->mux == HB_MUX_AV_MP4)
+            {
+                subtitle->config.codec = HB_SCODEC_TX3G;
+            }
+            else if (subtitle->source == UTF8SUB ||
+                     subtitle->source == SRTSUB  ||
+                     subtitle->source == TX3GSUB)
+            {
+                subtitle->config.codec = HB_SCODEC_SRT;
             }
         }
         /* Adjust output track number, in case we removed one.
@@ -1611,16 +1659,36 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
             }
         }
 
+        int angle = 0, hflip = 0;
         double scale_factor_x = 1, scale_factor_y = 1;
         int crop_top = 0, crop_bottom = 0, crop_left = 0, crop_right = 0;
         int pad_top = 0, pad_bottom = 0, pad_left = 0, pad_right = 0;
 
-        hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+        hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_ROTATE);
         if (filter != NULL)
         {
             hb_dict_t *settings = filter->settings;
             if (settings != NULL)
             {
+                angle = hb_dict_get_int(settings, "angle");
+                hflip = hb_dict_get_int(settings, "hflip");
+            }
+        }
+
+        filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+        if (filter != NULL)
+        {
+            hb_dict_t *settings = filter->settings;
+            if (settings != NULL)
+            {
+                hb_geometry_crop_t title_geo = {0};
+                title_geo.geometry = job->title->geometry;
+
+                if (angle || hflip)
+                {
+                    hb_rotate_geometry(&title_geo, &title_geo, angle, hflip);
+                }
+
                 int width  = hb_dict_get_int(settings, "width");
                 int height = hb_dict_get_int(settings, "height");
                 crop_top    = hb_dict_get_int(settings, "crop-top");
@@ -1628,8 +1696,8 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
                 crop_left   = hb_dict_get_int(settings, "crop-left");
                 crop_right  = hb_dict_get_int(settings, "crop-right");
 
-                scale_factor_x = (float)(job->title->geometry.width - crop_right - crop_left) / width;
-                scale_factor_y = (float)(job->title->geometry.height - crop_top - crop_bottom) / height;
+                scale_factor_x = (float)(title_geo.geometry.width - crop_right - crop_left) / width;
+                scale_factor_y = (float)(title_geo.geometry.height - crop_top - crop_bottom) / height;
             }
         }
 
@@ -1647,10 +1715,12 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         }
 
         filter = hb_filter_init(HB_FILTER_RPU);
-        char *settings = hb_strdup_printf("mode=%d:scale-factor-x=%f:scale-factor-y=%f:"
+        char *settings = hb_strdup_printf("mode=%d:angle=%d:hflip=%d:"
+                                          "scale-factor-x=%f:scale-factor-y=%f:"
                                           "crop-top=%d:crop-bottom=%d:crop-left=%d:crop-right=%d:"
                                           "pad-top=%d:pad-bottom=%d:pad-left=%d:pad-right=%d",
-                                          mode, scale_factor_x, scale_factor_y,
+                                          mode, angle, hflip,
+                                          scale_factor_x, scale_factor_y,
                                           crop_top, crop_bottom, crop_left, crop_right,
                                           pad_top, pad_bottom, pad_left, pad_right);
         hb_add_filter(job, filter, settings);
@@ -1747,7 +1817,8 @@ static void do_job(hb_job_t *job)
         {
             hb_hwaccel_hw_ctx_init(job->title->video_codec_param,
                                    job->hw_decode,
-                                   &job->hw_device_ctx);
+                                   &job->hw_device_ctx,
+                                   job);
         }
 
         sanitize_dynamic_hdr_metadata_passthru(job);
@@ -1866,14 +1937,14 @@ static void do_job(hb_job_t *job)
         update_dolby_vision_level(job);
     }
 
-    job->fifo_mpeg2  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+    job->fifo_in     = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
     job->fifo_raw    = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
     if (!job->indepth_scan)
     {
         // When doing subtitle indepth scan, the pipeline ends at sync
         job->fifo_sync   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         job->fifo_render = NULL; // Attached to filter chain
-        job->fifo_mpeg4  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+        job->fifo_out    = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
     }
 
     result = sanitize_audio(job);
@@ -1918,7 +1989,7 @@ static void do_job(hb_job_t *job)
         }
     }
 
-    // Subtitle fifos must be initialized before sync
+    // Subtitle decoder and sync fifos must be initialized before sync
     for (i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
         subtitle = hb_list_item( job->list_subtitle, i );
@@ -1947,7 +2018,8 @@ static void do_job(hb_job_t *job)
         if (!job->indepth_scan)
         {
             // When doing subtitle indepth scan, the pipeline ends at sync
-            subtitle->fifo_out = hb_fifo_init( FIFO_UNBOUNDED, FIFO_UNBOUNDED_WAKE );
+            subtitle->fifo_sync = hb_fifo_init( FIFO_UNBOUNDED, FIFO_SMALL_WAKE );
+            subtitle->fifo_out  = hb_fifo_init( FIFO_UNBOUNDED, FIFO_SMALL_WAKE);
         }
 
         w->fifo_in = subtitle->fifo_in;
@@ -1964,7 +2036,7 @@ static void do_job(hb_job_t *job)
         *job->die = 1;
         goto cleanup;
     }
-    w->fifo_in  = job->fifo_mpeg2;
+    w->fifo_in  = job->fifo_in;
     w->fifo_out = job->fifo_raw;
     hb_list_add(job->list_work, w);
 
@@ -1981,28 +2053,45 @@ static void do_job(hb_job_t *job)
             /*
             * Audio Encoder Thread
             */
-            if ( !(audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
+            w = hb_audio_encoder( job->h, audio->config.out.codec);
+            if (w == NULL)
             {
-                /*
-                * Add the encoder thread if not doing passthru
-                */
-                w = hb_audio_encoder( job->h, audio->config.out.codec);
-                if (w == NULL)
-                {
-                    hb_error("Invalid audio codec: %#x", audio->config.out.codec);
-                    w = NULL;
-                    *job->done_error = HB_ERROR_WRONG_INPUT;
-                    *job->die = 1;
-                    goto cleanup;
-                }
-                w->init_delay = &audio->priv.init_delay;
-                w->extradata  = &audio->priv.extradata;
-                w->fifo_in  = audio->priv.fifo_sync;
-                w->fifo_out = audio->priv.fifo_out;
-                w->audio    = audio;
-
-                hb_list_add( job->list_work, w );
+                hb_error("Invalid audio codec: %#x", audio->config.out.codec);
+                w = NULL;
+                *job->done_error = HB_ERROR_WRONG_INPUT;
+                *job->die = 1;
+                goto cleanup;
             }
+            w->init_delay = &audio->priv.init_delay;
+            w->fifo_in    = audio->priv.fifo_sync;
+            w->fifo_out   = audio->priv.fifo_out;
+            w->extradata  = &audio->priv.extradata;
+            w->audio      = audio;
+
+            hb_list_add( job->list_work, w );
+        }
+
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+        {
+            subtitle = hb_list_item(job->list_subtitle, i);
+
+            /*
+            * Subtitle Encoder Thread
+            */
+            w = hb_subtitle_encoder( job->h, subtitle->config.codec);
+            if (w == NULL)
+            {
+                hb_error("Invalid subtitle codec: %#x", subtitle->config.codec);
+                w = NULL;
+                *job->done_error = HB_ERROR_WRONG_INPUT;
+                *job->die = 1;
+                goto cleanup;
+            }
+            w->fifo_in  = subtitle->fifo_sync;
+            w->fifo_out = subtitle->fifo_out;
+            w->subtitle = subtitle;
+
+            hb_list_add( job->list_work, w );
         }
 
         /* Set up the video filter fifo pipeline */
@@ -2043,13 +2132,12 @@ static void do_job(hb_job_t *job)
         else
             w->fifo_in  = job->fifo_sync;
 
-        w->fifo_out  =  job->fifo_mpeg4;
+        w->fifo_out  =  job->fifo_out;
 
         w->init_delay = &job->init_delay;
         w->extradata  = &job->extradata;
 
         hb_list_add( job->list_work, w );
-
     }
 
     // Add Muxer work object
@@ -2160,10 +2248,10 @@ cleanup:
     hb_list_close( &job->list_work );
 
     /* Close fifos */
-    hb_fifo_close( &job->fifo_mpeg2 );
+    hb_fifo_close( &job->fifo_in );
     hb_fifo_close( &job->fifo_raw );
     hb_fifo_close( &job->fifo_sync );
-    hb_fifo_close( &job->fifo_mpeg4 );
+    hb_fifo_close( &job->fifo_out );
 
     for (i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
@@ -2172,6 +2260,7 @@ cleanup:
         {
             hb_fifo_close( &subtitle->fifo_in );
             hb_fifo_close( &subtitle->fifo_raw );
+            hb_fifo_close( &subtitle->fifo_sync );
             hb_fifo_close( &subtitle->fifo_out );
         }
     }
@@ -2207,15 +2296,6 @@ cleanup:
 
     hb_buffer_pool_free();
     hb_hwaccel_hw_ctx_close(&job->hw_device_ctx);
-
-#if HB_PROJECT_FEATURE_QSV
-    if (!job->indepth_scan &&
-        (job->pass_id != HB_PASS_ENCODE_ANALYSIS) &&
-        hb_qsv_is_enabled(job))
-    {
-        hb_qsv_context_uninit(job);
-    }
-#endif
 }
 
 static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )

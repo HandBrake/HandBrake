@@ -133,6 +133,10 @@ typedef struct hb_sei_s
     hb_sei_type_t  type;
     size_t         payload_size;
     const uint8_t *payload;
+
+    // Internal fields
+    size_t  nalu_size;
+    uint8_t written;
 } hb_sei_t;
 
 /*
@@ -141,7 +145,7 @@ typedef struct hb_sei_s
  */
 hb_buffer_t * hb_isomp4_hevc_nal_bitstream_insert_payloads(const uint8_t *data,
                                                            const size_t size,
-                                                           const hb_sei_t *sei,
+                                                                 hb_sei_t *sei,
                                                            const size_t sei_count,
                                                            const hb_nal_t *nals,
                                                            const size_t nal_count,

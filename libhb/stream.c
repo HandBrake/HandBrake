@@ -5802,7 +5802,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->format = TEXTSUB;
             subtitle->source = TX3GSUB;
             subtitle->config.dest = PASSTHRUSUB;
-            subtitle->codec = WORK_DECTX3GSUB;
+            subtitle->codec       = WORK_DECTX3GSUB;
             break;
         case AV_CODEC_ID_ASS:
             subtitle->format      = TEXTSUB;
@@ -5846,7 +5846,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     // Copy the extradata for the subtitle track
     if (codecpar->extradata != NULL)
     {
-        hb_set_text_extradata(&subtitle->extradata, codecpar->extradata, codecpar->extradata_size);
+        hb_set_extradata(&subtitle->extradata, codecpar->extradata, codecpar->extradata_size);
     }
 
     if (st->disposition & AV_DISPOSITION_DEFAULT)
@@ -5931,14 +5931,17 @@ static void add_ffmpeg_coverart(hb_title_t *title, hb_stream_t *stream, int id)
     int type = HB_ART_UNDEFINED;
     AVStream *st = stream->ffmpeg_ic->streams[id];
     AVCodecParameters *codecpar = st->codecpar;
+    char *name = get_ffmpeg_metadata_value(st->metadata, "filename");
 
     switch (codecpar->codec_id)
     {
         case AV_CODEC_ID_PNG:
             type = HB_ART_PNG;
+            name = name ? name : "cover.png";
             break;
         case AV_CODEC_ID_MJPEG:
             type = HB_ART_JPEG;
+            name = name ? name : "cover.jpg";
             break;
         default:
             break;
@@ -5949,7 +5952,7 @@ static void add_ffmpeg_coverart(hb_title_t *title, hb_stream_t *stream, int id)
         hb_metadata_add_coverart(title->metadata,
                                  st->attached_pic.data,
                                  st->attached_pic.size,
-                                 type);
+                                 type, name);
     }
 }
 
@@ -5986,10 +5989,23 @@ static int ffmpeg_decmetadata( AVDictionary *m, hb_title_t *title )
         }
     }
 
-    if (av_dict_get(m, "com.android.version", NULL, 0) &&
-        hb_dict_get(title->metadata->dict, "ReleaseDate") == NULL)
+    // Android creation time to release date
+    if (hb_dict_get(title->metadata->dict, "ReleaseDate") == NULL)
     {
-        ffmpeg_decdate("ReleaseDate", "creation_time", m, title);
+        if (av_dict_get(m, "com.android.version", NULL, 0) ||
+            av_dict_get(m, "firmware", NULL, 0))
+        {
+            ffmpeg_decdate("ReleaseDate", "creation_time", m, title);
+        }
+    }
+
+    // MXF modification date to creation time
+    if (hb_dict_get(title->metadata->dict, "CreationTime") == NULL)
+    {
+        if (av_dict_get(m, "modification_date", NULL, 0))
+        {
+            ffmpeg_decdate("CreationTime", "modification_date", m, title);
+        }
     }
 
     return result;
@@ -6197,29 +6213,34 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 chapter->seconds = ( seconds % 60 );
 
                 tag = av_dict_get( m->metadata, "title", NULL, 0 );
+                int valid = tag && tag->value && tag->value[0];
 
-                // Detect if the chapter title is a valid UTF-8 string
-                char *p, *q;
-                size_t in_size, out_size, retval;
-
-                p = tag->value;
-                q = utf8_buf;
-
-                in_size = strlen(tag->value);
-                out_size = in_size;
-
-                if (utf8_buf_size < in_size)
+                if (valid)
                 {
-                    utf8_buf = realloc(utf8_buf, in_size);
-                }
+                    // Detect if the chapter title is a valid UTF-8 string
+                    char *p, *q;
+                    size_t in_size, out_size, retval;
 
-                retval = iconv(iconv_context, &p, &in_size, &q, &out_size);
-                int valid = retval != (size_t) -1;
+                    in_size = strlen(tag->value);
+                    out_size = in_size;
+
+                    if (utf8_buf_size < in_size)
+                    {
+                        utf8_buf = realloc(utf8_buf, in_size + 1);
+                        utf8_buf_size = in_size + 1;
+                    }
+
+                    p = tag->value;
+                    q = utf8_buf;
+
+                    retval = iconv(iconv_context, &p, &in_size, &q, &out_size);
+                    valid = retval != (size_t) -1;
+                }
 
                 /* Ignore generic chapter names set by MakeMKV
                  * ("Chapter 00" etc.).
                  * Our default chapter names are better. */
-                if( valid && tag && tag->value && tag->value[0] &&
+                if (valid &&
                     ( strncmp( "Chapter ", tag->value, 8 ) ||
                       strlen( tag->value ) > 11 ) )
                 {

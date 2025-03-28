@@ -285,16 +285,16 @@ hb_encoder_internal_t hb_video_encoders[]  =
     // actual encoders
     { { "AV1 (SVT)",                   "svt_av1",          "AV1 (SVT)",                      HB_VCODEC_SVT_AV1,           HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
     { { "AV1 10-bit (SVT)",            "svt_av1_10bit",    "AV1 10-bit (SVT)",               HB_VCODEC_SVT_AV1_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
-    { { "AV1 (Intel QSV)",             "qsv_av1",          "AV1 (Intel Media SDK)",          HB_VCODEC_QSV_AV1,           HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV,    },
-    { { "AV1 10-bit (Intel QSV)",      "qsv_av1_10bit",    "AV1 10-bit (Intel Media SDK)",   HB_VCODEC_QSV_AV1_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV,    },
-    { { "AV1 (NVEnc)",                 "nvenc_av1",        "AV1 (NVEnc)",                    HB_VCODEC_FFMPEG_NVENC_AV1,                   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
-    { { "AV1 10-bit (NVEnc)",          "nvenc_av1_10bit",  "AV1 10-bit (NVEnc)",             HB_VCODEC_FFMPEG_NVENC_AV1_10BIT,             HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
-    { { "AV1 (AMD VCE)",               "vce_av1",          "AV1 (AMD VCE)",                  HB_VCODEC_FFMPEG_VCE_AV1,    				   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_VCE,    },
-    { { "AV1 (MediaFoundation)",       "mf_av1",           "AV1 (MediaFoundation)",          HB_VCODEC_FFMPEG_MF_AV1,                      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_MF,     },
-    { { "FFV1",                        "ffv1",             "FFV1 (libavcodec)",              HB_VCODEC_FFMPEG_FFV1,                                          HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_FFV1,     },
+    { { "AV1 (Intel QSV)",             "qsv_av1",          "AV1 (Intel QSV)",                HB_VCODEC_FFMPEG_QSV_AV1,    HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV,    },
+    { { "AV1 10-bit (Intel QSV)",      "qsv_av1_10bit",    "AV1 10-bit (Intel QSV)",         HB_VCODEC_FFMPEG_QSV_AV1_10BIT, HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV, },
+    { { "AV1 (NVEnc)",                 "nvenc_av1",        "AV1 (NVEnc)",                    HB_VCODEC_FFMPEG_NVENC_AV1,  HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
+    { { "AV1 10-bit (NVEnc)",          "nvenc_av1_10bit",  "AV1 10-bit (NVEnc)",             HB_VCODEC_FFMPEG_NVENC_AV1_10BIT, HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
+    { { "AV1 (AMD VCE)",               "vce_av1",          "AV1 (AMD VCE)",                  HB_VCODEC_FFMPEG_VCE_AV1,    HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_VCE,    },
+    { { "AV1 (MediaFoundation)",       "mf_av1",           "AV1 (MediaFoundation)",          HB_VCODEC_FFMPEG_MF_AV1,     HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_MF,     },
+    { { "FFV1",                        "ffv1",             "FFV1 (libavcodec)",              HB_VCODEC_FFMPEG_FFV1,                                        HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_FFV1,       },
     { { "H.264 (x264)",                "x264",             "H.264 (libx264)",                HB_VCODEC_X264_8BIT,                          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
     { { "H.264 10-bit (x264)",         "x264_10bit",       "H.264 10-bit (libx264)",         HB_VCODEC_X264_10BIT,                         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
-    { { "H.264 (Intel QSV)",           "qsv_h264",         "H.264 (Intel Media SDK)",        HB_VCODEC_QSV_H264,                           HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_QSV,   },
+    { { "H.264 (Intel QSV)",           "qsv_h264",         "H.264 (Intel QSV)",              HB_VCODEC_FFMPEG_QSV_H264,                    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_QSV,   },
     { { "H.264 (AMD VCE)",             "vce_h264",         "H.264 (AMD VCE)",                HB_VCODEC_FFMPEG_VCE_H264,                    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_VCE,   },
     { { "H.264 (NVEnc)",               "nvenc_h264",       "H.264 (NVEnc)",                  HB_VCODEC_FFMPEG_NVENC_H264,                  HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_NVENC, },
     { { "H.264 (MediaFoundation)",     "mf_h264",          "H.264 (MediaFoundation)",        HB_VCODEC_FFMPEG_MF_H264,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_MF,    },
@@ -303,8 +303,8 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "H.265 10-bit (x265)",         "x265_10bit",       "H.265 10-bit (libx265)",         HB_VCODEC_X265_10BIT,                           HB_MUX_AV_MP4|HB_MUX_AV_MKV,   }, NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
     { { "H.265 12-bit (x265)",         "x265_12bit",       "H.265 12-bit (libx265)",         HB_VCODEC_X265_12BIT,                           HB_MUX_AV_MP4|HB_MUX_AV_MKV,   }, NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
     { { "H.265 16-bit (x265)",         "x265_16bit",       "H.265 16-bit (libx265)",         HB_VCODEC_X265_16BIT,                           HB_MUX_AV_MP4|HB_MUX_AV_MKV,   }, NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
-    { { "H.265 (Intel QSV)",           "qsv_h265",         "H.265 (Intel Media SDK)",        HB_VCODEC_QSV_H265,                           HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_QSV,   },
-    { { "H.265 10-bit (Intel QSV)",    "qsv_h265_10bit",   "H.265 10-bit (Intel Media SDK)", HB_VCODEC_QSV_H265_10BIT,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_QSV,   },
+    { { "H.265 (Intel QSV)",           "qsv_h265",         "H.265 (Intel QSV)",              HB_VCODEC_FFMPEG_QSV_H265,                           HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_QSV, },
+    { { "H.265 10-bit (Intel QSV)",    "qsv_h265_10bit",   "H.265 10-bit (Intel QSV)",       HB_VCODEC_FFMPEG_QSV_H265_10BIT,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_QSV, },
     { { "H.265 (AMD VCE)",             "vce_h265",         "H.265 (AMD VCE)",                HB_VCODEC_FFMPEG_VCE_H265,                    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_VCE,   },
     { { "H.265 10-bit (AMD VCE)",      "vce_h265_10bit",   "H.265 10-bit (AMD VCE)",         HB_VCODEC_FFMPEG_VCE_H265_10BIT,              HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_VCE,   },
     { { "H.265 (NVEnc)",               "nvenc_h265",       "H.265 (NVEnc)",                  HB_VCODEC_FFMPEG_NVENC_H265,                  HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_NVENC, },
@@ -1690,11 +1690,11 @@ int hb_video_multipass_is_supported(uint32_t codec, int constant_quality)
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
-        case HB_VCODEC_QSV_H264:
-        case HB_VCODEC_QSV_H265:
-        case HB_VCODEC_QSV_H265_10BIT:
-        case HB_VCODEC_QSV_AV1:
-        case HB_VCODEC_QSV_AV1_10BIT:
+        case HB_VCODEC_FFMPEG_QSV_H264:
+        case HB_VCODEC_FFMPEG_QSV_H265:
+        case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+        case HB_VCODEC_FFMPEG_QSV_AV1:
+        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
             return 0;
 
         case HB_VCODEC_FFMPEG_VP9:
@@ -1783,8 +1783,8 @@ int hb_video_encoder_get_depth(int encoder)
     switch (encoder)
     {
 #if HB_PROJECT_FEATURE_QSV
-        case HB_VCODEC_QSV_H265_10BIT:
-        case HB_VCODEC_QSV_AV1_10BIT:
+        case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
 #endif
 #ifdef __APPLE__
         case HB_VCODEC_VT_H265_10BIT:
@@ -1808,13 +1808,6 @@ int hb_video_encoder_get_depth(int encoder)
 
 const char* const* hb_video_encoder_get_presets(int encoder)
 {
-#if HB_PROJECT_FEATURE_QSV
-    if (encoder & HB_VCODEC_QSV_MASK)
-    {
-        return hb_qsv_preset_get_names();
-    }
-#endif
-
     if (encoder & HB_VCODEC_FFMPEG_MASK)
     {
         return hb_av_preset_get_names(encoder);
@@ -2042,13 +2035,6 @@ static const enum AVPixelFormat standard_444_12bit_pix_fmts[] =
 
 const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
 {
-#if HB_PROJECT_FEATURE_QSV
-    if (encoder & HB_VCODEC_QSV_MASK)
-    {
-        return hb_qsv_get_pix_fmts(encoder);
-    }
-#endif
-
     if (encoder & HB_VCODEC_FFMPEG_MASK)
     {
         return hb_av_get_pix_fmts(encoder);
@@ -4331,7 +4317,7 @@ void hb_register_error_handler( hb_error_handler_t * handler )
     error_handler = handler;
 }
 
-static void hb_update_str( char **dst, const char *src )
+void hb_update_str( char **dst, const char *src )
 {
     if ( dst )
     {
@@ -5576,6 +5562,33 @@ hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i)
 }
 
 /**********************************************************************
+ * hb_subtitle_config_copy
+ **********************************************************************
+ *
+ *********************************************************************/
+void hb_subtitle_config_copy(hb_subtitle_config_t *dst,
+                             const hb_subtitle_config_t *src)
+{
+    if (dst == NULL || src == NULL)
+    {
+        return;
+    }
+    memcpy(dst, src, sizeof(*src));
+    if (src->name != NULL)
+    {
+        dst->name = strdup(src->name);
+    }
+    if (src->src_filename != NULL)
+    {
+        dst->src_filename = strdup(src->src_filename);
+    }
+    if (src->external_filename != NULL)
+    {
+        dst->external_filename = strdup(src->external_filename);
+    }
+}
+
+/**********************************************************************
  * hb_subtitle_copy
  **********************************************************************
  *
@@ -5652,6 +5665,67 @@ void hb_subtitle_close( hb_subtitle_t **_sub )
 }
 
 /**********************************************************************
+ * hb_subtitle_extradata_init
+ **********************************************************************
+ * Initializes avcodec format subtitle extradata
+ * Returns:
+ *  0  - no action taken, already set or does not require extradata
+ *  1  - set extradata
+ *  -1 - Error
+ *********************************************************************/
+int hb_subtitle_extradata_init(hb_subtitle_t * subtitle)
+{
+    if (subtitle->extradata != NULL)
+    {
+        // Already initialized
+         return 0;
+     }
+
+    if (subtitle->source == VOBSUB)
+    {
+        uint32_t  rgb[16];
+        char     *sub_idx;
+
+        for (int ii = 0; ii < 16; ii++)
+        {
+            rgb[ii] = hb_yuv2rgb(subtitle->palette[ii]);
+        }
+
+        sub_idx = hb_strdup_printf(
+            "size: %dx%d\n"
+            "org: %d, %d\n"
+            "scale: 100%%, 100%%\n"
+            "alpha: 100%%\n"
+            "smooth: OFF\n"
+            "fadein/out: 50, 50\n"
+            "align: OFF at LEFT TOP\n"
+            "time offset: 0\n"
+            "forced subs: %s\n"
+            "palette: %06x, %06x, %06x, %06x, %06x, %06x, "
+            "%06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x\n"
+            "custom colors: OFF, tridx: 0000, "
+            "colors: 000000, 000000, 000000, 000000\n",
+            subtitle->width, subtitle->height, 0, 0, "OFF",
+            rgb[0],  rgb[1],  rgb[2],  rgb[3],
+            rgb[4],  rgb[5],  rgb[6],  rgb[7],
+            rgb[8],  rgb[9],  rgb[10], rgb[11],
+            rgb[12], rgb[13], rgb[14], rgb[15]);
+        if (sub_idx == NULL)
+        {
+            return -1;
+        }
+
+        hb_set_extradata(&subtitle->extradata,
+                         (const uint8_t *)sub_idx,
+                         strlen(sub_idx));
+        free(sub_idx);
+
+        return 1;
+    }
+    return 0;
+}
+
+/**********************************************************************
  * hb_subtitle_add
  **********************************************************************
  *
@@ -5671,15 +5745,7 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
     // "track" in title->list_audio is an index into the source's tracks.
     // "track" in job->list_audio is an index into title->list_audio
     subtitle->track = track;
-    subtitle->config = *subtitlecfg;
-    if (subtitlecfg->name != NULL && subtitlecfg->name[0] != 0)
-    {
-        subtitle->config.name = strdup(subtitlecfg->name);
-    }
-    else
-    {
-        subtitle->config.name = NULL;
-    }
+    hb_subtitle_config_copy(&subtitle->config, subtitlecfg);
     subtitle->config.src_filename = NULL;
     subtitle->out_track = hb_list_count(job->list_subtitle) + 1;
     hb_list_add(job->list_subtitle, subtitle);
@@ -5723,16 +5789,7 @@ int hb_import_subtitle_add( const hb_job_t * job,
              hb_subsource_name(subtitle->source));
     strcpy(subtitle->iso639_2, lang->iso639_2);
 
-    subtitle->config = *subtitlecfg;
-    if (subtitlecfg->name != NULL && subtitlecfg->name[0] != 0)
-    {
-        subtitle->config.name = strdup(subtitlecfg->name);
-    }
-    else
-    {
-        subtitle->config.name = NULL;
-    }
-    subtitle->config.src_filename = strdup(subtitlecfg->src_filename);
+    hb_subtitle_config_copy(&subtitle->config, subtitlecfg);
     hb_list_add(job->list_subtitle, subtitle);
 
     return 1;
@@ -5755,6 +5812,24 @@ int hb_subtitle_can_burn( int source )
     return source == VOBSUB    || source == PGSSUB    || source == SSASUB  ||
            source == CC608SUB  || source == UTF8SUB   || source == TX3GSUB ||
            source == IMPORTSRT || source == IMPORTSSA || source == DVBSUB;
+}
+
+int hb_subtitle_can_export( int source )
+{
+    switch (source)
+    {
+        case CC608SUB:
+        case CC708SUB:
+        case UTF8SUB:
+        case TX3GSUB:
+        case SSASUB:
+        case IMPORTSRT:
+        case IMPORTSSA:
+        case PGSSUB:
+            return 1;
+        default:
+            return 0;
+    }
 }
 
 int hb_subtitle_can_pass( int source, int mux )
@@ -5806,6 +5881,14 @@ int hb_subtitle_can_pass( int source, int mux )
             hb_error("internal error.  Bad mux %d\n", mux);
             return 0;
     }
+}
+
+int hb_subtitle_must_burn(hb_subtitle_t *subtitle, int mux)
+{
+    return (subtitle->config.dest == RENDERSUB ||
+             (!(subtitle->config.external_filename != NULL &&
+                hb_subtitle_can_export(subtitle->source)) &&
+              !hb_subtitle_can_pass(subtitle->source, mux)));
 }
 
 int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder)
@@ -5882,7 +5965,7 @@ hb_metadata_t *hb_metadata_copy( const hb_metadata_t *src )
             {
                 hb_coverart_t *art = hb_list_item( src->list_coverart, ii );
                 hb_metadata_add_coverart(
-                        metadata, art->data, art->size, art->type );
+                        metadata, art->data, art->size, art->type, art->name );
             }
         }
     }
@@ -5911,6 +5994,7 @@ void hb_metadata_close( hb_metadata_t **_m )
             while( ( art = hb_list_item( m->list_coverart, 0 ) ) )
             {
                 hb_list_rem( m->list_coverart, art );
+                free( art->name );
                 free( art->data );
                 free( art );
             }
@@ -5939,7 +6023,9 @@ void hb_update_meta_dict(hb_dict_t * dict, const char * key, const char * value)
     }
 }
 
-void hb_metadata_add_coverart( hb_metadata_t *metadata, const uint8_t *data, int size, int type )
+void hb_metadata_add_coverart( hb_metadata_t *metadata,
+                               const uint8_t *data, int size,
+                               int type, const char *name )
 {
     if ( metadata )
     {
@@ -5948,6 +6034,10 @@ void hb_metadata_add_coverart( hb_metadata_t *metadata, const uint8_t *data, int
             metadata->list_coverart = hb_list_init();
         }
         hb_coverart_t *art = calloc( 1, sizeof(hb_coverart_t) );
+        if (name)
+        {
+            art->name = strdup( name );
+        }
         art->data = malloc( size );
         memcpy( art->data, data, size );
         art->size = size;
@@ -5964,6 +6054,7 @@ void hb_metadata_rem_coverart( hb_metadata_t *metadata, int idx )
         if ( art )
         {
             hb_list_rem( metadata->list_coverart, art );
+            free( art->name );
             free( art->data );
             free( art );
         }
@@ -6782,11 +6873,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
 
     if (planes_count == 2)
     {
-        if (hb_hwaccel_decode_is_enabled(job) == 0
-#if HB_PROJECT_FEATURE_QSV
-            && hb_qsv_full_path_is_enabled(job) == 0
-#endif
-            )
+        if (hb_hwaccel_decode_is_enabled(job) == 0)
         {
             return 0;
         }

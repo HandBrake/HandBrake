@@ -15,10 +15,15 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             this.Annotation = annotation;
             this.Value = value;
+            this.Enabled = true; // Default passthru
         }
 
         public string Annotation { get; set; }
 
         public string Value { get; set; }
+
+        public bool Enabled { get; set; }
+
+        public bool IsNew { get; set; }
     }
 }

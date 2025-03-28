@@ -12,9 +12,9 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/ffmpeg-7.1.tar.bz2
-FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-7.1.tar.bz2
-FFMPEG.FETCH.sha256 = fd59e6160476095082e94150ada5a6032d7dcc282fe38ce682a00c18e7820528
+FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/ffmpeg-7.1.1.tar.bz2
+FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-7.1.1.tar.bz2
+FFMPEG.FETCH.sha256 = 0c8da2f11579a01e014fc007cbacf5bb4da1d06afd0b43c7f8097ec7c0f143ba
 
 FFMPEG.GCC.args.c_std =
 
@@ -45,6 +45,8 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \
     --enable-encoder=libmp3lame \
+    --enable-encoder=movtext \
+    --enable-encoder=subrip \
     --enable-libopus \
     --enable-encoder=libopus \
     --enable-libspeex \
@@ -109,7 +111,10 @@ FFMPEG.CONFIGURE.extra += \
     --enable-muxer=mov \
     --enable-muxer=mp4 \
     --enable-muxer=psp \
-    --enable-muxer=ipod
+    --enable-muxer=ipod \
+    --enable-muxer=ass \
+    --enable-muxer=srt \
+    --enable-muxer=sup
 
 ifeq (darwin,$(HOST.system))
     FFMPEG.CONFIGURE.extra += --disable-audiotoolbox --disable-coreimage --enable-hwaccel=h264_videotoolbox --enable-hwaccel=hevc_videotoolbox --enable-hwaccel=prores_videotoolbox
@@ -167,6 +172,9 @@ endif
 ifeq (1,$(FEATURE.qsv))
   FFMPEG.CONFIGURE.extra += --enable-libvpl
   FFMPEG.CONFIGURE.extra += --enable-filter=vpp_qsv
+  FFMPEG.CONFIGURE.extra += --enable-encoder=hevc_qsv
+  FFMPEG.CONFIGURE.extra += --enable-encoder=h264_qsv
+  FFMPEG.CONFIGURE.extra += --enable-encoder=av1_qsv
 endif
 
 ifeq (1,$(FEATURE.vce))

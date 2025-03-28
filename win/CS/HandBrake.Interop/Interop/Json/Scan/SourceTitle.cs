@@ -86,6 +86,8 @@ namespace HandBrake.Interop.Interop.Json.Scan
         /// </summary>
         public Dictionary<string, string> MetaData { get; set; }
 
+        public List<CoverArt> CoverArts { get; set; }
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>

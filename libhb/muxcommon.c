@@ -578,6 +578,8 @@ static void muxClose( hb_work_object_t * muxer )
                         frames_total );
             }
         }
+
+        hb_system_backup_set_excluded(job->file, 0);
     }
 
     for (i = 0; i < mux->ntracks; ++i)
@@ -686,11 +688,12 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
         if( mux->m )
         {
             mux->m->init( mux->m );
+            hb_system_backup_set_excluded(job->file, 1);
         }
     }
 
     /* Initialize the work objects that will receive fifo data */
-    muxer->fifo_in = job->fifo_mpeg4;
+    muxer->fifo_in = job->fifo_out;
     if (add_mux_track(mux, job->mux_data, 1))
     {
         goto fail;

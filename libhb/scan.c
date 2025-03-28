@@ -341,21 +341,23 @@ static void ScanFunc( void * _data )
             j++;
         }
 
-        // VOBSUB and PGS width and height needs to be set to the
-        // title width and height for any stream type that does
-        // not provide this information (DVDs, BDs, VOBs, and M2TSs).
-        // Title width and height don't get set until we decode
-        // previews, so we can't set subtitle width/height till
-        // we get here.
         for (j = 0; j < hb_list_count(title->list_subtitle); j++)
         {
             hb_subtitle_t *subtitle = hb_list_item(title->list_subtitle, j);
             if ((subtitle->source == VOBSUB || subtitle->source == PGSSUB) &&
                 (subtitle->width <= 0 || subtitle->height <= 0))
             {
+                // VOBSUB and PGS width and height needs to be set to the
+                // title width and height for any stream type that does
+                // not provide this information (DVDs, BDs, VOBs, and M2TSs).
+                // Title width and height don't get set until we decode
+                // previews, so we can't set subtitle width/height till
+                // we get here.
                 subtitle->width  = title->geometry.width;
                 subtitle->height = title->geometry.height;
             }
+            // Initialize subtitle extradata if not set by demux already
+            hb_subtitle_extradata_init(subtitle);
         }
         i++;
     }
@@ -715,6 +717,11 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     {
         hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
     }
+    else if (data->hw_decode == HB_DECODE_SUPPORT_QSV &&
+             hb_hwaccel_available(title->video_codec_param, "qsv"))
+    {
+        hw_decode = HB_DECODE_SUPPORT_QSV;
+    }
     else if (data->hw_decode == HB_DECODE_SUPPORT_MF &&
              hb_hwaccel_available(title->video_codec_param, "d3d11va"))
     {
@@ -724,7 +731,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     void *hw_device_ctx = NULL;
     if (hw_decode)
     {
-        hb_hwaccel_hw_ctx_init(title->video_codec_param, hw_decode, &hw_device_ctx);
+        hb_hwaccel_hw_ctx_init(title->video_codec_param, hw_decode, &hw_device_ctx, NULL);
     }
 
     hb_work_object_t *vid_decoder = hb_get_work(data->h, title->video_codec);

@@ -1,0 +1,68 @@
+From 1325e2dabe9220f0d24eb0da3c9c98b3f10efc88 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Sat, 15 Feb 2025 09:47:36 +0100
+Subject: [PATCH] videotoolbox: speedup decoding
+
+HandBrake doesn't need OpenGL compatibility or CVBuffer attachments, disable both for a minor performance improvement.
+Align buffers to 16 to avoid additional automatic pixel conversions in VTCompressionSession.
+---
+ libavcodec/videotoolbox.c          |  5 +----
+ libavutil/hwcontext_videotoolbox.c | 12 +++++++++++-
+ 2 files changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/libavcodec/videotoolbox.c b/libavcodec/videotoolbox.c
+index bbb00d2c8a..75fa4c6709 100644
+--- a/libavcodec/videotoolbox.c
++++ b/libavcodec/videotoolbox.c
+@@ -108,9 +108,6 @@ static int videotoolbox_postproc_frame(void *avctx, AVFrame *frame)
+     frame->crop_top = 0;
+     frame->crop_bottom = 0;
+
+-    if ((ret = av_vt_pixbuf_set_attachments(avctx, ref->pixbuf, frame)) < 0)
+-        return ret;
+-
+     frame->data[3] = (uint8_t*)ref->pixbuf;
+
+     if (ref->hw_frames_ctx) {
+@@ -790,7 +787,7 @@ static CFDictionaryRef videotoolbox_buffer_attributes_create(int width,
+ #if TARGET_OS_IPHONE
+     CFDictionarySetValue(buffer_attributes, kCVPixelBufferOpenGLESCompatibilityKey, kCFBooleanTrue);
+ #else
+-    CFDictionarySetValue(buffer_attributes, kCVPixelBufferIOSurfaceOpenGLTextureCompatibilityKey, kCFBooleanTrue);
++    CFDictionarySetValue(buffer_attributes, kCVPixelBufferMetalCompatibilityKey, kCFBooleanTrue);
+ #endif
+
+     CFRelease(io_surface_properties);
+diff --git a/libavutil/hwcontext_videotoolbox.c b/libavutil/hwcontext_videotoolbox.c
+index 122a61d5e7..04e0f0c418 100644
+--- a/libavutil/hwcontext_videotoolbox.c
++++ b/libavutil/hwcontext_videotoolbox.c
+@@ -183,7 +183,8 @@ static int vt_pool_alloc(AVHWFramesContext *ctx)
+     VTFramesContext *fctx = ctx->hwctx;
+     AVVTFramesContext *hw_ctx = &fctx->p;
+     CVReturn err;
+-    CFNumberRef w, h, pixfmt;
++    CFNumberRef w, h, extend_w_num, extend_h_num, pixfmt;
++    int extend_w, extend_h;
+     uint32_t cv_pixfmt;
+     CFMutableDictionaryRef attributes, iosurface_properties;
+
+@@ -216,6 +217,15 @@ static int vt_pool_alloc(AVHWFramesContext *ctx)
+     CFRelease(w);
+     CFRelease(h);
+
++    extend_w = FFALIGN(ctx->width,  16) - ctx->width;
++    extend_h = FFALIGN(ctx->height, 16) - ctx->height;
++    extend_w_num = CFNumberCreate(NULL, kCFNumberSInt32Type, &extend_w);
++    extend_h_num = CFNumberCreate(NULL, kCFNumberSInt32Type, &extend_h);
++    CFDictionarySetValue(attributes, kCVPixelBufferExtendedPixelsRightKey, extend_w_num);
++    CFDictionarySetValue(attributes, kCVPixelBufferExtendedPixelsBottomKey, extend_h_num);
++    CFRelease(extend_w_num);
++    CFRelease(extend_h_num);
++
+     err = CVPixelBufferPoolCreate(
+         NULL,
+         NULL,
+--
+2.39.5 (Apple Git-154)
+

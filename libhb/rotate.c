@@ -12,8 +12,6 @@
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
 #include "handbrake/qsv_common.h"
-#include "libavutil/hwcontext_qsv.h"
-#include "libavutil/hwcontext.h"
 #endif
 
 static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init);
@@ -88,16 +86,6 @@ static int qsv_rotate_init(hb_filter_private_t * pv, hb_filter_init_t * init, in
             break;
         default:
             break;
-    }
-
-    if (hb_qsv_hw_filters_via_video_memory_are_enabled(init->job))
-    {
-        int result = hb_qsv_create_ffmpeg_vpp_pool(init, width, height);
-        if (result < 0)
-        {
-            hb_error("hb_create_ffmpeg_pool vpp allocation failed");
-            return result;
-        }
     }
 
     if (trans != NULL)
@@ -195,7 +183,8 @@ static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     }
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (hb_qsv_hw_filters_via_video_memory_are_enabled(init->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(init->job))
+    if (hb_hwaccel_is_full_hardware_pipeline_enabled(init->job) &&
+        hb_qsv_decode_is_enabled(init->job))
     {
         qsv_rotate_init(pv, init, angle, flip);
         return 0;

@@ -16,7 +16,7 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 
 TEST.libs = $(LIBHB.a)
 
-TEST.pkgconfig_libs = libass libavformat libavfilter libavcodec libavutil libswresample dvdnav \
+TEST.pkgconfig_libs = libass libavformat libavfilter libavcodec libavutil libswresample libcpuinfo dvdnav \
 	dvdread libswscale theoraenc theoradec vorbis vorbisenc ogg x264 libbluray \
 	jansson libturbojpeg SvtAv1Enc
 

@@ -70,6 +70,7 @@
 #endif
 
 #ifdef __APPLE__
+#include <CoreServices/CoreServices.h>
 #include <IOKit/pwr_mgt/IOPMLib.h>
 #endif
 
@@ -1174,6 +1175,28 @@ void hb_net_close( hb_net_t ** _n )
     close( n->socket );
     free( n );
     *_n = NULL;
+}
+
+/************************************************************************
+* OS Backup Include / Exclude
+***********************************************************************/
+
+void hb_system_backup_set_excluded(const char *path, int exclude)
+{
+#ifdef __APPLE__
+    if (path != NULL)
+    {
+        CFURLRef url = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
+                                                               (const UInt8 *)path,
+                                                               strlen(path),
+                                                               false);
+        if (url != NULL)
+        {
+            CSBackupSetItemExcluded(url, exclude, false);
+            CFRelease(url);
+        }
+    }
+#endif
 }
 
 /************************************************************************
