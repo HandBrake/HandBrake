@@ -43,7 +43,7 @@ jobs:
         ./configure --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --enable-fdk-aac --disable-gtk --disable-x265 --disable-libdovi --launch-jobs=0 --launch
 
     - name: Upload HandBrakeCLI
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HandBrakeCLI
         path: ./build/HandBrakeCLI
