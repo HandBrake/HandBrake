@@ -99,7 +99,11 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
     EbErrorType svt_ret;
     int ret;
 
+#if SVT_AV1_CHECK_VERSION(3, 0, 0)
     svt_ret = svt_av1_enc_init_handle(&pv->svt_handle, &pv->enc_params);
+#else
+    svt_ret = svt_av1_enc_init_handle(&pv->svt_handle, pv, &pv->enc_params);
+#endif
     if (svt_ret != EB_ErrorNone)
     {
         hb_error("encsvtav1: error initializing encoder handle");
