@@ -82,15 +82,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 7500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "svt_av1_10bit",
@@ -193,15 +198,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 7500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -303,15 +313,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 4000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -413,15 +428,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 2000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -523,15 +543,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1200,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -633,15 +658,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -744,15 +774,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 10500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "svt_av1_10bit",
@@ -855,15 +890,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 13000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -965,15 +1005,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1075,15 +1120,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1185,15 +1235,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1800,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1295,15 +1350,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1419,15 +1479,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 16000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "svt_av1_10bit",
@@ -1543,15 +1608,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 20500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -1667,15 +1737,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 9000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1791,15 +1866,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 4500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1915,15 +1995,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 2700,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2039,15 +2124,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 2250,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2164,15 +2254,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 32000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "svt_av1_10bit",
@@ -2289,15 +2384,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 32000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -2413,15 +2513,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 15000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2537,15 +2642,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 7500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2661,15 +2771,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 4500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2785,15 +2900,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 3750,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2902,15 +3022,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 18000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3012,15 +3137,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 12000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3122,15 +3252,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 9000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3232,15 +3367,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 4500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3342,15 +3482,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3452,15 +3597,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3562,15 +3712,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3672,15 +3827,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3782,15 +3942,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 2250,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3892,15 +4057,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1125,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4002,15 +4172,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4133,15 +4308,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -4257,15 +4437,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4367,15 +4552,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4477,15 +4667,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4587,15 +4782,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4697,15 +4897,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1800,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4807,15 +5012,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                     "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4931,15 +5141,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -5055,15 +5270,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5179,15 +5399,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5303,15 +5528,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5427,15 +5657,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 2500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5551,15 +5786,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -5675,15 +5915,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5799,15 +6044,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5921,15 +6171,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 12000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6045,15 +6300,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6155,15 +6415,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6265,15 +6530,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 2250,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6392,15 +6662,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -6516,15 +6791,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6640,15 +6920,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6750,15 +7035,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1800,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6860,15 +7150,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6984,15 +7279,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -7100,15 +7400,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 10500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "svt_av1_10bit",
@@ -7210,15 +7515,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 13000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -7320,15 +7630,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 2500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -7430,15 +7745,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 2000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -7540,15 +7860,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1200,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -7650,15 +7975,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -7760,15 +8090,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 12000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -7870,15 +8205,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -7980,15 +8320,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -8090,15 +8435,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1800,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -8200,15 +8550,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -8309,15 +8664,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vp9",
@@ -8418,15 +8778,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 4500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vp9",
@@ -8527,15 +8892,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 2500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vp9",
@@ -8636,15 +9006,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vp9",
@@ -8745,15 +9120,20 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": true,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
+                        {
+                          "IsoLangCode": "any",
+                          "TrackSelectionMode": 0,
+                          "DefaultMode": 0,
+                          "BurnPassthruMode": 1,
+                          "ForcedMode": 1,
+                          "TrackNameOverride": "",
+                          "IsForeignAudioScanRule": 1
+                        }
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 1250,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vp9",
@@ -8862,15 +9242,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 6500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "qsv_av1_10bit",
@@ -8972,15 +9348,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 10500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "nvenc_h265",
@@ -9082,15 +9454,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 3750,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "nvenc_h265",
@@ -9192,15 +9560,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "qsv_h265",
@@ -9302,15 +9666,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 2500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "qsv_h265",
@@ -9412,15 +9772,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 12500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vce_h265",
@@ -9522,15 +9878,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 7250,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vce_h265",
@@ -9632,15 +9984,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 9500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "mf_h265",
@@ -9742,15 +10090,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 5500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "mf_h265",
@@ -9852,15 +10196,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 17500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vt_h265_10bit",
@@ -9962,15 +10302,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 5500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vt_h265_10bit",
@@ -10079,15 +10415,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 120000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -10189,15 +10521,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 60000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -10299,15 +10627,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 30000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -10409,15 +10733,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": false,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "foreign",
-                    "SubtitleBurnBDSub": true,
-                    "SubtitleBurnDVDSub": true,
-                    "SubtitleLanguageList": [
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 15000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -10529,16 +10849,11 @@
                     "Type": 0,
                     "UsesPictureFilters": true,
                     "UsesPictureSettings": 1,
-                    "SubtitleAddCC": true,
-                    "SubtitleAddForeignAudioSearch": false,
-                    "SubtitleAddForeignAudioSubtitle": false,
-                    "SubtitleBurnBehavior": "none",
-                    "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
-                    "SubtitleLanguageList": [
-                        "any"
+                    "SubtitleBehaviours": [
                     ],
-                    "SubtitleTrackSelectionBehavior": "all",
+                    "SubtitleUseSourceOrder": true,
+                    "SubtitleImportMode": 0,
+                    "SubtitlePassthruTrackNames": true,
                     "VideoAvgBitrate": 0,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "ffv1",
