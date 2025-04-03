@@ -1,0 +1,38 @@
+From ed829a91ca96bc4bd02594e45629bb12f90d6fd9 Mon Sep 17 00:00:00 2001
+From: Nomis101 <Nomis101@web.de>
+Date: Wed, 2 Apr 2025 08:21:26 +0200
+Subject: cmake fix
+
+Signed-off-by: Nomis101 <Nomis101@web.de>
+---
+ source/CMakeLists.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
+index 5c6dda9e8..efc83df3a 100755
+--- a/source/CMakeLists.txt
++++ b/source/CMakeLists.txt
+@@ -7,17 +7,17 @@ if(NOT CMAKE_BUILD_TYPE)
+ endif()
+ message(STATUS "cmake version ${CMAKE_VERSION}")
+ if(POLICY CMP0025)
+-    cmake_policy(SET CMP0025 OLD) # report Apple's Clang as just Clang
++    cmake_policy(SET CMP0025 NEW) # report Apple's Clang as just Clang
+ endif()
+ if(POLICY CMP0042)
+     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
+ endif()
+ if(POLICY CMP0054)
+-    cmake_policy(SET CMP0054 OLD) # Only interpret if() arguments as variables or keywords when unquoted
++    cmake_policy(SET CMP0054 NEW) # Only interpret if() arguments as variables or keywords when unquoted
+ endif()
+ 
+ project (x265)
+-cmake_minimum_required (VERSION 2.8.8) # OBJECT libraries require 2.8.8
++cmake_minimum_required (VERSION 2.8.8...3.10) # OBJECT libraries require 2.8.8
+ include(CheckIncludeFiles)
+ include(CheckFunctionExists)
+ include(CheckSymbolExists)
+-- 
+2.49.0
+
