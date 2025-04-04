@@ -1,7 +1,7 @@
-From f069ed8e59da8d89b771e9f9fe7e7a39ae9d8f5b Mon Sep 17 00:00:00 2001
+From 933faae215b8788afe32714148b64499942e40ba Mon Sep 17 00:00:00 2001
 From: Max Dmitrichenko <max.dmitrichenko@intel.com>
 Date: Thu, 22 Aug 2024 07:40:48 +0200
-Subject: [PATCH 1/5] Do not set thread priority on Windows
+Subject: [PATCH 1/7] Do not set thread priority on Windows
 
 ---
  source/common/threadpool.cpp | 6 ------

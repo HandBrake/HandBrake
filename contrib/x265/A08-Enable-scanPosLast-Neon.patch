@@ -1,0 +1,36 @@
+>From d6201e6131aec95cc0e72ea99a659685d848c459 Mon Sep 17 00:00:00 2001
+From: George Steed <george.steed@arm.com>
+Date: Fri, 14 Mar 2025 11:48:48 +0000
+Subject: [PATCH] Enable scanPosLast_neon on Apple Silicon and for high
+ bit-depth
+
+Currently the Neon implementation of scanPosLast is only used for
+standard bit-depth and is not used at all on Apple Silicon platforms.
+This patch moves the setup such that it is now used on all platforms and
+used on both standard and high bit-depth.
+---
+ source/common/aarch64/asm-primitives.cpp | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/source/common/aarch64/asm-primitives.cpp b/source/common/aarch64/asm-primitives.cpp
+index c1317eb74..7f2f6f09e 100644
+--- a/source/common/aarch64/asm-primitives.cpp
++++ b/source/common/aarch64/asm-primitives.cpp
+@@ -736,12 +736,11 @@ void setupNeonPrimitives(EncoderPrimitives &p)
+     p.cu[BLOCK_4x4].psy_cost_pp = PFX(psyCost_4x4_neon);
+ 
+     p.weight_pp = PFX(weight_pp_neon);
+-#if !defined(__APPLE__)
+-    p.scanPosLast = PFX(scanPosLast_neon);
+-#endif
+     p.costCoeffNxN = PFX(costCoeffNxN_neon);
+ #endif
+ 
++    p.scanPosLast = PFX(scanPosLast_neon);
++
+     // quant
+     p.quant = PFX(quant_neon);
+     p.nquant = PFX(nquant_neon);
+-- 
+2.34.1
+

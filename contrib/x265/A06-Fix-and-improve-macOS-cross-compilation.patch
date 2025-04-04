@@ -1,0 +1,55 @@
+From 81e6bd32c1d128a34456774af09c4a28ee6c8f84 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Fri, 4 Apr 2025 11:34:52 +0200
+Subject: [PATCH 6/7] Fix and improve macOS cross compilation
+
+---
+ source/CMakeLists.txt | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
+
+diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
+index 4f5b3ed82..8fd13a2d1 100755
+--- a/source/CMakeLists.txt
++++ b/source/CMakeLists.txt
+@@ -6,18 +6,12 @@ if(NOT CMAKE_BUILD_TYPE)
+         FORCE)
+ endif()
+ message(STATUS "cmake version ${CMAKE_VERSION}")
+-if(POLICY CMP0025)
+-    cmake_policy(SET CMP0025 NEW) # report Apple's Clang as just Clang
+-endif()
+ if(POLICY CMP0042)
+     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
+ endif()
+-if(POLICY CMP0054)
+-    cmake_policy(SET CMP0054 NEW) # Only interpret if() arguments as variables or keywords when unquoted
+-endif()
+ 
+ project (x265)
+-cmake_minimum_required (VERSION 2.8.8) # OBJECT libraries require 2.8.8
++cmake_minimum_required (VERSION 3.5)
+ include(CheckIncludeFiles)
+ include(CheckFunctionExists)
+ include(CheckSymbolExists)
+@@ -168,7 +162,7 @@ if(APPLE)
+   add_definitions(-DMACOS=1)
+ endif()
+ 
+-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
++if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
+     set(CLANG 1)
+ endif()
+ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
+@@ -753,6 +747,9 @@ if((MSVC_IDE OR XCODE OR GCC) AND ENABLE_ASSEMBLY)
+ 	elseif(ARM64 OR CROSS_COMPILE_ARM64)
+     # compile ARM64 arch asm files here
+         enable_language(ASM)
++        if(APPLE)
++            set(ARM_ARGS ${ARM_ARGS} -arch ${CMAKE_OSX_ARCHITECTURES})
++        endif()
+         foreach(ASM ${ARM_ASMS})
+             set(ASM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/aarch64/${ASM})
+             list(APPEND ASM_SRCS ${ASM_SRC})
+-- 
+2.39.5 (Apple Git-154)
+
