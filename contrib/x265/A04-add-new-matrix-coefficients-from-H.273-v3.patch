@@ -1,7 +1,7 @@
-From c934fcd99aa7f4f9e9c7e8eb4315a29dd0c13c66 Mon Sep 17 00:00:00 2001
+From e40c6c83a27797c05067c85fcd4eba80a6afcfb1 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Sat, 30 Nov 2024 08:59:51 +0100
-Subject: [PATCH] add new matrix coefficients from H.273 v3
+Subject: [PATCH 4/7] add new matrix coefficients from H.273 v3
 
 ---
  doc/reST/cli.rst        | 3 +++
@@ -25,10 +25,10 @@ index 6bb99f92e..e9bc86d23 100755
  .. option:: --chromaloc <0..5>
  
 diff --git a/source/common/param.cpp b/source/common/param.cpp
-index a35b06339..58806c0c2 100755
+index c9b1bfa49..1fdbb5c61 100755
 --- a/source/common/param.cpp
 +++ b/source/common/param.cpp
-@@ -1803,10 +1803,10 @@ int x265_check_params(x265_param* param)
+@@ -1806,10 +1806,10 @@ int x265_check_params(x265_param* param)
            " smpte170m, smpte240m, linear, log100, log316, iec61966-2-4, bt1361e,"
            " iec61966-2-1, bt2020-10, bt2020-12, smpte-st-2084, smpte-st-428 or arib-std-b67");
      CHECK(param->vui.matrixCoeffs < 0
@@ -42,10 +42,10 @@ index a35b06339..58806c0c2 100755
            || param->vui.chromaSampleLocTypeTopField > 5,
            "Chroma Sample Location Type Top Field must be 0-5");
 diff --git a/source/x265.h b/source/x265.h
-index 7241beda2..bd93a8cc7 100644
+index c9fd99984..2d5aa0479 100644
 --- a/source/x265.h
 +++ b/source/x265.h
-@@ -746,7 +746,7 @@ static const char * const x265_transfer_names[] = { "reserved", "bt709", "unknow
+@@ -747,7 +747,7 @@ static const char * const x265_transfer_names[] = { "reserved", "bt709", "unknow
                                                      "log316", "iec61966-2-4", "bt1361e", "iec61966-2-1", "bt2020-10", "bt2020-12",
                                                      "smpte2084", "smpte428", "arib-std-b67", 0 };
  static const char * const x265_colmatrix_names[] = { "gbr", "bt709", "unknown", "", "fcc", "bt470bg", "smpte170m", "smpte240m",
@@ -55,7 +55,7 @@ index 7241beda2..bd93a8cc7 100644
                                                 "32:11", "80:33", "18:11", "15:11", "64:33", "160:99", "4:3", "3:2", "2:1", 0 };
  static const char * const x265_interlace_names[] = { "prog", "tff", "bff", 0 };
 diff --git a/source/x265cli.cpp b/source/x265cli.cpp
-index 6ca6fb495..74a5f74f1 100755
+index c5fd26a68..47e69c85d 100755
 --- a/source/x265cli.cpp
 +++ b/source/x265cli.cpp
 @@ -327,7 +327,7 @@ namespace X265_NS {

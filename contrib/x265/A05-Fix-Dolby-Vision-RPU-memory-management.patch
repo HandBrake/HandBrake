@@ -1,7 +1,7 @@
-From 3a71553731ce49117397ada92ffd858cc550195a Mon Sep 17 00:00:00 2001
+From fbb4a1305e39910de5376bc82f78c1f767736a08 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 22 Nov 2024 10:51:25 +0100
-Subject: [PATCH 5/5] Fix Dolby Vision RPU memory management
+Subject: [PATCH 5/7] Fix Dolby Vision RPU memory management
 
 ---
  source/common/frame.cpp    |  5 +++++
@@ -25,10 +25,10 @@ index 200717425..1244fdc24 100644
      {
          uint32_t widthInCU = (m_param->sourceWidth + m_param->maxCUSize - 1) >> m_param->maxLog2CUSize;
 diff --git a/source/encoder/encoder.cpp b/source/encoder/encoder.cpp
-index 752e41a8a..8117a90b2 100644
+index 39ca2ada1..4461ed8e2 100644
 --- a/source/encoder/encoder.cpp
 +++ b/source/encoder/encoder.cpp
-@@ -1681,11 +1681,20 @@ int Encoder::encode(const x265_picture* pic_in, x265_picture* pic_out)
+@@ -1689,11 +1689,20 @@ int Encoder::encode(const x265_picture* pic_in, x265_picture* pic_out)
          }
          copyUserSEIMessages(inFrame[0], inputPic[0]);
  
