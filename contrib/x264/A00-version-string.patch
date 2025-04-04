@@ -1,12 +1,11 @@
 diff --git a/x264.h b/x264.h
-index d685efbd..7f270c4b 100644
+index cc22f05d..2cdfad99 100644
 --- a/x264.h
 +++ b/x264.h
 @@ -45,7 +45,24 @@ extern "C" {
  
  #include "x264_config.h"
  
--#define X264_BUILD 164
 +/*
 + * Define the full version explicitly so that it survives a git --archive.
 + *
@@ -22,9 +21,9 @@ index d685efbd..7f270c4b 100644
 +#ifdef  X264_POINTVER
 +#undef  X264_POINTVER
 +#endif
-+#define X264_BUILD 164
-+#define X264_VERSION " r3186 585e0199"
-+#define X264_POINTVER "0.164.3186 585e0199"
+ #define X264_BUILD 165
++#define X264_VERSION " r3214 fe9e4a7f"
++#define X264_POINTVER "0.165.3214 fe9e4a7f"
  
  #ifdef _WIN32
  #   define X264_DLL_IMPORT __declspec(dllimport)
