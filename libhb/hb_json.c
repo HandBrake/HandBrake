@@ -722,7 +722,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         if (job->frame_to_stop > 0)
         {
             hb_dict_set(range_dict, "End",
-                        hb_value_int(job->frame_to_start + job->frame_to_stop + 1));
+                        hb_value_int(job->frame_to_start + job->frame_to_stop - 1));
         }
     }
     else
