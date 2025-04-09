@@ -82,13 +82,13 @@
     else if (self.range.type == HBRangeTypeFrames)
     {
         // we are frame based start / stop
-        //Point A to Point B. Frame to frame
+        // Point A to Point B. Frame to frame
         // get the start frame from the start frame field
         int start_frame = self.range.frameStart;
         job->frame_to_start = start_frame;
         // get the frame to stop on from the end frame field
         int stop_frame = self.range.frameStop;
-        job->frame_to_stop = stop_frame - start_frame;
+        job->frame_to_stop = stop_frame - start_frame + 1;
     }
     else if (self.range.type == HBRangePreviewIndex)
     {

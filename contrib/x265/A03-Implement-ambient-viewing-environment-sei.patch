@@ -1,7 +1,7 @@
-From 39f1065dc6e6c85780c42123033391233f7104af Mon Sep 17 00:00:00 2001
+From 6e9b7185420f1d4fec64a1b6a671c88400bb9e97 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 22 Nov 2024 10:49:10 +0100
-Subject: [PATCH 4/5] Implement ambient viewing environment sei
+Subject: [PATCH 3/7] Implement ambient viewing environment sei
 
 Defined in ISO/IEC 23008-2:2017, D.2.39.
 ---
@@ -12,7 +12,7 @@ Defined in ISO/IEC 23008-2:2017, D.2.39.
  4 files changed, 43 insertions(+)
 
 diff --git a/source/common/param.cpp b/source/common/param.cpp
-index a35b06339..92f70b6bf 100755
+index 02cface59..c9b1bfa49 100755
 --- a/source/common/param.cpp
 +++ b/source/common/param.cpp
 @@ -408,6 +408,7 @@ void x265_param_default(x265_param* param)
@@ -23,7 +23,7 @@ index a35b06339..92f70b6bf 100755
  
      param->bEnableFrameDuplication = 0;
      param->dupThreshold = 70;
-@@ -1963,6 +1964,7 @@ int x265_check_params(x265_param* param)
+@@ -1965,6 +1966,7 @@ int x265_check_params(x265_param* param)
                       || param->bEmitIDRRecoverySEI
                     || !!param->interlaceMode
                       || param->preferredTransferCharacteristics > 1
@@ -31,7 +31,7 @@ index a35b06339..92f70b6bf 100755
                       || strlen(param->toneMapFile)
                       || strlen(param->naluFile));
  
-@@ -2910,6 +2912,10 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+@@ -2925,6 +2927,10 @@ void x265_copy_params(x265_param* dst, x265_param* src)
      dst->bEmitCLL = src->bEmitCLL;
      dst->maxCLL = src->maxCLL;
      dst->maxFALL = src->maxFALL;
@@ -43,10 +43,10 @@ index a35b06339..92f70b6bf 100755
      dst->bEmitVUIHRDInfo = src->bEmitVUIHRDInfo;
      dst->bEmitVUITimingInfo = src->bEmitVUITimingInfo;
 diff --git a/source/encoder/encoder.cpp b/source/encoder/encoder.cpp
-index 6670c814d..752e41a8a 100644
+index cf2e95988..39ca2ada1 100644
 --- a/source/encoder/encoder.cpp
 +++ b/source/encoder/encoder.cpp
-@@ -3367,6 +3367,15 @@ void Encoder::getStreamHeaders(NALList& list, Entropy& sbacCoder, Bitstream& bs)
+@@ -3375,6 +3375,15 @@ void Encoder::getStreamHeaders(NALList& list, Entropy& sbacCoder, Bitstream& bs)
          }
      }
  

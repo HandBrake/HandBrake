@@ -1,7 +1,7 @@
-From a7921f411ee52f1f77cbdfea20d982351483eb7e Mon Sep 17 00:00:00 2001
+From ab704bef1773da3dba45b57cd9392f3118dd3817 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 13 Sep 2024 16:08:25 +0200
-Subject: [PATCH 2/5] Apple Silicon tuning
+Subject: [PATCH 2/7] Apple Silicon tuning
 
 ---
  source/common/threadpool.cpp | 8 +++++++-

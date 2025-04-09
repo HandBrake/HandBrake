@@ -717,12 +717,12 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         if (job->frame_to_start > 0)
         {
             hb_dict_set(range_dict, "Start",
-                        hb_value_int(job->frame_to_start + 1));
+                        hb_value_int(job->frame_to_start));
         }
         if (job->frame_to_stop > 0)
         {
             hb_dict_set(range_dict, "End",
-                        hb_value_int(job->frame_to_start + job->frame_to_stop));
+                        hb_value_int(job->frame_to_start + job->frame_to_stop - 1));
         }
     }
     else
@@ -1382,9 +1382,9 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         else if (!strcasecmp(range_type, "frame"))
         {
             if (range_start > 0)
-                job->frame_to_start = range_start - 1;
+                job->frame_to_start = range_start;
             if (range_end > 0)
-                job->frame_to_stop = range_end - job->frame_to_start;
+                job->frame_to_stop = range_end - job->frame_to_start + 1;
         }
     }
 
