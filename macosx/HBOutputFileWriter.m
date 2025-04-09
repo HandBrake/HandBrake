@@ -71,6 +71,11 @@
 
 - (void)write:(NSString *)text
 {
+    if (f == NULL)
+    {
+        return;
+    }
+
     fprintf(f, "%s", text.UTF8String);
     fflush(f);
 }
@@ -82,8 +87,24 @@
 
 - (void)clear
 {
+    if (f == NULL)
+    {
+        return;
+    }
+
     f = freopen(NULL, "w", f);
+
+    if (f == NULL)
+    {
+        return;
+    }
+
     f = freopen(NULL, "a", f);
+
+    if (f == NULL)
+    {
+        return;
+    }
 
     [self writeHeaderForReason:@"Session (Cleared)"];
 }

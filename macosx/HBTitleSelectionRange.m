@@ -195,7 +195,7 @@
 
 - (BOOL)chaptersSelected
 {
-    return self.type == HBRangeTypeChapters;
+    return self.type == HBTitleSelectionRangeTypeChapters;
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingChaptersSelected
@@ -205,7 +205,7 @@
 
 - (BOOL)secondsSelected
 {
-    return self.type == HBRangeTypeSeconds;
+    return self.type == HBTitleSelectionRangeTypeSeconds;
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingSecondsSelected
@@ -215,7 +215,7 @@
 
 - (BOOL)framesSelected
 {
-    return self.type == HBRangeTypeFrames;
+    return self.type == HBTitleSelectionRangeTypeFrames;
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingFramesSelected
