@@ -519,11 +519,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             job->vcodec == HB_VCODEC_FFMPEG_MF_H265 ||
             job->vcodec == HB_VCODEC_FFMPEG_MF_AV1) {
             av_dict_set(&av_opts, "rate_control", "u_vbr", 0); // options are cbr, pc_vbr, u_vbr, ld_vbr, g_vbr, gld_vbr
-
-            // On Qualcomm encoders, the VBR modes can easily drop frames if
-            // the rate control feels like it needs it (in certain
-            // configurations), unless scenario is set to camera_record.
-            av_dict_set(&av_opts, "scenario", "camera_record", 0);
         }
     }
     else
@@ -686,10 +681,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             snprintf(quality, 7, "%d", (int)job->vquality);
             av_dict_set(&av_opts, "rate_control", "quality", 0);
             av_dict_set(&av_opts, "quality", quality, 0);
-            if (!av_dict_get(av_opts, "scenario", NULL, 0))
-            {
-                av_dict_set(&av_opts, "scenario", "archive", 0);
-            }
         }
         else
         {
@@ -870,6 +861,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             context->max_b_frames = 1;
         }
         av_dict_set(&av_opts, "hw_encoding", "1", 0);
+        if (!av_dict_get(av_opts, "scenario", NULL, 0))
+        {
+            av_dict_set(&av_opts, "scenario", "archive", 0);
+        }
     }
 
     if( job->pass_id == HB_PASS_ENCODE_ANALYSIS ||
