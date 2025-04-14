@@ -103,6 +103,13 @@ namespace HandBrakeWPF.Controls
                 this.moveUp.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
                 this.moveDown.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
                 this.moveSplitter.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+
+                this.moveSplitter1.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+                this.moveSplitter2.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+                this.setDefault.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+                this.editPresetMenuItem.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+                this.clonePresetMenuItem.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+                this.deletePresetMenuItem.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -137,7 +144,15 @@ namespace HandBrakeWPF.Controls
         private void ContextMenu_OnOpened(object sender, RoutedEventArgs e)
         {
             Preset preset = this.presetListTree.SelectedItem as Preset;
-            this.editPresetMenuItem.IsEnabled = preset == null || !preset.IsPresetDisabled;
+
+            if (preset == null || preset.IsPresetDisabled || preset.IsBuildIn)
+            {
+                this.editPresetMenuItem.IsEnabled = false;
+            }
+            else
+            {
+                this.editPresetMenuItem.IsEnabled = true;
+            }
         }
 
         private void PresetOptionsBtn_OnClick(object sender, RoutedEventArgs e)
