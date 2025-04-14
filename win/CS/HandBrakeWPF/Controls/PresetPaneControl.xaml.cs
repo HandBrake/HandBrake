@@ -153,5 +153,16 @@ namespace HandBrakeWPF.Controls
             bool showPresetDesc = userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetDesc);
             this.presetDescMenuItem.Header = showPresetDesc ? Properties.Resources.PresetPane_HidePresetDesc : Properties.Resources.PresetPane_ShowPresetDesc;
         }
+
+
+        private void PresetExpandAll_OnClick(object sender, RoutedEventArgs e)
+        {
+            TreeViewHelper.ExpandAllNodes(this.presetListTree);
+        }
+
+        private void PresetCollapseAll_OnClick(object sender, RoutedEventArgs e)
+        {
+            TreeViewHelper.CollapseAllNodes(this.presetListTree);
+        }
     }
 }
