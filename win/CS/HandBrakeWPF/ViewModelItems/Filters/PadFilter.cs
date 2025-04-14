@@ -51,6 +51,7 @@ namespace HandBrakeWPF.ViewModelItems.Filters
             {
                 this.mode = value;
                 this.IsCustomPaddingEnabled = false;
+                this.CurrentTask.Padding.Mode = value;  
 
                 switch (value)
                 {
@@ -58,12 +59,22 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                         this.currentTask.Padding.Enabled = true;
                         IsCustomPaddingEnabled = true;
                         break;
+
+                    case PaddingMode.Fill:
+                    case PaddingMode.FillHeight:
+                    case PaddingMode.FillWidth:
+                        this.currentTask.Padding.Enabled = true;
+                        IsCustomPaddingEnabled = false;
+                        break;
+
                     case PaddingMode.None:
                     default:
                         this.Reset();
                         this.currentTask.Padding.Enabled = false;
                         break;
                 }
+
+                ApplyPad(value);
 
                 this.NotifyOfPropertyChange(() => this.Mode);
                 this.NotifyOfPropertyChange(() => this.IsCustomPaddingEnabled);
@@ -264,6 +275,43 @@ namespace HandBrakeWPF.ViewModelItems.Filters
             }
 
             this.NotifyOfPropertyChange(() => this.Colour);
+        }
+
+        private void ApplyPad(PaddingMode mode)
+        {
+            bool fillwidth, fillheight;
+            int[] pad = { 0, 0, 0, 0 };
+
+            fillwidth = fillheight = mode == PaddingMode.Fill;
+            fillheight = fillheight || (mode == PaddingMode.FillHeight);
+            fillwidth = fillwidth || (mode == PaddingMode.FillWidth);
+
+            if (mode == PaddingMode.Custom)
+            {
+                pad[0] = this.Top;
+                pad[1] = this.Bottom;
+                pad[2] = this.Left;
+                pad[3] = this.Right;
+            }
+
+            if (fillheight && this.currentTask.MaxHeight > 0)
+            {
+                pad[0] = (this.currentTask.MaxHeight.Value - this.currentTask.Height.Value) / 2;
+                pad[1] = this.currentTask.MaxHeight.Value - this.currentTask.Height.Value - pad[0];
+            }
+            if (fillwidth && this.currentTask.MaxWidth > 0)
+            {
+                pad[2] = (this.currentTask.MaxWidth.Value - this.currentTask.Width.Value) / 2;
+                pad[3] = this.currentTask.MaxWidth.Value - this.currentTask.Width.Value - pad[2];
+            }
+
+            this.Top = pad[0];
+            this.Bottom = pad[1];
+            this.Left = pad[2];
+            this.Right = pad[3];
+
+            //result->width += pad[2] + pad[3];
+            //result->height += pad[0] + pad[1];
         }
     }
 }

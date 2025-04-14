@@ -70,7 +70,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task.AllowUpscaling = importedPreset.PictureAllowUpscaling;
             preset.Task.OptimalSize = importedPreset.PictureUseMaximumSize;
             preset.Task.Padding = new PaddingFilter();
-            preset.Task.Padding.Set(importedPreset.PicturePadTop, importedPreset.PicturePadBottom, importedPreset.PicturePadLeft, importedPreset.PicturePadRight, importedPreset.PicturePadColor, importedPreset.PicturePadMode);
+            preset.Task.Padding.Set(importedPreset.PicturePadTop, importedPreset.PicturePadBottom, importedPreset.PicturePadLeft, importedPreset.PicturePadRight, importedPreset.PicturePadColor, EnumHelper<PaddingMode>.GetValue(importedPreset.PicturePadMode));
             
             switch (importedPreset.PicturePAR)
             {
@@ -573,7 +573,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureWidth = export.Task.MaxWidth;
             preset.PictureDARWidth = export.Task.DisplayWidth.HasValue ? (int)export.Task.DisplayWidth.Value : 0;
 
-            preset.PicturePadMode = export.Task.Padding.Mode;
+            preset.PicturePadMode = EnumHelper<PaddingMode>.GetShortName(export.Task.Padding.Mode);
             preset.PicturePadTop = export.Task.Padding.Y;
             preset.PicturePadBottom = export.Task.Padding.Bottom;
             preset.PicturePadLeft = export.Task.Padding.X;

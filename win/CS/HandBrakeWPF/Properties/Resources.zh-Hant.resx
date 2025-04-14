@@ -2190,16 +2190,16 @@ You can drag/drop or enter the text above.</value>
     <value>自訂（不限制）</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>填充（環繞）</value>
+    <value />
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>按高度（左右黑邊）</value>
+    <value />
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>無</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>按寬度（上下黑邊）</value>
+    <value />
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
     <value>填充：</value>
