@@ -9,7 +9,7 @@ concurrency:
 jobs:
   build:
     name: Build on Ubuntu
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
@@ -38,8 +38,6 @@ jobs:
 
     - name: Build HandBrake Linux
       run: |
-        PWD=$(pwd)
-        export PATH=$PWD/cmake-3.16.3-Linux-x86_64/bin:$PATH
         ./configure --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --enable-fdk-aac --disable-gtk --disable-x265 --disable-libdovi --launch-jobs=0 --launch
 
     - name: Upload HandBrakeCLI
