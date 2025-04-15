@@ -1621,6 +1621,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto Scroll.
+        /// </summary>
+        public static string LogView_AutoScrolling {
+            get {
+                return ResourceManager.GetString("LogView_AutoScrolling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose log file :.
+        /// </summary>
+        public static string LogView_ChooseLogFile {
+            get {
+                return ResourceManager.GetString("LogView_ChooseLogFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy to clipboard.
         /// </summary>
         public static string LogView_CopyClipboard {
@@ -2301,6 +2319,42 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_Container {
             get {
                 return ResourceManager.GetString("MainView_Container", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export debug file (JSON).
+        /// </summary>
+        public static string MainView_DebugExportData {
+            get {
+                return ResourceManager.GetString("MainView_DebugExportData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import debug file (JSON).
+        /// </summary>
+        public static string MainView_DebugImportData {
+            get {
+                return ResourceManager.GetString("MainView_DebugImportData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debug Menu.
+        /// </summary>
+        public static string MainView_DebugMenu {
+            get {
+                return ResourceManager.GetString("MainView_DebugMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to Queue - Quality Sweep.
+        /// </summary>
+        public static string MainView_DebugQualitySweep {
+            get {
+                return ResourceManager.GetString("MainView_DebugQualitySweep", resourceCulture);
             }
         }
         
@@ -4834,7 +4888,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fill (Surround).
+        ///   Looks up a localized string similar to Width &amp; Height.
         /// </summary>
         public static string PaddingMode_Fill {
             get {
@@ -4843,7 +4897,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Height (Pillarbox).
+        ///   Looks up a localized string similar to Height (Letterbox).
         /// </summary>
         public static string PaddingMode_Height {
             get {
@@ -4861,7 +4915,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Width (Letterbox).
+        ///   Looks up a localized string similar to Width (Pillarbox).
         /// </summary>
         public static string PaddingMode_Width {
             get {
@@ -8322,60 +8376,6 @@ namespace HandBrakeWPF.Properties {
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to Choose Log file in activity log.
-        /// </summary>
-        public static string LogView_ChooseLogFile {
-            get {
-                return ResourceManager.GetString("LogView_ChooseLogFile", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to autoscroll ScanLog.
-        /// </summary>
-        public static string LogView_AutoScrolling {
-            get {
-                return ResourceManager.GetString("LogView_AutoScrolling", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to Debug menu.
-        /// </summary>
-        public static string MainView_DebugMenu {
-            get {
-                return ResourceManager.GetString("MainView_DebugMenu", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to export debug data.
-        /// </summary>
-        public static string MainView_DebugExportData {
-            get {
-                return ResourceManager.GetString("MainView_DebugExportData", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to import debug data.
-        /// </summary>
-        public static string MainView_DebugImportData {
-            get {
-                return ResourceManager.GetString("MainView_DebugImportData", resourceCulture);
-            }
-        }
-        
-		/// <summary>
-        ///   Looks up a localized string similar to Add to Queue - QualitySweep.
-        /// </summary>
-        public static string MainView_DebugQualitySweep {
-            get {
-                return ResourceManager.GetString("MainView_DebugQualitySweep", resourceCulture);
             }
         }
     }

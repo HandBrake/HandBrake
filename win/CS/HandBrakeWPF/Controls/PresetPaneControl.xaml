@@ -99,6 +99,9 @@
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="PresetDeleteBuildIn" Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" />
                             <Separator />
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="ShowHidePresetDesc" Header="{x:Static Properties:Resources.PresetPane_ShowPresetDesc}" x:Name="presetDescMenuItem" />
+                            <Separator />
+                            <MenuItem Header="{x:Static Properties:Resources.Shared_ExpandAll}" x:Name="presetExpandAllOptions" Click="PresetExpandAll_OnClick"  />
+                            <MenuItem Header="{x:Static Properties:Resources.Shared_CollapseAll}" x:Name="presetCollapseAllOptions" Click="PresetCollapseAll_OnClick" />
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
@@ -133,22 +136,22 @@
 
                 <TreeView.ContextMenu>
                     <ContextMenu AutomationProperties.Name="Presets List Context Menu" Opened="ContextMenu_OnOpened">
-                        <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" Command="{Binding RelayCommand}" CommandParameter="PresetSetDefault" />
-                        <Separator />
+                        <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" x:Name="setDefault" Command="{Binding RelayCommand}" CommandParameter="PresetSetDefault" />
+                        <Separator x:Name="moveSplitter1" />
                         <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" x:Name="editPresetMenuItem" Command="{Binding RelayCommand}" CommandParameter="PresetManage" />
-                        <MenuItem Command="{Binding PresetClone}" CommandParameter="{Binding}" Header="{x:Static Properties:Resources.MainView_PresetClone}" />
-                        <MenuItem Header="{x:Static Properties:Resources.PresetManagerView_Delete}" Click="Delete_OnClick" InputGestureText="Del" />
-                        <Separator />
+                        <MenuItem Command="{Binding PresetClone}" CommandParameter="{Binding}"  x:Name="clonePresetMenuItem" Header="{x:Static Properties:Resources.MainView_PresetClone}" />
+                        <MenuItem Header="{x:Static Properties:Resources.PresetManagerView_Delete}"  x:Name="deletePresetMenuItem" Click="Delete_OnClick" InputGestureText="Del" />
+                        <Separator x:Name="moveSplitter2" />
                         <MenuItem Header="{x:Static Properties:Resources.Preset_Import}" Command="{Binding RelayCommand}" CommandParameter="PresetImport" />
                         <MenuItem Header="{x:Static Properties:Resources.Preset_Export}" Command="{Binding RelayCommand}" CommandParameter="PresetExport" />
-                        <Separator />
-                        <MenuItem Header="{x:Static Properties:Resources.MainView_ResetBuiltInPresets}" Command="{Binding RelayCommand}" CommandParameter="PresetReset" />
-                        <MenuItem Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" Command="{Binding RelayCommand}" CommandParameter="PresetDeleteBuildIn" />
                         <Separator x:Name="moveSplitter" />
                         <MenuItem Header="{x:Static Properties:Resources.PresetPane_MoveUp}" x:Name="moveUp" Command="{Binding PresetMove}" CommandParameter="up" />
                         <MenuItem Header="{x:Static Properties:Resources.PresetPane_MoveDown}" x:Name="moveDown" Command="{Binding PresetMove}" CommandParameter="down" />
                         <MenuItem Header="{x:Static Properties:Resources.PresetPane_MoveToTop}" x:Name="moveTop" Command="{Binding PresetMove}" CommandParameter="top" />
                         <MenuItem Header="{x:Static Properties:Resources.PresetPane_MoveToBottom}" x:Name="moveBottom" Command="{Binding PresetMove}" CommandParameter="bottom" />
+                        <Separator />
+                        <MenuItem Header="{x:Static Properties:Resources.Shared_ExpandAll}" x:Name="presetExpandAll" Click="PresetExpandAll_OnClick"  />
+                        <MenuItem Header="{x:Static Properties:Resources.Shared_CollapseAll}" x:Name="presetCollapseAll" Click="PresetCollapseAll_OnClick" />
                     </ContextMenu>
                 </TreeView.ContextMenu>
             </TreeView>

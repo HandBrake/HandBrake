@@ -103,6 +103,13 @@ namespace HandBrakeWPF.Controls
                 this.moveUp.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
                 this.moveDown.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
                 this.moveSplitter.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+
+                this.moveSplitter1.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+                this.moveSplitter2.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+                this.setDefault.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+                this.editPresetMenuItem.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+                this.clonePresetMenuItem.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
+                this.deletePresetMenuItem.Visibility = category == null ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -137,7 +144,15 @@ namespace HandBrakeWPF.Controls
         private void ContextMenu_OnOpened(object sender, RoutedEventArgs e)
         {
             Preset preset = this.presetListTree.SelectedItem as Preset;
-            this.editPresetMenuItem.IsEnabled = preset == null || !preset.IsPresetDisabled;
+
+            if (preset == null || preset.IsPresetDisabled || preset.IsBuildIn)
+            {
+                this.editPresetMenuItem.IsEnabled = false;
+            }
+            else
+            {
+                this.editPresetMenuItem.IsEnabled = true;
+            }
         }
 
         private void PresetOptionsBtn_OnClick(object sender, RoutedEventArgs e)
@@ -152,6 +167,17 @@ namespace HandBrakeWPF.Controls
 
             bool showPresetDesc = userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetDesc);
             this.presetDescMenuItem.Header = showPresetDesc ? Properties.Resources.PresetPane_HidePresetDesc : Properties.Resources.PresetPane_ShowPresetDesc;
+        }
+
+
+        private void PresetExpandAll_OnClick(object sender, RoutedEventArgs e)
+        {
+            TreeViewHelper.ExpandAllNodes(this.presetListTree);
+        }
+
+        private void PresetCollapseAll_OnClick(object sender, RoutedEventArgs e)
+        {
+            TreeViewHelper.CollapseAllNodes(this.presetListTree);
         }
     }
 }

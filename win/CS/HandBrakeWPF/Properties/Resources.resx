@@ -2199,16 +2199,16 @@ Please choose a different preset.</value>
     <value>Custom (Not Limited)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (Surround)</value>
+    <value>Width &amp; Height</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (Pillarbox)</value>
+    <value>Height (Letterbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>None</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (Letterbox)</value>
+    <value>Width (Pillarbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
     <value>Fill:</value>
@@ -2944,7 +2944,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="MetaData_Add" xml:space="preserve">
     <value>Add Row</value>
   </data>
- <data name="MainView_DebugMenu" xml:space="preserve">
+  <data name="MainView_DebugMenu" xml:space="preserve">
     <value>Debug Menu</value>
   </data>
   <data name="MainView_DebugExportData" xml:space="preserve">
