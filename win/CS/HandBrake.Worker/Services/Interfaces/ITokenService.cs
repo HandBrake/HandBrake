@@ -11,7 +11,7 @@ namespace HandBrake.Worker.Services.Interfaces
 {
     public interface ITokenService
     {
-        string RegisterToken(string request);
+        bool RegisterToken(string request);
 
         bool IsTokenSet();
 

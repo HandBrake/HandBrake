@@ -154,10 +154,9 @@ namespace HandBrake.Worker
         private static string RegisterToken(HttpListenerRequest request)
         {
             string requestPostData = HttpUtilities.GetRequestPostData(request);
-            if (!string.IsNullOrEmpty(requestPostData))
+            if (!string.IsNullOrEmpty(requestPostData) && !TokenService.IsTokenSet())
             {
-                TokenService.RegisterToken(requestPostData);
-                return true.ToString();
+                return TokenService.RegisterToken(requestPostData).ToString();
             }
 
             return false.ToString();
