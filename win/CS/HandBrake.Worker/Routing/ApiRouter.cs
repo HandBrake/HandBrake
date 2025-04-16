@@ -230,7 +230,10 @@ namespace HandBrake.Worker.Routing
 
         public string ResetLogging(HttpListenerRequest request)
         {
-            this.logHandler.Reset();
+            if (this.logHandler != null)
+            {
+                this.logHandler.Reset();
+            }
 
             return null;
         }

@@ -79,14 +79,17 @@ namespace HandBrakeWPF.Instance
                         StartInfo =
                                         {
                                             FileName = "HandBrake.Worker.exe",
-                                            Arguments =
-                                                string.Format(" --port={0} --token={1} --pid={2}", port, this.base64Token, Process.GetCurrentProcess().Id),
                                             UseShellExecute = false,
                                             RedirectStandardOutput = true,
                                             RedirectStandardError = true,
-                                            CreateNoWindow = true
+                                            CreateNoWindow = true,
                                         }
                     };
+
+                    workerProcess.StartInfo.EnvironmentVariables["HB_PORT"] = port.ToString();
+                    workerProcess.StartInfo.EnvironmentVariables["HB_TOKEN"] = this.base64Token;
+                    workerProcess.StartInfo.EnvironmentVariables["HB_PID"] = Process.GetCurrentProcess().Id.ToString();
+
                     workerProcess.Exited += this.WorkerProcess_Exited;
                     workerProcess.OutputDataReceived += this.WorkerProcess_OutputDataReceived;
                     workerProcess.ErrorDataReceived += this.WorkerProcess_OutputDataReceived;

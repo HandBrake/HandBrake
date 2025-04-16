@@ -42,7 +42,7 @@ namespace HandBrake.Worker.Services
         {
             lock (this.lockObject)
             {
-                if (string.IsNullOrEmpty(token))
+                if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(this.uiToken))
                 {
                     return false;
                 }
