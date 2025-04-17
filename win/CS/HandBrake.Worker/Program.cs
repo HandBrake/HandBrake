@@ -45,34 +45,38 @@ namespace HandBrake.Worker
             }
 
             int port = 8037; // Default Port;
-            string token;
-            
-            if (args.Length != 0)
+
+            string envVar = Environment.GetEnvironmentVariable("HB_PORT");
+            if (!string.IsNullOrWhiteSpace(envVar))
             {
-                foreach (string argument in args)
+                if (int.TryParse(envVar, out var parsedPort))
                 {
-                    if (argument.StartsWith("--port"))
-                    {
-                        string value = argument.TrimStart("--port=".ToCharArray());
-                        if (int.TryParse(value, out var parsedPort))
-                        {
-                            port = parsedPort;
-                        }
-                    }
-
-                    if (argument.StartsWith("--token"))
-                    {
-                        token = argument.TrimStart("--token=".ToCharArray());
-                        TokenService.RegisterToken(token);
-                    }
-
-                    if (argument.StartsWith("--pid"))
-                    {
-                        token = argument.TrimStart("--pid=".ToCharArray());
-                        int.TryParse(token, out parentProcessId);
-                    }
+                    port = parsedPort;
                 }
             }
+
+            string token = Environment.GetEnvironmentVariable("HB_TOKEN");
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                TokenService.RegisterToken(token);
+            }
+
+            envVar = Environment.GetEnvironmentVariable("HB_PID");
+            if (!string.IsNullOrWhiteSpace(envVar))
+            {
+                if (int.TryParse(envVar, out var parsedPid))
+                {
+                    parentProcessId = parsedPid;
+                }
+            }
+
+            // Clear the environment variables for this process. We no longer need them.
+            Environment.SetEnvironmentVariable("HB_PORT", string.Empty);
+            Environment.SetEnvironmentVariable("HB_TOKEN", string.Empty);
+            Environment.SetEnvironmentVariable("HB_PID", string.Empty);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
 
             if (!TokenService.IsTokenSet())
             {
@@ -150,10 +154,9 @@ namespace HandBrake.Worker
         private static string RegisterToken(HttpListenerRequest request)
         {
             string requestPostData = HttpUtilities.GetRequestPostData(request);
-            if (!string.IsNullOrEmpty(requestPostData))
+            if (!string.IsNullOrEmpty(requestPostData) && !TokenService.IsTokenSet())
             {
-                TokenService.RegisterToken(requestPostData);
-                return true.ToString();
+                return TokenService.RegisterToken(requestPostData).ToString();
             }
 
             return false.ToString();

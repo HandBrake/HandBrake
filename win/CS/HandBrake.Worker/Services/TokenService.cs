@@ -3,7 +3,7 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the TokenService type.
+//   This acts as a pairing system between the UI and the Server to avoid requests hitting the API that are not meant for it.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ namespace HandBrake.Worker.Services
         private readonly object lockObject = new object();
         private string uiToken;
         
-        public string RegisterToken(string requestToken)
+        public bool RegisterToken(string requestToken)
         {
             lock (this.lockObject)
             {
@@ -24,9 +24,10 @@ namespace HandBrake.Worker.Services
                 if (string.IsNullOrEmpty(this.uiToken))
                 {
                     this.uiToken = requestToken;
+                    return true;
                 }
 
-                return string.Empty;
+                return false;
             }
         }
 
@@ -42,7 +43,7 @@ namespace HandBrake.Worker.Services
         {
             lock (this.lockObject)
             {
-                if (string.IsNullOrEmpty(token))
+                if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(this.uiToken))
                 {
                     return false;
                 }
