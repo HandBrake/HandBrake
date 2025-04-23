@@ -44,7 +44,7 @@ jobs:
         cd build
         make pkg.create.zip
         cd libhb
-        move hb.dll hb_a64.dll
+        mv hb.dll hb_a64.dll
         
 
     - name: Upload HandBrakeCLI
