@@ -128,7 +128,7 @@ jobs:
   build_gui:
     name: Windows UI
     runs-on: windows-2022
-    needs: [build_mingw, build_mingw_arm]
+    needs: [build_mingw]
     env:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
@@ -140,6 +140,39 @@ jobs:
       with:
        name: LibHandBrake
        path: win/CS/HandBrakeWPF/bin/publish
+      
+    - name: Import the Signing Cert
+      run: |
+        $ErrorView = "NormalView"
+        if (-NOT ($env:SigningCertificate -eq '')) {
+          $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.HandBrakeTeam_Pfx }}")
+          $currentDirectory = Get-Location
+          $certificatePath = Join-Path -Path $currentDirectory -ChildPath $env:SigningCertificate
+          $certPassword = ConvertTo-SecureString -String ${{ secrets.HandBrakeTeam_pfx_pwd }} -Force –AsPlainText
+          [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
+          cp $certificatePath win\cs\
+        }
+
+    - name: Build Windows GUI
+      run: |
+        $env:Path += ";C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
+        msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
+
+    - name: Upload HandBrake exe Installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: HandBrake-Win_GUI-x64
+        path: win/CS/HandBrakeWPF/bin/publish/HandBrake-Nightly-x86_64-Win_GUI.exe
+        
+  build_gui_arm:
+    name: Windows UI
+    runs-on: windows-2022
+    needs: [build_mingw_arm]
+    env:
+      SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
+
+    steps:
+    - uses: actions/checkout@v4
        
     - name: Download LibHandBrake_ARM64
       uses: actions/download-artifact@v4
@@ -162,10 +195,11 @@ jobs:
     - name: Build Windows GUI
       run: |
         $env:Path += ";C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
-        msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
+        msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
     - name: Upload HandBrake exe Installer
       uses: actions/upload-artifact@v4
       with:
-        name: HandBrake-Win_GUI-EXE
-        path: win/CS/HandBrakeWPF/bin/publish/HandBrake-Nightly-x86_64-Win_GUI.exe
+        name: HandBrake-Win_GUI-ARM64
+        path: win/CS/HandBrakeWPF/bin/publish/HandBrake-Nightly-arm64-Win_GUI.exe
+
