@@ -2962,4 +2962,13 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="LogView_AutoScrolling" xml:space="preserve">
     <value>Auto Scroll</value>
   </data>
+  <data name="LogLevel_Minimised" xml:space="preserve">
+    <value>Minimised</value>
+  </data>
+  <data name="LogLevel_Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="LogLevel_Extended" xml:space="preserve">
+    <value>Extended</value>
+  </data>
 </root>

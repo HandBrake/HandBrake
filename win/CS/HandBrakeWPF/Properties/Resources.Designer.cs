@@ -8378,5 +8378,32 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to LogLevel "Minimised".
+        /// </summary>
+        public static string LogLevel_Minimised {
+            get {
+                return ResourceManager.GetString("LogLevel_Minimised", resourceCulture);
+            }
+        }
+		
+        /// <summary>
+        ///   Looks up a localized string similar to LogLevel "Standard".
+        /// </summary>
+        public static string LogLevel_Standard {
+            get {
+                return ResourceManager.GetString("LogLevel_Standard", resourceCulture);
+            }
+        }
+		
+        /// <summary>
+        ///   Looks up a localized string similar to LogLevel "Extended".
+        /// </summary>
+        public static string LogLevel_Extended {
+            get {
+                return ResourceManager.GetString("LogLevel_Extended", resourceCulture);
+            }
+        }
     }
 }
