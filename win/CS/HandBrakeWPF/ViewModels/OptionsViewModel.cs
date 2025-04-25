@@ -957,7 +957,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                this.selectedVerbosity = (LogLevel)userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
+                this.selectedVerbosity = value;
                 this.NotifyOfPropertyChange(() => this.SelectedVerbosity);
             }
         }
