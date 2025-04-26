@@ -196,10 +196,20 @@ jobs:
       run: |
         $env:Path += ";C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
         msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
-
+        git rev-parse --short HEAD > gitHash.txt
+        git show -s --format=%cs > hb_date.txt
+        set /p gitHash=<HandBrake/gitHash.txt
+        set /p HBDATE=<HandBrake/hb_date.txt
+        set HBDATE=%HBDATE:-=%    
+        set HBDATE=%HBDATE:~0,8%
+        set FILENAME=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.exe
+        echo %FILENAME%
+        cd win/CS/HandBrakeWPF/bin/publish/
+        move HandBrake-*-Win_GUI.exe %FILENAME%
+        
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v4
       with:
         name: HandBrake-Win_GUI-ARM64
-        path: win/CS/HandBrakeWPF/bin/publish/HandBrake-Nightly*.exe
+        path: win/CS/HandBrakeWPF/bin/publish/HandBrake-*.exe
 
