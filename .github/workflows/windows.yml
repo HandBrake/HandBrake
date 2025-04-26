@@ -158,11 +158,43 @@ jobs:
         $env:Path += ";C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
         msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
+    - name: Prepare Package
+      run: |
+        echo "Setting up context"
+        dir
+        git rev-parse --short HEAD > gitHash.txt
+        set /p gitHash=<gitHash.txt
+        set FILENAME=HandBrake-%gitHash%-x64-Win_GUI.exe
+        set FILENAMEZIP=HandBrake-%gitHash%-x64-Win_GUI.zip
+        echo %FILENAME%
+        echo %FILENAMEZIP%
+        echo "Renaming Windows Installer file"
+        cd win/CS/HandBrakeWPF/bin/publish/
+        dir
+        move HandBrake-*-Win_GUI.exe %FILENAME%
+        dir
+        cd ..
+        dir
+        echo "Creating Zip Package"
+        rmdir /q /s Debug
+        move publish HandBrake
+        7z a %FILENAMEZIP% * -x!Release\ -x!HandBrake\%FILENAME% -x!HandBrake\*.nsi -x!HandBrake\*.config -x!*HandBrake\*.xml -x!*HandBrake\*.pdb -x!*HandBrake\*.bmp  -x!HandBrake\*.zip -x!HandBrake\*.bz2 -x!HandBrake\*.msi -mx9
+        dir
+        cd ../../../../
+        dir
+      shell: cmd
+              
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v4
       with:
         name: HandBrake-Win_GUI-x64
-        path: win/CS/HandBrakeWPF/bin/publish/HandBrake-Nightly-x86_64-Win_GUI.exe
+        path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake*.exe
+
+    - name: Upload HandBrake ZIP
+      uses: actions/upload-artifact@v4
+      with:
+        name: HandBrake-Win_GUI-x64-Zip
+        path: win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
         
   build_gui_arm:
     name: Windows UI ARM
@@ -227,7 +259,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: HandBrake-Win_GUI-ARM64
-        path: win/CS/HandBrakeWPF/bin/publish/HandBrake*.exe
+        path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake*.exe
 
     - name: Upload HandBrake ZIP
       uses: actions/upload-artifact@v4
