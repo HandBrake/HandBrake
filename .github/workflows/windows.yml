@@ -196,20 +196,41 @@ jobs:
       run: |
         $env:Path += ";C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
         msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
-        git rev-parse --short HEAD > gitHash.txt
-        git show -s --format=%cs > hb_date.txt
+        
+    - name: Prepare Package
+      run: |
+        echo "Setting up context"
+        dir
         set /p gitHash=<HandBrake/gitHash.txt
         set /p HBDATE=<HandBrake/hb_date.txt
-        set HBDATE=%HBDATE:-=%    
+        set HBDATE=%HBDATE:-=%
         set HBDATE=%HBDATE:~0,8%
         set FILENAME=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.exe
+        set FILENAMEZIP=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.zip
         echo %FILENAME%
-        cd win/CS/HandBrakeWPF/bin/publish/
+        echo %FILENAMEZIP%
+        echo "Renaming Windows Installer file"
+        cd HandBrake/win/CS/HandBrakeWPF/bin/publish/
+        dir
         move HandBrake-*-Win_GUI.exe %FILENAME%
-        
+        dir
+        cd ..
+        dir
+        echo "Creating Zip Package"
+        rmdir /q /s Debug
+        move publish HandBrake
+        7z a %FILENAMEZIP% * -x!Release\ -x!HandBrake\%FILENAME% -x!HandBrake\*.nsi -x!HandBrake\*.config -x!*HandBrake\*.xml -x!*HandBrake\*.pdb -x!*HandBrake\*.bmp  -x!HandBrake\*.zip -x!HandBrake\*.bz2 -x!HandBrake\*.msi -mx9
+      shell: cmd
+              
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v4
       with:
         name: HandBrake-Win_GUI-ARM64
         path: win/CS/HandBrakeWPF/bin/publish/HandBrake-*.exe
+
+    - name: Upload HandBrake ZIP
+      uses: actions/upload-artifact@v4
+      with:
+        name: HandBrake-Win_GUI-ARM64-Zip
+        path: HandBrake/win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
 
