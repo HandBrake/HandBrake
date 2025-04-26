@@ -202,13 +202,9 @@ jobs:
         echo "Setting up context"
         dir
         git rev-parse --short HEAD > gitHash.txt
-        git show -s --format=%cs > hb_date.txt
         set /p gitHash=<gitHash.txt
-        set /p HBDATE=<hb_date.txt
-        set HBDATE=%HBDATE:-=%
-        set HBDATE=%HBDATE:~0,8%
-        set FILENAME=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.exe
-        set FILENAMEZIP=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.zip
+        set FILENAME=HandBrake-%gitHash%-arm64-Win_GUI.exe
+        set FILENAMEZIP=HandBrake-%gitHash%-arm64-Win_GUI.zip
         echo %FILENAME%
         echo %FILENAMEZIP%
         echo "Renaming Windows Installer file"
