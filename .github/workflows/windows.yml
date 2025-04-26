@@ -218,17 +218,20 @@ jobs:
         rmdir /q /s Debug
         move publish HandBrake
         7z a %FILENAMEZIP% * -x!Release\ -x!HandBrake\%FILENAME% -x!HandBrake\*.nsi -x!HandBrake\*.config -x!*HandBrake\*.xml -x!*HandBrake\*.pdb -x!*HandBrake\*.bmp  -x!HandBrake\*.zip -x!HandBrake\*.bz2 -x!HandBrake\*.msi -mx9
+        dir
+        cd ../../../../
+        dir
       shell: cmd
               
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v4
       with:
         name: HandBrake-Win_GUI-ARM64
-        path: win/CS/HandBrakeWPF/bin/publish/HandBrake-*.exe
+        path: win/CS/HandBrakeWPF/bin/publish/HandBrake*.exe
 
     - name: Upload HandBrake ZIP
       uses: actions/upload-artifact@v4
       with:
         name: HandBrake-Win_GUI-ARM64-Zip
-        path: HandBrake/win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
+        path: win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
 
