@@ -37,7 +37,10 @@ namespace HandBrakeWPF.Services.Presets.Model
             this.Task = new EncodeTask(preset.Task);
             this.IsPresetDisabled = preset.IsPresetDisabled;
             this.AudioTrackBehaviours = new AudioBehaviours(preset.AudioTrackBehaviours);
-            this.SubtitleTrackBehaviours = new SubtitleBehaviours(preset.SubtitleTrackBehaviours);
+            if (preset.SubtitleTrackBehaviours != null)
+            {
+                this.SubtitleTrackBehaviours = new SubtitleBehaviourRule(preset.SubtitleTrackBehaviours);
+            }
         }
 
         public string Category { get; set; }
@@ -78,15 +81,15 @@ namespace HandBrakeWPF.Services.Presets.Model
 
         public AudioBehaviours AudioTrackBehaviours { get; set; }
 
-        public SubtitleBehaviours SubtitleTrackBehaviours { get; set; }
+        public  SubtitleBehaviourRule SubtitleTrackBehaviours { get; set; }
 
         public bool IsPresetDisabled { get; set; }
 
-        public void Update(EncodeTask task, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours)
+        public void Update(EncodeTask task, AudioBehaviours audioBehaviours, SubtitleBehaviourRule subtitleBehaviours)
         {
             this.Task = task;
             this.AudioTrackBehaviours = new AudioBehaviours(audioBehaviours);
-            this.SubtitleTrackBehaviours = new SubtitleBehaviours(subtitleBehaviours);
+            this.SubtitleTrackBehaviours = new SubtitleBehaviourRule(subtitleBehaviours);
         }
 
         public override string ToString()
