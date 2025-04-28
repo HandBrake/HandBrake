@@ -733,35 +733,17 @@ static int avformatInit( hb_mux_object_t * m )
             track->st->codecpar->ch_layout = ch_layout;
         }
 
-        const char *name;
-        if (audio->config.out.name == NULL)
-        {
-            switch (track->st->codecpar->ch_layout.nb_channels)
-            {
-                case 1:
-                    name = "Mono";
-                    break;
-
-                case 2:
-                    name = "Stereo";
-                    break;
-
-                default:
-                    name = "Surround";
-                    break;
-            }
-        }
-        else
-        {
-            name = audio->config.out.name;
-        }
         // Set audio track title
-        av_dict_set(&track->st->metadata, "title", name, 0);
-        if (job->mux == HB_MUX_AV_MP4)
+        const char *name = audio->config.out.name;
+        if (name != NULL && name[0] != 0)
         {
-            // Some software (MPC, mediainfo) use hdlr description
-            // for track title
-            av_dict_set(&track->st->metadata, "handler_name", name, 0);
+            av_dict_set(&track->st->metadata, "title", name, 0);
+            if (job->mux == HB_MUX_AV_MP4)
+            {
+                // Some software (MPC, mediainfo) use hdlr description
+                // for track title
+                av_dict_set(&track->st->metadata, "handler_name", name, 0);
+            }
         }
     }
 
