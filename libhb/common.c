@@ -1468,6 +1468,36 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last)
     return ((hb_rate_internal_t*)last)->next;
 }
 
+const char * hb_audio_name_get_default(int mixdown, uint64_t layout)
+{
+    int mix_channels = 2;
+
+    if (mixdown != HB_AMIXDOWN_NONE)
+    {
+        mix_channels = hb_mixdown_get_discrete_channel_count(mixdown);
+    }
+    else
+    {
+        mix_channels = hb_layout_get_discrete_channel_count(layout);
+    }
+
+    switch (mix_channels)
+    {
+        case 1:
+            return "Mono";
+            break;
+
+        case 2:
+            return "Stereo";
+            break;
+
+        default:
+            return "Surround";
+            break;
+    }
+
+}
+
 // Get limits and hints for the UIs.
 //
 // granularity sets the minimum step increments that should be used

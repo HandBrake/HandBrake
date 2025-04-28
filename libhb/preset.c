@@ -853,15 +853,6 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             hb_dict_set(audio_dict, "Track", hb_value_int(aconfig->index));
             hb_dict_set(audio_dict, "Encoder", hb_value_string(
                         hb_audio_encoder_get_short_name(out_codec)));
-            const char * name = hb_dict_get_string(encoder_dict, "AudioTrackName");
-            if (name != NULL && name[0] != 0)
-            {
-                hb_dict_set_string(audio_dict, "Name", name);
-            }
-            else if (aconfig->in.name != NULL && aconfig->in.name[0] != 0)
-            {
-                hb_dict_set_string(audio_dict, "Name", aconfig->in.name);
-            }
             if (!(out_codec & HB_ACODEC_PASS_FLAG))
             {
                 if (hb_dict_get(encoder_dict, "AudioTrackGainSlider") != NULL)
@@ -924,7 +915,39 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             }
 
             // Sanitize the settings before adding to the audio list
-            hb_sanitize_audio_settings(title,  audio_dict);
+            hb_sanitize_audio_settings(title, audio_dict);
+
+            const char *name = hb_dict_get_string(encoder_dict, "AudioTrackName");
+            if (name != NULL && name[0] != 0)
+            {
+                hb_dict_set_string(audio_dict, "Name", name);
+            }
+            else
+            {
+                int passthru_name = hb_value_get_bool(hb_dict_get(preset, "AudioTrackNamePassthru"));
+                if (passthru_name && aconfig->in.name != NULL && aconfig->in.name[0] != 0)
+                {
+                    name = aconfig->in.name;
+                }
+
+                const char *behavior = hb_value_get_string(hb_dict_get(preset, "AudioAutomaticNamingBehavior"));
+                if (behavior != NULL &&
+                    (!strcasecmp(behavior, "all") ||
+                     (!strcasecmp(behavior, "unnamed") && (name == NULL || name[0] == 0))))
+                {
+                    const char *mixdown_name = hb_dict_get_string(audio_dict, "Mixdown");
+                    if (mixdown_name)
+                    {
+                        int mixdown  = hb_mixdown_get_from_name(mixdown_name);
+                        name = hb_audio_name_get_default(mixdown, aconfig->in.channel_layout);
+                    }
+                }
+
+                if (name != NULL && name[0] != 0)
+                {
+                    hb_dict_set_string(audio_dict, "Name", name);
+                }
+            }
 
             hb_value_array_append(list, audio_dict);
             hb_dict_set(used, key, hb_value_bool(1));
@@ -1109,7 +1132,7 @@ static int has_default_subtitle(hb_value_array_t *list)
 }
 
 static void add_subtitle_for_lang(hb_value_array_t *list, hb_title_t *title,
-                                  int mux, const char *lang,
+                                  int mux, const char *lang, int passthru_name,
                                   subtitle_behavior_t *behavior)
 {
     int t;
@@ -1140,7 +1163,8 @@ static void add_subtitle_for_lang(hb_value_array_t *list, hb_title_t *title,
 
         if (!behavior->one_burned || hb_subtitle_can_pass(subtitle->source, mux))
         {
-            add_subtitle(list, t, make_default, 0 /*!force*/, burn, subtitle->name);
+            add_subtitle(list, t, make_default, 0 /*!force*/, burn,
+                         passthru_name ? subtitle->name : NULL);
         }
 
         behavior->burn_first &= !burn;
@@ -1273,6 +1297,8 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
     const iso639_lang_t * lang_any  = lang_get_any();
     const char          * pref_lang = lang_any->iso639_2;
 
+    int passthru_name = hb_value_get_bool(hb_dict_get(preset, "SubtitleTrackNamePassthru"));
+
     count = hb_value_array_len(lang_list);
     if (count > 0)
     {
@@ -1303,7 +1329,7 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
         behavior.one = 1;
         behavior.burn_foreign = burn_foreign;
         behavior.make_default = 1;
-        add_subtitle_for_lang(list, title, mux, pref_lang, &behavior);
+        add_subtitle_for_lang(list, title, mux, pref_lang, passthru_name, &behavior);
     }
 
     hb_dict_t *search_dict = hb_dict_get(subtitle_dict, "Search");
@@ -1339,12 +1365,12 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
         {
             const char *lang;
             lang = hb_value_get_string(hb_value_array_get(lang_list, ii));
-            add_subtitle_for_lang(list, title, mux, lang, &behavior);
+            add_subtitle_for_lang(list, title, mux, lang, passthru_name, &behavior);
         }
         if (count <= 0)
         {
             // No languages in language list, assume "any"
-            add_subtitle_for_lang(list, title, mux, "any", &behavior);
+            add_subtitle_for_lang(list, title, mux, "any", passthru_name, &behavior);
         }
     }
 

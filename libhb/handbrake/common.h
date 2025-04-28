@@ -457,6 +457,8 @@ int              hb_audio_bitrate_get_default(uint32_t codec, int samplerate, in
 void             hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high);
 const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 
+const char * hb_audio_name_get_default(int mixdown, uint64_t layout);
+
 void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 const char* hb_video_quality_get_name(uint32_t codec);
 
