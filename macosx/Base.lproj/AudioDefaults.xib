@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23094" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23094"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,14 +19,14 @@
         <window title="Audio Selection Behaviour" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" visibleAtLaunch="NO" animationBehavior="default" id="kwM-lz-5lG">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="54" y="544" width="800" height="474"/>
+            <rect key="contentRect" x="54" y="544" width="766" height="474"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
-            <view key="contentView" id="ZP2-Cp-K5w">
-                <rect key="frame" x="0.0" y="0.0" width="828" height="474"/>
+            <view key="contentView" misplaced="YES" id="ZP2-Cp-K5w">
+                <rect key="frame" x="0.0" y="0.0" width="766" height="474"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sC2-52-liU">
-                        <rect key="frame" x="750" y="13" width="64" height="27"/>
+                        <rect key="frame" x="689" y="13" width="64" height="27"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kDe-1L-VkD">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu" size="11"/>
@@ -40,7 +40,7 @@ DQ
                         </connections>
                     </button>
                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Pw-Kq-eMN">
-                        <rect key="frame" x="516" y="292" width="223" height="138"/>
+                        <rect key="frame" x="468" y="295" width="223" height="138"/>
                         <subviews>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OkV-lt-k7P">
                                 <rect key="frame" x="0.0" y="24" width="223" height="114"/>
@@ -332,7 +332,7 @@ DQ
                         </customSpacing>
                     </stackView>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="600" translatesAutoresizingMaskIntoConstraints="NO" id="RtZ-Cz-5mG">
-                        <rect key="frame" x="18" y="264" width="253" height="14"/>
+                        <rect key="frame" x="18" y="223" width="253" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio encoder settings for each selected track:" id="007-WM-RmC">
                             <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -358,19 +358,19 @@ DQ
                         </connections>
                     </segmentedControl>
                     <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hGL-Ew-UVJ">
-                        <rect key="frame" x="20" y="75" width="788" height="181"/>
+                        <rect key="frame" x="20" y="75" width="727" height="140"/>
                         <clipView key="contentView" id="jkU-Fi-GCv">
-                            <rect key="frame" x="1" y="1" width="786" height="179"/>
+                            <rect key="frame" x="1" y="1" width="725" height="138"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" tableStyle="plain" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="IbE-bD-EWJ" viewBased="YES" id="ZsG-T1-vGv">
-                                    <rect key="frame" x="0.0" y="0.0" width="786" height="156"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="725" height="115"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn width="289.5" minWidth="143" maxWidth="1000" id="pR9-d4-SNf">
+                                        <tableColumn width="228.5" minWidth="143" maxWidth="1000" id="pR9-d4-SNf">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Codec">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -383,11 +383,11 @@ DQ
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="UBy-AR-7XQ">
-                                                    <rect key="frame" x="1" y="1" width="290" height="24"/>
+                                                    <rect key="frame" x="1" y="1" width="228" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton toolTip="Audio encoder." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6lx-af-rBL">
-                                                            <rect key="frame" x="-1" y="0.0" width="292" height="22"/>
+                                                            <rect key="frame" x="-1" y="0.0" width="231" height="22"/>
                                                             <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="t8s-X1-tQV">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="menu" size="11"/>
@@ -425,11 +425,11 @@ DQ
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="uS1-Fd-V9I">
-                                                    <rect key="frame" x="293.5" y="1" width="149" height="24"/>
+                                                    <rect key="frame" x="232.5" y="1" width="150" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="igm-hS-rrD">
-                                                            <rect key="frame" x="-1" y="0.0" width="151" height="22"/>
+                                                            <rect key="frame" x="-1" y="0.0" width="152" height="22"/>
                                                             <string key="toolTip">Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.
 
 Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility.</string>
@@ -475,7 +475,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="5No-Mm-bpD">
-                                                    <rect key="frame" x="446" y="1" width="110" height="24"/>
+                                                    <rect key="frame" x="385" y="1" width="109" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton toolTip="Audio sample rate in kilohertz (kHz). Auto is recommended." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r80-yv-59n">
@@ -519,11 +519,11 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="Bxd-gI-dFS">
-                                                    <rect key="frame" x="558.5" y="1" width="95" height="24"/>
+                                                    <rect key="frame" x="497.5" y="1" width="96" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hHP-dw-nba">
-                                                            <rect key="frame" x="-1" y="0.0" width="97" height="22"/>
+                                                            <rect key="frame" x="-1" y="0.0" width="98" height="22"/>
                                                             <string key="toolTip">Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible.</string>
                                                             <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="U8n-oy-hkv">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -563,7 +563,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="fhc-Nv-0Oh">
-                                                    <rect key="frame" x="657" y="1" width="62" height="28"/>
+                                                    <rect key="frame" x="596" y="1" width="62" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField toolTip="Audio gain in decibels (dB). Increases or decreases audio volume." focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xnA-03-Bul">
@@ -613,7 +613,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="t2K-5D-xsX">
-                                                    <rect key="frame" x="722" y="1" width="62" height="27"/>
+                                                    <rect key="frame" x="661" y="1" width="62" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DGi-Dl-5nh">
@@ -675,7 +675,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="140" id="4LW-Vv-px8"/>
                         </constraints>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="ToF-HP-PBf">
-                            <rect key="frame" x="1" y="124" width="824" height="15"/>
+                            <rect key="frame" x="1" y="123" width="724" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Dhw-4v-YLa">
@@ -683,7 +683,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" wantsLayer="YES" id="IbE-bD-EWJ">
-                            <rect key="frame" x="0.0" y="0.0" width="786" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="725" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
@@ -699,7 +699,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kJY-av-BYf">
-                        <rect key="frame" x="690" y="13" width="64" height="27"/>
+                        <rect key="frame" x="629" y="13" width="64" height="27"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Jn4-1L-J1g">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu" size="11"/>
@@ -722,10 +722,10 @@ Gw
                         </connections>
                     </button>
                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mON-8C-X5t">
-                        <rect key="frame" x="20" y="294" width="440" height="160"/>
+                        <rect key="frame" x="20" y="253" width="392" height="204"/>
                         <subviews>
                             <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dYR-Xt-Vb4">
-                                <rect key="frame" x="0.0" y="144" width="351" height="16"/>
+                                <rect key="frame" x="0.0" y="188" width="351" height="16"/>
                                 <subviews>
                                     <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="fPg-3n-1TN">
                                         <rect key="frame" x="-2" y="1" width="138" height="14"/>
@@ -772,10 +772,10 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                 </customSpacing>
                             </stackView>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GSL-ZN-P2c">
-                                <rect key="frame" x="0.0" y="0.0" width="440" height="136"/>
+                                <rect key="frame" x="0.0" y="0.0" width="392" height="180"/>
                                 <subviews>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Jsz-Er-bsF">
-                                        <rect key="frame" x="-2" y="122" width="138" height="14"/>
+                                        <rect key="frame" x="-2" y="166" width="138" height="14"/>
                                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Languages:" id="mAT-Jp-SG1">
                                             <font key="font" metaFont="menu" size="11"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -783,19 +783,19 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                         </textFieldCell>
                                     </textField>
                                     <scrollView toolTip="Select the languages to use with the Track Selection Behavior setting." wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTC-39-h6S">
-                                        <rect key="frame" x="142" y="0.0" width="298" height="136"/>
+                                        <rect key="frame" x="142" y="0.0" width="250" height="180"/>
                                         <clipView key="contentView" ambiguous="YES" id="TdE-Sh-NcS">
-                                            <rect key="frame" x="1" y="1" width="296" height="134"/>
+                                            <rect key="frame" x="1" y="1" width="248" height="178"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" viewBased="YES" id="Of7-71-Ci6">
-                                                    <rect key="frame" x="0.0" y="0.0" width="296" height="134"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="248" height="178"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
-                                                        <tableColumn identifier="checkBox" width="217" minWidth="16" maxWidth="1000" id="G44-XP-6xE">
+                                                        <tableColumn identifier="checkBox" width="245" minWidth="16" maxWidth="1000" id="G44-XP-6xE">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
@@ -807,7 +807,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView id="haT-6q-XQu">
-                                                                    <rect key="frame" x="1" y="1" width="217" height="17"/>
+                                                                    <rect key="frame" x="1" y="1" width="245" height="17"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="F5N-kV-6cy">
@@ -822,7 +822,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                                                             </connections>
                                                                         </button>
                                                                         <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qqA-7S-cT9">
-                                                                            <rect key="frame" x="17" y="2" width="199" height="14"/>
+                                                                            <rect key="frame" x="17" y="2" width="227" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="XKL-2e-Dlv">
                                                                                 <font key="font" metaFont="menu" size="11"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -861,10 +861,10 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                         </clipView>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="7Rp-Nn-e0h"/>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="136" id="u5x-I4-dLx"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="180" id="u5x-I4-dLx"/>
                                         </constraints>
                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
-                                            <rect key="frame" x="1" y="157" width="258" height="15"/>
+                                            <rect key="frame" x="1" y="163" width="247" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
@@ -895,27 +895,82 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                             <real value="3.4028234663852886e+38"/>
                         </customSpacing>
                     </stackView>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jVF-av-Sw6">
+                        <rect key="frame" x="571" y="265" width="99" height="16"/>
+                        <buttonCell key="cell" type="check" title="Passthru name" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="XmJ-lo-ciO">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.settings.passthruName" id="Vdb-dy-WkL"/>
+                        </connections>
+                    </button>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bqY-oZ-Dez">
+                        <rect key="frame" x="466" y="266" width="100" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Track name:" id="aQn-7q-tQG">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8C3-yX-7tT">
+                        <rect key="frame" x="568" y="238" width="120" height="22"/>
+                        <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="AaG-rx-x5W" id="Rde-g8-st2">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <menu key="menu" id="uDn-6R-tds">
+                                <items>
+                                    <menuItem title="Off" state="on" id="AaG-rx-x5W"/>
+                                    <menuItem title="Unnamed Tracks" id="gjw-kg-H3W"/>
+                                    <menuItem title="All Tracks" id="s0U-gp-0sK"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <binding destination="-2" name="selectedIndex" keyPath="self.settings.automaticNamingBehavior" id="8SF-Vd-s3C"/>
+                        </connections>
+                    </popUpButton>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Sl3-PL-ybS">
+                        <rect key="frame" x="466" y="243" width="100" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Autonaming:" id="XOM-af-vzp">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstItem="kJY-av-BYf" firstAttribute="width" secondItem="sC2-52-liU" secondAttribute="width" id="3US-QJ-5QL"/>
+                    <constraint firstItem="Tth-IR-7cU" firstAttribute="leading" secondItem="bqY-oZ-Dez" secondAttribute="leading" id="6TO-Se-4Mn"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="RtZ-Cz-5mG" secondAttribute="trailing" constant="20" symbolic="YES" id="7dT-AF-zH9"/>
                     <constraint firstItem="mON-8C-X5t" firstAttribute="leading" secondItem="ZP2-Cp-K5w" secondAttribute="leading" constant="20" symbolic="YES" id="84z-cH-d09"/>
                     <constraint firstItem="kJY-av-BYf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="M11-Ls-RrL" secondAttribute="trailing" constant="12" symbolic="YES" id="864-c4-BeW"/>
                     <constraint firstItem="M11-Ls-RrL" firstAttribute="top" secondItem="N4q-sT-WgW" secondAttribute="bottom" constant="15" id="AOo-Sb-GZW"/>
+                    <constraint firstItem="8C3-yX-7tT" firstAttribute="leading" secondItem="Sl3-PL-ybS" secondAttribute="trailing" constant="8" symbolic="YES" id="AeR-Ps-v4g"/>
                     <constraint firstAttribute="trailing" secondItem="sC2-52-liU" secondAttribute="trailing" constant="20" id="B62-ty-pmI"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="8Pw-Kq-eMN" secondAttribute="trailing" constant="20" id="Fu8-nq-Vft"/>
                     <constraint firstAttribute="bottom" secondItem="M11-Ls-RrL" secondAttribute="bottom" constant="20" id="G1B-eX-eqE"/>
                     <constraint firstItem="uF5-6E-EIe" firstAttribute="leading" secondItem="N4q-sT-WgW" secondAttribute="trailing" constant="13" id="J0L-CA-XLI"/>
+                    <constraint firstItem="8C3-yX-7tT" firstAttribute="firstBaseline" secondItem="Sl3-PL-ybS" secondAttribute="firstBaseline" id="Kp4-Za-XgQ"/>
                     <constraint firstItem="kJY-av-BYf" firstAttribute="baseline" secondItem="sC2-52-liU" secondAttribute="baseline" id="LdH-5O-jKo"/>
+                    <constraint firstItem="Sl3-PL-ybS" firstAttribute="top" secondItem="bqY-oZ-Dez" secondAttribute="bottom" constant="9" id="Qq9-ES-dj1"/>
                     <constraint firstItem="RtZ-Cz-5mG" firstAttribute="leading" secondItem="ZP2-Cp-K5w" secondAttribute="leading" constant="20" id="R53-5h-0vJ"/>
                     <constraint firstAttribute="bottom" secondItem="sC2-52-liU" secondAttribute="bottom" constant="20" id="RRW-Y5-912"/>
                     <constraint firstItem="8Pw-Kq-eMN" firstAttribute="leading" secondItem="mON-8C-X5t" secondAttribute="trailing" constant="56" id="Wad-TB-7OD"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="8C3-yX-7tT" secondAttribute="trailing" constant="20" symbolic="YES" id="YpH-o8-mMO"/>
+                    <constraint firstItem="jVF-av-Sw6" firstAttribute="leading" secondItem="bqY-oZ-Dez" secondAttribute="trailing" constant="8" symbolic="YES" id="ZNF-8f-XQc"/>
+                    <constraint firstItem="bqY-oZ-Dez" firstAttribute="top" secondItem="Tth-IR-7cU" secondAttribute="bottom" constant="16" id="amj-wt-gHG"/>
+                    <constraint firstItem="Tth-IR-7cU" firstAttribute="width" secondItem="bqY-oZ-Dez" secondAttribute="width" id="bZu-Zw-J4W"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="uF5-6E-EIe" secondAttribute="trailing" constant="20" symbolic="YES" id="cEr-2s-7rp"/>
                     <constraint firstItem="M11-Ls-RrL" firstAttribute="leading" secondItem="N4q-sT-WgW" secondAttribute="leading" id="fBT-WX-Q5Z"/>
                     <constraint firstAttribute="trailing" secondItem="hGL-Ew-UVJ" secondAttribute="trailing" constant="20" id="glz-Tw-AyY"/>
                     <constraint firstItem="hGL-Ew-UVJ" firstAttribute="top" secondItem="RtZ-Cz-5mG" secondAttribute="bottom" constant="8" id="jhe-0p-LYz"/>
                     <constraint firstItem="mON-8C-X5t" firstAttribute="top" secondItem="ZP2-Cp-K5w" secondAttribute="top" constant="20" symbolic="YES" id="kni-de-kzf"/>
                     <constraint firstItem="uF5-6E-EIe" firstAttribute="centerY" secondItem="N4q-sT-WgW" secondAttribute="centerY" id="nJR-6O-xLy"/>
+                    <constraint firstItem="jVF-av-Sw6" firstAttribute="firstBaseline" secondItem="bqY-oZ-Dez" secondAttribute="firstBaseline" id="qco-nx-Mur"/>
+                    <constraint firstItem="Sl3-PL-ybS" firstAttribute="width" secondItem="bqY-oZ-Dez" secondAttribute="width" id="qf8-02-v7L"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="jVF-av-Sw6" secondAttribute="trailing" constant="20" symbolic="YES" id="sOd-JV-Xyo"/>
+                    <constraint firstItem="bqY-oZ-Dez" firstAttribute="leading" secondItem="Sl3-PL-ybS" secondAttribute="leading" id="u0J-Vk-x2O"/>
                     <constraint firstItem="sC2-52-liU" firstAttribute="leading" secondItem="kJY-av-BYf" secondAttribute="trailing" constant="8" id="vZI-9R-5tO"/>
                     <constraint firstItem="N4q-sT-WgW" firstAttribute="top" secondItem="hGL-Ew-UVJ" secondAttribute="bottom" constant="8" id="w2O-Xt-Vdr"/>
                     <constraint firstItem="RtZ-Cz-5mG" firstAttribute="top" secondItem="GSL-ZN-P2c" secondAttribute="bottom" constant="16" id="wcv-WR-Xhf"/>
@@ -927,7 +982,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
             <connections>
                 <outlet property="initialFirstResponder" destination="oiD-QI-wly" id="Vxi-xi-P0d"/>
             </connections>
-            <point key="canvasLocation" x="-1567" y="-303"/>
+            <point key="canvasLocation" x="-1557" y="-368"/>
         </window>
         <arrayController objectClassName="HBLang" id="ZBe-aP-wvq" userLabel="Languages Table Controller" customClass="HBLanguageArrayController">
             <declaredKeys>
