@@ -22,7 +22,7 @@
 #define NONE_TRACK_INDEX        0
 #define FOREIGN_TRACK_INDEX     1
 
-@interface HBSubtitles () <HBTrackDataSource, HBTrackDelegate>
+@interface HBSubtitles () <HBSubtitlesTrackDataSource, HBSubtitlesTrackDelegate>
 
 @property (nonatomic, readwrite) NSArray<HBTitleSubtitlesTrack *> *sourceTracks;
 
@@ -91,6 +91,19 @@
     }
 
     return sourceNames;
+}
+
+- (nullable NSString *)defaultTitleForTrackAtIndex:(NSUInteger)idx
+{
+    NSString *title = nil;
+    HBTitleSubtitlesTrack *track = [self sourceTrackAtIndex:idx];
+
+    if (self.defaults.passthruName)
+    {
+        title = track.title;
+    }
+
+    return title;
 }
 
 #pragma mark - Delegate
@@ -316,6 +329,7 @@
         {
             track.burnedIn = [trackDict[@"Burn"] boolValue];
             track.forcedOnly = [trackDict[@"Forced"] boolValue];
+            track.title = [trackDict[@"Name"] stringValue];
 
             [tracks addObject:track];
         }

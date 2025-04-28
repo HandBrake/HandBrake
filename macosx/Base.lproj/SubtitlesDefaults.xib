@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,14 +17,14 @@
         <window title="Subtitles Selection Behaviour" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" visibleAtLaunch="NO" animationBehavior="default" id="kwM-lz-5lG">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="283" y="305" width="427" height="422"/>
+            <rect key="contentRect" x="283" y="305" width="427" height="439"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <view key="contentView" misplaced="YES" id="ZP2-Cp-K5w">
-                <rect key="frame" x="0.0" y="0.0" width="427" height="422"/>
+                <rect key="frame" x="0.0" y="0.0" width="427" height="439"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="fPg-3n-1TN">
-                        <rect key="frame" x="18" y="368" width="138" height="14"/>
+                        <rect key="frame" x="18" y="401" width="138" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Track Selection Behavior:" id="GbM-vm-RC2">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -32,7 +32,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Jsz-Er-bsF">
-                        <rect key="frame" x="18" y="345" width="138" height="14"/>
+                        <rect key="frame" x="18" y="378" width="138" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Languages:" id="mAT-Jp-SG1">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -40,7 +40,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Hqz-Lw-gAu">
-                        <rect key="frame" x="18" y="185" width="138" height="14"/>
+                        <rect key="frame" x="18" y="211" width="138" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Options:" id="NJl-q3-zXL">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -48,7 +48,7 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oiD-QI-wly">
-                        <rect key="frame" x="158" y="363" width="253" height="22"/>
+                        <rect key="frame" x="158" y="396" width="253" height="22"/>
                         <string key="toolTip">Track Selection Behavior.
 
 None will not select any audio tracks by default.
@@ -73,7 +73,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         </connections>
                     </popUpButton>
                     <button toolTip="Add Closed Caption subtitles as a soft subtitle track (not burned-in)." translatesAutoresizingMaskIntoConstraints="NO" id="uF5-6E-EIe">
-                        <rect key="frame" x="161" y="184" width="246" height="16"/>
+                        <rect key="frame" x="161" y="210" width="246" height="16"/>
                         <buttonCell key="cell" type="check" title="Add Closed Captions when available" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="66v-2g-DHn">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -83,7 +83,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         </connections>
                     </button>
                     <button toolTip="Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default." verticalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="OOC-GZ-OFA">
-                        <rect key="frame" x="161" y="164" width="246" height="16"/>
+                        <rect key="frame" x="161" y="190" width="246" height="16"/>
                         <buttonCell key="cell" type="check" title="Add Foreign Audio Search" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="vNY-OC-hTJ">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -93,13 +93,13 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         </connections>
                     </button>
                     <scrollView toolTip="Select the languages to use with the Track Selection Behavior setting." wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTC-39-h6S">
-                        <rect key="frame" x="162" y="219" width="245" height="140"/>
+                        <rect key="frame" x="162" y="245" width="245" height="147"/>
                         <clipView key="contentView" id="TdE-Sh-NcS">
-                            <rect key="frame" x="1" y="1" width="243" height="138"/>
+                            <rect key="frame" x="1" y="1" width="243" height="145"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" viewBased="YES" id="Of7-71-Ci6">
-                                    <rect key="frame" x="0.0" y="0.0" width="243" height="138"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="243" height="145"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -181,7 +181,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         <accessibility description="Subtitles Track Languages"/>
                     </scrollView>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lsa-kB-2BP">
-                        <rect key="frame" x="158" y="130" width="253" height="22"/>
+                        <rect key="frame" x="158" y="156" width="253" height="22"/>
                         <string key="toolTip">Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.
 
 Only one subtitles track can be burned in.</string>
@@ -203,7 +203,7 @@ Only one subtitles track can be burned in.</string>
                         </connections>
                     </popUpButton>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="qAf-lQ-GN4">
-                        <rect key="frame" x="18" y="135" width="138" height="14"/>
+                        <rect key="frame" x="18" y="161" width="138" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Burn-In Behavior:" id="640-NB-Uby">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -211,7 +211,7 @@ Only one subtitles track can be burned in.</string>
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="ceZ-On-t5S">
-                        <rect key="frame" x="161" y="111" width="246" height="16"/>
+                        <rect key="frame" x="161" y="137" width="246" height="16"/>
                         <string key="toolTip">Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.
 
 Only one subtitles track can be burned in.</string>
@@ -224,7 +224,7 @@ Only one subtitles track can be burned in.</string>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="Px8-G6-NVX">
-                        <rect key="frame" x="161" y="91" width="246" height="16"/>
+                        <rect key="frame" x="161" y="117" width="246" height="16"/>
                         <string key="toolTip">Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.
 
 Only one subtitles track can be burned in.</string>
@@ -237,7 +237,7 @@ Only one subtitles track can be burned in.</string>
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="MlS-tB-pEv">
-                        <rect key="frame" x="160" y="56" width="249" height="28"/>
+                        <rect key="frame" x="160" y="82" width="249" height="28"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Only one subtitles burn-in option will be applied, starting with the first (top)." id="N4s-K9-RwM">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -280,6 +280,24 @@ Gw
                             <action selector="openUserGuide:" target="-2" id="xuY-gI-DkB"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3vE-dK-KLk">
+                        <rect key="frame" x="161" y="51" width="129" height="16"/>
+                        <buttonCell key="cell" type="check" title="Passthru track name" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="KXY-tz-asI">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.settings.passthruName" id="SKv-zB-Qs7"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cG8-2W-cdJ">
+                        <rect key="frame" x="18" y="52" width="138" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Name:" id="Nks-nt-ePt">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="ceZ-On-t5S" secondAttribute="trailing" constant="20" id="1s9-9K-9py"/>
@@ -290,6 +308,8 @@ Gw
                     <constraint firstAttribute="bottom" secondItem="nfu-VW-cTe" secondAttribute="bottom" constant="18" id="D3B-WT-db0"/>
                     <constraint firstAttribute="trailing" secondItem="oiD-QI-wly" secondAttribute="trailing" constant="20" id="DCH-xM-c7M"/>
                     <constraint firstItem="MlS-tB-pEv" firstAttribute="top" secondItem="Px8-G6-NVX" secondAttribute="bottom" constant="8" id="DuC-dI-6lg"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="3vE-dK-KLk" secondAttribute="trailing" constant="20" symbolic="YES" id="Fw1-iS-A7M"/>
+                    <constraint firstItem="3vE-dK-KLk" firstAttribute="firstBaseline" secondItem="cG8-2W-cdJ" secondAttribute="firstBaseline" id="JNR-Jt-OcH"/>
                     <constraint firstItem="Lsa-kB-2BP" firstAttribute="top" secondItem="OOC-GZ-OFA" secondAttribute="bottom" constant="15" id="Jom-Wb-udi"/>
                     <constraint firstItem="qAf-lQ-GN4" firstAttribute="baseline" secondItem="Lsa-kB-2BP" secondAttribute="baseline" id="LsD-LD-mET"/>
                     <constraint firstItem="OOC-GZ-OFA" firstAttribute="top" secondItem="uF5-6E-EIe" secondAttribute="bottom" constant="6" id="Niq-4w-rB0"/>
@@ -302,21 +322,25 @@ Gw
                     <constraint firstItem="AAX-DK-L3G" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="nfu-VW-cTe" secondAttribute="trailing" constant="12" symbolic="YES" id="U3Y-Zd-acm"/>
                     <constraint firstItem="QdJ-64-GgC" firstAttribute="width" secondItem="AAX-DK-L3G" secondAttribute="width" id="V7Q-Z0-mdN"/>
                     <constraint firstItem="Jsz-Er-bsF" firstAttribute="top" secondItem="aTC-39-h6S" secondAttribute="top" id="Vjm-7V-1cC"/>
+                    <constraint firstItem="QdJ-64-GgC" firstAttribute="top" secondItem="3vE-dK-KLk" secondAttribute="bottom" constant="16" id="WEY-dd-Wkc"/>
                     <constraint firstItem="OOC-GZ-OFA" firstAttribute="leading" secondItem="uF5-6E-EIe" secondAttribute="leading" id="WKZ-HH-AyA"/>
                     <constraint firstItem="fPg-3n-1TN" firstAttribute="baseline" secondItem="oiD-QI-wly" secondAttribute="baseline" id="XJA-tm-IJd"/>
                     <constraint firstAttribute="bottom" secondItem="QdJ-64-GgC" secondAttribute="bottom" constant="20" id="XzF-Bn-tMl"/>
                     <constraint firstItem="Hqz-Lw-gAu" firstAttribute="baseline" secondItem="uF5-6E-EIe" secondAttribute="baseline" id="bmT-Td-cBg"/>
+                    <constraint firstItem="qAf-lQ-GN4" firstAttribute="width" secondItem="cG8-2W-cdJ" secondAttribute="width" id="eGt-Fw-FBt"/>
+                    <constraint firstItem="cG8-2W-cdJ" firstAttribute="leading" secondItem="qAf-lQ-GN4" secondAttribute="leading" id="esk-Pa-eI1"/>
                     <constraint firstItem="ceZ-On-t5S" firstAttribute="top" secondItem="Lsa-kB-2BP" secondAttribute="bottom" constant="8" id="fZD-U2-nWu"/>
                     <constraint firstItem="Lsa-kB-2BP" firstAttribute="leading" secondItem="qAf-lQ-GN4" secondAttribute="trailing" constant="8" id="fl7-9l-tFW"/>
                     <constraint firstItem="aTC-39-h6S" firstAttribute="trailing" secondItem="oiD-QI-wly" secondAttribute="trailing" id="hq2-2Y-G4l"/>
                     <constraint firstAttribute="trailing" secondItem="OOC-GZ-OFA" secondAttribute="trailing" constant="20" id="htF-X4-lpu"/>
                     <constraint firstItem="Px8-G6-NVX" firstAttribute="top" secondItem="ceZ-On-t5S" secondAttribute="bottom" constant="6" id="iWq-sE-ajq"/>
-                    <constraint firstItem="QdJ-64-GgC" firstAttribute="top" secondItem="MlS-tB-pEv" secondAttribute="bottom" constant="20" id="iyr-A8-UM6"/>
                     <constraint firstItem="ceZ-On-t5S" firstAttribute="leading" secondItem="Lsa-kB-2BP" secondAttribute="leading" id="koA-TF-GxL"/>
                     <constraint firstAttribute="trailing" secondItem="uF5-6E-EIe" secondAttribute="trailing" constant="20" id="l0V-di-L2v"/>
+                    <constraint firstItem="3vE-dK-KLk" firstAttribute="top" secondItem="MlS-tB-pEv" secondAttribute="bottom" constant="16" id="md4-pt-JHF"/>
                     <constraint firstItem="uF5-6E-EIe" firstAttribute="top" secondItem="aTC-39-h6S" secondAttribute="bottom" constant="20" id="nhU-5A-Rap"/>
                     <constraint firstItem="qAf-lQ-GN4" firstAttribute="leading" secondItem="fPg-3n-1TN" secondAttribute="leading" id="o90-wY-3FL"/>
                     <constraint firstItem="Hqz-Lw-gAu" firstAttribute="leading" secondItem="fPg-3n-1TN" secondAttribute="leading" id="p6B-ac-s9o"/>
+                    <constraint firstItem="3vE-dK-KLk" firstAttribute="leading" secondItem="cG8-2W-cdJ" secondAttribute="trailing" constant="8" symbolic="YES" id="qUo-3Y-s7Q"/>
                     <constraint firstItem="aTC-39-h6S" firstAttribute="leading" secondItem="Jsz-Er-bsF" secondAttribute="trailing" constant="8" id="rLi-Pt-pSb"/>
                     <constraint firstItem="fPg-3n-1TN" firstAttribute="leading" secondItem="ZP2-Cp-K5w" secondAttribute="leading" constant="20" id="rjw-eY-hZF"/>
                     <constraint firstItem="MlS-tB-pEv" firstAttribute="leading" secondItem="Px8-G6-NVX" secondAttribute="leading" id="sKB-2V-Vpl"/>
@@ -329,7 +353,7 @@ Gw
                     <constraint firstItem="qAf-lQ-GN4" firstAttribute="width" secondItem="fPg-3n-1TN" secondAttribute="width" id="zyM-7a-twX"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="74.5" y="97.5"/>
+            <point key="canvasLocation" x="0.5" y="98.5"/>
         </window>
         <arrayController objectClassName="HBLang" id="ZBe-aP-wvq" userLabel="Table Controller" customClass="HBLanguageArrayController">
             <declaredKeys>

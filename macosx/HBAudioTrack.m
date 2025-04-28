@@ -43,7 +43,6 @@
         _dataSource = dataSource;
         _sourceTrackIdx = index;
         _container = container;
-        self.title = [dataSource sourceTrackAtIndex:_sourceTrackIdx].title;
 
         [self validateSettings];
 
@@ -90,9 +89,10 @@
 
     if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
-        self.title = [self.dataSource sourceTrackAtIndex:_sourceTrackIdx].title;
-
         [self validateSettings];
+
+        self.title = [self.dataSource defaultTitleForTrackAtIndex:_sourceTrackIdx
+                                                          mixdown:_mixdown];
 
         if (oldIdx != sourceTrackIdx)
         {
@@ -149,6 +149,15 @@
     {
         self.validating = YES;
         self.bitRate = [self sanitizeBitrateValue:self.bitRate];
+
+        if ([self.title isEqualToString:@"Mono"]   ||
+            [self.title isEqualToString:@"Stereo"] ||
+            [self.title isEqualToString:@"Surround"])
+        {
+            self.title = [self.dataSource defaultTitleForTrackAtIndex:_sourceTrackIdx
+                                                              mixdown:_mixdown];
+        }
+
         self.validating = NO;
     }
 }
@@ -219,13 +228,6 @@
 
 - (void)setTitle:(NSString *)title
 {
-    if ([title isEqualToString:@"Mono"] ||
-        [title isEqualToString:@"Stereo"] ||
-        [title isEqualToString:@"Surround"])
-    {
-        title = nil;
-    }
-
     if (title != _title)
     {
         [[self.undo prepareWithInvocationTarget:self] setTitle:_title];
