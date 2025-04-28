@@ -119,14 +119,16 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 {
     if (self.type == HBRangeTypeChapters)
     {
-        hb_title_t *title = self.title.hb_title;
-        hb_chapter_t *chapter;
         int64_t duration = 0;
+        hb_title_t *title = self.title.hb_title;
 
         for (int i = self.chapterStart; i <= self.chapterStop; i++ )
         {
-            chapter = (hb_chapter_t *) hb_list_item(title->list_chapter, i);
-            duration += chapter->duration;
+            hb_chapter_t *chapter = (hb_chapter_t *)hb_list_item(title->list_chapter, i);
+            if (chapter)
+            {
+                duration += chapter->duration;
+            }
         }
 
         duration /= 90000; // pts -> seconds

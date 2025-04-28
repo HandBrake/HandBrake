@@ -74,7 +74,7 @@ namespace HandBrakeWPF.ViewModels
         private Mp4Behaviour selectedMp4Extension;
         private int selectedPreviewCount;
         private ProcessPriority selectedPriority;
-        private int selectedVerbosity;
+        private LogLevel selectedVerbosity;
         private bool sendFileAfterEncode;
         private string sendFileTo;
         private string sendFileToPath;
@@ -873,17 +873,8 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.DisableLibdvdNav);
             }
         }
-
-        public BindingList<int> LogVerbosityOptions
-        {
-            get => this.logVerbosityOptions;
-
-            set
-            {
-                this.logVerbosityOptions = value;
-                this.NotifyOfPropertyChange(() => this.LogVerbosityOptions);
-            }
-        }
+		
+		public BindingList<LogLevel> LogVerbosityOptions { get; } = new BindingList<LogLevel>(EnumHelper<LogLevel>.GetEnumList().ToList());
 
         public long MinLength
         {
@@ -960,7 +951,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public int SelectedVerbosity
+        public LogLevel SelectedVerbosity
         {
             get => this.selectedVerbosity;
 
@@ -1619,7 +1610,7 @@ namespace HandBrakeWPF.ViewModels
             this.logVerbosityOptions.Add(0);
             this.logVerbosityOptions.Add(1);
             this.logVerbosityOptions.Add(2);
-            this.SelectedVerbosity = userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
+            this.SelectedVerbosity = (LogLevel)userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
 
             // Logs
             this.CopyLogToEncodeDirectory = userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo);
