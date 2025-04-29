@@ -12,6 +12,7 @@
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
 #include "handbrake/qsv_common.h"
+#include "handbrake/hwaccel.h"
 #endif
 
 static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init);
