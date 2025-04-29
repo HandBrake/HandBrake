@@ -4650,7 +4650,8 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
         {
             mux_s = "WebM";
             // WebM only supports Vorbis and Opus codecs
-            if (codec != HB_ACODEC_VORBIS && codec != HB_ACODEC_OPUS)
+            if (codec != HB_ACODEC_VORBIS && codec != HB_ACODEC_VORBIS_PASS &&
+                codec != HB_ACODEC_OPUS && codec != HB_ACODEC_OPUS_PASS)
             {
                 a_unsup = hb_audio_encoder_get_short_name(codec);
                 codec = hb_audio_encoder_get_default(mux->format);
