@@ -230,7 +230,7 @@ static int set_extradata(hb_data_t *extradata, uint8_t **priv_data, int *priv_si
         //
         // So allocate extra bytes
         *priv_size = extradata->size;
-        *priv_data = av_malloc(extradata->size + AV_INPUT_BUFFER_PADDING_SIZE);
+        *priv_data = av_mallocz(extradata->size + AV_INPUT_BUFFER_PADDING_SIZE);
         if (priv_data == NULL)
         {
             hb_error("extradata: malloc failure");
