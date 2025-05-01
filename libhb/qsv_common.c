@@ -1199,7 +1199,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
          * suffers from false positives instead. The latter is probably easier
          * and/or safer to sanitize for us, so use mode 1.
          */
-        if (HB_CHECK_MFX_VERSION(version, 1, 6) && info->codec_id == MFX_CODEC_AVC)
+        if (HB_CHECK_MFX_VERSION(version, 1, 6))
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
@@ -2279,55 +2279,6 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
     return qsv_full_path_is_enabled;
 }
 
-int hb_qsv_codingoption_xlat(int val)
-{
-    switch (HB_QSV_CLIP3(-1, 2, val))
-    {
-        case 0:
-            return MFX_CODINGOPTION_OFF;
-        case 1:
-        case 2: // MFX_CODINGOPTION_ADAPTIVE, reserved
-            return MFX_CODINGOPTION_ON;
-        case -1:
-        default:
-            return MFX_CODINGOPTION_UNKNOWN;
-    }
-}
-
-int hb_qsv_trellisvalue_xlat(int val)
-{
-    switch (HB_QSV_CLIP3(0, 3, val))
-    {
-        case 0:
-            return MFX_TRELLIS_OFF;
-        case 1: // I-frames only
-            return MFX_TRELLIS_I;
-        case 2: // I- and P-frames
-            return MFX_TRELLIS_I|MFX_TRELLIS_P;
-        case 3: // all frames
-            return MFX_TRELLIS_I|MFX_TRELLIS_P|MFX_TRELLIS_B;
-        default:
-            return MFX_TRELLIS_UNKNOWN;
-    }
-}
-
-const char* hb_qsv_codingoption_get_name(int val)
-{
-    switch (val)
-    {
-        case MFX_CODINGOPTION_ON:
-            return "on";
-        case MFX_CODINGOPTION_OFF:
-            return "off";
-        case MFX_CODINGOPTION_ADAPTIVE:
-            return "adaptive";
-        case MFX_CODINGOPTION_UNKNOWN:
-            return "unknown (auto)";
-        default:
-            return NULL;
-    }
-}
-
 int hb_qsv_atoindex(const char* const *arr, const char *str, int *err)
 {
     int i;
@@ -2385,23 +2336,351 @@ float hb_qsv_atof(const char *str, int *err)
     return v;
 }
 
-int hb_qsv_apply_encoder_options(qsv_data_t *qsv_data, hb_job_t *job, AVDictionary **av_opts)
+static void add_qsv_param(AVDictionary** av_opts, const char *key, const char *value)
 {
-    qsv_data->is_sys_mem = (hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_SYSTEM_MEMORY);
-    qsv_data->qsv_info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
+    // qsv_params=KEY=VALUE:NEXTKEY=NEXTVALUE
+    char c[100] = {0};
 
-    if (qsv_data != NULL && qsv_data->qsv_info != NULL)
+    if(av_dict_get(*av_opts, "qsv_params", NULL, 0) != NULL)
     {
-        int ret = hb_qsv_param_default(&qsv_data->param, qsv_data->qsv_info);
-        if (ret)
+        strcat(c, ":"); // add separator if already exists
+    }
+
+    strcat(c, key);
+    strcat(c, "=");
+    strcat(c, value);
+
+    av_dict_set(av_opts, "qsv_params", c, AV_DICT_APPEND);
+}
+
+static void add_qsv_param_u32(AVDictionary** av_opts, const char *key, mfxU32 value)
+{
+    if(value == 0) return; // Default == 0; skip
+
+    int len = snprintf(NULL, 0, "%"PRIu32"", value); // u16 == u32
+    char c[100] = {0};
+    snprintf(c, len + 1, "%"PRIu32"", value);
+
+    add_qsv_param(av_opts, key, c);
+}
+
+int hb_qsv_select_ffmpeg_options(qsv_data_t * qsv_data, hb_job_t *job, AVDictionary **av_opts)
+{
+#define MFX_STRUCT_TO_AV_OPTS(MEMBER_NAME) add_qsv_param_u32(av_opts, #MEMBER_NAME, param->videoParam->mfx.MEMBER_NAME);
+
+    hb_qsv_info_t *qsv_info = qsv_data->qsv_info;
+    hb_qsv_param_t *param = &qsv_data->param;
+
+    int hw_generation = hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index()));
+    // sanitize ICQ
+    // workaround for MediaSDK platforms below TGL to disable ICQ if incorrectly detected
+    if (!(qsv_info->capabilities & HB_QSV_CAP_RATECONTROL_ICQ) ||
+        ((param->videoParam->mfx.LowPower == MFX_CODINGOPTION_ON) && (hw_generation < QSV_G8)))
+    {
+        // ICQ not supported
+        param->rc.icq = 0;
+    }
+    else
+    {
+        param->rc.icq = param->rc.icq && job->vquality > HB_INVALID_VIDEO_QUALITY;
+    }
+
+    // sanitize lookahead
+    if (!(qsv_info->capabilities & HB_QSV_CAP_RATECONTROL_LA))
+    {
+        // lookahead not supported
+        param->rc.lookahead = 0;
+    }
+    else if ((param->rc.lookahead)                                      &&
+             (qsv_info->capabilities & HB_QSV_CAP_RATECONTROL_LAi) == 0 &&
+             (param->videoParam->mfx.FrameInfo.PicStruct != MFX_PICSTRUCT_PROGRESSIVE))
+    {
+        // lookahead enabled but we can't use it
+        hb_log("encqsvInit: LookAhead not used (LookAhead is progressive-only)");
+        param->rc.lookahead = 0;
+    }
+    else
+    {
+        param->rc.lookahead = param->rc.lookahead && (param->rc.icq || job->vquality <= HB_INVALID_VIDEO_QUALITY);
+    }
+
+    if (job->qsv.ctx != NULL)
+    {
+        job->qsv.ctx->la_is_enabled = param->rc.lookahead ? 1 : 0;
+    }
+
+    // libmfx BRC parameters are 16 bits thus maybe overflow, then BRCParamMultiplier is needed
+    // Comparison vbitrate in Kbps (kilobit) with vbv_max_bitrate, vbv_buffer_size, vbv_buffer_init in KB (kilobyte)
+    int brc_param_multiplier = (FFMAX(FFMAX3(job->vbitrate, param->rc.vbv_max_bitrate, param->rc.vbv_buffer_size),
+                            param->rc.vbv_buffer_init) + 0x10000) / 0x10000;
+    // set VBV here (this will be overridden for CQP and ignored for LA)
+    // only set BufferSizeInKB, InitialDelayInKB and MaxKbps if we have
+    // them - otherwise Media SDK will pick values for us automatically
+    if (param->rc.vbv_buffer_size > 0)
+    {
+        if (param->rc.vbv_buffer_init > 1.0)
         {
-            return ret;
+            param->videoParam->mfx.InitialDelayInKB = (param->rc.vbv_buffer_init / 8) / brc_param_multiplier;
+            MFX_STRUCT_TO_AV_OPTS(InitialDelayInKB)
+        }
+        else if (param->rc.vbv_buffer_init > 0.0)
+        {
+            param->videoParam->mfx.InitialDelayInKB = (param->rc.vbv_buffer_size *
+                                                          param->rc.vbv_buffer_init / 8) / brc_param_multiplier;
+            MFX_STRUCT_TO_AV_OPTS(InitialDelayInKB)
+        }
+        param->videoParam->mfx.BufferSizeInKB       = (param->rc.vbv_buffer_size / 8) / brc_param_multiplier;
+        MFX_STRUCT_TO_AV_OPTS(BufferSizeInKB)
+        param->videoParam->mfx.BRCParamMultiplier   = brc_param_multiplier;
+    }
+    if (param->rc.vbv_max_bitrate > 0)
+    {
+        param->videoParam->mfx.MaxKbps              = param->rc.vbv_max_bitrate / brc_param_multiplier;
+        MFX_STRUCT_TO_AV_OPTS(MaxKbps)
+        param->videoParam->mfx.BRCParamMultiplier   = brc_param_multiplier;
+    }
+
+    // set rate control parameters
+    if (job->vquality > HB_INVALID_VIDEO_QUALITY)
+    {
+        unsigned int upper_limit = 51;
+
+        if (param->rc.icq)
+        {
+            // introduced in API 1.8
+            if (param->rc.lookahead)
+            {
+                param->videoParam->mfx.RateControlMethod = MFX_RATECONTROL_LA_ICQ;
+            }
+            else
+            {
+                param->videoParam->mfx.RateControlMethod = MFX_RATECONTROL_ICQ;
+            }
+            param->videoParam->mfx.ICQQuality = HB_QSV_CLIP3(1, upper_limit, job->vquality);
+            MFX_STRUCT_TO_AV_OPTS(ICQQuality)
+        }
+        else
+        {
+            // introduced in API 1.1
+            // HEVC 10b has QP range as [-12;51]
+            // with shift +12 needed to be in QSV's U16 range
+            if (param->videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10)
+            {
+                upper_limit = 63;
+            }
+            if (param->videoParam->mfx.CodecId == MFX_CODEC_AV1)
+            {
+                upper_limit = 255;
+            }
+
+            param->videoParam->mfx.RateControlMethod = MFX_RATECONTROL_CQP;
+            param->videoParam->mfx.QPI = HB_QSV_CLIP3(0, upper_limit, job->vquality + param->rc.cqp_offsets[0]);
+            param->videoParam->mfx.QPP = HB_QSV_CLIP3(0, upper_limit, job->vquality + param->rc.cqp_offsets[1]);
+            param->videoParam->mfx.QPB = HB_QSV_CLIP3(0, upper_limit, job->vquality + param->rc.cqp_offsets[2]);
+
+            MFX_STRUCT_TO_AV_OPTS(QPI)
+            MFX_STRUCT_TO_AV_OPTS(QPP)
+            MFX_STRUCT_TO_AV_OPTS(QPB)
+
+            // CQP + ExtBRC can cause bad output
+            param->codingOption2.ExtBRC = MFX_CODINGOPTION_OFF;
+            av_dict_set(av_opts, "extbrc", "0", 0); // MFX_CODINGOPTION_OFF
+        }
+    }
+    else if (job->vbitrate > 0)
+    {
+        if (param->rc.lookahead)
+        {
+            // introduced in API 1.7
+            param->videoParam->mfx.RateControlMethod  = MFX_RATECONTROL_LA;
+            param->videoParam->mfx.TargetKbps         = job->vbitrate / brc_param_multiplier;
+            MFX_STRUCT_TO_AV_OPTS(TargetKbps)
+            param->videoParam->mfx.BRCParamMultiplier = brc_param_multiplier;
+            // ignored, but some drivers will change AsyncDepth because of it
+            param->codingOption2.ExtBRC = MFX_CODINGOPTION_OFF;
+            av_dict_set(av_opts, "extbrc", "0", 0); // MFX_CODINGOPTION_OFF
+        }
+        else
+        {
+            // introduced in API 1.0
+            if (job->vbitrate == param->rc.vbv_max_bitrate)
+            {
+                param->videoParam->mfx.RateControlMethod = MFX_RATECONTROL_CBR;
+            }
+            else
+            {
+                param->videoParam->mfx.RateControlMethod = MFX_RATECONTROL_VBR;
+            }
+            param->videoParam->mfx.TargetKbps            = job->vbitrate / brc_param_multiplier;
+            MFX_STRUCT_TO_AV_OPTS(TargetKbps)
+            param->videoParam->mfx.BRCParamMultiplier    = brc_param_multiplier;
         }
     }
     else
     {
-        hb_error("hb_qsv_apply_encoder_options: invalid pointer(s) qsv_data=%p qsv_data->qsv_info=%p", qsv_data, qsv_data->qsv_info);
+        hb_error("encqsvInit: invalid rate control (%f, %d)",
+                 job->vquality, job->vbitrate);
         return -1;
+    }
+
+    MFX_STRUCT_TO_AV_OPTS(RateControlMethod);
+
+    // if VBV is enabled but ignored, log it
+    if (param->rc.vbv_max_bitrate > 0 || param->rc.vbv_buffer_size > 0)
+    {
+        switch (param->videoParam->mfx.RateControlMethod)
+        {
+            case MFX_RATECONTROL_LA:
+            case MFX_RATECONTROL_LA_ICQ:
+                hb_log("encqsvInit: LookAhead enabled, ignoring VBV");
+                break;
+            case MFX_RATECONTROL_ICQ:
+                hb_log("encqsvInit: ICQ rate control, ignoring VBV");
+                break;
+            default:
+                break;
+        }
+    }
+
+    // set the GOP structure
+    if (param->gop.gop_ref_dist < 0)
+    {
+        if ((hw_generation >= QSV_G8) &&
+            (param->videoParam->mfx.CodecId == MFX_CODEC_HEVC ||
+            param->videoParam->mfx.CodecId == MFX_CODEC_AV1))
+        {
+            param->gop.gop_ref_dist = 8;
+        }
+        else
+        {
+            param->gop.gop_ref_dist = 4;
+        }
+    }
+    param->videoParam->mfx.GopRefDist = param->gop.gop_ref_dist;
+
+    // set the keyframe interval
+    if (param->gop.gop_pic_size < 0)
+    {
+        double rate = (double)job->orig_vrate.num / job->orig_vrate.den + 0.5;
+        // set the keyframe interval based on the framerate
+        param->gop.gop_pic_size = (int)(FFMIN(rate * 2, 120));
+    }
+    param->videoParam->mfx.GopPicSize = param->gop.gop_pic_size;
+
+    // set the Hyper Encode structure
+    if (param->hyperEncodeParam->value != MFX_HYPERMODE_OFF)
+    {
+        if (param->videoParam->mfx.CodecId == MFX_CODEC_HEVC)
+        {
+            param->videoParam->mfx.IdrInterval = 1;
+        }
+        else if (param->videoParam->mfx.CodecId == MFX_CODEC_AVC)
+        {
+            param->videoParam->mfx.IdrInterval = 0;
+        }
+
+        MFX_STRUCT_TO_AV_OPTS(IdrInterval)
+        // sanitize some of the encoding parameters
+        param->videoParam->mfx.GopPicSize = (int)(FFMIN(param->gop.gop_pic_size, 60));
+        param->videoParam->AsyncDepth = (int)(FFMAX(param->videoParam->AsyncDepth, 30));
+
+        char hyperencode[16];
+        snprintf(hyperencode, sizeof(hyperencode), "%s", qsv_data->param.hyperEncodeParam->key);
+        av_dict_set(av_opts, "dual_gfx", hyperencode, 0);
+        hb_log("encavcodec: Hyper Encoding mode: %s", hyperencode);
+    }
+    MFX_STRUCT_TO_AV_OPTS(GopPicSize)
+
+    // sanitize some settings that affect memory consumption
+    if (!qsv_data->is_sys_mem)
+    {
+        // limit these to avoid running out of resources (causes hang)
+        param->videoParam->mfx.GopRefDist   = FFMIN(param->videoParam->mfx.GopRefDist,
+                                                       param->rc.lookahead ? 8 : 16);
+        param->codingOption2.LookAheadDepth = FFMIN(param->codingOption2.LookAheadDepth,
+                                                       param->rc.lookahead ? (48 - param->videoParam->mfx.GopRefDist -
+                                                                                 3 * !param->videoParam->mfx.GopRefDist) : 0);
+    }
+    else
+    {
+        // encode-only is a bit less sensitive to memory issues
+        param->videoParam->mfx.GopRefDist   = FFMIN(param->videoParam->mfx.GopRefDist, 16);
+        param->codingOption2.LookAheadDepth = FFMIN(param->codingOption2.LookAheadDepth,
+                                                       param->rc.lookahead ? 100 : 0);
+    }
+    MFX_STRUCT_TO_AV_OPTS(GopRefDist)
+
+    if (param->rc.lookahead)
+    {
+        // LookAheadDepth 10 will cause a hang with some driver versions
+        param->codingOption2.LookAheadDepth = FFMAX(param->codingOption2.LookAheadDepth, 11);
+    }
+    char cvalue[7];
+    snprintf(cvalue, 7, "%d", param->codingOption2.LookAheadDepth);
+    av_dict_set(av_opts, "look_ahead_depth", cvalue, 0);
+
+    if(qsv_data->qsv_info->capabilities & HB_QSV_CAP_LOWPOWER_ENCODE)
+    {
+        char low_power[7];
+        snprintf(low_power, sizeof(low_power), "%d", qsv_data->param.low_power);
+        av_dict_set(av_opts, "low_power", low_power, 0);
+        if(qsv_data->param.low_power)
+            hb_log("encavcodec: using Low Power mode");
+    }
+
+    if((qsv_data->qsv_info->capabilities & HB_QSV_CAP_AV1_SCREENCONTENT) &&
+        qsv_data->param.av1ScreenContentToolsParam.IntraBlockCopy)
+    {
+        char intrabc[7];
+        snprintf(intrabc, sizeof(intrabc), "%d", qsv_data->param.av1ScreenContentToolsParam.IntraBlockCopy);
+        av_dict_set(av_opts, "intrabc", intrabc, 0);
+        hb_log("encavcodec: ScreenContentCoding is enabled IBC %s",
+            qsv_data->param.av1ScreenContentToolsParam.IntraBlockCopy ? "on" : "off");
+    }
+
+    if((qsv_data->qsv_info->capabilities & HB_QSV_CAP_AV1_SCREENCONTENT) &&
+        qsv_data->param.av1ScreenContentToolsParam.Palette)
+    {
+        char palette_mode[7];
+        snprintf(palette_mode, sizeof(palette_mode), "%d", qsv_data->param.av1ScreenContentToolsParam.Palette);
+        av_dict_set(av_opts, "palette_mode", palette_mode, 0);
+        hb_log("encavcodec: ScreenContentCoding is enabled Palette %s",
+            qsv_data->param.av1ScreenContentToolsParam.Palette ? "on" : "off");
+    }
+
+  // Transcoding Info
+  MFX_STRUCT_TO_AV_OPTS(BRCParamMultiplier)
+  // scenecut
+  MFX_STRUCT_TO_AV_OPTS(GopOptFlag)
+
+#undef MFX_STRUCT_TO_AV_OPTS
+  return 0;
+}
+
+int hb_qsv_apply_encoder_options(qsv_data_t * qsv_data, hb_job_t *job, AVDictionary **av_opts)
+{
+    if (qsv_data == NULL)
+    {
+        hb_error("hb_qsv_apply_encoder_options: invalid pointer qsv_data=%p", qsv_data);
+        return -1;
+    }
+
+    qsv_data->qsv_info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
+
+    if (qsv_data->qsv_info == NULL)
+    {
+        hb_error("hb_qsv_apply_encoder_options: invalid pointer qsv_data->qsv_info=%p", qsv_data->qsv_info);
+        return -1;
+    }
+
+    mfxVideoParam videoParam = {0};
+    qsv_data->param.videoParam = &videoParam;
+    qsv_data->is_sys_mem = (hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_SYSTEM_MEMORY);
+
+    int ret = hb_qsv_param_default(&qsv_data->param, qsv_data->qsv_info);
+    if (ret)
+    {
+        return ret;
     }
 
     if (job->encoder_options != NULL && *job->encoder_options)
@@ -2445,48 +2724,17 @@ int hb_qsv_apply_encoder_options(qsv_data_t *qsv_data, hb_job_t *job, AVDictiona
         hb_dict_free(&options_list);
     }
 
+    ret = hb_qsv_select_ffmpeg_options(qsv_data, job, av_opts);
+    if(ret)
+    {
+        hb_log("encavcodec: parsing ffmpeg options failed");
+        return ret;
+    }
+
     hb_log("encavcodec: using%s%s path",
            hb_qsv_full_path_is_enabled(job) ? " full QSV" : " encode-only",
            hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY ? " via video memory" : " via system memory");
 
-    if(qsv_data->qsv_info->capabilities & HB_QSV_CAP_LOWPOWER_ENCODE)
-    {
-        char low_power[7];
-        snprintf(low_power, sizeof(low_power), "%d", qsv_data->param.low_power);
-        av_dict_set(av_opts, "low_power", low_power, 0);
-        if(qsv_data->param.low_power)
-            hb_log("encavcodec: using Low Power mode");
-    }
-
-    if((qsv_data->qsv_info->capabilities & HB_QSV_CAP_HYPERENCODE) &&
-        qsv_data->param.hyperEncodeParam->value != MFX_HYPERMODE_OFF)
-    {
-        char hyperencode[16];
-        snprintf(hyperencode, sizeof(hyperencode), "%s", qsv_data->param.hyperEncodeParam->key);
-        av_dict_set(av_opts, "dual_gfx", hyperencode, 0);
-        //av_dict_set(av_opts, "async_depth", "30", 0);
-        hb_log("encavcodec: Hyper Encoding mode: %s", hyperencode);
-    }
-
-    if((qsv_data->qsv_info->capabilities & HB_QSV_CAP_AV1_SCREENCONTENT) &&
-        qsv_data->param.av1ScreenContentToolsParam.IntraBlockCopy)
-    {
-        char intrabc[7];
-        snprintf(intrabc, sizeof(intrabc), "%d", qsv_data->param.av1ScreenContentToolsParam.IntraBlockCopy);
-        av_dict_set(av_opts, "intrabc", intrabc, 0);
-        hb_log("encavcodec: ScreenContentCoding is enabled IBC %s",
-            qsv_data->param.av1ScreenContentToolsParam.IntraBlockCopy ? "on" : "off");
-    }
-
-    if((qsv_data->qsv_info->capabilities & HB_QSV_CAP_AV1_SCREENCONTENT) &&
-        qsv_data->param.av1ScreenContentToolsParam.Palette)
-    {
-        char palette_mode[7];
-        snprintf(palette_mode, sizeof(palette_mode), "%d", qsv_data->param.av1ScreenContentToolsParam.Palette);
-        av_dict_set(av_opts, "palette_mode", palette_mode, 0);
-        hb_log("encavcodec: ScreenContentCoding is enabled Palette %s",
-            qsv_data->param.av1ScreenContentToolsParam.Palette ? "on" : "off");
-    }
     return 0;
 }
 
@@ -2604,6 +2852,21 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             return HB_QSV_PARAM_UNSUPPORTED;
         }
     }
+    else if (!strcasecmp(key, "scenecut"))
+    {
+        ivalue = hb_qsv_atobool(value, &error);
+        if (!error)
+        {
+            if (!ivalue)
+            {
+                param->videoParam->mfx.GopOptFlag |= MFX_GOP_STRICT;
+            }
+            else
+            {
+                param->videoParam->mfx.GopOptFlag &= ~MFX_GOP_STRICT;
+            }
+        }
+    }
     else if (!strcasecmp(key, "adaptive-i") ||
              !strcasecmp(key, "i-adapt"))
     {
@@ -2613,7 +2876,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             if (!error)
             {
                 char cvalue[7];
-                snprintf(cvalue, 7, "%d", hb_qsv_codingoption_xlat(ivalue));
+                snprintf(cvalue, 7, "%d", ivalue);
                 av_dict_set(av_opts, "adaptive_i", cvalue, 0);
             }
         }
@@ -2631,7 +2894,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             if (!error)
             {
                 char cvalue[7];
-                snprintf(cvalue, 7, "%d", hb_qsv_codingoption_xlat(ivalue));
+                snprintf(cvalue, 7, "%d", ivalue);
                 av_dict_set(av_opts, "adaptive_b", cvalue, 0);
             }
         }
@@ -2677,9 +2940,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         fvalue = hb_qsv_atof(value, &error);
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "%.2f", HB_QSV_CLIP3(0, INT32_MAX, fvalue));
-            av_dict_set(av_opts, "rc_initial_buffer_occupancy", cvalue, 0);
+            param->rc.vbv_buffer_init = HB_QSV_CLIP3(0, INT32_MAX, fvalue);
         }
     }
     else if (!strcasecmp(key, "vbv-bufsize"))
@@ -2687,9 +2948,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "%d", HB_QSV_CLIP3(0, INT32_MAX, ivalue));
-            av_dict_set(av_opts, "rc_buffer_size", cvalue, 0);
+            param->rc.vbv_buffer_size = HB_QSV_CLIP3(0, INT32_MAX, ivalue);
         }
     }
     else if (!strcasecmp(key, "vbv-maxrate"))
@@ -2697,9 +2956,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "%d", HB_QSV_CLIP3(0, INT32_MAX, ivalue));
-            av_dict_set(av_opts, "rc_max_rate", cvalue, 0);
+            param->rc.vbv_max_bitrate = HB_QSV_CLIP3(0, INT32_MAX, ivalue);
         }
     }
     else if (!strcasecmp(key, "cavlc") || !strcasecmp(key, "cabac"))
@@ -2726,7 +2983,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
                 ivalue = !ivalue;
             }
             char cvalue[7];
-            snprintf(cvalue, 7, "%d", hb_qsv_codingoption_xlat(ivalue));
+            snprintf(cvalue, 7, "%d", ivalue);
             av_dict_set(av_opts, "cavlc", cvalue, 0);
         }
     }
@@ -2854,7 +3111,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             if (!error)
             {
                 char cvalue[7];
-                snprintf(cvalue, 7, "%d", hb_qsv_codingoption_xlat(ivalue));
+                snprintf(cvalue, 7, "%d", ivalue);
                 av_dict_set(av_opts, "mbbrc", cvalue, 0);
             }
         }
@@ -2871,7 +3128,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             if (!error)
             {
                 char cvalue[7];
-                snprintf(cvalue, 7, "%d", hb_qsv_codingoption_xlat(ivalue));
+                snprintf(cvalue, 7, "%d", ivalue);
                 av_dict_set(av_opts, "extbrc", cvalue, 0);
             }
         }
@@ -2940,7 +3197,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             if (!error)
             {
                 char cvalue[7];
-                snprintf(cvalue, 7, "%d", hb_qsv_trellisvalue_xlat(ivalue));
+                snprintf(cvalue, 7, "%d", ivalue);
                 av_dict_set(av_opts, "trellis", cvalue, 0);
             }
         }
@@ -2957,7 +3214,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             if (!error)
             {
                 char cvalue[7];
-                snprintf(cvalue, 7, "%d", hb_qsv_codingoption_xlat(ivalue));
+                snprintf(cvalue, 7, "%d", ivalue);
                 av_dict_set(av_opts, "repeat_pps", cvalue, 0);
             }
         }

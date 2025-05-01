@@ -309,10 +309,7 @@ const char* hb_qsv_video_quality_get_name(uint32_t codec);
 void hb_qsv_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 
 #define HB_QSV_CLIP3(min, max, val) ((val < min) ? min : (val > max) ? max : val)
-int         hb_qsv_codingoption_xlat    (int val);
-const char* hb_qsv_codingoption_get_name(int val);
 
-int   hb_qsv_trellisvalue_xlat(int val);
 int   hb_qsv_atoindex(const char* const *arr, const char *str, int *err);
 int   hb_qsv_atobool (const char *str, int *err);
 int   hb_qsv_atoi    (const char *str, int *err);
@@ -342,7 +339,6 @@ hb_triplet_t* hb_triplet4key  (hb_triplet_t *triplets, const char *key);
 
 const char* hb_qsv_codec_name    (uint32_t codec_id);
 const char* hb_qsv_profile_name  (uint32_t codec_id, uint16_t profile_id);
-const char* hb_qsv_level_name    (uint32_t codec_id, uint16_t level_id);
 uint8_t     hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags);
 
 const char* hb_qsv_impl_get_name(int impl);
