@@ -902,7 +902,19 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             if (titles.count)
             {
-                job.title = titles.firstObject;
+                // Match the title index if the scan returned a cached result
+                for (HBTitle *title in titles)
+                {
+                    if (title.index == job.titleIdx)
+                    {
+                        job.title = title;
+                    }
+                }
+
+                if (job.title == nil)
+                {
+                    job.title = titles.firstObject;
+                }
 
                 self.job = job;
                 job.undo = self.window.undoManager;
