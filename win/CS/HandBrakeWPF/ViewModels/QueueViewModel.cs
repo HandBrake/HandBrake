@@ -122,6 +122,19 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public String StartQueueActionName
+        {
+            get
+            {
+                if (this.IsStartTimeEnabled)
+                {
+                    return Resources.QueueView_StartQueueNow;
+                }
+
+                return Resources.QueueView_Start;
+            }
+        }
+
         public ObservableCollection<QueueTask> QueueTasks => this.queueProcessor.Queue;
 
         public BindingList<QueueTask> SelectedItems { get; }
@@ -150,7 +163,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.JobInfoVisible);
             }
         }
-
+        
         public bool JobInfoVisible => SelectedItems.Count == 1 && this.SelectedTask != null && this.SelectedTask.TaskType != QueueTaskType.Breakpoint;
 
         public int SelectedTabIndex { get; set; }
@@ -240,6 +253,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.isStartTimeEnabled = value;
                 this.NotifyOfPropertyChange(() => this.IsStartTimeEnabled);
+                this.NotifyOfPropertyChange(() => this.StartQueueActionName);
             }
         }
 
@@ -424,6 +438,11 @@ namespace HandBrakeWPF.ViewModels
 
         public void StartQueue()
         {
+            if (this.IsStartTimeEnabled)
+            {
+                this.CancelDelayedStart();
+            }
+
             // Remove any old Stop Tasks.
             if (this.QueueTasks.Any(t => t.TaskType == QueueTaskType.Breakpoint))
             {

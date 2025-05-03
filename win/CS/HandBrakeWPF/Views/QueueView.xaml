@@ -137,11 +137,11 @@
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="16" Height="16" Margin="2,0,0,0" Source="Images/Play.png"  />
-                                <Label Margin="5,0,5,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.QueueView_Start}" />
+                                <Label Margin="5,0,0,0" VerticalAlignment="Center" Content="{Binding StartQueueActionName}" />
                             </StackPanel>
 
                             <Grid x:Name="dropdown" Background="Transparent" >
-                                <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                <Path Height="5" Margin="5,2,5,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
                                   Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrow" />
                             </Grid>
@@ -210,21 +210,25 @@
                     </Menu>
                 </Grid>
 
-                <Border BorderThickness="1,1,1,0" BorderBrush="DarkGray" Grid.Row="1" Margin="10,0,5,0" SnapsToDevicePixels="True" Visibility="{Binding IsStartTimeEnabled, Converter={StaticResource boolToVisConverter}}" >
-                    <Grid HorizontalAlignment="Center" >
+                <Border BorderThickness="1,1,1,0" BorderBrush="DarkGray" Grid.Row="1" Margin="10,0,5,0" SnapsToDevicePixels="True"  HorizontalAlignment="Stretch"
+                        Visibility="{Binding IsStartTimeEnabled, Converter={StaticResource boolToVisConverter}}" >
+                    <Grid HorizontalAlignment="Stretch" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <!--  Settings  -->
-                        <StackPanel Orientation="Horizontal" Grid.Column="0" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
+                        <StackPanel Orientation="Vertical" Grid.Column="0" Margin="0,3,5,3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="27">
 
-                            <TextBlock Text="{x:Static Properties:Resources.QueueView_QueueStartTime}" HorizontalAlignment="Left" Margin="0,0,10,0" VerticalAlignment="Center" />
+                            <TextBlock Text="{x:Static Properties:Resources.QueueView_QueueStartTime}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-                            <controls:SimpleTimeControl Hour="{Binding StartHour, Mode=TwoWay}" Minute="{Binding StartMinute, Mode=TwoWay}" DataContext="{Binding}" Width="90" />
+                            <StackPanel Orientation="Horizontal" Grid.Column="0" Margin="0,3,5,3" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="27">
+                                <controls:SimpleTimeControl Hour="{Binding StartHour, Mode=TwoWay}" Minute="{Binding StartMinute, Mode=TwoWay}" DataContext="{Binding}" Width="90" />
 
-                            <Button Content="{x:Static Properties:Resources.Generic_Cancel}" Margin="10,0,0,0" Command="{Binding RelayCommand}" CommandParameter="CancelDelayedStart" />
+                                <Button Content="{x:Static Properties:Resources.QueueView_CancelDelayStart}" Margin="10,0,0,0" Command="{Binding RelayCommand}" CommandParameter="CancelDelayedStart"
+                                        VerticalAlignment="Center" />
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </Border>

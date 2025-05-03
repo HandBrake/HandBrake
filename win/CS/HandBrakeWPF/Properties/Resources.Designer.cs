@@ -1621,6 +1621,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extended.
+        /// </summary>
+        public static string LogLevel_Extended {
+            get {
+                return ResourceManager.GetString("LogLevel_Extended", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimised.
+        /// </summary>
+        public static string LogLevel_Minimised {
+            get {
+                return ResourceManager.GetString("LogLevel_Minimised", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard.
+        /// </summary>
+        public static string LogLevel_Standard {
+            get {
+                return ResourceManager.GetString("LogLevel_Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Scroll.
         /// </summary>
         public static string LogView_AutoScrolling {
@@ -6008,6 +6035,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel Delay.
+        /// </summary>
+        public static string QueueView_CancelDelayStart {
+            get {
+                return ResourceManager.GetString("QueueView_CancelDelayStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear All.
         /// </summary>
         public static string QueueView_ClearAll {
@@ -6377,7 +6413,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Queue Start Time:.
+        ///   Looks up a localized string similar to Queue will automatically start at:.
         /// </summary>
         public static string QueueView_QueueStartTime {
             get {
@@ -6472,6 +6508,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_StartAtTime {
             get {
                 return ResourceManager.GetString("QueueView_StartAtTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Queue (Immediately).
+        /// </summary>
+        public static string QueueView_StartQueueNow {
+            get {
+                return ResourceManager.GetString("QueueView_StartQueueNow", resourceCulture);
             }
         }
         
@@ -8376,33 +8421,6 @@ namespace HandBrakeWPF.Properties {
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to LogLevel "Minimised".
-        /// </summary>
-        public static string LogLevel_Minimised {
-            get {
-                return ResourceManager.GetString("LogLevel_Minimised", resourceCulture);
-            }
-        }
-		
-        /// <summary>
-        ///   Looks up a localized string similar to LogLevel "Standard".
-        /// </summary>
-        public static string LogLevel_Standard {
-            get {
-                return ResourceManager.GetString("LogLevel_Standard", resourceCulture);
-            }
-        }
-		
-        /// <summary>
-        ///   Looks up a localized string similar to LogLevel "Extended".
-        /// </summary>
-        public static string LogLevel_Extended {
-            get {
-                return ResourceManager.GetString("LogLevel_Extended", resourceCulture);
             }
         }
     }
