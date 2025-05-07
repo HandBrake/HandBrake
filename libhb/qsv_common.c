@@ -3961,9 +3961,6 @@ void hb_qsv_uninit_enc(hb_job_t *job)
     }
     if (job->qsv.ctx && job->qsv.ctx->hb_dec_qsv_frames_ctx)
     {
-        if (job->qsv.ctx->hb_dec_qsv_frames_ctx->mids_buf)
-            av_buffer_unref(&job->qsv.ctx->hb_dec_qsv_frames_ctx->mids_buf);
-        job->qsv.ctx->hb_dec_qsv_frames_ctx->mids_buf = NULL;
         if (job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx)
             av_buffer_unref(&job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx);
         job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx = NULL;
@@ -3972,9 +3969,6 @@ void hb_qsv_uninit_enc(hb_job_t *job)
     }
     if (job->qsv.ctx && job->qsv.ctx->hb_vpp_qsv_frames_ctx)
     {
-        if (job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf)
-            av_buffer_unref(&job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf);
-        job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf = NULL;
         if (job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx)
             av_buffer_unref(&job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
         job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx = NULL;
