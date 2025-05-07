@@ -215,6 +215,8 @@ typedef struct QSVFrame {
 
 #define HB_QSV_POOL_FFMPEG_SURFACE_SIZE (64)
 #define HB_QSV_POOL_SURFACE_SIZE (64)
+#define HB_QSV_FFMPEG_INITIAL_POOL_SIZE (0)
+#define HB_QSV_FFMPEG_EXTRA_HW_FRAMES (60)
 
 typedef struct HBQSVFramesContext {
     AVBufferRef *hw_frames_ctx;
