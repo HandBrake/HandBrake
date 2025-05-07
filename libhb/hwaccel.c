@@ -261,7 +261,7 @@ int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx, hb_job_t *job)
     if (hb_hwaccel_is_full_hardware_pipeline_enabled(job) &&
             hb_qsv_decode_is_enabled(job))
     {
-        ctx->extra_hw_frames = 32;
+        ctx->extra_hw_frames = HB_QSV_FFMPEG_EXTRA_HW_FRAMES;
         ctx->sw_pix_fmt = job->input_pix_fmt;
     }
 #endif
@@ -280,11 +280,7 @@ int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx, hb_job_t *job)
     {
         // Use input pix format for decoder and filters frame pools, output frame pools are created by FFmpeg
         frames_ctx->sw_format = job->input_pix_fmt;
-        frames_ctx->initial_pool_size = HB_QSV_POOL_FFMPEG_SURFACE_SIZE;
-        if (ctx->extra_hw_frames >= 0)
-        {
-            frames_ctx->initial_pool_size += ctx->extra_hw_frames;
-        }
+        frames_ctx->initial_pool_size = HB_QSV_FFMPEG_INITIAL_POOL_SIZE;
 
         AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
         frames_hwctx->frame_type = MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET;
