@@ -924,24 +924,19 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             }
             else
             {
-                int passthru_name = hb_value_get_bool(hb_dict_get(preset, "AudioTrackNamePassthru"));
-                if (passthru_name && aconfig->in.name != NULL && aconfig->in.name[0] != 0)
-                {
-                    name = aconfig->in.name;
-                }
+                int mixdown = HB_INVALID_AMIXDOWN;
+                int keep_name = hb_value_get_bool(hb_dict_get(preset, "AudioTrackNamePassthru"));
+                hb_audio_autonaming_behavior_t behavior = HB_AUDIO_AUTONAMING_NONE;
 
-                const char *behavior = hb_value_get_string(hb_dict_get(preset, "AudioAutomaticNamingBehavior"));
-                if (behavior != NULL &&
-                    (!strcasecmp(behavior, "all") ||
-                     (!strcasecmp(behavior, "unnamed") && (name == NULL || name[0] == 0))))
-                {
-                    const char *mixdown_name = hb_dict_get_string(audio_dict, "Mixdown");
-                    if (mixdown_name)
-                    {
-                        int mixdown  = hb_mixdown_get_from_name(mixdown_name);
-                        name = hb_audio_name_get_default(mixdown, aconfig->in.channel_layout);
-                    }
-                }
+                const char *mixdown_name = hb_dict_get_string(audio_dict, "Mixdown");
+                mixdown = hb_mixdown_get_from_name(mixdown_name);
+
+                const char *behavior_name = hb_dict_get_string(preset, "AudioAutomaticNamingBehavior");
+                behavior = hb_audio_autonaming_behavior_get_from_name(behavior_name);
+
+                name = hb_audio_name_generate(aconfig->in.name,
+                                              aconfig->in.channel_layout,
+                                              mixdown, keep_name, behavior);
 
                 if (name != NULL && name[0] != 0)
                 {
