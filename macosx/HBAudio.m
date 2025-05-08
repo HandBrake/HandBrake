@@ -56,21 +56,14 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 
 - (nullable NSString *)defaultTitleForTrackAtIndex:(NSUInteger)idx mixdown:(int)mixdown
 {
-    NSString *title = nil;
     HBTitleAudioTrack *track = [self sourceTrackAtIndex:idx];
 
-    if (self.defaults.passthruName)
-    {
-        title = track.title;
-    }
+    const char *title = hb_audio_name_generate(track.title.UTF8String,
+                                               track.channelLayout, mixdown,
+                                               self.defaults.passthruName,
+                                               (hb_audio_autonaming_behavior_t)self.defaults.automaticNamingBehavior);
 
-    if (self.defaults.automaticNamingBehavior == HBAudioTrackAutomaticNamingBehaviorAll ||
-        (self.defaults.automaticNamingBehavior == HBAudioTrackAutomaticNamingBehaviorUnnamed && title.length == 0))
-    {
-        title = @(hb_audio_name_get_default(mixdown, track.channelLayout));
-    }
-
-    return title;
+    return title ? @(title) : nil;
 }
 
 - (HBTitleAudioTrack *)sourceTrackAtIndex:(NSUInteger)idx

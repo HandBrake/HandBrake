@@ -5470,7 +5470,10 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         int keep_name = hb_value_get_bool(hb_dict_get(preset_dict, "AudioTrackNamePassthru"));
-        const char *auto_naming_behaviour = hb_value_get_string(hb_dict_get(preset_dict, "AudioAutomaticNamingBehavior"));
+        hb_audio_autonaming_behavior_t behavior = HB_AUDIO_AUTONAMING_NONE;
+
+        const char *behavior_name = hb_value_get_string(hb_dict_get(preset_dict, "AudioAutomaticNamingBehavior"));
+        behavior = hb_audio_autonaming_behavior_get_from_name(behavior_name);
 
         for (ii = 0; ii < track_count; ii++)
         {
@@ -5483,16 +5486,12 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
 
                 if (audio != NULL)
                 {
-                    const char *name = keep_name && audio->in.name != NULL && audio->in.name[0] != 0 ? audio->in.name : NULL;
+                    const char *mixdown_name = hb_dict_get_string(audio_dict, "Mixdown");
+                    int mixdown = hb_mixdown_get_from_name(mixdown_name);
 
-                    if (auto_naming_behaviour != NULL &&
-                        (!strcasecmp(auto_naming_behaviour, "all") ||
-                         (!strcasecmp(auto_naming_behaviour, "unnamed") && (name == NULL || name[0] == 0))))
-                    {
-                        const char *mixdown_name = hb_dict_get_string(audio_dict, "Mixdown");
-                        int mixdown  = hb_mixdown_get_from_name(mixdown_name);
-                        name = hb_audio_name_get_default(mixdown, audio->in.channel_layout);
-                    }
+                    const char *name = hb_audio_name_generate(audio->in.name,
+                                                              audio->in.channel_layout,
+                                                              mixdown, keep_name, behavior);
 
                     if (name)
                     {
