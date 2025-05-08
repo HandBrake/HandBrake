@@ -31,17 +31,28 @@ Download available from Microsoft:
 #### Third-party libraries
 
 - Updated libraries
+  - AMF 1.4.36 (AMD VCN video encoding)
   - FFmpeg 7.1.1 (decoding and filters)
-  - HarfBuzz 10.4.0 (subtitles)
+  - HarfBuzz 11.2.0 (subtitles)
+  - libiconv 1.18 (character encoding support)
+  - liblzma (xz) 5.8.1 (LZMA video decoding, e.g. TIFF)
   - nv-codec-headers 13.0.19.0 (Nvidia NVENC encoding)
   - oneVPL 2.14.0 (Intel QSV video encoding/decoding)
-  - SVT-AV1 3.0.0 (AV1 video encoding)
+  - SVT-AV1 3.0.2 (AV1 video encoding)
+  - x264 165 r3214 (H.264/AVC video encoding)
+  - x265 r13212 (H.265/HEVC video encoding)
+
+### Linux
+
+- Fixed Opus and Vorbis passthru validation in Webm
 
 ### Mac
 
 - Added a Metal accelerated Render Sub filter
 - Added a contextual menu to the presets popover
 - Reduced CPU usage when using VideoToolbox decoders and encoders
+- Encoded files are now excluded from Time Machine until they are completed
+- Fixed queue jobs not being reloaded properly when the source is an .iso file
 
 ### Windows
 
