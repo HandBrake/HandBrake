@@ -46,8 +46,8 @@ static NSArray *_languagesArray = nil;
 
 - (instancetype)initWithTrackIdx:(NSUInteger)index
                        container:(int)container
-                      dataSource:(id<HBTrackDataSource>)dataSource
-                        delegate:(id<HBTrackDelegate>)delegate
+                      dataSource:(id<HBSubtitlesTrackDataSource>)dataSource
+                        delegate:(id<HBSubtitlesTrackDelegate>)delegate
 {
     self = [super init];
     if (self)
@@ -127,9 +127,9 @@ static NSArray *_languagesArray = nil;
 
     if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
-        self.title = [self.dataSource sourceTrackAtIndex:_sourceTrackIdx].title;
-
         [self validateSettings];
+
+        self.title = [self.dataSource defaultTitleForTrackAtIndex:_sourceTrackIdx];
 
         if (oldIdx != sourceTrackIdx)
         {

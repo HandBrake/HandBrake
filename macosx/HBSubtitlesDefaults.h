@@ -35,6 +35,8 @@ typedef NS_ENUM(NSUInteger, HBSubtitleTrackBurnInBehavior) {
 @property (nonatomic, readwrite) BOOL burnInDVDSubtitles;
 @property (nonatomic, readwrite) BOOL burnInBluraySubtitles;
 
+@property (nonatomic, readwrite) BOOL passthruName;
+
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
 @end
