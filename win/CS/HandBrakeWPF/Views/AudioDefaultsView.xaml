@@ -95,7 +95,7 @@
                         <TextBlock Text="{x:Static Properties:Resources.Shared_AvailableLanguages}" Margin="0,0,0,5"/>
                         <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" DisplayMemberPath="DisplayNative"
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
-                                             SelectionMode="Extended" Width="225" Height="120" />
+                                             SelectionMode="Extended" Width="225" Height="150" />
                     </StackPanel>
 
                     <DockPanel Grid.Column="1" Margin="10,0,10,0">
@@ -110,7 +110,7 @@
                         <TextBlock Text="{x:Static Properties:Resources.Shared_ChosenLanguages}"  Margin="0,0,0,5"/>
                         <ListBox Name="selectedLanguages" ItemsSource="{Binding AudioBehaviours.SelectedLanguages}"  DisplayMemberPath="DisplayNative"
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedLanguagesToMove}" 
-                                             SelectionMode="Extended" Width="225" Height="120"
+                                             SelectionMode="Extended" Width="225" Height="150"
                                              dd:DragDrop.DropHandler="{Binding}"
                                              dd:DragDrop.IsDragSource="True"
                                              dd:DragDrop.IsDropTarget="True"/>
@@ -158,8 +158,21 @@
                         </MultiBinding>
                     </ComboBox.ItemsSource>
                 </ComboBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical">
+
+                <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_NamingBehaviour}" Style="{StaticResource subHeader}" Margin="0,10,0,5" />
+
+                <CheckBox Content="{x:Static Properties:Resources.AudioDefaultsView_PassthruTrackNames}" IsChecked="{Binding AudioBehaviours.AudioTrackNamePassthru}" Margin="10,0,0,0" /> 
+                <StackPanel Orientation="Horizontal" Margin="10,5,0,0">
+                    <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_AutoNaming}" />
+                    <ComboBox ItemsSource="{Binding TrackNamingBehaviours}" SelectedItem="{Binding AudioBehaviours.AudioAutomaticNamingBehavior}"
+                              Margin="5,0,0,0"/>
+                </StackPanel>
 
             </StackPanel>
+
         </StackPanel>
 
         <!-- Tracks -->

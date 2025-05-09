@@ -9,8 +9,9 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
+    using System;
+
     using HandBrake.Interop.Interop.Interfaces.Model;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels;
@@ -80,6 +81,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.SubtitleType = subtitle.SubtitleType;
             this.SourceTrack = subtitle.SourceTrack;
             this.Name = subtitle.Name;
+            this.TrackNamingCallback = subtitle.TrackNamingCallback;
         }
 
         #endregion
@@ -188,6 +190,15 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 if (this.sourceTrack != null)
                 {
                     this.Name = !string.IsNullOrEmpty(this.sourceTrack.Name) ? this.sourceTrack.Name : string.Empty;
+                }
+
+                if (TrackNamingCallback != null)
+                {
+                    bool passthruName = TrackNamingCallback();
+                    if (passthruName)
+                    {
+                        this.SetTrackNamePassthru();
+                    }
                 }
             }
         }
@@ -315,6 +326,16 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 return this.SrtFileName != "-" && this.SrtFileName != null;
             }
         }
+
+        public void SetTrackNamePassthru()
+        {
+            if (this.SourceTrack != null)
+            {
+                this.Name = this.SourceTrack.Name;
+            }
+        }
+
+        public Func<bool> TrackNamingCallback { get; set; }
 
         public override string ToString()
         {
