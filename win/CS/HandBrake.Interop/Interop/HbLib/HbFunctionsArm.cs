@@ -140,6 +140,12 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb_a64", EntryPoint = "hb_audio_bitrate_get_next", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_audio_bitrate_get_next(IntPtr last);
 
+        [DllImport("hb_a64", EntryPoint = "hb_audio_autonaming_behavior_get_from_name", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_audio_autonaming_behavior_get_from_name(IntPtr name);
+
+        [DllImport("hb_a64", EntryPoint = "hb_audio_name_generate", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_audio_name_generate(IntPtr name, ulong layout, int mixdown, int keep_name, int behaviour);
+
         [DllImport("hb_a64", EntryPoint = "hb_video_quality_get_limits", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_video_quality_get_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
 
