@@ -182,7 +182,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (subtitlesDefaultsViewModel.IsApplied)
             {
-                this.Preset.SubtitleTrackBehaviours = new SubtitleBehaviours(subtitlesDefaultsViewModel.SubtitleBehaviours);
+                this.Preset.SubtitleTrackBehaviours = new SubtitleBehaviourRule(subtitlesDefaultsViewModel.SubtitleBehaviourRules);
             }
         }
 

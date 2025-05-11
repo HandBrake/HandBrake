@@ -2038,10 +2038,10 @@ Where supported, any user presets will have been imported.</value>
     <value>Seconds</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>All Matching Selected Languages</value>
+    <value>All Matching</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>First Matching Selected Language</value>
+    <value>First Matching</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
     <value>None</value>
@@ -2976,5 +2976,32 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="QueueView_StartQueueNow" xml:space="preserve">
     <value>Start Queue (Immediately)</value>
+  </data>
+  <data name="BurnPassthruModes_Burn" xml:space="preserve">
+    <value>Burn In (else Drop)</value>
+  </data>
+  <data name="BurnPassthruModes_Export" xml:space="preserve">
+    <value>Export to File (Text Subtitle)</value>
+  </data>
+  <data name="BurnPassthruModes_PassthruBurn" xml:space="preserve">
+    <value>Passthru (else try Burn in)</value>
+  </data>
+  <data name="BurnPassthruModes_PassthruDrop" xml:space="preserve">
+    <value>Passthru (else Drop)</value>
+  </data>
+  <data name="ForcedModes_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="ForcedModes_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="IsDefaultModes_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="IsDefaultModes_Yes" xml:space="preserve">
+    <value>Yes (First)</value>
+  </data>
+  <data name="SubtitleBehaviourModes_SecondMatching" xml:space="preserve">
+    <value>Second</value>
   </data>
 </root>

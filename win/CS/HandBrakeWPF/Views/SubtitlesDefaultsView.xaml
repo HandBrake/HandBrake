@@ -4,22 +4,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
-             xmlns:subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-             d:DesignHeight="350"
+             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
+             d:DesignHeight="1000"
              d:DesignWidth="550"
-             MinWidth="620"
-             Width="620"
-             ResizeMode="NoResize"
+             MinHeight="550"
+             MinWidth="1000"
+             ResizeMode="CanResize"
              SizeToContent="WidthAndHeight"
              WindowStartupLocation="CenterScreen"
              TextOptions.TextFormattingMode="Display"
              mc:Ignorable="d"
              Title="{Binding Title}">
     <Window.Resources>
-        <subtitles:SubtitleBehaviourConverter x:Key="subtitleBehaviourConverter" />
-        <subtitles:SubtitleBurnInBehaviourConverter x:Key="subtitleBurnInBehaviourConverter" />
+        <converters:ThemeImageConverter x:Key="themeConverter" />
+
+        <subtitles:IsDefaultModesConverter x:Key="isDefaultModesConverter" />
+        <subtitles:ForcedModesConverter x:Key="forcedModesConverter" />
+        <subtitles:BurnPassthruModesConverter x:Key="burnPassthruModesConverter" />
+        <subtitles:SubtitleBehaviourConverter x:Key="trackSelectionConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
 
         <Style x:Key="LongToolTip" TargetType="TextBlock">
             <Setter Property="Width" Value="400" />
@@ -30,105 +36,172 @@
 
     </Window.Resources>
 
-    <Grid VerticalAlignment="Top" Margin="0,10,10,10">
+    <Grid VerticalAlignment="Stretch" Margin="0,10,10,10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="10,0,0,0">
-            <TextBlock Text="{x:Static Properties:Resources.SubtitlesDefaultsView_PaneTitle}"  Style="{StaticResource windowTitle}"   />
+        <StackPanel Grid.Row="0" Margin="10,0,0,0" Orientation="Vertical">
+            <TextBlock Text="Automatic Subtitle Selections"  Style="{StaticResource windowTitle}"   />
+            <TextBlock Text="Setup rules to automatically add subtitle tracks."   />
+            <TextBlock Text="Rules are applied in priority order and will attempt to match where possible. Subtitle limitations apply."   />
         </StackPanel>
 
         <!-- Row 0 -->
-        <Grid Grid.Row="1" Grid.Column="0"  Margin="10,15,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid Grid.Row="1" Margin="10,15,10,0">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="160" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <!-- Subtitles -->
-            <TextBlock Text="{x:Static Properties:Resources.SubtitlesView_TrackSelectionBehaviour}"  Grid.Column="0" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
-            <ComboBox Name="autoSubtitleMode"  Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                          ItemsSource="{Binding SubtitleBehaviourModeList, Converter={StaticResource subtitleBehaviourConverter}}" 
-                          SelectedItem="{Binding SubtitleBehaviours.SelectedBehaviour, Converter={StaticResource subtitleBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
-
-            <!-- Languages -->
-            <Grid Margin="25,10,0,0" Grid.Row="2" Grid.ColumnSpan="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Orientation="Horizontal">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Orientation="Vertical" Grid.Column="0">
-                            <TextBlock Text="{x:Static Properties:Resources.Shared_AvailableLanguages}" Margin="0,0,0,5"/>
-                            <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" DisplayMemberPath="DisplayNative"
-                                     helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
-                                             SelectionMode="Extended" Width="225" Height="120" />
-                        </StackPanel>
-
-                        <DockPanel Grid.Column="1" Margin="10,0,10,0">
-                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                <Button Content="{x:Static Properties:Resources.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" Command="{Binding RelayCommand}" CommandParameter="LanguageMoveRight" MaxWidth="90" />
-                                <Button Content="{x:Static Properties:Resources.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" Command="{Binding RelayCommand}" CommandParameter="LanguageMoveLeft" MaxWidth="90" />
-                                <Button Content="{x:Static Properties:Resources.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" Command="{Binding RelayCommand}" CommandParameter="LanguageClearAll" Width="80"/>
-                            </StackPanel>
-                        </DockPanel>
-
-                        <StackPanel Orientation="Vertical" Grid.Column="2">
-                            <TextBlock Text="{x:Static Properties:Resources.Shared_ChosenLanguages}"  Margin="0,0,0,5"/>
-                            <ListBox Name="selectedLanguages" ItemsSource="{Binding SubtitleBehaviours.SelectedLanguages}" 
-                                     helpers:ListBoxHelper.SelectedItems="{Binding SelectedLanguagesToMove}" 
-                                             SelectionMode="Extended" Width="225" Height="120" DisplayMemberPath="DisplayNative"
-                                             dd:DragDrop.DropHandler="{Binding}"
-                                             dd:DragDrop.IsDragSource="True"
-                                             dd:DragDrop.IsDropTarget="True"/>
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Grid>
-
-            <!-- Options -->
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="Options: " Margin="0,20,0,0" />
-            <CheckBox Content="{x:Static Properties:Resources.SubtitlesView_AddCC}" Grid.Row="3" Grid.Column="1"  Margin="0,20,0,0" 
-                          HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddClosedCaptions}"/>
-            <CheckBox Content="{x:Static Properties:Resources.SubtitlesView_AddForeignAudioSearch}"  Grid.Column="1" Grid.Row="4" Margin="0,5,0,0" 
-                          HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddForeignAudioScanTrack}"/>
-
-
-            <!-- Burn In Behaviour -->
-            <TextBlock Text="{x:Static Properties:Resources.SubtitlesView_BurnInBehaviour}"  Grid.Column="0" Grid.Row="5" Margin="0,15,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
-            <ComboBox Name="burninBehaviour"  Grid.Column="2" Grid.Row="5" HorizontalAlignment="Left"
-                          ItemsSource="{Binding SubtitleBurnInBehaviourModeList, Converter={StaticResource subtitleBurnInBehaviourConverter}}" 
-                          SelectedItem="{Binding SubtitleBehaviours.SelectedBurnInBehaviour, Converter={StaticResource subtitleBurnInBehaviourConverter}}" Width="210" Margin="0,15,5,0">
-                <ComboBox.ToolTip>
-                    <TextBlock Style="{StaticResource LongToolTip}" Text="{x:Static Properties:Resources.Subtitles_BurnInBehaviourModes}" />
-                </ComboBox.ToolTip>
-            </ComboBox>
+            <Button Content="Add Rule" FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0"
+                    Command="{Binding RelayCommand}" CommandParameter="AddRule" />
+            
+            <Button MinWidth="65" Grid.Column="5"
+                    Margin="0,0,0,0"
+                    Command="{Binding RelayCommand}" CommandParameter="Clear"
+                    Content="{x:Static Properties:Resources.Generic_Clear}" />
         </Grid>
 
-        <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" SnapsToDevicePixels="True" Grid.Row="2" Grid.ColumnSpan="3" Margin="10,15,0,0" >
+        <!-- Row 1 -->
+        <ListView Grid.Row="2"
+                 Margin="10,10,10,10" x:Name="subtitleListBox"
+                 dd:DragDrop.DropHandler="{Binding}"
+                 dd:DragDrop.IsDragSource="True"
+                 dd:DragDrop.IsDropTarget="True"
+                 ItemsSource="{Binding SubtitleBehaviourRules.Tracks}"
+                 SelectionMode="Extended">
+
+           <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}" >
+                    <Setter Property="Template" >
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                <Border BorderBrush="{StaticResource Ui.ContrastLight}" BorderThickness="0,0,0,1" Margin="0,0,0,5">
+                                    <TextBlock Text="{TemplateBinding Content}" TextAlignment="Left" Margin="5,2,0,3" Style="{StaticResource sectionHeader}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.Resources>
+
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Header="" Width="28" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Reorder.png'}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Language" Width="150" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox HorizontalAlignment="Stretch" Width="130"
+                                          ItemsSource="{Binding DataContext.Languages, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                                          SelectedItem="{Binding Language}" DisplayMemberPath="DisplayNative" />
+
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Track Selection" Width="140" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox HorizontalAlignment="Stretch" Width="125"
+                                          ItemsSource="{Binding DataContext.TrackSelectionModes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource trackSelectionConverter}}"
+                                          SelectedItem="{Binding TrackSelectionMode, Converter={StaticResource trackSelectionConverter}}" />
+
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Is Default" Width="100" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox HorizontalAlignment="Stretch" Width="80" Visibility="{Binding IsExport, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}"
+                                          ItemsSource="{Binding DataContext.IsDefaultModes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource isDefaultModesConverter}}"
+                                          SelectedItem="{Binding DefaultMode, Converter={StaticResource isDefaultModesConverter}}" />
+
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Burn in/Passthru (If Possible)" Width="200" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox HorizontalAlignment="Stretch" Width="185"
+                                          ItemsSource="{Binding DataContext.BurnPassthruModes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource burnPassthruModesConverter}}"
+                                          SelectedItem="{Binding BurnPassthruMode, Converter={StaticResource burnPassthruModesConverter}}" />
+
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Forced" Width="100" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox HorizontalAlignment="Stretch" Width="80" Visibility="{Binding IsExport, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}"
+                                          ItemsSource="{Binding DataContext.ForcedModes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource forcedModesConverter}}"
+                                          SelectedItem="{Binding ForcedMode, Converter={StaticResource forcedModesConverter}}" />
+
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Track Name" Width="190" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding TrackName}" HorizontalAlignment="Stretch" Width="175" Visibility="{Binding IsExport, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" />
+
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+
+                    <GridViewColumn Header="" Width="28" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Width="16" Height="16" Source="Images/close64.png" Margin="0,0,0,3">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="MouseDown">
+                                            <b:InvokeCommandAction Command="{Binding DataContext.RemoveTrackCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                </Image>
+
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Row 2 -->
+        <StackPanel Grid.Row="3" Margin="10,0,0,0">
+            <CheckBox Content="Automatically load external subtitles matching the above rules." IsChecked="{Binding SubtitleBehaviourRules.AutoloadExternal}" />
+            <CheckBox Content="Passthru Track Names if not overridden above." IsChecked="{Binding SubtitleBehaviourRules.PassthruTrackNames}"/>
+            <CheckBox Content="Override order to match source" IsChecked="{Binding SubtitleBehaviourRules.UseSourceOrder}" />
+        </StackPanel>
+
+        <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" SnapsToDevicePixels="True" Grid.Row="4" Grid.ColumnSpan="3" Margin="10,15,0,0" >
             <Grid Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -156,6 +229,7 @@
                         Padding="8,2" />
             </Grid>
         </Border>
+
 
     </Grid>
 </Window>

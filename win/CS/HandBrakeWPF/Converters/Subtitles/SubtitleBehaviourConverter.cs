@@ -16,34 +16,11 @@ namespace HandBrakeWPF.Converters.Subtitles
     using System.Windows.Data;
 
     using HandBrake.App.Core.Utilities;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Utilities;
 
-    /// <summary>
-    /// Subtitle Behaviour Converter
-    /// </summary>
     public class SubtitleBehaviourConverter : IValueConverter
     {
-        /// <summary>
-        /// The convert.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <param name="targetType">
-        /// The target type.
-        /// </param>
-        /// <param name="parameter">
-        /// The parameter.
-        /// </param>
-        /// <param name="culture">
-        /// The culture.
-        /// </param>
-        /// <returns>
-        /// The <see cref="object"/>.
-        /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value != null && value.GetType() == typeof(BindingList<SubtitleBehaviourModes>))
@@ -61,24 +38,6 @@ namespace HandBrakeWPF.Converters.Subtitles
             return null;
         }
 
-        /// <summary>
-        /// The convert back.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <param name="targetType">
-        /// The target type.
-        /// </param>
-        /// <param name="parameter">
-        /// The parameter.
-        /// </param>
-        /// <param name="culture">
-        /// The culture.
-        /// </param>
-        /// <returns>
-        /// The <see cref="object"/>.
-        /// </returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string name = value as string;
