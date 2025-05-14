@@ -778,8 +778,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
         if (isDirectory.boolValue == YES)
         {
-            [self.job setDestinationFolderURL:self.destinationFolderURL sameAsSource:YES];
+            self.destinationFolderURL = sourceURL;
             self.destinationFolderToken = [HBSecurityAccessToken tokenWithObject:sourceURL];
+            [self.job setDestinationFolderURL:sourceURL sameAsSource:YES];
             return;
         }
     }
