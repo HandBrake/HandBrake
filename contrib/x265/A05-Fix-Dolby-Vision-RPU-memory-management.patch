@@ -1,7 +1,7 @@
-From fbb4a1305e39910de5376bc82f78c1f767736a08 Mon Sep 17 00:00:00 2001
+From 51e17c9e8b102b5de3bb496145894007c84bc0e9 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 22 Nov 2024 10:51:25 +0100
-Subject: [PATCH 5/7] Fix Dolby Vision RPU memory management
+Subject: [PATCH 5/6] Fix Dolby Vision RPU memory management
 
 ---
  source/common/frame.cpp    |  5 +++++

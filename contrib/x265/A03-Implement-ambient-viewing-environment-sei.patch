@@ -1,7 +1,7 @@
-From 6e9b7185420f1d4fec64a1b6a671c88400bb9e97 Mon Sep 17 00:00:00 2001
+From 808917ba4a6d2cefac431a9b0613d5952359ceb2 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 22 Nov 2024 10:49:10 +0100
-Subject: [PATCH 3/7] Implement ambient viewing environment sei
+Subject: [PATCH 3/6] Implement ambient viewing environment sei
 
 Defined in ISO/IEC 23008-2:2017, D.2.39.
 ---
@@ -12,7 +12,7 @@ Defined in ISO/IEC 23008-2:2017, D.2.39.
  4 files changed, 43 insertions(+)
 
 diff --git a/source/common/param.cpp b/source/common/param.cpp
-index 02cface59..c9b1bfa49 100755
+index 6aed44ac2..adf157f61 100755
 --- a/source/common/param.cpp
 +++ b/source/common/param.cpp
 @@ -408,6 +408,7 @@ void x265_param_default(x265_param* param)
@@ -23,7 +23,7 @@ index 02cface59..c9b1bfa49 100755
  
      param->bEnableFrameDuplication = 0;
      param->dupThreshold = 70;
-@@ -1965,6 +1966,7 @@ int x265_check_params(x265_param* param)
+@@ -1969,6 +1970,7 @@ int x265_check_params(x265_param* param)
                       || param->bEmitIDRRecoverySEI
                     || !!param->interlaceMode
                       || param->preferredTransferCharacteristics > 1
@@ -31,7 +31,7 @@ index 02cface59..c9b1bfa49 100755
                       || strlen(param->toneMapFile)
                       || strlen(param->naluFile));
  
-@@ -2925,6 +2927,10 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+@@ -2929,6 +2931,10 @@ void x265_copy_params(x265_param* dst, x265_param* src)
      dst->bEmitCLL = src->bEmitCLL;
      dst->maxCLL = src->maxCLL;
      dst->maxFALL = src->maxFALL;
