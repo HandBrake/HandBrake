@@ -17,15 +17,13 @@ namespace HandBrakeWPF.Model.Filters
 
         public PaddingFilter(PaddingFilter filter)
         {
-            this.Enabled = filter.Enabled;
+            this.Mode = filter.Mode;
             this.Color = filter.Color;
             this.X = filter.X;
             this.Y = filter.Y;
             this.W = filter.W;
             this.H = filter.H;
         }
-
-        public bool Enabled { get; set; }
 
         public string Color { get; set; }
 
@@ -79,22 +77,6 @@ namespace HandBrakeWPF.Model.Filters
 
             this.Color = colour;
             this.Mode = mode;
-
-            switch (mode)
-            {
-                case PaddingMode.None:
-                    this.Enabled = false;
-                    break;
-                case PaddingMode.Custom:
-                    this.Enabled = true;
-                    break;
-                case PaddingMode.FillWidth:
-                    this.Enabled = true;
-                    break;
-                case PaddingMode.FillHeight:
-                    this.Enabled = true;
-                    break;
-            }
         }
     }
 }

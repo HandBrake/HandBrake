@@ -555,7 +555,7 @@ namespace HandBrakeWPF.ViewModels
             string storageDesc = Resources.SummaryView_storage;
             int? width = this.task.Width;
             int? height = this.task.Height;
-            if (this.task.Padding.Enabled)
+            if (this.task.Padding.Mode != PaddingMode.None)
             {
                 storageDesc = string.Format("{0} {1}", Resources.SummaryView_storage, Resources.SummaryView_Padded);
                 width = this.task.Width + this.task.Padding.W;

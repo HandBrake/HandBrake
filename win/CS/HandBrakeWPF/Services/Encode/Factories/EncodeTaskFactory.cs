@@ -528,16 +528,14 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             // Padding Filter
-            if (job.Padding.Enabled)
+            if (job.Padding.Mode != PaddingMode.None)
             {
                 // Calculate the new Width / Height
                 int? width = job.Width;
                 int? height = job.Height;
-                if (job.Padding.Enabled)
-                {
-                    width = width + job.Padding.W;
-                    height = height + job.Padding.H;
-                }
+
+                width = width + job.Padding.W;
+                height = height + job.Padding.H;
 
                 // Setup the filter.
                 string padSettings = string.Format("width={0}:height={1}:color={2}:x={3}:y={4}", width, height, job.Padding.Color, job.Padding.X, job.Padding.Y);

@@ -6,7 +6,6 @@
 
 namespace HandBrakeWPF.ViewModelItems.Filters
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
 
@@ -19,7 +18,6 @@ namespace HandBrakeWPF.ViewModelItems.Filters
     using HandBrakeWPF.ViewModels;
 
     using Action = System.Action;
-
     public class PadFilter : PropertyChangedBase
     {
         private readonly Action triggerTabChanged;
@@ -56,21 +54,18 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 switch (value)
                 {
                     case PaddingMode.Custom:
-                        this.currentTask.Padding.Enabled = true;
                         IsCustomPaddingEnabled = true;
                         break;
 
                     case PaddingMode.Fill:
                     case PaddingMode.FillHeight:
                     case PaddingMode.FillWidth:
-                        this.currentTask.Padding.Enabled = true;
                         IsCustomPaddingEnabled = false;
                         break;
 
                     case PaddingMode.None:
                     default:
                         this.Reset();
-                        this.currentTask.Padding.Enabled = false;
                         break;
                 }
 
@@ -79,10 +74,13 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 this.NotifyOfPropertyChange(() => this.Mode);
                 this.NotifyOfPropertyChange(() => this.IsCustomPaddingEnabled);
                 this.NotifyOfPropertyChange(() => this.IsCustomColourVisible);
+                this.NotifyOfPropertyChange(() => this.IsPaddingEnabled);
             }
         }
 
         public bool IsCustomPaddingEnabled { get; set; }
+
+        public bool IsPaddingEnabled => this.Mode != PaddingMode.None;
 
         public BindingList<PadColour> PaddingColours => new BindingList<PadColour>(EnumHelper<PadColour>.GetEnumList().ToList());
 
@@ -115,7 +113,7 @@ namespace HandBrakeWPF.ViewModelItems.Filters
             }
         }
 
-        public bool IsCustomColourVisible => this.IsCustomPaddingEnabled && this.Colour == PadColour.Custom;
+        public bool IsCustomColourVisible => this.IsPaddingEnabled && this.Colour == PadColour.Custom;
 
         public int Top
         {
@@ -205,7 +203,7 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 return;
             }
 
-            this.Mode = task.Padding.Enabled ? PaddingMode.Custom : PaddingMode.None;
+            this.Mode = task.Padding.Mode;
 
             int padTop = task.Padding.Y;
             int padLeft = task.Padding.X;
@@ -228,7 +226,7 @@ namespace HandBrakeWPF.ViewModelItems.Filters
 
         public bool MatchesPreset(Preset preset)
         {
-            if (preset.Task.Padding.Enabled && Mode != PaddingMode.None)
+            if (!this.CurrentTask.Padding.Mode.Equals(preset.Task.Padding.Mode))
             {
                 return false;
             }
@@ -274,7 +272,29 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 return;
             }
 
-            this.NotifyOfPropertyChange(() => this.Colour);
+            this.Reset();
+            this.Mode = preset.Task.Padding.Mode;
+
+            if (this.Mode == PaddingMode.Custom)
+            {
+                int padTop = preset.Task.Padding.Y;
+                int padLeft = preset.Task.Padding.X;
+                int padBottom = preset.Task.Padding.H - padTop;
+                int padRight = preset.Task.Padding.W - padLeft;
+
+                this.SetRotationValues(padTop, padBottom, padLeft, padRight);
+            }
+            
+            PadColour padColour = EnumHelper<PadColour>.GetValue(preset.Task.Padding.Color);
+            if (padColour == PadColour.Black && preset.Task.Padding.Color != EnumHelper<PadColour>.GetShortName(PadColour.Black))
+            {
+                this.Colour = PadColour.Custom;
+                this.CustomColour = preset.Task.Padding.Color;
+            }
+            else
+            {
+                this.Colour = PadColour.Black;
+            }
         }
 
         private void ApplyPad(PaddingMode mode)
@@ -309,9 +329,6 @@ namespace HandBrakeWPF.ViewModelItems.Filters
             this.Bottom = pad[1];
             this.Left = pad[2];
             this.Right = pad[3];
-
-            //result->width += pad[2] + pad[3];
-            //result->height += pad[0] + pad[1];
         }
     }
 }

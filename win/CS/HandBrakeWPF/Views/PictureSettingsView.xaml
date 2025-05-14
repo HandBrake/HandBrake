@@ -270,7 +270,7 @@
 
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_PaddingColour}" Grid.Row="2" Grid.Column="0" />
             <ComboBox ItemsSource="{Binding PaddingFilter.PaddingColours, Converter={StaticResource padColourConverter}}" SelectedItem="{Binding PaddingFilter.Colour, Converter={StaticResource padColourConverter}}" Grid.Row="2" Grid.Column="1" Width="140"
-                      IsEnabled="{Binding PaddingFilter.IsCustomPaddingEnabled}" />
+                      IsEnabled="{Binding PaddingFilter.IsPaddingEnabled}" />
 
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_PaddingCustomColour}" Grid.Row="3" Grid.Column="0"  Visibility="{Binding PaddingFilter.IsCustomColourVisible, Converter={StaticResource boolToVisConverter}}" />
             <TextBox Text="{Binding PaddingFilter.CustomColour, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Width="140" Visibility="{Binding PaddingFilter.IsCustomColourVisible, Converter={StaticResource boolToVisConverter}}"

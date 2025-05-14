@@ -38,7 +38,7 @@ namespace HandBrakeWPF.ViewModels
         private Title currentTitle;
         private bool isNextAvailable;
         private bool isBackAvailable;
-        private bool isCovertArtPreviewEnabled = false;
+        private bool isCovertArtPreviewEnabled = true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaDataViewModel"/> class. 
