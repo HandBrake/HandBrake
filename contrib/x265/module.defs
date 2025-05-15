@@ -2,9 +2,9 @@ __deps__ := X265_8 X265_10 X265_12
 $(eval $(call import.MODULE.defs,X265,x265,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,X265))
 
-X265.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/x265-snapshot-20250224-13212.tar.gz
+X265.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/x265-snapshot-20250507-13244.tar.gz
 #X265.FETCH.url    += https://bitbucket.org/multicoreware/x265_git/downloads/x265_4.1.tar.gz
-X265.FETCH.sha256  = 110d31d4e133c32138dbbf9bcdc4104b8b14a0d6bab2b74a51168eafd927d7d1
+X265.FETCH.sha256  = 53a6e0b29a644654e2e5612d78cb1aead7c1645b2e730f99c8fbeae0e275c89b
 
 # Silence "warning: overriding recipe for target" messages
 X265.FETCH.target =

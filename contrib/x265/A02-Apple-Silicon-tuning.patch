@@ -1,14 +1,14 @@
-From ab704bef1773da3dba45b57cd9392f3118dd3817 Mon Sep 17 00:00:00 2001
+From 82b81e909d0ea9c3f92e87db950308d39403b256 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 13 Sep 2024 16:08:25 +0200
-Subject: [PATCH 2/7] Apple Silicon tuning
+Subject: [PATCH 2/6] Apple Silicon tuning
 
 ---
  source/common/threadpool.cpp | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/source/common/threadpool.cpp b/source/common/threadpool.cpp
-index 1dec78b8d..2c28fceea 100644
+index 615b04b6f..7d99f8cb1 100644
 --- a/source/common/threadpool.cpp
 +++ b/source/common/threadpool.cpp
 @@ -661,10 +661,16 @@ void ThreadPool::getFrameThreadsCount(x265_param* p, int cpuCount)

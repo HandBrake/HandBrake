@@ -1,0 +1,31 @@
+From ac54e3ab6b5cbbd44129c2c2087dc87f963cfdea Mon Sep 17 00:00:00 2001
+From: Mr-Z-2697 <74594146+Mr-Z-2697@users.noreply.github.com>
+Date: Mon, 12 May 2025 01:58:02 +0800
+Subject: [PATCH] Fix weighted prediction delta_chroma_offset non-conformance
+
+The calculation here is the same as final entropy coding.
+Specification says the valid range is [-512, 511].
+---
+ source/encoder/weightPrediction.cpp | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/source/encoder/weightPrediction.cpp b/source/encoder/weightPrediction.cpp
+index bc842f173..fd010d032 100644
+--- a/source/encoder/weightPrediction.cpp
++++ b/source/encoder/weightPrediction.cpp
+@@ -466,7 +466,11 @@ void weightAnalyse(Slice& slice, Frame& frame, x265_param& param)
+                 }
+             }
+ 
+-            if (!bFound || (minscale == (1 << mindenom) && minoff == 0) || (float)minscore / origscore > 0.998f)
++            int predTemp = (128 - ((128 * minscale) >> (mindenom)));
++            int deltaChromaTemp = minoff - predTemp;
++
++            if (!bFound || (minscale == (1 << mindenom) && minoff == 0) || (float)minscore / origscore > 0.998f ||
++                (plane && (deltaChromaTemp < -512 || deltaChromaTemp > 511)) )
+             {
+                 SET_WEIGHT(weights[plane], false, 1 << denom, denom, 0);
+             }
+-- 
+2.49.0
+

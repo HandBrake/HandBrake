@@ -1,14 +1,14 @@
-From 75fae0bf453f0e9fa46abad704a00c1ad3ec3f72 Mon Sep 17 00:00:00 2001
+From b49f968bac07e33f00500c0197db8262c9024451 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 4 Apr 2025 11:40:36 +0200
-Subject: [PATCH] Update version strings
+Subject: [PATCH 6/6] Update version strings
 
 ---
  x265Version.txt | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/x265Version.txt b/x265Version.txt
-index 8e450033e..9daa622ff 100644
+index 8e450033e..8aee0864c 100644
 --- a/x265Version.txt
 +++ b/x265Version.txt
 @@ -1,4 +1,4 @@
@@ -16,8 +16,8 @@ index 8e450033e..9daa622ff 100644
 -repositorychangeset: 6318f22
 -releasetagdistance: 1
 -releasetag: 4.0
-+repositorychangeset: b354c00
-+releasetagdistance: 79
++repositorychangeset: 78e5ac3
++releasetagdistance: 158
 +releasetag: 4.1
 -- 
 2.39.5 (Apple Git-154)
