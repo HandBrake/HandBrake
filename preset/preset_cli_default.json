@@ -2,6 +2,7 @@
         {
             "ChildrenArray": [
                 {
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3",
@@ -31,6 +32,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -94,6 +96,7 @@
                     "SubtitleBurnDVDSub": false,
                     "SubtitleLanguageList": [
                     ],
+                    "SubtitleTrackNamePassthru": true,
                     "SubtitleTrackSelectionBehavior": "none",
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
