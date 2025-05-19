@@ -63,6 +63,9 @@ Download available from Microsoft:
 - Minor Performance Optimisations for ARM64 devices running Windows
 - Minor UI improvements throughout the UI.
 - Various bug fixes and improvements (#6524, #6517, #6514, #6477, #6473, #6086)
+- Added new translations
+  - Galician (Galego)
+  - Hungarian (Magyar)
 
 
 ## HandBrake 1.9.2

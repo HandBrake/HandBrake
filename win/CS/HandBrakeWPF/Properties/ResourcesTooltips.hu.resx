@@ -1,0 +1,573 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>A Deblock csökkenti az alacsony minőségű videotömörítés okozta blokkos megjelenéseket.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Válassza ki a decomb vagy deinterlace szűrő beállításait.
+
+A decomb szűrő szelektíven feloldja az átlapoltnak tűnő kereteket.
+Ez megőrzi a minőséget a nem átlapolt keretekben.
+
+A klasszikus deinterlace szűrő minden képkockára vonatkozik.
+A nem átlapolt keretek minőségromlást szenvednek.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>A zajcsökkentés csökkenti vagy eltávolítja a zaj és a szemcsék megjelenését. Ez javíthatja a tömörítés hatékonyságát, és jobb minőségű videókat hozhat létre kisebb fájlméret mellett. 
+A túl erős zajcsökkentési beállítások ronthatják a képminőséget a részletek elvetésével.
+         
+Az NLMeans egy kiváló minőségű denoise szűrő, amelynek ára a sebesség. Használja ott, ahol a minőség fontosabb, mint a sebesség.
+         
+A HQDN3D egy adaptív aluláteresztő szűrő, gyorsabb, mint az NLMeans, de kevésbé hatékony a finom részletek megőrzésében.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>A Detelecine eltávolítja azokat a fésűs elemeket, amelyek a telecine, a film képkockasebesség televíziós képkockasebességgé konvertálására szolgáló eljárás eredménye.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>A szürkeárnyalatos eltávolítja a videó színösszetevőjét. Gyakran fekete-fehér videónak is nevezik.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Cél elérési útja, beleértve a könyvtárat és a fájlnevet. Itt jön létre az új videó, és mi lesz a neve.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>Adjon hozzá egy speciális MP4 jelölőt, hogy lehetővé tegye a lejátszást a vintage iPod 5. generációs eszközökön 2006 körül. Más beállítások befolyásolhatják a kompatibilitást.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Tároló formátuma. A videó, a hang és az egyéb sávok egyetlen ilyen típusú fájlba vannak egyesítve. Befolyásolja a kompatibilitást.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Optimalizálja az MP4-et a progresszív letöltéshez. A kódolás után az adatok átrendeződnek és újraíródnak, hogy azonnali lejátszást tegyenek lehetővé a hálózaton keresztül, anélkül, hogy a teljes fájlt le kellene tölteni.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Forrástartomány kiválasztása. Alapértelmezés szerint az összes fejezet ki van jelölve, és a teljes forrás kódolva van.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Cím vagy videoklip a kódoláshoz.
+A Blu-ray és DVD források gyakran több címet is tartalmaznak, a leghosszabbik általában a fő funkció.</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Az Anamorf tetszőleges tárolási méreteket tesz lehetővé, miközben megőrzi az eredeti aspektust lejátszás közben.
+
+Az Egyik sem, letiltja az anamorfot. A videó tárolási méretei és a kijelző méretei azonosak lesznek. Csak bizonyos régi eszközökkel való kompatibilitás esetén hasznos.
+
+Az Automatikus maximalizálja a tárolási felbontást, miközben megőrzi az eredeti kijelző képarányát. Ajánlott.
+
+Az Egyéni lehetővé teszi az összes paraméter manuális beállítását. Hasznos a helytelen forrásmegjelenítési aspektus kijavításához és azoknak a szakembereknek, akiknek fejlett ellenőrzésre van szükségük az utómunkálatok során.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Automatikusan levágja a fekete szegélyeket a videó szélei körül.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Vágja le a videót alulról.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Vágja le a videót a bal oldalról.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Vágja le a videót a jobb oldalról.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Vágja le a videót felülről.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Ez az a magasság, amelyen a videó tárolásra kerül.
+A tényleges megjelenítési méretek eltérnek, ha a pixel képarány nem 1: 1.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Manuálisan vágja le a videót.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Igazítsa a tárolási méreteket ennek az értéknek a többszöröséhez.
+
+Ez a beállítás csak bizonyos eszközökkel való kompatibilitáshoz szükséges.
+A 2-t használja, kivéve, ha kompatibilitási problémákat tapasztal.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>A képpont mérete határozza meg a képpontok alakját.
+Az 1:1 arány négyzet alakú képpontot határoz meg. Más értékek téglalap alakú alakzatokat határoznak meg.
+A lejátszók méretezik a képet a megadott szempont elérése érdekében.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Ez az a szélesség, amelyen a videó tárolódik.
+A tényleges megjelenítési méretek eltérnek, ha a képpont képaránya nem 1:1.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>Törölje a feladatot a várólistáról.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>Állítsa vissza a feladat állapotát Várakozásra.</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>Küldje vissza a feladatot a főablakba szerkesztésre.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Az átlagos bitsebesség beállítása.
+
+A pillanatnyi bitsebesség bármikor sokkal magasabb vagy alacsonyabb lehet.
+De a hosszú időtartamra számított átlag lesz az itt meghatározott érték. Ha szükség van
+a pillanatnyi bitsebesség korlátozására, nézd meg az x264 vbv-bufsize és vbv-maxrate beállításait.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Engedélyezi az állandó képkocka kimenetet.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Elérhető videó kódolók.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>A beállítások finomhangolása a gyakori forgatókönyvekhez való optimalizáláshoz.
+
+Ez javíthatja a hatékonyságot bizonyos forrásjellemzők esetén, vagy a
+kimeneti fájl jellemzőit. A módosítások a
+előbeállítás után, de az összes többi paraméter előtt.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>További kódoló beállítások.
+
+A kódoló beállításainak kettősponttal elválasztott listája.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Csökkentse a dekódoló CPU-használatát.
+
+Ezt akkor állítsa be, ha a készülék nehezen tudja lejátszani a kimenetet (kiesett képkockák).</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Kimeneti képkockasebesség.
+
+"Ugyanaz, mint a forrás" ajánlott. Ha a forrásvideó képkockasebessége változó, a "Forrással megegyező" beállítás megőrzi azt.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Beállítja és biztosítja a megadott szintnek való megfelelést.
+
+Felülbírálja az összes többi beállítást.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Lehetővé teszi a változó képkockasebesség kimenetét a képkockasebesség beállítása által meghatározott csúcssebességgel.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Módosítja a kódoló beállításait, hogy a tömörítési hatékonyságot a kódolási sebességgel szemben egyenértékűvé tegye.
+
+Ez meghatározza a kódoló alapértelmezett beállításait.
+A hangok, profilok, szintek és speciális opciós karakterláncok erre lesznek alkalmazva.
+Ezt az opciót általában a leglassabbra kell beállítani, mivel a lassabb
+beállítások jobb minőséget vagy kisebb fájlokat eredményeznek.
+
+Állítsa a csúszkát jobbra, ha a tömörítés hatékonyságát a kódolási sebesség rovására kívánja növelni,
+vagy balra, ha a tömörítési hatékonyság rovására kívánja növelni a kódolási sebességet.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Beállítja és biztosítja a megadott profil betartását.
+
+Felülbírálja az összes többi beállítást.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Állítsa be a kívánt minőségi tényezőt.
+A kódoló egy bizonyos minőséget céloz meg.
+Az egyes videokódolók által használt skála eltérő.
+
+Az x264 skálája logaritmikus, és az alacsonyabb értékek magasabb minőségnek felelnek meg.
+Tehát az érték kis csökkenése fokozatosan nagyobb növekedést eredményez.
+a keletkező fájlméretben. A 0 érték veszteségmenteset jelent, és a következő eredményt eredményezi
+az eredeti forrásnál nagyobb fájlméretet eredményez, kivéve, ha a forrás
+szintén veszteségmentes volt.
+A javasolt értékek a következők: A szabványos felbontású források esetében 18-20, nagy felbontású források esetében 20-23.
+
+Az FFMpeg és a Theora skálája lineárisabb.
+Ezek a kódolók nem rendelkeznek veszteségmentes móddal.</value>
+  </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>A többmenetes kódolás elemzése során használjon olyan beállításokat, amelyek felgyorsítják a dolgokat.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Többmenetes kódolás végrehajtása.
+
+A 'Bitráta' opció előfeltétel. Az analízis során a statisztikák a
+a videóról. Az utolsó menetben ezeket a statisztikákat használjuk fel.
+a bitráta kiosztására vonatkozó döntések meghozatalához.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Lehetővé teszi a változó képkockasebességű kimenetet.
+
+A VFR nem kompatibilis egyes lejátszókkal.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>Amikor a HandBrake befejezte az aktuális várólistát vagy kódolást, végrehajtja ezt a műveletet.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Tallózással válassza ki a kódolás új célelérési útját és fájlnevét.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Videó szög a kódoláshoz. Csak többszögű DVD-re és Blu-ray-re alkalmazható.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Új előbeállítás hozzáadása.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>További előbeállítási lehetőségek.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Az előbeállítások a kódolási beállítások csoportjai, amelyek meghatározott forgatókönyvekre vannak szabva. Válassza ki a szándékához legközelebb állót.
+ 
+ Felülírja az összes kódolási beállítást. A beállítások az előbeállítás kiválasztása után tovább módosíthatók.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>A kiválasztott előbeállítás eltávolítása.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Egyes források egynél több videoklipet vagy címek gyűjteményét tartalmazhatják. A Blu-ray és DVD forrásoknak gyakran több címe van.
+
+Ha ismeri a kódolni kívánt címet, beírhatja ide, és a HandBrake csak azt a címet fogja beolvasni, nem pedig a forrásfájl összes címét. Ellenkező esetben hagyja üresen a mezőt.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Egyéni zajcsökkentési paraméterek.
+ 
+NLMeans szintaxis: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans alapértelmezett: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D szintaxis: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D alapértelmezett: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Zajmentesítési szűrő előbeállítása. A szűrő erősségének beállítása.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Zajtalanítás. Tovább módosítja a zajcsökkentés előre beállított beállítást, hogy optimalizálja a beállításokat az adott forgatókönyvekhez.
+ 
+- A Nincs az alapértelmezett előbeállításokat használja.
+ 
+- A Film finomítja a beállításokat a legtöbb élőszereplős tartalomhoz.
+ 
+- A Szemcse csak a színes csatornákat dolgozza fel. Hasznos a fénysűrűségű szemcsék filmszerű megjelenésének megőrzéséhez, miközben csökkenti vagy eltávolítja a színzajt.
+
+- A Sok Mozgás csökkenti a színelkenést a nagy mozgású jelenetekben a színcsatornák időbeli feldolgozásának elkerülése révén. Hasznos sport- és akcióvideókhoz.
+
+- Az Animáció hasznos a cel animációkhoz, például animékhez és rajzfilmekhez.
+
+- A Szalag hasznos az alacsony részletességű analóg szalagforrásokhoz, például a VHS-hez, ahol a film nem hoz kívánt eredményt.
+
+- A Sprite hasznos az 1-/4-/8-/16-bites 2 dimenziós játékokhoz. A Sprite-ot nem nagyfelbontású videókhoz tervezték.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>A Deinterlace eltávolítja a képből a fésűs hibákat.
+
+A Bwdif és a Yadif két népszerű és gyors deinterlacer.
+
+A Decomb több interpolációs algoritmus között vált a sebesség és a minőség érdekében.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Egyéni deinterlace paraméterek.
+ 
+Bwdif és Yadif szintaxis: mode=m:parity=p
+ 
+ Bwdif és Yadif alapértelmezett: mode=3
+ 
+ Decomb szintaxis: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ 
+ Decomb alapértelmezett: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Deinterlace szűrő előbeállítás.
+
+Az alapértelmezett a sebesség és a minőség szempontjából kiegyensúlyozott.
+
+A térbeli ellenőrzés kihagyása lehetővé teszi a Yadif számára, hogy kihagyja bizonyos elkerülhető elemek kijavítását egy kis sebességnövelés érdekében.
+
+Az EEDI2 lassabb, jobb minőségű interpolációs algoritmust használ a Decombhoz. Hasznos a legnehezebb forrásokhoz.
+
+Bob megpróbálja jobban megőrizni a mozgást az észlelt megoldás enyhe büntetése érdekében.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Megfordítja (tükrözi) a képet a vízszintes tengelyen.</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Ha az Átlapolás észlelése engedélyezve van, a Deinterlace szűrő csak az átlapolt videokockákat dolgozza fel.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Egyéni átlapolás-észlelési paraméterek.
+ 
+ Szintaxis: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ 
+ Alapértelmezett: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Forgassa el a képet az óramutató járásával megegyező irányba 90 fokos lépésekben.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>A kiválasztott forrástartomány időtartama Óra:Perc:Másodperc-ben</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>A Képarány megtartása megőrzi a forrás eredeti megjelenítési képét. Ennek letiltása megnyúlt vagy összenyomott képet eredményezhet.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Egyéni élesítési paraméterek.
+
+Életlen szintaxis: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Életlen alapértelmezett: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp szintaxis: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp alapértelmezett: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Az élesítés javítja a részletek megjelenését, különösen az élekét. A túl erős élesítési beállítások ronthatják a képminőséget a gyűrűszerű hibák létrehozásával és a zaj fokozásával, ami csökkentheti a tömörítés hatékonyságát.
+
+Az Unsharp egy általános célú élesítésmentes maszkoló szűrő. Elmosással élesít, majd kiszámítja az elmosódott kép és az eredeti kép közötti különbséget.
+
+A Lapsharp a Laplacian élesítő szűrőket közelítő konvolúciós kernelek segítségével élesít, és néha jobb minőségű eredményt ad, mint az unisharp maszkolás.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Élesítés szűrő előbeállítás. A szűrő erősségének beállítása.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Élesítsd a hangokat. Tovább módosítja az Élesítés előbeállítását, hogy optimalizálja a beállításokat az adott forgatókönyvekhez.
+
+A Nincs az alapértelmezett előbeállításokat használja.
+
+Az Életlen ultrafinom, finom, közepes, durva vagy nagyon durva élezésre hangolható. Válasszon egyet a kimeneti képfelbontás és a részletek finomsága alapján.
+
+A Lapsharp Film tuningja finomítja a legtöbb élőszereplős tartalomhoz használható beállításokat. A Film egy izotróp Laplacian kernelt használ az élek hasonló élesítéséhez, és a luminancia (fényerő) információt jobban élesíti, mint a krominancia (szín) információt.
+
+A Lapsharp's Grain tuning hasonló a Filmhez, de a zaj és a szemcsék hatásának csökkentésére a Gauss izotróp Laplacian kernelt használja. Hasznos a szemcsék megőrzésére és a Film hangolás általános alternatívájaként.
+
+A Lapsharp Animation tuning hasznos a cellás animációhoz, például anime és rajzfilmekhez. Az Animáció megegyezik a Filmmel, de az általános erősséget csökkenti, hogy elkerülje a leleteket.
+
+A Lapsharp Sprite hangolása hasznos az 1-/4-/8-/16 bites 2 dimenziós játékokhoz. A Sprite egy 4 szomszédos Laplacian kernelt használ, amely a függőleges és vízszintes éleket jobban kiemeli, mint az átlós éleket.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Igazítja az összes hang- és videófolyam kezdeti időbélyegét üres képkockák beillesztésével vagy képkockák elhagyásával. Javíthatja az audió/videó szinkronizálását a meghibásodott lejátszók esetében, amelyek nem tisztelik az MP4 szerkesztési listákat.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Előbeállítások vezérlési lehetőségei.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Ennek a tartománynak a végpontja.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Ennek a tartománynak a kiindulópontja.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Ha engedélyezve van, az automatikus névrendszer mindig az alapértelmezett elérési utat használja. 
+Ha ki van kapcsolva, akkor a főablakban lévő cél mezőben lévő elérési utat használja, ha az be van töltve, egyébként az alapértelmezett elérési utat használja.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Színtér szűrő.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Színek simítása szűrő</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>Ez a mező olyan RGB értékeket fogadhat el, mint például: "0xFF0000" vagy színneveket, például "piros". A nevesített színek teljes listáját a kitöltésszűrő dokumentációjában találja.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Feliratok írása a videófolyamba.
+
+Vegye figyelembe, hogy ez automatikusan kiválasztásra kerül, ha a forrás feliratsáv formátuma nem támogatott a kimeneti fájltípusban.
+
+Például a PGS feliratok nem támogatottak az MP4-ben</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Lapos - Az előbeállítások lapos listaként jelennek meg.
+Részlegesen lapos - Az utolsó 8 felhasználói előbeállítás lapos listaként jelenik meg, majd az összes előbeállítás kategória listában jelenik meg.
+Kategóriák - Az összes előbeállítás kategóriánként egy almenüben jelenik meg.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Állítsa be azokat a viselkedéseket, amelyek meghatározzák, hogy ez a lap hogyan adja hozzá automatikusan a hangsávokat új forrás vagy cím kiválasztásakor.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Frissítse az alábbi listát a konfigurált viselkedések alapján.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Állítsa be azokat a viselkedéseket, amelyek meghatározzák, hogy ez a lap hogyan adja hozzá automatikusan a feliratsávokat új forrás vagy cím kiválasztásakor.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>A következő környezeti változók mindig be vannak állítva:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+A lehetséges kilépési kódok a következők:
+0 : Sikeres
+2 : Bemeneti argumentumok hibája
+3 : Nem sikerült inicializálni 
+4 : Ismeretlen hiba
+5 : Hiba történt a forrásfájl beolvasásakor.
+
+Felhívjuk figyelmét, hogy a hibakódok a legjobb tudásunk szerint készültek, és nem mindig pontosak.
+Javasoljuk, hogy a kimeneti fájlt ellenőrizze, mielőtt műveleteket hajtana végre rajta.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>A kimeneti fájl formátuma. A támogatott fájlrendszer-karakterek mellett használhatja a cím megváltoztatásakor, a forrás beolvasásakor vagy bizonyos beállítások frissítésekor lecserélt helyőrzőket is.
+
+{source} - A forrásfájl neve.
+{title} - Egész szám értéke. Ez a lemez címszámát reprezentálja.
+{chapters} - A kiválasztott fejezetek tartománya.
+{creation-date} - A forrásfájl létrehozásának dátuma (ha elérhető).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - A forrásfájl utolsó módosításának dátuma (ha elérhető).
+{modification-time} - A forrásfájl utolsó módosításának időpontja (ha elérhető).
+{date} - Ma. Állítsa be a várólistához való hozzáadáskor.
+{time} - Ma. Állítsa be a várólistához való hozzáadáskor.
+{quality_bitrate} - Az RF/CQ szám vagy bitráta
+{quality_type} - "kbps" vagy "Q" betűt nyomtat a videó lapon kiválasztott minőségi módtól függően.
+{preset} - A kiválasztott előbeállítás neve.
+{encode_bit_depth} - Egész szám értéke. azaz 8, 10 vagy 12
+{width} - A kimeneti tárolási szélesség
+{height} - A kimeneti tárolási magasság
+{codec} - Jelenítse meg a videó formátumát.
+{encoder} - Jelenítse meg a használt kódoló rövid formázási kulcsát.
+
+Az illegális elérési út karakterei automatikusan eltávolításra kerülnek.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>A jobbról balra haladó nyelvek esetében két mód közül választhat. A "Csak szöveg" csak jobbról balra stílusban jeleníti meg a szöveget. A "Teljes felhasználói felület" az összes vezérlőt jobbról balra jeleníti meg.
+
+Felhívjuk figyelmét, hogy a felhasználói felület elrendezésében hiányosságok lehetnek ezen módok használatakor. A nyelvtől függően érdemes lehet mindkét módot kipróbálni, hogy megtalálja a legmegfelelőbbet.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Adott hangminőségi szint megcélzása.
+Az 1 a legrosszabb minőségű, az 5 pedig a legjobb minőségű.
+
+A bitráta forrásonként változik.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>A következők használhatók külön-külön vagy együtt a célútvonal felépítéséhez
+
+{source_path} - Ugyanabban a mappában, mint a forrás elérési útja (ha lehetséges)
+{source_folder_name} – Annak a könyvtárnak a neve, amelyben a forrásfájl található, a teljes elérési út nélkül.
+{source} - A forrásfájl neve.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Elindítja a dokumentációs webhelyet, amely a következő címen található https://handbrake.fr/docs</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Kötőjel (-), pont (.) és vessző (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Használja a fenti beállítások által megengedett legnagyobb felbontást</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Ha nincs engedélyezve, a méretezett dimenziók a forrásdimenziókra korlátozódnak.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>A kijelző méretének módosítása megnyújtja a videót</value>
+  </data>
+</root>

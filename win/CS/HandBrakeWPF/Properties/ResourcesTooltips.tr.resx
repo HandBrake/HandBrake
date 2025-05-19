@@ -567,6 +567,6 @@ Bit hızı kaynaktan kaynağa değişecektir.</value>
     <value>Etkinleştirilmezse, ölçeklenen boyutlar kaynak boyutlarıyla sınırlı kalacaktır.</value>
   </data>
   <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
-    <value>Ekran ebatlarını değiştirmek videoyu ebatını uzatacaktır.</value>
+    <value>Ekran ebatlarını değiştirmek videoyu ebadını uzatacaktır.</value>
   </data>
 </root>
