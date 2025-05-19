@@ -54,22 +54,22 @@ static void build_gamma_lut(hb_motion_metric_private_t *pv)
 // count less.
 #if defined (__aarch64__) && !defined(__APPLE__)
 static
-float motion_metric_neon_8(hb_motion_metric_private_t *pv,
+float motion_metric_neon_##_##nbits(hb_motion_metric_private_t *pv,
                                      hb_buffer_t *a, hb_buffer_t *b)
 {
     int bw = a->f.width / 16;
     int bh = a->f.height / 16;
     int stride_a = a->plane[0].stride / pv->bps;
     int stride_b = b->plane[0].stride / pv->bps;
-    const uint8_t *pa = (const uint8_t *)a->plane[0].data;
-    const uint8_t *pb = (const uint8_t *)b->plane[0].data;
+    const uint##_##nbits_t *pa = (const uint##_##nbits_t *)a->plane[0].data;
+    const uint##_##nbits_t *pb = (const uint##_##nbits_t *)b->plane[0].data;
     uint64_t sum = 0;
     for (int y = 0; y < bh; y++)
     {
         for (int x = 0; x < bw; x++)
         {
-            const uint8_t *ra = pa + y * 16 * stride_a + x * 16;
-            const uint8_t *rb = pb + y * 16 * stride_b + x * 16;
+            const uint##_##nbits_t *ra = pa + y * 16 * stride_a + x * 16;
+            const uint##_##nbits_t *rb = pb + y * 16 * stride_b + x * 16;
 
             for (int yy = 0; yy < 16; yy++)
             {
@@ -215,7 +215,11 @@ static float hb_motion_metric_work(hb_motion_metric_object_t *metric,
             return motion_metric_8(metric->private_data, buf_a, buf_b);
 #endif
         default:
+#if defined (__aarch64__) && !defined(__APPLE__)
+            return motion_metric_neon_16(metric->private_data, buf_a, buf_b);
+#else
             return motion_metric_16(metric->private_data, buf_a, buf_b);
+#endif
     }
 }
 
