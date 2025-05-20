@@ -121,46 +121,46 @@
     <value>Deblock vermindert blokkerige effecten veroorzaakt door videocompressie van lage kwaliteit.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>Kies filteroptie decomb of deinterlace.
+    <value>Kies filteroptie decomb of deïnterliniëren.
 
-Het decomb-filter deinterlacet selectief frames die lijken te zijn geïnterlinieerd.
+Het decomb-filter deïnterlinieert selectief frames die geïnterlinieerd lijken te zijn.
 Hiermee blijft de kwaliteit behouden in frames die niet zijn geïnterlinieerd.
 
-Het klassieke deinterlace-filter wordt op alle frames toegepast.
+Het klassieke deïnterliniëringsfilter wordt op alle frames toegepast.
 Frames die niet zijn geïnterlinieerd, zullen enige kwaliteitsvermindering ondergaan.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
-    <value>Denoise vermindert of verwijdert het voorkomen van ruis of korrel. Dit kan de compressie-efficiëntie verbeteren en video van hogere kwaliteit maken bij kleinere bestandsgroottes. 
-Een te sterke Denoise-instelling kan de beeldkwaliteit schaden door het verlies van details.
+    <value>Denoise vermindert of verwijdert ruis of korrel. Dit kan de efficiëntie van de compressie verbeteren en video van hogere kwaliteit maken met kleinere bestanden. 
+Te sterke denoise-instellingen kunnen de beeldkwaliteit aantasten door details te verwijderen.
 
-NLMeans is een hoogwaardig denoise-filter ten koste van snelheid. Gebruiken waar kwaliteit belangrijker is dan snelheid.
+NLMeans is een denoise-filter van hoge kwaliteit die ten koste gaat van de snelheid. Gebruik dit als kwaliteit belangrijker is dan snelheid.
 
-HQDN3D is een adaptief laagdoorlaatfilter, sneller dan NLMeans maar minder effectief in het bewaren van fijne details.</value>
+HQDN3D is een adaptief laagdoorlaatfilter, sneller dan NLMeans maar minder effectief in het behouden van fijne details.</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
     <value>Detelecine verwijdert zichtbare kam-effecten die het resultaat zijn van telecine, een proces waarbij framesnelheden voor film worden omgezet naar die voor televisie.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Grijstinten verwijdert de kleurcomponent van de video. Vaak aangeduid als Zwart-wit video.</value>
+    <value>Grijstinten verwijdert de kleurcomponent van de video. Vaak zwart-wit video genoemd.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>Bestemmingspad, inclusief directory en bestandsnaam. Hier wordt uw nieuwe video aangemaakt en hoe deze zal worden genoemd.</value>
+    <value>Doelpad, inclusief map en bestandsnaam. Dit is waar uw nieuwe video zal worden gemaakt en hoe deze zal worden genoemd.</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
-    <value>Voeg een speciale MP4-markering toe om weergave op verouderde iPod-apparaten van de 5e generatie rond 2006 mogelijk te maken. Andere instellingen kunnen de compatibiliteit beïnvloeden.</value>
+    <value>Een speciale MP4-markering toevoegen om weergave op verouderde iPod-apparaten van de 5e generatie rond 2006 mogelijk te maken. Andere instellingen kunnen de compatibiliteit beïnvloeden.</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
     <value>Containerformaat. Video-, audio- en andere sporen worden gecombineerd tot één bestand van dit type. Beïnvloedt compatibiliteit.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
-    <value>Optimaliseer MP4 voor progressieve download. Na codering worden gegevens gereorganiseerd en herschreven om onmiddellijk afspelen via een netwerk mogelijk te maken, zonder dat het hele bestand hoeft te worden gedownload.</value>
+    <value>MP4 optimaliseren voor progressieve download. Na codering worden gegevens gereorganiseerd en herschreven om onmiddellijk afspelen via een netwerk mogelijk te maken, zonder dat het hele bestand hoeft te worden gedownload.</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>Selectie van bronbereik. Standaard zijn alle hoofdstukken geselecteerd en wordt de volledige bron gecodeerd.</value>
+    <value>Selectie van bronbereik. Standaard worden alle hoofdstukken geselecteerd en wordt de hele bron gecodeerd.</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
     <value>Titel of videoclip om te coderen.
-Blu-ray- en dvd-bronnen bevatten vaak meerdere titels, waarvan de langste in het algemeen het belangrijkste deel is</value>
+Blu-ray- en dvd-bronnen hebben vaak meerdere titels, waarvan de langste meestal de hoofdfilm is</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
     <value>Anamorf maakt willekeurige opslagafmetingen mogelijk met behoud van de originele beeldverhouding tijdens het afspelen.
@@ -169,22 +169,22 @@ Geen schakelt anamorf uit. De afmetingen van video-opslag en het beeldscherm zij
 
 Automatisch maximaliseert de opslagresolutie met behoud van de oorspronkelijke beeldverhouding van het scherm. Aanbevolen.
 
-Aangepast maakt het mogelijk om alle parameters handmatig in te stellen. Handig voor het corrigeren van een onjuist beeldverhouding van de bronweergave en voor professionals die geavanceerde controle nodig hebben in de postproductie.</value>
+Aangepast maakt het mogelijk om alle parameters handmatig in te stellen. Handig voor het corrigeren van een onjuiste beeldverhouding van de bronweergave en voor professionals die geavanceerde controle nodig hebben in de postproductie.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Zwarte randen rond de video automatisch bijsnijden.</value>
   </data>
   <data name="PictureSettingsView_CropBottom" xml:space="preserve">
-    <value>Video aan de onderkant bijsnijden.</value>
+    <value>Video vanaf de onderkant bijsnijden.</value>
   </data>
   <data name="PictureSettingsView_CropLeft" xml:space="preserve">
-    <value>Video aan de linkerzijde bijsnijden.</value>
+    <value>Video vanaf de linkerkant bijsnijden.</value>
   </data>
   <data name="PictureSettingsView_CropRight" xml:space="preserve">
-    <value>Video aan de rechterzijde bijsnijden.</value>
+    <value>Video vanaf de rechterkant bijsnijden.</value>
   </data>
   <data name="PictureSettingsView_CropTop" xml:space="preserve">
-    <value>Video aan de bovenkant bijsnijden.</value>
+    <value>Video vanaf de bovenkant bijsnijden.</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>Dit is de hoogte van de video zoals deze wordt opgeslagen.
@@ -194,10 +194,10 @@ De werkelijke weergaveafmetingen zullen verschillen als de pixelverhouding niet 
     <value>De video handmatig bijsnijden.</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Pas de opslagafmetingen aan naar veelvouden van deze waarde.
+    <value>De opslagafmetingen uitlijnen op veelvouden van deze waarde.
 
 Deze instelling is alleen nodig voor compatibiliteit met sommige apparaten.
-Gebruik waarde 2 tenzij er compatibiliteitsproblemen optreden.</value>
+Gebruik 2 tenzij u compatibiliteitsproblemen ondervindt.</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
     <value>Pixelverhouding definieert de vorm van de pixels.
@@ -209,23 +209,24 @@ Videospelers schalen het beeld om het in de gespecificeerde verhouding weer te g
 De werkelijke weergaveafmetingen zullen verschillen als de pixelverhouding niet 1: 1 is.</value>
   </data>
   <data name="QueueView_DeleteJob" xml:space="preserve">
-    <value>Verwijder de taak uit de wachtrij.</value>
+    <value>De taak uit de wachtrij verwijderen.</value>
   </data>
   <data name="QueueView_ResetJobStatus" xml:space="preserve">
-    <value>Taak opnieuw terugzetten naar Wachten.</value>
+    <value>Status van taak terug op wachten zetten.</value>
   </data>
   <data name="QueueView_SendJobBack" xml:space="preserve">
-    <value>Taak naar het hoofdscherm terugzetten voor bewerking.</value>
+    <value>De taak terugsturen naar het hoofdvenster om te bewerken.</value>
   </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
-    <value>Stel de gemiddelde bitsnelheid in.
+    <value>De gemiddelde bitrate instellen.
 
-De momentane bitsnelheid kan op elk moment veel hoger of lager zijn.
-Maar het gemiddelde over een lange duur is de hier ingestelde waarde. 
-Kijk naar de vbv-bufsize- en vbv-maxrate-instellingen van x264 om de momentane bitsnelheid te beperken.</value>
+De momentane bitrate kan op elk moment veel hoger of lager zijn, maar het
+gemiddelde over een lange periode zal de hier ingestelde waarde zijn. Als u de
+momentane bitrate moet beperken, kijk dan naar de instellingen vbv-bufsize en
+vbv-maxrate van x264.</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
-    <value>Maakt constante framesnelheid uitvoer mogelijk.</value>
+    <value>Schakelt uitvoer met constante framesnelheid in.</value>
   </data>
   <data name="Video_Encoders" xml:space="preserve">
     <value>Beschikbare video-encoders.</value>
@@ -248,9 +249,9 @@ Door puntkomma's gescheiden lijst met coderingsopties.</value>
 Stel dit in wanneer het apparaat moeite heeft om de uitvoer af te spelen (dropped frames).</value>
   </data>
   <data name="Video_Framerate" xml:space="preserve">
-    <value>Framesnelheid van de uitvoer.정
+    <value>Framesnelheid van de uitvoer.
 
-'Hetzelfde als bron' wordt aanbevolen. Als de bronvideo een variabele framesnelheid heeft, zal 'Hetzelfde als bron' deze behouden.</value>
+'Zelfde als bron' wordt aanbevolen. Als de bronvideo een variabele framesnelheid heeft, zal 'zelfde als bron' deze behouden.</value>
   </data>
   <data name="Video_Level" xml:space="preserve">
     <value>Zorgt ervoor dat het gespecificeerde niveau wordt nageleefd.
@@ -258,7 +259,7 @@ Stel dit in wanneer het apparaat moeite heeft om de uitvoer af te spelen (droppe
 Overschrijft alle andere instellingen.</value>
   </data>
   <data name="Video_PeakFramerate" xml:space="preserve">
-    <value>Maakt uitvoer met variabele framesnelheid mogelijk met een ingestelde piekwaarde.</value>
+    <value>Schakelt uitvoer met variabele framesnelheid in met een pieksnelheid die wordt bepaald door de framesnelheid-instelling.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
     <value>Past de instellingen van de encoder aan waarbij compressie-efficiëntie wordt afgewogen tegen coderingssnelheid.
@@ -292,25 +293,25 @@ De schaal van FFMpeg en Theora is meer lineair.
 Deze encoders hebben geen verliesvrije modus.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>Gebruik tijdens de analyse van een meervoudige fasecodering instellingen die zaken versnellen.</value>
+    <value>Instellingen gebruiken die het proces versnellen tijdens de analysefase van een meerfasencodering.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Meervoudige fasecodering uitvoeren.
+    <value>Codering in meerdere fasen uitvoeren.
 
-De optie 'Bitrate' is vereist. Tijdens de analysefase worden statistieken over 
-de video verzameld. In de laatste fase worden deze gebruikt 
-om beslissingen over bitrate-toewijzing te nemen.</value>
+De optie 'Bitrate' is een vereiste. Tijdens de analyse-fasen worden statistieken over
+de video verzameld. In de laatste stap worden deze statistieken gebruikt
+om beslissingen te nemen over bitrate-toewijzing.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
-    <value>Maakt uitvoer met variabele framesnelheid mogelijk.
+    <value>Schakelt uitvoer met variabele framesnelheid in.
 
-VFR is niet compatibel met sommige videospelers.</value>
+VFR is niet compatibel met sommige spelers.</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
     <value>Deze actie wordt uitgevoerd wanneer HandBrake de huidige wachtrij of codering heeft voltooid,.</value>
   </data>
   <data name="MainView_Browse" xml:space="preserve">
-    <value>Blader om een nieuw bestemmingspad en bestandsnaam voor de codering te selecteren.</value>
+    <value>Bladeren om een nieuw doelpad en nieuwe bestandsnaam voor de codering te selecteren.</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
     <value>Videohoek om te coderen. Alleen van toepassing op multi-angle dvd en Blu-ray.</value>
@@ -327,7 +328,7 @@ VFR is niet compatibel met sommige videospelers.</value>
 Dit overschrijft alle coderingsinstellingen. Na het selecteren ervan kunnen de instellingen nader worden aangepast.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>Verwijder de geselecteerde voorinstelling.</value>
+    <value>De geselecteerde voorinstelling verwijderen.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
     <value>Sommige bronnen kunnen meer dan één videoclip bevatten of een verzameling titels. Blu-ray- en dvd-bronnen bevatten vaak meerdere titels.
@@ -366,14 +367,14 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
 - Sprite is handig voor 1-/4-/8-/ 16-bit tweedimensionale spellen. Sprite is niet ontworpen voor high-definition video.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace verwijdert kam-effecten uit het beeld.
+    <value>Deïnterliniëren verwijdert kam-effecten uit het beeld.
 
-Bwdif en Yadif zijn twee populaire en snelle deinterlacers.
+Bwdif en Yadif zijn twee populaire en snelle deïnterlinieerders.
 
-Decomb schakelt tussen meerdere interpolatiealgoritmen voor snelheid en kwaliteit.</value>
+Decomb schakelt tussen meerdere interpolatie-algoritmen voor snelheid en kwaliteit.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Aangepaste parameters voor Deinterlace.
+    <value>Aangepaste parameters voor deïnterliniëren.
 
 Bwdif en Yadif syntaxis: mode=m:parity=p 
 
@@ -384,7 +385,7 @@ Decomb syntaxis: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:
 Decomb standaard: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>Deinterlace-filtervoorinstelling.
+    <value>Deïnterliniëren-filtervoorinstelling.
 
 Standaard is goed uitgebalanceerd voor snelheid en kwaliteit.
 
@@ -398,7 +399,7 @@ Bob probeert bewegingsscherpte beter te behouden ten koste van resolutie.</value
     <value>Draait (spiegelt) het beeld langs de horizontale as.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
-    <value>Interlace-detectie, indien ingeschakeld, laat toe dat het Deinterlace-filter alleen geïnterlinieerde videoframes verwerkt.</value>
+    <value>Interliniëring-detectie, indien ingeschakeld, laat toe dat het deïnterliniëren-filter alleen geïnterlinieerde videoframes verwerkt.</value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
     <value>Aangepaste parameters voor Interlace-detectie.
@@ -490,13 +491,13 @@ Deels lijst - De 8  laatst gebruikte gebruikersvoorinstellingen worden weergegev
 Categorieën - Alle voorinstellingen worden per categorie weergegeven.</value>
   </data>
   <data name="AudioView_AudioDefaults" xml:space="preserve">
-    <value>Stel gedragingen in die bepalen hoe dit tabblad automatisch audiosporen toevoegt bij het selecteren van een nieuwe bron of titel.</value>
+    <value>Gedragingen instellen die bepalen hoe dit tabblad automatisch audiosporen toevoegt bij het selecteren van een nieuwe bron of titel.</value>
   </data>
   <data name="BehavioursReload" xml:space="preserve">
     <value>Vernieuw de onderstaande lijst op basis van het ingestelde gedrag.</value>
   </data>
   <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
-    <value>Stel gedragingen in die bepalen hoe dit tabblad automatisch ondertitelsporen toevoegt bij het selecteren van een nieuwe bron of titel.</value>
+    <value>Gedragingen instellen die bepalen hoe dit tabblad automatisch ondertitelsporen toevoegt bij het selecteren van een nieuwe bron of titel.</value>
   </data>
   <data name="OptionsView_SendFileToArguments" xml:space="preserve">
     <value>De volgende omgevingsvariabelen zijn altijd ingesteld:
@@ -549,11 +550,10 @@ Let op: er kunnen onvolkomenheden zijn in de UI-indeling bij het gebruik van dez
 Bitsnelheid varieert van bron tot bron.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
-    <value>Het volgende kan afzonderlijk worden gebruikt, of samen om een bestemmingspad 
-op te bouwen
+    <value>Het volgende kan afzonderlijk worden gebruikt, of samen om een doelpad op te bouwen
 
 {source_path} - In dezelfde map als het bronpad (indien mogelijk) 
-{source_folder_name} - De naam van de directory waarin het bronbestand zich bevindt, zonder het volledige pad.
+{source_folder_name} - De naam van de map waarin het bronbestand zich bevindt, zonder het volledige pad.
 {source} - De naam van het bronbestand. </value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
@@ -563,12 +563,12 @@ op te bouwen
     <value>Streep (-), punt (.) en komma (,)</value>
   </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
-    <value>Gebruik de hoogste resolutie die is toegestaan in de bovenstaande instellingen</value>
+    <value>Gebruik de hoogste resolutie die is toegestaan door bovenstaande instellingen</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>Als deze optie niet is ingeschakeld, wordt de schaal beperkt tot de brondimensies.</value>
+    <value>Als deze optie niet is ingeschakeld, worden de geschaalde afmetingen beperkt tot de bronafmetingen.</value>
   </data>
   <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
-    <value>Als de schermgrootte wijzigt, wordt de video uitgerekt</value>
+    <value>Als u de schermgrootte wijzigt, wordt de video uitgerekt</value>
   </data>
 </root>

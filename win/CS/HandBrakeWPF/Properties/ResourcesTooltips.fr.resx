@@ -163,13 +163,13 @@ HQDN3D est un filtre passe-bas adaptatif, plus rapide que NLMeans mais moins eff
 Les sources Blu-ray et DVD ont souvent plusieurs titres, le plus long étant généralement l'élément principal</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>Anamorphique permet des dimensions de stockage arbitraires tout en préservant l'aspect d'origine pendant la lecture.
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+Aucun désactive l'anamorphose. Les dimensions de stockage vidéo et les dimensions d'affichage seront identiques. Utile uniquement pour la compatibilité avec certains appareils anciens.
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+Automatique maximise la résolution de stockage tout en préservant le format d'affichage original. Conseillé.
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+Personnalisé permet de définir manuellement tous les paramètres. Utile pour corriger un aspect d'affichage source incorrect et pour les professionnels ayant besoin d'un contrôle avancé en post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Recadrer automatiquement les bordures noires autour de la vidéo.</value>
@@ -260,15 +260,16 @@ Remplace tous les autres paramètres.</value>
     <value>Active un framerate variable en sortie avec un taux de pic déterminé par le paramétrage du framerate.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
+    <value>Ajuste les paramètres de l'encodeur pour effectuer un compromis entre l'efficacité de la compression et la vitesse d'encodage.
 
-This establishes your default encoder settings.
-Tunes, profiles, levels and advanced option string will be applied to this.
-You should generally set this option to the slowest you can bear since slower
-settings will result in better quality or smaller files.
+Ceci définit vos paramètres d'encodeur par défaut.
+Réglages, profils, niveaux et option avancée seront appliqués à cette opération.
+Vous devriez régler cette option sur la vitesse la plus lente que vous puissiez
+supporter, car meilleure est la qualité et/ou
+plus petit est le fichier final.
 
-Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
-or to the left to increase encoding speed at the expense of compression efficiency.</value>
+Déplacer le curseur vers la droite pour augmenter la compression au détriment de la vitesse d'encodage,
+ou vers la gauche pour priviliégier la vitesse d'encodage par rapport à l'efficacité de la compression.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Définit et assure la conformité avec le profil spécifié.
@@ -561,12 +562,12 @@ Le débit variera d'une source à une autre.</value>
     <value>Tiret (-), Point (.) et Virgule (,)</value>
   </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
-    <value>Use highest resolution permitted by above settings</value>
+    <value>Utilise la plus grande résolution permise par les réglages ci-dessus</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+    <value>Si non autorisé, le redimensionnement n'ira pas au-delà des dimensions d'origine.</value>
   </data>
   <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
-    <value>Changing the displays size will stretch the video</value>
+    <value>Changer la dimension d'affichage va déformer la vidéo</value>
   </data>
 </root>
