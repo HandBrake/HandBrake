@@ -2582,7 +2582,8 @@ int hb_qsv_select_ffmpeg_options(qsv_data_t * qsv_data, hb_job_t *job, AVDiction
         MFX_STRUCT_TO_AV_OPTS(IdrInterval)
         // sanitize some of the encoding parameters
         param->videoParam->mfx.GopPicSize = (int)(FFMIN(param->gop.gop_pic_size, 60));
-        param->videoParam->AsyncDepth = (int)(FFMAX(param->videoParam->AsyncDepth, 30));
+        param->videoParam->AsyncDepth = (int)(FFMAX(param->videoParam->AsyncDepth, 60));
+        av_dict_set_int(av_opts, "async_depth", param->videoParam->AsyncDepth, 0);
 
         char hyperencode[16];
         snprintf(hyperencode, sizeof(hyperencode), "%s", qsv_data->param.hyperEncodeParam->key);
@@ -2615,9 +2616,7 @@ int hb_qsv_select_ffmpeg_options(qsv_data_t * qsv_data, hb_job_t *job, AVDiction
         // LookAheadDepth 10 will cause a hang with some driver versions
         param->codingOption2.LookAheadDepth = FFMAX(param->codingOption2.LookAheadDepth, 11);
     }
-    char cvalue[7];
-    snprintf(cvalue, 7, "%d", param->codingOption2.LookAheadDepth);
-    av_dict_set(av_opts, "look_ahead_depth", cvalue, 0);
+    av_dict_set_int(av_opts, "look_ahead_depth", param->codingOption2.LookAheadDepth, 0);
 
     if(qsv_data->qsv_info->capabilities & HB_QSV_CAP_LOWPOWER_ENCODE)
     {
@@ -2809,9 +2808,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "%d", HB_QSV_CLIP3(0, 16, ivalue));
-            av_dict_set(av_opts, "refs", cvalue, 0);
+            av_dict_set_int(av_opts, "refs", HB_QSV_CLIP3(0, 16, ivalue), 0);
         }
     }
     else if (!strcasecmp(key, "gop-ref-dist"))
@@ -2819,9 +2816,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "%d", HB_QSV_CLIP3(-1, 32, ivalue));
-            av_dict_set(av_opts, "bf", cvalue, 0);
+            av_dict_set_int(av_opts, "bf", HB_QSV_CLIP3(-1, 32, ivalue), 0);
         }
     }
     else if (!strcasecmp(key, "gop-pic-size") ||
@@ -2830,9 +2825,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "%d", HB_QSV_CLIP3(-1, UINT16_MAX, ivalue));
-            av_dict_set(av_opts, "g", cvalue, 0);
+            av_dict_set_int(av_opts, "g", HB_QSV_CLIP3(-1, UINT16_MAX, ivalue), 0);
         }
     }
     else if (!strcasecmp(key, "b-pyramid"))
@@ -2842,9 +2835,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atoi(value, &error);
             if (!error)
             {
-                char cvalue[7];
-                snprintf(cvalue, 7, "%d", HB_QSV_CLIP3(-1, 1, ivalue));
-                av_dict_set(av_opts, "b_strategy", cvalue, 0);
+                av_dict_set_int(av_opts, "b_strategy", HB_QSV_CLIP3(-1, 1, ivalue), 0);
             }
         }
         else
@@ -2875,9 +2866,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atobool(value, &error);
             if (!error)
             {
-                char cvalue[7];
-                snprintf(cvalue, 7, "%d", ivalue);
-                av_dict_set(av_opts, "adaptive_i", cvalue, 0);
+                av_dict_set_int(av_opts, "adaptive_i", ivalue, 0);
             }
         }
         else
@@ -2893,9 +2882,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atobool(value, &error);
             if (!error)
             {
-                char cvalue[7];
-                snprintf(cvalue, 7, "%d", ivalue);
-                av_dict_set(av_opts, "adaptive_b", cvalue, 0);
+                av_dict_set_int(av_opts, "adaptive_b", ivalue, 0);
             }
         }
         else
@@ -2982,9 +2969,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             {
                 ivalue = !ivalue;
             }
-            char cvalue[7];
-            snprintf(cvalue, 7, "%d", ivalue);
-            av_dict_set(av_opts, "cavlc", cvalue, 0);
+            av_dict_set_int(av_opts, "cavlc", ivalue, 0);
         }
     }
     else if (!strcasecmp(key, "colorprim"))
@@ -3009,9 +2994,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         }
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "%d", ivalue);
-            av_dict_set(av_opts, "color_primaries", cvalue, 0);
+            av_dict_set_int(av_opts, "color_primaries", ivalue, 0);
         }
     }
     else if (!strcasecmp(key, "transfer"))
@@ -3036,9 +3019,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         }
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "%d", ivalue);
-            av_dict_set(av_opts, "color_trc", cvalue, 0);
+            av_dict_set_int(av_opts, "color_trc", ivalue, 0);
         }
     }
     else if (!strcasecmp(key, "colormatrix"))
@@ -3063,9 +3044,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         }
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "%d", ivalue);
-            av_dict_set(av_opts, "colorspace", cvalue, 0);
+            av_dict_set_int(av_opts, "colorspace", ivalue, 0);
         }
     }
     else if (!strcasecmp(key, "tff") ||
@@ -3081,9 +3060,8 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         }
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "+%d", ivalue ? MFX_PICSTRUCT_FIELD_TFF : MFX_PICSTRUCT_PROGRESSIVE);
-            av_dict_set(av_opts, "flags", cvalue, AV_DICT_APPEND);
+            ivalue = ivalue ? MFX_PICSTRUCT_FIELD_TFF : MFX_PICSTRUCT_PROGRESSIVE;
+            av_dict_set_int(av_opts, "flags", ivalue, AV_DICT_APPEND);
         }
     }
     else if (!strcasecmp(key, "bff"))
@@ -3098,9 +3076,8 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         }
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "+%d", ivalue ? MFX_PICSTRUCT_FIELD_BFF : MFX_PICSTRUCT_PROGRESSIVE);
-            av_dict_set(av_opts, "flags", cvalue, AV_DICT_APPEND);
+            ivalue = ivalue ? MFX_PICSTRUCT_FIELD_BFF : MFX_PICSTRUCT_PROGRESSIVE;
+            av_dict_set_int(av_opts, "flags", ivalue, AV_DICT_APPEND);
         }
     }
     else if (!strcasecmp(key, "mbbrc"))
@@ -3110,9 +3087,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atobool(value, &error);
             if (!error)
             {
-                char cvalue[7];
-                snprintf(cvalue, 7, "%d", ivalue);
-                av_dict_set(av_opts, "mbbrc", cvalue, 0);
+                av_dict_set_int(av_opts, "mbbrc", ivalue, 0);
             }
         }
         else
@@ -3127,9 +3102,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atobool(value, &error);
             if (!error)
             {
-                char cvalue[7];
-                snprintf(cvalue, 7, "%d", ivalue);
-                av_dict_set(av_opts, "extbrc", cvalue, 0);
+                av_dict_set_int(av_opts, "extbrc", ivalue, 0);
             }
         }
         else
@@ -3161,9 +3134,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atoi(value, &error);
             if (!error)
             {
-                char cvalue[7];
-                snprintf(cvalue, 7, "%d", HB_QSV_CLIP3(10, 100, ivalue));
-                av_dict_set(av_opts, "look_ahead_depth", cvalue, 0);
+                av_dict_set_int(av_opts, "look_ahead_depth", HB_QSV_CLIP3(10, 100, ivalue), 0);
             }
         }
         else
@@ -3179,9 +3150,8 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atoi(value, &error);
             if (!error)
             {
-                char cvalue[7];
-                snprintf(cvalue, 7, "%d", HB_QSV_CLIP3(MFX_LOOKAHEAD_DS_UNKNOWN, MFX_LOOKAHEAD_DS_4x, ivalue));
-                av_dict_set(av_opts, "look_ahead_downsampling", cvalue, 0);
+                ivalue = HB_QSV_CLIP3(MFX_LOOKAHEAD_DS_UNKNOWN, MFX_LOOKAHEAD_DS_4x, ivalue);
+                av_dict_set_int(av_opts, "look_ahead_downsampling", ivalue, 0);
             }
         }
         else
@@ -3196,9 +3166,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atoi(value, &error);
             if (!error)
             {
-                char cvalue[7];
-                snprintf(cvalue, 7, "%d", ivalue);
-                av_dict_set(av_opts, "trellis", cvalue, 0);
+                av_dict_set_int(av_opts, "trellis", ivalue, 0);
             }
         }
         else
@@ -3213,9 +3181,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atobool(value, &error);
             if (!error)
             {
-                char cvalue[7];
-                snprintf(cvalue, 7, "%d", ivalue);
-                av_dict_set(av_opts, "repeat_pps", cvalue, 0);
+                av_dict_set_int(av_opts, "repeat_pps", ivalue, 0);
             }
         }
         else
@@ -3350,9 +3316,8 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         int async_depth = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            char cvalue[7];
-            snprintf(cvalue, 7, "%d", async_depth);
-            av_dict_set(av_opts, "async_depth", cvalue, 0);
+            av_dict_set_int(av_opts, "async_depth", async_depth, 0);
+            param->videoParam->AsyncDepth = async_depth;
         }
     }
     else
