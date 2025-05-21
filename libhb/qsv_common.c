@@ -2582,7 +2582,7 @@ int hb_qsv_select_ffmpeg_options(qsv_data_t * qsv_data, hb_job_t *job, AVDiction
         MFX_STRUCT_TO_AV_OPTS(IdrInterval)
         // sanitize some of the encoding parameters
         param->videoParam->mfx.GopPicSize = (int)(FFMIN(param->gop.gop_pic_size, 60));
-        param->videoParam->AsyncDepth = (int)(FFMAX(param->videoParam->AsyncDepth, 30));
+        param->videoParam->AsyncDepth = (int)(FFMAX(param->videoParam->AsyncDepth, 60));
         av_dict_set_int(av_opts, "async_depth", param->videoParam->AsyncDepth, 0);
 
         char hyperencode[16];
