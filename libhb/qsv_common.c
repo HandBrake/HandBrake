@@ -2584,6 +2584,9 @@ int hb_qsv_select_ffmpeg_options(qsv_data_t * qsv_data, hb_job_t *job, AVDiction
         param->videoParam->mfx.GopPicSize = (int)(FFMIN(param->gop.gop_pic_size, 60));
         param->videoParam->AsyncDepth = (int)(FFMAX(param->videoParam->AsyncDepth, 30));
 
+        char cvalue[7];
+        snprintf(cvalue, 7, "%d", param->videoParam->AsyncDepth);
+        av_dict_set(av_opts, "async_depth", cvalue, 0);
         char hyperencode[16];
         snprintf(hyperencode, sizeof(hyperencode), "%s", qsv_data->param.hyperEncodeParam->key);
         av_dict_set(av_opts, "dual_gfx", hyperencode, 0);
@@ -3353,6 +3356,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             char cvalue[7];
             snprintf(cvalue, 7, "%d", async_depth);
             av_dict_set(av_opts, "async_depth", cvalue, 0);
+            param->videoParam->AsyncDepth = async_depth;
         }
     }
     else
