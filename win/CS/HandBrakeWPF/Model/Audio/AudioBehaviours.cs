@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Model.Audio
     using System.ComponentModel;
     using System.Linq;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
@@ -24,7 +25,11 @@ namespace HandBrakeWPF.Model.Audio
         private AudioBehaviourModes selectedBehaviour;
         private BindingList<Language> selectedLanguages;
         private AudioTrackDefaultsMode trackDefaultBehaviour;
-        
+
+        private AudioTrackNamingBehaviour audioAutomaticNamingBehavior;
+
+        private bool audioTrackNamePassthru;
+
         public AudioBehaviours()
         {
             this.SelectedBehaviour = AudioBehaviourModes.None;
@@ -33,6 +38,7 @@ namespace HandBrakeWPF.Model.Audio
             this.BehaviourTracks = new BindingList<AudioBehaviourTrack>();
             this.AllowedPassthruOptions = new BindingList<HBAudioEncoder>();
             this.AudioFallbackEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
+      
         }
 
         public AudioBehaviours(AudioBehaviours behaviours)
@@ -43,6 +49,8 @@ namespace HandBrakeWPF.Model.Audio
             this.BehaviourTracks = behaviours.BehaviourTracks;
             this.AllowedPassthruOptions = new BindingList<HBAudioEncoder>(behaviours.AllowedPassthruOptions);
             this.AudioFallbackEncoder = behaviours.AudioFallbackEncoder;
+            this.AudioTrackNamePassthru = behaviours.AudioTrackNamePassthru;
+            this.AudioAutomaticNamingBehavior = behaviours.AudioAutomaticNamingBehavior;
         }
 
         public AudioBehaviourModes SelectedBehaviour
@@ -102,5 +110,35 @@ namespace HandBrakeWPF.Model.Audio
         public IList<HBAudioEncoder> AllowedPassthruOptions { get; set; }
 
         public HBAudioEncoder AudioFallbackEncoder { get; set; }
+        
+        public bool AudioTrackNamePassthru
+        {
+            get => this.audioTrackNamePassthru;
+            set
+            {
+                if (value == this.audioTrackNamePassthru)
+                {
+                    return;
+                }
+
+                this.audioTrackNamePassthru = value;
+                this.NotifyOfPropertyChange(() => this.AudioTrackNamePassthru);
+            }
+        }
+
+        public AudioTrackNamingBehaviour AudioAutomaticNamingBehavior
+        {
+            get => this.audioAutomaticNamingBehavior;
+            set
+            {
+                if (value == this.audioAutomaticNamingBehavior)
+                {
+                    return;
+                }
+
+                this.audioAutomaticNamingBehavior = value;
+                this.NotifyOfPropertyChange(() => this.AudioAutomaticNamingBehavior);
+            }
+        }
     }
 }

@@ -9,7 +9,6 @@
 
 namespace HandBrake.Interop.Interop.Json.Presets
 {
-    using System;
     using System.Collections.Generic;
 
     public class HBPreset
@@ -45,6 +44,10 @@ namespace HandBrake.Interop.Interop.Json.Presets
         /// Gets or sets the audio track selection behavior.
         /// </summary>
         public string AudioTrackSelectionBehavior { get; set; }
+
+        public bool AudioTrackNamePassthru { get; set; }
+
+        public string AudioAutomaticNamingBehavior { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether chapter markers.
@@ -315,6 +318,8 @@ namespace HandBrake.Interop.Interop.Json.Presets
         /// Gets or sets the subtitle track selection behavior.
         /// </summary>
         public string SubtitleTrackSelectionBehavior { get; set; }
+
+        public bool SubtitleTrackNamePassthru { get; set; }
 
         /// <summary>
         /// Gets or sets the video avg bitrate.
