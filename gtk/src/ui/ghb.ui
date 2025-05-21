@@ -4768,6 +4768,15 @@ Overrides all other settings.</property>
           </object>
         </child>
         <child>
+          <object class="GtkCheckButton" id="SubtitleTrackNamePassthru">
+            <property name="label" translatable="1">Passthru track names</property>
+            <property name="focusable">1</property>
+            <property name="tooltip-text" translatable="1">Preserve the source track names</property>
+            <property name="halign">start</property>
+            <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
+          </object>
+        </child>
+        <child>
           <object class="GtkBox" id="subtitle_burn_box">
             <property name="spacing">4</property>
             <child>
@@ -5204,6 +5213,36 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                         <property name="valign">center</property>
                         <property name="tooltip-text" translatable="yes">Set the audio codec to encode with when a suitable track can not be found for audio passthru.</property>
                         <signal name="changed" handler="audio_fallback_widget_changed_cb" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="AudioTrackNamePassthru">
+                    <property name="label" translatable="yes">Passthru track names</property>
+                    <property name="focusable">1</property>
+                    <property name="tooltip-text" translatable="yes">Preserve the source track names.</property>
+                    <property name="halign">start</property>
+                    <property name="active">1</property>
+                    <signal name="toggled" handler="audio_def_widget_changed_cb" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="auto_autonaming_box">
+                    <property name="spacing">6</property>
+                    <property name="halign">end</property>
+                    <child>
+                      <object class="GtkLabel" id="labela5">
+                        <property name="halign">end</property>
+                        <property name="hexpand">1</property>
+                        <property name="label" translatable="yes">Autonaming:</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="AudioAutomaticNamingBehavior">
+                        <property name="valign">center</property>
+                        <property name="tooltip-text" translatable="yes">Set the automatic naming behaviour.</property>
+                        <signal name="changed" handler="audio_autonaming_widget_changed_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>

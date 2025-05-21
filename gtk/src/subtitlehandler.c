@@ -445,7 +445,12 @@ static GhbValue*  subtitle_add_track(
 
         strack = ghb_get_title_subtitle_track(settings, track);
         source = ghb_dict_get_int(strack, "Source");
-        name   = ghb_dict_get_string(strack, "Name");
+
+        int keep_name = ghb_dict_get_int(settings, "SubtitlesTrackNamePassthru");
+        if (keep_name)
+        {
+            name   = ghb_dict_get_string(strack, "Name");
+        }
     }
 
     burn |= !hb_subtitle_can_pass(source, mux);
