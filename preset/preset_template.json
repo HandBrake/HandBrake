@@ -1,5 +1,6 @@
     {
         "AlignAVStart": false,
+        "AudioAutomaticNamingBehavior": "unnamed",
         "AudioCopyMask": [
             "copy:aac",
             "copy:ac3",
@@ -31,6 +32,7 @@
         ],
         "AudioSecondaryEncoderMode": true,
         "AudioTrackSelectionBehavior": "first",
+        "AudioTrackNamePassthru": true,
         "ChapterMarkers": true,
         "ChildrenArray": [
         ],
@@ -105,6 +107,7 @@
         "SubtitleLanguageList": [
         ],
         "SubtitleTrackSelectionBehavior": "none",
+        "SubtitleTrackNamePassthru": true,
         "VideoAvgBitrate": 1800,
         "VideoColorMatrixCodeOverride": 0,
         "VideoEncoder": "x264",

@@ -49,6 +49,18 @@ typedef struct
     options_map_t *map;
 } combo_opts_t;
 
+static options_map_t d_audio_autonaming_opts[] =
+{
+    {N_("None"),    "none",          0},
+    {N_("Unnamed"), "unnamed",       1},
+    {N_("All"),     "all",         2},
+};
+combo_opts_t audio_autonaming_opts =
+{
+    sizeof(d_audio_autonaming_opts)/sizeof(options_map_t),
+    d_audio_autonaming_opts
+};
+
 static options_map_t d_subtitle_track_sel_opts[] =
 {
     {N_("None"),                              "none",  0},
@@ -572,6 +584,12 @@ combo_name_map_t combo_name_map[] =
     {
         "SubtitleBurnBehavior",
         &subtitle_burn_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "AudioAutomaticNamingBehavior",
+        &audio_autonaming_opts,
         small_opts_set,
         generic_opt_get
     },
