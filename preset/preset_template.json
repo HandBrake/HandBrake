@@ -32,7 +32,7 @@
         ],
         "AudioSecondaryEncoderMode": true,
         "AudioTrackSelectionBehavior": "first",
-        "AudioTrackNamePassthru": "true",
+        "AudioTrackNamePassthru": true,
         "ChapterMarkers": true,
         "ChildrenArray": [
         ],

@@ -10725,7 +10725,7 @@ const char hb_builtin_presets_json[] =
 "                }\n"
 "            ],\n"
 "            \"AudioSecondaryEncoderMode\": true,\n"
-"            \"AudioTrackNamePassthru\": \"true\",\n"
+"            \"AudioTrackNamePassthru\": true,\n"
 "            \"AudioTrackSelectionBehavior\": \"first\",\n"
 "            \"ChapterMarkers\": true,\n"
 "            \"ChildrenArray\": [],\n"
