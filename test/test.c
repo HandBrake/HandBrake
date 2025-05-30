@@ -60,6 +60,7 @@
 #define DEBLOCK_DEFAULT_PRESET       "medium"
 #define COLORSPACE_DEFAULT_PRESET    "bt709"
 #define HDR_DYNAMIC_METADATA_DEFAULT_PRESET "all"
+#define AUDIO_AUTONAMING_BEHAVIOUR_DEFAULT_PRESET "unnamed"
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
@@ -215,6 +216,9 @@ static int      keep_duplicate_titles = 0;
 static int      hdr_dynamic_metadata_disable = 0;
 static char *   hdr_dynamic_metadata  = NULL;
 static int      metadata_passthru = -1;
+static int      audio_name_passthru = -1;
+static char *   audio_autonaming_behaviour = NULL;
+static int      sub_name_passthru   = -1;
 
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
@@ -1675,6 +1679,14 @@ static void ShowHelp(void)
         }
     }
     fprintf(out,
+"       --keep-aname        Passthru the source audio track(s) name(s).\n"
+"       --no-keep-aname     Disable the source audio track(s) name(s) passthru.\n"
+"       --automatic-naming-behaviour\n"
+"                           Set the audio track(s) automatic naming behaviour:\n"
+"                               off\n"
+"                               unnamed\n"
+"                               all\n"
+"                           Disable the source audio track(s) name(s) passthru.\n"
 "   -A, --aname <string>    Set audio track name(s).\n"
 "                           Separate tracks by commas.\n"
 "\n"
@@ -1901,6 +1913,8 @@ static void ShowHelp(void)
 "                           or less is selected. This should locate subtitles\n"
 "                           for short foreign language segments. Best used in\n"
 "                           conjunction with --subtitle-forced.\n"
+"      --keep-subname       Passthru the source subtitle track(s) name(s).\n"
+"      --no-keep-subname    Disable the source subtitle track(s) name(s) passthru.\n"
 "  -S, --subname <string>   Set subtitle track name(s).\n"
 "                           Separate tracks by commas.\n"
 "  -F, --subtitle-forced[=string]\n"
@@ -2251,6 +2265,7 @@ static int ParseOptions( int argc, char ** argv )
     #define KEEP_DUPLICATE_TITLES         332
     #define MAX_DURATION                  333
     #define HDR_DYNAMIC_METADATA          334
+    #define AUDIO_AUTONAMING_BEHAVIOUR    335
 
     for( ;; )
     {
@@ -2429,7 +2444,12 @@ static int ParseOptions( int argc, char ** argv )
             { "preset-export-description", required_argument, NULL, PRESET_EXPORT_DESC },
             { "queue-import-file",  required_argument, NULL, QUEUE_IMPORT },
 
+            { "keep-aname",    no_argument,     &audio_name_passthru, 1 },
+            { "no-keep-aname", no_argument,     &audio_name_passthru, 0 },
+            { "automatic-naming-behaviour", required_argument, NULL, AUDIO_AUTONAMING_BEHAVIOUR },
             { "aname",       required_argument, NULL,    'A' },
+            { "keep-subname",    no_argument,   &sub_name_passthru, 1 },
+            { "no-keep-subname", no_argument,   &sub_name_passthru, 0 },
             { "subname",     required_argument, NULL,    'S' },
             { "color-matrix",required_argument, NULL,    'M' },
             { "previews",    required_argument, NULL,    PREVIEWS },
@@ -3277,6 +3297,17 @@ static int ParseOptions( int argc, char ** argv )
                     hdr_dynamic_metadata = strdup(HDR_DYNAMIC_METADATA_DEFAULT_PRESET);
                 }
                 break;
+            case AUDIO_AUTONAMING_BEHAVIOUR:
+                free(audio_autonaming_behaviour);
+                if (optarg != NULL)
+                {
+                    audio_autonaming_behaviour = strdup(optarg);
+                }
+                else
+                {
+                    audio_autonaming_behaviour = strdup(AUDIO_AUTONAMING_BEHAVIOUR_DEFAULT_PRESET);
+                }
+                break;
             case ':':
                 fprintf( stderr, "missing parameter (%s)\n", argv[cur_optind] );
                 return -1;
@@ -3932,6 +3963,10 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         hb_dict_set(preset, "SubtitleTrackSelectionBehavior",
                     hb_value_string(selection));
     }
+    if (sub_name_passthru != -1)
+    {
+        hb_dict_set(preset, "SubtitleTrackNamePassthru", hb_value_bool(sub_name_passthru));
+    }
 
     if (audio_copy_list != NULL)
     {
@@ -3989,6 +4024,14 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "AudioTrackSelectionBehavior",
                     hb_value_string(audio_all == 1 ? "all" : "first"));
+    }
+    if (audio_name_passthru != -1)
+    {
+        hb_dict_set(preset, "AudioTrackNamePassthru", hb_value_bool(audio_name_passthru));
+    }
+    if (audio_autonaming_behaviour != NULL)
+    {
+        hb_dict_set(preset, "AudioAutomaticNamingBehavior", hb_value_string(audio_autonaming_behaviour));
     }
 
     // Audio overrides
@@ -4805,7 +4848,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
 }
 
 
-static int add_sub(hb_value_array_t *list, hb_title_t *title, int track, int out_track, int *one_burned)
+static int add_sub(hb_value_array_t *list, hb_title_t *title, int track, int out_track, int *one_burned, int keep_name)
 {
     hb_subtitle_t *subtitle;
     // Check that the track exists
@@ -4834,11 +4877,18 @@ static int add_sub(hb_value_array_t *list, hb_title_t *title, int track, int out
         }
         *one_burned = 1;
     }
+
+    const char *name = keep_name && subtitle->name != NULL && subtitle->name[0] != 0 ? subtitle->name : NULL;
+
     hb_dict_t *subtitle_dict = hb_dict_init();
     hb_dict_set(subtitle_dict, "Track", hb_value_int(track));
     hb_dict_set(subtitle_dict, "Default", hb_value_bool(def));
     hb_dict_set(subtitle_dict, "Forced", hb_value_bool(force));
     hb_dict_set(subtitle_dict, "Burn", hb_value_bool(burn));
+    if (name)
+    {
+        hb_dict_set(subtitle_dict, "Name", hb_value_string(name));
+    }
     hb_value_array_append(list, subtitle_dict);
     return 0;
 }
@@ -5411,12 +5461,44 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                 fprintf(stderr, "Dropping excess audio track names\n");
             }
         }
-        // If exactly one name was specified, apply it to the reset
+        // If exactly one name was specified, apply it to the rest
         // of the tracks
         if (ii == 1 && *anames[0]) for (; ii < track_count; ii++)
         {
             audio_dict = hb_value_array_get(audio_array, ii);
             hb_dict_set(audio_dict, "Name", hb_value_string(anames[0]));
+        }
+
+        int keep_name = hb_value_get_bool(hb_dict_get(preset_dict, "AudioTrackNamePassthru"));
+        hb_audio_autonaming_behavior_t behavior = HB_AUDIO_AUTONAMING_NONE;
+
+        const char *behavior_name = hb_value_get_string(hb_dict_get(preset_dict, "AudioAutomaticNamingBehavior"));
+        behavior = hb_audio_autonaming_behavior_get_from_name(behavior_name);
+
+        for (ii = 0; ii < track_count; ii++)
+        {
+            audio_dict = hb_value_array_get(audio_array, ii);
+
+            if (hb_dict_get(audio_dict, "Name") == NULL)
+            {
+                int track = hb_value_get_int(hb_dict_get(audio_dict, "Track"));
+                hb_audio_config_t *audio = hb_list_audio_config_item(title->list_audio, track);
+
+                if (audio != NULL)
+                {
+                    const char *mixdown_name = hb_dict_get_string(audio_dict, "Mixdown");
+                    int mixdown = hb_mixdown_get_from_name(mixdown_name);
+
+                    const char *name = hb_audio_name_generate(audio->in.name,
+                                                              audio->in.channel_layout,
+                                                              mixdown, keep_name, behavior);
+
+                    if (name)
+                    {
+                        hb_dict_set(audio_dict, "Name", hb_value_string(name));
+                    }
+                }
+            }
         }
     }
 
@@ -5446,13 +5528,15 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                 continue;
             }
 
+            int keep_name = hb_value_get_bool(hb_dict_get(preset_dict, "SubtitleTrackNamePassthru"));
+
             int first, last, track;
             if (sscanf(subtracks[ii], "%d-%d", &first, &last ) == 2)
             {
                 for (track = first - 1; track < last; track++)
                 {
                     if (add_sub(subtitle_array, title, track - 1,
-                                out_track + 1, &one_burned) == 0)
+                                out_track + 1, &one_burned, keep_name) == 0)
                     {
                         out_track++;
                     }
@@ -5461,7 +5545,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             else if (sscanf(subtracks[ii], "%d", &track) == 1)
             {
                 if (add_sub(subtitle_array, title, track - 1,
-                            out_track + 1, &one_burned) == 0)
+                            out_track + 1, &one_burned, keep_name) == 0)
                 {
                     out_track++;
                 }

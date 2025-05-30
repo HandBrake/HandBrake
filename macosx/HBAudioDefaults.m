@@ -23,12 +23,15 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _encoderFallback = HB_ACODEC_AC3;
         _trackSelectionLanguages = [[NSMutableArray alloc] init];
         _tracksArray = [[NSMutableArray alloc] init];
         _trackSelectionBehavior = HBAudioTrackSelectionBehaviorFirst;
         _container = HB_MUX_MKV;
+        _passthruName = NO;
+        _automaticNamingBehavior = HBAudioTrackAutomaticNamingBehaviorNone;
     }
     return self;
 }
@@ -208,6 +211,24 @@
     return fallbacks;
 }
 
+- (void)setPassthruName:(BOOL)passthruName
+{
+    if (passthruName != _passthruName)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setPassthruName:_passthruName];
+    }
+    _passthruName = passthruName;
+}
+
+- (void)setautomaticNamingBehavior:(HBAudioTrackAutomaticNamingBehavior)automaticNamingBehavior
+{
+    if (automaticNamingBehavior != _automaticNamingBehavior)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setautomaticNamingBehavior:_automaticNamingBehavior];
+    }
+    _automaticNamingBehavior = automaticNamingBehavior;
+}
+
 #pragma mark - HBPresetCoding
 
 - (BOOL)applyPreset:(HBPreset *)preset error:(NSError * __autoreleasing *)outError
@@ -301,6 +322,25 @@
     {
         // map legacy encoder names via libhb
         self.encoderFallback = hb_audio_encoder_get_from_name([preset[@"AudioEncoderFallback"] UTF8String]);
+    }
+
+    self.passthruName = [preset[@"AudioTrackNamePassthru"] boolValue];
+
+    NSString *automaticNamingBehavior = [preset[@"AudioAutomaticNamingBehavior"] stringValue];
+    if ([automaticNamingBehavior isKindOfClass:[NSString class]])
+    {
+        if ([automaticNamingBehavior isEqualToString:@"none"])
+        {
+            self.automaticNamingBehavior = HBAudioTrackAutomaticNamingBehaviorNone;
+        }
+        else if ([automaticNamingBehavior isEqualToString:@"unnamed"])
+        {
+            self.automaticNamingBehavior = HBAudioTrackAutomaticNamingBehaviorUnnamed;
+        }
+        else if ([automaticNamingBehavior isEqualToString:@"all"])
+        {
+            self.automaticNamingBehavior = HBAudioTrackAutomaticNamingBehaviorAll;
+        }
     }
 
     while ([self countOfTracksArray])
@@ -419,6 +459,22 @@
 
     preset[@"AudioSecondaryEncoderMode"] = @(self.secondaryEncoderMode);
 
+    preset[@"AudioTrackNamePassthru"] = @(self.passthruName);
+
+    switch (self.automaticNamingBehavior)
+    {
+        case HBAudioTrackAutomaticNamingBehaviorNone:
+            preset[@"AudioAutomaticNamingBehavior"] = @"none";
+            break;
+        case HBAudioTrackAutomaticNamingBehaviorUnnamed:
+            preset[@"AudioAutomaticNamingBehavior"] = @"unnamed";
+            break;
+        case HBAudioTrackAutomaticNamingBehaviorAll:
+        default:
+            preset[@"AudioAutomaticNamingBehavior"] = @"all";
+            break;
+    }
+
     NSMutableArray<NSDictionary *> *audioList = [[NSMutableArray alloc] init];
 
     for (HBAudioTrackPreset *track in self.tracksArray)
@@ -504,6 +560,9 @@
         copy->_encoderFallback = _encoderFallback;
         copy->_container = _container;
         copy->_secondaryEncoderMode = _secondaryEncoderMode;
+
+        copy->_passthruName = _passthruName;
+        copy->_automaticNamingBehavior = _automaticNamingBehavior;
     }
 
     return copy;
@@ -539,6 +598,9 @@
     encodeInt(_encoderFallback);
     encodeInt(_container);
     encodeBool(_secondaryEncoderMode);
+
+    encodeBool(_passthruName);
+    encodeInteger(_automaticNamingBehavior);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
@@ -568,6 +630,14 @@
     decodeInt(_encoderFallback); if (_encoderFallback < 0) { goto fail; }
     decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
     decodeBool(_secondaryEncoderMode);
+
+    decodeBool(_passthruName);
+    decodeInt(_automaticNamingBehavior);
+    if (_automaticNamingBehavior < HBAudioTrackAutomaticNamingBehaviorNone || _automaticNamingBehavior > HBAudioTrackAutomaticNamingBehaviorAll)
+    {
+        goto fail;
+    }
+
 
     return self;
 

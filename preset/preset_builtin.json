@@ -3,6 +3,7 @@
             "ChildrenArray": [
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -25,6 +26,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -91,6 +93,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 7500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "svt_av1_10bit",
@@ -114,6 +117,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -136,6 +140,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -202,6 +207,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 7500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -225,6 +231,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -247,6 +254,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -312,6 +320,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 4000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -335,6 +344,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -357,6 +367,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -422,6 +433,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 2000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -445,6 +457,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -467,6 +480,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -532,6 +546,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1200,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -555,6 +570,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -577,6 +593,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -642,6 +659,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -665,6 +683,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -687,6 +706,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -753,6 +773,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 10500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "svt_av1_10bit",
@@ -776,6 +797,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -798,6 +820,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -864,6 +887,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 13000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -887,6 +911,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -909,6 +934,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -974,6 +1000,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -997,6 +1024,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -1019,6 +1047,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -1084,6 +1113,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1107,6 +1137,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -1129,6 +1160,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -1194,6 +1226,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1800,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1217,6 +1250,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -1239,6 +1273,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -1304,6 +1339,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1327,6 +1363,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -1362,6 +1399,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -1428,6 +1466,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 16000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "svt_av1_10bit",
@@ -1451,6 +1490,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -1486,6 +1526,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -1552,6 +1593,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 20500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -1575,6 +1617,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -1611,6 +1654,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -1676,6 +1720,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 9000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1699,6 +1744,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -1735,6 +1781,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -1800,6 +1847,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 4500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1823,6 +1871,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -1859,6 +1908,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -1924,6 +1974,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 2700,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -1947,6 +1998,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -1983,6 +2035,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -2048,6 +2101,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 2250,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2071,6 +2125,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -2107,6 +2162,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -2173,6 +2229,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 32000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "svt_av1_10bit",
@@ -2196,6 +2253,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -2232,6 +2290,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -2298,6 +2357,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 32000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -2321,6 +2381,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -2357,6 +2418,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -2422,6 +2484,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 15000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2445,6 +2508,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -2481,6 +2545,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -2546,6 +2611,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 7500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2569,6 +2635,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -2605,6 +2672,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -2670,6 +2738,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 4500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2693,6 +2762,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -2729,6 +2799,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -2794,6 +2865,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 3750,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2824,6 +2896,7 @@
             "ChildrenArray": [
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -2846,6 +2919,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -2911,6 +2985,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 18000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -2934,6 +3009,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -2956,6 +3032,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -3021,6 +3098,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 12000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3044,6 +3122,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3066,6 +3145,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -3131,6 +3211,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 9000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3154,6 +3235,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3176,6 +3258,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -3241,6 +3324,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 4500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3264,6 +3348,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3286,6 +3371,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -3351,6 +3437,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3374,6 +3461,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3396,6 +3484,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -3461,6 +3550,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3484,6 +3574,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3506,6 +3597,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -3571,6 +3663,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3594,6 +3687,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3616,6 +3710,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -3681,6 +3776,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3704,6 +3800,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3726,6 +3823,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -3791,6 +3889,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 2250,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3814,6 +3913,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3836,6 +3936,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -3901,6 +4002,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1125,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -3924,6 +4026,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3946,6 +4049,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -4011,6 +4115,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4041,6 +4146,7 @@
             "ChildrenArray": [
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -4077,6 +4183,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -4142,6 +4249,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -4165,6 +4273,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -4201,6 +4310,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -4266,6 +4376,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4289,6 +4400,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -4311,6 +4423,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -4376,6 +4489,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4399,6 +4513,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -4421,6 +4536,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -4486,6 +4602,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4509,6 +4626,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -4531,6 +4649,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -4596,6 +4715,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4619,6 +4739,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -4641,6 +4762,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -4706,6 +4828,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1800,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4729,6 +4852,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -4751,6 +4875,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -4816,6 +4941,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -4839,6 +4965,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -4875,6 +5002,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -4940,6 +5068,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -4963,6 +5092,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -4999,6 +5129,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -5064,6 +5195,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5087,6 +5219,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -5123,6 +5256,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -5188,6 +5322,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5211,6 +5346,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -5247,6 +5383,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -5312,6 +5449,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5335,6 +5473,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -5371,6 +5510,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -5436,6 +5576,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 2500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5459,6 +5600,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -5495,6 +5637,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -5560,6 +5703,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -5583,6 +5727,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -5619,6 +5764,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -5684,6 +5830,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5707,6 +5854,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -5743,6 +5891,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -5808,6 +5957,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5831,6 +5981,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -5866,6 +6017,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [],
@@ -5930,6 +6082,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 12000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -5953,6 +6106,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -5989,6 +6143,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -6054,6 +6209,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6077,6 +6233,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6099,6 +6256,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -6164,6 +6322,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6187,6 +6346,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6209,6 +6369,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -6274,6 +6435,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 2250,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6297,6 +6459,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3",
@@ -6336,6 +6499,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -6401,6 +6565,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -6424,6 +6589,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -6460,6 +6626,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -6525,6 +6692,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6548,6 +6716,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -6584,6 +6753,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -6649,6 +6819,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6672,6 +6843,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6694,6 +6866,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -6759,6 +6932,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1800,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6782,6 +6956,7 @@
                 },
                 {
                     "AlignAVStart": true,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6804,6 +6979,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -6869,6 +7045,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -6892,6 +7069,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -6928,6 +7106,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -6993,6 +7172,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -7023,6 +7203,7 @@
             "ChildrenArray": [
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -7044,6 +7225,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -7109,6 +7291,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 10500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "svt_av1_10bit",
@@ -7132,6 +7315,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -7154,6 +7338,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -7219,6 +7404,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 13000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -7242,6 +7428,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -7264,6 +7451,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -7329,6 +7517,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 2500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -7352,6 +7541,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -7374,6 +7564,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -7439,6 +7630,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 2000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -7462,6 +7654,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -7484,6 +7677,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -7549,6 +7743,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1200,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -7572,6 +7767,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -7594,6 +7790,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -7659,6 +7856,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
@@ -7682,6 +7880,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -7704,6 +7903,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -7769,6 +7969,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 12000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -7792,6 +7993,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -7814,6 +8016,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -7879,6 +8082,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -7902,6 +8106,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -7924,6 +8129,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -7989,6 +8195,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 3000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -8012,6 +8219,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -8034,6 +8242,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -8099,6 +8308,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1800,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -8122,6 +8332,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -8144,6 +8355,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -8209,6 +8421,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -8232,6 +8445,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -8253,6 +8467,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -8318,6 +8533,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vp9",
@@ -8341,6 +8557,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -8362,6 +8579,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -8427,6 +8645,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 4500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vp9",
@@ -8450,6 +8669,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -8471,6 +8691,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -8536,6 +8757,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 2500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vp9",
@@ -8559,6 +8781,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -8580,6 +8803,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -8645,6 +8869,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vp9",
@@ -8668,6 +8893,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -8689,6 +8915,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -8754,6 +8981,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 1250,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vp9",
@@ -8784,6 +9012,7 @@
             "ChildrenArray": [
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -8806,6 +9035,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -8871,6 +9101,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 6500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "qsv_av1_10bit",
@@ -8894,6 +9125,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -8916,6 +9148,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -8981,6 +9214,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 10500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "nvenc_h265",
@@ -9004,6 +9238,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -9026,6 +9261,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -9091,6 +9327,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 3750,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "nvenc_h265",
@@ -9114,6 +9351,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -9136,6 +9374,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -9201,6 +9440,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 8000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "qsv_h265",
@@ -9224,6 +9464,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -9246,6 +9487,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -9311,6 +9553,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 2500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "qsv_h265",
@@ -9334,6 +9577,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -9356,6 +9600,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -9421,6 +9666,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 12500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vce_h265",
@@ -9444,6 +9690,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -9466,6 +9713,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -9531,6 +9779,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 7250,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vce_h265",
@@ -9554,6 +9803,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -9576,6 +9826,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -9641,6 +9892,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 9500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "mf_h265",
@@ -9664,6 +9916,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -9686,6 +9939,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -9751,6 +10005,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 5500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "mf_h265",
@@ -9774,6 +10029,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -9796,6 +10052,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -9861,6 +10118,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 17500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vt_h265_10bit",
@@ -9884,6 +10142,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -9906,6 +10165,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -9971,6 +10231,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 5500,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "vt_h265_10bit",
@@ -10001,6 +10262,7 @@
             "ChildrenArray": [
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -10023,6 +10285,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": false,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "all",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -10088,6 +10351,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 120000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -10111,6 +10375,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -10133,6 +10398,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": false,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "all",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -10198,6 +10464,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 60000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -10221,6 +10488,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -10243,6 +10511,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": false,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "all",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -10308,6 +10577,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 30000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -10331,6 +10601,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -10353,6 +10624,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": false,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "all",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -10418,6 +10690,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 15000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
@@ -10441,6 +10714,7 @@
                 },
                 {
                     "AlignAVStart": false,
+                    "AudioAutomaticNamingBehavior": "unnamed",
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3",
@@ -10473,6 +10747,7 @@
                         }
                     ],
                     "AudioSecondaryEncoderMode": false,
+                    "AudioTrackNamePassthru": true,
                     "AudioTrackSelectionBehavior": "all",
                     "ChapterMarkers": true,
                     "ChildrenArray": [
@@ -10539,6 +10814,7 @@
                         "any"
                     ],
                     "SubtitleTrackSelectionBehavior": "all",
+                    "SubtitleTrackNamePassthru": true,
                     "VideoAvgBitrate": 0,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "ffv1",

@@ -550,11 +550,18 @@ audio_add_track(
     if (atrack != NULL)
     {
         int layout = ghb_dict_get_int(atrack, "ChannelLayout");
-        const char * name = ghb_dict_get_string(atrack, "Name");
         mix = ghb_get_best_mix(layout, encoder, mix);
-        if (name != NULL)
+
+        int keep_name = ghb_dict_get_int(settings, "AudioTrackNamePassthru");
+        const char * behavior_name = ghb_dict_get_string(settings, "AudioAutomaticNamingBehavior");
+        int behavior = hb_audio_autonaming_behavior_get_from_name(behavior_name);
+
+        const char * name = ghb_dict_get_string(atrack, "Name");
+        const char * generated_name = hb_audio_name_generate(name, layout, mix,
+                                                            keep_name, behavior);
+        if (generated_name != NULL)
         {
-            ghb_dict_set_string(asettings, "Name", name);
+            ghb_dict_set_string(asettings, "Name", generated_name);
         }
     }
     ghb_dict_set_string(asettings, "Mixdown", hb_mixdown_get_short_name(mix));
@@ -2284,6 +2291,14 @@ audio_fallback_widget_changed_cb (GtkWidget *widget, gpointer data)
     ghb_dict_set(audio, "FallbackEncoder", ghb_value_dup(
                  ghb_dict_get(ud->settings, "AudioEncoderFallback")));
     audio_def_set_all_limits(ud);
+    ghb_clear_presets_selection(ud);
+}
+
+G_MODULE_EXPORT void
+audio_autonaming_widget_changed_cb (GtkWidget *widget, gpointer data)
+{
+    signal_user_data_t *ud = ghb_ud();
+    ghb_widget_to_setting(ud->settings, widget);
     ghb_clear_presets_selection(ud);
 }
 
