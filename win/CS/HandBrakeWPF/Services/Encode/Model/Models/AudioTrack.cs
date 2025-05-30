@@ -62,6 +62,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
         public AudioTrack(AudioTrack track, bool setScannedTrack)
         {
+            this.PassthruTracks = track.PassthruTracks;
+            this.TrackNamingBehaviour = track.TrackNamingBehaviour;
+
             this.bitrate = track.Bitrate;
             this.drc = track.DRC;
             this.encoder = track.Encoder;
@@ -169,6 +172,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 }
 
                 this.GetDefaultMixdownIfNull();
+
+                this.PassthruTrackName();
+                this.AutoNameTrack();
             }
         }
 
@@ -476,7 +482,38 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
+        [JsonIgnore]
+        public Func<bool> PassthruTracks { get; set; }
+
+        [JsonIgnore]
+        public Func<AudioTrackNamingBehaviour> TrackNamingBehaviour { get; set; }
+
         /* Helper Methods */
+        public void PassthruTrackName()
+        {
+            if (PassthruTracks != null)
+            {
+                bool passthru = PassthruTracks();
+                if (this.ScannedTrack != null && passthru)
+                {
+                    this.TrackName = this.ScannedTrack.Name;
+                }
+            }
+        }
+
+        public void AutoNameTrack()
+        {
+            if (TrackNamingBehaviour != null)
+            {
+                AudioTrackNamingBehaviour behaviour = TrackNamingBehaviour();
+
+                if (this.ScannedTrack != null)
+                {
+                    HBMixdown currentMixdown = HandBrakeEncoderHelpers.GetMixdown(this.mixDown);
+                    this.TrackName = HandBrakeEncoderHelpers.GetAutonameAudioTrack(this.TrackName, 0, currentMixdown.Id, false, (int)behaviour);
+                }
+            }
+        }
 
         private void SetupLimits()
         {
@@ -601,7 +638,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.MixDown = sanitisedMixdown.ShortName;
             }
         }
-
+        
         public override string ToString()
         {
             return string.Format("Audio Track: Title {0}", this.ScannedTrack.ToString());

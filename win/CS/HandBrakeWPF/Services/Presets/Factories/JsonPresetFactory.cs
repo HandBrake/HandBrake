@@ -350,6 +350,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
                                                                      ? AudioBehaviourModes.AllMatching
                                                                      : AudioBehaviourModes.FirstMatch;
 
+            preset.AudioTrackBehaviours.AudioTrackNamePassthru = importedPreset.AudioTrackNamePassthru;
+            preset.AudioTrackBehaviours.AudioAutomaticNamingBehavior = EnumHelper<AudioTrackNamingBehaviour>.GetValue(importedPreset.AudioAutomaticNamingBehavior);
+
             preset.AudioTrackBehaviours.SelectedTrackDefaultBehaviour = importedPreset.AudioSecondaryEncoderMode ? AudioTrackDefaultsMode.FirstTrack : AudioTrackDefaultsMode.AllTracks;
 
             if (importedPreset.AudioCopyMask != null)
@@ -417,6 +420,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.SubtitleTrackBehaviours = new SubtitleBehaviours();
             preset.SubtitleTrackBehaviours.SelectedBehaviour = EnumHelper<SubtitleBehaviourModes>.GetValue(importedPreset.SubtitleTrackSelectionBehavior);
             preset.SubtitleTrackBehaviours.SelectedBurnInBehaviour = EnumHelper<SubtitleBurnInBehaviourModes>.GetValue(importedPreset.SubtitleBurnBehavior);
+            preset.SubtitleTrackBehaviours.SubtitleTrackNamePassthru = importedPreset.SubtitleTrackNamePassthru;
 
             preset.SubtitleTrackBehaviours.AddClosedCaptions = importedPreset.SubtitleAddCC;
             preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack = importedPreset.SubtitleAddForeignAudioSearch;
@@ -543,6 +547,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.AudioList.Add(track);
             }
 
+            preset.AudioTrackNamePassthru = export.AudioTrackBehaviours.AudioTrackNamePassthru;
+            preset.AudioAutomaticNamingBehavior = EnumHelper<AudioTrackNamingBehaviour>.GetShortName(export.AudioTrackBehaviours.AudioAutomaticNamingBehavior);
+
             // Subtitles
             preset.SubtitleAddCC = export.SubtitleTrackBehaviours.AddClosedCaptions;
             preset.SubtitleAddForeignAudioSearch = export.SubtitleTrackBehaviours.AddForeignAudioScanTrack;
@@ -551,6 +558,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.SubtitleBurnBehavior = EnumHelper<SubtitleBurnInBehaviourModes>.GetShortName(export.SubtitleTrackBehaviours.SelectedBurnInBehaviour);
             preset.SubtitleLanguageList = HandBrakeLanguagesHelper.GetLanguageCodes(export.SubtitleTrackBehaviours.SelectedLanguages);
             preset.SubtitleTrackSelectionBehavior = EnumHelper<SubtitleBehaviourModes>.GetShortName(export.SubtitleTrackBehaviours.SelectedBehaviour);
+            preset.SubtitleTrackNamePassthru = export.SubtitleTrackBehaviours.SubtitleTrackNamePassthru;
 
             // Chapters
             preset.ChapterMarkers = export.Task.IncludeChapterMarkers;
