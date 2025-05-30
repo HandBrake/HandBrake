@@ -93,8 +93,12 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.SetupLimits();
         }
 
-        public AudioTrack(AudioBehaviourTrack track, Audio sourceTrack, IList<HBAudioEncoder> passthruEncoders, HBAudioEncoder fallbackEncoder, OutputFormat container)
+        public AudioTrack(AudioBehaviourTrack track, Audio sourceTrack, IList<HBAudioEncoder> passthruEncoders, HBAudioEncoder fallbackEncoder, OutputFormat container, Func<bool> passthruTracks,
+            Func<AudioTrackNamingBehaviour> trackNamingBehaviour)
         {
+            this.PassthruTracks = passthruTracks;
+            this.TrackNamingBehaviour = trackNamingBehaviour;
+
             HBAudioEncoder validatedEncoder = track.Encoder;
             if (track.IsPassthru)
             {
@@ -143,8 +147,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             
             if (!string.IsNullOrEmpty(this.scannedTrack?.Name))
             {
-                this.TrackName = this.scannedTrack.Name;
+                this.PassthruTrackName();
             }
+
+            this.AutoNameTrack();
 
             this.SetupLimits();
         }
@@ -509,8 +515,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
                 if (this.ScannedTrack != null)
                 {
+                    bool keep = behaviour == AudioTrackNamingBehaviour.Unnamed || behaviour == AudioTrackNamingBehaviour.None;
                     HBMixdown currentMixdown = HandBrakeEncoderHelpers.GetMixdown(this.mixDown);
-                    this.TrackName = HandBrakeEncoderHelpers.GetAutonameAudioTrack(this.TrackName, 0, currentMixdown.Id, false, (int)behaviour);
+                    this.TrackName = HandBrakeEncoderHelpers.GetAutonameAudioTrack(this.TrackName, 0, currentMixdown.Id, keep, (int)behaviour);
                 }
             }
         }
