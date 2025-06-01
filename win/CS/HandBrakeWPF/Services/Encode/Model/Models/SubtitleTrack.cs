@@ -187,11 +187,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                     this.Forced = false;
                 }
 
-                if (this.sourceTrack != null)
-                {
-                    this.Name = !string.IsNullOrEmpty(this.sourceTrack.Name) ? this.sourceTrack.Name : string.Empty;
-                }
-
                 if (TrackNamingCallback != null)
                 {
                     bool passthruName = TrackNamingCallback();
