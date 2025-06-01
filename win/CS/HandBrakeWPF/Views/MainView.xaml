@@ -600,9 +600,9 @@
                     <views:ChaptersView DataContext="{Binding ChaptersViewModel}"  />
                 </TabItem>
 
-                <TabItem Name="metaTab" Header="{x:Static Properties:Resources.MainView_MetaDataTab}">
+                <!--<TabItem Name="metaTab" Header="{x:Static Properties:Resources.MainView_MetaDataTab}">
                     <views:MetaDataView DataContext="{Binding MetaDataViewModel}"  />
-                </TabItem>
+                </TabItem>-->
             </TabControl>
 
             <!--  Destination  -->
