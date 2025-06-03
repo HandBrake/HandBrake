@@ -230,6 +230,7 @@ namespace HandBrakeWPF.ViewModels
                 this.SubtitleBehaviours.SelectedBurnInBehaviour = behaviours.SelectedBurnInBehaviour;
                 this.SubtitleBehaviours.AddClosedCaptions = behaviours.AddClosedCaptions;
                 this.SubtitleBehaviours.AddForeignAudioScanTrack = behaviours.AddForeignAudioScanTrack;
+                this.SubtitleBehaviours.SubtitleTrackNamePassthru = behaviours.SubtitleTrackNamePassthru;
 
                 foreach (Language selectedItem in behaviours.SelectedLanguages)
                 {

@@ -54,6 +54,18 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 
 #pragma mark - Data Source
 
+- (nullable NSString *)defaultTitleForTrackAtIndex:(NSUInteger)idx mixdown:(int)mixdown
+{
+    HBTitleAudioTrack *track = [self sourceTrackAtIndex:idx];
+
+    const char *title = hb_audio_name_generate(track.title.UTF8String,
+                                               track.channelLayout, mixdown,
+                                               self.defaults.passthruName,
+                                               (hb_audio_autonaming_behavior_t)self.defaults.automaticNamingBehavior);
+
+    return title ? @(title) : nil;
+}
+
 - (HBTitleAudioTrack *)sourceTrackAtIndex:(NSUInteger)idx
 {
     return self.sourceTracks[idx];
@@ -182,6 +194,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 {
     HBAudioTrack *track = [[HBAudioTrack alloc] initWithTrackIdx:trackIndex container:self.container dataSource:self delegate:self];
     track.undo = self.undo;
+
     return track;
 }
 
@@ -223,6 +236,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
             track.sampleRate = [trackDict[@"Samplerate"] intValue] == -1 ? 0 : [trackDict[@"Samplerate"] intValue];
             track.bitRate = [trackDict[@"Bitrate"] intValue];
             track.encoder = hb_audio_encoder_get_from_name([trackDict[@"Encoder"] UTF8String]);
+            track.title = [trackDict[@"Name"] stringValue];
 
             [tracks addObject:track];
         }

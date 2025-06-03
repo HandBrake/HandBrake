@@ -405,8 +405,6 @@ namespace HandBrake.Interop.Interop.HbLib
         }
 
 
-
-
         public static IntPtr hb_video_encoder_get_presets(int encoder)
         {
             return IsArmDevice ? HbFunctionsArm.hb_video_encoder_get_presets(encoder) : HBFunctions64.hb_video_encoder_get_presets(encoder);
@@ -651,6 +649,18 @@ namespace HandBrake.Interop.Interop.HbLib
         {
             return IsArmDevice ? HbFunctionsArm.hb_get_preview3_json(hbHandle, preview_idx, job_dict)
                                : HBFunctions64.hb_get_preview3_json(hbHandle, preview_idx, job_dict);
+        }
+
+        public static int hb_audio_autonaming_behavior_get_from_name(IntPtr name)
+        {
+            return IsArmDevice ? HbFunctionsArm.hb_audio_autonaming_behavior_get_from_name(name)
+                : HBFunctions64.hb_audio_autonaming_behavior_get_from_name(name);
+        }
+
+        public static IntPtr hb_audio_name_generate(IntPtr name, ulong layout, int mixdown, int keep_name, int behaviour)
+        {
+            return IsArmDevice ? HbFunctionsArm.hb_audio_name_generate(name, layout, mixdown, keep_name, behaviour)
+                : HBFunctions64.hb_audio_name_generate(name, layout, mixdown, keep_name, behaviour);
         }
     }
 }

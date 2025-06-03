@@ -140,6 +140,12 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_audio_bitrate_get_next", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_audio_bitrate_get_next(IntPtr last);
 
+        [DllImport("hb", EntryPoint = "hb_audio_autonaming_behavior_get_from_name", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_audio_autonaming_behavior_get_from_name(IntPtr name);
+
+        [DllImport("hb", EntryPoint = "hb_audio_name_generate", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_audio_name_generate(IntPtr name, ulong layout, int mixdown, int keep_name, int behaviour);
+
         [DllImport("hb", EntryPoint = "hb_video_quality_get_limits", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_video_quality_get_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
 
@@ -355,5 +361,9 @@ namespace HandBrake.Interop.Interop.HbLib
         // hb_get_preview3(hb_handle_t* h, int picture, const char * job_dict)
         [DllImport("hb", EntryPoint = "hb_get_preview3_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_get_preview3_json(IntPtr hbHandle, int preview_idx, [In][MarshalAs(UnmanagedType.LPStr)] string job_dict);
+
+
+
+
     }
 }

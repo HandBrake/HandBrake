@@ -9,19 +9,16 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Linq;
-    using System.Runtime.CompilerServices;
 
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Model.Audio;
@@ -216,6 +213,15 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IList<string> SampleRates { get; set; }
 
+        public IList<AudioTrackNamingBehaviour> TrackNamingBehaviours
+        {
+            get
+            {
+                return new BindingList<AudioTrackNamingBehaviour>(EnumHelper<AudioTrackNamingBehaviour>.GetEnumList().ToList());
+            }
+        }
+
+
         #endregion
 
         #region Public Methods
@@ -342,6 +348,9 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.UpdateAvailableLanguages();
+
+                this.AudioBehaviours.AudioTrackNamePassthru = behaviours.AudioTrackNamePassthru;
+                this.AudioBehaviours.AudioAutomaticNamingBehavior = behaviours.AudioAutomaticNamingBehavior;
             }
 
             this.CorrectAudioEncoders(this.OutputFormat);

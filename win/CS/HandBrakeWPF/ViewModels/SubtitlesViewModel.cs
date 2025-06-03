@@ -159,7 +159,6 @@ namespace HandBrakeWPF.ViewModels
             this.CheckAddState(count);
         }
 
-
         /// <summary>
         /// Add a new Track
         /// </summary>
@@ -659,12 +658,12 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
-
             SubtitleTrack track = new SubtitleTrack
-                                      {
-                                          SubtitleType = source.SubtitleType,
-                                          SourceTrack = source,
-                                      };
+            {
+                TrackNamingCallback = this.IsTrackNamePassthruEnabled,
+                SubtitleType = source.SubtitleType,
+                SourceTrack = source,
+            };
 
             // Burn-in Behaviours
             if (this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudio
@@ -698,6 +697,12 @@ namespace HandBrakeWPF.ViewModels
                     track.Burned = true;
                     this.SetBurnedToFalseForAllExcept(track);
                 }
+            }
+
+            // Default the track name to the source track name, if it exists. 
+            if (SubtitleBehaviours.SubtitleTrackNamePassthru)
+            {
+                track.SetTrackNamePassthru();
             }
 
             var encodeTask = this.Task;
@@ -776,14 +781,16 @@ namespace HandBrakeWPF.ViewModels
                 string extension = Path.GetExtension(srtFile);
 
                 SubtitleTrack track = new SubtitleTrack
-                                          {
-                                              SrtFileName = Path.GetFileNameWithoutExtension(srtFile),
-                                              SrtOffset = 0,
-                                              SrtCharCode = "UTF-8",
-                                              SrtLang = HandBrakeLanguagesHelper.GetByName("English"),
-                                              SubtitleType = extension.Contains("ass", StringComparison.InvariantCultureIgnoreCase) ? SubtitleType.IMPORTSSA : SubtitleType.IMPORTSRT,
-                                              SrtPath = srtFile
-                                          };
+                {
+                    TrackNamingCallback = this.IsTrackNamePassthruEnabled,
+                    SrtFileName = Path.GetFileNameWithoutExtension(srtFile),
+                    SrtOffset = 0,
+                    SrtCharCode = "UTF-8",
+                    SrtLang = HandBrakeLanguagesHelper.GetByName("English"),
+                    SubtitleType = extension.Contains("ass", StringComparison.InvariantCultureIgnoreCase) ? SubtitleType.IMPORTSSA : SubtitleType.IMPORTSRT,
+                    SrtPath = srtFile,
+
+                };
                 this.Task.SubtitleTracks.Add(track);
             }
         }
@@ -798,6 +805,11 @@ namespace HandBrakeWPF.ViewModels
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
+        }
+
+        public bool IsTrackNamePassthruEnabled()
+        {
+            return this.SubtitleBehaviours.SubtitleTrackNamePassthru;
         }
     }
 }

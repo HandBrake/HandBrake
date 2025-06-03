@@ -14,15 +14,16 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  HBTrackDataSource
  */
-@protocol HBTrackDataSource <NSObject>
+@protocol HBSubtitlesTrackDataSource <NSObject>
 - (HBTitleSubtitlesTrack *)sourceTrackAtIndex:(NSUInteger)idx;
 - (NSArray<NSString *> *)sourceTracksArray;
+- (nullable NSString *)defaultTitleForTrackAtIndex:(NSUInteger)idx;
 @end
 
 /**
  * HBTrackDelegate
  */
-@protocol HBTrackDelegate <NSObject>
+@protocol HBSubtitlesTrackDelegate <NSObject>
 - (void)track:(HBSubtitlesTrack *)track didChangeSourceFrom:(NSUInteger)oldSourceIdx;
 
 - (BOOL)canSetBurnedInOption:(HBSubtitlesTrack *)track;
@@ -35,8 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithTrackIdx:(NSUInteger)index
                        container:(int)container
-                      dataSource:(id<HBTrackDataSource>)dataSource
-                        delegate:(id<HBTrackDelegate>)delegate;
+                      dataSource:(id<HBSubtitlesTrackDataSource>)dataSource
+                        delegate:(id<HBSubtitlesTrackDelegate>)delegate;
 
 /// The index of the source in the data source tracks array.
 @property (nonatomic, readwrite) NSUInteger sourceTrackIdx;
@@ -65,8 +66,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
-@property (nonatomic, readwrite, weak) id<HBTrackDataSource> dataSource;
-@property (nonatomic, readwrite, weak) id<HBTrackDelegate> delegate;
+@property (nonatomic, readwrite, weak) id<HBSubtitlesTrackDataSource> dataSource;
+@property (nonatomic, readwrite, weak) id<HBSubtitlesTrackDelegate> delegate;
 
 /// A complete list of the possible languages.
 - (NSArray<NSString *> *)languages;

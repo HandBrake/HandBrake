@@ -1468,6 +1468,87 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last)
     return ((hb_rate_internal_t*)last)->next;
 }
 
+const char * hb_audio_name_get_default(uint64_t layout, int mixdown)
+{
+    int mix_channels = 2;
+
+    if (mixdown != HB_AMIXDOWN_NONE)
+    {
+        mix_channels = hb_mixdown_get_discrete_channel_count(mixdown);
+    }
+    else
+    {
+        mix_channels = hb_layout_get_discrete_channel_count(layout);
+    }
+
+    switch (mix_channels)
+    {
+        case 1:
+            return "Mono";
+            break;
+
+        case 2:
+            return "Stereo";
+            break;
+
+        default:
+            return "Surround";
+            break;
+    }
+}
+
+int hb_audio_autonaming_behavior_get_from_name(const char *name)
+{
+    hb_audio_autonaming_behavior_t behavior = HB_AUDIO_AUTONAMING_NONE;
+
+    if (name)
+    {
+        if (!strcasecmp(name, "all"))
+        {
+            behavior = HB_AUDIO_AUTONAMING_ALL;
+        }
+        else if (!strcasecmp(name, "unnamed"))
+        {
+            behavior = HB_AUDIO_AUTONAMING_UNNAMED;
+        }
+    }
+
+    return behavior;
+}
+
+const char * hb_audio_name_generate(const char *name,
+                                    uint64_t layout, int mixdown, int keep_name,
+                                    hb_audio_autonaming_behavior_t behavior)
+{
+    const char *out = NULL;
+
+    if (name == NULL || name[0] == 0)
+    {
+        name = NULL;
+    }
+
+    if (keep_name)
+    {
+        out = name;
+    }
+
+    if (name != NULL &&
+        (!strcmp(name, "Mono") ||
+         !strcmp(name, "Stereo") ||
+         !strcmp(name, "Surround")))
+    {
+        out = NULL;
+    }
+
+    if (behavior == HB_AUDIO_AUTONAMING_ALL ||
+        (behavior == HB_AUDIO_AUTONAMING_UNNAMED && (name == NULL || name[0] == 0)))
+    {
+        out = hb_audio_name_get_default(layout, mixdown);
+    }
+
+    return out;
+}
+
 // Get limits and hints for the UIs.
 //
 // granularity sets the minimum step increments that should be used

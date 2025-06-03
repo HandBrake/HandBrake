@@ -457,6 +457,22 @@ int              hb_audio_bitrate_get_default(uint32_t codec, int samplerate, in
 void             hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high);
 const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 
+
+const char * hb_audio_name_get_default(uint64_t layout, int mixdown);
+
+typedef enum
+{
+    HB_AUDIO_AUTONAMING_NONE,
+    HB_AUDIO_AUTONAMING_UNNAMED,
+    HB_AUDIO_AUTONAMING_ALL
+} hb_audio_autonaming_behavior_t;
+
+int          hb_audio_autonaming_behavior_get_from_name(const char *name);
+
+const char * hb_audio_name_generate(const char *name,
+                                    uint64_t layout, int mixdown, int keep_name,
+                                    hb_audio_autonaming_behavior_t behaviour);
+
 void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 const char* hb_video_quality_get_name(uint32_t codec);
 

@@ -12,6 +12,7 @@ namespace HandBrake.Interop.Interop
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Helpers;
@@ -783,6 +784,13 @@ namespace HandBrake.Interop.Interop
             }
 
             return new List<int>();
+        }
+
+        public static string GetAutonameAudioTrack(string name, ulong layout, int mixdown, bool keep_name, int behaviour)
+        {
+            IntPtr nameptr = Marshal.StringToHGlobalAnsi(name);
+
+            return Marshal.PtrToStringUTF8((IntPtr)HBFunctions.hb_audio_name_generate(nameptr, layout, mixdown, keep_name ? 1 : 0, behaviour));
         }
     }
 }

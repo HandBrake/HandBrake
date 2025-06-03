@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol HBAudioTrackDataSource <NSObject>
 - (HBTitleAudioTrack *)sourceTrackAtIndex:(NSUInteger)idx;
 - (NSArray<NSString *> *)sourceTracksArray;
+- (nullable NSString *)defaultTitleForTrackAtIndex:(NSUInteger)idx mixdown:(int)mixdown;
 @end
 
 @protocol HBAudioTrackDelegate <NSObject>
