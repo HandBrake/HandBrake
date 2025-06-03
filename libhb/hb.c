@@ -84,8 +84,13 @@ int hb_avcodec_open(AVCodecContext *avctx, const AVCodec *codec,
     if ((thread_count == HB_FFMPEG_THREADS_AUTO || thread_count > 0) &&
         (codec->type == AVMEDIA_TYPE_VIDEO))
     {
+#if defined (__aarch64__) && defined(_WIN32)
+        avctx->thread_count = (thread_count == HB_FFMPEG_THREADS_AUTO) ?
+                               hb_get_cpu_count() + 1 : thread_count;
+#else
         avctx->thread_count = (thread_count == HB_FFMPEG_THREADS_AUTO) ?
                                hb_get_cpu_count() / 2 + 1 : thread_count;
+#endif
         avctx->thread_type = FF_THREAD_FRAME|FF_THREAD_SLICE;
     }
     else
