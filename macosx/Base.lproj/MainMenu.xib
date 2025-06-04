@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -119,6 +119,19 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Kee-pg-bfk">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Show Source in Finder" keyEquivalent="r" id="4VH-Mt-RSo">
+                                <connections>
+                                    <action selector="revealSourceItemsInFinder:" target="-1" id="0Aw-fl-eHd"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show Destination in Finder" keyEquivalent="R" id="Vka-FP-wZE">
+                                <connections>
+                                    <action selector="revealDestinationItemsInFinder:" target="-1" id="ZuD-UY-BSn"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="CbB-Mb-ok1">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                             <menuItem title="Start Encoding" keyEquivalent="s" id="2444">

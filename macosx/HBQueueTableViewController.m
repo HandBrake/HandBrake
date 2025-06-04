@@ -134,7 +134,7 @@
 /**
  * Show the finished encode in the finder
  */
-- (IBAction)revealSelectedQueueItems:(id)sender
+- (IBAction)revealDestinationItemsInFinder:(id)sender
 {
     NSIndexSet *targetedRows = self.tableView.targetedRowIndexes;
     NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
@@ -156,7 +156,7 @@
     }
 }
 
-- (IBAction)revealSelectedQueueItemsSources:(id)sender
+- (IBAction)revealSourceItemsInFinder:(id)sender
 {
     NSIndexSet *targetedRows = self.tableView.targetedRowIndexes;
     NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
@@ -256,7 +256,7 @@
         return self.tableView.targetedRowIndexes.count > 0;
     }
 
-    if (action == @selector(revealSelectedQueueItemsSources:))
+    if (action == @selector(revealSourceItemsInFinder:))
     {
         NSIndexSet *indexes = self.tableView.targetedRowIndexes;
         if (indexes.count == 0) { return NO; }
@@ -268,7 +268,7 @@
     }
 
     if (action == @selector(revealSelectedQueueItemsActivityLogs:) ||
-        action == @selector(revealSelectedQueueItems:))
+        action == @selector(revealDestinationItemsInFinder:))
     {
         NSIndexSet *indexes = self.tableView.targetedRowIndexes;
         if (indexes.count == 0) { return NO; }
