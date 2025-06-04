@@ -286,7 +286,7 @@ static BOOL _hardwareDecoderSupported = NO;
     [self.formatTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
     [self.formatTokenField setCompletionDelay:0.2];
 
-    _buildInFormatTokens = @[@"{Source}", @"{Title}", @"{Chapters}", @"{Preset}",
+    _buildInFormatTokens = @[@"{Source}", @"{Title}", @"{Angle}", @"{Chapters}", @"{Preset}",
                              @"{Width}", @"{Height}", @"{Codec}",
                              @"{Encoder}", @"{Bit-Depth}", @"{Quality/Bitrate}", @"{Quality-Type}",
                              @"{Date}", @"{Time}", @"{Creation-Date}", @"{Creation-Time}",
@@ -462,6 +462,10 @@ static BOOL _hardwareDecoderSupported = NO;
     else if ([tokenString isEqualToString:@"{Title}"])
     {
         return NSLocalizedString(@"Title", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Angle}"])
+    {
+        return NSLocalizedString(@"Angle", "Preferences -> Output Name Token");
     }
     else if ([tokenString isEqualToString:@"{Chapters}"])
     {

@@ -157,6 +157,11 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
             [self.job addObserver:self forKeyPath:@"video.avgBitrate" options:0 context:HBAutoNamerContext];
             [self.job addObserver:self forKeyPath:@"video.quality" options:0 context:HBAutoNamerContext];
         }
+        else if ([formatKey isEqualToString:@"{Angle}"])
+        {
+            [self.job addObserver:self forKeyPath:@"angle" options:0 context:HBAutoNamerContext];
+        }
+
     }
 }
 
@@ -193,6 +198,10 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
             [self.job removeObserver:self forKeyPath:@"video.qualityType" context:HBAutoNamerContext];
             [self.job removeObserver:self forKeyPath:@"video.avgBitrate" context:HBAutoNamerContext];
             [self.job removeObserver:self forKeyPath:@"video.quality" context:HBAutoNamerContext];
+        }
+        else if ([formatKey isEqualToString:@"{Angle}"])
+        {
+            [self.job removeObserver:self forKeyPath:@"angle" context:HBAutoNamerContext];
         }
     }
 }

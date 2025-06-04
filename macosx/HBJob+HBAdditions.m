@@ -76,6 +76,10 @@ static NSDateFormatter *_releaseDateFormatter = nil;
         {
             [name appendFormat:@"%lu", (unsigned long)self.title.index];
         }
+        else if ([formatKey isEqualToString:@"{Angle}"])
+        {
+            [name appendFormat:@"%lu", (unsigned long)self.angle];
+        }
         else if ([formatKey isEqualToString:@"{Chapters}"])
         {
             NSRange chaptersRange = NSMakeRange(self.range.chapterStart + 1, self.range.chapterStop + 1);
