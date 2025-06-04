@@ -21,7 +21,7 @@ jobs:
           ~/.cargo/bin/cargo-capi
           ~/.cargo/bin/cargo-cbuild
           ~/.cargo/bin/cargo-cinstall
-        key: linux-cargo-c-toolchain
+        key: ${{ runner.os }}-${{ runner.arch }}-linux-cargo-c-toolchain
 
     - name: Setup Environment
       run: |

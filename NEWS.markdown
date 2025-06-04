@@ -54,6 +54,7 @@ Download available from Microsoft:
   - FFmpeg 7.1.1 (decoding and filters)
   - HarfBuzz 11.3.3 (subtitles)
   - libass 0.17.4 (subtitles)
+  - libdovi 3.3.2 (Dolby Vision dynamic metadata)
   - libiconv 1.18 (character encoding support)
   - libjpeg-turbo 3.1.1 (preview image compression)
   - liblzma (xz) 5.8.1 (LZMA video decoding, e.g. TIFF)

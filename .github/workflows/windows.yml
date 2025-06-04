@@ -76,7 +76,7 @@ jobs:
           ~/.cargo/bin/cargo-capi
           ~/.cargo/bin/cargo-cbuild
           ~/.cargo/bin/cargo-cinstall
-        key: windows-cargo-c-toolchain
+        key: ${{ runner.os }}-${{ runner.arch }}-windows-cargo-c-toolchain
 
     - name: Setup Environment
       run: |
