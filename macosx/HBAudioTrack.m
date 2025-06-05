@@ -132,6 +132,7 @@
         self.mixdown = [self sanitizeMixdownValue:self.mixdown];
         self.sampleRate = [self sanitizeSamplerateValue:self.sampleRate];
         self.bitRate = [self sanitizeBitrateValue:self.bitRate];
+        self.title = [self sanitizeTrackNameValue:self.title];
         [self.delegate encoderChanged];
         self.validating = NO;
     }
@@ -149,15 +150,7 @@
     {
         self.validating = YES;
         self.bitRate = [self sanitizeBitrateValue:self.bitRate];
-
-        if ([self.title isEqualToString:@"Mono"]   ||
-            [self.title isEqualToString:@"Stereo"] ||
-            [self.title isEqualToString:@"Surround"])
-        {
-            self.title = [self.dataSource defaultTitleForTrackAtIndex:_sourceTrackIdx
-                                                              mixdown:_mixdown];
-        }
-
+        self.title = [self sanitizeTrackNameValue:self.title];
         self.validating = NO;
     }
 }
@@ -314,6 +307,19 @@
     {
         return hb_audio_bitrate_get_best(self.encoder, proposedBitrate, sampleRate, self.mixdown);
     }
+}
+
+- (NSString *)sanitizeTrackNameValue:(NSString *)proposedTrackName
+{
+    if ([proposedTrackName isEqualToString:@"Mono"]   ||
+        [proposedTrackName isEqualToString:@"Stereo"] ||
+        [proposedTrackName isEqualToString:@"Surround"])
+    {
+        return [self.dataSource defaultTitleForTrackAtIndex:_sourceTrackIdx
+                                                        mixdown:_mixdown];
+    }
+
+    return proposedTrackName;
 }
 
 #pragma mark - Options
