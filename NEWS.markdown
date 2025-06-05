@@ -24,9 +24,16 @@ Download available from Microsoft:
 
 - Added an option to disable Dolby Vision and HDR10+ passthru
 
+#### Audio
+
+- Addded an option to disable track names passthru and autonaming
+- EAC3 + Atmos is now properly signaled in MP4
+
 #### Subtitles
 
+- Addded an option to disable track names passthru
 - SubRip/UTF-8 subtitles are now passed through to MKV without conversion to SSA
+- Fixed a crash that could happen when burning bitmap subtitles
 
 #### Third-party libraries
 
@@ -40,7 +47,7 @@ Download available from Microsoft:
   - oneVPL 2.14.0 (Intel QSV video encoding/decoding)
   - SVT-AV1 3.0.2 (AV1 video encoding)
   - x264 165 r3214 (H.264/AVC video encoding)
-  - x265 r13212 (H.265/HEVC video encoding)
+  - x265 r13244 (H.265/HEVC video encoding)
 
 ### Linux
 
@@ -50,9 +57,12 @@ Download available from Microsoft:
 
 - Added a Metal accelerated Render Sub filter
 - Added a contextual menu to the presets popover
+- Updated Auto Naming Preferences to add "{angle}" as a filename generation option (#6086)
 - Reduced CPU usage when using VideoToolbox decoders and encoders
 - Encoded files are now excluded from Time Machine until they are completed
 - Fixed queue jobs not being reloaded properly when the source is an .iso file
+- Fixed "Same as source" destination option, it didn't work properly in some case
+- Fixed reloading jobs from the queue when the source is a .iso file
 
 ### Windows
 
