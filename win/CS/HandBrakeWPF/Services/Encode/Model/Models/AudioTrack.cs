@@ -150,9 +150,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.PassthruTrackName();
             }
 
-            this.AutoNameTrack();
-
             this.SetupLimits();
+            this.AutoNameTrack();
         }
 
         /* Audio Track Properties */
@@ -232,6 +231,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                     this.mixDown = value;
                     this.NotifyOfPropertyChange(() => this.MixDown);
                     this.SetupLimits();
+                    this.SetupTrackName();
                 }
             }
         }
@@ -266,6 +266,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 {
                     this.EncoderRateType = AudioEncoderRateType.Bitrate; // Default to bitrate.
                 }
+
+                this.SetupTrackName();
             }
         }
 
@@ -515,10 +517,23 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
                 if (this.ScannedTrack != null)
                 {
-                    bool keep = behaviour == AudioTrackNamingBehaviour.Unnamed || behaviour == AudioTrackNamingBehaviour.None;
+                    ulong layout = (ulong)this.scannedTrack.ChannelLayout;
+                    bool keep = PassthruTracks != null ? PassthruTracks() : true;
                     HBMixdown currentMixdown = HandBrakeEncoderHelpers.GetMixdown(this.mixDown);
-                    this.TrackName = HandBrakeEncoderHelpers.GetAutonameAudioTrack(this.TrackName, 0, currentMixdown.Id, keep, (int)behaviour);
+                    this.TrackName = HandBrakeEncoderHelpers.GetAutonameAudioTrack(this.TrackName,
+                        layout, currentMixdown.Id, keep, (int)behaviour);
                 }
+            }
+        }
+
+        public void SetupTrackName()
+        {
+            if (this.trackName == "Mono"   ||
+                this.trackName == "Stereo" ||
+                this.trackName == "Surround")
+            {
+                this.AutoNameTrack();
+                this.NotifyOfPropertyChange(() => this.TrackName);
             }
         }
 
