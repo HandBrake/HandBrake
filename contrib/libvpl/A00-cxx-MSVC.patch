@@ -1,0 +1,13 @@
+diff --git a/libvpl/CMakeLists.txt b/libvpl/CMakeLists.txt
+--- a/libvpl/CMakeLists.txt	2025-04-18 17:44:33.000000000 +0200
++++ b/libvpl/CMakeLists.txt	2024-12-16 21:11:53.000000000 +0100
+@@ -190,6 +190,9 @@
+     # WIN32 in general
+     set(MINGW_LIBS "-lole32 -lgdi32 -luuid")
+   endif()
++  if(NOT MSVC)
++    set(CXX_LIB "-lstdc++")
++  endif()
+   set(VPL_PKGCONFIG_DEPENDENT_LIBS
+       "${DL_LIBS} ${CMAKE_THREAD_LIBS_INIT} ${MINGW_LIBS} ${CXX_LIB}")
+   configure_file("pkgconfig/vpl.pc.in" "pkgconfig/vpl.pc" @ONLY)
