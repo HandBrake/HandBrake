@@ -339,6 +339,12 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="hUK-Og-yP5"/>
+                            <menuItem title="Show Sidebar" keyEquivalent="s" id="khp-X3-3Ws">
+                                <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                <connections>
+                                    <action selector="toggleDetails:" target="-1" id="Sdv-C0-iDI"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Show Toolbar" keyEquivalent="t" id="IsV-5A-bqx">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>

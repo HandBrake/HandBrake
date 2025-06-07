@@ -192,14 +192,16 @@
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_DETAILS])
     {
-        return [NSToolbarItem HB_toolbarItemWithIdentifier:itemIdentifier
-                                                     label:NSLocalizedString(@"Details", @"Queue Window Details Toolbar Item")
-                                              paletteLabel:NSLocalizedString(@"Details", @"Queue Window Details Toolbar Item")
-                                                symbolName:@"sidebar.right"
-                                                     image:@"details"
-                                                     style:HBToolbarItemStyleBordered | HBToolbarItemStyleButton
-                                                    target:self.target
-                                                    action:@selector(toggleDetails:)];
+        NSToolbarItem *item = [NSToolbarItem HB_toolbarItemWithIdentifier:itemIdentifier
+                                                                    label:NSLocalizedString(@"Details", @"Queue Window Details Toolbar Item")
+                                                             paletteLabel:NSLocalizedString(@"Details", @"Queue Window Details Toolbar Item")
+                                                               symbolName:@"sidebar.right"
+                                                                    image:@"details"
+                                                                    style:HBToolbarItemStyleBordered | HBToolbarItemStyleButton
+                                                                   target:self.target
+                                                                   action:@selector(toggleDetails:)];
+        item.toolTip = NSLocalizedString(@"Toggle details sidebar", @"Queue Window Details Toolbar Item");
+        return item;
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_QUICKLOOK])
     {

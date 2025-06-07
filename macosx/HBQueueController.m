@@ -226,8 +226,7 @@
             return self.queue.canEncode;
         }
     }
-
-    if (action == @selector(togglePauseResume:))
+    else if (action == @selector(togglePauseResume:))
     {
         if (self.queue.canPause)
         {
@@ -237,21 +236,30 @@
         {
             menuItem.title = NSLocalizedString(@"Resume Encoding", @"Queue -> pause/resume men");
         }
-
         return self.queue.canPause || self.queue.canResume;
     }
-
-    if (action == @selector(removeAll:) || action == @selector(resetAll:))
+    else if (action == @selector(toggleDetails:))
+    {
+        NSSplitViewItem *detailsItem = self.splitViewController.splitViewItems[1];
+        if (detailsItem.isCollapsed)
+        {
+            menuItem.title = NSLocalizedString(@"Show Sidebar", @"Queue -> sidebar menu");
+        }
+        else
+        {
+            menuItem.title = NSLocalizedString(@"Hide Sidebar", @"Queue -> sidebar menu");
+        }
+        return YES;
+    }
+    else if (action == @selector(removeAll:) || action == @selector(resetAll:))
     {
         return self.queue.items.count > 0;
     }
-
-    if (action == @selector(resetFailed:))
+    else if (action == @selector(resetFailed:))
     {
         return self.queue.failedItemsCount > 0;
     }
-
-    if (action == @selector(removeCompleted:))
+    else if (action == @selector(removeCompleted:))
     {
         return self.queue.completedItemsCount > 0;
     }
@@ -265,13 +273,11 @@
     {
         return self.queue.isEncoding || self.queue.canEncode;
     }
-
-    if (action == @selector(togglePauseResume:))
+    else if (action == @selector(togglePauseResume:))
     {
         return self.queue.canPause || self.queue.canResume;
     }
-
-    if (action == @selector(toggleDetails:) ||
+    else if (action == @selector(toggleDetails:) ||
         action == @selector(toggleQuickLook:))
     {
         return YES;
