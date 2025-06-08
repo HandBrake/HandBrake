@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
     using System;
+    using System.Text.Json.Serialization;
 
     using HandBrake.Interop.Interop.Interfaces.Model;
 
@@ -330,6 +331,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
+        [JsonIgnore]
         public Func<bool> TrackNamingCallback { get; set; }
 
         public override string ToString()
