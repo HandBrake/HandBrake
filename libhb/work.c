@@ -1723,6 +1723,15 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         job->passthru_dynamic_hdr_metadata &= ~HB_HDR_DYNAMIC_METADATA_DOVI;
 #endif
     }
+
+#if HB_PROJECT_FEATURE_QSV
+    // QSV decoder does not propagate
+    // the dynamic hdr side data
+    if (job->passthru_dynamic_hdr_metadata)
+    {
+        job->qsv.decode = 0;
+    }
+#endif
 }
 
 /**
