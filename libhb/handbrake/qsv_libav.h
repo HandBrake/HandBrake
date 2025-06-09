@@ -320,8 +320,6 @@ typedef struct hb_qsv_context {
 
     void *qsv_config;
 
-    int num_sw_filters;
-    int num_hw_filters;
     int la_is_enabled;
     int qsv_hw_filters_via_video_memory_are_enabled;
     int qsv_hw_filters_via_system_memory_are_enabled;

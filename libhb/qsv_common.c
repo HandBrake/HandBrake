@@ -2274,7 +2274,7 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
 
     qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
         info && hb_qsv_implementation_is_hardware(info->implementation) &&
-        job->qsv.ctx && !job->qsv.ctx->num_sw_filters);
+        job->qsv.ctx && hb_qsv_are_filters_supported(job));
 #endif
     return qsv_full_path_is_enabled;
 }
@@ -3997,64 +3997,46 @@ int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags)
 
 int hb_qsv_are_filters_supported(hb_job_t *job)
 {
-    hb_qsv_sanitize_filter_list(job); 
-    return job->qsv.ctx->num_sw_filters == 0;
-}
-
-int hb_qsv_sanitize_filter_list(hb_job_t *job)
-{
-    /*
-     * When QSV's VPP is used for filtering, not all CPU filters
-     * are supported, so we need to do a little extra setup here.
-     */
-    if (job->vcodec & HB_VCODEC_QSV_MASK)
+    int num_sw_filters = 0;
+    int num_hw_filters = 0;
+    if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
     {
-        int i = 0;
-        int num_sw_filters = 0;
-        int num_hw_filters = 0;
-        if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
+        for (int i = 0; i < hb_list_count(job->list_filter); i++)
         {
-            for (i = 0; i < hb_list_count(job->list_filter); i++)
+            hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
+            switch (filter->id)
             {
-                hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
-
-                switch (filter->id)
+                // pixel format conversion is done via VPP filter
+                case HB_FILTER_FORMAT:
+                    num_hw_filters++;
+                    break;
+                // cropping and scaling always done via VPP filter
+                case HB_FILTER_CROP_SCALE:
+                    num_hw_filters++;
+                    break;
+                case HB_FILTER_ROTATE:
+                    num_hw_filters++;
+                    break;
+                case HB_FILTER_VFR:
                 {
-                    // color conversion is done via VPP filter
-                    case HB_FILTER_FORMAT:
-                        num_hw_filters++;
-                        break;
-                    // cropping and scaling always done via VPP filter
-                    case HB_FILTER_CROP_SCALE:
-                        num_hw_filters++;
-                        break;
-                    case HB_FILTER_ROTATE:
-                        num_hw_filters++;
-                        break;
-                    case HB_FILTER_VFR:
+                    // Mode 0 doesn't require access to the frame data
+                    int mode = hb_dict_get_int(filter->settings, "mode");
+                    if (mode == 0)
                     {
-                        // Mode 0 doesn't require access to the frame data
-                        int mode = hb_dict_get_int(filter->settings, "mode");
-                        if (mode == 0)
-                        {
-                            break;
-                        }
+                        break;
                     }
-                    case HB_FILTER_AVFILTER:
-                        num_hw_filters++;
-                        break;
-                    default:
-                        // count only filters with access to frame data
-                        num_sw_filters++;
-                        break;
                 }
+                case HB_FILTER_AVFILTER:
+                    num_hw_filters++;
+                    break;
+                default:
+                    // count only filters with access to frame data
+                    num_sw_filters++;
+                    break;
             }
         }
-
-        job->qsv.ctx->num_sw_filters = num_sw_filters;
-        job->qsv.ctx->num_hw_filters = num_hw_filters;
     }
-    return 0;
+    return num_sw_filters == 0;
 }
 
 #else // other OS

@@ -353,7 +353,6 @@ int hb_qsv_is_enabled(hb_job_t *job);
 hb_qsv_context* hb_qsv_context_init();
 void hb_qsv_context_uninit(hb_job_t *job);
 int hb_qsv_are_filters_supported(hb_job_t *job);
-int hb_qsv_sanitize_filter_list(hb_job_t *job);
 int hb_qsv_get_memory_type(hb_job_t *job);
 int hb_qsv_full_path_is_enabled(hb_job_t *job);
 int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags);
