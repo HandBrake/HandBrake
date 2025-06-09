@@ -3924,22 +3924,6 @@ void hb_qsv_uninit_enc(hb_job_t *job)
         av_free(job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx);
         job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx = NULL;
     }
-    if (job->qsv.ctx && job->qsv.ctx->hb_dec_qsv_frames_ctx)
-    {
-        if (job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx)
-            av_buffer_unref(&job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx);
-        job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx = NULL;
-        av_free(job->qsv.ctx->hb_dec_qsv_frames_ctx);
-        job->qsv.ctx->hb_dec_qsv_frames_ctx = NULL;
-    }
-    if (job->qsv.ctx && job->qsv.ctx->hb_vpp_qsv_frames_ctx)
-    {
-        if (job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx)
-            av_buffer_unref(&job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
-        job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx = NULL;
-        av_free(job->qsv.ctx->hb_vpp_qsv_frames_ctx);
-        job->qsv.ctx->hb_vpp_qsv_frames_ctx = NULL;
-    }
     if (job->qsv.ctx && job->qsv.ctx->hb_hw_device_ctx)
     {
         av_buffer_unref(&job->qsv.ctx->hb_hw_device_ctx);
@@ -4069,16 +4053,6 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
 
         job->qsv.ctx->num_sw_filters = num_sw_filters;
         job->qsv.ctx->num_hw_filters = num_hw_filters;
-
-        if (!job->qsv.ctx->hb_vpp_qsv_frames_ctx)
-        {
-            job->qsv.ctx->hb_vpp_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
-            if (!job->qsv.ctx->hb_vpp_qsv_frames_ctx)
-            {
-                hb_error( "sanitize_qsv: HBQSVFramesContext vpp alloc failed" );
-                return 1;
-            }
-        }
     }
     return 0;
 }

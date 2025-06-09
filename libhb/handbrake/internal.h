@@ -156,7 +156,6 @@ struct hb_buffer_s
     {
         void               * qsv_atom;
         hb_qsv_context     * ctx;
-        HBQSVFramesContext * qsv_frames_ctx;
     } qsv_details;
 #endif
 

@@ -333,8 +333,6 @@ typedef struct hb_qsv_context {
     int dx_index;
     AVBufferRef *hb_hw_device_ctx;
     AVBufferRef *hb_ffmpeg_qsv_hw_frames_ctx;
-    HBQSVFramesContext *hb_dec_qsv_frames_ctx;
-    HBQSVFramesContext *hb_vpp_qsv_frames_ctx;
 
     mfxHDL device_manager_handle;
     mfxHandleType device_manager_handle_type;

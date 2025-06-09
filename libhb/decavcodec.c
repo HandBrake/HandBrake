@@ -1871,15 +1871,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                     return 1;
                 }
                 pv->job->qsv.ctx->full_path_is_enabled = 1;
-                if (!pv->job->qsv.ctx->hb_dec_qsv_frames_ctx)
-                {
-                    pv->job->qsv.ctx->hb_dec_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
-                    if(!pv->job->qsv.ctx->hb_dec_qsv_frames_ctx)
-                    {
-                        hb_error( "decavcodecvInit: HBQSVFramesContext dec alloc failed" );
-                        return 1;
-                    }
-                }
+
                 if (!pv->job->qsv.ctx->dec_space)
                 {
                     pv->job->qsv.ctx->dec_space = av_mallocz(sizeof(hb_qsv_space));
