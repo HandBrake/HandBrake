@@ -12,8 +12,8 @@ Signed-off-by: James Almer <jamrial@gmail.com>
  libavcodec/ac3dec.h              |   3 +-
  libavcodec/ac3defs.h             |   2 +
  libavcodec/eac3dec.c             | 154 +++------------------
- libavformat/movenc.c             |  28 ++--
- 7 files changed, 296 insertions(+), 223 deletions(-)
+ libavformat/movenc.c             |  30 ++---
+ 7 files changed, 297 insertions(+), 224 deletions(-)
 
 diff --git a/libavcodec/ac3_parser.c b/libavcodec/ac3_parser.c
 index 69989690dd..a8bc3afc74 100644
@@ -319,11 +319,11 @@ index 46814bfb1f..ab5df34003 100644
  
  /**
 diff --git a/libavcodec/ac3dec.c b/libavcodec/ac3dec.c
-index 936aa2ed36..f5771c5663 100644
+index 3cc20f32a9..fcd165057d 100644
 --- a/libavcodec/ac3dec.c
 +++ b/libavcodec/ac3dec.c
-@@ -262,72 +262,6 @@ static av_cold void ac3_decode_flush(AVCodecContext *avctx)
-     av_lfg_init(&s->dith_state, 0);
+@@ -252,72 +252,6 @@ static av_cold int ac3_decode_init(AVCodecContext *avctx)
+     return 0;
  }
  
 -/**
@@ -395,7 +395,7 @@ index 936aa2ed36..f5771c5663 100644
  /**
   * Common function to parse AC-3 or E-AC-3 frame header
   */
-@@ -385,10 +319,25 @@ static int parse_frame_header(AC3DecodeContext *s)
+@@ -375,10 +309,25 @@ static int parse_frame_header(AC3DecodeContext *s)
          s->dba_syntax            = 1;
          s->skip_syntax           = 1;
          memset(s->channel_uses_aht, 0, sizeof(s->channel_uses_aht));
@@ -423,7 +423,7 @@ index 936aa2ed36..f5771c5663 100644
      } else {
          av_log(s->avctx, AV_LOG_ERROR, "E-AC-3 support not compiled in\n");
          return AVERROR(ENOSYS);
-@@ -1572,6 +1521,9 @@ dependent_frame:
+@@ -1562,6 +1511,9 @@ dependent_frame:
                  av_log(avctx, AV_LOG_ERROR, "invalid frame type\n");
              }
              break;
@@ -434,11 +434,11 @@ index 936aa2ed36..f5771c5663 100644
              break;
          default: // Normal AVERROR do not try to recover.
 diff --git a/libavcodec/ac3dec.h b/libavcodec/ac3dec.h
-index d039ce115b..b4b50ee8fb 100644
+index 98de7b5abf..863651c561 100644
 --- a/libavcodec/ac3dec.h
 +++ b/libavcodec/ac3dec.h
-@@ -260,11 +260,12 @@ typedef struct AC3DecodeContext {
- ///@}
+@@ -255,11 +255,12 @@ typedef struct AC3DecodeContext {
+     AVChannelLayout downmix_layout;
  } AC3DecodeContext;
  
 +struct AC3HeaderInfo;
@@ -663,7 +663,7 @@ index 2b3bffda6e..c5095b1917 100644
      /* audio frame syntax flags, strategy data, and per-frame data */
  
 diff --git a/libavformat/movenc.c b/libavformat/movenc.c
-index d6effda6fa..bf3fc47d0a 100644
+index d6effda6fa..73704dcee8 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
 @@ -393,6 +393,8 @@ struct eac3_info {
@@ -725,6 +725,15 @@ index d6effda6fa..bf3fc47d0a 100644
      buf = av_malloc(size);
      if (!buf) {
          return AVERROR(ENOMEM);
+@@ -631,7 +622,7 @@ static int mov_write_eac3_tag(AVFormatContext *s, AVIOContext *pb, MOVTrack *tra
+         put_bits(&pbc, 3, info->substream[i].bsmod);
+         put_bits(&pbc, 3, info->substream[i].acmod);
+         put_bits(&pbc, 1, info->substream[i].lfeon);
+-        put_bits(&pbc, 5, 0); /* reserved */
++        put_bits(&pbc, 3, 0); /* reserved */
+         put_bits(&pbc, 4, info->substream[i].num_dep_sub);
+         if (!info->substream[i].num_dep_sub) {
+             put_bits(&pbc, 1, 0); /* reserved */
 @@ -639,6 +630,11 @@ static int mov_write_eac3_tag(AVFormatContext *s, AVIOContext *pb, MOVTrack *tra
              put_bits(&pbc, 9, info->substream[i].chan_loc);
          }
