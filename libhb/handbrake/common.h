@@ -878,8 +878,10 @@ struct hb_job_s
 
 #ifdef __LIBHB__
 
+#if HB_PROJECT_FEATURE_QSV
     // QSV-specific settings
     hb_qsv_context_t *qsv_ctx;
+#endif
 
     /* Internal data */
     hb_handle_t   * h;
