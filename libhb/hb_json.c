@@ -596,9 +596,9 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     int adapter_index = 0;
 
 #if HB_PROJECT_FEATURE_QSV
-    if (job->qsv.ctx)
+    if (job->qsv_ctx)
     {
-        adapter_index = job->qsv.ctx->dx_index;
+        adapter_index = job->qsv_ctx->dx_index;
     }
 #endif
 
@@ -651,7 +651,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "Encoder",          hb_value_int(job->vcodec),
             "HardwareDecode",   hb_value_int(job->hw_decode),
             "QSV",
-                "AsyncDepth",   hb_value_int(job->qsv.async_depth),
+                "AsyncDepth",   hb_value_int(job->qsv_ctx->async_depth),
                 "AdapterIndex", hb_value_int(adapter_index),
         "Audio",
             "CopyMask",
@@ -1271,7 +1271,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ColorMatrixOverride",    unpack_i(&job->color_matrix_override),
             "HardwareDecode",         unpack_i(&job->hw_decode),
             "QSV",
-                "AsyncDepth",       unpack_i(&job->qsv.async_depth),
+                "AsyncDepth",       unpack_i(&job->qsv_ctx->async_depth),
                 "AdapterIndex",     unpack_i(&adapter_index),
         "Audio",
             "CopyMask",             unpack_o(&acodec_copy_mask),
@@ -1404,9 +1404,9 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_job_set_encoder_options(job, video_options);
 
 #if HB_PROJECT_FEATURE_QSV
-    if (job->qsv.ctx)
+    if (job->qsv_ctx)
     {
-        job->qsv.ctx->dx_index = adapter_index;
+        job->qsv_ctx->dx_index = adapter_index;
     }
     // Prefer to use QSV decode when QSV encoder is enabled
     if (job->hw_decode && hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec))

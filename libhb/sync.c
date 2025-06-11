@@ -2937,11 +2937,11 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // Fix of LA case allowing use of LA up to 40 in full encode path,
     // as currently for such support we cannot allocate >64 slices per texture
     // due to MSFT limitation, not impacting other cases
-    if (pv->common->job->qsv.ctx && (pv->common->job->qsv.ctx->la_is_enabled == 1)
-        && pv->common->job->qsv.ctx->full_path_is_enabled)
+    if (pv->common->job->qsv_ctx && (pv->common->job->qsv_ctx->la_is_enabled == 1)
+        && pv->common->job->qsv_ctx->full_path_is_enabled)
     {
         pv->stream->max_len = SYNC_MIN_VIDEO_QUEUE_LEN;
-        pv->common->job->qsv.ctx->la_is_enabled++;
+        pv->common->job->qsv_ctx->la_is_enabled++;
     }
 #endif
 

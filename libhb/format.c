@@ -62,11 +62,11 @@ static int format_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     if (hb_qsv_full_path_is_enabled(init->job))
     {
         hb_dict_set_string(avsettings, "format", format);
-        hb_dict_set_int(avsettings, "async_depth", init->job->qsv.async_depth);
+        hb_dict_set_int(avsettings, "async_depth", init->job->qsv_ctx->async_depth);
         init->pix_fmt = av_get_pix_fmt(format);
 
-        if (init->job->qsv.ctx->out_range != AVCOL_RANGE_UNSPECIFIED)
-            hb_dict_set_string(avsettings, "out_range", (init->job->qsv.ctx->out_range == AVCOL_RANGE_JPEG) ? "full" : "limited");
+        if (init->job->qsv_ctx->out_range != AVCOL_RANGE_UNSPECIFIED)
+            hb_dict_set_string(avsettings, "out_range", (init->job->qsv_ctx->out_range == AVCOL_RANGE_JPEG) ? "full" : "limited");
 
         hb_dict_set(avfilter, "vpp_qsv", avsettings);
     }

@@ -1851,12 +1851,12 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             if (info != NULL)
             {
                 // setup the QSV configuration
-                if (!pv->job->qsv.ctx)
+                if (!pv->job->qsv_ctx)
                 {
                     hb_error( "decavcodecvInit: no context" );
                     return 1;
                 }
-                pv->job->qsv.ctx->full_path_is_enabled = 1;
+                pv->job->qsv_ctx->full_path_is_enabled = 1;
             }
         }
     }
@@ -1921,7 +1921,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
             {
                 hb_hwaccel_hwframes_ctx_init(pv->context, job);
-                job->qsv.ctx->hw_frames_ctx = av_buffer_ref(pv->context->hw_frames_ctx);
+                job->qsv_ctx->hw_frames_ctx = av_buffer_ref(pv->context->hw_frames_ctx);
             }
             if (pv->context->codec_id == AV_CODEC_ID_HEVC)
                 av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );

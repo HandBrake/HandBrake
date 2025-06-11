@@ -22,9 +22,22 @@ int hb_qsv_impl_set_preferred(const char *name);
 #ifdef __LIBHB__
 // Private API
 
-#include "vpl/mfxvideo.h"
 #include "handbrake/hb_dict.h"
 #include "libavutil/hwcontext_qsv.h"
+#include "libavcodec/avcodec.h"
+
+typedef struct hb_qsv_context_s
+{
+    int async_depth;
+    int la_is_enabled;
+    int memory_type;
+    int out_range;
+    int dx_index;
+    int full_path_is_enabled;
+    const char *vpp_scale_mode;
+    const char *vpp_interpolation_method;
+    AVBufferRef *hw_frames_ctx;
+} hb_qsv_context_t;
 
 // version of MSDK/QSV API currently used
 #define HB_QSV_MSDK_VERSION_MAJOR  1
