@@ -594,10 +594,12 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     int subtitle_search_burn;
     int ii;
     int adapter_index = 0;
+    int async_depth = 0;
 
 #if HB_PROJECT_FEATURE_QSV
     if (job->qsv_ctx)
     {
+        async_depth = job->qsv_ctx->async_depth;
         adapter_index = job->qsv_ctx->dx_index;
     }
 #endif
@@ -651,7 +653,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "Encoder",          hb_value_int(job->vcodec),
             "HardwareDecode",   hb_value_int(job->hw_decode),
             "QSV",
-                "AsyncDepth",   hb_value_int(job->qsv_ctx->async_depth),
+                "AsyncDepth",   hb_value_int(async_depth),
                 "AdapterIndex", hb_value_int(adapter_index),
         "Audio",
             "CopyMask",
@@ -1176,6 +1178,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     int                vbitrate = -1;
     double             vquality = HB_INVALID_VIDEO_QUALITY;
     int                adapter_index = -1;
+    int                async_depth = -1;
     hb_dict_t        * meta_dict = NULL;
     hb_value_array_t * art_array = NULL;
 
@@ -1271,7 +1274,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ColorMatrixOverride",    unpack_i(&job->color_matrix_override),
             "HardwareDecode",         unpack_i(&job->hw_decode),
             "QSV",
-                "AsyncDepth",       unpack_i(&job->qsv_ctx->async_depth),
+                "AsyncDepth",       unpack_i(&async_depth),
                 "AdapterIndex",     unpack_i(&adapter_index),
         "Audio",
             "CopyMask",             unpack_o(&acodec_copy_mask),
@@ -1406,6 +1409,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
 #if HB_PROJECT_FEATURE_QSV
     if (job->qsv_ctx)
     {
+        job->qsv_ctx->async_depth = async_depth;
         job->qsv_ctx->dx_index = adapter_index;
     }
     // Prefer to use QSV decode when QSV encoder is enabled
