@@ -2102,11 +2102,6 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "QSV", qsv);
         qsv = hb_dict_get(video_dict, "QSV");
     }
-    if ((value = hb_dict_get(preset, "VideoQSVDecode")) != NULL)
-    {
-        hb_dict_set(qsv, "Decode",
-                    hb_value_xform(value, HB_VALUE_TYPE_BOOL));
-    }
     if ((value = hb_dict_get(preset, "VideoQSVAsyncDepth")) != NULL)
     {
         hb_dict_set(qsv, "AsyncDepth",
