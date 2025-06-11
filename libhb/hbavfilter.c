@@ -302,7 +302,7 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
             else
             {
                 // copy hw frame ctx from filter graph for future encoder initialization
-                graph->job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx = av_buffer_ref(hw_frames_ctx);
+                graph->job->qsv.ctx->hw_frames_ctx = av_buffer_ref(hw_frames_ctx);
             }
         }
  #endif

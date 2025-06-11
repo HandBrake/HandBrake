@@ -10,26 +10,32 @@
 #ifndef HANDBRAKE_QSV_COMMON_H
 #define HANDBRAKE_QSV_COMMON_H
 
-int            hb_qsv_available();
+int hb_qsv_available();
 
 #include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_QSV
 
 // Public API
-int  hb_qsv_impl_set_preferred(const char *name);
+int hb_qsv_impl_set_preferred(const char *name);
 
 #ifdef __LIBHB__
 // Private API
 
 #include "vpl/mfxvideo.h"
 #include "handbrake/hb_dict.h"
-#include "handbrake/qsv_libav.h"
 #include "libavutil/hwcontext_qsv.h"
+
+// version of MSDK/QSV API currently used
+#define HB_QSV_MSDK_VERSION_MAJOR  1
+#define HB_QSV_MSDK_VERSION_MINOR  3
 
 /* Minimum Intel Media SDK version (currently 1.3, for Sandy Bridge support) */
 #define HB_QSV_MINVERSION_MAJOR HB_QSV_MSDK_VERSION_MAJOR
 #define HB_QSV_MINVERSION_MINOR HB_QSV_MSDK_VERSION_MINOR
+
+#define HB_QSV_FFMPEG_INITIAL_POOL_SIZE (0)
+#define HB_QSV_FFMPEG_EXTRA_HW_FRAMES (60)
 
 static const char * const hb_qsv_h264_level_names[] =
 {
@@ -350,8 +356,8 @@ mfxIMPL     hb_qsv_dx_index_to_impl(int dx_index);
 const char * hb_map_qsv_preset_name(const char * preset);
 int hb_qsv_apply_encoder_options(qsv_data_t * qsv_data, hb_job_t * job, AVDictionary** av_opts);
 int hb_qsv_is_enabled(hb_job_t *job);
-hb_qsv_context* hb_qsv_context_init();
-void hb_qsv_context_uninit(hb_job_t *job);
+hb_qsv_context_t * hb_qsv_context_init();
+int hb_qsv_context_uninit(hb_job_t *job);
 int hb_qsv_are_filters_supported(hb_job_t *job);
 int hb_qsv_get_memory_type(hb_job_t *job);
 int hb_qsv_full_path_is_enabled(hb_job_t *job);

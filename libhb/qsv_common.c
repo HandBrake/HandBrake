@@ -25,6 +25,24 @@
 #include "handbrake/av1_common.h"
 #include "handbrake/hbffmpeg.h"
 
+#ifndef HB_QSV_PRINT_RET_MSG
+#define HB_QSV_PRINT_RET_MSG(ERR)              { fprintf(stderr, "Error code %d,\t%s\t%d\n", ERR, __FUNCTION__, __LINE__); }
+#endif
+
+#ifndef HB_QSV_DEBUG_ASSERT
+#define HB_QSV_DEBUG_ASSERT(x,y)               { if ((x)) { fprintf(stderr, "\nASSERT: %s\n", y); } }
+#endif
+
+#define HB_QSV_CHECK_RET(P, X, ERR)                {if ((X) > (P)) {HB_QSV_PRINT_RET_MSG(ERR); return;}}
+#define HB_QSV_CHECK_RESULT(P, X, ERR)             {if ((X) > (P)) {HB_QSV_PRINT_RET_MSG(ERR); return ERR;}}
+#define HB_QSV_CHECK_POINTER(P, ERR)               {if (!(P)) {HB_QSV_PRINT_RET_MSG(ERR); return ERR;}}
+#define HB_QSV_IGNORE_MFX_STS(P, X)                {if ((X) == (P)) {P = MFX_ERR_NONE;}}
+
+#define HB_QSV_ASYNC_DEPTH_DEFAULT     4
+
+#define HB_QSV_AVC_DECODER_WIDTH_MAX   4096
+#define HB_QSV_AVC_DECODER_HEIGHT_MAX  4096
+
 typedef struct hb_qsv_adapter_details
 {
     // DirectX index
@@ -3907,12 +3925,12 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
 
 void hb_qsv_uninit_enc(hb_job_t *job)
 {
-    if (job->qsv.ctx && job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx)
+    if (job->qsv.ctx && job->qsv.ctx->hw_frames_ctx)
     {
-        if (job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx)
-            av_buffer_unref(&job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx);
-        av_free(job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx);
-        job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx = NULL;
+        if (job->qsv.ctx->hw_frames_ctx)
+            av_buffer_unref(&job->qsv.ctx->hw_frames_ctx);
+        av_free(job->qsv.ctx->hw_frames_ctx);
+        job->qsv.ctx->hw_frames_ctx = NULL;
     }
 }
 
@@ -4043,14 +4061,15 @@ void hb_qsv_uninit_enc(hb_job_t *job)
 
 #endif
 
-hb_qsv_context* hb_qsv_context_init()
+hb_qsv_context_t * hb_qsv_context_init()
 {
-    if (!hb_qsv_available()) {
+    if (!hb_qsv_available())
+    {
         return 0;
     }
   
-    hb_qsv_context *ctx;
-    ctx = av_mallocz(sizeof(hb_qsv_context));
+    hb_qsv_context_t *ctx;
+    ctx = av_mallocz(sizeof(hb_qsv_context_t));
     if (!ctx)
     {
         hb_error( "hb_qsv_context_init: qsv ctx alloc failed" );
@@ -4058,25 +4077,36 @@ hb_qsv_context* hb_qsv_context_init()
     }
     ctx->dx_index = hb_qsv_get_default_adapter_index();
     ctx->out_range = AVCOL_RANGE_UNSPECIFIED;
-    hb_qsv_add_context_usage(ctx, 0);
     return ctx;
 }
 
-void hb_qsv_context_uninit(hb_job_t *job)
+int  hb_qsv_context_uninit(hb_job_t *job)
 {
-    hb_qsv_context *ctx = job->qsv.ctx;
-    if ( ctx == NULL )
+    hb_qsv_context_t *ctx = job->qsv.ctx;
+    if (ctx == NULL)
     {
         hb_error( "hb_qsv_context_uninit: ctx is NULL" );
-        return;
+        return 1;
     }
-    /* QSV context cleanup and MFXClose */
-    hb_qsv_context_clean(ctx, hb_qsv_full_path_is_enabled(job));
+
+    // QSV context cleanup and MFXClose
+    mfxStatus sts = MFX_ERR_NONE;
+    if (ctx->mfx_session && !hb_qsv_full_path_is_enabled(job))
+    {
+        sts = MFXClose(ctx->mfx_session);
+        HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+        ctx->mfx_session = 0;
+        // Display must be closed after MFXClose
+        hb_display_close(&ctx->display);
+        ctx->display = NULL;
+    }
     av_free(ctx);
     job->qsv.ctx = NULL;
 
     // restore adapter index after user preferences
     g_adapter_index = hb_qsv_get_default_adapter_index();
+
+    return 0;
 }
 
 #else // HB_PROJECT_FEATURE_QSV

@@ -54,7 +54,6 @@
 
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
-#include "handbrake/qsv_libav.h"
 #endif
 
 static void compute_frame_duration( hb_work_private_t *pv );
@@ -150,7 +149,6 @@ struct hb_work_private_s
     struct
     {
         int                decode;
-        hb_qsv_config      config;
         const char       * codec_name;
     } qsv;
 #endif
@@ -1847,15 +1845,12 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     if (pv->qsv.decode)
     {
         pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
-        pv->qsv.config.io_pattern = MFX_IOPATTERN_OUT_SYSTEM_MEMORY;
         if(hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
         {
             hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
             if (info != NULL)
             {
                 // setup the QSV configuration
-                pv->qsv.config.io_pattern         = MFX_IOPATTERN_OUT_VIDEO_MEMORY;
-                pv->qsv.config.async_depth        = job->qsv.async_depth;
                 if (!pv->job->qsv.ctx)
                 {
                     hb_error( "decavcodecvInit: no context" );
@@ -1926,7 +1921,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
             {
                 hb_hwaccel_hwframes_ctx_init(pv->context, job);
-                job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx = av_buffer_ref(pv->context->hw_frames_ctx);
+                job->qsv.ctx->hw_frames_ctx = av_buffer_ref(pv->context->hw_frames_ctx);
             }
             if (pv->context->codec_id == AV_CODEC_ID_HEVC)
                 av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );

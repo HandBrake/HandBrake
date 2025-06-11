@@ -879,7 +879,7 @@ struct hb_job_s
         int decode;
         int async_depth;
 #if HB_PROJECT_FEATURE_QSV
-        hb_qsv_context *ctx;
+        hb_qsv_context_t *ctx;
 #endif
     } qsv;
 
