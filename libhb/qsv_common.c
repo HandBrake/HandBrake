@@ -3905,31 +3905,15 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
 
 #if defined(_WIN32) || defined(__MINGW32__)
 
-static int qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags)
-{
-    int ret = -1;
-    if(s->hw_frames_ctx)
-    {
-        ret = av_hwframe_get_buffer(s->hw_frames_ctx, frame, 0);
-    }
-    return ret;
-}
-
 void hb_qsv_uninit_enc(hb_job_t *job)
 {
-    if(job->qsv.ctx && job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx)
+    if (job->qsv.ctx && job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx)
     {
         if (job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx)
             av_buffer_unref(&job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx);
         av_free(job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx);
         job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx = NULL;
     }
-    if (job->qsv.ctx && job->qsv.ctx->hb_hw_device_ctx)
-    {
-        av_buffer_unref(&job->qsv.ctx->hb_hw_device_ctx);
-        job->qsv.ctx->hb_hw_device_ctx = NULL;
-    }
-    job->qsv.ctx->device_manager_handle = NULL;
 }
 
 static int hb_qsv_ffmpeg_set_options(hb_job_t *job, AVDictionary** dict)
@@ -3985,14 +3969,6 @@ err_out:
     }
 
     return err;
-}
-
-int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags)
-{
-    if (frame->format == AV_PIX_FMT_QSV)
-        return qsv_get_buffer(s, frame, flags);
-
-    return avcodec_default_get_buffer2(s, frame, flags);
 }
 
 int hb_qsv_are_filters_supported(hb_job_t *job)
@@ -4059,11 +4035,6 @@ int hb_qsv_device_init(hb_job_t *job, void **hw_device_ctx)
 enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts)
 {
     return AV_PIX_FMT_NONE;
-}
-
-int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags)
-{
-    return -1;
 }
 
 void hb_qsv_uninit_enc(hb_job_t *job)

@@ -355,7 +355,6 @@ void hb_qsv_context_uninit(hb_job_t *job);
 int hb_qsv_are_filters_supported(hb_job_t *job);
 int hb_qsv_get_memory_type(hb_job_t *job);
 int hb_qsv_full_path_is_enabled(hb_job_t *job);
-int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags);
 enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts);
 void hb_qsv_uninit_enc(hb_job_t *job);
 int hb_qsv_setup_job(hb_job_t *job);

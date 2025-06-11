@@ -1855,33 +1855,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             {
                 // setup the QSV configuration
                 pv->qsv.config.io_pattern         = MFX_IOPATTERN_OUT_VIDEO_MEMORY;
-                pv->qsv.config.impl_requested     = info->implementation;
                 pv->qsv.config.async_depth        = job->qsv.async_depth;
-                pv->qsv.config.sync_need          =  0;
-                pv->qsv.config.usage_threaded     =  1;
-                pv->qsv.config.additional_buffers = 64; // FIFO_LARGE
-                if (info->capabilities & HB_QSV_CAP_RATECONTROL_LA)
-                {
-                    // more surfaces may be needed for the lookahead
-                    pv->qsv.config.additional_buffers = 160;
-                }
                 if (!pv->job->qsv.ctx)
                 {
                     hb_error( "decavcodecvInit: no context" );
                     return 1;
                 }
                 pv->job->qsv.ctx->full_path_is_enabled = 1;
-
-                if (!pv->job->qsv.ctx->dec_space)
-                {
-                    pv->job->qsv.ctx->dec_space = av_mallocz(sizeof(hb_qsv_space));
-                    if(!pv->job->qsv.ctx->dec_space)
-                    {
-                        hb_error( "decavcodecvInit: dec_space alloc failed" );
-                        return 1;
-                    }
-                    pv->job->qsv.ctx->dec_space->is_init_done = 1;
-                }
             }
         }
     }
