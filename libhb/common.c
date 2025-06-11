@@ -4567,13 +4567,10 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->metadata = hb_metadata_copy( title->metadata );
 
 #if HB_PROJECT_FEATURE_QSV
-    job->qsv.ctx = NULL;
     if (!job->indepth_scan)
     {
         job->qsv.ctx = hb_qsv_context_init();
     }
-    job->qsv.decode                = !!(title->video_decode_support &
-                                        HB_DECODE_SUPPORT_QSV);
 #endif
 }
 

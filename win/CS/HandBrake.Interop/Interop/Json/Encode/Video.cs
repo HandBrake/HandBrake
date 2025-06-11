@@ -85,6 +85,6 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// <summary>
         /// HB_DECODE_SUPPORT constants in common.h
         /// </summary>
-        public int HardwareDecode { get; set; }
+        public uint HardwareDecode { get; set; }
     }
 }

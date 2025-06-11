@@ -148,12 +148,6 @@ static void work_func( void * _work )
             hb_job_close(&job);
             job = new_job;
         }
-#if HB_PROJECT_FEATURE_QSV
-        if (hb_qsv_available())
-        {
-            hb_qsv_setup_job(job);
-        }
-#endif
 
         hb_job_setup_passes(job->h, job, passes);
         hb_job_close(&job);
@@ -1729,7 +1723,7 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
     // the dynamic hdr side data
     if (job->passthru_dynamic_hdr_metadata)
     {
-        job->qsv.decode = 0;
+        job->hw_decode &= ~HB_DECODE_SUPPORT_QSV;
     }
 #endif
 }
@@ -1788,9 +1782,15 @@ static void do_job(hb_job_t *job)
     {
         job->hw_decode = 0;
     }
-    if (job->hw_decode == HB_DECODE_SUPPORT_MF)
+    if (job->hw_decode & HB_DECODE_SUPPORT_MF)
     {
         job->hw_decode |= HB_DECODE_SUPPORT_FORCE_HW;
+    }
+    else if (job->hw_decode & HB_DECODE_SUPPORT_QSV)
+    {
+        #if HB_PROJECT_FEATURE_QSV
+        hb_qsv_setup_job(job);
+        #endif
     }
 
     // This must be performed before initializing filters because

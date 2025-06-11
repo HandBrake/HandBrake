@@ -2240,7 +2240,8 @@ int hb_qsv_setup_job(hb_job_t *job)
         job->qsv.async_depth = async_depth_default;
     }
     // Make sure QSV Decode is only True if the selected QSV adapter supports decode.
-    job->qsv.decode = job->qsv.decode && hb_qsv_available();
+    job->hw_decode = (job->hw_decode & HB_DECODE_SUPPORT_QSV) && hb_qsv_available ?
+                        HB_DECODE_SUPPORT_QSV : 0;
     return 0;
 }
 
@@ -2252,7 +2253,7 @@ int hb_qsv_decode_is_enabled(hb_job_t *job)
     int qsv_decode_is_codec_supported = hb_qsv_decode_is_codec_supported(hb_qsv_get_adapter_index(),
         job->title->video_codec_param, job->input_pix_fmt, job->title->geometry.width, job->title->geometry.height);
 
-    return ((job->qsv.decode) && (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)) &&
+    return ((job->hw_decode & HB_DECODE_SUPPORT_QSV) && (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)) &&
             qsv_decode_is_codec_supported;
 }
 

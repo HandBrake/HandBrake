@@ -876,7 +876,6 @@ struct hb_job_s
     // QSV-specific settings
     struct
     {
-        int decode;
         int async_depth;
 #if HB_PROJECT_FEATURE_QSV
         hb_qsv_context_t *ctx;
