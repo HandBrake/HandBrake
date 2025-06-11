@@ -4567,10 +4567,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->metadata = hb_metadata_copy( title->metadata );
 
 #if HB_PROJECT_FEATURE_QSV
-    if (!job->indepth_scan)
-    {
-        job->qsv.ctx = hb_qsv_context_init();
-    }
+    job->qsv.ctx = hb_qsv_context_init();
 #endif
 }
 
@@ -4667,6 +4664,11 @@ static void job_clean( hb_job_t * job )
 
         // clean up metadata
         hb_metadata_close( &job->metadata );
+
+#if HB_PROJECT_FEATURE_QSV
+        // cleanup qsv specific data
+        hb_qsv_context_close(&job->qsv.ctx);
+#endif
     }
 }
 

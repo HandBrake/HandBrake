@@ -19,6 +19,7 @@
 
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
+#include "handbrake/qsv_libav.h"
 #endif
 
 #if defined( SYS_MINGW )
@@ -1873,6 +1874,10 @@ static void hb_add_internal( hb_handle_t * h, hb_job_t * job, hb_list_t *list_pa
 
     /* Copy the job filter list */
     job_copy->list_filter = hb_filter_list_copy( job->list_filter );
+
+#if HB_PROJECT_FEATURE_QSV
+    job_copy->qsv.ctx = hb_qsv_context_dup(job->qsv.ctx);
+#endif
 
     /* Add the job to the list */
     hb_list_add( list_pass, job_copy );

@@ -37,10 +37,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 typedef struct hb_qsv_context_s
 {
-    mfxIMPL impl;
-    mfxSession mfx_session;
-    mfxVersion ver;
-
     int la_is_enabled;
     int memory_type;
     int out_range;
@@ -49,8 +45,6 @@ typedef struct hb_qsv_context_s
     const char *vpp_scale_mode;
     const char *vpp_interpolation_method;
     AVBufferRef *hw_frames_ctx;
-
-    hb_display_t *display;
 } hb_qsv_context_t;
 
 #endif // HANDBRAKE_QSV_LIBAV_H

@@ -1314,7 +1314,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_qsv_decode_is_enabled(pv->job) && pv->context->hw_frames_ctx == NULL && pv->job->qsv.ctx->hw_frames_ctx != NULL)
     {
         // use the same hw frames context as for decoder or filter graph hw frames context
-        pv->context->hw_frames_ctx = pv->job->qsv.ctx->hw_frames_ctx;
+        pv->context->hw_frames_ctx = av_buffer_ref(pv->job->qsv.ctx->hw_frames_ctx);
         int open_ret = 0;
         if ((open_ret = hb_avcodec_open(pv->context, pv->qsv_data.codec, &pv->qsv_data.av_opts, HB_FFMPEG_THREADS_AUTO)))
         {

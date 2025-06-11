@@ -3924,17 +3924,6 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
 
 #if defined(_WIN32) || defined(__MINGW32__)
 
-void hb_qsv_uninit_enc(hb_job_t *job)
-{
-    if (job->qsv.ctx && job->qsv.ctx->hw_frames_ctx)
-    {
-        if (job->qsv.ctx->hw_frames_ctx)
-            av_buffer_unref(&job->qsv.ctx->hw_frames_ctx);
-        av_free(job->qsv.ctx->hw_frames_ctx);
-        job->qsv.ctx->hw_frames_ctx = NULL;
-    }
-}
-
 static int hb_qsv_ffmpeg_set_options(hb_job_t *job, AVDictionary** dict)
 {
     int err;
@@ -4056,10 +4045,6 @@ enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat
     return AV_PIX_FMT_NONE;
 }
 
-void hb_qsv_uninit_enc(hb_job_t *job)
-{
-}
-
 #endif
 
 hb_qsv_context_t * hb_qsv_context_init()
@@ -4069,11 +4054,10 @@ hb_qsv_context_t * hb_qsv_context_init()
         return 0;
     }
   
-    hb_qsv_context_t *ctx;
-    ctx = av_mallocz(sizeof(hb_qsv_context_t));
+    hb_qsv_context_t *ctx = av_mallocz(sizeof(hb_qsv_context_t));
     if (!ctx)
     {
-        hb_error( "hb_qsv_context_init: qsv ctx alloc failed" );
+        hb_error("hb_qsv_context_init: qsv ctx alloc failed");
         return NULL;
     }
     ctx->dx_index = hb_qsv_get_default_adapter_index();
@@ -4081,33 +4065,38 @@ hb_qsv_context_t * hb_qsv_context_init()
     return ctx;
 }
 
-int  hb_qsv_context_uninit(hb_job_t *job)
+hb_qsv_context_t * hb_qsv_context_dup(const hb_qsv_context_t *src)
 {
-    hb_qsv_context_t *ctx = job->qsv.ctx;
-    if (ctx == NULL)
+    if (src == NULL)
     {
-        hb_error( "hb_qsv_context_uninit: ctx is NULL" );
-        return 1;
+        return NULL;
     }
 
-    // QSV context cleanup and MFXClose
-    mfxStatus sts = MFX_ERR_NONE;
-    if (ctx->mfx_session && !hb_qsv_full_path_is_enabled(job))
+    hb_qsv_context_t *ctx = hb_qsv_context_init();
+    if (ctx)
     {
-        sts = MFXClose(ctx->mfx_session);
-        HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
-        ctx->mfx_session = 0;
-        // Display must be closed after MFXClose
-        hb_display_close(&ctx->display);
-        ctx->display = NULL;
+        memcpy(ctx, src, sizeof(hb_qsv_context_t));
+        ctx->hw_frames_ctx = NULL;
     }
-    av_free(ctx);
-    job->qsv.ctx = NULL;
+    return ctx;
+}
+
+void hb_qsv_context_close(hb_qsv_context_t **_ctx)
+{
+    hb_qsv_context_t *ctx = *_ctx;
+    if (ctx == NULL)
+    {
+        return;
+    }
+
+    if (ctx->hw_frames_ctx)
+    {
+        av_buffer_unref(&ctx->hw_frames_ctx);
+    }
+    av_freep(_ctx);
 
     // restore adapter index after user preferences
     g_adapter_index = hb_qsv_get_default_adapter_index();
-
-    return 0;
 }
 
 #else // HB_PROJECT_FEATURE_QSV
