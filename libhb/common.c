@@ -4567,13 +4567,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->metadata = hb_metadata_copy( title->metadata );
 
 #if HB_PROJECT_FEATURE_QSV
-    job->qsv.ctx = NULL;
-    if (!job->indepth_scan)
-    {
-        job->qsv.ctx = hb_qsv_context_init();
-    }
-    job->qsv.decode                = !!(title->video_decode_support &
-                                        HB_DECODE_SUPPORT_QSV);
+    job->qsv_ctx = hb_qsv_context_init();
 #endif
 }
 
@@ -4670,6 +4664,11 @@ static void job_clean( hb_job_t * job )
 
         // clean up metadata
         hb_metadata_close( &job->metadata );
+
+#if HB_PROJECT_FEATURE_QSV
+        // cleanup qsv specific data
+        hb_qsv_context_close(&job->qsv_ctx);
+#endif
     }
 }
 
@@ -7021,17 +7020,16 @@ int hb_get_best_pix_fmt(hb_job_t * job)
 
 static int pix_hw_fmt_is_supported(hb_job_t *job, int pix_fmt)
 {
-    if (pix_fmt == AV_PIX_FMT_QSV)
+    if (hb_hwaccel_is_full_hardware_pipeline_enabled(job))
     {
 #if HB_PROJECT_FEATURE_QSV
-        if (hb_qsv_full_path_is_enabled(job) && hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
+        if (pix_fmt == AV_PIX_FMT_QSV &&
+            job->hw_decode & HB_DECODE_SUPPORT_QSV &&
+            hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
         {
             return 1;
         }
 #endif
-    }
-    else if (hb_hwaccel_is_full_hardware_pipeline_enabled(job))
-    {
         if (pix_fmt == AV_PIX_FMT_CUDA &&
             job->hw_decode & HB_DECODE_SUPPORT_NVDEC)
         {

@@ -3270,7 +3270,6 @@ static int ParseOptions( int argc, char ** argv )
 #if HB_PROJECT_FEATURE_QSV
                     else if (!strcmp(optarg, "qsv"))
                     {
-                        qsv_decode = 1;
                         hw_decode = HB_DECODE_SUPPORT_QSV;
                     }
 #endif
@@ -3281,6 +3280,10 @@ static int ParseOptions( int argc, char ** argv )
                     else
                     {
                         hw_decode = 0;
+                    }
+                    if (hw_decode)
+                    {
+                        hw_decode |= HB_DECODE_SUPPORT_FORCE_HW;
                     }
                 } break;
             case KEEP_DUPLICATE_TITLES:
@@ -4470,7 +4473,6 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
     if (qsv_decode != -1)
     {
-        hb_dict_set(preset, "VideoQSVDecode", hb_value_int(qsv_decode));
         hw_decode = qsv_decode ? HB_DECODE_SUPPORT_QSV : 0;
     }
 #endif

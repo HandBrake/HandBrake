@@ -60,10 +60,6 @@ void hb_job_setup_passes(hb_handle_t *h, hb_job_t *job, hb_list_t *list_pass);
  */
 typedef struct hb_buffer_s hb_buffer_t;
 
-#if HB_PROJECT_FEATURE_QSV
-#include "handbrake/qsv_libav.h"
-#endif
-
 struct hb_buffer_settings_s
 {
     enum { OTHER_BUF, AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, FRAME_BUF } type;
@@ -150,14 +146,6 @@ struct hb_buffer_s
         int           height;
         int           size;
     } plane[4]; // 3 Color components + alpha
-
-#if HB_PROJECT_FEATURE_QSV
-    struct qsv
-    {
-        void               * qsv_atom;
-        hb_qsv_context     * ctx;
-    } qsv_details;
-#endif
 
     void  *storage;
     enum  { STANDARD, AVFRAME, COREMEDIA } storage_type;

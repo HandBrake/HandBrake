@@ -933,8 +933,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
 
 #if HB_PROJECT_FEATURE_QSV
-    if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job) &&
-            hb_qsv_decode_is_enabled(job))
+    if (hb_hwaccel_is_full_hardware_pipeline_enabled(job) &&
+        job->hw_pix_fmt == AV_PIX_FMT_QSV)
     {
         pv->context = context;
         pv->qsv_data.codec = codec;
@@ -1311,24 +1311,18 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 #if HB_PROJECT_FEATURE_QSV
     // postponed encoder initialization, reused code from encavcodecInit()
     if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job) &&
-        hb_qsv_decode_is_enabled(pv->job) && pv->context->hw_frames_ctx == NULL && pv->job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx != NULL)
+        pv->job->hw_pix_fmt == AV_PIX_FMT_QSV &&
+        pv->context->hw_frames_ctx == NULL &&
+        pv->job->qsv_ctx->hw_frames_ctx != NULL)
     {
         // use the same hw frames context as for decoder or filter graph hw frames context
-        pv->context->hw_frames_ctx = pv->job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx;
+        pv->context->hw_frames_ctx = av_buffer_ref(pv->job->qsv_ctx->hw_frames_ctx);
         int open_ret = 0;
         if ((open_ret = hb_avcodec_open(pv->context, pv->qsv_data.codec, &pv->qsv_data.av_opts, HB_FFMPEG_THREADS_AUTO)))
         {
             hb_log( "encavcodecWork: avcodec_open failed: %s", av_err2str(open_ret) );
             return HB_WORK_ERROR;
         }
-
-        /*
-        * Reload colorimetry settings in case custom
-        * values were set in the encoder_options string.
-        */
-        pv->job->color_prim_override     = pv->context->color_primaries;
-        pv->job->color_transfer_override = pv->context->color_trc;
-        pv->job->color_matrix_override   = pv->context->colorspace;
 
         // avcodec_open populates the opts dictionary with the
         // things it didn't recognize.

@@ -104,7 +104,7 @@ typedef enum
 #include "libavutil/channel_layout.h"
 
 #if HB_PROJECT_FEATURE_QSV
-#include "qsv_libav.h"
+#include "qsv_common.h"
 #endif
 
 #ifdef __LIBHB__
@@ -873,20 +873,16 @@ struct hb_job_s
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
 
-    // QSV-specific settings
-    struct
-    {
-        int decode;
-        int async_depth;
-#if HB_PROJECT_FEATURE_QSV
-        hb_qsv_context *ctx;
-#endif
-    } qsv;
-
     int hw_decode;
     int keep_duplicate_titles;
 
 #ifdef __LIBHB__
+
+#if HB_PROJECT_FEATURE_QSV
+    // QSV-specific settings
+    hb_qsv_context_t *qsv_ctx;
+#endif
+
     /* Internal data */
     hb_handle_t   * h;
     volatile hb_error_code * done_error;

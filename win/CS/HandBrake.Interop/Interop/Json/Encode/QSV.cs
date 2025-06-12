@@ -15,11 +15,6 @@ namespace HandBrake.Interop.Interop.Json.Encode
     public class QSV
     {
         /// <summary>
-        /// Gets or sets a value indicating whether decode.
-        /// </summary>
-        public bool Decode { get; set; }
-
-        /// <summary>
         /// Gets or sets the async depth.
         /// </summary>
         public int? AsyncDepth { get; set; }

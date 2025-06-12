@@ -15,6 +15,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "vpl/mfxvideo.h"
+#include "vpl/mfxdispatcher.h"
+
 #include "handbrake/handbrake.h"
 #include "handbrake/ports.h"
 #include "handbrake/common.h"
@@ -24,6 +27,24 @@
 #include "handbrake/h265_common.h"
 #include "handbrake/av1_common.h"
 #include "handbrake/hbffmpeg.h"
+
+#ifndef HB_QSV_PRINT_RET_MSG
+#define HB_QSV_PRINT_RET_MSG(ERR)              { fprintf(stderr, "Error code %d,\t%s\t%d\n", ERR, __FUNCTION__, __LINE__); }
+#endif
+
+#ifndef HB_QSV_DEBUG_ASSERT
+#define HB_QSV_DEBUG_ASSERT(x,y)               { if ((x)) { fprintf(stderr, "\nASSERT: %s\n", y); } }
+#endif
+
+#define HB_QSV_CHECK_RET(P, X, ERR)                {if ((X) > (P)) {HB_QSV_PRINT_RET_MSG(ERR); return;}}
+#define HB_QSV_CHECK_RESULT(P, X, ERR)             {if ((X) > (P)) {HB_QSV_PRINT_RET_MSG(ERR); return ERR;}}
+#define HB_QSV_CHECK_POINTER(P, ERR)               {if (!(P)) {HB_QSV_PRINT_RET_MSG(ERR); return ERR;}}
+#define HB_QSV_IGNORE_MFX_STS(P, X)                {if ((X) == (P)) {P = MFX_ERR_NONE;}}
+
+#define HB_QSV_ASYNC_DEPTH_DEFAULT     4
+
+#define HB_QSV_AVC_DECODER_WIDTH_MAX   4096
+#define HB_QSV_AVC_DECODER_HEIGHT_MAX  4096
 
 typedef struct hb_qsv_adapter_details
 {
@@ -653,7 +674,7 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
  * and collect GPU adapters capabilities.
  *
  * @returns encoder codec mask supported by QSV implemenation,
- *      0 if QSV is not avalable, -1 if HB_PROJECT_FEATURE_QSV is not enabled
+ *      0 if QSV is not available, -1 if HB_PROJECT_FEATURE_QSV is not enabled
  */
 int hb_qsv_available()
 {
@@ -2170,7 +2191,7 @@ static int hb_qsv_parse_options(hb_job_t *job)
                 free(str);
                 if (!err)
                 {
-                    job->qsv.async_depth = async_depth;
+                    job->qsv_ctx->async_depth = async_depth;
                 }
             }
             else if (!strcasecmp(key, "memory-type"))
@@ -2183,7 +2204,7 @@ static int hb_qsv_parse_options(hb_job_t *job)
                 }
                 else
                 {
-                    job->qsv.ctx->memory_type = mode->value;
+                    job->qsv_ctx->memory_type = mode->value;
                 }
             }
             else if (!strcasecmp(key, "out_range"))
@@ -2196,7 +2217,7 @@ static int hb_qsv_parse_options(hb_job_t *job)
                 }
                 else
                 {
-                    job->qsv.ctx->out_range = mode->value;
+                    job->qsv_ctx->out_range = mode->value;
                 }
             }
         }
@@ -2207,40 +2228,40 @@ static int hb_qsv_parse_options(hb_job_t *job)
 
 int hb_qsv_setup_job(hb_job_t *job)
 {
-    // parse the json parameter
-    if (job->qsv.ctx && job->qsv.ctx->dx_index >= -1)
+    if (job->qsv_ctx == NULL)
     {
-        hb_qsv_param_parse_dx_index(job, job->qsv.ctx->dx_index);
+        return 1;
     }
 
-    // parse the advanced options parameter
+    // Parse the json parameter
+    if (job->qsv_ctx->dx_index >= -1)
+    {
+        hb_qsv_param_parse_dx_index(job, job->qsv_ctx->dx_index);
+    }
+
+    // Parse the advanced options parameter
     hb_qsv_parse_options(job);
 
     int async_depth_default = hb_qsv_param_default_async_depth();
-    if (job->qsv.async_depth <= 0 || job->qsv.async_depth > async_depth_default)
+    if (job->qsv_ctx->async_depth <= 0 || job->qsv_ctx->async_depth > async_depth_default)
     {
-        job->qsv.async_depth = async_depth_default;
+        job->qsv_ctx->async_depth = async_depth_default;
     }
-    // Make sure QSV Decode is only True if the selected QSV adapter supports decode.
-    job->qsv.decode = job->qsv.decode && hb_qsv_available();
+
+    // Make sure QSV Decode is only True if the selected QSV adapter supports decode
+    if (job->hw_decode & HB_DECODE_SUPPORT_QSV)
+    {
+        int is_codec_supported = hb_qsv_decode_is_codec_supported(hb_qsv_get_adapter_index(),
+            job->title->video_codec_param, job->input_pix_fmt,
+            job->title->geometry.width, job->title->geometry.height);
+
+        if (is_codec_supported == 0)
+        {
+            job->hw_decode &= ~HB_DECODE_SUPPORT_QSV;
+        }
+    }
+
     return 0;
-}
-
-int hb_qsv_decode_is_enabled(hb_job_t *job)
-{
-    if (!job)
-        return 0;
-
-    int qsv_decode_is_codec_supported = hb_qsv_decode_is_codec_supported(hb_qsv_get_adapter_index(),
-        job->title->video_codec_param, job->input_pix_fmt, job->title->geometry.width, job->title->geometry.height);
-
-    return ((job->qsv.decode) && (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)) &&
-            qsv_decode_is_codec_supported;
-}
-
-int hb_qsv_is_enabled(hb_job_t *job)
-{
-    return hb_qsv_decode_is_enabled(job) || hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
 }
 
 int hb_qsv_get_memory_type(hb_job_t *job)
@@ -2249,9 +2270,9 @@ int hb_qsv_get_memory_type(hb_job_t *job)
 
     if (qsv_full_path_is_enabled)
     {
-        if (job->qsv.ctx->memory_type == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
+        if (job->qsv_ctx->memory_type == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
             return MFX_IOPATTERN_OUT_VIDEO_MEMORY;
-        else if (job->qsv.ctx->memory_type == MFX_IOPATTERN_OUT_SYSTEM_MEMORY)
+        else if (job->qsv_ctx->memory_type == MFX_IOPATTERN_OUT_SYSTEM_MEMORY)
             return MFX_IOPATTERN_OUT_SYSTEM_MEMORY;
     }
 
@@ -2261,20 +2282,16 @@ int hb_qsv_get_memory_type(hb_job_t *job)
 int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
     int qsv_full_path_is_enabled = 0;
-    if (!job || !job->qsv.ctx)
-    {
-        return 0;
-    }
-    if (hb_get_bit_depth(job->title->pix_fmt) == -1)
+    if (!job || !job->qsv_ctx)
     {
         return 0;
     }
 #if defined(_WIN32) || defined(__MINGW32__)
     hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
 
-    qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
+    qsv_full_path_is_enabled = (job->hw_decode & HB_DECODE_SUPPORT_QSV &&
         info && hb_qsv_implementation_is_hardware(info->implementation) &&
-        job->qsv.ctx && hb_qsv_are_filters_supported(job));
+        job->qsv_ctx && hb_qsv_are_filters_supported(job));
 #endif
     return qsv_full_path_is_enabled;
 }
@@ -2404,9 +2421,9 @@ int hb_qsv_select_ffmpeg_options(qsv_data_t * qsv_data, hb_job_t *job, AVDiction
         param->rc.lookahead = param->rc.lookahead && (param->rc.icq || job->vquality <= HB_INVALID_VIDEO_QUALITY);
     }
 
-    if (job->qsv.ctx != NULL)
+    if (job->qsv_ctx != NULL)
     {
-        job->qsv.ctx->la_is_enabled = param->rc.lookahead ? 1 : 0;
+        job->qsv_ctx->la_is_enabled = param->rc.lookahead ? 1 : 0;
     }
 
     // libmfx BRC parameters are 16 bits thus maybe overflow, then BRCParamMultiplier is needed
@@ -3211,14 +3228,14 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
     else if (!strcasecmp(key, "memory-type"))
     {
         // Check if was parsed already in decoder initialization
-        if (job->qsv.ctx && !job->qsv.ctx->memory_type)
+        if (job->qsv_ctx && !job->qsv_ctx->memory_type)
         {
             hb_triplet_t* mode = NULL;
             mode = hb_triplet4key(hb_qsv_memory_types, value);
             if (!mode)
                 error = HB_QSV_PARAM_BAD_VALUE;
             else
-                job->qsv.ctx->memory_type = mode->value;
+                job->qsv_ctx->memory_type = mode->value;
         }
     }
     else if (!strcasecmp(key, "out_range"))
@@ -3893,54 +3910,27 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
         // find DirectX adapter with given index in list of QSV adapters
         if (details && (details->index == dx_index))
         {
-            job->qsv.ctx->dx_index = details->index;
+            job->qsv_ctx->dx_index = details->index;
             hb_log("qsv: %s qsv adapter with index %u has been selected", hb_qsv_get_adapter_type(details), details->index);
             hb_qsv_set_adapter_index(details->index);
             return 0;
         }
     }
-    job->qsv.ctx->dx_index = hb_qsv_get_adapter_index();
+    job->qsv_ctx->dx_index = hb_qsv_get_adapter_index();
     return -1;
 }
 
 #if defined(_WIN32) || defined(__MINGW32__)
-
-static int qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags)
-{
-    int ret = -1;
-    if(s->hw_frames_ctx)
-    {
-        ret = av_hwframe_get_buffer(s->hw_frames_ctx, frame, 0);
-    }
-    return ret;
-}
-
-void hb_qsv_uninit_enc(hb_job_t *job)
-{
-    if(job->qsv.ctx && job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx)
-    {
-        if (job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx)
-            av_buffer_unref(&job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx);
-        av_free(job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx);
-        job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx = NULL;
-    }
-    if (job->qsv.ctx && job->qsv.ctx->hb_hw_device_ctx)
-    {
-        av_buffer_unref(&job->qsv.ctx->hb_hw_device_ctx);
-        job->qsv.ctx->hb_hw_device_ctx = NULL;
-    }
-    job->qsv.ctx->device_manager_handle = NULL;
-}
 
 static int hb_qsv_ffmpeg_set_options(hb_job_t *job, AVDictionary** dict)
 {
     int err;
     AVDictionary* out_dict = *dict;
 
-    if (job->qsv.ctx && job->qsv.ctx->dx_index >= 0)
+    if (job->qsv_ctx && job->qsv_ctx->dx_index >= 0)
     {
         char device[32];
-        snprintf(device, 32, "%u", job->qsv.ctx->dx_index);
+        snprintf(device, 32, "%u", job->qsv_ctx->dx_index);
         err = av_dict_set(&out_dict, "child_device", device, 0);
         if (err < 0)
         {
@@ -3987,18 +3977,9 @@ err_out:
     return err;
 }
 
-int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags)
-{
-    if (frame->format == AV_PIX_FMT_QSV)
-        return qsv_get_buffer(s, frame, flags);
-
-    return avcodec_default_get_buffer2(s, frame, flags);
-}
-
 int hb_qsv_are_filters_supported(hb_job_t *job)
 {
     int num_sw_filters = 0;
-    int num_hw_filters = 0;
     if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
     {
         for (int i = 0; i < hb_list_count(job->list_filter); i++)
@@ -4008,14 +3989,10 @@ int hb_qsv_are_filters_supported(hb_job_t *job)
             {
                 // pixel format conversion is done via VPP filter
                 case HB_FILTER_FORMAT:
-                    num_hw_filters++;
-                    break;
                 // cropping and scaling always done via VPP filter
                 case HB_FILTER_CROP_SCALE:
-                    num_hw_filters++;
-                    break;
                 case HB_FILTER_ROTATE:
-                    num_hw_filters++;
+                case HB_FILTER_AVFILTER:
                     break;
                 case HB_FILTER_VFR:
                 {
@@ -4026,9 +4003,6 @@ int hb_qsv_are_filters_supported(hb_job_t *job)
                         break;
                     }
                 }
-                case HB_FILTER_AVFILTER:
-                    num_hw_filters++;
-                    break;
                 default:
                     // count only filters with access to frame data
                     num_sw_filters++;
@@ -4061,48 +4035,55 @@ enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat
     return AV_PIX_FMT_NONE;
 }
 
-int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags)
-{
-    return -1;
-}
-
-void hb_qsv_uninit_enc(hb_job_t *job)
-{
-}
-
 #endif
 
-hb_qsv_context* hb_qsv_context_init()
+hb_qsv_context_t * hb_qsv_context_init()
 {
-    if (!hb_qsv_available()) {
+    if (!hb_qsv_available())
+    {
         return 0;
     }
   
-    hb_qsv_context *ctx;
-    ctx = av_mallocz(sizeof(hb_qsv_context));
+    hb_qsv_context_t *ctx = av_mallocz(sizeof(hb_qsv_context_t));
     if (!ctx)
     {
-        hb_error( "hb_qsv_context_init: qsv ctx alloc failed" );
+        hb_error("hb_qsv_context_init: qsv ctx alloc failed");
         return NULL;
     }
     ctx->dx_index = hb_qsv_get_default_adapter_index();
     ctx->out_range = AVCOL_RANGE_UNSPECIFIED;
-    hb_qsv_add_context_usage(ctx, 0);
     return ctx;
 }
 
-void hb_qsv_context_uninit(hb_job_t *job)
+hb_qsv_context_t * hb_qsv_context_dup(const hb_qsv_context_t *src)
 {
-    hb_qsv_context *ctx = job->qsv.ctx;
-    if ( ctx == NULL )
+    if (src == NULL)
     {
-        hb_error( "hb_qsv_context_uninit: ctx is NULL" );
+        return NULL;
+    }
+
+    hb_qsv_context_t *ctx = hb_qsv_context_init();
+    if (ctx)
+    {
+        memcpy(ctx, src, sizeof(hb_qsv_context_t));
+        ctx->hw_frames_ctx = NULL;
+    }
+    return ctx;
+}
+
+void hb_qsv_context_close(hb_qsv_context_t **_ctx)
+{
+    hb_qsv_context_t *ctx = *_ctx;
+    if (ctx == NULL)
+    {
         return;
     }
-    /* QSV context cleanup and MFXClose */
-    hb_qsv_context_clean(ctx, hb_qsv_full_path_is_enabled(job));
-    av_free(ctx);
-    job->qsv.ctx = NULL;
+
+    if (ctx->hw_frames_ctx)
+    {
+        av_buffer_unref(&ctx->hw_frames_ctx);
+    }
+    av_freep(_ctx);
 
     // restore adapter index after user preferences
     g_adapter_index = hb_qsv_get_default_adapter_index();

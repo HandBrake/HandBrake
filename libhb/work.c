@@ -148,12 +148,6 @@ static void work_func( void * _work )
             hb_job_close(&job);
             job = new_job;
         }
-#if HB_PROJECT_FEATURE_QSV
-        if (hb_qsv_available())
-        {
-            hb_qsv_setup_job(job);
-        }
-#endif
 
         hb_job_setup_passes(job->h, job, passes);
         hb_job_close(&job);
@@ -505,17 +499,14 @@ void hb_display_job_info(hb_job_t *job)
 
     hb_log(" * video track");
 
-#if HB_PROJECT_FEATURE_QSV
-    if (hb_qsv_decode_is_enabled(job))
-    {
-        hb_log("   + decoder: %s %d-bit (%s)",
-               hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
-    } else
-#endif
     if (hb_hwaccel_decode_is_enabled(job))
     {
-        hb_log("   + decoder: %s %d-bit hwaccel (%s, %s)",
-               title->video_codec_name, hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt), av_get_pix_fmt_name(job->hw_pix_fmt));
+        hb_log("   + decoder: %s %d-bit %s hwaccel (%s, %s)",
+               title->video_codec_name,
+               hb_get_bit_depth(job->input_pix_fmt),
+               hb_hwaccel_get_name(job->hw_decode),
+               av_get_pix_fmt_name(job->input_pix_fmt),
+               av_get_pix_fmt_name(job->hw_pix_fmt));
     }
     else
     {
@@ -1729,7 +1720,7 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
     // the dynamic hdr side data
     if (job->passthru_dynamic_hdr_metadata)
     {
-        job->qsv.decode = 0;
+        job->hw_decode &= ~HB_DECODE_SUPPORT_QSV;
     }
 #endif
 }
@@ -1788,9 +1779,15 @@ static void do_job(hb_job_t *job)
     {
         job->hw_decode = 0;
     }
-    if (job->hw_decode == HB_DECODE_SUPPORT_MF)
+    if (job->hw_decode & HB_DECODE_SUPPORT_MF)
     {
         job->hw_decode |= HB_DECODE_SUPPORT_FORCE_HW;
+    }
+    else if (job->hw_decode & HB_DECODE_SUPPORT_QSV)
+    {
+        #if HB_PROJECT_FEATURE_QSV
+        hb_qsv_setup_job(job);
+        #endif
     }
 
     // This must be performed before initializing filters because
@@ -1809,12 +1806,11 @@ static void do_job(hb_job_t *job)
         hb_filter_init_t init;
 
         sanitize_filter_list_pre(job, title->geometry);
+        sanitize_dynamic_hdr_metadata_passthru(job);
 
         // Select the optimal pixel formats for the pipeline
         job->hw_pix_fmt = hb_get_best_hw_pix_fmt(job);
         job->input_pix_fmt = hb_get_best_pix_fmt(job);
-
-        sanitize_dynamic_hdr_metadata_passthru(job);
 
         // Init hwaccel context if needed
         if (hb_hwaccel_decode_is_enabled(job))

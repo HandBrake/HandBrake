@@ -104,7 +104,7 @@ static int qsv_rotate_init(hb_filter_private_t * pv, hb_filter_init_t * init, in
         {
             hb_dict_set(avsettings, "transpose", hb_value_string(trans));
         }
-        hb_dict_set_int(avsettings, "async_depth", init->job->qsv.async_depth);
+        hb_dict_set_int(avsettings, "async_depth", init->job->qsv_ctx->async_depth);
         hb_dict_set(avfilter, "vpp_qsv", avsettings);
         pv->avfilters = avfilter;
     }
@@ -118,7 +118,7 @@ static int qsv_rotate_init(hb_filter_private_t * pv, hb_filter_init_t * init, in
             avfilter = hb_dict_init();
 
             hb_dict_set(avsettings, "transpose", hb_value_string("vflip"));
-            hb_dict_set_int(avsettings, "async_depth", init->job->qsv.async_depth);
+            hb_dict_set_int(avsettings, "async_depth", init->job->qsv_ctx->async_depth);
             hb_dict_set(avfilter, "vpp_qsv", avsettings);
             pv->avfilters = avfilter;
         }
@@ -127,7 +127,7 @@ static int qsv_rotate_init(hb_filter_private_t * pv, hb_filter_init_t * init, in
             avfilter = hb_dict_init();
 
             hb_dict_set(avsettings, "transpose", hb_value_string("hflip"));
-            hb_dict_set_int(avsettings, "async_depth", init->job->qsv.async_depth);
+            hb_dict_set_int(avsettings, "async_depth", init->job->qsv_ctx->async_depth);
             hb_dict_set(avfilter, "vpp_qsv", avsettings);
             pv->avfilters = avfilter;
         }
@@ -184,8 +184,7 @@ static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     }
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (hb_hwaccel_is_full_hardware_pipeline_enabled(init->job) &&
-        hb_qsv_decode_is_enabled(init->job))
+    if (init->hw_pix_fmt == AV_PIX_FMT_QSV)
     {
         qsv_rotate_init(pv, init, angle, flip);
         return 0;
