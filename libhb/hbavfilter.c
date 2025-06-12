@@ -277,6 +277,7 @@ int hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t ** buf_in)
     return ret;
 }
 
+#if HB_PROJECT_FEATURE_QSV
 static void set_qsv_hw_frames_ctx(hb_avfilter_graph_t * graph)
 {
     if (graph->job->hw_pix_fmt == AV_PIX_FMT_QSV)
@@ -300,6 +301,7 @@ static void set_qsv_hw_frames_ctx(hb_avfilter_graph_t * graph)
        }
     }
 }
+#endif
 
 hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
 {
