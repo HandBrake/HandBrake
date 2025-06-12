@@ -65,67 +65,66 @@ APPROX_FRAME_DATA(16)
 // Gamma adjusts pixel values so that less visible differences
 // count less.
 #if defined (__aarch64__) && !defined(__APPLE__)
-static float motion_metric_neon_8(hb_motion_metric_private_t *pv,
-                                  int width, int height,
-                                  int stride_a, int stride_b,
-                                  const uint8_t *buf_a, const uint8_t *buf_b)
-{
-    int bw, bh;
-    bw = width / 16;
-    bh = height / 16;
 
-    uint64_t sum = 0;
-    for (int y = 0; y < bh; y++)
-    {
-        for (int x = 0; x < bw; x++)
-        {
-            const uint8_t *ra = buf_a + y * 16 * stride_a + x * 16;
-            const uint8_t *rb = buf_b + y * 16 * stride_b + x * 16;
+#define DEF_MOTION_METRIC(nbits)                                                           \
+static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,                       \
+                                     int width, int height,                                \
+                                     int stride_a, int stride_b,                           \
+                                     const uint8_t *a, const uint8_t *b)                   \
+{                                                                                          \
+    int bw, bh;                                                                            \
+    uint##nbits##_t *buf_a, *buf_b;                                                        \
+                                                                                           \
+    buf_a     = (uint##nbits##_t *)a;                                                      \
+    buf_b     = (uint##nbits##_t *)b;                                                      \
+    bw        = width / 16;                                                                \
+    bh        = height / 16;                                                               \
+                                                                                           \
+    uint64_t sum = 0;                                                                      \
+    for (int y = 0; y < bh; y++)                                                           \
+    {                                                                                      \
+        for (int x = 0; x < bw; x++)                                                       \
+        {                                                                                  \
+            const uint##nbits##_t *ra = buf_a + y * 16 * stride_a + x * 16;                \
+            const uint##nbits##_t *rb = buf_b + y * 16 * stride_b + x * 16;                \
+            for (int yy = 0; yy < 16; yy++)                                                \
+            {                                                                              \
+                uint32_t arrga[16];                                                        \
+                uint32_t arrgb[16];                                                        \
+                for (int xx = 0; xx < 16; xx++)                                            \
+                {                                                                          \
+                    arrga[xx] = pv->gamma_lut[ra[xx]];                                     \
+                    arrgb[xx] = pv->gamma_lut[rb[xx]];                                     \
+                }                                                                          \
+                uint32x4_t vga0 = vld1q_u32(arrga);                                        \
+                uint32x4_t vga1 = vld1q_u32(arrga + 4);                                    \
+                uint32x4_t vga2 = vld1q_u32(arrga + 8);                                    \
+                uint32x4_t vga3 = vld1q_u32(arrga + 12);                                   \
+                uint32x4_t vgb0 = vld1q_u32(arrgb);                                        \
+                uint32x4_t vgb1 = vld1q_u32(arrgb + 4);                                    \
+                uint32x4_t vgb2 = vld1q_u32(arrgb + 8);                                    \
+                uint32x4_t vgb3 = vld1q_u32(arrgb + 12);                                   \
+                uint32x4_t vdf0 = vsubq_u32(vga0, vgb0);                                   \
+                uint32x4_t vdf1 = vsubq_u32(vga1, vgb1);                                   \
+                uint32x4_t vdf2 = vsubq_u32(vga2, vgb2);                                   \
+                uint32x4_t vdf3 = vsubq_u32(vga3, vgb3);                                   \
+                uint32x4_t vsq0 = vmulq_u32(vdf0, vdf0);                                   \
+                uint32x4_t vsq1 = vmulq_u32(vdf1, vdf1);                                   \
+                uint32x4_t vsq2 = vmulq_u32(vdf2, vdf2);                                   \
+                uint32x4_t vsq3 = vmulq_u32(vdf3, vdf3);                                   \
+                sum += vaddvq_u32(vsq0);                                                   \
+                sum += vaddvq_u32(vsq1);                                                   \
+                sum += vaddvq_u32(vsq2);                                                   \
+                sum += vaddvq_u32(vsq3);                                                   \
+                ra += stride_a;                                                            \
+                rb += stride_b;                                                            \
+            }                                                                              \
+        }                                                                                  \
+    }                                                                                      \
+    return (float)sum / (width * height);                                                  \
+}                                                                                          \
 
-            for (int yy = 0; yy < 16; yy++)
-            {
-                uint32_t arrga[16];
-                uint32_t arrgb[16];
-
-                for (int xx = 0; xx < 16; xx++)
-                {
-                    arrga[xx] = pv->gamma_lut[ra[xx]];
-                    arrgb[xx] = pv->gamma_lut[rb[xx]];
-                }
-
-                uint32x4_t vga0 = vld1q_u32(arrga);
-                uint32x4_t vga1 = vld1q_u32(arrga + 4);
-                uint32x4_t vga2 = vld1q_u32(arrga + 8);
-                uint32x4_t vga3 = vld1q_u32(arrga + 12);
-
-                uint32x4_t vgb0 = vld1q_u32(arrgb);
-                uint32x4_t vgb1 = vld1q_u32(arrgb + 4);
-                uint32x4_t vgb2 = vld1q_u32(arrgb + 8);
-                uint32x4_t vgb3 = vld1q_u32(arrgb + 12);
-                uint32x4_t vdf0 = vsubq_u32(vga0, vgb0);
-                uint32x4_t vdf1 = vsubq_u32(vga1, vgb1);
-                uint32x4_t vdf2 = vsubq_u32(vga2, vgb2);
-                uint32x4_t vdf3 = vsubq_u32(vga3, vgb3);
-
-                uint32x4_t vsq0 = vmulq_u32(vdf0, vdf0);
-                uint32x4_t vsq1 = vmulq_u32(vdf1, vdf1);
-                uint32x4_t vsq2 = vmulq_u32(vdf2, vdf2);
-                uint32x4_t vsq3 = vmulq_u32(vdf3, vdf3);
-
-                sum += vaddvq_u32(vsq0);
-                sum += vaddvq_u32(vsq1);
-                sum += vaddvq_u32(vsq2);
-                sum += vaddvq_u32(vsq3);
-
-                ra += stride_a;
-                rb += stride_b;
-            }
-        }
-    }
-
-    return (float)sum / (width * height);
-}
-#endif
+#else
 
 #define DEF_SSE_BLOCK16(nbits)                                                         \
 static inline unsigned sse_block16##_##nbits(unsigned *gamma_lut,                      \
@@ -179,6 +178,8 @@ static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,            
     }                                                                                       \
     return (float)sum / (width * height);                                                   \
 }                                                                                           \
+
+#endif
 
 DEF_MOTION_METRIC(8)
 DEF_MOTION_METRIC(16)
