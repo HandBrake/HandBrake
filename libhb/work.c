@@ -1809,12 +1809,11 @@ static void do_job(hb_job_t *job)
         hb_filter_init_t init;
 
         sanitize_filter_list_pre(job, title->geometry);
+        sanitize_dynamic_hdr_metadata_passthru(job);
 
         // Select the optimal pixel formats for the pipeline
         job->hw_pix_fmt = hb_get_best_hw_pix_fmt(job);
         job->input_pix_fmt = hb_get_best_pix_fmt(job);
-
-        sanitize_dynamic_hdr_metadata_passthru(job);
 
         // Init hwaccel context if needed
         if (hb_hwaccel_decode_is_enabled(job))

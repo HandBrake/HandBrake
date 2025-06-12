@@ -1793,6 +1793,10 @@ static void hb_add_internal( hb_handle_t * h, hb_job_t * job, hb_list_t *list_pa
     job_copy->list_attachment = NULL;
     job_copy->metadata        = NULL;
 
+#if HB_PROJECT_FEATURE_QSV
+    job_copy->qsv_ctx = hb_qsv_context_dup(job->qsv_ctx);
+#endif
+
     /* If we're doing Foreign Audio Search, copy all subtitles matching the
      * first audio track language we find in the audio list.
      *
@@ -1873,10 +1877,6 @@ static void hb_add_internal( hb_handle_t * h, hb_job_t * job, hb_list_t *list_pa
 
     /* Copy the job filter list */
     job_copy->list_filter = hb_filter_list_copy( job->list_filter );
-
-#if HB_PROJECT_FEATURE_QSV
-    job_copy->qsv_ctx = hb_qsv_context_dup(job->qsv_ctx);
-#endif
 
     /* Add the job to the list */
     hb_list_add( list_pass, job_copy );

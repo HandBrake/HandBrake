@@ -59,7 +59,7 @@ static int format_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     hb_dict_t *avsettings = hb_dict_init();
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (hb_qsv_full_path_is_enabled(init->job))
+    if (init->hw_pix_fmt == AV_PIX_FMT_QSV)
     {
         hb_dict_set_string(avsettings, "format", format);
         hb_dict_set_int(avsettings, "async_depth", init->job->qsv_ctx->async_depth);

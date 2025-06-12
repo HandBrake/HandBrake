@@ -368,7 +368,6 @@ mfxIMPL     hb_qsv_dx_index_to_impl(int dx_index);
 /* QSV pipeline helpers */
 const char * hb_map_qsv_preset_name(const char * preset);
 int hb_qsv_apply_encoder_options(qsv_data_t * qsv_data, hb_job_t * job, AVDictionary** av_opts);
-int hb_qsv_is_enabled(hb_job_t *job);
 hb_qsv_context_t * hb_qsv_context_init();
 hb_qsv_context_t * hb_qsv_context_dup(const hb_qsv_context_t *src);
 void hb_qsv_context_close(hb_qsv_context_t **_ctx);

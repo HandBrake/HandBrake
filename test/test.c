@@ -3281,6 +3281,10 @@ static int ParseOptions( int argc, char ** argv )
                     {
                         hw_decode = 0;
                     }
+                    if (hw_decode)
+                    {
+                        hw_decode |= HB_DECODE_SUPPORT_FORCE_HW;
+                    }
                 } break;
             case KEEP_DUPLICATE_TITLES:
                 keep_duplicate_titles = 1;

@@ -1454,7 +1454,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     {
         settings = hb_dict_init();
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        if (hb_qsv_full_path_is_enabled(pv->job))
+        if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_QSV)
         {
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
@@ -1510,7 +1510,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     if (pv->title->rotation != HB_ROTATION_0)
     {
 #if HB_PROJECT_FEATURE_QSV
-        if (hb_qsv_full_path_is_enabled(pv->job))
+        if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_QSV)
         {
             switch (pv->title->rotation)
             {
@@ -1845,7 +1845,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     if (pv->qsv.decode)
     {
         pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
-        if(hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
+        if (hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
         {
             hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
             if (info != NULL)
@@ -1853,7 +1853,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                 // setup the QSV configuration
                 if (!pv->job->qsv_ctx)
                 {
-                    hb_error( "decavcodecvInit: no context" );
+                    hb_error("decavcodecvInit: no context");
                     return 1;
                 }
                 pv->job->qsv_ctx->full_path_is_enabled = 1;
@@ -1924,7 +1924,9 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                 job->qsv_ctx->hw_frames_ctx = av_buffer_ref(pv->context->hw_frames_ctx);
             }
             if (pv->context->codec_id == AV_CODEC_ID_HEVC)
+            {
                 av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
+            }
         }
 #endif
 
@@ -2462,7 +2464,8 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_available())
     {
-        if (hb_qsv_decode_is_codec_supported(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt, pv->context->width, pv->context->height))
+        if (hb_qsv_decode_is_codec_supported(hb_qsv_get_adapter_index(), pv->context->codec_id,
+            pv->context->pix_fmt, pv->context->width, pv->context->height))
         {
             info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
         }

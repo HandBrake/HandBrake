@@ -2228,8 +2228,13 @@ static int hb_qsv_parse_options(hb_job_t *job)
 
 int hb_qsv_setup_job(hb_job_t *job)
 {
+    if (job->qsv_ctx == NULL)
+    {
+        return 1;
+    }
+
     // parse the json parameter
-    if (job->qsv_ctx && job->qsv_ctx->dx_index >= -1)
+    if (job->qsv_ctx->dx_index >= -1)
     {
         hb_qsv_param_parse_dx_index(job, job->qsv_ctx->dx_index);
     }
@@ -2242,27 +2247,28 @@ int hb_qsv_setup_job(hb_job_t *job)
     {
         job->qsv_ctx->async_depth = async_depth_default;
     }
+
     // Make sure QSV Decode is only True if the selected QSV adapter supports decode.
-    job->hw_decode = (job->hw_decode & HB_DECODE_SUPPORT_QSV) && hb_qsv_available ?
+    job->hw_decode = (job->hw_decode & HB_DECODE_SUPPORT_QSV) && hb_qsv_available() ?
                         HB_DECODE_SUPPORT_QSV : 0;
+
     return 0;
 }
 
 int hb_qsv_decode_is_enabled(hb_job_t *job)
 {
     if (!job)
+    {
         return 0;
+    }
 
     int qsv_decode_is_codec_supported = hb_qsv_decode_is_codec_supported(hb_qsv_get_adapter_index(),
-        job->title->video_codec_param, job->input_pix_fmt, job->title->geometry.width, job->title->geometry.height);
+        job->title->video_codec_param, job->input_pix_fmt,
+        job->title->geometry.width, job->title->geometry.height);
 
-    return ((job->hw_decode & HB_DECODE_SUPPORT_QSV) && (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)) &&
+    return ((job->hw_decode & HB_DECODE_SUPPORT_QSV) &&
+            (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)) &&
             qsv_decode_is_codec_supported;
-}
-
-int hb_qsv_is_enabled(hb_job_t *job)
-{
-    return hb_qsv_decode_is_enabled(job) || hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
 }
 
 int hb_qsv_get_memory_type(hb_job_t *job)
@@ -3985,7 +3991,6 @@ err_out:
 int hb_qsv_are_filters_supported(hb_job_t *job)
 {
     int num_sw_filters = 0;
-    int num_hw_filters = 0;
     if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
     {
         for (int i = 0; i < hb_list_count(job->list_filter); i++)
@@ -3995,14 +4000,10 @@ int hb_qsv_are_filters_supported(hb_job_t *job)
             {
                 // pixel format conversion is done via VPP filter
                 case HB_FILTER_FORMAT:
-                    num_hw_filters++;
-                    break;
                 // cropping and scaling always done via VPP filter
                 case HB_FILTER_CROP_SCALE:
-                    num_hw_filters++;
-                    break;
                 case HB_FILTER_ROTATE:
-                    num_hw_filters++;
+                case HB_FILTER_AVFILTER:
                     break;
                 case HB_FILTER_VFR:
                 {
@@ -4013,9 +4014,6 @@ int hb_qsv_are_filters_supported(hb_job_t *job)
                         break;
                     }
                 }
-                case HB_FILTER_AVFILTER:
-                    num_hw_filters++;
-                    break;
                 default:
                     // count only filters with access to frame data
                     num_sw_filters++;
