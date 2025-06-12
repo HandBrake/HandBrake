@@ -123,6 +123,26 @@ int hb_hwaccel_decode_is_enabled(hb_job_t *job)
     }
 }
 
+const char * hb_hwaccel_get_name(int hw_decode)
+{
+    if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+    {
+        return "videotoolbox";
+    }
+    if (hw_decode & HB_DECODE_SUPPORT_NVDEC)
+    {
+        return "nvdec";
+    }
+    if (hw_decode & HB_DECODE_SUPPORT_QSV)
+    {
+        return "qsv";
+    }
+    if (hw_decode & HB_DECODE_SUPPORT_MF)
+    {
+        return "mf";
+    }
+}
+
 enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name)
 {
     if (is_hardware_disabled())

@@ -33,7 +33,6 @@ typedef struct hb_qsv_context_s
     int memory_type;
     int out_range;
     int dx_index;
-    int full_path_is_enabled;
     const char *vpp_scale_mode;
     const char *vpp_interpolation_method;
     AVBufferRef *hw_frames_ctx;
@@ -221,7 +220,6 @@ int            hb_qsv_implementation_is_hardware(mfxIMPL implementation);
 
 /* Intel Quick Sync Video DECODE utilities */
 const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id);
-int hb_qsv_decode_is_enabled(hb_job_t *job);
 
 /* Media SDK parameters handling */
 enum

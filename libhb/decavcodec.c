@@ -144,15 +144,6 @@ struct hb_work_private_s
     int                    drop_samples;
     uint64_t               downmix_mask;
 
-#if HB_PROJECT_FEATURE_QSV
-    // QSV-specific settings
-    struct
-    {
-        int                decode;
-        const char       * codec_name;
-    } qsv;
-#endif
-
     AVFrame              * hw_frame;
     enum AVPixelFormat     hw_pix_fmt;
 
@@ -1840,37 +1831,17 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->next_pts = 0;
     hb_buffer_list_clear(&pv->list);
 
-#if HB_PROJECT_FEATURE_QSV
-    pv->qsv.decode = hb_qsv_decode_is_enabled(job);
-    if (pv->qsv.decode)
-    {
-        pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
-        if (hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
-        {
-            hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
-            if (info != NULL)
-            {
-                // setup the QSV configuration
-                if (!pv->job->qsv_ctx)
-                {
-                    hb_error("decavcodecvInit: no context");
-                    return 1;
-                }
-                pv->job->qsv_ctx->full_path_is_enabled = 1;
-            }
-        }
-    }
-#endif
-
     if( pv->job && pv->job->title && !pv->job->title->has_resolution_change )
     {
         pv->threads = HB_FFMPEG_THREADS_AUTO;
     }
 
 #if HB_PROJECT_FEATURE_QSV
-    if (pv->qsv.decode)
+    if (hb_hwaccel_decode_is_enabled(job) &&
+        pv->job->hw_decode & HB_DECODE_SUPPORT_QSV)
     {
-        pv->codec = avcodec_find_decoder_by_name(pv->qsv.codec_name);
+        const char *codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
+        pv->codec = avcodec_find_decoder_by_name(codec_name);
     }
     else
 #endif
@@ -1916,8 +1887,9 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         }
 
 #if HB_PROJECT_FEATURE_QSV
-        if (pv->qsv.decode)
-        {
+    if (hb_hwaccel_decode_is_enabled(job) &&
+        pv->job->hw_decode & HB_DECODE_SUPPORT_QSV)
+    {
             if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
             {
                 hb_hwaccel_hwframes_ctx_init(pv->context, job);

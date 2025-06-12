@@ -499,17 +499,14 @@ void hb_display_job_info(hb_job_t *job)
 
     hb_log(" * video track");
 
-#if HB_PROJECT_FEATURE_QSV
-    if (hb_qsv_decode_is_enabled(job))
-    {
-        hb_log("   + decoder: %s %d-bit (%s)",
-               hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
-    } else
-#endif
     if (hb_hwaccel_decode_is_enabled(job))
     {
-        hb_log("   + decoder: %s %d-bit hwaccel (%s, %s)",
-               title->video_codec_name, hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt), av_get_pix_fmt_name(job->hw_pix_fmt));
+        hb_log("   + decoder: %s %d-bit %s hwaccel (%s, %s)",
+               title->video_codec_name,
+               hb_get_bit_depth(job->input_pix_fmt),
+               hb_hwaccel_get_name(job->hw_decode),
+               av_get_pix_fmt_name(job->input_pix_fmt),
+               av_get_pix_fmt_name(job->hw_pix_fmt));
     }
     else
     {
