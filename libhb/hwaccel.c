@@ -92,9 +92,7 @@ static int are_filters_supported(hb_job_t *job)
 
 int hb_hwaccel_is_enabled(hb_job_t *job)
 {
-    return job != NULL &&
-            (job->title->video_decode_support & HB_DECODE_SUPPORT_HWACCEL) &&
-            (job->hw_decode & HB_DECODE_SUPPORT_HWACCEL);
+    return job != NULL && (job->title->video_decode_support & job->hw_decode);
 }
 
 int hb_hwaccel_is_full_hardware_pipeline_enabled(hb_job_t *job)
@@ -127,19 +125,23 @@ const char * hb_hwaccel_get_name(int hw_decode)
 {
     if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
     {
-        return "videotoolbox";
+        return "videotoolbox hwaccel";
     }
-    if (hw_decode & HB_DECODE_SUPPORT_NVDEC)
+    else if (hw_decode & HB_DECODE_SUPPORT_NVDEC)
     {
-        return "nvdec";
+        return "nvdec hwaccel";
     }
-    if (hw_decode & HB_DECODE_SUPPORT_QSV)
+    else if (hw_decode & HB_DECODE_SUPPORT_QSV)
     {
         return "qsv";
     }
-    if (hw_decode & HB_DECODE_SUPPORT_MF)
+    else if (hw_decode & HB_DECODE_SUPPORT_MF)
     {
-        return "mf";
+        return "mf hwaccel";
+    }
+    else
+    {
+        return "unknown";
     }
 }
 
@@ -434,29 +436,3 @@ hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_
 
     return NULL;
 }
-
-#if HB_PROJECT_FEATURE_MF
-int hb_directx_available()
-{
-    if (is_hardware_disabled())
-    {
-        return 0;
-    }
-    enum AVHWDeviceType hw_type = av_hwdevice_find_type_by_name("d3d11va");
-    if (hw_type == AV_HWDEVICE_TYPE_NONE)
-    {
-        hb_log("directx: not available on this system");
-        return 0;
-    }
-
-    hb_log("directx: is available");
-    return 1;
-}
-#else // HB_PROJECT_FEATURE_MF
-
-int hb_directx_available()
-{
-    return -1;
-}
-
-#endif // HB_PROJECT_FEATURE_MF

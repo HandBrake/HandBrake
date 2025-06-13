@@ -205,3 +205,28 @@ int hb_mf_av1_available()
     return is_mf_av1_available;
 }
 
+#if HB_PROJECT_FEATURE_MF
+int hb_directx_available()
+{
+    if (is_hardware_disabled())
+    {
+        return 0;
+    }
+    enum AVHWDeviceType hw_type = av_hwdevice_find_type_by_name("d3d11va");
+    if (hw_type == AV_HWDEVICE_TYPE_NONE)
+    {
+        hb_log("directx: not available on this system");
+        return 0;
+    }
+
+    hb_log("directx: is available");
+    return 1;
+}
+#else // HB_PROJECT_FEATURE_MF
+
+int hb_directx_available()
+{
+    return -1;
+}
+
+#endif // HB_PROJECT_FEATURE_MF

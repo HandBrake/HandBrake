@@ -13,6 +13,8 @@
 
 #include "handbrake/hbffmpeg.h"
 
+int hb_directx_available();
+
 #if HB_PROJECT_FEATURE_MF
 #include <windows.h>
 #include <mfapi.h>
@@ -28,9 +30,9 @@ typedef struct MFFunctions {
 } MFFunctions;
 #endif // HB_PROJECT_FEATURE_MF
 
-int            hb_mf_h264_available();
-int            hb_mf_h265_available();
-int            hb_mf_av1_available();
-int            hb_check_mf_available();
+int hb_mf_h264_available();
+int hb_mf_h265_available();
+int hb_mf_av1_available();
+int hb_check_mf_available();
 
 #endif // HANDBRAKE_MF_COMMON_H

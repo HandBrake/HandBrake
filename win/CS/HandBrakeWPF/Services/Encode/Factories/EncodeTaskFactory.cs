@@ -291,7 +291,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (this.isEncodePath && (job.VideoEncoder?.IsQuickSync ?? false))
             {
                 video.HardwareDecode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && enableQuickSyncDecoding ?
-                     NativeConstants.HB_DECODE_SUPPORT_QSV : 0 ;
+                     NativeConstants.HB_DECODE_SUPPORT_QSV | NativeConstants.HB_DECODE_SUPPORT_FORCE_HW : 0 ;
             }
 
             // Allow use of the QSV decoder is configurable for non QSV encoders.
