@@ -292,7 +292,9 @@ void hb_hwaccel_hw_ctx_close(void **hw_device_ctx)
     }
 }
 
-int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx, hb_job_t *job)
+int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx,
+                                 enum AVPixelFormat hw_pix_fmt,
+                                 enum AVPixelFormat sw_pix_fmt)
 {
     if (!ctx->hw_device_ctx)
     {
@@ -301,30 +303,21 @@ int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx, hb_job_t *job)
     }
 
     ctx->get_format = hw_hwaccel_get_hw_format;
-    ctx->pix_fmt = job->hw_pix_fmt;
-#if HB_PROJECT_FEATURE_QSV
-    if (hb_hwaccel_is_full_hardware_pipeline_enabled(job) &&
-        job->hw_pix_fmt == AV_PIX_FMT_QSV)
-    {
-        ctx->extra_hw_frames = HB_QSV_FFMPEG_EXTRA_HW_FRAMES;
-        ctx->sw_pix_fmt = job->input_pix_fmt;
-    }
-#endif
-
+    ctx->pix_fmt = hw_pix_fmt;
+    ctx->sw_pix_fmt = sw_pix_fmt;
     ctx->hw_frames_ctx = av_hwframe_ctx_alloc(ctx->hw_device_ctx);
 
     AVHWFramesContext *frames_ctx = (AVHWFramesContext *)ctx->hw_frames_ctx->data;
-    frames_ctx->format = job->hw_pix_fmt;
-    frames_ctx->sw_format = job->output_pix_fmt;
+    frames_ctx->format = hw_pix_fmt;
+    frames_ctx->sw_format = sw_pix_fmt;
     frames_ctx->width = ctx->width;
     frames_ctx->height = ctx->height;
 
 #if HB_PROJECT_FEATURE_QSV
-    if (hb_hwaccel_is_full_hardware_pipeline_enabled(job) &&
-        job->hw_pix_fmt == AV_PIX_FMT_QSV)
+    if (hw_pix_fmt == AV_PIX_FMT_QSV)
     {
-        // Use input pix format for decoder and filters frame pools, output frame pools are created by FFmpeg
-        frames_ctx->sw_format = job->input_pix_fmt;
+        ctx->extra_hw_frames = HB_QSV_FFMPEG_EXTRA_HW_FRAMES;
+
         frames_ctx->initial_pool_size = HB_QSV_FFMPEG_INITIAL_POOL_SIZE;
 
         AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;

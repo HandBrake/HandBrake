@@ -699,8 +699,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
     {
         context->hw_device_ctx = av_buffer_ref(pv->job->hw_device_ctx);
-        hb_hwaccel_hwframes_ctx_init(context, job);
-        context->pix_fmt = job->hw_pix_fmt;
+        hb_hwaccel_hwframes_ctx_init(context, job->hw_pix_fmt, job->output_pix_fmt);
     }
     else
     {

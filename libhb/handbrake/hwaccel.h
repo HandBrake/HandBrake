@@ -17,7 +17,10 @@ enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPi
 int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx, hb_job_t *job);
 void hb_hwaccel_hw_ctx_close(void **hw_device_ctx);
 
-int hb_hwaccel_hwframes_ctx_init(struct AVCodecContext *ctx, hb_job_t *job);
+int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx,
+                                 enum AVPixelFormat hw_pix_fmt,
+                                 enum AVPixelFormat sw_pix_fmt);
+
 AVBufferRef *hb_hwaccel_init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
                                        enum AVPixelFormat sw_fmt,
                                        enum AVPixelFormat hw_fmt,
