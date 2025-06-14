@@ -10,7 +10,7 @@
 #ifndef HANDBRAKE_QSV_COMMON_H
 #define HANDBRAKE_QSV_COMMON_H
 
-int hb_qsv_available();
+int hb_qsv_available(void);
 
 #include "handbrake/project.h"
 
