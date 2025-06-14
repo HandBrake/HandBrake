@@ -3922,61 +3922,6 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
 
 #if defined(_WIN32) || defined(__MINGW32__)
 
-static int hb_qsv_ffmpeg_set_options(hb_job_t *job, AVDictionary** dict)
-{
-    int err;
-    AVDictionary* out_dict = *dict;
-
-    if (job->qsv_ctx && job->qsv_ctx->dx_index >= 0)
-    {
-        char device[32];
-        snprintf(device, 32, "%u", job->qsv_ctx->dx_index);
-        err = av_dict_set(&out_dict, "child_device", device, 0);
-        if (err < 0)
-        {
-            return err;
-        }
-    }
-
-    av_dict_set(&out_dict, "child_device_type", "d3d11va", 0);
-
-    *dict = out_dict;
-    return 0;
-}
-
-int hb_qsv_device_init(hb_job_t *job, void **hw_device_ctx)
-{
-    int err;
-    AVDictionary *dict = NULL;
-    AVBufferRef *ctx = NULL;
-
-    if (job)
-    {
-        err = hb_qsv_ffmpeg_set_options(job, &dict);
-        if (err < 0)
-        {
-            return err;
-        }
-    }
-
-    err = av_hwdevice_ctx_create(&ctx, AV_HWDEVICE_TYPE_QSV,
-                                 0, dict, 0);
-    if (err < 0)
-    {
-        hb_error("hb_qsv_device_init: error creating a QSV device %d", err);
-        goto err_out;
-    }
-
-    *hw_device_ctx = ctx;
-err_out:
-    if (dict)
-    {
-        av_dict_free(&dict);
-    }
-
-    return err;
-}
-
 int hb_qsv_are_filters_supported(hb_job_t *job)
 {
     int num_sw_filters = 0;
@@ -4020,22 +3965,64 @@ int hb_qsv_are_filters_supported(hb_job_t *job)
     return 0;
 }
 
-int hb_qsv_hw_frames_init(AVCodecContext *s)
+#endif
+
+static int hb_qsv_ffmpeg_set_options(hb_job_t *job, AVDictionary** dict)
 {
-    return -1;
+    AVDictionary* out_dict = *dict;
+
+#if defined(_WIN32) || defined(__MINGW32__)
+    if (job->qsv_ctx && job->qsv_ctx->dx_index >= 0)
+    {
+        int err;
+        char device[32];
+        snprintf(device, 32, "%u", job->qsv_ctx->dx_index);
+        err = av_dict_set(&out_dict, "child_device", device, 0);
+        if (err < 0)
+        {
+            return err;
+        }
+    }
+
+    av_dict_set(&out_dict, "child_device_type", "d3d11va", 0);
+#endif
+
+    *dict = out_dict;
+    return 0;
 }
 
 int hb_qsv_device_init(hb_job_t *job, void **hw_device_ctx)
 {
-    return -1;
-}
+    int err;
+    AVDictionary *dict = NULL;
+    AVBufferRef *ctx = NULL;
 
-enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts)
-{
-    return AV_PIX_FMT_NONE;
-}
+    if (job)
+    {
+        err = hb_qsv_ffmpeg_set_options(job, &dict);
+        if (err < 0)
+        {
+            return err;
+        }
+    }
 
-#endif
+    err = av_hwdevice_ctx_create(&ctx, AV_HWDEVICE_TYPE_QSV,
+                                 0, dict, 0);
+    if (err < 0)
+    {
+        hb_error("hb_qsv_device_init: error creating a QSV device %d", err);
+        goto err_out;
+    }
+
+    *hw_device_ctx = ctx;
+err_out:
+    if (dict)
+    {
+        av_dict_free(&dict);
+    }
+
+    return err;
+}
 
 hb_qsv_context_t * hb_qsv_context_init()
 {
