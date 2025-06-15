@@ -326,7 +326,7 @@
 
     self.passthruName = [preset[@"AudioTrackNamePassthru"] boolValue];
 
-    NSString *automaticNamingBehavior = [preset[@"AudioAutomaticNamingBehavior"] stringValue];
+    NSString *automaticNamingBehavior = preset[@"AudioAutomaticNamingBehavior"];
     if ([automaticNamingBehavior isKindOfClass:[NSString class]])
     {
         if ([automaticNamingBehavior isEqualToString:@"none"])

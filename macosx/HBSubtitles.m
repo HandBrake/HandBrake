@@ -329,7 +329,7 @@
         {
             track.burnedIn = [trackDict[@"Burn"] boolValue];
             track.forcedOnly = [trackDict[@"Forced"] boolValue];
-            track.title = [trackDict[@"Name"] stringValue];
+            track.title = trackDict[@"Name"];
 
             [tracks addObject:track];
         }

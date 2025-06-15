@@ -236,7 +236,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
             track.sampleRate = [trackDict[@"Samplerate"] intValue] == -1 ? 0 : [trackDict[@"Samplerate"] intValue];
             track.bitRate = [trackDict[@"Bitrate"] intValue];
             track.encoder = hb_audio_encoder_get_from_name([trackDict[@"Encoder"] UTF8String]);
-            track.title = [trackDict[@"Name"] stringValue];
+            track.title = trackDict[@"Name"];
 
             [tracks addObject:track];
         }
