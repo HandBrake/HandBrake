@@ -3348,7 +3348,17 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    *buf_in = NULL;
+    if (pv->common->job->indepth_scan)
+    {
+        // When doing subtitle indepth scan, the pipeline ends at sync,
+        // do not add the subtitles to the queue
+        return HB_WORK_OK;
+    }
+    else
+    {
+        *buf_in = NULL;
+    }
+
     QueueBuffer(pv->stream, in);
     Synchronize(pv->stream);
 
