@@ -46,14 +46,26 @@ static void build_gamma_lut(hb_motion_metric_private_t *pv)
 static void approximate_frame_data##_##nbits(const uint##nbits##_t *source, uint##nbits##_t *dest,      \
                                              int source_stride, int dest_stride, int width, int height) \
 {                                                                                                       \
+    int stride2 = source_stride * 2;                                                                    \
+    int stride3 = source_stride * 3;                                                                    \
+    int jj4;                                                                                            \
+    int top_left, top_right, bottom_left, bottom_right;                                                 \
     for (int ii = 0; ii < height; ii++)                                                                 \
     {                                                                                                   \
         for (int jj = 0; jj < width; jj++)                                                              \
         {                                                                                               \
-            dest[jj] = APPROX(source[2 * jj],     source[2 * jj + source_stride] ,                      \
-                              source[2 * jj + 1], source[2 * jj + 1 + source_stride]);                  \
+            jj4 = jj * 4;                                                                               \
+            top_left     = APPROX(source[jj4], source[jj4 + source_stride],                             \
+                                  source[jj4 + 1], source[jj4 + source_stride + 1]);                    \
+            top_right    = APPROX(source[jj4 + 2], source[jj4 + source_stride + 2],                     \
+                                  source[jj4 + 3], source[jj4 + source_stride + 3]);                    \
+            bottom_left  = APPROX(source[jj4 + stride2], source[jj4 + stride3],                         \
+                                  source[jj4 + stride2 + 1], source[jj4 + stride3 + 1]);                \
+            bottom_right = APPROX(source[jj4 + stride2 + 2], source[jj4 + stride3 + 2],                 \
+                                  source[jj4 + stride2 + 3], source[jj4 + stride3 + 3]);                \
+            dest[jj]     = APPROX(top_left, top_right, bottom_left, bottom_right);                      \
         }                                                                                               \
-        source += source_stride * 2;                                                                    \
+        source += source_stride * 4;                                                                    \
         dest += dest_stride;                                                                            \
     }                                                                                                   \
 }                                                                                                       \
