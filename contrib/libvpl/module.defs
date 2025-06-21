@@ -1,11 +1,11 @@
 $(eval $(call import.MODULE.defs,LIBVPL,libvpl))
 $(eval $(call import.CONTRIB.defs,LIBVPL))
 
-LIBVPL.FETCH.url       = https://github.com/intel/libvpl/archive/refs/tags/v2.14.0.tar.gz
-LIBVPL.FETCH.url      += https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libvpl-2.14.0.tar.gz
-LIBVPL.FETCH.sha256    = 7c6bff1c1708d910032c2e6c44998ffff3f5fdbf06b00972bc48bf2dd9e5ac06
-LIBVPL.FETCH.basename  = libvpl-2.14.0.tar.gz
-LIBVPL.EXTRACT.tarbase = libvpl-2.14.0
+LIBVPL.FETCH.url       = https://github.com/intel/libvpl/archive/refs/tags/v2.15.0.tar.gz
+LIBVPL.FETCH.url      += https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libvpl-2.15.0.tar.gz
+LIBVPL.FETCH.sha256    = 7218c3b8206b123204c3827ce0cf7c008d5c693c1f58ab461958d05fe6f847b3
+LIBVPL.FETCH.basename  = libvpl-2.15.0.tar.gz
+LIBVPL.EXTRACT.tarbase = libvpl-2.15.0
 
 LIBVPL.build_dir             = build
 LIBVPL.CONFIGURE.exe         = cmake
@@ -15,8 +15,7 @@ LIBVPL.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBVPL.CONFIGURE.prefix
 LIBVPL.CONFIGURE.deps        =
 LIBVPL.CONFIGURE.static      =
 LIBVPL.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
-LIBVPL.CONFIGURE.extra       = -DBUILD_EXPERIMENTAL=ON -DBUILD_TOOLS=OFF -DBUILD_EXAMPLES=OFF
-
+LIBVPL.CONFIGURE.extra       = -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_EXPERIMENTAL=ON -DINSTALL_DEV=ON
 ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
     LIBVPL.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
 else
