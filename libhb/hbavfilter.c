@@ -277,40 +277,11 @@ int hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t ** buf_in)
     return ret;
 }
 
-#if HB_PROJECT_FEATURE_QSV
-static void set_qsv_hw_frames_ctx(hb_avfilter_graph_t * graph)
-{
-    if (graph->job->hw_pix_fmt == AV_PIX_FMT_QSV)
-    {
-        AVBufferRef *hw_frames_ctx = av_buffersink_get_hw_frames_ctx(graph->output);
-        if (!hw_frames_ctx)
-        {
-            hb_error("hb_avfilter_get_buf: failed to get hw_frames_ctx from sink");
-        }
-        else
-        {
-            // copy hw frame ctx from filter graph for future encoder initialization
-            if (graph->job->qsv_ctx->hw_frames_ctx->buffer != hw_frames_ctx->buffer)
-            {
-                if (graph->job->qsv_ctx->hw_frames_ctx)
-                {
-                    av_buffer_unref(&graph->job->qsv_ctx->hw_frames_ctx);
-                }
-                graph->job->qsv_ctx->hw_frames_ctx = av_buffer_ref(hw_frames_ctx);
-            }
-       }
-    }
-}
-#endif
-
 hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
 {
     int result = av_buffersink_get_frame(graph->output, graph->frame);
     if (result >= 0)
     {
-#if HB_PROJECT_FEATURE_QSV
-        set_qsv_hw_frames_ctx(graph);
-#endif
         hb_buffer_t *buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
         av_frame_unref(graph->frame);
         return buf;

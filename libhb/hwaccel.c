@@ -190,16 +190,6 @@ enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPi
         {
             if (*p == job->hw_pix_fmt)
             {
-#if HB_PROJECT_FEATURE_QSV
-                if (*p == AV_PIX_FMT_QSV)
-                {
-                    if (job->qsv_ctx->hw_frames_ctx)
-                    {
-                        // in case if decoder and encoder have the same size
-                        ctx->hw_frames_ctx = av_buffer_ref(job->qsv_ctx->hw_frames_ctx);
-                    }
-                }
-#endif
                 return *p;
             }
         }

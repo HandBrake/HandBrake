@@ -4053,7 +4053,6 @@ hb_qsv_context_t * hb_qsv_context_dup(const hb_qsv_context_t *src)
     if (ctx)
     {
         memcpy(ctx, src, sizeof(hb_qsv_context_t));
-        ctx->hw_frames_ctx = NULL;
     }
     return ctx;
 }
@@ -4066,10 +4065,6 @@ void hb_qsv_context_close(hb_qsv_context_t **_ctx)
         return;
     }
 
-    if (ctx->hw_frames_ctx)
-    {
-        av_buffer_unref(&ctx->hw_frames_ctx);
-    }
     av_freep(_ctx);
 
     // restore adapter index after user preferences

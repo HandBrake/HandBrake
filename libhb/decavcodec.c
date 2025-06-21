@@ -1893,7 +1893,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
             {
                 hb_hwaccel_hwframes_ctx_init(pv->context, job->hw_pix_fmt, job->input_pix_fmt);
-                job->qsv_ctx->hw_frames_ctx = av_buffer_ref(pv->context->hw_frames_ctx);
             }
             if (pv->context->codec_id == AV_CODEC_ID_HEVC)
             {
