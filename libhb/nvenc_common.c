@@ -262,6 +262,7 @@ int hb_nvenc_are_filters_supported(hb_list_t *filters)
                 supported = hb_dict_get_int(filter->settings, "mode") == 0;
                 break;
             case HB_FILTER_FORMAT:
+            case HB_FILTER_AVFILTER:
                 break;
             default:
                 supported = 0;
