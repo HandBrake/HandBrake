@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,ZIMG,zimg))
 $(eval $(call import.CONTRIB.defs,ZIMG))
 
-ZIMG.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/zimg-snapshot-20250624.tar.gz
+ZIMG.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/zimg-snapshot-20250624.tar.gz
 #ZIMG.FETCH.url    += https://github.com/sekrit-twc/zimg/archive/refs/tags/release-3.0.5.tar.gz
 ZIMG.FETCH.sha256  = 19a96cdc266466be58be86a9271bedb1f080bf4cc14f5ed58ac39dc5b970fd17
 ZIMG.EXTRACT.tarbase = zimg-snapshot-20250624
