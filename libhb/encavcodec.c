@@ -1364,14 +1364,17 @@ static int apply_encoder_options(hb_job_t *job, AVCodecContext *context, AVDicti
 
 static int apply_vce_preset(AVDictionary **av_opts, const char *preset)
 {
-    if (preset)
+    if (!strcasecmp(preset, "speed"))
     {
-        if (!strcasecmp(preset, "balanced")
-            || !strcasecmp(preset, "speed")
-            || !strcasecmp(preset, "quality"))
-        {
-            av_opt_set(av_opts, "quality", preset, AV_OPT_SEARCH_CHILDREN);
-        }
+        av_dict_set(av_opts, "quality", "10", 0);
+    }
+    else if (!strcasecmp(preset, "balanced"))
+    {
+        av_dict_set(av_opts, "quality", "5", 0);
+    }
+    else if (!strcasecmp(preset, "quality"))
+    {
+        av_dict_set(av_opts, "quality", "0", 0);
     }
 
     return 0;
