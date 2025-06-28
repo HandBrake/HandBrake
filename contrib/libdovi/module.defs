@@ -24,6 +24,8 @@ ifeq (1,$(HOST.cross))
         ifneq ($(HOST.machine),$(BUILD.machine))
             LIBDOVI.target += --target="$(HOST.machine:arm64=aarch64)-$(HOST.vendor)-$(HOST.system)"
         endif
+    else ifeq ($(HOST.system)-$(HOST.machine),mingw-aarch64)
+        LIBDOVI.target += --target="aarch64-pc-windows-gnullvm"
     else ifeq ($(HOST.system),mingw)
         LIBDOVI.target += --target="$(HOST.machine)-pc-windows-gnu"
     else
