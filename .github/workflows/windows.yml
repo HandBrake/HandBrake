@@ -12,12 +12,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-
     - name: Environment Setup
       run: |
-        sudo apt-get install automake autoconf build-essential libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax
-        sudo pip3 install meson
+        sudo apt-get install automake autoconf build-essential libtool libtool-bin make meson nasm patch tar yasm zlib1g-dev ninja-build gzip pax
+        rustup target add aarch64-pc-windows-gnullvm
 
     - name: Setup Toolchain
       run: |
@@ -35,6 +33,11 @@ jobs:
             echo "Toolchain Verification FAILED. Exiting!"
             return -1
         fi
+
+    - name: Setup Cargo-C Toolchain
+      if: steps.windows-cargo-c-toolchain.outputs.cache-hit != 'true'
+      run: |
+        cargo install cargo-c
 
     - name: Build CLI and LibHB
       run: |
@@ -77,8 +80,7 @@ jobs:
 
     - name: Setup Environment
       run: |
-        sudo apt-get install automake autoconf build-essential libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax libssl-dev
-        sudo pip3 install meson
+        sudo apt-get install automake autoconf build-essential libtool libtool-bin make meson nasm patch tar yasm zlib1g-dev ninja-build gzip pax libssl-dev
         rustup target add x86_64-pc-windows-gnu
 
     - name: Setup Toolchain
