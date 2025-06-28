@@ -47,7 +47,7 @@
                                                 <rect key="frame" x="1" y="1" width="540" height="54"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ar9-Uk-6sM">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsExpansionToolTips="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ar9-Uk-6sM">
                                                         <rect key="frame" x="28" y="35" width="482" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="lzC-jf-dZI"/>
@@ -80,7 +80,7 @@
                                                     <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="xAK-4F-cCr">
                                                         <rect key="frame" x="30" y="13" width="478" height="23"/>
                                                     </progressIndicator>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxw-eD-SmJ">
+                                                    <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxw-eD-SmJ">
                                                         <rect key="frame" x="28" y="3" width="482" height="14"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Encoding status" usesSingleLineMode="YES" id="eEU-Dr-Qh8">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -117,7 +117,7 @@
                                                 <rect key="frame" x="1" y="57" width="540" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ns0-GA-WCh">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsExpansionToolTips="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ns0-GA-WCh">
                                                         <rect key="frame" x="28" y="3" width="482" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="5Tc-Oy-HWg"/>
