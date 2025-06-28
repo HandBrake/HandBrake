@@ -9,7 +9,7 @@ concurrency:
 jobs:
   build_mingw_arm:
     name: CLI / LibHB (ARM)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
@@ -61,7 +61,7 @@ jobs:
 
   build_mingw:
     name: CLI / LibHB
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
 
