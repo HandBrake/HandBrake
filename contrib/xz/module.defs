@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,XZ,xz))
+$(eval $(call import.MODULE.defs,XZ,xz,LIBICONV))
 $(eval $(call import.CONTRIB.defs,XZ))
 
 XZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/xz-5.8.1.tar.bz2

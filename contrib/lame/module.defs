@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,LAME,lame))
+$(eval $(call import.MODULE.defs,LAME,lame,LIBICONV))
 $(eval $(call import.CONTRIB.defs,LAME))
 
 LAME.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/lame-3.100.tar.gz
