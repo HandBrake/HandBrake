@@ -201,7 +201,7 @@
 
         <!-- Grayscale -->
         <CheckBox Content="{x:Static Properties:Resources.FiltersView_Grayscale}" IsChecked="{Binding GrayscaleFilter.Grayscale}" Grid.Row="8" Grid.Column="1"
-                          ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Grayscale}"  HorizontalAlignment="Left" VerticalContentAlignment="Center"  />
+                          ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Grayscale}"  VerticalAlignment="Center" VerticalContentAlignment="Center"  />
     </Grid>
 
 </UserControl>
