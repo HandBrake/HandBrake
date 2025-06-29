@@ -9,9 +9,6 @@
 
 #include "handbrake/common.h"
 #include "handbrake/avfilter_priv.h"
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-#include "handbrake/qsv_common.h"
-#endif
 
 static int format_init(hb_filter_object_t *filter,
                            hb_filter_init_t *init);
@@ -62,11 +59,8 @@ static int format_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     if (init->hw_pix_fmt == AV_PIX_FMT_QSV)
     {
         hb_dict_set_string(avsettings, "format", format);
+        hb_dict_set_string(avsettings, "out_range", (init->color_range == AVCOL_RANGE_JPEG) ? "full" : "limited");
         hb_dict_set_int(avsettings, "async_depth", init->job->qsv_ctx->async_depth);
-        init->pix_fmt = av_get_pix_fmt(format);
-
-        if (init->job->qsv_ctx->out_range != AVCOL_RANGE_UNSPECIFIED)
-            hb_dict_set_string(avsettings, "out_range", (init->job->qsv_ctx->out_range == AVCOL_RANGE_JPEG) ? "full" : "limited");
 
         hb_dict_set(avfilter, "vpp_qsv", avsettings);
     }

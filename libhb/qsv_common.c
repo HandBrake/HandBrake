@@ -2207,19 +2207,6 @@ static int hb_qsv_parse_options(hb_job_t *job)
                     job->qsv_ctx->memory_type = mode->value;
                 }
             }
-            else if (!strcasecmp(key, "out_range"))
-            {
-                hb_triplet_t* mode = NULL;
-                mode = hb_triplet4key(hb_qsv_out_range_types, hb_value_get_string_xform(value));
-                if (!mode)
-                {
-                    err = HB_QSV_PARAM_BAD_VALUE;
-                }
-                else
-                {
-                    job->qsv_ctx->out_range = mode->value;
-                }
-            }
         }
         hb_dict_free(&options_list);
     }
@@ -3238,10 +3225,6 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
                 job->qsv_ctx->memory_type = mode->value;
         }
     }
-    else if (!strcasecmp(key, "out_range"))
-    {
-        // Already parsed in QSV initialization
-    }
     else if (!strcasecmp(key, "scalingmode") ||
              !strcasecmp(key, "vpp-sm"))
     {
@@ -3767,65 +3750,6 @@ const char* hb_qsv_profile_name(uint32_t codec_id, uint16_t profile_id)
     return profile != NULL ? profile->name : NULL;
 }
 
-const char* hb_qsv_frametype_name(uint16_t qsv_frametype)
-{
-    if      (qsv_frametype & MFX_FRAMETYPE_IDR)
-    {
-        return qsv_frametype & MFX_FRAMETYPE_REF ? "IDR (ref)" : "IDR";
-    }
-    else if (qsv_frametype & MFX_FRAMETYPE_I)
-    {
-        return qsv_frametype & MFX_FRAMETYPE_REF ? "I (ref)"   : "I";
-    }
-    else if (qsv_frametype & MFX_FRAMETYPE_P)
-    {
-        return qsv_frametype & MFX_FRAMETYPE_REF ? "P (ref)"   : "P";
-    }
-    else if (qsv_frametype & MFX_FRAMETYPE_B)
-    {
-        return qsv_frametype & MFX_FRAMETYPE_REF ? "B (ref)"   : "B";
-    }
-    else
-    {
-        return "unknown";
-    }
-}
-
-uint8_t hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags)
-{
-    uint16_t flags     = 0;
-    uint8_t  frametype = 0;
-
-    if (qsv_frametype & MFX_FRAMETYPE_IDR)
-    {
-        flags |= HB_FLAG_FRAMETYPE_KEY;
-        frametype = HB_FRAME_IDR;
-    }
-    else if (qsv_frametype & MFX_FRAMETYPE_I)
-    {
-        frametype = HB_FRAME_I;
-    }
-    else if (qsv_frametype & MFX_FRAMETYPE_P)
-    {
-        frametype = HB_FRAME_P;
-    }
-    else if (qsv_frametype & MFX_FRAMETYPE_B)
-    {
-        frametype = HB_FRAME_B;
-    }
-
-    if (qsv_frametype & MFX_FRAMETYPE_REF)
-    {
-        flags |= HB_FLAG_FRAMETYPE_REF;
-    }
-
-    if (out_flags != NULL)
-    {
-       *out_flags = flags;
-    }
-    return frametype;
-}
-
 const char* hb_qsv_impl_get_name(int impl)
 {
     switch (MFX_IMPL_BASETYPE(impl))
@@ -3920,10 +3844,9 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
     return -1;
 }
 
-#if defined(_WIN32) || defined(__MINGW32__)
-
 int hb_qsv_are_filters_supported(hb_job_t *job)
 {
+#if defined(_WIN32) || defined(__MINGW32__)
     int num_sw_filters = 0;
     if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
     {
@@ -3956,16 +3879,10 @@ int hb_qsv_are_filters_supported(hb_job_t *job)
         }
     }
     return num_sw_filters == 0;
-}
-
 #else // other OS
-
-int hb_qsv_are_filters_supported(hb_job_t *job)
-{
     return 0;
-}
-
 #endif
+}
 
 static int hb_qsv_ffmpeg_set_options(hb_job_t *job, AVDictionary** dict)
 {
@@ -4038,7 +3955,6 @@ hb_qsv_context_t * hb_qsv_context_init()
         return NULL;
     }
     ctx->dx_index = hb_qsv_get_default_adapter_index();
-    ctx->out_range = AVCOL_RANGE_UNSPECIFIED;
     return ctx;
 }
 

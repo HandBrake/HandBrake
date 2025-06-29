@@ -31,11 +31,9 @@ typedef struct hb_qsv_context_s
     int async_depth;
     int la_is_enabled;
     int memory_type;
-    int out_range;
     int dx_index;
     const char *vpp_scale_mode;
     const char *vpp_interpolation_method;
-    AVBufferRef *hw_frames_ctx;
 } hb_qsv_context_t;
 
 // version of MSDK/QSV API currently used
@@ -356,7 +354,6 @@ hb_triplet_t* hb_triplet4key  (hb_triplet_t *triplets, const char *key);
 
 const char* hb_qsv_codec_name    (uint32_t codec_id);
 const char* hb_qsv_profile_name  (uint32_t codec_id, uint16_t profile_id);
-uint8_t     hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags);
 
 const char* hb_qsv_impl_get_name(int impl);
 int         hb_qsv_impl_get_num(int impl);

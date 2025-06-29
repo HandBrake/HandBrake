@@ -11,10 +11,6 @@
 #include "handbrake/hbavfilter.h"
 #include "handbrake/avfilter_priv.h"
 
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-#include "handbrake/qsv_common.h"
-#endif
-
 static int  avfilter_init(hb_filter_object_t * filter, hb_filter_init_t * init);
 static int  avfilter_post_init( hb_filter_object_t * filter, hb_job_t * job );
 static void avfilter_close( hb_filter_object_t * filter );
