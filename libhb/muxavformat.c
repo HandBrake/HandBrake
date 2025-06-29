@@ -403,11 +403,40 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_FFMPEG_NVENC_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
         case HB_VCODEC_FFMPEG_VCE_AV1:
-        case HB_VCODEC_FFMPEG_QSV_AV1:
-        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
         case HB_VCODEC_FFMPEG_MF_AV1:
             track->st->codecpar->codec_id = AV_CODEC_ID_AV1;
             break;
+
+        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
+        case HB_VCODEC_FFMPEG_QSV_AV1:
+        {
+            const AVBitStreamFilter  *bsf;
+            AVBSFContext             *ctx;
+            int                       ret;
+
+            track->st->codecpar->codec_id = AV_CODEC_ID_AV1;
+
+            bsf = av_bsf_get_by_name("extract_extradata");
+            ret = av_bsf_alloc(bsf, &ctx);
+            if (ret < 0)
+            {
+                hb_error("AV1 bitstream filter: alloc failure");
+                goto error;
+            }
+
+            track->bitstream_context = ctx;
+            if (track->bitstream_context != NULL)
+            {
+                avcodec_parameters_copy(track->bitstream_context->par_in,
+                                       track->st->codecpar);
+                ret = av_bsf_init(track->bitstream_context);
+                if (ret < 0)
+                {
+                    hb_error("AV1 bitstream filter: init failure");
+                    goto error;
+                }
+            }
+        } break;
 
         case HB_VCODEC_THEORA:
             track->st->codecpar->codec_id = AV_CODEC_ID_THEORA;
