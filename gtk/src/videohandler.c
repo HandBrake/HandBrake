@@ -389,3 +389,13 @@ framerate_mode_changed_cb (GtkWidget *widget, gpointer data)
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 }
+
+G_MODULE_EXPORT void
+color_range_changed_cb (GtkWidget *widget, gpointer data)
+{
+    signal_user_data_t *ud = ghb_ud();
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_update_summary_info(ud);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+}

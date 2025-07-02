@@ -72,6 +72,13 @@
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,10" >
+                    <TextBlock Text="{x:Static Properties:Resources.VideoView_ColourRange}" Width="100" />
+
+                    <ComboBox Width="120" AutomationProperties.Name="{x:Static Properties:Resources.VideoView_ColourRange}"
+                        ItemsSource="{Binding ColourRanges}" DisplayMemberPath="DisplayName" SelectedItem="{Binding ColourRange}" HorizontalAlignment="Left"
+                        ToolTip="{x:Static Properties:ResourcesTooltips.Video_ColourRange}"  Visibility="{Binding DisplayTuneControls, Converter={StaticResource boolToVisConverter}}" />
+                </StackPanel>
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Grid.Column="1">

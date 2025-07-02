@@ -196,6 +196,7 @@ static char *   queue_import_name    = NULL;
 static int      cfr           = -1;
 static int      optimize      = -1;
 static int      ipod_atom     = -1;
+static char *   color_range   = NULL;
 static int      color_matrix_code = -1;
 static int      preview_count = 10;
 static int      store_previews = 0;
@@ -1738,6 +1739,12 @@ static void ShowHelp(void)
 "   --modulus <number>      Set storage width and height modulus\n"
 "                           Dimensions will be made divisible by this number.\n"
 "                           (default: set by preset, typically 2)\n"
+"   --color-range <string>\n"
+"                           Set the color range of the output.\n"
+"                               auto\n"
+"                               limited\n"
+"                               full\n"
+"                           (default: set by preset, typically limited)\n"
 "   -M, --color-matrix <string>\n"
 "                           Set the color space signaled by the output:\n"
 "                           Overrides color signalling with no conversion.\n"
@@ -2266,6 +2273,7 @@ static int ParseOptions( int argc, char ** argv )
     #define MAX_DURATION                  333
     #define HDR_DYNAMIC_METADATA          334
     #define AUDIO_AUTONAMING_BEHAVIOUR    335
+    #define COLOR_RANGE                   336
 
     for( ;; )
     {
@@ -2451,6 +2459,7 @@ static int ParseOptions( int argc, char ** argv )
             { "keep-subname",    no_argument,   &sub_name_passthru, 1 },
             { "no-keep-subname", no_argument,   &sub_name_passthru, 0 },
             { "subname",     required_argument, NULL,    'S' },
+            { "color-range", required_argument, NULL,    COLOR_RANGE },
             { "color-matrix",required_argument, NULL,    'M' },
             { "previews",    required_argument, NULL,    PREVIEWS },
             { "start-at-preview", required_argument, NULL, START_AT_PREVIEW },
@@ -3206,6 +3215,21 @@ static int ParseOptions( int argc, char ** argv )
             case AUDIO_FALLBACK:
                 acodec_fallback = strdup( optarg );
                 break;
+            case COLOR_RANGE:
+            {
+                free(color_range);
+                color_range = NULL;
+                if (optarg != NULL)
+                {
+                    if (!strcmp(optarg, "auto")    ||
+                        !strcmp(optarg, "limited") ||
+                        !strcmp( optarg, "full"))
+                    {
+                        color_range = strdup(optarg);
+                    }
+                }
+                break;
+            }
             case 'M':
                 if( optarg != NULL )
                 {
@@ -4454,6 +4478,11 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         hb_dict_set(preset, "VideoFramerateMode",
                     hb_value_string(cfr == 0 ? "vfr" :
                                     cfr == 1 ? "cfr" : "pfr"));
+    }
+    if (color_range != NULL)
+    {
+        hb_dict_set(preset, "VideoColorRange",
+                    hb_value_string(color_range));
     }
     if (color_matrix_code > 0)
     {
