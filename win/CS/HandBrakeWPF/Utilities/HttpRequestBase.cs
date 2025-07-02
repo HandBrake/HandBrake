@@ -15,6 +15,8 @@ namespace HandBrakeWPF.Utilities
     using System.Text;
     using System.Threading.Tasks;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Instance.Model;
 
     public class HttpRequestBase
@@ -59,7 +61,22 @@ namespace HandBrakeWPF.Utilities
 
         public async Task<ServerResponse> MakeHttpGetRequest(string urlPath)
         {
-            using (HttpClient client = new HttpClient { Timeout = TimeSpan.FromSeconds(20) })
+            HttpClient client;
+            if (Portable.IsSystemProxyDisabled())
+            {
+                var handler = new HttpClientHandler
+                {
+                    UseProxy = false // Ignore system proxy settings
+                };
+
+                client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(20) };
+            }
+            else
+            {
+                client = new HttpClient() { Timeout = TimeSpan.FromSeconds(20) };
+            }
+            
+            using (client)
             {
                 HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, this.serverUrl + urlPath);
                 if (!string.IsNullOrEmpty(this.base64Token))

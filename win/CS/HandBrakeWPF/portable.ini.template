@@ -11,6 +11,7 @@
 # - process.isolation.enabled =>  true | false (See Note 2)
 # - software.render =>            true | false (Only set to true if you are experiencing UI corruption or glitches)
 # - theme.enabled =>              true | false (default true, false disables dark and light themes and uses stock framework appearence.)
+# - force.disable.system.proxy => true | false (default true.  When Process Isolation is turned on, true will bypass any local proxy server settings in Windows.)
 #
 # Note 1:
 #   Set to 'cwd' to use the current applications directory. It will automatically create "storage" and "tmp" folders in this instance.
@@ -28,3 +29,4 @@ hardware.enabled = true
 process.isolation.enabled = false
 software.rendering = false
 theme.enabled = true
+force.disable.system.proxy = true

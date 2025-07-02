@@ -155,6 +155,11 @@ namespace HandBrake.App.Core.Utilities
             return GetBooleanValue("theme.enabled", true);
         }
 
+        public static bool IsSystemProxyDisabled()
+        {
+            return GetBooleanValue("force.disable.system.proxy", true);
+        }
+
         /// <summary>
         /// The get temp directory.
         /// </summary>
