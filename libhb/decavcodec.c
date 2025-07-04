@@ -1845,7 +1845,11 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     }
     else
 #endif
+    if (w->hw_device_ctx && w->codec_param == AV_CODEC_ID_AV1)
     {
+        pv->codec = avcodec_find_decoder_by_name("av1");
+    }
+    else {
         pv->codec = avcodec_find_decoder(w->codec_param);
     }
     if ( pv->codec == NULL )

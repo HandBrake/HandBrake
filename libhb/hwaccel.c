@@ -152,7 +152,16 @@ enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name
         return 0;
     }
 
-    const AVCodec *codec = avcodec_find_decoder(codec_id);
+    const AVCodec *codec;
+    if (codec_id == AV_CODEC_ID_AV1)
+    {
+        codec = avcodec_find_decoder_by_name("av1");
+    }
+    else
+    {
+        codec = avcodec_find_decoder(codec_id);
+    }
+
     enum AVHWDeviceType hw_type = av_hwdevice_find_type_by_name(hwdevice_name);
     if (hw_type == AV_HWDEVICE_TYPE_QSV)
     {
@@ -209,7 +218,15 @@ int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx, hb
     enum AVPixelFormat pix_fmt = AV_PIX_FMT_NONE;
     int err = 0;
 
-    const AVCodec *codec = avcodec_find_decoder(codec_id);
+    const AVCodec *codec;
+    if (codec_id == AV_CODEC_ID_AV1)
+    {
+        codec = avcodec_find_decoder_by_name("av1");
+    }
+    else
+    {
+        codec = avcodec_find_decoder(codec_id);
+    }
 
     if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
     {
