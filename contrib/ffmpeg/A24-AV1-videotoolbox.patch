@@ -185,19 +185,6 @@ index 5171e4c7d7357..2b9bdc8fc97ad 100644
  extern const struct FFHWAccel ff_av1_vulkan_hwaccel;
  extern const struct FFHWAccel ff_h263_vaapi_hwaccel;
  extern const struct FFHWAccel ff_h263_videotoolbox_hwaccel;
-diff --git a/libavcodec/version.h b/libavcodec/version.h
-index d0980e28de827..da6f3a84ac197 100644
---- a/libavcodec/version.h
-+++ b/libavcodec/version.h
-@@ -29,7 +29,7 @@
- 
- #include "version_major.h"
- 
--#define LIBAVCODEC_VERSION_MINOR  19
-+#define LIBAVCODEC_VERSION_MINOR  20
- #define LIBAVCODEC_VERSION_MICRO 100
- 
- #define LIBAVCODEC_VERSION_INT  AV_VERSION_INT(LIBAVCODEC_VERSION_MAJOR, \
 diff --git a/libavcodec/videotoolbox.c b/libavcodec/videotoolbox.c
 index 505483ef66d7a..a5a76e83271fc 100644
 --- a/libavcodec/videotoolbox.c
