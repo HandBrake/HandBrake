@@ -14,7 +14,7 @@
 
 enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPixelFormat *pix_fmts);
 
-int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx, hb_job_t *job);
+int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, int device_index, void **hw_device_ctx);
 void hb_hwaccel_hw_ctx_close(void **hw_device_ctx);
 
 int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx,

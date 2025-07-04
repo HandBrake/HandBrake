@@ -4463,12 +4463,12 @@ static hb_dict_t * PreparePreset(const char *preset_name)
 #if HB_PROJECT_FEATURE_QSV
     if (qsv_async_depth >= 0)
     {
-        hb_dict_set(preset, "VideoQSVAsyncDepth",
+        hb_dict_set(preset, "VideoAsyncDepth",
                         hb_value_int(qsv_async_depth));
     }
     if (qsv_adapter >= 0)
     {
-        hb_dict_set(preset, "VideoQSVAdapterIndex",
+        hb_dict_set(preset, "VideoAdapterIndex",
                         hb_value_int(qsv_adapter));
     }
     if (qsv_decode != -1)

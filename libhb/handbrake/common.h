@@ -874,6 +874,9 @@ struct hb_job_s
                                         //  to non-I frames).
 
     int hw_decode;
+    int hw_device_index;
+    int hw_device_async_depth;
+
     int keep_duplicate_titles;
 
 #ifdef __LIBHB__

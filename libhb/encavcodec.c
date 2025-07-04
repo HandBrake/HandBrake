@@ -706,7 +706,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 #if HB_PROJECT_FEATURE_QSV
         if (hb_qsv_is_ffmpeg_supported_codec(job->vcodec) && !job->hw_device_ctx)
         {
-            hb_qsv_device_init(job, &job->hw_device_ctx);
+            hb_qsv_device_init(job->hw_device_index, &job->hw_device_ctx);
             context->hw_device_ctx = av_buffer_ref(job->hw_device_ctx);
         }
 #endif

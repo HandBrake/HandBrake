@@ -68,23 +68,23 @@ static int is_encoder_supported(int hw_decode, int encoder_id)
     return ret;
 }
 
-static int are_filters_supported(hb_job_t *job)
+static int are_filters_supported(int hw_decode, hb_list_t *filters)
 {
     int ret = 0;
 #ifdef __APPLE__
-    if (job->hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+    if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
     {
-        ret = hb_vt_are_filters_supported(job->list_filter);
+        ret = hb_vt_are_filters_supported(filters);
     }
 #endif
-    if (job->hw_decode & HB_DECODE_SUPPORT_NVDEC)
+    if (hw_decode & HB_DECODE_SUPPORT_NVDEC)
     {
-        ret = hb_nvenc_are_filters_supported(job->list_filter);
+        ret = hb_nvenc_are_filters_supported(filters);
     }
 #if HB_PROJECT_FEATURE_QSV
-    if (job->hw_decode & HB_DECODE_SUPPORT_QSV)
+    if (hw_decode & HB_DECODE_SUPPORT_QSV)
     {
-        ret = hb_qsv_are_filters_supported(job);
+        ret = hb_qsv_are_filters_supported(filters);
     }
 #endif
     return ret;
@@ -98,7 +98,7 @@ int hb_hwaccel_is_enabled(hb_job_t *job)
 int hb_hwaccel_is_full_hardware_pipeline_enabled(hb_job_t *job)
 {
     return hb_hwaccel_is_enabled(job) &&
-            are_filters_supported(job) &&
+            are_filters_supported(job->hw_decode, job->list_filter) &&
             is_encoder_supported(job->hw_decode, job->vcodec);
 }
 
@@ -145,13 +145,8 @@ const char * hb_hwaccel_get_name(int hw_decode)
     }
 }
 
-enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name)
+static const AVCodec * find_decoder_by_name(int codec_id, const char *hwdevice_name)
 {
-    if (is_hardware_disabled())
-    {
-        return 0;
-    }
-
     const AVCodec *codec;
     if (codec_id == AV_CODEC_ID_AV1)
     {
@@ -161,12 +156,23 @@ enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name
     {
         codec = avcodec_find_decoder(codec_id);
     }
+    return codec;
+}
+
+enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name)
+{
+    if (is_hardware_disabled())
+    {
+        return 0;
+    }
 
     enum AVHWDeviceType hw_type = av_hwdevice_find_type_by_name(hwdevice_name);
     if (hw_type == AV_HWDEVICE_TYPE_QSV)
     {
         return 1;
     }
+
+    const AVCodec *codec = find_decoder_by_name(codec_id, hwdevice_name);
 
     if (hw_type != AV_HWDEVICE_TYPE_NONE)
     {
@@ -212,21 +218,13 @@ enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPi
     return AV_PIX_FMT_NONE;
 }
 
-int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx, hb_job_t *job)
+int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, int device_index, void **hw_device_ctx)
 {
     enum AVHWDeviceType hw_type = AV_HWDEVICE_TYPE_NONE;
     enum AVPixelFormat pix_fmt = AV_PIX_FMT_NONE;
     int err = 0;
 
-    const AVCodec *codec;
-    if (codec_id == AV_CODEC_ID_AV1)
-    {
-        codec = avcodec_find_decoder_by_name("av1");
-    }
-    else
-    {
-        codec = avcodec_find_decoder(codec_id);
-    }
+    const AVCodec *codec = find_decoder_by_name(codec_id, NULL);
 
     if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
     {
@@ -242,7 +240,8 @@ int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx, hb
         AVBufferRef *ctx = NULL;
         hw_type = av_hwdevice_find_type_by_name("qsv");
         pix_fmt = AV_PIX_FMT_QSV;
-        err = hb_qsv_device_init(job, (void**)&ctx);
+
+        err = hb_qsv_device_init(device_index, (void**)&ctx);
         if (err < 0)
         {
             hb_error("hwaccel: failed to create hwdevice");

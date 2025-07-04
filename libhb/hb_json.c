@@ -11,7 +11,6 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_json.h"
 #include "libavutil/base64.h"
-#include "handbrake/qsv_common.h"
 
 /**
  * Convert an hb_state_t to a jansson dict
@@ -593,16 +592,6 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     json_error_t error;
     int subtitle_search_burn;
     int ii;
-    int adapter_index = 0;
-    int async_depth = 0;
-
-#if HB_PROJECT_FEATURE_QSV
-    if (job->qsv_ctx)
-    {
-        async_depth = job->qsv_ctx->async_depth;
-        adapter_index = job->qsv_ctx->dx_index;
-    }
-#endif
 
     if (job == NULL || job->title == NULL)
         return NULL;
@@ -622,8 +611,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     "s:{s:o, s:o, s:o, s:o, s:o},"
     // PAR {Num, Den}
     "s:{s:o, s:o},"
-    // Video {Encoder, HardwareDecode, QSV {AsyncDepth, AdapterIndex}}
-    "s:{s:o, s:o, s:{s:o, s:o}},"
+    // Video {Encoder, HardwareDecode, AdapterIndex, AsyncDepth}
+    "s:{s:o, s:o, s:o, s:o},"
     // Audio {CopyMask, FallbackEncoder, AudioList []}
     "s:{s:[], s:o, s:[]},"
     // Subtitles {Search {Enable, Forced, Default, Burn}, SubtitleList []}
@@ -652,9 +641,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         "Video",
             "Encoder",          hb_value_int(job->vcodec),
             "HardwareDecode",   hb_value_int(job->hw_decode),
-            "QSV",
-                "AsyncDepth",   hb_value_int(async_depth),
-                "AdapterIndex", hb_value_int(adapter_index),
+            "AdapterIndex",     hb_value_int(job->hw_device_index),
+            "AsyncDepth",       hb_value_int(job->hw_device_async_depth),
         "Audio",
             "CopyMask",
             "FallbackEncoder",  hb_value_int(job->acodec_fallback),
@@ -1177,8 +1165,6 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     json_int_t         range_start = -1, range_end = -1, range_seek_points = -1;
     int                vbitrate = -1;
     double             vquality = HB_INVALID_VIDEO_QUALITY;
-    int                adapter_index = -1;
-    int                async_depth = -1;
     hb_dict_t        * meta_dict = NULL;
     hb_value_array_t * art_array = NULL;
 
@@ -1202,8 +1188,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //       ContentLightLevel,
     //       DolbyVisionConfigurationRecord
     //       ColorPrimariesOverride, ColorTransferOverride, ColorMatrixOverride,
-    //       HardwareDecode
-    //       QSV {AsyncDepth, AdapterIndex}}
+    //       HardwareDecode, AdapterIndex, AsyncDepth
     "s:{s:o, s?F, s?i, s?s, s?s, s?s, s?s, s?s,"
     "   s?b, s?b, s?i,"
     "   s?i, s?i, s?i,"
@@ -1212,8 +1197,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "   s?o,"
     "   s?o,"
     "   s?i, s?i, s?i,"
-    "   s?i,"
-    "   s?{s?i, s?i}},"
+    "   s?i, s?i, s?i},"
     // Audio {CopyMask, FallbackEncoder, AudioList}
     "s?{s?o, s?o, s?o},"
     // Subtitle {Search {Enable, Forced, Default, Burn, ExternalFilename}, SubtitleList}
@@ -1273,9 +1257,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ColorTransferOverride",  unpack_i(&job->color_transfer_override),
             "ColorMatrixOverride",    unpack_i(&job->color_matrix_override),
             "HardwareDecode",         unpack_i(&job->hw_decode),
-            "QSV",
-                "AsyncDepth",       unpack_i(&async_depth),
-                "AdapterIndex",     unpack_i(&adapter_index),
+            "AdapterIndex",           unpack_i(&job->hw_device_index),
+            "AsyncDepth",             unpack_i(&job->hw_device_async_depth),
         "Audio",
             "CopyMask",             unpack_o(&acodec_copy_mask),
             "FallbackEncoder",      unpack_o(&acodec_fallback),
@@ -1406,13 +1389,6 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_job_set_encoder_level(job, video_level);
     hb_job_set_encoder_options(job, video_options);
 
-#if HB_PROJECT_FEATURE_QSV
-    if (job->qsv_ctx)
-    {
-        job->qsv_ctx->async_depth = async_depth;
-        job->qsv_ctx->dx_index = adapter_index;
-    }
-#endif
     // If both vbitrate and vquality were specified, vbitrate is used;
     // we need to ensure the unused rate control mode is always set to an
     // invalid value, as if both values are valid, behavior is undefined

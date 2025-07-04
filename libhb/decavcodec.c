@@ -1849,7 +1849,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     {
         pv->codec = avcodec_find_decoder_by_name("av1");
     }
-    else {
+    else
+    {
         pv->codec = avcodec_find_decoder(w->codec_param);
     }
     if ( pv->codec == NULL )
@@ -1891,9 +1892,9 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         }
 
 #if HB_PROJECT_FEATURE_QSV
-    if (hb_hwaccel_decode_is_enabled(job) &&
-        pv->job->hw_decode & HB_DECODE_SUPPORT_QSV)
-    {
+        if (hb_hwaccel_decode_is_enabled(job) &&
+            pv->job->hw_decode & HB_DECODE_SUPPORT_QSV)
+        {
             if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
             {
                 hb_hwaccel_hwframes_ctx_init(pv->context, job->hw_pix_fmt, job->input_pix_fmt);

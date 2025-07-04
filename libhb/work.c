@@ -1817,8 +1817,8 @@ static void do_job(hb_job_t *job)
         {
             hb_hwaccel_hw_ctx_init(job->title->video_codec_param,
                                    job->hw_decode,
-                                   &job->hw_device_ctx,
-                                   job);
+                                   job->hw_device_index,
+                                   &job->hw_device_ctx);
         }
 
         sanitize_filter_list_post(job);

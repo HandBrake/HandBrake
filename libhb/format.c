@@ -60,7 +60,7 @@ static int format_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     {
         hb_dict_set_string(avsettings, "format", format);
         hb_dict_set_string(avsettings, "out_range", (init->color_range == AVCOL_RANGE_JPEG) ? "full" : "limited");
-        hb_dict_set_int(avsettings, "async_depth", init->job->qsv_ctx->async_depth);
+        hb_dict_set_int(avsettings, "async_depth", init->job->hw_device_async_depth);
 
         hb_dict_set(avfilter, "vpp_qsv", avsettings);
     }

@@ -4576,6 +4576,8 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->list_attachment = hb_attachment_list_copy( title->list_attachment );
     job->metadata = hb_metadata_copy( title->metadata );
 
+    job->hw_device_index = -1;
+
 #if HB_PROJECT_FEATURE_QSV
     job->qsv_ctx = hb_qsv_context_init();
 #endif
