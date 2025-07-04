@@ -295,6 +295,14 @@ static void ScanFunc( void * _data )
         /* Decode previews */
         /* this will also detect more AC3 / DTS information */
         npreviews = DecodePreviews( data, title, 1 );
+        if (npreviews == 0 && data->hw_decode)
+        {
+            // Try without the hardware decoder
+            // Some hwaccel implementations don't automatically
+            // fall back to the software encoder
+            data->hw_decode = 0;
+            npreviews = DecodePreviews( data, title, 1 );
+        }
         if (npreviews < 2)
         {
             // Try harder to get some valid frames
@@ -707,22 +715,22 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 
     int hw_decode = 0;
 
-    if (data->hw_decode == HB_DECODE_SUPPORT_NVDEC &&
+    if (data->hw_decode & HB_DECODE_SUPPORT_NVDEC &&
         hb_hwaccel_available(title->video_codec_param, "cuda"))
     {
         hw_decode = HB_DECODE_SUPPORT_NVDEC;
     }
-    else if (data->hw_decode == HB_DECODE_SUPPORT_VIDEOTOOLBOX &&
+    else if (data->hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX &&
              hb_hwaccel_available(title->video_codec_param, "videotoolbox"))
     {
         hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
     }
-    else if (data->hw_decode == HB_DECODE_SUPPORT_QSV &&
+    else if (data->hw_decode & HB_DECODE_SUPPORT_QSV &&
              hb_hwaccel_available(title->video_codec_param, "qsv"))
     {
         hw_decode = HB_DECODE_SUPPORT_QSV;
     }
-    else if (data->hw_decode == HB_DECODE_SUPPORT_MF &&
+    else if (data->hw_decode & HB_DECODE_SUPPORT_MF &&
              hb_hwaccel_available(title->video_codec_param, "d3d11va"))
     {
         hw_decode = HB_DECODE_SUPPORT_MF;
