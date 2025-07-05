@@ -211,7 +211,7 @@ static int      qsv_async_depth    = -1;
 static int      qsv_adapter        = -1;
 static int      qsv_decode         = -1;
 #endif
-static int      hw_decode          = -1;
+static int      hw_decode          = 0;
 static int      keep_duplicate_titles = 0;
 static int      hdr_dynamic_metadata_disable = 0;
 static char *   hdr_dynamic_metadata  = NULL;
@@ -3281,7 +3281,7 @@ static int ParseOptions( int argc, char ** argv )
                     {
                         hw_decode = 0;
                     }
-                    if (hw_decode)
+                    if (hw_decode > 0)
                     {
                         hw_decode |= HB_DECODE_SUPPORT_FORCE_HW;
                     }
