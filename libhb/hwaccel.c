@@ -145,9 +145,17 @@ const char * hb_hwaccel_get_name(int hw_decode)
     }
 }
 
-static const AVCodec * find_decoder_by_name(int codec_id, const char *hwdevice_name)
+const AVCodec * hb_hwaccel_find_decoder_by_name(enum AVCodecID codec_id, enum AVHWDeviceType type)
 {
     const AVCodec *codec;
+#if HB_PROJECT_FEATURE_QSV
+    if (type == AV_HWDEVICE_TYPE_QSV)
+    {
+        const char *codec_name = hb_qsv_decode_get_codec_name(codec_id);
+        return avcodec_find_decoder_by_name(codec_name);
+    }
+    else
+#endif
     if (codec_id == AV_CODEC_ID_AV1)
     {
         codec = avcodec_find_decoder_by_name("av1");
@@ -172,7 +180,7 @@ enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name
         return 1;
     }
 
-    const AVCodec *codec = find_decoder_by_name(codec_id, hwdevice_name);
+    const AVCodec *codec = hb_hwaccel_find_decoder_by_name(codec_id, hw_type);
 
     if (hw_type != AV_HWDEVICE_TYPE_NONE)
     {
@@ -218,13 +226,25 @@ enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPi
     return AV_PIX_FMT_NONE;
 }
 
+enum AVHWDeviceType hw_hwaccel_get_hw_device_type(AVBufferRef *ref)
+{
+    enum AVHWDeviceType hw_device_type = AV_HWDEVICE_TYPE_NONE;
+    if (ref != NULL)
+    {
+        const AVHWDeviceContext *hw_device_ctx = (AVHWDeviceContext *)ref->data;
+        if (hw_device_ctx != NULL)
+        {
+            hw_device_type = hw_device_ctx->type;
+        }
+    }
+    return hw_device_type;
+}
+
 int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, int device_index, void **hw_device_ctx)
 {
     enum AVHWDeviceType hw_type = AV_HWDEVICE_TYPE_NONE;
     enum AVPixelFormat pix_fmt = AV_PIX_FMT_NONE;
     int err = 0;
-
-    const AVCodec *codec = find_decoder_by_name(codec_id, NULL);
 
     if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
     {
@@ -255,6 +275,8 @@ int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, int device_index, void *
     {
         hw_type = av_hwdevice_find_type_by_name("d3d11va");
     }
+
+    const AVCodec *codec = hb_hwaccel_find_decoder_by_name(codec_id, hw_type);
 
     if (hw_type != AV_HWDEVICE_TYPE_NONE)
     {

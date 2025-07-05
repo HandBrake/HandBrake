@@ -725,6 +725,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     {
         hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
     }
+    // TODO: re-enable when it will demux hdr dynamic side data
+    //else if (data->hw_decode & HB_DECODE_SUPPORT_QSV &&
+    //         hb_hwaccel_available(title->video_codec_param, "qsv"))
+    //{
+    //    hw_decode = HB_DECODE_SUPPORT_QSV;
+    //}
     else if (data->hw_decode & HB_DECODE_SUPPORT_MF &&
              hb_hwaccel_available(title->video_codec_param, "d3d11va"))
     {

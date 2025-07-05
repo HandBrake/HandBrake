@@ -1836,18 +1836,10 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->threads = HB_FFMPEG_THREADS_AUTO;
     }
 
-#if HB_PROJECT_FEATURE_QSV
-    if (hb_hwaccel_decode_is_enabled(job) &&
-        pv->job->hw_decode & HB_DECODE_SUPPORT_QSV)
+    if (w->hw_device_ctx)
     {
-        const char *codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
-        pv->codec = avcodec_find_decoder_by_name(codec_name);
-    }
-    else
-#endif
-    if (w->hw_device_ctx && w->codec_param == AV_CODEC_ID_AV1)
-    {
-        pv->codec = avcodec_find_decoder_by_name("av1");
+        enum AVHWDeviceType type = hw_hwaccel_get_hw_device_type(w->hw_device_ctx);
+        pv->codec = hb_hwaccel_find_decoder_by_name(w->codec_param, type);
     }
     else
     {
@@ -1858,6 +1850,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         hb_log( "decavcodecvInit: failed to find codec for id (%d)", w->codec_param );
         return 1;
     }
+
+    hb_deep_log(2, "decavcodecvInit: using decoder %s", pv->codec->name);
 
     pv->context = avcodec_alloc_context3( pv->codec );
     pv->context->workaround_bugs = FF_BUG_AUTODETECT;
@@ -1892,8 +1886,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         }
 
 #if HB_PROJECT_FEATURE_QSV
-        if (hb_hwaccel_decode_is_enabled(job) &&
-            pv->job->hw_decode & HB_DECODE_SUPPORT_QSV)
+        if (hw_hwaccel_get_hw_device_type(w->hw_device_ctx) == AV_HWDEVICE_TYPE_QSV)
         {
             if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
             {
@@ -2448,15 +2441,19 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     }
 #endif
 
+    if (pv->context->pix_fmt == AV_PIX_FMT_QSV)
+    {
+        info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
+    }
     if (pv->context->pix_fmt == AV_PIX_FMT_CUDA)
     {
         info->video_decode_support |= HB_DECODE_SUPPORT_NVDEC;
     }
-    else if (pv->context->pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
+    if (pv->context->pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
         info->video_decode_support |= HB_DECODE_SUPPORT_VIDEOTOOLBOX;
     }
-    else if (pv->context->pix_fmt == AV_PIX_FMT_D3D11)
+    if (pv->context->pix_fmt == AV_PIX_FMT_D3D11)
     {
         info->video_decode_support |= HB_DECODE_SUPPORT_MF;
     }
