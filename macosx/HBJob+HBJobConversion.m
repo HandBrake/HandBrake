@@ -101,6 +101,11 @@
     job->mux = self.container;
     job->vcodec = self.video.encoder;
 
+    if (self.video.colorRange != HBVideoColorRangeAuto)
+    {
+        job->color_range = (int)self.video.colorRange;
+    }
+
     job->optimize = self.optimize;
 
     if (self.container & HB_MUX_MASK_MP4)

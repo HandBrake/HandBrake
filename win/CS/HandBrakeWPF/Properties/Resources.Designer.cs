@@ -8236,6 +8236,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Color Range:.
+        /// </summary>
+        public static string VideoView_ColourRange {
+            get {
+                return ResourceManager.GetString("VideoView_ColourRange", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Constant Framerate.
         /// </summary>
         public static string VideoView_ConstantFramerate {

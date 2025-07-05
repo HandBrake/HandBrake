@@ -327,6 +327,11 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public int? VideoAvgBitrate { get; set; }
 
         /// <summary>
+        /// Gets or sets the video color range.
+        /// </summary>
+        public string VideoColorRange { get; set; }
+
+        /// <summary>
         /// Gets or sets the video color matrix code.
         /// </summary>
         public int VideoColorMatrixCode { get; set; }

@@ -24,6 +24,7 @@ namespace HandBrake.Interop.Interop
         private static List<HBAudioEncoder> audioEncoders;
         private static List<HBVideoEncoder> videoEncoders;
         private static List<HBRate> videoFramerates;
+        private static List<HBColourRange> videoColourRanges;
         private static List<HBMixdown> mixdowns;
         private static List<HBContainer> containers;
         private static List<int> audioBitrates;
@@ -87,6 +88,27 @@ namespace HandBrake.Interop.Interop
                 }
 
                 return videoFramerates;
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of supported video colour ranges.
+        /// </summary>
+        public static List<HBColourRange> VideoColourRanges
+        {
+            get
+            {
+                if (videoColourRanges == null)
+                {
+                    videoColourRanges = new List<HBColourRange>()
+                    {
+                        new("Same as source", 0, "auto"),
+                        new("Limited", 1, "limited"),
+                        new("Full", 2, "full"),
+                    };
+                }
+
+                return videoColourRanges;
             }
         }
 

@@ -570,4 +570,7 @@ Bitrate will vary source to source.</value>
   <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
     <value>Changing the displays size will stretch the video</value>
   </data>
+  <data name="Video_ColourRange" xml:space="preserve">
+    <value>Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility.</value>
+  </data>
 </root>

@@ -250,6 +250,18 @@ combo_opts_t rotate_opts =
     d_rotate_opts
 };
 
+static options_map_t d_color_range_opts[] =
+{
+    {N_("Auto"),    "auto",     0},
+    {N_("Limited"), "limited",  1},
+    {N_("Full"),    "full",     2},
+};
+combo_opts_t color_range_opts =
+{
+    sizeof(d_color_range_opts)/sizeof(options_map_t),
+    d_color_range_opts
+};
+
 static options_map_t d_resolution_opts[] =
 {
     {N_("4320p 8K Ultra HD"),  "4320p",  4320},
@@ -740,6 +752,12 @@ combo_name_map_t combo_name_map[] =
     {
         "rotate",
         &rotate_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "VideoColorRange",
+        &color_range_opts,
         small_opts_set,
         generic_opt_get
     },

@@ -34,7 +34,7 @@ static const char crop_scale_vt_template[] =
     "width=^"HB_INT_REG"$:height=^"HB_INT_REG"$:"
     "crop-top=^"HB_INT_REG"$:crop-bottom=^"HB_INT_REG"$:"
     "crop-left=^"HB_INT_REG"$:crop-right=^"HB_INT_REG"$:"
-    "format=^"HB_INT_REG"$";
+    "format=^"HB_INT_REG"$:color-range=^"HB_INT_REG"$";
 
 hb_filter_object_t hb_filter_crop_scale_vt =
 {
@@ -183,7 +183,13 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
     {
         format = init->pix_fmt;
     }
-    pv->pool = hb_cv_create_pixel_buffer_pool(width, height, format, init->color_range);
+    int color_range = AVCOL_RANGE_UNSPECIFIED;
+    hb_dict_extract_int(&color_range, settings, "color-range");
+    if (color_range == AVCOL_RANGE_UNSPECIFIED)
+    {
+        color_range = init->color_range;
+    }
+    pv->pool = hb_cv_create_pixel_buffer_pool(width, height, format, color_range);
     if (pv->pool == NULL)
     {
         hb_log("cropscale_vt: CVPixelBufferPoolCreate failed");

@@ -48,6 +48,11 @@ namespace HandBrake.Interop.Interop.Json.Encode
         public bool Turbo { get; set; }
 
         /// <summary>
+        /// Gets or sets the Colour Range
+        /// </summary>
+        public int? ColorRange { get; set; }
+
+        /// <summary>
         /// Gets or sets the Colour Matrix Code
         /// </summary>
         public int ColorMatrixCode { get; set; }

@@ -3410,6 +3410,28 @@ a variable framerate, &apos;Same as source&apos; will preserve it.</property>
                                     </layout>
                                   </object>
                                 </child>
+                                <child>
+                                  <object class="GtkLabel" id="VideoColorRangeLabel">
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Color Range:</property>
+                                    <layout>
+                                      <property name="row">3</property>
+                                      <property name="column">0</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="VideoColorRange">
+                                    <property name="valign">center</property>
+                                    <property name="width-request">100</property>
+                                    <property name="tooltip-text" translatable="yes">Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility.</property>
+                                    <signal name="changed" handler="color_range_changed_cb" swapped="no"/>
+                                    <layout>
+                                      <property name="row">3</property>
+                                      <property name="column">1</property>
+                                    </layout>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                             <child>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,11 +20,11 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <view id="wAC-5p-nXb">
-            <rect key="frame" x="0.0" y="0.0" width="920" height="375"/>
+            <rect key="frame" x="0.0" y="0.0" width="920" height="386"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="gfa-Hb-cDP">
-                    <rect key="frame" x="294" y="345" width="45" height="14"/>
+                    <rect key="frame" x="294" y="356" width="45" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Quality:" id="F3s-qR-qeE">
                         <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -35,7 +35,7 @@
                     </connections>
                 </textField>
                 <textField toolTip="Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video." focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3o-Zx-OfM">
-                    <rect key="frame" x="504" y="298" width="78" height="19"/>
+                    <rect key="frame" x="504" y="309" width="78" height="19"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="78" id="EZ2-qD-5pb"/>
                     </constraints>
@@ -83,7 +83,7 @@
                     </connections>
                 </textField>
                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="50" translatesAutoresizingMaskIntoConstraints="NO" id="Pai-3Q-Gs3">
-                    <rect key="frame" x="527" y="345" width="11" height="14"/>
+                    <rect key="frame" x="527" y="356" width="11" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="0" id="bvD-W7-O0N">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="wYW-16-bWA"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -97,7 +97,7 @@
                     </connections>
                 </textField>
                 <popUpButton toolTip="Framerate (Frames Per Second). Number of pictures displayed during each second of video." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9tc-EO-QMd">
-                    <rect key="frame" x="113" y="316" width="151" height="22"/>
+                    <rect key="frame" x="113" y="327" width="151" height="22"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="0VS-Ah-Q3S">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -124,7 +124,7 @@
                     </connections>
                 </popUpButton>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="bnV-aE-FVh">
-                    <rect key="frame" x="344" y="274" width="129" height="16"/>
+                    <rect key="frame" x="344" y="285" width="129" height="16"/>
                     <string key="toolTip">Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode.</string>
                     <buttonCell key="cell" type="check" title="Multi-pass encoding" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nPA-nO-Eik">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -152,7 +152,7 @@
                     </connections>
                 </button>
                 <button toolTip="Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis." translatesAutoresizingMaskIntoConstraints="NO" id="olm-zg-k9Y">
-                    <rect key="frame" x="503" y="274" width="125" height="16"/>
+                    <rect key="frame" x="503" y="285" width="125" height="16"/>
                     <buttonCell key="cell" type="check" title="Turbo analysis pass" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="vSc-VB-NEv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -190,7 +190,7 @@
                     </connections>
                 </button>
                 <popUpButton toolTip="Video encoder. Determines video type and settings used during encoding." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xwK-Yu-a1e">
-                    <rect key="frame" x="113" y="340" width="151" height="22"/>
+                    <rect key="frame" x="113" y="351" width="151" height="22"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="KHu-7m-NR7">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -220,7 +220,7 @@
                     </connections>
                 </popUpButton>
                 <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="bAn-iZ-ieF">
-                    <rect key="frame" x="18" y="321" width="93" height="14"/>
+                    <rect key="frame" x="18" y="332" width="93" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Framerate (FPS):" id="SJc-tv-AMH">
                         <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -230,8 +230,45 @@
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="FB8-Bt-u3y"/>
                     </connections>
                 </textField>
+                <popUpButton toolTip="Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="R00-pj-eFX">
+                    <rect key="frame" x="113" y="261" width="133" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Same As Source" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="F37-pp-Zet" id="gzf-9B-0My">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
+                        <menu key="menu" title="OtherViews" id="r18-GT-7jT">
+                            <items>
+                                <menuItem title="Same As Source" state="on" id="F37-pp-Zet"/>
+                                <menuItem title="Limited" tag="1" id="0jj-Au-RHD"/>
+                                <menuItem title="Full" tag="2" id="TVE-3O-C2l"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="125" id="z1D-rh-UvU"/>
+                    </constraints>
+                    <connections>
+                        <accessibilityConnection property="title" destination="7oJ-hv-HBm" id="ldG-PE-mUV"/>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="raL-U2-uzQ">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedTag" keyPath="self.video.colorRange" id="9Rn-sf-bfZ"/>
+                    </connections>
+                </popUpButton>
+                <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="7oJ-hv-HBm">
+                    <rect key="frame" x="18" y="266" width="93" height="14"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Color Range:" id="yBk-7V-j1G">
+                        <font key="font" metaFont="controlContent" size="11"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="CAE-c3-Xkf"/>
+                    </connections>
+                </textField>
                 <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="rOd-nt-22T">
-                    <rect key="frame" x="18" y="345" width="93" height="14"/>
+                    <rect key="frame" x="18" y="356" width="93" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Video Encoder:" id="Mrb-6Q-0YM">
                         <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -242,7 +279,7 @@
                     </connections>
                 </textField>
                 <slider horizontalHuggingPriority="1000" verticalHuggingPriority="749" horizontalCompressionResistancePriority="200" translatesAutoresizingMaskIntoConstraints="NO" id="GPu-Ht-bKg">
-                    <rect key="frame" x="359" y="322" width="543" height="17"/>
+                    <rect key="frame" x="359" y="333" width="543" height="17"/>
                     <string key="toolTip">Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.
 
 Adjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.
@@ -275,7 +312,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </slider>
                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="60" translatesAutoresizingMaskIntoConstraints="NO" id="1au-ZO-l1i">
-                    <rect key="frame" x="502" y="345" width="21" height="14"/>
+                    <rect key="frame" x="502" y="356" width="21" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="RF:" id="rRB-9F-pHn">
                         <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -288,7 +325,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vae-sv-7Up">
-                    <rect key="frame" x="344" y="344.5" width="114" height="15"/>
+                    <rect key="frame" x="344" y="355.5" width="114" height="15"/>
                     <buttonCell key="cell" type="radio" title="Constant Quality" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="ZjL-cY-O5f">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -311,7 +348,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="brN-9J-qa1">
-                    <rect key="frame" x="344" y="299.5" width="147" height="15"/>
+                    <rect key="frame" x="344" y="310.5" width="147" height="15"/>
                     <buttonCell key="cell" type="radio" title="Average Bitrate (kbps):" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="VQe-CK-YDR">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -338,7 +375,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fc1-EX-DWd">
-                    <rect key="frame" x="116" y="299.5" width="120" height="15"/>
+                    <rect key="frame" x="116" y="310.5" width="120" height="15"/>
                     <buttonCell key="cell" type="radio" title="Variable Framerate" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zZo-75-1WG">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -357,7 +394,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y3k-tv-pIb">
-                    <rect key="frame" x="116" y="277.5" width="126" height="15"/>
+                    <rect key="frame" x="116" y="288.5" width="126" height="15"/>
                     <buttonCell key="cell" type="radio" title="Constant Framerate" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="6Dd-IP-Pwt">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -372,7 +409,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h2m-9o-ibu">
-                    <rect key="frame" x="0.0" y="22" width="920" height="237"/>
+                    <rect key="frame" x="0.0" y="20" width="920" height="237"/>
                     <subviews>
                         <customView id="6Tf-Wn-haS" userLabel="x264/x264 presets view">
                             <rect key="frame" x="0.0" y="33" width="920" height="204"/>
@@ -687,6 +724,7 @@ Syntax: option-1=foo:opt2=bar</string>
             <constraints>
                 <constraint firstItem="gfa-Hb-cDP" firstAttribute="firstBaseline" secondItem="Vae-sv-7Up" secondAttribute="firstBaseline" id="0kX-Ab-X5K"/>
                 <constraint firstItem="bAn-iZ-ieF" firstAttribute="leading" secondItem="rOd-nt-22T" secondAttribute="leading" id="1Ef-t6-WNM"/>
+                <constraint firstItem="R00-pj-eFX" firstAttribute="top" secondItem="Y3k-tv-pIb" secondAttribute="bottom" constant="8" symbolic="YES" id="3oO-zW-zeT"/>
                 <constraint firstItem="gfa-Hb-cDP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9tc-EO-QMd" secondAttribute="trailing" constant="8" symbolic="YES" id="4cy-QR-OG6"/>
                 <constraint firstItem="Y3k-tv-pIb" firstAttribute="leading" secondItem="9tc-EO-QMd" secondAttribute="leading" id="5PE-fo-oii"/>
                 <constraint firstItem="9tc-EO-QMd" firstAttribute="width" secondItem="xwK-Yu-a1e" secondAttribute="width" id="7GS-Rj-bPM"/>
@@ -698,20 +736,25 @@ Syntax: option-1=foo:opt2=bar</string>
                 <constraint firstItem="1au-ZO-l1i" firstAttribute="baseline" secondItem="gfa-Hb-cDP" secondAttribute="baseline" id="BfH-Qs-3mV"/>
                 <constraint firstItem="bnV-aE-FVh" firstAttribute="leading" secondItem="brN-9J-qa1" secondAttribute="leading" id="D6T-CW-ala"/>
                 <constraint firstItem="A3o-Zx-OfM" firstAttribute="leading" secondItem="1au-ZO-l1i" secondAttribute="leading" id="F0a-Kc-s3X"/>
+                <constraint firstItem="7oJ-hv-HBm" firstAttribute="leading" secondItem="bAn-iZ-ieF" secondAttribute="leading" id="FBs-xM-65K"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="olm-zg-k9Y" secondAttribute="trailing" constant="20" id="Fsh-Kh-XyK"/>
+                <constraint firstItem="R00-pj-eFX" firstAttribute="leading" secondItem="7oJ-hv-HBm" secondAttribute="trailing" constant="8" symbolic="YES" id="GIg-Oa-2fQ"/>
                 <constraint firstItem="Pai-3Q-Gs3" firstAttribute="leading" secondItem="1au-ZO-l1i" secondAttribute="trailing" constant="8" symbolic="YES" id="GPO-LT-xtY"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="h2m-9o-ibu" secondAttribute="bottom" constant="18" id="GUs-eQ-AGW"/>
                 <constraint firstItem="9tc-EO-QMd" firstAttribute="top" secondItem="xwK-Yu-a1e" secondAttribute="bottom" constant="8" id="GeU-VZ-YTd"/>
                 <constraint firstItem="olm-zg-k9Y" firstAttribute="leading" secondItem="bnV-aE-FVh" secondAttribute="trailing" constant="31" id="HWr-FL-VKu"/>
+                <constraint firstItem="7oJ-hv-HBm" firstAttribute="width" secondItem="bAn-iZ-ieF" secondAttribute="width" id="Iex-wW-LTD"/>
                 <constraint firstItem="xwK-Yu-a1e" firstAttribute="baseline" secondItem="gfa-Hb-cDP" secondAttribute="baseline" id="KMY-23-CNr"/>
                 <constraint firstItem="9tc-EO-QMd" firstAttribute="leading" secondItem="bAn-iZ-ieF" secondAttribute="trailing" constant="8" id="LOL-Rd-Xdp"/>
                 <constraint firstItem="GPu-Ht-bKg" firstAttribute="top" secondItem="Vae-sv-7Up" secondAttribute="bottom" constant="8" id="PIy-tb-2VH"/>
+                <constraint firstItem="h2m-9o-ibu" firstAttribute="top" secondItem="R00-pj-eFX" secondAttribute="bottom" constant="8" symbolic="YES" id="RHk-bG-srb"/>
                 <constraint firstItem="Vae-sv-7Up" firstAttribute="leading" secondItem="brN-9J-qa1" secondAttribute="leading" id="SDC-yH-bYi"/>
                 <constraint firstItem="rOd-nt-22T" firstAttribute="leading" secondItem="wAC-5p-nXb" secondAttribute="leading" constant="20" id="U8S-gG-od4"/>
                 <constraint firstItem="Y3k-tv-pIb" firstAttribute="top" secondItem="Fc1-EX-DWd" secondAttribute="bottom" constant="8" id="V4I-Zk-x8R"/>
                 <constraint firstItem="gfa-Hb-cDP" firstAttribute="leading" secondItem="xwK-Yu-a1e" secondAttribute="trailing" constant="36" id="X7s-4B-e33"/>
                 <constraint firstItem="gfa-Hb-cDP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Fc1-EX-DWd" secondAttribute="trailing" constant="8" symbolic="YES" id="XpL-gA-cOo"/>
                 <constraint firstItem="1au-ZO-l1i" firstAttribute="leading" secondItem="Vae-sv-7Up" secondAttribute="trailing" constant="46" id="Za9-Lu-OUj"/>
+                <constraint firstItem="7oJ-hv-HBm" firstAttribute="firstBaseline" secondItem="R00-pj-eFX" secondAttribute="firstBaseline" id="amL-M8-vVE"/>
                 <constraint firstItem="brN-9J-qa1" firstAttribute="top" secondItem="GPu-Ht-bKg" secondAttribute="bottom" constant="10" id="bQV-DG-M7N"/>
                 <constraint firstItem="xwK-Yu-a1e" firstAttribute="leading" secondItem="rOd-nt-22T" secondAttribute="trailing" constant="8" id="bV5-2x-8ji"/>
                 <constraint firstItem="bnV-aE-FVh" firstAttribute="baseline" secondItem="olm-zg-k9Y" secondAttribute="baseline" id="gA6-nQ-o4p"/>
@@ -728,10 +771,9 @@ Syntax: option-1=foo:opt2=bar</string>
                 <constraint firstItem="Pai-3Q-Gs3" firstAttribute="baseline" secondItem="1au-ZO-l1i" secondAttribute="baseline" id="sVB-mt-wYZ"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Pai-3Q-Gs3" secondAttribute="trailing" constant="20" symbolic="YES" id="yJK-FI-8b5"/>
                 <constraint firstItem="A3o-Zx-OfM" firstAttribute="leading" secondItem="olm-zg-k9Y" secondAttribute="leading" id="ydG-Lc-8Ru"/>
-                <constraint firstItem="h2m-9o-ibu" firstAttribute="top" secondItem="bnV-aE-FVh" secondAttribute="bottom" constant="16" id="zmx-5X-iAt"/>
                 <constraint firstItem="Vae-sv-7Up" firstAttribute="leading" secondItem="gfa-Hb-cDP" secondAttribute="trailing" constant="8" id="zxZ-dZ-W0N"/>
             </constraints>
-            <point key="canvasLocation" x="-37" y="203.5"/>
+            <point key="canvasLocation" x="-75" y="175"/>
         </view>
     </objects>
 </document>

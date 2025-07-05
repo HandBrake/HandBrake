@@ -1932,6 +1932,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
     hb_dict_t    *dest_dict, *video_dict, *qsv;
     hb_value_t   *value, *vcodec_value;
     int           mux, vcodec, vqtype, color_matrix_code;
+    const char   *color_range;
     hb_encoder_t *encoder;
 
     dest_dict    = hb_dict_get(job_dict, "Destination");
@@ -2007,6 +2008,27 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "ColorMatrixOverride",
                     hb_value_int(color_matrix));
     }
+    color_range = hb_dict_get_string(preset, "VideoColorRange");
+    if (color_range != NULL)
+    {
+        if (!strcmp(color_range, "auto"))
+        {
+            hb_dict_set(video_dict, "ColorRange", hb_value_int(AVCOL_RANGE_UNSPECIFIED));
+        }
+        else if (!strcmp(color_range, "full"))
+        {
+            hb_dict_set(video_dict, "ColorRange", hb_value_int(AVCOL_RANGE_JPEG));
+        }
+        else
+        {
+            hb_dict_set(video_dict, "ColorRange", hb_value_int(AVCOL_RANGE_MPEG));
+        }
+    }
+    else
+    {
+        hb_dict_set(video_dict, "ColorRange", hb_value_int(AVCOL_RANGE_MPEG));
+    }
+
     hb_dict_set(video_dict, "Encoder", hb_value_dup(vcodec_value));
 
     if ((vcodec & HB_VCODEC_X264_MASK) &&

@@ -512,7 +512,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+        ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
         ///
         ///{source} - Name of the source file.
         ///{title} - Integer value. This is representative of a disc title number.
@@ -842,6 +842,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility..
+        /// </summary>
+        public static string Video_ColourRange {
+            get {
+                return ResourceManager.GetString("Video_ColourRange", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Enables constant framerate output..
         /// </summary>
         public static string Video_ConstantFramerate {
@@ -944,7 +953,10 @@ namespace HandBrakeWPF.Properties {
         ///This establishes your default encoder settings.
         ///Tunes, profiles, levels and advanced option string will be applied to this.
         ///You should generally set this option to the slowest you can bear since slower
-        ///settings will result in better quality or smaller files..
+        ///settings will result in better quality or smaller files.
+        ///
+        ///Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
+        ///or to the left to increase encoding speed at the expense o [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Video_Presets {
             get {
