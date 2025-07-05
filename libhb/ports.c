@@ -609,13 +609,28 @@ static char *tmp_dirname = NULL;
 static void
 hb_init_temporary_directory (void)
 {
-    char *path, *base, *p;
+    char *path = NULL, *base = NULL, *p;
 
 #if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
-    base = malloc(MAX_PATH);
-    int i_size = GetTempPath(MAX_PATH, base);
-    if (i_size <= 0 || i_size >= MAX_PATH)
+    DWORD i_size = 0;
+    WCHAR wide_base[MAX_PATH + 1];
+
+    i_size = GetTempPathW(MAX_PATH, wide_base);
+    if (i_size > 0 && i_size <= MAX_PATH)
     {
+        int base_size = WideCharToMultiByte(CP_UTF8, 0, wide_base, -1,
+                                            NULL, 0, 0, NULL);
+        if (base_size)
+        {
+            base = malloc(base_size);
+            WideCharToMultiByte(CP_UTF8, 0, wide_base, -1,
+                                base, base_size, 0, NULL);
+        }
+    }
+
+    if (base == NULL)
+    {
+        base = malloc(MAX_PATH + 1);
         if (getcwd(base, MAX_PATH) == NULL)
             strcpy(base, "c:"); /* Bad fallback but ... */
     }
