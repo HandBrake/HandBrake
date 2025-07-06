@@ -9,7 +9,7 @@ While we wish to welcome contributions from people, we need to have some ground 
 
 - Contributors must have fluent verbal and written English. (English is the base language used for translation.)
 - You must not use a translation service to aid translation. If anything is unclear, please ask!
-- Our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md) and [Community Rules](https://forum.handbrake.fr/app.php/rules) must be followed.
+- Our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md) must be followed.
 
 
 ## How to become a translator 
