@@ -258,7 +258,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.Encoder = job.VideoEncoder.ShortName;
             }
 
-            video.ColorRange = job.VideoColourRange.Id  != 0 ? job.VideoColourRange.Id : null;
+            video.ColorRange = job.VideoColourRange  != 0 ? (int)job.VideoColourRange : null;
 
             video.Level = job.VideoLevel?.ShortName;
             video.Preset = job.VideoPreset?.ShortName;

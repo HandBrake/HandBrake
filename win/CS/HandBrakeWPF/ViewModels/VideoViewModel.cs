@@ -15,12 +15,14 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.Linq;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -31,7 +33,6 @@ namespace HandBrakeWPF.ViewModels
     using EncodeTask = Services.Encode.Model.EncodeTask;
     using FramerateMode = Services.Encode.Model.Models.FramerateMode;
     using OutputFormat = Services.Encode.Model.Models.OutputFormat;
-    using SettingChangedEventArgs = EventArgs.SettingChangedEventArgs;
     using VideoEncodeRateType = Model.Video.VideoEncodeRateType;
     using VideoLevel = Services.Encode.Model.Models.Video.VideoLevel;
     using VideoPreset = Services.Encode.Model.Models.Video.VideoPreset;
@@ -126,13 +127,8 @@ namespace HandBrakeWPF.ViewModels
                 this.OnTabStatusChanged(null);
             }
         }
-        public IEnumerable<HBColourRange> ColourRanges
-        {
-            get
-            {
-                return HandBrakeEncoderHelpers.VideoColourRanges;
-            }
-        }
+
+        public BindingList<VideoColourRange> ColourRanges => new BindingList<VideoColourRange>(EnumHelper<VideoColourRange>.GetEnumList().ToList());
 
         public bool IsMultiPassEnabled
         {
@@ -267,7 +263,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public HBColourRange ColourRange
+        public VideoColourRange ColourRange
         {
             get => this.Task.VideoColourRange;
 

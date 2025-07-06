@@ -3001,4 +3001,13 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="SubtitlesDefaultsView_PassthruTrackName" xml:space="preserve">
     <value>Passthru Track Names</value>
   </data>
+  <data name="VideoColourRange_SameAsSource" xml:space="preserve">
+    <value>Same as source</value>
+  </data>
+  <data name="VideoColourRange_Full" xml:space="preserve">
+    <value>Full</value>
+  </data>
+  <data name="VideoColourRange_Limited" xml:space="preserve">
+    <value>Limited</value>
+  </data>
 </root>
