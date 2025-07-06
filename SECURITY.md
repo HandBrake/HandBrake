@@ -15,10 +15,15 @@ This allows us time to investigate and take corrective action where necessary.
 
 Our goal is to deal with any issues reported as quickly as possible.  If you do not receive a direct response from us within 24 hours, please follow up with us as we may not have received the message.
 
-## Notices
+## Policy Notes
 
-HandBrake is a volunteer project and we are not funded. As such, we do not participate in bug bounty programs or pay out for bugs raised.
-
+ - HandBrake is a volunteer project and we are not funded. As such, we do not participate in bug bounty programs or pay out for bugs raised.
+ - When a new version of HandBrake is released, all prior versions immediately become end-of-life. 
+ - Releases are ad-hoc and do not follow any set release schedule.
+ - Any new releases will be published on our website, here on the [GitHub releases](https://github.com/HandBrake/HandBrake/releases) page and will be available via in-app software updates usually within a few days of a release being published. 
+ - Any security issues will be noted in our [Releases Notes](https://github.com/HandBrake/HandBrake/releases) and if relevant, an advisory may also be published on our [GitHub Security Page](https://github.com/HandBrake/HandBrake/security).
+ - We do NOT fill out any form of questionaries or provide any security scan results.
+ 
 ## Versions
 
 We accept bug reports (including security reports) for the following versions:
