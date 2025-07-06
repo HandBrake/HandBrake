@@ -100,7 +100,7 @@ int hb_is_mf_encoder_available(const GUID* pSubType)
 
 int hb_check_mf_available()
 {
-    if (is_hardware_disabled())
+    if (hb_is_hardware_disabled())
     {
         return 0;
     }
@@ -208,7 +208,7 @@ int hb_mf_av1_available()
 #if HB_PROJECT_FEATURE_MF
 int hb_directx_available()
 {
-    if (is_hardware_disabled())
+    if (hb_is_hardware_disabled())
     {
         return 0;
     }

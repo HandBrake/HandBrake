@@ -22,15 +22,15 @@ extern "C" {
 #include "handbrake/param.h"
 #include "handbrake/colormap.h"
 
+#define HB_DEBUG_NONE 0
+#define HB_DEBUG_ALL  1
+
+void          hb_register( hb_work_object_t * );
+void          hb_register_logger( void (*log_cb)(const char* message) );
+
 /* hb_init()
    Initializes a libhb session (launches his own thread, detects CPUs,
    etc) */
-#define HB_DEBUG_NONE 0
-#define HB_DEBUG_ALL  1
-#define HB_PREVIEW_FORMAT_YUV 0
-#define HB_PREVIEW_FORMAT_JPG 1
-void          hb_register( hb_work_object_t * );
-void          hb_register_logger( void (*log_cb)(const char* message) );
 hb_handle_t * hb_init( int verbose );
 void          hb_log_level_set(hb_handle_t *h, int level);
 
@@ -71,9 +71,12 @@ hb_list_t * hb_get_title_coverarts( hb_handle_t * h, int title );
 /* hb_detect_comb()
    Analyze a frame for interlacing artifacts, returns true if they're found.
    Taken from Thomas Oestreich's 32detect filter in the Transcode project.  */
-int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold );
+int hb_detect_comb( hb_buffer_t * buf,int color_equal, int color_diff,
+                   int threshold, int prog_equal, int prog_diff, int prog_threshold );
 
-// JJJ: title->job?
+#define HB_PREVIEW_FORMAT_YUV 0
+#define HB_PREVIEW_FORMAT_JPG 1
+
 int           hb_save_preview( hb_handle_t * h, int title, int preview,
                                hb_buffer_t *buf, int format );
 hb_buffer_t * hb_read_preview( hb_handle_t * h, hb_title_t *title,
@@ -154,7 +157,7 @@ void          hb_global_close(void);
    Return the unique instance id of an libhb instance created by hb_init. */
 int hb_get_instance_id( hb_handle_t * h );
 
-int is_hardware_disabled(void);
+int hb_is_hardware_disabled(void);
 
 #ifdef __cplusplus
 }

@@ -127,7 +127,7 @@ clean:
 
 int hb_vce_h264_available()
 {
-    if (is_hardware_disabled())
+    if (hb_is_hardware_disabled())
     {
         return 0;
     }
@@ -152,7 +152,7 @@ int hb_vce_h264_available()
 
 int hb_vce_h265_available()
 {
-    if (is_hardware_disabled())
+    if (hb_is_hardware_disabled())
     {
         return 0;
     }
@@ -168,7 +168,7 @@ int hb_vce_h265_available()
 
 int hb_vce_av1_available()
 {
-    if (is_hardware_disabled())
+    if (hb_is_hardware_disabled())
     {
         return 0;
     }

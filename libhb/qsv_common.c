@@ -678,7 +678,7 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
  */
 int hb_qsv_available()
 {
-    if (is_hardware_disabled())
+    if (hb_is_hardware_disabled())
     {
         return 0;
     }

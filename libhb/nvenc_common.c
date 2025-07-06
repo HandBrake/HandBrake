@@ -84,7 +84,7 @@ int hb_nvenc_get_cuda_version()
 
 int hb_check_nvenc_available()
 {
-    if (is_hardware_disabled())
+    if (hb_is_hardware_disabled())
     {
         return 0;
     }

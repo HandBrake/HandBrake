@@ -446,7 +446,7 @@ void hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
     hb_log(" - logical processor count: %d", hb_get_cpu_count());
 
 #if HB_PROJECT_FEATURE_QSV
-    if (!is_hardware_disabled())
+    if (!hb_is_hardware_disabled())
     {
         /* Print QSV info here so that it's in all scan and encode logs */
         hb_qsv_info_print();
@@ -2407,7 +2407,7 @@ hb_interjob_t * hb_interjob_get( hb_handle_t * h )
     return h->interjob;
 }
 
-int is_hardware_disabled(void)
+int hb_is_hardware_disabled(void)
 {
     return disable_hardware;
 }

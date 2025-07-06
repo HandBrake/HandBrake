@@ -169,7 +169,7 @@ const AVCodec * hb_hwaccel_find_decoder_by_name(enum AVCodecID codec_id, enum AV
 
 enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name)
 {
-    if (is_hardware_disabled())
+    if (hb_is_hardware_disabled())
     {
         return 0;
     }
