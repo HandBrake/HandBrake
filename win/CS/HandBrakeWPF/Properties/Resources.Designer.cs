@@ -8218,6 +8218,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Full.
+        /// </summary>
+        public static string VideoColourRange_Full {
+            get {
+                return ResourceManager.GetString("VideoColourRange_Full", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limited.
+        /// </summary>
+        public static string VideoColourRange_Limited {
+            get {
+                return ResourceManager.GetString("VideoColourRange_Limited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same as source.
+        /// </summary>
+        public static string VideoColourRange_SameAsSource {
+            get {
+                return ResourceManager.GetString("VideoColourRange_SameAsSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Avg Bitrate (kbps):.
         /// </summary>
         public static string VideoView_AverageBitrate {
@@ -8232,6 +8259,15 @@ namespace HandBrakeWPF.Properties {
         public static string VideoView_Codec {
             get {
                 return ResourceManager.GetString("VideoView_Codec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color Range:.
+        /// </summary>
+        public static string VideoView_ColourRange {
+            get {
+                return ResourceManager.GetString("VideoView_ColourRange", resourceCulture);
             }
         }
         

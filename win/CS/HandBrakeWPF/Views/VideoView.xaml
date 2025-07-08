@@ -12,6 +12,7 @@
         <Converters:BooleanConverter x:Key="boolConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Video:VideoEncoderConverter x:Key="videoEncoderConverter" />
+        <Video:VideoColourRangeConverter x:Key="videoColourRangeConverter" />
     </UserControl.Resources>
 
     <Grid Margin="10,5,0,0">
@@ -71,6 +72,13 @@
                                      Visibility="{Binding ShowPeakFramerate, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_PeakFramerate}"  />
                         </StackPanel>
                     </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,10" >
+                    <TextBlock Text="{x:Static Properties:Resources.VideoView_ColourRange}" Width="100" />
+
+                    <ComboBox Width="120" AutomationProperties.Name="{x:Static Properties:Resources.VideoView_ColourRange}"
+                        ItemsSource="{Binding ColourRanges, Converter={StaticResource videoColourRangeConverter}}" SelectedItem="{Binding ColourRange, Converter={StaticResource videoColourRangeConverter}}" HorizontalAlignment="Left"
+                        ToolTip="{x:Static Properties:ResourcesTooltips.Video_ColourRange}" />
                 </StackPanel>
             </StackPanel>
 

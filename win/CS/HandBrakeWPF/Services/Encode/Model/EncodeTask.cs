@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Services.Encode.Model
     using HandBrake.Interop.Interop.Json.Shared;
 
     using HandBrakeWPF.Model.Filters;
+    using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Services.Encode.Model.Models;
 
     using AudioTrack = Models.AudioTrack;
@@ -142,6 +143,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.VideoBitrate = task.VideoBitrate;
             this.VideoEncoder = task.VideoEncoder;
             this.VideoEncodeRateType = task.VideoEncodeRateType;
+            this.VideoColourRange = task.VideoColourRange;
             this.VideoLevel = task.VideoLevel;
             this.VideoProfile = task.VideoProfile;
             this.VideoPreset = task.VideoPreset;
@@ -277,6 +279,8 @@ namespace HandBrakeWPF.Services.Encode.Model
         public VideoEncodeRateType VideoEncodeRateType { get; set; }
 
         public HBVideoEncoder VideoEncoder { get; set; }
+
+        public VideoColourRange VideoColourRange { get; set; }
 
         public VideoProfile VideoProfile { get; set; }
 

@@ -490,8 +490,11 @@ void hb_vt_setup_hw_filters(hb_job_t *job)
     {
         fix_prores_pix_fmt(job);
 
+        // Add adapter
         hb_filter_object_t *filter = hb_filter_init(HB_FILTER_PRE_VT);
-        hb_add_filter(job, filter, NULL);
+        char *settings = hb_strdup_printf("rotation=%d", job->title->rotation);
+        hb_add_filter(job, filter, settings);
+        free(settings);
 
         replace_filter(job, HB_FILTER_COMB_DETECT, HB_FILTER_COMB_DETECT_VT);
         replace_filter(job, HB_FILTER_YADIF, HB_FILTER_YADIF_VT);

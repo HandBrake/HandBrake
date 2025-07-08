@@ -307,6 +307,15 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task.VideoPreset = new VideoPreset(importedPreset.VideoPreset, importedPreset.VideoPreset);
             preset.Task.VideoProfile = new VideoProfile(importedPreset.VideoProfile, importedPreset.VideoProfile);
 
+            if (!string.IsNullOrEmpty(importedPreset.VideoColorRange))
+            {
+                preset.Task.VideoColourRange = EnumHelper<VideoColourRange>.GetValue(importedPreset.VideoColorRange);
+            }
+            else
+            {
+                preset.Task.VideoColourRange = VideoColourRange.SameAsSource;
+            }
+
             if (!string.IsNullOrEmpty(importedPreset.VideoTune))
             {
                 string[] split = importedPreset.VideoTune.Split(',');
@@ -640,6 +649,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoEncoder = export.Task.VideoEncoder?.ShortName;
             preset.VideoFramerate = export.Task.Framerate.HasValue ? export.Task.Framerate.ToString() : null;
             preset.VideoFramerateMode = EnumHelper<FramerateMode>.GetShortName(export.Task.FramerateMode);
+            preset.VideoColorRange = EnumHelper<VideoColourRange>.GetShortName(export.Task.VideoColourRange);
             preset.VideoGrayScale = export.Task.Grayscale;
             preset.VideoLevel = export.Task.VideoLevel != null ? export.Task.VideoLevel.ShortName : null;
             preset.VideoOptionExtra = export.Task.ExtraAdvancedArguments;

@@ -2940,4 +2940,13 @@ Para permitir várias codificações simultâneas, ative o "Isolamento do proces
   <data name="OptionsViewModel_PortableMode" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="VideoColourRange_SameAsSource" xml:space="preserve">
+    <value />
+  </data>
+  <data name="VideoColourRange_Full" xml:space="preserve">
+    <value />
+  </data>
+  <data name="VideoColourRange_Limited" xml:space="preserve">
+    <value />
+  </data>
 </root>

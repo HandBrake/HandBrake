@@ -15,12 +15,14 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.Linq;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -31,7 +33,6 @@ namespace HandBrakeWPF.ViewModels
     using EncodeTask = Services.Encode.Model.EncodeTask;
     using FramerateMode = Services.Encode.Model.Models.FramerateMode;
     using OutputFormat = Services.Encode.Model.Models.OutputFormat;
-    using SettingChangedEventArgs = EventArgs.SettingChangedEventArgs;
     using VideoEncodeRateType = Model.Video.VideoEncodeRateType;
     using VideoLevel = Services.Encode.Model.Models.Video.VideoLevel;
     using VideoPreset = Services.Encode.Model.Models.Video.VideoPreset;
@@ -126,6 +127,8 @@ namespace HandBrakeWPF.ViewModels
                 this.OnTabStatusChanged(null);
             }
         }
+
+        public BindingList<VideoColourRange> ColourRanges => new BindingList<VideoColourRange>(EnumHelper<VideoColourRange>.GetEnumList().ToList());
 
         public bool IsMultiPassEnabled
         {
@@ -256,6 +259,18 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.TurboAnalysisPass = value;
                 this.NotifyOfPropertyChange(() => this.TurboAnalysisPass);
+                this.OnTabStatusChanged(null);
+            }
+        }
+
+        public VideoColourRange ColourRange
+        {
+            get => this.Task.VideoColourRange;
+
+            set
+            {
+                this.Task.VideoColourRange = value;
+                this.NotifyOfPropertyChange(() => this.ColourRange);
                 this.OnTabStatusChanged(null);
             }
         }
@@ -625,7 +640,7 @@ namespace HandBrakeWPF.ViewModels
             this.TurboAnalysisPass = preset.Task.TurboAnalysisPass;
 
             this.VideoBitrate = preset.Task.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate ? preset.Task.VideoBitrate : null;
-
+            this.ColourRange = preset.Task.VideoColourRange;
             this.NotifyOfPropertyChange(() => this.Task);
 
             this.HandleEncoderChange(preset.Task.VideoEncoder);
@@ -679,6 +694,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.IsVariableFramerate);
             this.NotifyOfPropertyChange(() => this.SelectedVideoEncoder);
             this.NotifyOfPropertyChange(() => this.SelectedFramerate);
+            this.NotifyOfPropertyChange(() => this.ColourRange);
             this.NotifyOfPropertyChange(() => this.QualityMax);
             this.NotifyOfPropertyChange(() => this.QualityMin);
             this.NotifyOfPropertyChange(() => this.RF);

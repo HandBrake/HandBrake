@@ -89,7 +89,7 @@ namespace HandBrake.Interop.Interop
                 return videoFramerates;
             }
         }
-
+        
         /// <summary>
         /// Gets a list of supported mixdowns.
         /// </summary>
