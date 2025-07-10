@@ -283,11 +283,11 @@ namespace HandBrakeWPF.Services.Scan
                 int hwDecode = 0;
                 if (nvdec && HandBrakeHardwareEncoderHelper.IsNVDecAvailable)
                 {
-                    hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
+                    hwDecode = (int)NativeConstants.HB_DECODE_NVDEC;
                 }
                 if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
                 {
-                    hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_MF;
+                    hwDecode = (int)NativeConstants.HB_DECODE_MF;
                 }
 
                 bool keepDuplicateTitles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.KeepDuplicateTitles);

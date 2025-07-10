@@ -122,18 +122,18 @@ namespace HandBrakeWPF.Services.Encode.Factories
             int hwDecode = 0;
             if (nvdec)
             {
-                hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
+                hwDecode = (int)NativeConstants.HB_DECODE_NVDEC;
             }
 
             if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
             {
-                hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_MF;
+                hwDecode = (int)NativeConstants.HB_DECODE_MF;
             }
 
             bool qsv = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
             if (qsv)
             {
-                hwDecode |= (int)NativeConstants.HB_DECODE_SUPPORT_QSV;
+                hwDecode |= (int)NativeConstants.HB_DECODE_QSV;
             }
 
             Source source = new Source
@@ -293,14 +293,14 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (this.isEncodePath && (job.VideoEncoder?.IsQuickSync ?? false))
             {
                 video.HardwareDecode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && enableQuickSyncDecoding ?
-                     NativeConstants.HB_DECODE_SUPPORT_QSV | NativeConstants.HB_DECODE_SUPPORT_FORCE_HW : 0 ;
+                     NativeConstants.HB_DECODE_QSV | NativeConstants.HB_DECODE_FORCE_HW : 0 ;
             }
 
             // Allow use of the QSV decoder is configurable for non QSV encoders.
             if (this.isEncodePath &&  job.VideoEncoder != null && !job.VideoEncoder.IsHardwareEncoder && useQSVDecodeForNonQSVEnc && enableQuickSyncDecoding)
             {
                 video.HardwareDecode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && useQSVDecodeForNonQSVEnc ?
-                    NativeConstants.HB_DECODE_SUPPORT_QSV | NativeConstants.HB_DECODE_SUPPORT_FORCE_HW : 0;
+                    NativeConstants.HB_DECODE_QSV | NativeConstants.HB_DECODE_FORCE_HW : 0;
             }
 
             if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && (job.VideoEncoder?.IsQuickSync ?? false))
@@ -317,12 +317,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
             if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsNVDecAvailable &&  this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport) && job.VideoEncoder.IsNVEnc)
             {
-                video.HardwareDecode = NativeConstants.HB_DECODE_SUPPORT_NVDEC;
+                video.HardwareDecode = NativeConstants.HB_DECODE_NVDEC;
             }
 
             if (HandBrakeHardwareEncoderHelper.IsDirectXAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding))
             {
-                video.HardwareDecode = NativeConstants.HB_DECODE_SUPPORT_MF;
+                video.HardwareDecode = NativeConstants.HB_DECODE_MF | NativeConstants.HB_DECODE_FORCE_HW;
             }
 
 

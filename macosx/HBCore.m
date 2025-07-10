@@ -362,7 +362,7 @@ HB_OBJC_DIRECT_MEMBERS
     hb_scan(_hb_handle, files_list,
               (int)index, (int)previewsNum,
               keepPreviews, min_title_duration_ticks, max_title_duration_ticks,
-              0, 0, NULL, hardwareDecoder ? HB_DECODE_SUPPORT_VIDEOTOOLBOX : 0, keepDuplicateTitles);
+              0, 0, NULL, hardwareDecoder ? HB_DECODE_VIDEOTOOLBOX : 0, keepDuplicateTitles);
 
     hb_list_close(&files_list);
 

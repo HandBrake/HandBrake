@@ -67,14 +67,14 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_MUX_AV_WEBM = 0x400000;
 
         // Video Decoders
-        public const uint HB_DECODE_SUPPORT_SW = 0x01;
-        public const uint HB_DECODE_SUPPORT_QSV = 0x02;
-        public const uint HB_DECODE_SUPPORT_NVDEC = 0x04;
-        public const uint HB_DECODE_SUPPORT_VIDEOTOOLBOX = 0x08;
-        public const uint HB_DECODE_SUPPORT_MF = 0x10;
+        public const uint HB_DECODE_SW = 0x01;
+        public const uint HB_DECODE_QSV = 0x02;
+        public const uint HB_DECODE_NVDEC = 0x04;
+        public const uint HB_DECODE_VIDEOTOOLBOX = 0x08;
+        public const uint HB_DECODE_MF = 0x10;
 
-        public const uint HB_DECODE_SUPPORT_HWACCEL = (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX | HB_DECODE_SUPPORT_QSV | HB_DECODE_SUPPORT_MF);
-        public const uint HB_DECODE_SUPPORT_FORCE_HW = 0x80000000;
+        public const uint HB_DECODE_HWACCEL = (HB_DECODE_NVDEC | HB_DECODE_VIDEOTOOLBOX | HB_DECODE_QSV | HB_DECODE_MF);
+        public const uint HB_DECODE_FORCE_HW = 0x80000000;
 
     }
 }

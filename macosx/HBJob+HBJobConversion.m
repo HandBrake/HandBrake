@@ -52,11 +52,11 @@
 
     if (self.hwDecodeUsage == HBJobHardwareDecoderUsageFullPathOnly)
     {
-        job->hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
+        job->hw_decode = HB_DECODE_VIDEOTOOLBOX;
     }
     else if (self.hwDecodeUsage == HBJobHardwareDecoderUsageAlways)
     {
-        job->hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX | HB_DECODE_SUPPORT_FORCE_HW;
+        job->hw_decode = HB_DECODE_VIDEOTOOLBOX | HB_DECODE_FORCE_HW;
     }
 
     // Title Angle for dvdnav

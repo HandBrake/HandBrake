@@ -696,17 +696,19 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->width     = job->width;
     context->height    = job->height;
 
-    if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
+    if (job->hw_pix_fmt != AV_PIX_FMT_NONE)
     {
         context->hw_device_ctx = av_buffer_ref(pv->job->hw_device_ctx);
-        hb_hwaccel_hwframes_ctx_init(context, job->hw_pix_fmt, job->output_pix_fmt);
+        hb_hwaccel_hwframes_ctx_init(context, job->output_pix_fmt, job->hw_pix_fmt);
     }
     else
     {
 #if HB_PROJECT_FEATURE_QSV
         if (hb_qsv_is_ffmpeg_supported_codec(job->vcodec) && !job->hw_device_ctx)
         {
-            hb_qsv_device_init(job->hw_device_index, &job->hw_device_ctx);
+            hb_hwaccel_hw_device_ctx_init(AV_HWDEVICE_TYPE_QSV,
+                                          job->hw_device_index,
+                                         &job->hw_device_ctx);
             context->hw_device_ctx = av_buffer_ref(job->hw_device_ctx);
         }
 #endif

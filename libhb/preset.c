@@ -1929,7 +1929,7 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
 
 int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
 {
-    hb_dict_t    *dest_dict, *video_dict, *qsv;
+    hb_dict_t    *dest_dict, *video_dict;
     hb_value_t   *value, *vcodec_value;
     int           mux, vcodec, vqtype, color_matrix_code;
     const char   *color_range;

@@ -316,7 +316,27 @@ const char* const* hb_vt_level_get_names(int encoder)
     return NULL;
 }
 
-hb_buffer_t * hb_vt_copy_video_buffer_to_hw_video_buffer(const hb_job_t *job, hb_buffer_t **in)
+hb_buffer_t * hb_vt_buffer_dup(const hb_buffer_t *src)
+{
+    CVPixelBufferRef pix_buf = hb_cv_get_pixel_buffer(src);
+
+    if (pix_buf == NULL)
+    {
+        return NULL;
+    }
+
+    CFRetain(pix_buf);
+
+    hb_buffer_t *out  = hb_buffer_wrapper_init();
+    out->storage_type = COREMEDIA;
+    out->storage      = pix_buf;
+    out->f            = src->f;
+    hb_buffer_copy_props(out, src);
+
+    return out;
+}
+
+hb_buffer_t * copy_video_buffer_to_hw_video_buffer(const hb_job_t *job, hb_buffer_t **in)
 {
     hb_buffer_t *buf = *in;
 
@@ -391,27 +411,7 @@ hb_buffer_t * hb_vt_copy_video_buffer_to_hw_video_buffer(const hb_job_t *job, hb
     return out;
 }
 
-hb_buffer_t * hb_vt_buffer_dup(const hb_buffer_t *src)
-{
-    CVPixelBufferRef pix_buf = hb_cv_get_pixel_buffer(src);
-
-    if (pix_buf == NULL)
-    {
-        return NULL;
-    }
-
-    CFRetain(pix_buf);
-
-    hb_buffer_t *out  = hb_buffer_wrapper_init();
-    out->storage_type = COREMEDIA;
-    out->storage      = pix_buf;
-    out->f            = src->f;
-    hb_buffer_copy_props(out, src);
-
-    return out;
-}
-
-int hb_vt_are_filters_supported(hb_list_t *filters)
+static int are_filters_supported(hb_list_t *filters)
 {
     int ret = 1;
 
@@ -521,3 +521,23 @@ void hb_vt_setup_hw_filters(hb_job_t *job)
         }
     }
 }
+
+static const int vt_encoders[] =
+{
+    HB_VCODEC_VT_H264,
+    HB_VCODEC_VT_H265,
+    HB_VCODEC_VT_H265_10BIT,
+    HB_VCODEC_INVALID
+};
+
+hb_hwaccel_t hb_hwaccel_videotoolbox =
+{
+    .id         = HB_DECODE_VIDEOTOOLBOX,
+    .name       = "videotoolbox hwaccel",
+    .encoders   = vt_encoders,
+    .type       = AV_HWDEVICE_TYPE_VIDEOTOOLBOX,
+    .hw_pix_fmt = AV_PIX_FMT_VIDEOTOOLBOX,
+    .can_filter = are_filters_supported,
+    .upload     = copy_video_buffer_to_hw_video_buffer,
+    .caps       = HB_HWACCEL_CAP_SCAN
+};

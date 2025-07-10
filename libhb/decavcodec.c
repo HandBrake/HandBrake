@@ -1838,8 +1838,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 
     if (w->hw_device_ctx)
     {
-        enum AVHWDeviceType type = hw_hwaccel_get_hw_device_type(w->hw_device_ctx);
-        pv->codec = hb_hwaccel_find_decoder_by_name(w->codec_param, type);
+        pv->codec = w->hw_accel->find_decoder(w->codec_param);
     }
     else
     {
@@ -1865,7 +1864,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         av_buffer_replace(&pv->context->hw_device_ctx, w->hw_device_ctx);
 
         if (job == NULL ||
-            (job->hw_pix_fmt == AV_PIX_FMT_NONE && job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW))
+            (job->hw_pix_fmt == AV_PIX_FMT_NONE && job->hw_decode & HB_DECODE_FORCE_HW))
         {
             pv->hw_frame = av_frame_alloc();
         }
@@ -1886,11 +1885,11 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         }
 
 #if HB_PROJECT_FEATURE_QSV
-        if (hw_hwaccel_get_hw_device_type(w->hw_device_ctx) == AV_HWDEVICE_TYPE_QSV)
+        if (w->hw_accel && w->hw_accel->type == AV_HWDEVICE_TYPE_QSV)
         {
-            if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
+            if (job && job->hw_pix_fmt != AV_PIX_FMT_NONE)
             {
-                hb_hwaccel_hwframes_ctx_init(pv->context, job->hw_pix_fmt, job->input_pix_fmt);
+                hb_hwaccel_hwframes_ctx_init(pv->context, job->input_pix_fmt, job->hw_pix_fmt);
             }
             if (pv->context->codec_id == AV_CODEC_ID_HEVC)
             {
@@ -2428,7 +2427,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->color_range     = pv->context->color_range;
     info->chroma_location = pv->context->chroma_sample_location;
 
-    info->video_decode_support = HB_DECODE_SUPPORT_SW;
+    info->video_decode_support = HB_DECODE_SW;
 
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_available())
@@ -2436,26 +2435,15 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         if (hb_qsv_decode_is_codec_supported(hb_qsv_get_adapter_index(), pv->context->codec_id,
             pv->context->pix_fmt, pv->context->width, pv->context->height))
         {
-            info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
+            info->video_decode_support |= HB_DECODE_QSV;
         }
     }
 #endif
 
-    if (pv->context->pix_fmt == AV_PIX_FMT_QSV)
+    hb_hwaccel_t *hwaccel = hb_get_hwaccel_from_pix_fmt(pv->context->pix_fmt);
+    if (hwaccel != NULL)
     {
-        info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
-    }
-    if (pv->context->pix_fmt == AV_PIX_FMT_CUDA)
-    {
-        info->video_decode_support |= HB_DECODE_SUPPORT_NVDEC;
-    }
-    if (pv->context->pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
-    {
-        info->video_decode_support |= HB_DECODE_SUPPORT_VIDEOTOOLBOX;
-    }
-    if (pv->context->pix_fmt == AV_PIX_FMT_D3D11)
-    {
-        info->video_decode_support |= HB_DECODE_SUPPORT_MF;
+        info->video_decode_support |= hwaccel->id;
     }
 
     return 1;

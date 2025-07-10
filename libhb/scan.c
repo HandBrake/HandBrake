@@ -713,39 +713,20 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         return 0;
     }
 
-    int hw_decode = 0;
-
-    if (data->hw_decode & HB_DECODE_SUPPORT_NVDEC &&
-        hb_hwaccel_available(title->video_codec_param, "cuda"))
-    {
-        hw_decode = HB_DECODE_SUPPORT_NVDEC;
-    }
-    else if (data->hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX &&
-             hb_hwaccel_available(title->video_codec_param, "videotoolbox"))
-    {
-        hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
-    }
-    // TODO: re-enable when it will demux hdr dynamic side data
-    //else if (data->hw_decode & HB_DECODE_SUPPORT_QSV &&
-    //         hb_hwaccel_available(title->video_codec_param, "qsv"))
-    //{
-    //    hw_decode = HB_DECODE_SUPPORT_QSV;
-    //}
-    else if (data->hw_decode & HB_DECODE_SUPPORT_MF &&
-             hb_hwaccel_available(title->video_codec_param, "d3d11va"))
-    {
-        hw_decode = HB_DECODE_SUPPORT_MF;
-    }
-
     void *hw_device_ctx = NULL;
-    if (hw_decode)
+    hb_hwaccel_t *hwaccel = hb_get_hwaccel(data->hw_decode);
+
+    if (hwaccel &&
+        hwaccel->caps & HB_HWACCEL_CAP_SCAN &&
+        hb_hwaccel_is_available(hwaccel, title->video_codec_param))
     {
-        hb_hwaccel_hw_ctx_init(title->video_codec_param, hw_decode, -1, &hw_device_ctx);
+        hb_hwaccel_hw_device_ctx_init(hwaccel->type, -1, &hw_device_ctx);
     }
 
     hb_work_object_t *vid_decoder = hb_get_work(data->h, title->video_codec);
     vid_decoder->codec_param = title->video_codec_param;
     vid_decoder->hw_device_ctx = hw_device_ctx;
+    vid_decoder->hw_accel = hwaccel;
     vid_decoder->title = title;
 
     if (vid_decoder->init(vid_decoder, NULL))
@@ -755,7 +736,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         crop_record_free(crops);
         free( vid_decoder );
         hb_stream_close(&stream);
-        hb_hwaccel_hw_ctx_close(&hw_device_ctx);
+        hb_hwaccel_hw_device_ctx_close(&hw_device_ctx);
         return 0;
     }
 
@@ -772,7 +753,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
             vid_decoder->close( vid_decoder );
             free( vid_decoder );
             hb_stream_close(&stream);
-            hb_hwaccel_hw_ctx_close(&hw_device_ctx);
+            hb_hwaccel_hw_device_ctx_close(&hw_device_ctx);
             return 0;
         }
         if (data->bd)
@@ -1095,7 +1076,7 @@ skip_preview:
     vid_decoder->close( vid_decoder );
     free( vid_decoder );
 
-    hb_hwaccel_hw_ctx_close(&hw_device_ctx);
+    hb_hwaccel_hw_device_ctx_close(&hw_device_ctx);
 
     if (stream != NULL)
     {
@@ -1412,12 +1393,12 @@ skip_preview:
             hb_log("scan: hdr10+ dynamic metadata found");
         }
 
-        if (title->video_decode_support != HB_DECODE_SUPPORT_SW)
+        if (title->video_decode_support != HB_DECODE_SW)
         {
             hb_log("scan: supported video decoders:%s%s%s",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_SW)      ? "" : " avcodec",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_QSV)     ? "" : " qsv",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_HWACCEL) ? "" : " hwaccel");
+                   !(title->video_decode_support & HB_DECODE_SW)      ? "" : " avcodec",
+                   !(title->video_decode_support & HB_DECODE_QSV)     ? "" : " qsv",
+                   !(title->video_decode_support & HB_DECODE_HWACCEL) ? "" : " hwaccel");
         }
 
         if (interlaced_preview_count && interlaced_preview_count >= (npreviews / 2))

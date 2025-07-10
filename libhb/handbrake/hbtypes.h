@@ -17,6 +17,7 @@ typedef struct hb_rate_s hb_rate_t;
 typedef struct hb_dither_s hb_dither_t;
 typedef struct hb_mixdown_s hb_mixdown_t;
 typedef struct hb_encoder_s hb_encoder_t;
+typedef struct hb_hwaccel_s hb_hwaccel_t;
 typedef struct hb_container_s hb_container_t;
 typedef struct hb_rational_s hb_rational_t;
 typedef struct hb_geometry_s hb_geometry_t;

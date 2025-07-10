@@ -3276,14 +3276,14 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     if (!strcmp(optarg, "nvdec"))
                     {
-                        hw_decode = HB_DECODE_SUPPORT_NVDEC;
+                        hw_decode = HB_DECODE_NVDEC;
                     }
                     else if (!strcmp(optarg, "videotoolbox"))
                     {
 #if defined( __APPLE_CC__ )
                         if (__builtin_available(macOS 13, *))
                         {
-                            hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
+                            hw_decode = HB_DECODE_VIDEOTOOLBOX;
                         }
                         else
                         {
@@ -3294,12 +3294,12 @@ static int ParseOptions( int argc, char ** argv )
 #if HB_PROJECT_FEATURE_QSV
                     else if (!strcmp(optarg, "qsv"))
                     {
-                        hw_decode = HB_DECODE_SUPPORT_QSV;
+                        hw_decode = HB_DECODE_QSV;
                     }
 #endif
                     else if (!strcmp(optarg, "mf"))
                     {
-                        hw_decode = HB_DECODE_SUPPORT_MF;
+                        hw_decode = HB_DECODE_MF;
                     }
                     else
                     {
@@ -3307,7 +3307,7 @@ static int ParseOptions( int argc, char ** argv )
                     }
                     if (hw_decode > 0)
                     {
-                        hw_decode |= HB_DECODE_SUPPORT_FORCE_HW;
+                        hw_decode |= HB_DECODE_FORCE_HW;
                     }
                 } break;
             case KEEP_DUPLICATE_TITLES:
@@ -4502,7 +4502,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
     if (qsv_decode != -1)
     {
-        hw_decode = qsv_decode ? HB_DECODE_SUPPORT_QSV : 0;
+        hw_decode = qsv_decode ? HB_DECODE_QSV : 0;
     }
 #endif
     if (hw_decode != -1)

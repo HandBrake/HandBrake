@@ -235,6 +235,32 @@ struct hb_encoder_s
     int         muxers;     // supported muxers
 };
 
+#ifdef __LIBHB__
+
+#define HB_HWACCEL_CAP_SCAN 0x1
+
+struct hb_hwaccel_s
+{
+    int id;
+    const char *name;
+    const int *encoders;
+
+    int type;
+    int hw_pix_fmt;
+
+    int           (*can_filter)   (hb_list_t *filter_list);
+    void *        (*find_decoder) (int codec_param);
+    hb_buffer_t * (*upload)       (const hb_job_t *job, hb_buffer_t **buf_in);
+
+    int caps;
+};
+
+extern hb_hwaccel_t hb_hwaccel_videotoolbox;
+extern hb_hwaccel_t hb_hwaccel_qsv;
+extern hb_hwaccel_t hb_hwaccel_nvdec;
+extern hb_hwaccel_t hb_hwaccel_mf;
+#endif
+
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_container_s.cs when changing this struct
 struct hb_container_s
 {
@@ -912,6 +938,7 @@ struct hb_job_s
                                        // this.  E.g. sync and decsrtsub
 
     void           *hw_device_ctx;
+    hb_hwaccel_t   *hw_accel;
     int             hw_pix_fmt;
 #endif
 };
@@ -1303,14 +1330,14 @@ struct hb_title_s
 
     // additional supported video decoders (e.g. HW-accelerated implementations)
     int           video_decode_support;
-#define HB_DECODE_SUPPORT_SW             0x01 // software (libavcodec)
-#define HB_DECODE_SUPPORT_QSV            0x02 // Intel Quick Sync Video
-#define HB_DECODE_SUPPORT_NVDEC          0x04
-#define HB_DECODE_SUPPORT_VIDEOTOOLBOX   0x08
-#define HB_DECODE_SUPPORT_MF             0x10 // Windows Media Foundation
+#define HB_DECODE_SW             0x01 // software (libavcodec)
+#define HB_DECODE_QSV            0x02 // Intel Quick Sync Video
+#define HB_DECODE_NVDEC          0x04
+#define HB_DECODE_VIDEOTOOLBOX   0x08
+#define HB_DECODE_MF             0x10 // Windows Media Foundation
 
-#define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX | HB_DECODE_SUPPORT_QSV | HB_DECODE_SUPPORT_MF)
-#define HB_DECODE_SUPPORT_FORCE_HW       0x80000000
+#define HB_DECODE_HWACCEL        (HB_DECODE_NVDEC | HB_DECODE_VIDEOTOOLBOX | HB_DECODE_QSV | HB_DECODE_MF)
+#define HB_DECODE_FORCE_HW       0x80000000
 
     hb_metadata_t * metadata;
 
@@ -1460,6 +1487,7 @@ struct hb_work_object_s
     int                 frame_count;
     int                 codec_param;
     void              * hw_device_ctx;
+    hb_hwaccel_t      * hw_accel;
     hb_title_t        * title;
 
     hb_work_object_t  * next;
@@ -1723,7 +1751,6 @@ int hb_get_color_matrix(int colorspace, hb_geometry_t geometry);
 int hb_get_color_range(int color_range);
 int hb_get_chroma_sub_sample(int format, int *h_shift, int *v_shift);
 int hb_get_best_pix_fmt(hb_job_t * job);
-int hb_get_best_hw_pix_fmt(hb_job_t * job);
 
 #define HB_NEG_FLOAT_REG "(([-])?(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
 #define HB_FLOAT_REG     "(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"

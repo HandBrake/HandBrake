@@ -222,6 +222,22 @@ int hb_directx_available()
     hb_log("directx: is available");
     return 1;
 }
+
+static const int mf_encoders[] =
+{
+    HB_VCODEC_INVALID
+};
+
+hb_hwaccel_t hb_hwaccel_mf =
+{
+    .id         = HB_DECODE_MF,
+    .name       = "mf hwaccel",
+    .encoders   = mf_encoders,
+    .type       = AV_HWDEVICE_TYPE_D3D11VA,
+    .hw_pix_fmt = AV_PIX_FMT_D3D11,
+    .caps       = HB_HWACCEL_CAP_SCAN
+};
+
 #else // HB_PROJECT_FEATURE_MF
 
 int hb_directx_available()

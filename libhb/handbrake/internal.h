@@ -268,7 +268,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * );
 hb_work_object_t * hb_get_work( hb_handle_t *, int );
 hb_work_object_t * hb_audio_decoder( hb_handle_t *, int );
 hb_work_object_t * hb_audio_encoder( hb_handle_t *, int );
-hb_work_object_t * hb_video_decoder( hb_handle_t *, int, int, void *);
+hb_work_object_t * hb_video_decoder( hb_handle_t *, int, int, void *, hb_hwaccel_t *hw_accel);
 hb_work_object_t * hb_video_encoder( hb_handle_t *, int );
 
 /***********************************************************************

@@ -246,7 +246,7 @@ const char * hb_map_nvenc_preset_name (const char * preset)
     return "p4"; // Default to Medium
 }
 
-int hb_nvenc_are_filters_supported(hb_list_t *filters)
+static int hb_nvenc_are_filters_supported(hb_list_t *filters)
 {
     int ret = 1;
 
@@ -277,3 +277,22 @@ int hb_nvenc_are_filters_supported(hb_list_t *filters)
 
     return ret;
 }
+
+static const int nv_encoders[] =
+{
+    HB_VCODEC_FFMPEG_NVENC_H264,
+    HB_VCODEC_FFMPEG_NVENC_H265,HB_VCODEC_FFMPEG_NVENC_H265_10BIT,
+    HB_VCODEC_FFMPEG_NVENC_AV1, HB_VCODEC_FFMPEG_NVENC_AV1_10BIT,
+    HB_VCODEC_INVALID
+};
+
+hb_hwaccel_t hb_hwaccel_nvdec =
+{
+    .id         = HB_DECODE_NVDEC,
+    .name       = "nvdec hwaccel",
+    .encoders   = nv_encoders,
+    .type       = AV_HWDEVICE_TYPE_CUDA,
+    .hw_pix_fmt = AV_PIX_FMT_CUDA,
+    .can_filter = hb_nvenc_are_filters_supported,
+    .caps       = HB_HWACCEL_CAP_SCAN
+};

@@ -364,7 +364,6 @@ int hb_qsv_apply_encoder_options(qsv_data_t * qsv_data, hb_job_t * job, AVDictio
 hb_qsv_context_t * hb_qsv_context_init();
 hb_qsv_context_t * hb_qsv_context_dup(const hb_qsv_context_t *src);
 void hb_qsv_context_close(hb_qsv_context_t **_ctx);
-int hb_qsv_are_filters_supported(hb_list_t *filters);
 int hb_qsv_get_memory_type(hb_job_t *job);
 int hb_qsv_full_path_is_enabled(hb_job_t *job);
 int hb_qsv_setup_job(hb_job_t *job);
@@ -374,7 +373,6 @@ int hb_qsv_decode_h265_10_bit_is_supported(int adapter_index);
 int hb_qsv_decode_av1_is_supported(int adapter_index);
 int hb_qsv_decode_vvc_is_supported(int adapter_index);
 int hb_qsv_decode_is_codec_supported(int adapter_index, int video_codec_param, int pix_fmt, int width, int height);
-int hb_qsv_device_init(int dx_index, void **hw_device_ctx);
 int hb_qsv_is_ffmpeg_supported_codec(int vcodec);
 
 #endif // __LIBHB__

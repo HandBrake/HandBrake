@@ -564,6 +564,12 @@ int hb_str_ends_with(const char *base, const char *str)
 
 static void hb_common_global_hw_init()
 {
+#ifdef __APPLE__
+    hb_register_hwaccel(&hb_hwaccel_videotoolbox);
+#endif
+#if HB_PROJECT_FEATURE_NVDEC
+    hb_register_hwaccel(&hb_hwaccel_nvdec);
+#endif
 #if HB_PROJECT_FEATURE_NVENC
     hb_nvenc_h264_available();
 #endif
@@ -572,11 +578,16 @@ static void hb_common_global_hw_init()
 #endif
 #if HB_PROJECT_FEATURE_MF
     hb_directx_available();
+    hb_register_hwaccel(&hb_hwaccel_mf);
 #endif
-    // first initialization and QSV adapters list collection should happen after other hw vendors initializations to prevent device order issues
 #if HB_PROJECT_FEATURE_QSV
+    // First initialization and QSV adapters list collection should happen
+    // after other hw vendors initializations to prevent device order issues
     hb_qsv_available();
+    hb_register_hwaccel(&hb_hwaccel_qsv);
 #endif
+
+    hb_hwaccel_common_hwaccel_init();
 }
 
 void hb_common_global_init(int disable_hardware)
@@ -6965,7 +6976,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
 
     if (planes_count == 2)
     {
-        if (hb_hwaccel_decode_is_enabled(job) == 0)
+        if (job->hw_accel == NULL)
         {
             return 0;
         }
@@ -7028,57 +7039,4 @@ int hb_get_best_pix_fmt(hb_job_t * job)
     }
 
     return AV_PIX_FMT_YUV420P;
-}
-
-static int pix_hw_fmt_is_supported(hb_job_t *job, int pix_fmt)
-{
-    if (hb_hwaccel_is_full_hardware_pipeline_enabled(job))
-    {
-#if HB_PROJECT_FEATURE_QSV
-        if (pix_fmt == AV_PIX_FMT_QSV &&
-            job->hw_decode & HB_DECODE_SUPPORT_QSV &&
-            hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
-        {
-            return 1;
-        }
-#endif
-        if (pix_fmt == AV_PIX_FMT_CUDA &&
-            job->hw_decode & HB_DECODE_SUPPORT_NVDEC)
-        {
-            return 1;
-        }
-        if (pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX &&
-            job->hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
-        {
-            return 1;
-        }
-        if (pix_fmt == AV_PIX_FMT_D3D11 &&
-            job->hw_decode & HB_DECODE_SUPPORT_MF)
-        {
-            return 1;
-        }
-    }
-
-    return 0;
-}
-
-static const enum AVPixelFormat hw_pipeline_pix_fmts[] =
-{
-    AV_PIX_FMT_QSV, AV_PIX_FMT_CUDA, AV_PIX_FMT_VIDEOTOOLBOX, AV_PIX_FMT_D3D11, AV_PIX_FMT_NONE
-};
-
-int hb_get_best_hw_pix_fmt(hb_job_t *job)
-{
-    const int *pix_fmts = hw_pipeline_pix_fmts;
-
-    while (*pix_fmts != AV_PIX_FMT_NONE)
-    {
-        if (pix_hw_fmt_is_supported(job, *pix_fmts))
-        {
-            return *pix_fmts;
-        }
-        pix_fmts++;
-    }
-
-    return AV_PIX_FMT_NONE;
 }
