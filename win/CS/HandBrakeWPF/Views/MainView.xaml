@@ -459,23 +459,15 @@
 
                     <TextBlock Text="{x:Static Properties:Resources.MainView_Title}"  Grid.Column="0" Style="{StaticResource sectionHeader}" Margin="5,0,0,0" />
                     <ComboBox Name="Titles"  Grid.Column="1" 
-                              MinWidth="100" Margin="16,0,0,0"
+                              MinWidth="100" Margin="16,0,0,0" MaxDropDownHeight="400"
                               ItemsSource="{Binding ScannedSource.Titles}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Title}"
-                              SelectedItem="{Binding Path=SelectedTitle}" >
-
-                        <ComboBox.Style>
-                            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=IsDropDownOpen, ElementName=Titles}" Value="True">
-                                        <Setter Property="DisplayMemberPath" Value="ItemDisplayText" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=IsDropDownOpen, ElementName=Titles}" Value="False">
-                                        <Setter Property="DisplayMemberPath" Value="ItemDisplayTextClosed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ComboBox.Style>
+                              SelectedItem="{Binding Path=SelectedTitle}" DropDownClosed="Titles_OnDropDownClosed" DropDownOpened="Titles_OnDropDownOpened" >
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
                     </ComboBox>
                     <StackPanel Orientation="Horizontal" Grid.Column="2" >
                         <TextBlock Margin="10,0,0,0"  Text="{x:Static Properties:Resources.MainView_Angle}" Style="{StaticResource sectionHeader}"  />

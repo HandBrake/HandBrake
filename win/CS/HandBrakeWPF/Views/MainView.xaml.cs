@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
@@ -129,6 +130,16 @@ namespace HandBrakeWPF.Views
                     button.ContextMenu.IsOpen = true;
                 }
             }
+        }
+
+        private void Titles_OnDropDownClosed(object sender, EventArgs e)
+        {
+            this.Titles.DisplayMemberPath = "ItemDisplayTextClosed";
+        }
+
+        private void Titles_OnDropDownOpened(object sender, EventArgs e)
+        {
+            this.Titles.DisplayMemberPath = "ItemDisplayText";
         }
     }
 }
