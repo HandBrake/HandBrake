@@ -62,8 +62,6 @@
 @interface HBVideo (EncoderAdditions)
 
 - (BOOL)isUnparsedSupported:(int)encoder;
-- (BOOL)isPresetSystemSupported:(int)encoder;
-- (BOOL)isSimpleOptionsPanelSupported:(int)encoder;
 - (void)qualityLimitsForEncoder:(int)encoder low:(float *)low high:(float *)high granularity:(float *)granularity direction:(int *)direction;
 
 @end

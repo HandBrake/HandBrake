@@ -22,9 +22,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 // Text Field to show the expanded opts from unparse()
 @property (nonatomic, weak) IBOutlet NSTextField *unparseTextField;
 
-// Simple encoder options
-@property (nonatomic, weak) IBOutlet NSView *encoderOptionsSimpleView;
-
 @property (nonatomic) NSColor *labelColor;
 @property (nonatomic) BOOL presetViewEnabled;
 @property (nonatomic) BOOL showTickMarks;
@@ -57,12 +54,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     return self;
 }
 
-- (void)viewDidLoad
-{
-    self.encoderOptionsView.hidden = YES;
-    self.encoderOptionsSimpleView.hidden = YES;
-}
-
 - (void)setVideo:(HBVideo *)video
 {
     _video = video;
@@ -76,7 +67,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         self.labelColor = [NSColor disabledControlTextColor];
     }
 
-    [self enableEncoderOptionsWidgets:(video != nil)];
+    self.presetViewEnabled = video != nil;
 }
 
 #pragma mark - KVO
@@ -87,7 +78,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     {
         if ([keyPath isEqualToString:@"video.encoder"])
         {
-            [self switchPresetView];
+            [self setupPresetsSlider];
             [self setupQualitySlider];
         }
         else if ([keyPath isEqualToString:@"video.frameRate"])
@@ -173,30 +164,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
                         options:@{NSValueTransformerBindingOption: transformer}];
 }
 
-#pragma mark - Video x264/x265 Presets
-
-/**
- *  Shows/hides the right preset view for the current video encoder.
- */
-- (void)switchPresetView
-{
-    BOOL supportPresets = [self.video isPresetSystemSupported:self.video.encoder];
-    self.encoderOptionsView.hidden = !supportPresets;
-    self.encoderOptionsSimpleView.hidden = !([self.video isSimpleOptionsPanelSupported:self.video.encoder] && !supportPresets);
-
-    if ([self.video isPresetSystemSupported:self.video.encoder])
-    {
-        [self setupPresetsSlider];
-    }
-}
-
-/**
- *  Enables/disables the preset panel.
- */
-- (void)enableEncoderOptionsWidgets:(BOOL)enable
-{
-    self.presetViewEnabled = enable;
-}
+#pragma mark - Presets
 
 /**
  *  Setup the presets slider with the right

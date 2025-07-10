@@ -1908,6 +1908,11 @@ int hb_video_encoder_get_depth(int encoder)
     }
 }
 
+static const char * const hb_empty_list_names[] =
+{
+    "auto", NULL
+};
+
 const char* const* hb_video_encoder_get_presets(int encoder)
 {
     if (encoder & HB_VCODEC_FFMPEG_MASK)
@@ -1940,7 +1945,7 @@ const char* const* hb_video_encoder_get_presets(int encoder)
             return hb_av1_svt_preset_names;
 
         default:
-            return NULL;
+            return hb_empty_list_names;
     }
 }
 
@@ -2034,7 +2039,7 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
             return hb_av1_svt_profile_names;
 
         default:
-            return NULL;
+            return hb_empty_list_names;
     }
 }
 
@@ -2081,7 +2086,7 @@ const char* const* hb_video_encoder_get_levels(int encoder)
             return hb_av1_level_names;
 
         default:
-            return NULL;
+            return hb_empty_list_names;
     }
 }
 

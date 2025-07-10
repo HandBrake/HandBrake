@@ -89,6 +89,11 @@ static const char * const empty_tune_names[] =
     "none", NULL
 };
 
+static const char * const empty_names[] =
+{
+    "auto", NULL
+};
+
 static const char * const vpx_preset_names[] =
 {
     "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow", NULL
@@ -148,14 +153,12 @@ static const char * const h265_mf_profile_name[] =
 {
     "auto", "main",  NULL
 };
+
 static const char * const av1_mf_profile_name[] =
 {
     "auto", "main",  NULL
 };
-static const char * const ffv1_profile_names[] =
-{
-    "auto", NULL
-};
+
 
 static const char * const hb_ffv1_level_names[] =
 {
@@ -1673,7 +1676,7 @@ const char* const* hb_av_preset_get_names(int encoder)
 #endif
 
         default:
-            return NULL;
+            return empty_names;
     }
 }
 
@@ -1705,15 +1708,13 @@ const char* const* hb_av_profile_get_names(int encoder)
             return h265_mf_profile_name;
         case HB_VCODEC_FFMPEG_MF_AV1:
             return av1_mf_profile_name;
-        case HB_VCODEC_FFMPEG_FFV1:
-            return ffv1_profile_names;
         case HB_VCODEC_FFMPEG_QSV_H264:
             return h264_qsv_profile_name;
         case HB_VCODEC_FFMPEG_QSV_H265:
         case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
             return h265_qsv_profile_name;
          default:
-             return NULL;
+             return empty_names;
      }
 }
 
@@ -1749,7 +1750,7 @@ const char* const* hb_av_level_get_names(int encoder)
             return hb_ffv1_level_names;
 
          default:
-             return NULL;
+             return empty_names;
      }
 }
 

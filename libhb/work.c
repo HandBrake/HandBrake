@@ -584,99 +584,19 @@ void hb_display_job_info(hb_job_t *job)
         }
         if (job->encoder_tune && *job->encoder_tune)
         {
-            switch (job->vcodec)
-            {
-                case HB_VCODEC_X264_8BIT:
-                case HB_VCODEC_X264_10BIT:
-                case HB_VCODEC_X265_8BIT:
-                case HB_VCODEC_X265_10BIT:
-                case HB_VCODEC_X265_12BIT:
-                case HB_VCODEC_X265_16BIT:
-                case HB_VCODEC_SVT_AV1:
-                case HB_VCODEC_SVT_AV1_10BIT:
-                case HB_VCODEC_FFMPEG_VP9:
-                case HB_VCODEC_FFMPEG_VP9_10BIT:
-                    hb_log("     + tune:    %s", job->encoder_tune);
-                default:
-                    break;
-            }
+            hb_log("     + tune:    %s", job->encoder_tune);
         }
-        if (job->encoder_options != NULL && *job->encoder_options &&
-            job->vcodec != HB_VCODEC_THEORA)
+        if (job->encoder_options != NULL && *job->encoder_options)
         {
             hb_log("     + options: %s", job->encoder_options);
         }
         if (job->encoder_profile && *job->encoder_profile)
         {
-            switch (job->vcodec)
-            {
-                case HB_VCODEC_X264_8BIT:
-                case HB_VCODEC_X264_10BIT:
-                case HB_VCODEC_X265_8BIT:
-                case HB_VCODEC_X265_10BIT:
-                case HB_VCODEC_X265_12BIT:
-                case HB_VCODEC_X265_16BIT:
-                case HB_VCODEC_FFMPEG_QSV_H264:
-                case HB_VCODEC_FFMPEG_QSV_H265:
-                case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
-                case HB_VCODEC_FFMPEG_QSV_AV1:
-                case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
-                case HB_VCODEC_FFMPEG_VCE_H264:
-                case HB_VCODEC_FFMPEG_VCE_H265:
-                case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
-                case HB_VCODEC_FFMPEG_VCE_AV1:
-                case HB_VCODEC_FFMPEG_NVENC_H264:
-                case HB_VCODEC_FFMPEG_NVENC_H265:
-                case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
-                case HB_VCODEC_FFMPEG_NVENC_AV1:
-                case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
-                case HB_VCODEC_VT_H264:
-                case HB_VCODEC_VT_H265:
-                case HB_VCODEC_VT_H265_10BIT:
-                case HB_VCODEC_FFMPEG_MF_H264:
-                case HB_VCODEC_FFMPEG_MF_H265:
-                case HB_VCODEC_FFMPEG_MF_AV1:
-                case HB_VCODEC_SVT_AV1:
-                case HB_VCODEC_SVT_AV1_10BIT:
-                    hb_log("     + profile: %s", job->encoder_profile);
-                default:
-                    break;
-            }
+            hb_log("     + profile: %s", job->encoder_profile);
         }
         if (job->encoder_level && *job->encoder_level)
         {
-            switch (job->vcodec)
-            {
-                case HB_VCODEC_X264_8BIT:
-                case HB_VCODEC_X264_10BIT:
-                case HB_VCODEC_X265_8BIT:
-                case HB_VCODEC_X265_10BIT:
-                case HB_VCODEC_X265_12BIT:
-                case HB_VCODEC_FFMPEG_QSV_H264:
-                case HB_VCODEC_FFMPEG_QSV_H265:
-                case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
-                case HB_VCODEC_FFMPEG_QSV_AV1:
-                case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
-                case HB_VCODEC_FFMPEG_VCE_H264:
-                case HB_VCODEC_FFMPEG_VCE_H265:
-                case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
-                case HB_VCODEC_FFMPEG_VCE_AV1:
-                case HB_VCODEC_FFMPEG_NVENC_H264:
-                case HB_VCODEC_FFMPEG_NVENC_H265:
-                case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
-                case HB_VCODEC_FFMPEG_NVENC_AV1:
-                case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
-                case HB_VCODEC_VT_H264:
-                case HB_VCODEC_VT_H265_10BIT:
-                case HB_VCODEC_SVT_AV1:
-                case HB_VCODEC_SVT_AV1_10BIT:
-                // MF h.264/h.265 currently only supports auto level
-                // case HB_VCODEC_FFMPEG_MF_H264:
-                // case HB_VCODEC_FFMPEG_MF_H265:
-                    hb_log("     + level:   %s", job->encoder_level);
-                default:
-                    break;
-            }
+            hb_log("     + level:   %s", job->encoder_level);
         }
 
         if (job->vquality > HB_INVALID_VIDEO_QUALITY)
