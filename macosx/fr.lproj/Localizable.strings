@@ -372,6 +372,9 @@ Preview -> window title */
 /* Preview -> window title format */
 "Preview - %@ %@" = "Aperçu - %1$@ %2$@";
 
+/* Preview -> accessibility label */
+"Preview Image, Size: %f x %f, Scale: %.0f%%" = "Aperçu de l'image, Taille : %1$f x %2$f, Échelle : %3$.0f%%";
+
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "Mettre en veille l'ordinateur";
 

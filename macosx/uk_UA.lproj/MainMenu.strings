@@ -4,6 +4,9 @@
 /* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "1GQ-n3-jfY"; */
 "1GQ-n3-jfY.title" = "Rename…";
 
+/* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "4VH-Mt-RSo"; */
+"4VH-Mt-RSo.title" = "Show Source in Finder";
+
 /* Class = "NSMenuItem"; title = "Filters"; ObjectID = "6rE-SM-AGi"; */
 "6rE-SM-AGi.title" = "Фільтри";
 
@@ -258,6 +261,9 @@
 
 /* Class = "NSMenuItem"; title = "Switch to Next Title"; ObjectID = "viv-aA-SoB"; */
 "viv-aA-SoB.title" = "Switch to Next Title";
+
+/* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "Vka-FP-wZE"; */
+"Vka-FP-wZE.title" = "Show Destination in Finder";
 
 /* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "wPw-Uj-Gxi"; */
 "wPw-Uj-Gxi.title" = "Clear Menu";

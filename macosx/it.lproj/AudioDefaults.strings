@@ -25,6 +25,9 @@
 /* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
 "66v-2g-DHn.title" = "Usa solo il primo codificatore per le tracce secondarie";
 
+/* Class = "NSMenuItem"; title = "Off"; ObjectID = "AaG-rx-x5W"; */
+"AaG-rx-x5W.title" = "Spento";
+
 /* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
 "AQe-Sg-Qgh.title" = "Ricaduta passthru:";
 

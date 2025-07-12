@@ -93,6 +93,9 @@ Touch bar */
 /* Main Window -> Same as source destination open panel */
 "Allow" = "Erlauben";
 
+/* Preferences -> Output Name Token */
+"Angle" = "Winkel";
+
 /* HBLanguage -> Any language */
 "Any" = "Beliebig";
 
@@ -251,6 +254,9 @@ Queue done notification failed message */
 
 /* Preferences -> Output Name Token */
 "Height" = "Höhe";
+
+/* Queue -> sidebar menu */
+"Hide Sidebar" = "Seitenleiste ausblenden";
 
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Wenn Sie HandBrake nun beenden werden Ihre momentanen Encodierungen beim nächsten Start wieder in die Warteschlange geladen. Wollen Sie trotzdem beenden?";
@@ -480,6 +486,9 @@ Touch bar */
 /* Main Window Presets Toolbar Item */
 "Show Queue Window" = "Warteschlange zeigen";
 
+/* Queue -> sidebar menu */
+"Show Sidebar" = "Seitenleiste einblenden";
+
 /* Queue Window When Done Toolbar Item */
 "Shut Down Computer" = "Computer herunterfahren";
 
@@ -576,6 +585,9 @@ Rename preset window -> name alert message */
 
 /* Preferences -> Output Name Token */
 "Title" = "Titel";
+
+/* Queue Window Details Toolbar Item */
+"Toggle details sidebar" = "Detail-Seitenleiste umschalten";
 
 /* HBLanguage -> Unknown language */
 "Unknown" = "Unbekannt";

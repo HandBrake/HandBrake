@@ -93,6 +93,9 @@ Touch bar */
 /* Main Window -> Same as source destination open panel */
 "Allow" = "Tillåt";
 
+/* Preferences -> Output Name Token */
+"Angle" = "Vinkel";
+
 /* HBLanguage -> Any language */
 "Any" = "Alla";
 
@@ -251,6 +254,9 @@ Queue done notification failed message */
 
 /* Preferences -> Output Name Token */
 "Height" = "Höjd";
+
+/* Queue -> sidebar menu */
+"Hide Sidebar" = "Dölj sidofält";
 
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Om du avslutar HandBrake kommer din aktuella enkodning att läsas in i din kö vid nästa start. Vill du avsluta ändå?";
@@ -480,6 +486,9 @@ Touch bar */
 /* Main Window Presets Toolbar Item */
 "Show Queue Window" = "Visa köfönstret";
 
+/* Queue -> sidebar menu */
+"Show Sidebar" = "Visa sidofält";
+
 /* Queue Window When Done Toolbar Item */
 "Shut Down Computer" = "Stäng av datorn";
 
@@ -576,6 +585,9 @@ Rename preset window -> name alert message */
 
 /* Preferences -> Output Name Token */
 "Title" = "Titel";
+
+/* Queue Window Details Toolbar Item */
+"Toggle details sidebar" = "Växla sidofältsinformation";
 
 /* HBLanguage -> Unknown language */
 "Unknown" = "Okänt";

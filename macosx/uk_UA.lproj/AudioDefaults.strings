@@ -25,6 +25,9 @@
 /* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
 "66v-2g-DHn.title" = "Використовувати лише перший перетворювач для другорядного аудіо";
 
+/* Class = "NSMenuItem"; title = "Off"; ObjectID = "AaG-rx-x5W"; */
+"AaG-rx-x5W.title" = "Відключити";
+
 /* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
 "AQe-Sg-Qgh.title" = "Запасний варіант для передачі сигналу:";
 

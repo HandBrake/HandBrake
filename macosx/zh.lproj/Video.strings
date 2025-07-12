@@ -40,6 +40,9 @@
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
 "F3s-qR-qeE.title" = "质量：";
 
+/* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.\n\nAdjust the slider to the right to increase compression efficiency at the expense of encoding speed, or to the left to increase encoding speed at the expense of compression efficiency."; ObjectID = "fue-2d-Bjn"; */
+"fue-2d-Bjn.ibShadowedToolTip" = "视频编码器预设。调整编码器设置以平衡压缩效率和编码速度。较慢的编码器预设可能会使用与某些设备兼容性较差的设置。\n\n将滑块向右调整可提高压缩效率，但会降低编码速度；向左调整则可提高编码速度，但会降低压缩效率。";
+
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "调优：";
 
@@ -72,6 +75,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "预设：";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r18-GT-7jT"; */
+"r18-GT-7jT.title" = "其他视图";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "rbo-w6-ENd"; */
 "rbo-w6-ENd.ibShadowedToolTip" = "额外的视频编码器选项。仅供高级使用。\n\n语法：option-1=foo:opt2=bar,baz";

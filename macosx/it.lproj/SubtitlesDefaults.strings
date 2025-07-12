@@ -1,5 +1,5 @@
 /* Class = "NSButtonCell"; title = "Add Closed Captions when available"; ObjectID = "66v-2g-DHn"; */
-"66v-2g-DHn.title" = "Aggiungi Closed Captions quando disponibili.";
+"66v-2g-DHn.title" = "Aggiungi Closed Caption quando disponibili";
 
 /* Class = "NSButtonCell"; title = "DVD Subtitles"; ObjectID = "69Q-xB-Vyq"; */
 "69Q-xB-Vyq.title" = "Sottotitoli DVD";
@@ -61,6 +61,9 @@
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NJl-q3-zXL"; */
 "NJl-q3-zXL.title" = "Opzioni:";
 
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "Nks-nt-ePt"; */
+"Nks-nt-ePt.title" = "Nome:";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
 "oiD-QI-wly.ibShadowedToolTip" = "Comportamento di selezione delle tracce. \n\n\"Nessuno\" non seleziona alcuna traccia audio di default. \n\n\"La prima corrispondente alle lingue selezionate\" aggiunge la prima traccia audio corrispondente a ciascuna delle lingue selezionate presenti nella sorgente.\n\n\"Tutte quelle corrispondenti alle lingue selezionate\" aggiunge tutte le tracce audio corrispondenti a ciascuna delle lingue selezionate presenti nella sorgente.";
 
@@ -77,7 +80,7 @@
 "qVQ-fS-w1S.title" = "Table View Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
-"uF5-6E-EIe.ibShadowedToolTip" = "Aggiunti i sottotitoli Closed Caption come una traccia leggera (non sovrimpressa).";
+"uF5-6E-EIe.ibShadowedToolTip" = "Aggiunti i sottotitoli Closed Caption come una traccia separata (non sovrimpressa).";
 
 /* Class = "NSButtonCell"; title = "Add Foreign Audio Search"; ObjectID = "vNY-OC-hTJ"; */
 "vNY-OC-hTJ.title" = "Aggiungi ricerca audio straniero";

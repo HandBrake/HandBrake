@@ -49,6 +49,9 @@
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
 "xEQ-Un-J0n.title" = "Exporter…";
 
+/* Class = "NSMenuItem"; title = "Delete…"; ObjectID = "xtN-lj-fJP"; */
+"xtN-lj-fJP.title" = "Supprimer...";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Additional Options"; ObjectID = "Ybq-Zt-sta"; */
 "Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Options additionnelles";
 

@@ -76,6 +76,9 @@
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "Preset:";
 
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r18-GT-7jT"; */
+"r18-GT-7jT.title" = "OtherViews";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "rbo-w6-ENd"; */
 "rbo-w6-ENd.ibShadowedToolTip" = "Opzioni aggiuntive del codificatore video. Solo per uso avanzato.\n\nSyntax: option-1=foo:opt2=bar,baz";
 
