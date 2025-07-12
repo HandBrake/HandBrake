@@ -61,6 +61,9 @@
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NJl-q3-zXL"; */
 "NJl-q3-zXL.title" = "Options:";
 
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "Nks-nt-ePt"; */
+"Nks-nt-ePt.title" = "Name:";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
 "oiD-QI-wly.ibShadowedToolTip" = "Поведінка Вибору Доріжки\n\nВідсутня не буде обирати жодного аудіо треку за замовчуванням.\n\nНайперша Відповідна До Обраних Мов додає найпершу звукову доріжку, що відповідає кожній з вибраних мов, які є у джерелі.\n\nУсі Відповідні До Обраних Мов додає всі звукові доріжки, що відповідають кожній з вибраних мов, які є у джерелі.";
 
