@@ -5,7 +5,7 @@
 If you believe you’ve found a security vulnerability in HandBrake or our website (https://handbrake.fr) please use the "Report a vulnerability" button on the [Security Tab](https://github.com/HandBrake/HandBrake/security) above.
 
 Contributors to this project are also available in [#handbrake on Libera.chat IRC](https://libera.chat/) (irc://irc.libera.chat:6697/#handbrake).
-Please note, #handbrake and #handbrake-dev are public so details should only be send to contributors via private message.
+Please note, #handbrake and #handbrake-dev are public so details should only be sent to contributors via private message.
 
 
 ## Responsible Disclosure
@@ -20,9 +20,9 @@ Our goal is to deal with any issues reported as quickly as possible.  If you do 
  - HandBrake is a volunteer project and we are not funded. As such, we do not participate in bug bounty programs or pay out for bugs raised.
  - When a new version of HandBrake is released, all prior versions immediately become end-of-life. 
  - Releases are ad-hoc and do not follow any set release schedule.
- - Any new releases will be published on our website, here on the [GitHub releases](https://github.com/HandBrake/HandBrake/releases) page and will be available via in-app software updates usually within a few days of a release being published. 
- - Any security issues will be noted in our [Releases Notes](https://github.com/HandBrake/HandBrake/releases) and if relevant, an advisory may also be published on our [GitHub Security Page](https://github.com/HandBrake/HandBrake/security).
- - We do NOT fill out any form of questionaries or provide any security scan results.
+ - Any new releases will be published on our website and here on the [GitHub releases](https://github.com/HandBrake/HandBrake/releases) page. They will also be available via in-app software updates usually within a few days of a release being published. 
+ - Any security issues will be noted in our [Release Notes](https://github.com/HandBrake/HandBrake/releases), and if relevant an advisory may also be published on our [GitHub Security Page](https://github.com/HandBrake/HandBrake/security).
+ - We do NOT fill out any form of questionnaires or provide any security scan results.
  
 ## Versions
 
