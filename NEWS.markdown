@@ -19,10 +19,17 @@ Download available from Microsoft:
     - Creation date
     - Cover art
     - Location
+- Fixed an excessive memory usage during the indepth scan (#6963)
 
 #### Command line interface
 
 - Added an option to disable Dolby Vision and HDR10+ passthru
+
+#### Video
+
+- Added an option to choose the encoder color range
+- Fixed VCN encoder presets (#6974)
+- Updated NVEnc CQ range (#6418)
 
 #### Audio
 
@@ -40,8 +47,10 @@ Download available from Microsoft:
 - Updated libraries
   - AMF 1.4.36 (AMD VCN video encoding)
   - FFmpeg 7.1.1 (decoding and filters)
-  - HarfBuzz 11.2.0 (subtitles)
+  - HarfBuzz 11.2.1 (subtitles)
+  - libass 0.17.4 (subtitles)
   - libiconv 1.18 (character encoding support)
+  - libjpeg-turbo 3.1.1 (preview image compression)
   - liblzma (xz) 5.8.1 (LZMA video decoding, e.g. TIFF)
   - nv-codec-headers 13.0.19.0 (Nvidia NVENC encoding)
   - oneVPL 2.14.0 (Intel QSV video encoding/decoding)
@@ -73,6 +82,7 @@ Download available from Microsoft:
 - Minor Performance Optimisations for ARM64 devices running Windows
 - Minor UI improvements throughout the UI.
 - Various bug fixes and improvements (#6524, #6517, #6514, #6477, #6473, #6086)
+- Handle temporary files path with non ASCII charactes correctly
 - Added new translations
   - Galician (Galego)
   - Hungarian (Magyar)
