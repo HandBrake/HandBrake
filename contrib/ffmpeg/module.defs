@@ -65,6 +65,7 @@ FFMPEG.CONFIGURE.extra = \
     --enable-filter=crop \
     --enable-filter=scale \
     --enable-filter=zscale \
+    --enable-filter=scale_d3d11 \
     --enable-filter=pad \
     --enable-filter=transpose \
     --enable-filter=hflip \
