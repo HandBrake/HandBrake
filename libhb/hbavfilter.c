@@ -346,6 +346,22 @@ void hb_avfilter_combine( hb_list_t * list)
             }
             else
 #endif
+#if HB_PROJECT_FEATURE_MF
+            // Concat d3d11 settings as one scale_d3d11 filter to optimize pipeline
+            hb_dict_t * avfilter_settings_dict = hb_value_array_get(avfilter->settings, 0);
+            hb_dict_t * cur_settings_dict = hb_value_array_get(settings, 0);
+            if (cur_settings_dict && avfilter_settings_dict && hb_dict_get(avfilter_settings_dict, "scale_d3d11"))
+            {
+                hb_dict_t *avfilter_settings_dict_d3d11 = hb_dict_get(avfilter_settings_dict, "scale_d3d11");
+                hb_dict_t *cur_settings_dict_d3d11 = hb_dict_get(cur_settings_dict, "scale_d3d11");
+                if (avfilter_settings_dict_d3d11 && cur_settings_dict_d3d11)
+                {
+                    hb_dict_merge(avfilter_settings_dict_d3d11, cur_settings_dict_d3d11);
+                    
+                }
+            }
+            else
+#endif
             {
                 hb_value_array_concat(avfilter->settings, settings);
             }

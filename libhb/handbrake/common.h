@@ -237,8 +237,10 @@ struct hb_encoder_s
 
 #ifdef __LIBHB__
 
-#define HB_HWACCEL_CAP_SCAN   0x1
-#define HB_HWACCEL_CAP_ROTATE 0x2
+#define HB_HWACCEL_CAP_SCAN                 0x01
+#define HB_HWACCEL_CAP_ROTATE               0x02
+#define HB_HWACCEL_CAP_FORMAT_REQUIRED      0x04
+
 
 struct hb_hwaccel_s
 {

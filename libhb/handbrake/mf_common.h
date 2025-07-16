@@ -34,5 +34,6 @@ int hb_mf_h264_available();
 int hb_mf_h265_available();
 int hb_mf_av1_available();
 int hb_check_mf_available();
+int hb_mf_are_filters_supported(hb_list_t *filters);
 
 #endif // HANDBRAKE_MF_COMMON_H
