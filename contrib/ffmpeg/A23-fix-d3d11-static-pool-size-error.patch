@@ -1,0 +1,74 @@
+diff --git a/libavutil/hwcontext_d3d11va.c b/libavutil/hwcontext_d3d11va.c
+index 9831f530c1..dac659ea9a 100644
+--- a/libavutil/hwcontext_d3d11va.c
++++ b/libavutil/hwcontext_d3d11va.c
+@@ -85,6 +85,9 @@ typedef struct D3D11VAFramesContext {
+     int nb_surfaces;
+     int nb_surfaces_used;
+ 
++    int max_retries;
++    int retries;
++
+     DXGI_FORMAT format;
+ 
+     ID3D11Texture2D *staging_texture;
+@@ -260,8 +263,10 @@ static AVBufferRef *d3d11va_pool_alloc(void *opaque, size_t size)
+     ID3D11Texture2D_GetDesc(hwctx->texture, &texDesc);
+ 
+     if (s->nb_surfaces_used >= texDesc.ArraySize) {
+-        av_log(ctx, AV_LOG_ERROR, "Static surface pool size exceeded.\n");
+-        return NULL;
++        if (s->retries >= s->max_retries) {
++            av_log(ctx, AV_LOG_ERROR, "Static surface pool size exceeded.\n");
++        }
++        return NULL;
+     }
+ 
+     ID3D11Texture2D_AddRef(hwctx->texture);
+@@ -343,20 +348,34 @@ static int d3d11va_frames_init(AVHWFramesContext *ctx)
+ static int d3d11va_get_buffer(AVHWFramesContext *ctx, AVFrame *frame)
+ {
+     AVD3D11FrameDescriptor *desc;
++    D3D11VAFramesContext       *s = ctx->hwctx;
++    s->retries = 0;
++    s->max_retries = 50;
+ 
+-    frame->buf[0] = av_buffer_pool_get(ctx->pool);
+-    if (!frame->buf[0])
+-        return AVERROR(ENOMEM);
+-
+-    desc = (AVD3D11FrameDescriptor *)frame->buf[0]->data;
+-
+-    frame->data[0] = (uint8_t *)desc->texture;
+-    frame->data[1] = (uint8_t *)desc->index;
+-    frame->format  = AV_PIX_FMT_D3D11;
+-    frame->width   = ctx->width;
+-    frame->height  = ctx->height;
++    /**
++     * Loop until a buffer becomes available from the pool.
++     * In a full hardware pipeline, all buffers may be temporarily in use by
++     * other modules (encoder/filter/decoder). Rather than immediately failing
++     * with ENOMEM, we wait for a buffer to be released back to the pool, which
++     * maintains pipeline flow and prevents unnecessary allocation failures
++     * during normal operation.
++     */
++    while (s->retries < s->max_retries) {
++        frame->buf[0] = av_buffer_pool_get(ctx->pool);
++        if (frame->buf[0]) {
++            desc = (AVD3D11FrameDescriptor *)frame->buf[0]->data;
++            frame->data[0] = (uint8_t *)desc->texture;
++            frame->data[1] = (uint8_t *)desc->index;
++            frame->format  = AV_PIX_FMT_D3D11;
++            frame->width   = ctx->width;
++            frame->height  = ctx->height;
++            return 0;
++        }
+ 
+-    return 0;
++        av_usleep(1000);
++    }
++ 
++    return AVERROR(ENOMEM);
+ }
+ 
+ static int d3d11va_transfer_get_formats(AVHWFramesContext *ctx,

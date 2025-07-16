@@ -1455,7 +1455,10 @@ static void sanitize_filter_list_post(hb_job_t *job)
     }
 #endif
 
-    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0)
+    hb_hwaccel_t *hwaccel = job->hw_accel;
+
+    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0 ||
+        (job->hw_pix_fmt != AV_PIX_FMT_NONE && hwaccel && (hwaccel->caps & HB_HWACCEL_CAP_FORMAT_REQUIRED)))
     {
         // Some encoders require a specific input pixel format
         // that could be different from the current pipeline format.
