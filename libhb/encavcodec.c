@@ -189,7 +189,7 @@ static const enum AVPixelFormat qsv_10bit_pix_formats[] =
 
 static const enum AVPixelFormat h26x_mf_pix_fmts[] =
 {
-    AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
+    AV_PIX_FMT_D3D11, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat nvenc_pix_formats_10bit[] =

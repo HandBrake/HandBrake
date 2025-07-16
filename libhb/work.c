@@ -1535,6 +1535,19 @@ static void sanitize_filter_list_post(hb_job_t *job)
     }
 #endif
 
+#ifdef HB_PROJECT_FEATURE_MF
+    // When NV12 D3D11 frames are used, they need to be passed through
+    // the scale_d3d11 filter to attach the required bind flags
+    if (job->hw_pix_fmt == AV_PIX_FMT_D3D11 && job->input_pix_fmt == AV_PIX_FMT_NV12)
+    {
+        hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
+        char *settings = hb_strdup_printf("format=%s", av_get_pix_fmt_name(AV_PIX_FMT_NV12));
+        hb_add_filter(job, filter, settings);
+        free(settings);
+        return;
+    }
+#endif
+
     if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0)
     {
         // Some encoders require a specific input pixel format
