@@ -1469,6 +1469,13 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
             hb_avfilter_append_dict(filters, "scale_cuda", settings);
         }
+        else if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_D3D11)
+        {
+            hb_dict_set(settings, "width", hb_value_int(orig_width));
+            hb_dict_set(settings, "height", hb_value_int(orig_height));
+            hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
+            hb_avfilter_append_dict(filters, "scale_d3d11", settings);
+        }
         else if (hb_av_can_use_zscale(pv->frame->format,
                                       pv->frame->width, pv->frame->height,
                                       orig_width, orig_height))
@@ -1895,6 +1902,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             {
                 av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
             }
+        }
+#endif
+
+#if HB_PROJECT_FEATURE_MF
+        if (w->hw_accel && w->hw_accel->type == AV_HWDEVICE_TYPE_D3D11VA)
+        {
+           pv->context->extra_hw_frames = 30;
         }
 #endif
 
