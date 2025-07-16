@@ -1898,6 +1898,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         }
 #endif
 
+#if HB_PROJECT_FEATURE_MF
+        if (w->hw_accel && w->hw_accel->type == AV_HWDEVICE_TYPE_D3D11VA)
+        {
+           pv->context->extra_hw_frames = 30;
+        }
+#endif
+
         if ( hb_avcodec_open( pv->context, pv->codec, &av_opts, pv->threads ) )
         {
             av_dict_free( &av_opts );
