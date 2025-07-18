@@ -1153,26 +1153,9 @@ static int hb_detelecine_work( hb_filter_object_t * filter,
     /* Copy input buffer into pullup buffer */
     for (int pp = 0; pp < 3; pp++)
     {
-        if (in->plane[pp].stride == ctx->stride[pp])
-        {
-            memcpy(buf->planes[pp], in->plane[pp].data, buf->size[pp]);
-        }
-        else
-        {
-            const int stride_src = in->plane[pp].stride;
-            const int stride_dst = ctx->stride[pp];
-            const int height = in->plane[pp].height;
-            const int size = stride_src < stride_dst ? ABS(stride_src) : stride_dst;
-            uint8_t *dst = buf->planes[pp];
-            uint8_t *src = in->plane[pp].data;
-
-            for (int yy = 0; yy < height; yy++)
-            {
-                memcpy(dst, src, size);
-                dst += stride_dst;
-                src += stride_src;
-            }
-        }
+        hb_image_copy_plane(buf->planes[pp], in->plane[pp].data,
+                            ctx->stride[pp], in->plane[pp].stride,
+                            in->plane[pp].height);
     }
 
     /* Submit buffer fields based on buffer flags.

@@ -251,6 +251,28 @@ static inline int hb_image_height(int pix_fmt, int height, int plane)
     return height;
 }
 
+static inline void hb_image_copy_plane(uint8_t *restrict dst, const uint8_t *restrict src,
+                                       const int stride_dst, const int stride_src, const int height)
+{
+    if (src != dst)
+    {
+        if (stride_src == stride_dst)
+        {
+            memcpy(dst, src, stride_dst * height);
+        }
+        else
+        {
+            const int size = stride_src < stride_dst ? ABS(stride_src) : stride_dst;
+            for (int yy = 0; yy < height; yy++)
+            {
+                memcpy(dst, src, size);
+                dst += stride_dst;
+                src += stride_src;
+            }
+        }
+    }
+}
+
 /***********************************************************************
  * Threads: scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/

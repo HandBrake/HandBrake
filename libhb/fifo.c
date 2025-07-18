@@ -665,32 +665,6 @@ static int copy_hwframe_to_video_buffer(const AVFrame *frame, hb_buffer_t *buf)
     return ret;
 }
 
-static void copy_avframe_to_video_buffer(const AVFrame *frame, hb_buffer_t *buf)
-{
-    for (int pp = 0; pp <= buf->f.max_plane; pp++)
-    {
-        if (buf->plane[pp].stride == frame->linesize[pp])
-        {
-            memcpy(buf->plane[pp].data, frame->data[pp], frame->linesize[pp] * buf->plane[pp].height);
-        }
-        else
-        {
-            const int stride    = buf->plane[pp].stride;
-            const int height    = buf->plane[pp].height;
-            const int linesize  = frame->linesize[pp];
-            const int size = linesize < stride ? ABS(linesize) : stride;
-            uint8_t *dst = buf->plane[pp].data;
-            uint8_t *src = frame->data[pp];
-            for (int yy = 0; yy < height; yy++)
-            {
-                memcpy(dst, src, size);
-                dst += stride;
-                src += linesize;
-            }
-        }
-    }
-}
-
 hb_buffer_t * hb_buffer_shallow_dup(const hb_buffer_t *src)
 {
     hb_buffer_t *buf = NULL;
@@ -806,7 +780,13 @@ hb_buffer_t * hb_buffer_dup(const hb_buffer_t *src)
             {
                 buf->f = src->f;
                 hb_buffer_copy_props(buf, src);
-                copy_avframe_to_video_buffer(frame, buf);
+
+                for (int pp = 0; pp <= buf->f.max_plane; pp++)
+                {
+                    hb_image_copy_plane(buf->plane[pp].data, frame->data[pp],
+                                        buf->plane[pp].stride, frame->linesize[pp],
+                                        buf->plane[pp].height);
+                }
             }
         }
     }

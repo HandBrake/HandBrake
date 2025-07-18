@@ -251,19 +251,9 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
     int pp;
     for (pp = 0; pp <= buf->f.max_plane; pp++)
     {
-        int yy;
-        int stride    = buf->plane[pp].stride;
-        int height    = buf->plane[pp].height;
-        int linesize  = frame->linesize[pp];
-        int size = linesize < stride ? ABS(linesize) : stride;
-        uint8_t * dst = buf->plane[pp].data;
-        uint8_t * src = frame->data[pp];
-        for (yy = 0; yy < height; yy++)
-        {
-            memcpy(dst, src, size);
-            dst += stride;
-            src += linesize;
-        }
+        hb_image_copy_plane(buf->plane[pp].data, frame->data[pp],
+                            buf->plane[pp].stride, frame->linesize[pp],
+                            buf->plane[pp].height);
     }
     for (int i = 0; i < frame->nb_side_data; i++)
     {
