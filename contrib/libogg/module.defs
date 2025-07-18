@@ -1,8 +1,8 @@
 $(eval $(call import.MODULE.defs,LIBOGG,libogg))
 $(eval $(call import.CONTRIB.defs,LIBOGG))
 
-LIBOGG.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libogg-1.3.5.tar.gz
-LIBOGG.FETCH.url    += https://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.gz
-LIBOGG.FETCH.sha256  = 0eb4b4b9420a0f51db142ba3f9c64b333f826532dc0f48c6410ae51f4799b664
+LIBOGG.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libogg-1.3.6.tar.gz
+LIBOGG.FETCH.url    += https://downloads.xiph.org/releases/ogg/libogg-1.3.6.tar.gz
+LIBOGG.FETCH.sha256  = 83e6704730683d004d20e21b8f7f55dcb3383cdf84c0daedf30bde175f774638
 
 LIBOGG.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;
