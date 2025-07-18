@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBTHEORA,libtheora,LIBOGG LIBVORBIS))
 $(eval $(call import.CONTRIB.defs,LIBTHEORA))
 
-LIBTHEORA.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libtheora-1.1.1.tar.bz2
-LIBTHEORA.FETCH.url    += https://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
-LIBTHEORA.FETCH.sha256  = b6ae1ee2fa3d42ac489287d3ec34c5885730b1296f0801ae577a35193d3affbc
+LIBTHEORA.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libtheora-1.2.0.tar.gz
+LIBTHEORA.FETCH.url    += https://downloads.xiph.org/releases/theora/libtheora-1.2.0.tar.gz
+LIBTHEORA.FETCH.sha256  = 279327339903b544c28a92aeada7d0dcfd0397b59c2f368cc698ac56f515906e
 
 LIBTHEORA.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;
 
