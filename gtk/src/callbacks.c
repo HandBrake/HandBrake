@@ -3815,7 +3815,7 @@ preferences_action_cb (GSimpleAction *action, GVariant *param, gpointer data)
 }
 
 G_MODULE_EXPORT gboolean
-prefs_response_cb (GtkDialog *dialog, GdkEvent *event, gpointer data)
+prefs_response_cb (GtkWindow *dialog, gpointer data)
 {
     ghb_prefs_store();
     gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
