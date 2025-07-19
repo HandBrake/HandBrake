@@ -204,7 +204,7 @@ conjunction with the &quot;Forced&quot; option.</property>
   <object class="GtkWindow" id="queue_window">
     <property name="title" translatable="yes">HandBrake Queue</property>
     <property name="icon-name">fr.handbrake.ghb</property>
-    <signal name="close-request" handler="queue_window_delete_cb" swapped="no"/>
+    <property name="hide-on-close">1</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <child>
@@ -4594,7 +4594,7 @@ Overrides all other settings.</property>
     <property name="transient-for">hb_window</property>
     <property name="modal">1</property>
     <property name="use-header-bar">1</property>
-    <signal name="close-request" handler="gtk_widget_hide" swapped="no"/>
+    <property name="hide-on-close">1</property>
     <child>
       <object class="GtkBox" id="subtitle_selection_tab">
         <property name="orientation">vertical</property>
@@ -4873,7 +4873,7 @@ Overrides all other settings.</property>
     <property name="modal">1</property>
     <property name="use-header-bar">1</property>
     <property name="height-request">540</property>
-    <signal name="close-request" handler="gtk_widget_hide" swapped="no"/>
+    <property name="hide-on-close">1</property>
     <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>

@@ -2070,13 +2070,6 @@ queue_show_sidebar_action_cb (GSimpleAction *action, GVariant *param,
     g_simple_action_set_state(action, param);
 }
 
-G_MODULE_EXPORT gboolean
-queue_window_delete_cb (GtkWidget *xwidget, gpointer data)
-{
-    gtk_widget_set_visible(xwidget, FALSE);
-    return TRUE;
-}
-
 GhbValue *ghb_queue_edit_settings = NULL;
 
 G_MODULE_EXPORT void
