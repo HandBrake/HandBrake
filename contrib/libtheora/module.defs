@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBTHEORA,libtheora,LIBOGG LIBVORBIS))
 $(eval $(call import.CONTRIB.defs,LIBTHEORA))
 
-LIBTHEORA.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libtheora-1.2.0.tar.bz2
+LIBTHEORA.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/theora-v1.2.0.tar.bz2
 LIBTHEORA.FETCH.url    += https://gitlab.xiph.org/xiph/theora/-/archive/v1.2.0/theora-v1.2.0.tar.bz2
 LIBTHEORA.FETCH.sha256  = 3363393c262baf1be16bab6d82aeb75594a07be95ee4c8c4fdd9a5f202176c9a
 LIBTHEORA.FETCH.basename = theora-v1.2.0.tar.bz2
