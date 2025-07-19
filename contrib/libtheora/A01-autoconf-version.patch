@@ -1,0 +1,11 @@
+diff -ur libtheora-1.2.0.orig/configure.ac libtheora-1.2.0/configure.ac
+--- libtheora-1.2.0.orig/configure.ac	2025-03-29 07:06:12.000000000 +0100
++++ libtheora-1.2.0/configure.ac	2025-07-18 22:32:31.023355400 +0200
+@@ -14,7 +14,7 @@
+ 
+ dnl we use doc_DATA in doc/Makefile.am which requires autoconf >= 2.60
+ dnl to define docdir for us.
+-AC_PREREQ([2.71])
++AC_PREREQ([2.60])
+ 
+ m4_ifdef([AM_SILENT_RULES], 
