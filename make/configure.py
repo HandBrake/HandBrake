@@ -1991,8 +1991,15 @@ int main()
     ## add configure line for reconfigure purposes
     doc.addBlank()
     conf_args = []
+    skip_next = False
     for arg in sys.argv[1:]:
-        if re.match( r'^--(force|launch).*$', arg ):
+        if re.match( r'^--(force|launch).*$', arg ) or re.match( r'^--build=.*$', arg ):
+            continue
+        elif re.match( r'^--build$', arg ):
+            skip_next = True
+            continue
+        elif skip_next:
+            skip_next = False
             continue
         conf_args.append(arg)
     doc.add( 'CONF.args', ' '.join(conf_args).replace('$','$$') )
