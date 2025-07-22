@@ -252,9 +252,9 @@ combo_opts_t rotate_opts =
 
 static options_map_t d_color_range_opts[] =
 {
-    {N_("Auto"),    "auto",     0},
-    {N_("Limited"), "limited",  1},
-    {N_("Full"),    "full",     2},
+    {N_("Same as source"), "auto",     0},
+    {N_("Limited"),        "limited",  1},
+    {N_("Full"),           "full",     2},
 };
 combo_opts_t color_range_opts =
 {
