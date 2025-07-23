@@ -1661,6 +1661,25 @@ queue_remove_response (GtkWidget *dialog, int response, GhbQueueRow *queue_row)
     int queue_remove_unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
     int status = ghb_dict_get_int(uiDict, "job_status");
 
+    // Update UI
+    GtkListBox *lb = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
+    GtkListBoxRow *selected_row = gtk_list_box_get_selected_row(lb);
+    int selected_index = gtk_list_box_row_get_index(selected_row);
+    if (selected_row == row)
+    {
+        // Select the row after the row to delete
+        selected_row = gtk_list_box_get_row_at_index(lb, selected_index + 1);
+    }
+    if (selected_row == NULL)
+    {
+        // The row to delete is the last one, try the one before it
+        selected_row = gtk_list_box_get_row_at_index(lb, selected_index - 1);
+    }
+    if (selected_row != NULL)
+    {
+        gtk_list_box_select_row(lb, selected_row);
+    }
+    gtk_list_box_remove(lb, GTK_WIDGET(row));
     ghb_array_remove(ud->queue, queue_remove_index);
 
     if (status == GHB_QUEUE_RUNNING)
@@ -1668,19 +1687,6 @@ queue_remove_response (GtkWidget *dialog, int response, GhbQueueRow *queue_row)
         ghb_stop_queue();
         ghb_set_cancel_status(GHB_CANCEL_ALL);
         ghb_remove_job(queue_remove_unique_id);
-    }
-
-    // Update UI
-    GtkListBox *lb = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
-    gtk_list_box_remove(lb, GTK_WIDGET(row));
-
-    if (queue_remove_index >= 1)
-    {
-        row = gtk_list_box_get_row_at_index(lb, queue_remove_index - 1);
-    }
-    if (row != NULL)
-    {
-        gtk_list_box_select_row(lb, row);
     }
 }
 
