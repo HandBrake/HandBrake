@@ -3946,7 +3946,7 @@ hb_hwaccel_t hb_hwaccel_qsv =
     .hw_pix_fmt   = AV_PIX_FMT_QSV,
     .can_filter   = are_filters_supported,
     .find_decoder = find_decoder,
-    .caps         = 0
+    .caps         = HB_HWACCEL_CAP_ROTATE
 };
 
 #else // HB_PROJECT_FEATURE_QSV

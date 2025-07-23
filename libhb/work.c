@@ -1739,7 +1739,8 @@ static void do_job(hb_job_t *job)
         hb_hwaccel_t *hwaccel = hb_get_hwaccel(job->hw_decode);
         if (hb_hwaccel_can_use_full_hw_pipeline(hwaccel,
                                                 job->list_filter,
-                                                job->vcodec))
+                                                job->vcodec,
+                                                job->title->rotation))
         {
             job->hw_accel = hwaccel;
             job->hw_pix_fmt = hwaccel->hw_pix_fmt;
