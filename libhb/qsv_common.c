@@ -72,7 +72,6 @@ typedef struct hb_qsv_adapter_details
     mfxExtendedDeviceId extended_device_id;
 } hb_qsv_adapter_details_t;
 
-static hb_list_t *g_qsv_adapters_list         = NULL;
 static hb_list_t *g_qsv_adapters_details_list = NULL;
 static int g_adapter_index = 0;
 static int g_default_adapter_index = 0;
@@ -116,7 +115,7 @@ static void init_adapter_details(hb_qsv_adapter_details_t *adapter_details)
 
 // QSV info about adapters
 static const char* hb_qsv_get_adapter_type(const hb_qsv_adapter_details_t *details);
-static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **qsv_adapters_details_list);
+static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_details_list);
 static int hb_qsv_collect_adapters_details(hb_list_t *hb_qsv_adapter_details_list);
 
 // QSV-supported profile and level lists (not all exposed to the user)
@@ -222,16 +221,11 @@ static int hb_qsv_get_default_adapter_index()
     return g_default_adapter_index;
 }
 
-hb_list_t* hb_qsv_adapters_list()
-{
-    return g_qsv_adapters_list;
-}
-
 static hb_qsv_adapter_details_t* hb_qsv_get_adapters_details_by_index(int adapter_index)
 {
     for (int i = 0; i < hb_list_count(g_qsv_adapters_details_list); i++)
     {
-        hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
+        const hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
         if (details->index == adapter_index || adapter_index == -1)
         {
             return details;
@@ -242,7 +236,7 @@ static hb_qsv_adapter_details_t* hb_qsv_get_adapters_details_by_index(int adapte
 
 int hb_qsv_get_adapter_render_node(int adapter_index)
 {
-    hb_qsv_adapter_details_t* details = hb_qsv_get_adapters_details_by_index(adapter_index);
+    const hb_qsv_adapter_details_t *details = hb_qsv_get_adapters_details_by_index(adapter_index);
     return details->extended_device_id.DRMRenderNodeNum;
 }
 
@@ -432,7 +426,7 @@ int hb_qsv_implementation_is_hardware(mfxIMPL implementation)
 int hb_qsv_info_init()
 {
     int result;
-    result = hb_qsv_make_adapters_list(&g_qsv_adapters_list, &g_qsv_adapters_details_list);
+    result = hb_qsv_make_adapters_list(&g_qsv_adapters_details_list);
     if (result != 0)
     {
         hb_error("hb_qsv_info_init: hb_qsv_make_adapters_list failed");
@@ -476,26 +470,10 @@ void hb_qsv_info_close()
         hb_list_close(&g_qsv_adapters_details_list);
         g_qsv_adapters_details_list = NULL;
     }
-    if (g_qsv_adapters_list)
-    {
-        hb_list_close(&g_qsv_adapters_list);
-        g_qsv_adapters_list = NULL;
-    }
 }
 
-static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **qsv_adapters_details_list)
+static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_details_list)
 {
-    if (!qsv_adapters_list)
-    {
-        hb_error("hb_qsv_make_adapters_list: qsv_adapters_list destination pointer is NULL");
-        return -1;
-    }
-    if (*qsv_adapters_list)
-    {
-        hb_error("hb_qsv_make_adapters_list: qsv_adapters_list is allocated already");
-        return -1;
-    }
-
     if (!qsv_adapters_details_list)
     {
         hb_error("hb_qsv_make_adapters_list: qsv_adapters_details_list destination pointer is NULL");
@@ -509,12 +487,6 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
     }
 
     hb_list_t *list = hb_list_init();
-    if (list == NULL)
-    {
-        hb_error("hb_qsv_make_adapters_list: hb_list_init() failed");
-        return -1;
-    }
-    hb_list_t *list2 = hb_list_init();
     if (list == NULL)
     {
         hb_error("hb_qsv_make_adapters_list: hb_list_init() failed");
@@ -582,17 +554,10 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
                 hb_error("hb_qsv_make_adapters_list: adapter_details allocation failed");
                 return -1;
             }
-            int *adapter_index = av_mallocz(sizeof(int));
-            if (!adapter_index)
-            {
-                hb_error("hb_qsv_make_adapters_list: adapter_index allocation failed");
-                return -1;
-            }
             init_adapter_details(adapter_details);
             // On Linux VendorImplID number of the device starting from 0
             adapter_details->index = idesc->VendorImplID;
             adapter_details->impl_name = strdup( (const char *)idesc->ImplName);
-            *adapter_index = idesc->VendorImplID;
             mfxHDL impl_path = NULL;
             err = MFXEnumImplementations(loader, i, MFX_IMPLCAPS_IMPLPATH, &impl_path);
             if (err == MFX_ERR_NONE)
@@ -616,8 +581,7 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
                 adapter_details->extended_device_id = *idescDevice;
                 MFXDispReleaseImplDescription(loader, idescDevice);
             }
-            hb_list_add(list, (void*)adapter_index);
-            hb_list_add(list2, (void*)adapter_details);
+            hb_list_add(list, (void*)adapter_details);
             // On Linux, the handle to the VA display must be set.
             // This code is essentially a NOP other platforms.
             hb_display_t *display = hb_qsv_display_init(adapter_details->extended_device_id.DRMRenderNodeNum);
@@ -655,8 +619,7 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
         i++;
     }
     MFXUnload(loader);
-    *qsv_adapters_list = list;
-    *qsv_adapters_details_list = list2;
+    *qsv_adapters_details_list = list;
     hb_qsv_set_default_adapter_index(default_adapter);
     hb_qsv_set_adapter_index(default_adapter);
     return 0;
@@ -703,7 +666,7 @@ int hb_qsv_available()
 
 int hb_qsv_hyper_encode_available(int adapter_index)
 {
-    hb_qsv_adapter_details_t* details = hb_qsv_get_adapters_details_by_index(adapter_index);
+    const hb_qsv_adapter_details_t *details = hb_qsv_get_adapters_details_by_index(adapter_index);
 
     if (details)
     {
@@ -734,10 +697,10 @@ int hb_qsv_is_ffmpeg_supported_codec(int vcodec)
 
 int hb_qsv_video_encoder_is_available(int encoder)
 {
-    for (int i = 0; i < hb_list_count(hb_qsv_adapters_list()); i++)
+    for (int i = 0; i < hb_list_count(g_qsv_adapters_details_list); i++)
     {
-        int *adapter_index = hb_list_item(g_qsv_adapters_list, i);
-        if (hb_qsv_adapter_video_encoder_is_available(*adapter_index, encoder))
+        const hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
+        if (hb_qsv_adapter_video_encoder_is_available(details->index, encoder))
         {
             return 1;
         }
@@ -747,7 +710,7 @@ int hb_qsv_video_encoder_is_available(int encoder)
 
 int hb_qsv_adapter_video_encoder_is_available(int adapter_index, int encoder)
 {
-    hb_qsv_adapter_details_t* details = hb_qsv_get_adapters_details_by_index(adapter_index);
+    const hb_qsv_adapter_details_t *details = hb_qsv_get_adapters_details_by_index(adapter_index);
 
     if (hb_qsv_hardware_generation(hb_qsv_get_platform(adapter_index)) < QSV_G5)
     {
@@ -1999,14 +1962,14 @@ void hb_qsv_info_print()
     if (hb_qsv_available())
     {
 #if defined(_WIN32) || defined(__MINGW32__)
-        if (g_qsv_adapters_list && hb_list_count(g_qsv_adapters_list))
+        if (hb_list_count(g_qsv_adapters_details_list))
         {
             char gpu_list_str[256] = "";
-            for (int i = 0; i < hb_list_count(g_qsv_adapters_list); i++)
+            for (int i = 0; i < hb_list_count(g_qsv_adapters_details_list); i++)
             {
+                const hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
                 char value_str[256];
-                int *value = hb_list_item(g_qsv_adapters_list, i);
-                snprintf(value_str, sizeof(value_str), "%d", *value);
+                snprintf(value_str, sizeof(value_str), "%d", details->index);
                 if (i > 0)
                     strcat(gpu_list_str, ", ");
                 strcat(gpu_list_str, value_str);
@@ -2040,7 +2003,7 @@ void hb_qsv_info_print()
 
 hb_qsv_info_t* hb_qsv_encoder_info_get(int adapter_index, int encoder)
 {
-    hb_qsv_adapter_details_t* details = hb_qsv_get_adapters_details_by_index(adapter_index);
+    const hb_qsv_adapter_details_t *details = hb_qsv_get_adapters_details_by_index(adapter_index);
 
     if (details)
     {
@@ -3510,7 +3473,7 @@ const int* hb_qsv_get_pix_fmts(int encoder)
 const char* hb_qsv_video_quality_get_name(uint32_t codec)
 {
     uint64_t caps = 0;
-    hb_qsv_adapter_details_t* details = hb_qsv_get_adapters_details_by_index(hb_qsv_get_adapter_index());
+    const hb_qsv_adapter_details_t *details = hb_qsv_get_adapters_details_by_index(hb_qsv_get_adapter_index());
     if (details)
     {
         switch (codec)
@@ -3540,7 +3503,7 @@ void hb_qsv_video_quality_get_limits(uint32_t codec, float *low, float *high,
                                      float *granularity, int *direction)
 {
     uint64_t caps = 0;
-    hb_qsv_adapter_details_t* details = hb_qsv_get_adapters_details_by_index(hb_qsv_get_adapter_index());
+    const hb_qsv_adapter_details_t *details = hb_qsv_get_adapters_details_by_index(hb_qsv_get_adapter_index());
     if (details)
     {
         switch (codec)
