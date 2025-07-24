@@ -74,9 +74,6 @@ static void source_dialog_start_scan(GtkFileChooser *chooser, int title_id);
 #define DBUS_LOGIND_SERVICE         "org.freedesktop.login1"
 #define DBUS_LOGIND_PATH            "/org/freedesktop/login1"
 #define DBUS_LOGIND_INTERFACE       "org.freedesktop.login1.Manager"
-#define GPM_DBUS_PM_SERVICE         "org.freedesktop.PowerManagement"
-#define GPM_DBUS_INHIBIT_PATH       "/org/freedesktop/PowerManagement/Inhibit"
-#define GPM_DBUS_INHIBIT_INTERFACE  "org.freedesktop.PowerManagement.Inhibit"
 #endif
 
 #if !defined(_WIN32)
@@ -267,26 +264,12 @@ shutdown_logind (void)
 #endif
 }
 
-#if !defined(_WIN32)
-// For inhibit and shutdown
-#define GPM_DBUS_SM_SERVICE         "org.gnome.SessionManager"
-#define GPM_DBUS_SM_PATH            "/org/gnome/SessionManager"
-#define GPM_DBUS_SM_INTERFACE       "org.gnome.SessionManager"
-#endif
-
-enum {
-    GHB_SUSPEND_UNINHIBITED = 0,
-    GHB_SUSPEND_INHIBITED_GPM,
-    GHB_SUSPEND_INHIBITED_GSM,
-    GHB_SUSPEND_INHIBITED_GTK
-};
-static int suspend_inhibited = GHB_SUSPEND_UNINHIBITED;
-static guint suspend_cookie;
+static guint suspend_cookie = 0;
 
 static void
 inhibit_suspend (void)
 {
-    if (suspend_inhibited != GHB_SUSPEND_UNINHIBITED)
+    if (suspend_cookie)
     {
         // Already inhibited
         return;
@@ -294,26 +277,17 @@ inhibit_suspend (void)
     suspend_cookie = gtk_application_inhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
             NULL, GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
             _("An encode is in progress."));
-    if (suspend_cookie != 0)
-    {
-        suspend_inhibited = GHB_SUSPEND_INHIBITED_GTK;
-        return;
-    }
 }
 
 static void
 uninhibit_suspend (void)
 {
-    switch (suspend_inhibited)
+    if (suspend_cookie)
     {
-        case GHB_SUSPEND_INHIBITED_GTK:
-            gtk_application_uninhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
-                                      suspend_cookie);
-            break;
-        default:
-            break;
+        gtk_application_uninhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
+                                  suspend_cookie);
+        suspend_cookie = 0;
     }
-    suspend_inhibited = GHB_SUSPEND_UNINHIBITED;
 }
 
 // This is a dependency map used for greying widgets
