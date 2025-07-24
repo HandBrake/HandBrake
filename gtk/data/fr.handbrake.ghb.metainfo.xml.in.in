@@ -3,6 +3,9 @@
 <component type="desktop-application">
   <id>fr.handbrake.ghb</id>
   <translation type="gettext">ghb</translation>
+  <developer id="fr.handbrake">
+    <name>HandBrake Team</name>
+  </developer>
   <developer_name>HandBrake Team</developer_name>
   <update_contact>jstebbins.hb_AT_gmail.com</update_contact>
   <launchable type="desktop-id">fr.handbrake.ghb.desktop</launchable>
@@ -24,7 +27,7 @@
   <url type="homepage">https://handbrake.fr/</url>
   <url type="help">https://handbrake.fr/docs/</url>
   <url type="bugtracker">https://github.com/HandBrake/HandBrake/issues</url>
-  <url type="translate">https://www.transifex.com/HandBrakeProject/</url>
+  <url type="translate">https://explore.transifex.com/HandBrakeProject/</url>
 
   <branding>
     <color type="primary" scheme_preference="light">#87ceeb</color>
@@ -105,6 +108,40 @@
 
   <releases>
     <release version="@RELEASE_TAG@" date="@RELEASE_DATE@">
+      <description>
+        <ul>
+          <li>Added new "Social 10MB" presets</li>
+          <li>Improved metadata passthru, preserving additional metadata</li>
+          <li>Added an option to choose the encoder color range</li>
+          <li>Added an option to disable track names passthru and autonaming</li>
+          <li>SubRip/UTF-8 subtitles are now passed through to MKV without conversion to SSA</li>
+        </ul>
+        <p>Fixed issues:</p>
+        <ul>
+          <li>Fixed VCN encoder presets</li>
+          <li>Fixed an excessive memory usage during the indepth scan</li>
+          <li>Fixed Opus and Vorbis passthru validation in Webm</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.9.2" date="2025-02-20">
+      <description>
+        <ul>
+          <li>Allowed muxing NVENC AV1 and VCN AV1 in WebM container</li>
+          <li>Fixed a crash that could happen when a source contains chapters with no titles</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.9.1" date="2025-02-10">
+      <description>
+        <ul>
+          <li>Fixed an issue that could happen when chapters titles are not UTF-8</li>
+          <li>Improved support for SRT files with overlapping subtitles</li>
+          <li>Fixed AC3 and EAC3 extradata in MKV</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.9.0" date="2024-12-01">
       <description>
         <ul>
           <li>Added Intel QSV VVC (hardware) video decoder</li>
