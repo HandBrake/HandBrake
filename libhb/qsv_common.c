@@ -676,7 +676,8 @@ int hb_qsv_available()
         return 0;
     }
 
-    if (qsv_init_done != 0) {
+    if (qsv_init_done != 0)
+    {
         // This method gets called a lot. Don't probe hardware each time.
         return qsv_init_result;
     }
@@ -692,11 +693,11 @@ int hb_qsv_available()
     hb_log("qsv: is available on this system");
 
     // Return the codec capabilities for the highest platform generation
-    qsv_init_result = ((hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_FFMPEG_QSV_H264) ? HB_VCODEC_FFMPEG_QSV_H264 : 0) |
-                      (hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_FFMPEG_QSV_H265) ? HB_VCODEC_FFMPEG_QSV_H265 : 0) |
-                      (hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_FFMPEG_QSV_H265_10BIT) ? HB_VCODEC_FFMPEG_QSV_H265_10BIT : 0) |
-                      (hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_FFMPEG_QSV_AV1) ? HB_VCODEC_FFMPEG_QSV_AV1 : 0) |
-                      (hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_FFMPEG_QSV_AV1_10BIT) ? HB_VCODEC_FFMPEG_QSV_AV1_10BIT : 0));
+    qsv_init_result = ((hb_qsv_video_encoder_is_available(HB_VCODEC_FFMPEG_QSV_H264) ? HB_VCODEC_FFMPEG_QSV_H264 : 0) |
+                       (hb_qsv_video_encoder_is_available(HB_VCODEC_FFMPEG_QSV_H265) ? HB_VCODEC_FFMPEG_QSV_H265 : 0) |
+                       (hb_qsv_video_encoder_is_available(HB_VCODEC_FFMPEG_QSV_H265_10BIT) ? HB_VCODEC_FFMPEG_QSV_H265_10BIT : 0) |
+                       (hb_qsv_video_encoder_is_available(HB_VCODEC_FFMPEG_QSV_AV1) ? HB_VCODEC_FFMPEG_QSV_AV1 : 0) |
+                       (hb_qsv_video_encoder_is_available(HB_VCODEC_FFMPEG_QSV_AV1_10BIT) ? HB_VCODEC_FFMPEG_QSV_AV1_10BIT : 0));
     return qsv_init_result;
 }
 
@@ -731,7 +732,20 @@ int hb_qsv_is_ffmpeg_supported_codec(int vcodec)
     return 0;
 }
 
-int hb_qsv_video_encoder_is_enabled(int adapter_index, int encoder)
+int hb_qsv_video_encoder_is_available(int encoder)
+{
+    for (int i = 0; i < hb_list_count(hb_qsv_adapters_list()); i++)
+    {
+        int *adapter_index = hb_list_item(g_qsv_adapters_list, i);
+        if (hb_qsv_adapter_video_encoder_is_available(*adapter_index, encoder))
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int hb_qsv_adapter_video_encoder_is_available(int adapter_index, int encoder)
 {
     hb_qsv_adapter_details_t* details = hb_qsv_get_adapters_details_by_index(adapter_index);
 

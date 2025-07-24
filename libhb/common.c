@@ -328,7 +328,7 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
 #if HB_PROJECT_FEATURE_QSV
         if (encoder & HB_VCODEC_QSV_MASK)
         {
-            return hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), encoder);
+            return hb_qsv_video_encoder_is_available(encoder);
         }
 #endif
 

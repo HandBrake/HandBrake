@@ -201,7 +201,8 @@ typedef struct hb_qsv_info_s
 /* Intel Quick Sync Video utilities */
 int            hb_qsv_create_mfx_session(mfxIMPL implementation, int adapter_index, mfxVersion *pver, mfxSession *psession);
 hb_display_t * hb_qsv_display_init(const uint32_t dri_render_node);
-int            hb_qsv_video_encoder_is_enabled(int adapter_index, int encoder);
+int            hb_qsv_video_encoder_is_available(int encoder);
+int            hb_qsv_adapter_video_encoder_is_available(int adapter_index, int encoder);
 int            hb_qsv_info_init();
 void           hb_qsv_info_close();
 void           hb_qsv_info_print();
