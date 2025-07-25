@@ -41,7 +41,7 @@ class FlatpakPluginManifest:
             self.manifest["runtime-version"] = runtime
 
 class FlatpakManifest:
-    def __init__(self, source_list, runtime, qsv, vcn, nvenc, dovi, template=None):
+    def __init__(self, source_list, runtime, features, template=None):
         if template is not None and os.path.exists(template):
             with open(template, 'r') as fp:
                 self.manifest = json.load(fp, object_pairs_hook=OrderedDict)
@@ -73,23 +73,17 @@ class FlatpakManifest:
         if runtime is not None:
             self.manifest["runtime-version"] = runtime
 
-        if qsv:
-            self.hbconfig.append("--enable-qsv");
-
-        if nvenc:
-            self.hbconfig.append("--enable-nvenc");
-            self.hbconfig.append("--enable-nvdec");
+        if "nvenc" in features:
             self.extensions += ['org.freedesktop.Sdk.Extension.llvm18'];
             self.build_path += ['/usr/lib/sdk/llvm18/bin'];
             self.ld_path    += ['/usr/lib/sdk/llvm18/lib'];
 
-        if vcn:
-            self.hbconfig.append("--enable-vce");
-
-        if dovi:
-            self.hbconfig.append("--enable-libdovi");
+        if "libdovi" in features:
             self.extensions += ['org.freedesktop.Sdk.Extension.rust-stable'];
             self.build_path += ['/usr/lib/sdk/rust-stable/bin'];
+
+        for feature in features:
+            self.hbconfig.append("--enable-" + feature)
 
         if len(self.extensions) > 0:
             self.manifest["sdk-extensions"] = self.extensions
@@ -135,25 +129,22 @@ class FlatpakManifest:
 
 
 def usage():
-    print("create_flatpak_manifest [-a <archive>] [-c <contrib>] [-s <sha265>] [-t <template>] [-r <sdk-runtime-version] [-h] [<dst>]")
+    print("create_flatpak_manifest [-a <archive>] [-c <contrib>] [-s <sha265>] [-t <template>] [-r <runtime>] [-f <feature>] [-p] [<dst>]")
     print("     -a --archive    - Main archive (a.k.a. HB sources)")
     print("     -c --contrib    - Contrib download URL (can be repeated)")
     print("     -s --sha256     - sha256 of previous file on command line")
     print("     -b --basename   - target basename of previous file on command line")
     print("     -t --template   - Flatpak manifest template")
     print("     -r --runtime    - Flatpak SDK runtime version")
-    print("     -q --qsv        - Build with Intel QSV support")
-    print("     -v --vcn        - Build with AMD VCN support")
-    print("     -e --nvenc      - Build with Nvidia HW Encoder support")
-    print("     -d --dovi       - Build with libdovi support")
+    print("     -f --feature    - Build with <feature> support")
     print("     -p --plugin     - Manifest if for a HandBrake flatpak plugin")
     print("     -h --help       - Show this message")
 
 if __name__ == "__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:b:t:r:qvedph",
+        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:b:t:r:f:ph",
             ["archive=", "contrib=", "sha256=", "basename=",
-             "template=", "runtime=", "qsv", "vcn", "nvenc", "dovi", "plugin", "help"])
+             "template=", "runtime=", "feature=", "plugin", "help"])
     except getopt.GetoptError:
         print("Error: Invalid option")
         usage()
@@ -167,10 +158,7 @@ if __name__ == "__main__":
     current_source = None
     runtime = None
     plugin = 0
-    dovi = 0
-    qsv = 0
-    vcn = 0
-    nvenc = 1
+    features = []
     print("ARGS ",args)
     print("OPT ",opts)
     # exit()
@@ -204,17 +192,12 @@ if __name__ == "__main__":
             template = arg
         elif opt in ("-r", "--runtime"):
             runtime = arg
-        elif opt in ("-q", "--qsv"):
-            qsv = 1;
-        elif opt in ("-v", "--vcn"):
-            vcn = 1;
-        elif opt in ("-e", "--nvenc"):
-            print("NVENC ON")
-            nvenc = 1;
-        elif opt in ("-d", "--dovi"):
-            dovi = 1;
+        elif opt in ("-f", "--feature"):
+            features.append(arg)
         elif opt in ("-p", "--plugin"):
             plugin = 1;
+
+    print(f"FEATURES {features}")
 
     if len(args) > 0:
         dst = args[0]
@@ -224,7 +207,7 @@ if __name__ == "__main__":
     if plugin:
         manifest = FlatpakPluginManifest(runtime, template)
     else:
-        manifest = FlatpakManifest(source_list, runtime, qsv, vcn, nvenc, dovi, template)
+        manifest = FlatpakManifest(source_list, runtime, features, template)
 
     if dst is not None:
         with open(dst, 'w') as fp:
