@@ -5908,6 +5908,7 @@ battery is charged.</property>
                                     <property name="hexpand">True</property>
                                     <property name="title" translatable="yes">Temp Directory</property>
                                     <property name="margin-start">21</property>
+                                    <signal name="notify::file" handler="temp_dir_changed_cb" swapped="no"/>
                                   </object>
                                 </child>
                                 <layout>
