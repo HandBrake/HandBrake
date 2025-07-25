@@ -64,19 +64,23 @@ RPMROOT.out/ = $(RPMROOT.out)/
 ###############################################################################
 
 ifeq (1,$(FEATURE.qsv))
-    FPFLAGS += -q
+    FPFLAGS += --feature=qsv
 endif
 
 ifeq (1,$(FEATURE.nvenc))
-    FPFLAGS += -e
+    FPFLAGS += --feature=nvenc --feature=nvdec
 endif
 
 ifeq (1,$(FEATURE.vce))
-    FPFLAGS += -v
+    FPFLAGS += --feature=vce
 endif
 
 ifeq (1,$(FEATURE.libdovi))
-    FPFLAGS += -d
+    FPFLAGS += --feature=libdovi
+endif
+
+ifeq (1,$(FEATURE.fdk_aac))
+    FPFLAGS += --feature=fdk-aac
 endif
 
 ifneq ($(FP_RUNTIME),)
