@@ -8,7 +8,7 @@ Please see: [Transifex - HandBrake Public Page](https://www.transifex.com/HandBr
 While we wish to welcome contributions from people, we need to have some ground rules to make sure translations run smoothly. 
 
 - Contributors must have fluent verbal and written English. (English is the base language used for translation.)
-- You must not use a translation service to aid translation. If anything is unclear, please ask!
+- You must not use a translation service or an AI translator to aid translation. If anything is unclear, please ask!
 - Our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md) must be followed.
 
 
@@ -19,8 +19,8 @@ There are around 4000 to 7000 words to translate for each language, depending on
 
 ## How to become a translator
 
-1. Please submit a join request on transifex for the relevant GUI that you currently use.
-2. Create a "Translation Request" GitHub issue
+1. Please submit a join request on Transifex for the relevant GUI that you currently use.
+2. Create a "Translation Request" GitHub issue.
 3. We will then discuss the request and make a decision whether to accept or reject it.
 
 
