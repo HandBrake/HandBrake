@@ -1283,6 +1283,25 @@ preset_reload_action_cb(GSimpleAction *action, GVariant *param,
     }
 }
 
+static gboolean
+video_encoder_is_hw_encoder (const char *encoder_name)
+{
+    const char *hw_prefixes[] = {
+        "qsv_",
+        "vce_",
+        "nvenc_",
+        "mf_",
+        "vt_",
+    };
+
+    for (int i = 0; i < G_N_ELEMENTS(hw_prefixes); i++)
+    {
+        if (!strncmp(encoder_name, hw_prefixes[i], strlen(hw_prefixes[i])))
+            return TRUE;
+    }
+    return FALSE;
+}
+
 void
 ghb_presets_menu_init(signal_user_data_t *ud)
 {
@@ -1343,6 +1362,7 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                     int           preset_type;
                     const gchar * name;
                     GString     * preset_str = g_string_new(folder_str->str);
+                    gboolean      preset_enabled = TRUE;
 
                     dict        = ghb_array_get(folder, jj);
                     name        = ghb_dict_get_string(dict, "PresetName");
@@ -1359,6 +1379,21 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                     {
                         continue;
                     }
+                    // Don't show official presets that use an unavailable hardware encoder
+                    // User-created presets are shown but disabled
+                    const char *encoder_name = ghb_dict_get_string(dict, "VideoEncoder");
+                    if (video_encoder_is_hw_encoder(encoder_name))
+                    {
+                        int encoder_id = hb_video_encoder_get_from_name(encoder_name);
+                        if (!hb_video_encoder_is_supported(encoder_id))
+                        {
+                            if (type == HB_PRESET_TYPE_OFFICIAL)
+                                continue;
+                            else
+                                preset_enabled = FALSE;
+                        }
+                    }
+
                     g_string_append(preset_str, "/");
                     g_string_append_uri_escaped(preset_str, name, NULL, TRUE);
 
@@ -1366,8 +1401,11 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                     char * detail_action;
 
                     preset_path = g_string_free(preset_str, FALSE);
-                    detail_action = g_strdup_printf("app.preset-select('%s')",
-                                                    preset_path);
+                    if (preset_enabled)
+                        detail_action = g_strdup_printf("app.preset-select('%s')", preset_path);
+                    else
+                        detail_action = g_strdup_printf("UNAVAILABLE");
+
                     g_menu_append(submenu, name, detail_action);
                     g_free(preset_path);
                     g_free(detail_action);
