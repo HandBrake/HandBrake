@@ -259,37 +259,10 @@ hb_triplet_t;
 
 typedef struct
 {
-    /*
-     * Supported mfxExtBuffer.BufferId values:
-     *
-     * MFX_EXTBUFF_AVC_REFLIST_CTRL
-     * MFX_EXTBUFF_AVC_TEMPORAL_LAYERS
-     * MFX_EXTBUFF_CODING_OPTION
-     * MFX_EXTBUFF_CODING_OPTION_SPSPPS
-     * MFX_EXTBUFF_CODING_OPTION2
-     * MFX_EXTBUFF_ENCODER_CAPABILITY
-     * MFX_EXTBUFF_ENCODER_RESET_OPTION
-     * MFX_EXTBUFF_OPAQUE_SURFACE_ALLOCATION
-     * MFX_EXTBUFF_PICTURE_TIMING_SEI
-     * MFX_EXTBUFF_VIDEO_SIGNAL_INFO
-     * MFX_EXTBUFF_CHROMA_LOC_INFO
-     * MFX_EXTBUFF_MASTERING_DISPLAY_COLOUR_VOLUME
-     * MFX_EXTBUFF_CONTENT_LIGHT_LEVEL_INFO
-     *
-     * This should cover all encode-compatible extended
-     * buffers that can be attached to an mfxVideoParam.
-     */
-#define HB_QSV_ENC_NUM_EXT_PARAM_MAX 16
-    mfxExtBuffer*         ExtParamArray[HB_QSV_ENC_NUM_EXT_PARAM_MAX];
-    mfxExtCodingOption    codingOption;
     mfxExtCodingOption2   codingOption2;
-    mfxExtVideoSignalInfo videoSignalInfo;
     hb_triplet_t*         hyperEncodeParam;
     mfxExtAV1ScreenContentTools av1ScreenContentToolsParam;
-    mfxExtChromaLocInfo   chromaLocInfo;
-    mfxExtMasteringDisplayColourVolume masteringDisplayColourVolume;
-    mfxExtContentLightLevelInfo        contentLightLevelInfo;
-    mfxExtAV1BitstreamParam av1BitstreamParam;
+
     struct
     {
         int b_pyramid;

@@ -3602,56 +3602,6 @@ int hb_qsv_param_default(hb_qsv_param_t *param, hb_qsv_info_t *info)
 {
     if (param != NULL && info != NULL)
     {
-        // introduced in API 1.0
-        memset(&param->codingOption, 0, sizeof(mfxExtCodingOption));
-        param->codingOption.Header.BufferId      = MFX_EXTBUFF_CODING_OPTION;
-        param->codingOption.Header.BufferSz      = sizeof(mfxExtCodingOption);
-        param->codingOption.MECostType           = 0; // reserved, must be 0
-        param->codingOption.MESearchType         = 0; // reserved, must be 0
-        param->codingOption.MVSearchWindow.x     = 0; // reserved, must be 0
-        param->codingOption.MVSearchWindow.y     = 0; // reserved, must be 0
-        param->codingOption.RefPicListReordering = 0; // reserved, must be 0
-        param->codingOption.IntraPredBlockSize   = 0; // reserved, must be 0
-        param->codingOption.InterPredBlockSize   = 0; // reserved, must be 0
-        param->codingOption.MVPrecision          = 0; // reserved, must be 0
-        param->codingOption.RateDistortionOpt    = MFX_CODINGOPTION_UNKNOWN;
-        param->codingOption.ResetRefList         = MFX_CODINGOPTION_UNKNOWN;
-        param->codingOption.MaxDecFrameBuffering = 0; // unspecified
-        param->codingOption.AUDelimiter          = MFX_CODINGOPTION_OFF;
-        param->codingOption.SingleSeiNalUnit     = MFX_CODINGOPTION_UNKNOWN;
-        param->codingOption.PicTimingSEI         = MFX_CODINGOPTION_OFF;
-        param->codingOption.VuiNalHrdParameters  = MFX_CODINGOPTION_UNKNOWN;
-        param->codingOption.FramePicture         = MFX_CODINGOPTION_UNKNOWN;
-        param->codingOption.CAVLC                = MFX_CODINGOPTION_OFF;
-        // introduced in API 1.3
-        param->codingOption.RefPicMarkRep        = MFX_CODINGOPTION_UNKNOWN;
-        param->codingOption.FieldOutput          = MFX_CODINGOPTION_UNKNOWN;
-        param->codingOption.NalHrdConformance    = MFX_CODINGOPTION_UNKNOWN;
-        param->codingOption.SingleSeiNalUnit     = MFX_CODINGOPTION_UNKNOWN;
-        param->codingOption.VuiVclHrdParameters  = MFX_CODINGOPTION_UNKNOWN;
-        // introduced in API 1.4
-        param->codingOption.ViewOutput           = MFX_CODINGOPTION_UNKNOWN;
-        // introduced in API 1.6
-        param->codingOption.RecoveryPointSEI     = MFX_CODINGOPTION_UNKNOWN;
-
-        // introduced in API 1.3
-        memset(&param->videoSignalInfo, 0, sizeof(mfxExtVideoSignalInfo));
-        param->videoSignalInfo.Header.BufferId          = MFX_EXTBUFF_VIDEO_SIGNAL_INFO;
-        param->videoSignalInfo.Header.BufferSz          = sizeof(mfxExtVideoSignalInfo);
-        param->videoSignalInfo.VideoFormat              = 5; // undefined
-        param->videoSignalInfo.VideoFullRange           = 0; // TV range
-        param->videoSignalInfo.ColourDescriptionPresent = 0; // don't write to bitstream
-        param->videoSignalInfo.ColourPrimaries          = 2; // undefined
-        param->videoSignalInfo.TransferCharacteristics  = 2; // undefined
-        param->videoSignalInfo.MatrixCoefficients       = 2; // undefined
-
-        // introduced in API 1.13
-        init_ext_chroma_loc_info(&param->chromaLocInfo);
-
-        // introduced in API 1.25
-        init_ext_mastering_display_colour_volume(&param->masteringDisplayColourVolume);
-        init_ext_content_light_level_info(&param->contentLightLevelInfo);
-
         // introduced in API 1.6
         memset(&param->codingOption2, 0, sizeof(mfxExtCodingOption2));
         param->codingOption2.Header.BufferId = MFX_EXTBUFF_CODING_OPTION2;
@@ -3675,11 +3625,6 @@ int hb_qsv_param_default(hb_qsv_param_t *param, hb_qsv_info_t *info)
         param->codingOption2.NumMbPerSlice   = 0;
         // introduced in API 2.5
         param->hyperEncodeParam              = hb_triplet4key(hb_qsv_hyper_encode_modes, "off");
-
-        memset(&param->av1BitstreamParam, 0, sizeof(mfxExtAV1BitstreamParam));
-        param->av1BitstreamParam.Header.BufferId = MFX_EXTBUFF_AV1_BITSTREAM_PARAM;
-        param->av1BitstreamParam.Header.BufferSz = sizeof(mfxExtAV1BitstreamParam);
-        param->av1BitstreamParam.WriteIVFHeaders = MFX_CODINGOPTION_OFF;
 
         // introduced in API 2.11
         memset(&param->av1ScreenContentToolsParam, 0, sizeof(mfxExtAV1ScreenContentTools));
