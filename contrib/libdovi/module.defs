@@ -24,6 +24,8 @@ ifeq (1,$(HOST.cross))
         ifneq ($(HOST.machine),$(BUILD.machine))
             LIBDOVI.target += --target="$(HOST.machine:arm64=aarch64)-$(HOST.vendor)-$(HOST.system)"
         endif
+    else ifeq ($(HOST.system)-$(HOST.machine),mingw-aarch64)
+        LIBDOVI.target += --target="aarch64-pc-windows-gnullvm"
     else ifeq ($(HOST.system),mingw)
         LIBDOVI.target += --target="$(HOST.machine)-pc-windows-gnu"
     else
@@ -35,7 +37,7 @@ LIBDOVI_DV.dir   = "$(LIBDOVI.EXTRACT.dir/)dolby_vision"
 LIBDOVI.manifest = --manifest-path="$(LIBDOVI.EXTRACT.dir/)dolby_vision/Cargo.toml"
 LIBDOVI.prefix   = --prefix "$(LIBDOVI.CONFIGURE.prefix)"
 LIBDOVI.extra    = --release --library-type staticlib $(LIBDOVI.prefix) $(LIBDOVI.target) \
-                   --pkgconfigdir "$(LIBDOVI.CONFIGURE.prefix)/lib/pkgconfig"
+                   --libdir=lib --pkgconfigdir=lib/pkgconfig
 
 LIBDOVI.BUILD.make       = cd $(LIBDOVI_DV.dir); $(CARGO.exe) cbuild
 LIBDOVI.BUILD.extra      = $(LIBDOVI.extra)
