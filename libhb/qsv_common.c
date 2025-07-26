@@ -175,13 +175,6 @@ static hb_triplet_t hb_qsv_memory_types[] =
     { NULL,                                                                      },
 };
 
-static hb_triplet_t hb_qsv_vpp_interpolation_methods[] =
-{
-    { "nearest",            "nearest",          MFX_INTERPOLATION_NEAREST_NEIGHBOR, },
-    { "bilinear",           "bilinear",         MFX_INTERPOLATION_BILINEAR,         },
-    { "advanced",           "advanced",         MFX_INTERPOLATION_ADVANCED,         },
-    { NULL,                                                                         },
-};
 static hb_triplet_t hb_qsv_hyper_encode_modes[] =
 {
     { "Hyper Encode off",      "off",           MFX_HYPERMODE_OFF,      },
@@ -2214,6 +2207,20 @@ static int hb_qsv_parse_options(hb_job_t *job)
                     job->qsv_ctx->memory_type = mode->value;
                 }
             }
+            else if (!strcasecmp(key, "scalingmode") ||
+                     !strcasecmp(key, "vpp-sm"))
+            {
+                hb_triplet_t *mode = NULL;
+                mode = hb_triplet4key(hb_qsv_vpp_scale_modes, hb_value_get_string_xform(value));
+                if (!mode)
+                {
+                    err = HB_QSV_PARAM_BAD_VALUE;
+                }
+                else
+                {
+                    job->qsv_ctx->vpp_scale_mode = mode->name;
+                }
+            }
         }
         hb_dict_free(&options_list);
     }
@@ -3280,24 +3287,6 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             hb_triplet_t *mode = NULL;
             mode = hb_triplet4key(hb_qsv_vpp_scale_modes, value);
             if (!mode)
-            {
-                error = HB_QSV_PARAM_BAD_VALUE;
-            }
-        }
-        else
-        {
-            return HB_QSV_PARAM_UNSUPPORTED;
-        }
-    }
-    else if (!strcasecmp(key, "interpolationmethod") ||
-             !strcasecmp(key, "vpp-im"))
-    {
-        // Already parsed it in decoder but need to check support
-        if (info->capabilities & HB_QSV_CAP_VPP_INTERPOLATION)
-        {
-            hb_triplet_t *method = NULL;
-            method = hb_triplet4key(hb_qsv_vpp_interpolation_methods, value);
-            if (!method)
             {
                 error = HB_QSV_PARAM_BAD_VALUE;
             }

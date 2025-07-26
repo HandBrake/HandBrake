@@ -31,7 +31,6 @@ typedef struct hb_qsv_context_s
     int la_is_enabled;
     int memory_type;
     const char *vpp_scale_mode;
-    const char *vpp_interpolation_method;
 } hb_qsv_context_t;
 
 // version of MSDK/QSV API currently used
