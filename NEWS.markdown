@@ -61,6 +61,8 @@ Download available from Microsoft:
 ### Linux
 
 - Fixed Opus and Vorbis passthru validation in Webm
+- Removed orphaned, no longer maintained locales or locales without active translators (af, cs, da, he, hr, ka, no, pl, pt, ro, ru, si, sk, th, tr, uk_UA, zh_TW). Removed locales are welcome back as soon as the locales are updated.
+- Updated existing and maintained locales.
 
 ### Mac
 

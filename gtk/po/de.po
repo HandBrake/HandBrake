@@ -5,6 +5,7 @@
 # 
 # Translators:
 # Nomis101 <Nomis101@web.de>, 2025
+# hnsteyding, 2025
 # 
 #, fuzzy
 msgid ""
@@ -390,7 +391,7 @@ msgid ""
 "Mark selected queue entry as pending.\n"
 "Resets the queue job to pending and ready to run again."
 msgstr ""
-"Markiere den ausgewählten Warteschlangeneintrag als bevorstehend.\n"
+"Markiere den ausgewählten Warteschlangeneintrag als \"Ausstehend\".\n"
 "Setzt den Auftrag in der Warteschlange auf \"Ausstehend\" zurück und macht ihn wieder lauffähig."
 
 #: src/ui/ghb.ui:397
@@ -643,11 +644,11 @@ msgid ""
 "This allows a player to initiate playback before downloading the entire file."
 msgstr ""
 "Optimiert MP4 für den schrittweißen Download. \n"
-"Nach der Encodierung werden die Daten so umgeschrieben, dass ein direktes Abspielen übers Internet ermöglicht wird ohne den gesamten Film herunterladen zu müssen."
+"Dies ermöglich dass direktes Abspielen der Datei über das Internet ohne den gesamten Film herunterladen zu müssen."
 
 #: src/ui/ghb.ui:1785
 msgid "Align A/V Start"
-msgstr "A/V synchron"
+msgstr "A/V synchronisieren"
 
 #: src/ui/ghb.ui:1787
 msgid ""
@@ -1065,7 +1066,7 @@ msgid ""
 "Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
-"Der Entrauschfilter verringern oder entfernen das Auftreten von Rauschen und Kriseln.\n"
+"Der Entrauschfilter verringert oder entfernt das Auftreten von Rauschen und Kriseln.\n"
 "Filmkrisel und andere Formen von hochfrequentem Rauschen sind schwer zu komprimieren.\n"
 "Durch Benutzung dieses Filters auf solche Quellen, können die resultierenden Dateien kleiner werden."
 
@@ -1171,7 +1172,7 @@ msgstr ""
 "Bildfrequenz der Ausgabe.\n"
 "\n"
 ""
-"„Wie die Quelle“ ist empfohlen. Falls das Quellvideo eine\n"
+"„Wie Quelle“ ist empfohlen. Falls das Quellvideo eine\n"
 "variable Bildfrequenz hat, wird diese Einstellung diese beibehalten."
 
 #: src/ui/ghb.ui:3378
@@ -1365,8 +1366,8 @@ msgid ""
 "\n"
 "Set this if your device is struggling to play the output (dropped frames)."
 msgstr ""
-"Die schnelle Decodierung benutzt Einstellungen um die Prozessorauslastung beim Abspielen des encodierten Videos zu reduzieren. \n"
-"Nützlich bei leistungsschwachen Abspielgeräten, bei denen das Video sonst nicht ruckelfrei läuft."
+"Reduziert die Prozessorauslastung beim Abspielen des encodierten Videos. \n"
+"Nützlich bei leistungsschwachen Abspielgeräten, bei denen das Video sonst nicht ruckelfrei läuft (Auslassung von Frames)."
 
 #: src/ui/ghb.ui:3682
 msgid "Zero Latency"
@@ -1383,7 +1384,7 @@ msgid ""
 msgstr ""
 "Minimiere Latenz zwischen Eingabe zum Encoder und Ausgabe des Decoder.\n"
 "Dies ist nützlich für die Übertragung von Livestreams.\n"
-"Da HandBrake jedoch nicht für Livestreams nützlich ist, bringt diese Einstellung wenig."
+"Da HandBrake jedoch nicht für Livestreams gedacht ist, bringt diese Einstellung wenig."
 
 #: src/ui/ghb.ui:3702
 msgid "Profile:"
@@ -1896,7 +1897,7 @@ msgid ""
 "\n"
 "Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
-"Falls aktiviert, verwendet jeder Titel dieselben Einstellungen, wenn ein Batch von Titeln der Warteschlange hinzugefügt wird.\n"
+"Falls aktiviert, verwendet jeder Titel dieselben Einstellungen, wenn ein Stapel von Titeln der Warteschlange hinzugefügt wird.\n"
 "\n"
 "Deaktiviere diese Option, falls für jeden Titel eigene Einstellungen festgelegt werden sollen."
 
@@ -2312,9 +2313,9 @@ msgid ""
 "For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
 "DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
-"<b>Dynamic Range Compression:</b>Adjustiere den Dynamikumfang der Tonspur der Ausgabe.\n"
+"<b>Dynamic Range Compression:</b>Passt den Dynamikumfang der Tonspur der Ausgabe an.\n"
 "\n"
-"Für Quellaudio welches einen großen Dynamikumfang hat (sehr laute und sehr leise sequenzen),\n"
+"Für Quellaudio welches einen großen Dynamikumfang hat (sehr laute und sehr leise Sequenzen),\n"
 "erlaubt DRC diesen Umfang zu komprimieren indem laute Geräusche\n"
 "leiser und leise Geräusche lauter gemacht werden."
 
@@ -2462,7 +2463,7 @@ msgstr[1] "+ %d zusätzliche Untertitelspuren"
 
 #: src/callbacks.c:2686
 msgid "storage"
-msgstr "quelle"
+msgstr "Speicher"
 
 #: src/callbacks.c:2687
 msgid "display"
@@ -2510,11 +2511,11 @@ msgstr ""
 
 #: src/callbacks.c:4134 src/queuehandler.c:1626
 msgid "Cancel Current and Stop"
-msgstr "Momentanes abbrechen und stoppen"
+msgstr "Aktuelles abbrechen und stoppen"
 
 #: src/callbacks.c:4134
 msgid "Cancel Current, Start Next"
-msgstr "Breche aktuelle Aufgabe ab, starte nächsten"
+msgstr "Aktuelle Aufgabe abbrechen und Nächste starten"
 
 #: src/callbacks.c:4135
 msgid "Finish Current and Stop"
@@ -2850,7 +2851,7 @@ msgstr "Normal"
 
 #: src/hb-backend.c:326
 msgid "Simple"
-msgstr "Simpel"
+msgstr "Einfach"
 
 #: src/hb-backend.c:327
 msgid "Smart"
@@ -2946,7 +2947,7 @@ msgstr "Immer"
 
 #: src/hb-backend.c:1476 src/hb-backend.c:1536 src/hb-backend.c:1615
 msgid "Same as source"
-msgstr "Wie die Quelle"
+msgstr "Wie Quelle"
 
 #: src/hb-backend.c:1629
 msgid "(NTSC Film)"
@@ -3497,7 +3498,7 @@ msgstr "Letzter Encodierungsdurchgang"
 #. Should never happen
 #: src/queuehandler.c:1151
 msgid "Error"
-msgstr "Error"
+msgstr "Fehler"
 
 #: src/queuehandler.c:1155
 #, c-format

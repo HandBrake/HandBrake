@@ -29,15 +29,15 @@ msgstr "_파일"
 
 #: src/ui/menu.ui:10 src/ui/menu.ui:456
 msgid "_Open Source…"
-msgstr ""
+msgstr "소스 열기(_O)…"
 
 #: src/ui/menu.ui:14 src/ui/menu.ui:460
 msgid "Open _Directory…"
-msgstr ""
+msgstr "디렉터리 열기(_D)…"
 
 #: src/ui/menu.ui:18 src/ui/menu.ui:176
 msgid "_Set Destination…"
-msgstr ""
+msgstr "대상 지정하기(_S)…"
 
 #: src/ui/menu.ui:26 src/ui/menu.ui:196
 msgid "_Preferences"
@@ -58,7 +58,7 @@ msgstr "추가하기(_A)"
 
 #: src/ui/menu.ui:43 src/ui/menu.ui:443
 msgid "Add _Multiple…"
-msgstr ""
+msgstr "여러 개 추가하기(_M)…"
 
 #: src/ui/menu.ui:47 src/ui/menu.ui:447
 msgid "Add A_ll"
@@ -74,11 +74,11 @@ msgstr "인코딩 일시 중지(_P)"
 
 #: src/ui/menu.ui:63 src/ui/menu.ui:182 src/ui/menu.ui:334
 msgid "_Import Queue…"
-msgstr ""
+msgstr "대기열 가져오기…"
 
 #: src/ui/menu.ui:67 src/ui/menu.ui:186 src/ui/menu.ui:338
 msgid "_Export Queue…"
-msgstr ""
+msgstr "대기열 내보내기…"
 
 #: src/ui/menu.ui:72
 msgid "_View"
@@ -106,7 +106,7 @@ msgstr "기본값 설정하기(_F)"
 
 #: src/ui/menu.ui:103 src/ui/menu.ui:225
 msgid "_New Preset…"
-msgstr ""
+msgstr "새 프리셋(_N)…"
 
 #: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:6038
 #: src/ui/ghb.ui:6128 src/callbacks.c:2141 src/chapters.c:455
@@ -116,19 +116,19 @@ msgstr "저장(_S)"
 
 #: src/ui/menu.ui:111 src/ui/menu.ui:233 src/ui/menu.ui:272
 msgid "_Rename…"
-msgstr ""
+msgstr "이름 바꾸기(_R)…"
 
 #: src/ui/menu.ui:115 src/ui/menu.ui:237 src/ui/menu.ui:276
 msgid "_Delete…"
-msgstr ""
+msgstr "삭제하기(_D)…"
 
 #: src/ui/menu.ui:121 src/ui/menu.ui:243
 msgid "_Import Preset…"
-msgstr ""
+msgstr "프리셋 가져오기(_I)…"
 
 #: src/ui/menu.ui:125 src/ui/menu.ui:247 src/ui/menu.ui:282
 msgid "_Export Preset…"
-msgstr ""
+msgstr "프리셋 내보내기(_E)…"
 
 #: src/ui/menu.ui:131 src/ui/menu.ui:253
 msgid "Reset _Built-in Presets"
@@ -140,7 +140,7 @@ msgstr "도움말(_H)"
 
 #: src/ui/menu.ui:144
 msgid "_Online Documentation"
-msgstr ""
+msgstr "온라인 문서(_O)"
 
 #: src/ui/menu.ui:148
 msgid "_About"
@@ -152,7 +152,7 @@ msgstr "초보자를 위한 HandBrake(_D)"
 
 #: src/ui/menu.ui:204
 msgid "A_bout HandBrake"
-msgstr ""
+msgstr "HandBrake 정보(_B)"
 
 #: src/ui/menu.ui:290 src/ui/menu.ui:369
 msgid "_Play File"
@@ -168,43 +168,43 @@ msgstr "대상 디렉터리 열기(_D)"
 
 #: src/ui/menu.ui:304 src/ui/menu.ui:382
 msgid "Open Encode _Log"
-msgstr ""
+msgstr "인코드 로그 열기(_L)"
 
 #: src/ui/menu.ui:308 src/ui/menu.ui:386
 msgid "Open _Encode Log Directory"
-msgstr ""
+msgstr "인코드 로그 디렉터리 열기(_E)"
 
 #: src/ui/menu.ui:316
 msgid "Reset _Failed Jobs"
-msgstr ""
+msgstr "실패한 작업 재설정(_F)"
 
 #: src/ui/menu.ui:320
 msgid "_Reset All Jobs"
-msgstr ""
+msgstr "모든 작업 재설정(_R)"
 
 #: src/ui/menu.ui:324
 msgid "_Clear Completed Jobs"
-msgstr ""
+msgstr "완료된 작업 지우기(_C)"
 
 #: src/ui/menu.ui:328
 msgid "Clear _All Jobs"
-msgstr ""
+msgstr "모든 작업 지우기(_A)"
 
 #: src/ui/menu.ui:346
 msgid "_Add Track"
-msgstr ""
+msgstr "트랙 추가하기(_A)"
 
 #: src/ui/menu.ui:350 src/ui/menu.ui:419 src/ui/menu.ui:431
 msgid "Add A_ll Tracks"
-msgstr ""
+msgstr "모든 트랙 추가하기(_L)"
 
 #: src/ui/menu.ui:354 src/ui/menu.ui:435
 msgid "Add _Foreign Audio Scan"
-msgstr ""
+msgstr "외부 오디오 스캔 추가하기(_F)"
 
 #: src/ui/menu.ui:360
 msgid "Add External Subtitle File"
-msgstr ""
+msgstr "외부 자막 파일 추가하기"
 
 #: src/ui/menu.ui:393
 msgid "Move to _Top"
@@ -224,7 +224,7 @@ msgstr "재설정(_R)"
 
 #: src/ui/menu.ui:415 src/ui/menu.ui:427
 msgid "_Add New Track"
-msgstr ""
+msgstr "새 트랙 추가하기(_A)"
 
 #: src/ui/ghb.ui:93
 msgid ""
@@ -338,7 +338,7 @@ msgstr "프리셋"
 
 #: src/ui/ghb.ui:157
 msgid "Save as new preset"
-msgstr ""
+msgstr "새 프리셋으로 저장"
 
 #: src/ui/ghb.ui:166 src/ui/ghb.ui:430
 msgid "Actions"
@@ -856,7 +856,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:2485 src/ui/ghb.ui:2747
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: src/ui/ghb.ui:2496
 msgid ""
@@ -1725,7 +1725,7 @@ msgstr "DRC"
 
 #: src/ui/ghb.ui:5287
 msgid "Add Track"
-msgstr ""
+msgstr "트랙 추가하기"
 
 #: src/ui/ghb.ui:5288
 msgid ""
