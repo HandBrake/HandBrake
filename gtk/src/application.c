@@ -587,10 +587,8 @@ static gboolean
 video_file_drop_received (GtkDropTarget* self, const GValue* value,
                           double x, double y, signal_user_data_t *ud)
 {
-/* The GdkFileList method is preferred where supported as it handles multiple
+/* The GdkFileList method is preferred as it handles multiple
  * files and also allows access to sandboxed files via the portal */
-#if GTK_CHECK_VERSION(4, 6, 0)
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     if (G_VALUE_HOLDS(value, GDK_TYPE_FILE_LIST))
     {
         GdkFileList *gdk_file_list = g_value_get_boxed(value);
@@ -628,8 +626,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
         }
         return TRUE;
     }
-G_GNUC_END_IGNORE_DEPRECATIONS
-#endif
 
     g_autoptr(GFile) file = NULL;
     g_autofree gchar *filename = NULL;
@@ -666,9 +662,7 @@ video_file_drop_init (signal_user_data_t *ud)
 {
     GtkWidget *window = ghb_builder_widget("hb_window");
     GType types[] = {
-#if GTK_CHECK_VERSION(4, 6, 0)
         GDK_TYPE_FILE_LIST,
-#endif
         G_TYPE_FILE,
         G_TYPE_URI,
     };
@@ -973,10 +967,8 @@ ghb_application_handle_local_options (GApplication *app, GVariantDict *options)
     if (g_variant_dict_lookup(options, "config", "s", &config_dir))
         ghb_override_user_config_dir(config_dir);
 
-#if GLIB_CHECK_VERSION(2, 72, 0)
     if (g_variant_dict_lookup(options, "debug", "b", NULL))
         g_log_set_debug_enabled(TRUE);
-#endif
 
     if (g_variant_dict_lookup(options, "console", "b", NULL))
 #if defined(_WIN32)
