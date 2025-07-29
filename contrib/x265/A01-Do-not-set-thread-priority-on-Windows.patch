@@ -1,4 +1,4 @@
-From ae2c6b8c2b665c3be30649e8ce68d39be7cbbcd3 Mon Sep 17 00:00:00 2001
+From a8c1d64e08c00ade27bc6508dd57ec567d578390 Mon Sep 17 00:00:00 2001
 From: Max Dmitrichenko <max.dmitrichenko@intel.com>
 Date: Thu, 22 Aug 2024 07:40:48 +0200
 Subject: [PATCH 1/6] Do not set thread priority on Windows
