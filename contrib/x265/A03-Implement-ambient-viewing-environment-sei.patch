@@ -1,4 +1,4 @@
-From 808917ba4a6d2cefac431a9b0613d5952359ceb2 Mon Sep 17 00:00:00 2001
+From 770f55dd15e18175b988899212a1fd55536d60f3 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 22 Nov 2024 10:49:10 +0100
 Subject: [PATCH 3/6] Implement ambient viewing environment sei
@@ -93,7 +93,7 @@ index 3ed957058..9d3e74c63 100644
  {
  public:
 diff --git a/source/x265.h b/source/x265.h
-index 7241beda2..c9fd99984 100644
+index 8bc7bea2a..70cd66dcb 100644
 --- a/source/x265.h
 +++ b/source/x265.h
 @@ -376,6 +376,7 @@ typedef enum
@@ -104,7 +104,7 @@ index 7241beda2..c9fd99984 100644
      ALPHA_CHANNEL_INFO                   = 165,
      THREE_DIMENSIONAL_REFERENCE_DISPLAYS_INFO = 176,
      MULTIVIEW_SCENE_INFO                 = 178,
-@@ -1962,6 +1963,11 @@ typedef struct x265_param
+@@ -1963,6 +1964,11 @@ typedef struct x265_param
       * value to that value. */
      uint16_t maxLuma;
  
@@ -116,7 +116,7 @@ index 7241beda2..c9fd99984 100644
      /* Maximum of the picture order count */
      int log2MaxPocLsb;
  
-@@ -2173,6 +2179,9 @@ typedef struct x265_param
+@@ -2174,6 +2180,9 @@ typedef struct x265_param
      /*Emit content light level info SEI*/
      int         bEmitCLL;
  
