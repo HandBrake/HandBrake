@@ -37,7 +37,7 @@ LIBDOVI_DV.dir   = "$(LIBDOVI.EXTRACT.dir/)dolby_vision"
 LIBDOVI.manifest = --manifest-path="$(LIBDOVI.EXTRACT.dir/)dolby_vision/Cargo.toml"
 LIBDOVI.prefix   = --prefix "$(LIBDOVI.CONFIGURE.prefix)"
 LIBDOVI.extra    = --release --library-type staticlib $(LIBDOVI.prefix) $(LIBDOVI.target) \
-                   --libdir=lib --pkgconfigdir=lib/pkgconfig
+                   --libdir="$(LIBDOVI.CONFIGURE.prefix)/lib" --pkgconfigdir="$(LIBDOVI.CONFIGURE.prefix)/lib/pkgconfig"
 
 LIBDOVI.BUILD.make       = cd $(LIBDOVI_DV.dir); $(CARGO.exe) cbuild
 LIBDOVI.BUILD.extra      = $(LIBDOVI.extra)
