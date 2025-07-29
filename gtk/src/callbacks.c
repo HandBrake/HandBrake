@@ -1431,10 +1431,10 @@ show_scan_progress(signal_user_data_t *ud)
     GtkLabel       * label;
 
     widget = ghb_builder_widget("SourceInfoBox");
-    gtk_widget_hide(widget);
+    gtk_widget_set_visible(widget, FALSE);
 
     widget = ghb_builder_widget("SourceScanBox");
-    gtk_widget_show(widget);
+    gtk_widget_set_visible(widget, TRUE);
 
     progress = GTK_PROGRESS_BAR(ghb_builder_widget("scan_prog"));
     gtk_progress_bar_set_fraction(progress, 0);
@@ -1454,10 +1454,10 @@ hide_scan_progress(signal_user_data_t *ud)
     gtk_progress_bar_set_fraction(progress, 1.0);
 
     widget = ghb_builder_widget("SourceScanBox");
-    gtk_widget_hide(widget);
+    gtk_widget_set_visible(widget, FALSE);
 
     widget = ghb_builder_widget("SourceInfoBox");
-    gtk_widget_show(widget);
+    gtk_widget_set_visible(widget, TRUE);
 }
 
 static void
@@ -1650,11 +1650,11 @@ single_title_dialog (GtkFileChooser *chooser)
 
     adj = gtk_adjustment_new(1, 0, 1000, 1, 10, 10);
     spin = gtk_spin_button_new(adj, 1, 0);
-    gtk_widget_show(spin);
+    gtk_widget_set_visible(spin, TRUE);
     msg = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
     gtk_box_append(GTK_BOX(msg), spin);
     g_signal_connect(dialog, "response", G_CALLBACK(single_title_dialog_response), chooser);
-    gtk_widget_show(dialog);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 static void
@@ -2319,16 +2319,16 @@ mini_preview_update (gboolean has_preview, signal_user_data_t *ud)
     if (ghb_dict_get_bool(ud->prefs, "ShowMiniPreview") && has_preview)
     {
         widget = ghb_builder_widget("summary_image");
-        gtk_widget_hide(widget);
+        gtk_widget_set_visible(widget, FALSE);
         widget = ghb_builder_widget("summary_preview_image");
-        gtk_widget_show(widget);
+        gtk_widget_set_visible(widget, TRUE);
     }
     else
     {
         widget = ghb_builder_widget("summary_image");
-        gtk_widget_show(widget);
+        gtk_widget_set_visible(widget, TRUE);
         widget = ghb_builder_widget("summary_preview_image");
-        gtk_widget_hide(widget);
+        gtk_widget_set_visible(widget, FALSE);
     }
 }
 
@@ -3916,7 +3916,7 @@ ghb_countdown_dialog_show (const gchar *message, const gchar *action,
 
     g_signal_connect(dialog, "response",
                      G_CALLBACK(countdown_dialog_response), timeout_id);
-    gtk_widget_show(dialog);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 G_GNUC_PRINTF(6, 0) static GtkMessageDialog *
@@ -4046,7 +4046,7 @@ ghb_alert_dialog_show (GtkMessageType type, const char *title,
         g_free(message);
     }
     g_signal_connect(dialog, "response", G_CALLBACK(message_dialog_destroy), NULL);
-    gtk_widget_show(dialog);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 GtkWidget *
@@ -4117,7 +4117,7 @@ ghb_stop_encode_dialog_show (signal_user_data_t *ud)
         _("Finish Current and Stop"), _("Continue Encoding"));
     g_signal_connect(dialog, "response",
                      G_CALLBACK(stop_encode_dialog_response), ud);
-    gtk_widget_show(dialog);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 static void
@@ -4140,7 +4140,7 @@ quit_dialog_show (void)
         _("Your movie will be lost if you don't continue encoding."),
         _("Cancel All and Quit"), NULL, NULL, _("Continue Encoding"));
     g_signal_connect(dialog, "response", G_CALLBACK(quit_dialog_response), NULL);
-    gtk_widget_show(dialog);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 static void
@@ -4326,7 +4326,7 @@ ghb_start_next_job(signal_user_data_t *ud)
 
     ghb_log_func();
     progress = ghb_builder_widget("progressbar");
-    gtk_widget_show(progress);
+    gtk_widget_set_visible(progress, TRUE);
 
     count = ghb_array_len(ud->queue);
     for (ii = 0; ii < count; ii++)
@@ -4348,7 +4348,7 @@ ghb_start_next_job(signal_user_data_t *ud)
     ghb_send_notification(GHB_NOTIFY_QUEUE_DONE, 0, ud);
     queue_done_action(ud);
     ghb_update_pending(ud);
-    gtk_widget_hide(progress);
+    gtk_widget_set_visible(progress, FALSE);
     ghb_reset_disk_space_check();
 }
 
@@ -4726,7 +4726,7 @@ ghb_backend_events(signal_user_data_t *ud)
         else
         {
             uninhibit_suspend();
-            gtk_widget_hide(GTK_WIDGET(progress));
+            gtk_widget_set_visible(GTK_WIDGET(progress), FALSE);
             ghb_reset_disk_space_check();
         }
         ghb_save_queue(ud->queue);

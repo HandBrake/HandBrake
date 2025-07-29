@@ -436,7 +436,7 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     gtk_box_set_spacing(hbox, 6);
     gtk_widget_set_margin_start(GTK_WIDGET(hbox), 6);
     gtk_widget_set_margin_end(GTK_WIDGET(hbox), 6);
-    gtk_widget_show(GTK_WIDGET(hbox));
+    gtk_widget_set_visible(GTK_WIDGET(hbox), TRUE);
 
     // Select checkbox
     selected = GTK_CHECK_BUTTON(gtk_check_button_new());
@@ -445,7 +445,7 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
       _("Select this title for adding to the queue.\n"));
     gtk_widget_set_valign(GTK_WIDGET(selected), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(selected), "title_selected");
-    gtk_widget_show(GTK_WIDGET(selected));
+    gtk_widget_set_visible(GTK_WIDGET(selected), TRUE);
     g_signal_connect(selected, "toggled", (GCallback)title_selected_cb, ud);
     gtk_box_append(hbox, GTK_WIDGET(selected));
 
@@ -455,7 +455,7 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     gtk_widget_set_halign(GTK_WIDGET(title), GTK_ALIGN_START);
     gtk_widget_set_valign(GTK_WIDGET(title), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(title), "title_label");
-    gtk_widget_show(GTK_WIDGET(title));
+    gtk_widget_set_visible(GTK_WIDGET(title), TRUE);
     gtk_box_append(hbox, GTK_WIDGET(title));
 
     default_title_attrs = gtk_label_get_attributes(title);
@@ -474,7 +474,7 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     gtk_editable_set_width_chars(GTK_EDITABLE(dest_file), 40);
     gtk_widget_set_name(dest_file, "title_file");
     //gtk_widget_set_hexpand(dest_file, TRUE);
-    gtk_widget_show(dest_file);
+    gtk_widget_set_visible(dest_file, TRUE);
     g_signal_connect(dest_file, "changed", (GCallback)title_dest_file_cb, ud);
     gtk_box_append(vbox_dest, dest_file);
     dest_dir = ghb_file_button_new(_("Destination Directory"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
@@ -482,9 +482,9 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
                      G_CALLBACK(title_dest_dir_cb), ud);
     gtk_widget_set_name(GTK_WIDGET(dest_dir), "title_dir");
     gtk_widget_set_hexpand(GTK_WIDGET(dest_dir), TRUE);
-    gtk_widget_show(GTK_WIDGET(dest_dir));
+    gtk_widget_set_visible(GTK_WIDGET(dest_dir), TRUE);
     gtk_box_append(vbox_dest, GTK_WIDGET(dest_dir));
-    gtk_widget_show(GTK_WIDGET(vbox_dest));
+    gtk_widget_set_visible(GTK_WIDGET(vbox_dest), TRUE);
     gtk_box_append(hbox, GTK_WIDGET(vbox_dest));
 
     return GTK_WIDGET(hbox);

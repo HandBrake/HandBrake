@@ -2162,7 +2162,7 @@ preset_import_response_cb (GtkFileChooser *chooser, GtkResponseType response,
                     _("Overwrite Preset?"),
                     _("The preset “%s” already exists. Do you want to overwrite it?"),
                     preset_name);
-            gtk_widget_show(GTK_WIDGET(overwrite_dialog));
+            gtk_widget_set_visible(GTK_WIDGET(overwrite_dialog), TRUE);
             g_signal_connect(overwrite_dialog, "response", G_CALLBACK(preset_write_response), data);
         }
         else
@@ -2545,7 +2545,7 @@ preset_save_as_response_cb (GtkDialog *dialog, int response,
                     _("The preset “%s” already exists. Do you want to overwrite it?"),
                     name);
             g_signal_connect(overwrite, "response", G_CALLBACK(preset_save_as_write_cb), dialog);
-            gtk_widget_show(GTK_WIDGET(overwrite));
+            gtk_widget_set_visible(GTK_WIDGET(overwrite), TRUE);
         }
         else
         {

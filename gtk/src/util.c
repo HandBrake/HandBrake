@@ -88,7 +88,7 @@ int ghb_dialog_run (GtkDialog *dialog)
         gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 
     if (!gtk_widget_get_visible(GTK_WIDGET(dialog)))
-        gtk_widget_show(GTK_WIDGET(dialog));
+        gtk_widget_set_visible(GTK_WIDGET(dialog), TRUE);
 
     response_handler = g_signal_connect(dialog,
                                         "response",
