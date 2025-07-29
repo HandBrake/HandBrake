@@ -1702,7 +1702,7 @@ queue_remove_dialog_show (GhbQueueRow *row)
                 _("Cancel and Remove"), NULL, NULL, _("Continue Encoding"));
 
     g_signal_connect(dialog, "response", G_CALLBACK(queue_remove_response), row);
-    gtk_widget_show(dialog);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 static void

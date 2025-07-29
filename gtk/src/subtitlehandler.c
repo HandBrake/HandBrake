@@ -1234,7 +1234,7 @@ subtitle_add_cb (GSimpleAction *action, GVariant *param, gpointer data)
         GtkWidget *dialog = ghb_builder_widget("subtitle_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), _("Add Subtitles"));
         g_signal_connect(dialog, "response", G_CALLBACK(subtitle_add_response), backup);
-        gtk_widget_show(dialog);
+        gtk_widget_set_visible(dialog, TRUE);
     }
 }
 
@@ -1243,7 +1243,7 @@ subtitle_add_response (GtkWidget *dialog, int response, GhbValue *backup)
 {
     signal_user_data_t *ud = ghb_ud();
     g_signal_handlers_disconnect_by_data(dialog, backup);
-    gtk_widget_hide(dialog);
+    gtk_widget_set_visible(dialog, FALSE);
     if (response == GTK_RESPONSE_OK)
     {
         ghb_value_free(&backup);
@@ -1296,7 +1296,7 @@ subtitle_add_fas_cb (GSimpleAction *action, GVariant *param, gpointer data)
     GtkWidget *dialog = ghb_builder_widget("subtitle_dialog");
     gtk_window_set_title(GTK_WINDOW(dialog), _("Foreign Audio Scan"));
     g_signal_connect(dialog, "response", G_CALLBACK(subtitle_add_fas_response), backup);
-    gtk_widget_show(dialog);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 static void
@@ -1304,7 +1304,7 @@ subtitle_add_fas_response (GtkWidget *dialog, int response, GhbValue *backup)
 {
     signal_user_data_t *ud = ghb_ud();
     g_signal_handlers_disconnect_by_data(dialog, backup);
-    gtk_widget_hide(dialog);
+    gtk_widget_set_visible(dialog, FALSE);
     if (response == GTK_RESPONSE_OK)
     {
         // Disable FAS button
@@ -1810,7 +1810,7 @@ subtitle_edit(GtkTreeView *tv, GtkTreePath *tp, signal_user_data_t *ud)
         GtkWidget *dialog = ghb_builder_widget("subtitle_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), _("Edit Subtitles"));
         g_signal_connect(dialog, "response", G_CALLBACK(subtitle_edit_response), backup);
-        gtk_widget_show(dialog);
+        gtk_widget_set_visible(dialog, TRUE);
     }
 }
 
@@ -1819,7 +1819,7 @@ subtitle_edit_response (GtkWidget *dialog, int response, GhbValue *backup)
 {
     signal_user_data_t *ud = ghb_ud();
     g_signal_handlers_disconnect_by_data(dialog, backup);
-    gtk_widget_hide(dialog);
+    gtk_widget_set_visible(dialog, FALSE);
     if (response == GTK_RESPONSE_OK)
     {
         ghb_value_free(&backup);

@@ -223,7 +223,7 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
     if (gtk_window_is_fullscreen(window))
     {
         reset = ghb_builder_widget("preview_reset");
-        gtk_widget_hide(reset);
+        gtk_widget_set_visible(reset, FALSE);
     }
     else
     {
@@ -662,7 +662,7 @@ preview_reset_clicked_cb (GtkWidget *toggle, gpointer data)
         // is reset above.  So assume it got reset and disable the
         // "Source Resolution" button.
         GtkWidget * widget = ghb_builder_widget("preview_reset");
-        gtk_widget_hide(widget);
+        gtk_widget_set_visible(widget, FALSE);
     }
 }
 

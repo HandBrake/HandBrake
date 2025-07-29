@@ -48,7 +48,7 @@ create_chapter_row (int index, gint64 start, gint64 duration,
     gtk_widget_add_controller(row, econ);
     g_signal_connect(econ, "key-pressed", G_CALLBACK(chapter_keypress_cb), ud);
 
-    gtk_widget_show(row);
+    gtk_widget_set_visible(row, TRUE);
     return row;
 }
 
