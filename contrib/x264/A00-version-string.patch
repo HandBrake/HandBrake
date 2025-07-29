@@ -1,5 +1,5 @@
 diff --git a/x264.h b/x264.h
-index cc22f05d..2cdfad99 100644
+index cc22f05d..a9b3b09b 100644
 --- a/x264.h
 +++ b/x264.h
 @@ -45,7 +45,24 @@ extern "C" {
@@ -22,8 +22,8 @@ index cc22f05d..2cdfad99 100644
 +#undef  X264_POINTVER
 +#endif
  #define X264_BUILD 165
-+#define X264_VERSION " r3214 fe9e4a7f"
-+#define X264_POINTVER "0.165.3214 fe9e4a7f"
++#define X264_VERSION " r3222 b35605ac"
++#define X264_POINTVER "0.165.3222 b35605ac"
  
  #ifdef _WIN32
  #   define X264_DLL_IMPORT __declspec(dllimport)
