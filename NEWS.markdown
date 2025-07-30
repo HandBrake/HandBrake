@@ -34,6 +34,7 @@ Download available from Microsoft:
 #### Audio
 
 - Addded an option to disable track names passthru and autonaming
+- Fixed selection behaviour fallback when no audio track is found (#6666)
 - EAC3 + Atmos is now properly signaled in MP4
 
 #### Subtitles
@@ -47,20 +48,26 @@ Download available from Microsoft:
 - Updated libraries
   - AMF 1.4.36 (AMD VCN video encoding)
   - FFmpeg 7.1.1 (decoding and filters)
-  - HarfBuzz 11.2.1 (subtitles)
+  - HarfBuzz 11.3.3 (subtitles)
   - libass 0.17.4 (subtitles)
   - libiconv 1.18 (character encoding support)
   - libjpeg-turbo 3.1.1 (preview image compression)
   - liblzma (xz) 5.8.1 (LZMA video decoding, e.g. TIFF)
+  - libogg 1.3.6 (Xiph codecs support)
+  - libtheora 1.2.0 (Theora video encoding)
+  - libvpx 1.15.2 (VP8/VP9 video encoding)
   - nv-codec-headers 13.0.19.0 (Nvidia NVENC encoding)
-  - oneVPL 2.14.0 (Intel QSV video encoding/decoding)
-  - SVT-AV1 3.0.2 (AV1 video encoding)
-  - x264 165 r3214 (H.264/AVC video encoding)
-  - x265 r13244 (H.265/HEVC video encoding)
+  - oneVPL 2.15.0 (Intel QSV video encoding/decoding)
+  - SVT-AV1 3.1.0 (AV1 video encoding)
+  - x264 165 r3222 (H.264/AVC video encoding)
+  - x265 r13276 (H.265/HEVC video encoding)
 
 ### Linux
 
 - Fixed Opus and Vorbis passthru validation in Webm
+- Fixed a crash that could happen when removing items from queue
+- Fixed audio bitrates list validation (#6997)
+- Built-in presets for unavailable hardware encoders are now hidden
 
 ### Mac
 
