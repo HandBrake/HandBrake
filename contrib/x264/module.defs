@@ -1,8 +1,8 @@
 $(eval $(call import.MODULE.defs,X264,x264))
 $(eval $(call import.CONTRIB.defs,X264))
 
-X264.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/x264-snapshot-20250225-3214.tar.gz
-X264.FETCH.sha256  = 194b2b55231c3266448330b3242a1743b0b4e4249169d6587a7194b6c187e1c9
+X264.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/x264-snapshot-20250729-3222.tar.gz
+X264.FETCH.sha256  = f5a6862482c5ad63ecc77fc8d1a8344fb62827137f8e0ccaeba80b4727fae3a2
 
 X264.GCC.args.c_std =
 

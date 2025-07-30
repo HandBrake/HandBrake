@@ -1415,7 +1415,7 @@ audio_add_cb (GSimpleAction *action, GVariant *param, gpointer data)
         GtkWidget *dialog = ghb_builder_widget("audio_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), _("Add Audio Track"));
         g_signal_connect(dialog, "response", G_CALLBACK(audio_add_response), backup);
-        gtk_widget_show(dialog);
+        gtk_widget_set_visible(dialog, TRUE);
     }
 }
 
@@ -1424,7 +1424,7 @@ audio_add_response (GtkWidget *dialog, int response, GhbValue *backup)
 {
     signal_user_data_t *ud = ghb_ud();
     g_signal_handlers_disconnect_by_data(dialog, backup);
-    gtk_widget_hide(dialog);
+    gtk_widget_set_visible(dialog, FALSE);
     if (response == GTK_RESPONSE_OK)
     {
         ghb_value_free(&backup);
@@ -1507,7 +1507,7 @@ audio_row_activated_cb (GtkTreeView *tv, GtkTreePath *tp,
         GtkWidget *dialog = ghb_builder_widget("audio_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), _("Edit Audio Track"));
         g_signal_connect(dialog, "response", G_CALLBACK(audio_edit_response), backup);
-        gtk_widget_show(dialog);
+        gtk_widget_set_visible(dialog, TRUE);
     }
 }
 
@@ -1516,7 +1516,7 @@ audio_edit_response (GtkWidget *dialog, int response, GhbValue *backup)
 {
     signal_user_data_t *ud = ghb_ud();
     g_signal_handlers_disconnect_by_data(dialog, backup);
-    gtk_widget_hide(dialog);
+    gtk_widget_set_visible(dialog, FALSE);
     if (response != GTK_RESPONSE_OK)
     {
         GhbValue *audio_dict = ghb_get_job_audio_settings(ud->settings);
@@ -1686,16 +1686,8 @@ static void audio_def_settings_bitrate_show(GtkWidget *widget, gboolean show)
     bitrate_widget = find_widget(widget, "AudioBitrate");
     quality_widget = find_widget(widget, "AudioTrackQualityBox");
 
-    if (show)
-    {
-        gtk_widget_hide(quality_widget);
-        gtk_widget_show(bitrate_widget);
-    }
-    else
-    {
-        gtk_widget_hide(bitrate_widget);
-        gtk_widget_show(quality_widget);
-    }
+    gtk_widget_set_visible(bitrate_widget, show);
+    gtk_widget_set_visible(quality_widget, !show);
 }
 
 static void audio_def_settings_quality_set_sensitive(GtkWidget *w, gboolean s)
@@ -1781,13 +1773,13 @@ create_audio_settings_row (signal_user_data_t *ud)
       _("Set the audio codec to encode this track with."));
     gtk_widget_set_valign(GTK_WIDGET(combo), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(combo), "AudioEncoder");
-    gtk_widget_show(GTK_WIDGET(combo));
+    gtk_widget_set_visible(GTK_WIDGET(combo), TRUE);
     g_signal_connect(combo, "changed", (GCallback)audio_def_encoder_changed_cb, ud);
     gtk_box_append(box2, GTK_WIDGET(combo));
 
     box3 = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
     gtk_widget_set_name(GTK_WIDGET(box3), "br_q_box");
-    gtk_widget_show(GTK_WIDGET(box3));
+    gtk_widget_set_visible(GTK_WIDGET(box3), TRUE);
 
     // Bitrate vs Quality RadioButton
     GtkBox *vbox;
@@ -1801,7 +1793,7 @@ create_audio_settings_row (signal_user_data_t *ud)
     gtk_widget_set_name(radio2, "AudioTrackQualityEnable");
     g_signal_connect(radio2, "toggled", G_CALLBACK(audio_def_quality_enable_changed_cb), ud);
     gtk_box_append(vbox, GTK_WIDGET(radio2));
-    gtk_widget_show(GTK_WIDGET(vbox));
+    gtk_widget_set_visible(GTK_WIDGET(vbox), TRUE);
     gtk_box_append(box3, GTK_WIDGET(vbox));
 
     // Audio Bitrate ComboBox
@@ -1813,7 +1805,7 @@ create_audio_settings_row (signal_user_data_t *ud)
       _("Set the bitrate to encode this track with."));
     gtk_widget_set_valign(GTK_WIDGET(combo), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(combo), "AudioBitrate");
-    gtk_widget_show(GTK_WIDGET(combo));
+    gtk_widget_set_visible(GTK_WIDGET(combo), TRUE);
     g_signal_connect(combo, "changed", (GCallback)audio_def_encode_setting_changed_cb, ud);
     gtk_box_append(box3, GTK_WIDGET(combo));
 
@@ -1840,7 +1832,7 @@ create_audio_settings_row (signal_user_data_t *ud)
 
     gtk_widget_set_valign(GTK_WIDGET(scale), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(scale), "AudioTrackQualityX");
-    gtk_widget_show(GTK_WIDGET(scale));
+    gtk_widget_set_visible(GTK_WIDGET(scale), TRUE);
     g_signal_connect(scale, "value-changed", (GCallback)audio_def_quality_changed_cb, ud);
     gtk_box_append(qbox, GTK_WIDGET(scale));
 
@@ -1850,9 +1842,9 @@ create_audio_settings_row (signal_user_data_t *ud)
     gtk_widget_set_halign(GTK_WIDGET(label), GTK_ALIGN_START);
     gtk_widget_set_valign(GTK_WIDGET(label), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(label), "AudioTrackQualityValue");
-    gtk_widget_show(GTK_WIDGET(label));
+    gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
     gtk_box_append(qbox, GTK_WIDGET(label));
-    gtk_widget_hide(GTK_WIDGET(qbox));
+    gtk_widget_set_visible(GTK_WIDGET(qbox), FALSE);
     gtk_box_append(box3, GTK_WIDGET(qbox));
     gtk_box_append(box2, GTK_WIDGET(box3));
 
@@ -1865,7 +1857,7 @@ create_audio_settings_row (signal_user_data_t *ud)
       _("Set the mixdown of the output audio track."));
     gtk_widget_set_valign(GTK_WIDGET(combo), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(combo), "AudioMixdown");
-    gtk_widget_show(GTK_WIDGET(combo));
+    gtk_widget_set_visible(GTK_WIDGET(combo), TRUE);
     g_signal_connect(combo, "changed", (GCallback)audio_def_encode_setting_changed_cb, ud);
     gtk_box_append(box2, GTK_WIDGET(combo));
 
@@ -1878,13 +1870,13 @@ create_audio_settings_row (signal_user_data_t *ud)
       _("Set the sample rate of the output audio track."));
     gtk_widget_set_valign(GTK_WIDGET(combo), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(combo), "AudioSamplerate");
-    gtk_widget_show(GTK_WIDGET(combo));
+    gtk_widget_set_visible(GTK_WIDGET(combo), TRUE);
     g_signal_connect(combo, "changed", (GCallback)audio_def_encode_setting_changed_cb, ud);
     gtk_box_append(box2, GTK_WIDGET(combo));
 
     box3 = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
     gtk_widget_set_name(GTK_WIDGET(box3), "gain_box");
-    gtk_widget_show(GTK_WIDGET(box3));
+    gtk_widget_set_visible(GTK_WIDGET(box3), TRUE);
 
     // Audio Gain ScaleButton
     const gchar *gain_icons[] = {
@@ -1902,7 +1894,7 @@ create_audio_settings_row (signal_user_data_t *ud)
 
     gtk_widget_set_valign(GTK_WIDGET(scale), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(scale), "AudioTrackGainSlider");
-    gtk_widget_show(GTK_WIDGET(scale));
+    gtk_widget_set_visible(GTK_WIDGET(scale), TRUE);
     g_signal_connect(scale, "value-changed", (GCallback)audio_def_gain_changed_cb, ud);
     gtk_box_append(box3, GTK_WIDGET(scale));
 
@@ -1912,13 +1904,13 @@ create_audio_settings_row (signal_user_data_t *ud)
     gtk_widget_set_halign(GTK_WIDGET(label), GTK_ALIGN_START);
     gtk_widget_set_valign(GTK_WIDGET(label), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(label), "AudioTrackGainValue");
-    gtk_widget_show(GTK_WIDGET(label));
+    gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
     gtk_box_append(box3, GTK_WIDGET(label));
     gtk_box_append(box2, GTK_WIDGET(box3));
 
     box3 = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
     gtk_widget_set_name(GTK_WIDGET(box3), "drc_box");
-    gtk_widget_show(GTK_WIDGET(box3));
+    gtk_widget_set_visible(GTK_WIDGET(box3), TRUE);
 
     // Audio DRC ComboBox
     const gchar *drc_icons[] = {
@@ -1936,7 +1928,7 @@ create_audio_settings_row (signal_user_data_t *ud)
 
     gtk_widget_set_valign(GTK_WIDGET(scale), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(scale), "AudioTrackDRCSlider");
-    gtk_widget_show(GTK_WIDGET(scale));
+    gtk_widget_set_visible(GTK_WIDGET(scale), TRUE);
     g_signal_connect(scale, "value-changed", (GCallback)audio_def_drc_changed_cb, ud);
     gtk_box_append(box3, GTK_WIDGET(scale));
 
@@ -1946,7 +1938,7 @@ create_audio_settings_row (signal_user_data_t *ud)
     gtk_widget_set_halign(GTK_WIDGET(label), GTK_ALIGN_START);
     gtk_widget_set_valign(GTK_WIDGET(label), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(label), "AudioTrackDRCValue");
-    gtk_widget_show(GTK_WIDGET(label));
+    gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
     gtk_box_append(box3, GTK_WIDGET(label));
     gtk_box_append(box2, GTK_WIDGET(box3));
 
@@ -1962,14 +1954,14 @@ create_audio_settings_row (signal_user_data_t *ud)
     gtk_widget_set_valign(GTK_WIDGET(button), GTK_ALIGN_CENTER);
     gtk_widget_set_halign(GTK_WIDGET(button), GTK_ALIGN_END);
     gtk_widget_set_name(GTK_WIDGET(button), "remove_button");
-    gtk_widget_show(GTK_WIDGET(button));
+    gtk_widget_set_visible(GTK_WIDGET(button), TRUE);
     g_signal_connect(button, "clicked", (GCallback)audio_def_setting_remove_cb, ud);
     gtk_box_append(box2, GTK_WIDGET(button));
 
-    gtk_widget_show(GTK_WIDGET(box2));
+    gtk_widget_set_visible(GTK_WIDGET(box2), TRUE);
     gtk_box_append(box, GTK_WIDGET(box2));
 
-    gtk_widget_show(GTK_WIDGET(box));
+    gtk_widget_set_visible(GTK_WIDGET(box), TRUE);
 
     GtkWidget *widget;
     GtkRequisition nat_req;
@@ -2243,8 +2235,9 @@ audio_def_set_limits (signal_user_data_t *ud, GtkWidget *widget, gboolean set_de
         enc = ghb_select_fallback(ud->settings, enc);
     }
     int sr = ghb_settings_audio_samplerate_rate(adict, "AudioSamplerate");
+    int mix = ghb_settings_mixdown_mix(adict, "AudioMixdown");
     int low, high;
-    hb_audio_bitrate_get_limits(enc, sr, HB_AMIXDOWN_MONO, &low, &high);
+    hb_audio_bitrate_get_limits(enc, sr, mix, &low, &high);
     GtkWidget *w = find_widget(GTK_WIDGET(row), "AudioBitrate");
     ghb_audio_bitrate_opts_filter(GTK_COMBO_BOX(w), low, high);
     w = find_widget(GTK_WIDGET(row), "AudioMixdown");

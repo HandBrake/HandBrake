@@ -3358,6 +3358,8 @@ ghb_audio_bitrate_opts_filter(
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL(store), &iter))
     {
+        int highest_rate = -1;
+        int lowest_rate = -1;
         do
         {
             gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 3, &ivalue, -1);
@@ -3368,9 +3370,29 @@ ghb_audio_bitrate_opts_filter(
             else
             {
                 gtk_list_store_set(store, &iter, 1, TRUE, -1);
+                // Store the highest and lowest supported rates
+                // Assume that the list of rates is sorted in ascending order
+                highest_rate = ivalue;
+                if (lowest_rate == -1)
+                    lowest_rate = ivalue;
             }
             done = !gtk_tree_model_iter_next (GTK_TREE_MODEL(store), &iter);
         } while (!done);
+
+        const char *current_id = gtk_combo_box_get_active_id(combo);
+        int current_rate = ghb_lookup_audio_bitrate_rate(current_id);
+        // If the previously set value is not in the allowed range,
+        // set the new value to the lowest/highest allowed
+        if (current_rate < first_rate)
+        {
+            g_autofree char *lowest_id = g_strdup_printf("%d", lowest_rate);
+            gtk_combo_box_set_active_id(combo, lowest_id);
+        }
+        else if (current_rate > last_rate)
+        {
+            g_autofree char *highest_id = g_strdup_printf("%d", highest_rate);
+            gtk_combo_box_set_active_id(combo, highest_id);
+        }
     }
 }
 
