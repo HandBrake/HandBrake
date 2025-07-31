@@ -68,6 +68,8 @@ Download available from Microsoft:
 - Fixed a crash that could happen when removing items from queue
 - Fixed audio bitrates list validation (#6997)
 - Built-in presets for unavailable hardware encoders are now hidden
+- Removed orphaned, no longer maintained locales or locales without active translators (af, cs, da, he, hr, ka, no, pl, pt, ro, ru, si, sk, th, tr, uk_UA, zh_TW). Removed locales are welcome back as soon as the locales are updated.
+- Updated existing and maintained locales.
 
 ### Mac
 

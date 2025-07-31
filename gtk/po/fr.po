@@ -10,7 +10,7 @@
 # Alexis DESMONS, 2022
 # Nicolas Moignot <nicolas@moignot.net>, 2024
 # DJ Dakta <djdakta@gmail.com>, 2024
-# Baptiste D <baptiste+transifex@darthenay.fr>, 2024
+# Baptiste D <baptiste.darthenay@gmail.com>, 2024
 # Tof Bouf, 2025
 # 
 #, fuzzy

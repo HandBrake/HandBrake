@@ -1422,11 +1422,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:4129
 msgid "Export Chapters"
-msgstr ""
+msgstr "导出章节"
 
 #: src/ui/ghb.ui:4131
 msgid "Export chapter list as an XML file"
-msgstr ""
+msgstr "将章节列表导出为 XML 文件​"
 
 #: src/ui/ghb.ui:4147
 msgid "Index"
@@ -1616,7 +1616,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5113
 msgid "ALAC"
-msgstr ""
+msgstr "ALAC"
 
 #: src/ui/ghb.ui:5115
 msgid ""

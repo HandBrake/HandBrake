@@ -6,7 +6,7 @@
 # Translators:
 # Arnold Marko <arnold.marko@gmail.com>, 2024
 # Martin Srebotnjak <miles@filmsi.net>, 2024
-# Gorzy Gorup <gorupgorazd@gmail.com>, 2024
+# Gorzy Gorup <gorupgorazd@gmail.com>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-16 19:27+0000\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Gorzy Gorup <gorupgorazd@gmail.com>, 2024\n"
+"Last-Translator: Gorzy Gorup <gorupgorazd@gmail.com>, 2025\n"
 "Language-Team: Slovenian (Slovenia) (https://app.transifex.com/HandBrakeProject/teams/92423/sl_SI/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1040,7 +1040,7 @@ msgstr ""
 #: src/ui/ghb.ui:3007 src/ui/ghb.ui:3087 src/ui/ghb.ui:3149 src/ui/ghb.ui:3227
 #: src/ui/ghb.ui:3641 src/hb-backend.c:4409 src/hb-backend.c:4434
 msgid "Tune:"
-msgstr ""
+msgstr "Prilagoditev:"
 
 #: src/ui/ghb.ui:3014
 msgid ""
@@ -1334,6 +1334,12 @@ msgid ""
 "You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
+"Priredi nastavitve kodirnika bodisi za večjo učinkovitost stiskanja bodisi za večjo hitrost kodiranja.\n"
+"\n"
+"To predstavlja vaše privzete nastavitve kodiranja.\n"
+"Upoštevani bodo prilagoditve, profili, stopnje in dodatne niz dodatnih možnosti.\n"
+"To možnost nastavite na čim počasnejše kodiranje, saj počasnejše nastavitve\n"
+"pomenijo boljšo kakovost in manjše izhodne datoteke."
 
 #: src/ui/ghb.ui:3614
 msgid "Encoder Preset"
@@ -1654,7 +1660,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5113
 msgid "ALAC"
-msgstr ""
+msgstr "ALAC"
 
 #: src/ui/ghb.ui:5115
 msgid ""
@@ -1688,13 +1694,15 @@ msgstr ""
 
 #: src/ui/ghb.ui:5158
 msgid "Vorbis"
-msgstr ""
+msgstr "Vorbis"
 
 #: src/ui/ghb.ui:5160
 msgid ""
 "Enable this if your playback device supports Vorbis.\n"
 "This permits Vorbis passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"To omogočite, če vaš predvajalnik podpira Vorbis.\n"
+"S tem bo Vorbis veljaven kandidat pri izbiri prepuščanja, kadar je omogočena samodejna izbira prepuščanja."
 
 #: src/ui/ghb.ui:5173
 msgid "Opus"
@@ -1710,21 +1718,23 @@ msgstr ""
 
 #: src/ui/ghb.ui:5196
 msgid "Passthru Fallback:"
-msgstr ""
+msgstr "Rezerva prepuščanja:"
 
 #: src/ui/ghb.ui:5202
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
 msgstr ""
+"Nastavite, s katerim zvočnim kodekom naj poteka kodiranje, če za prepuščanje"
+" zvoka ni mogoče najti ustrezne steze."
 
 #: src/ui/ghb.ui:5218
 msgid "Audio encoder settings for each selected track:"
-msgstr ""
+msgstr "Nastavitve zvočnega kodirnika za vsako izbrano stezo:"
 
 #: src/ui/ghb.ui:5219
 msgid "Each selected source track will be encoded with all selected encoders"
-msgstr ""
+msgstr "Vse izbrane izvorne steze bodo zakodirane z vsemi izbranimi kodirniki"
 
 #: src/ui/ghb.ui:5229
 msgid "Encoder"
@@ -1744,7 +1754,7 @@ msgstr "Hitrost vzorčenja"
 
 #: src/ui/ghb.ui:5253 src/queuehandler.c:550
 msgid "Gain"
-msgstr ""
+msgstr "Ojačitev"
 
 #: src/ui/ghb.ui:5259
 msgid "DRC"
@@ -1759,16 +1769,20 @@ msgid ""
 "Add an audio encoder.\n"
 "Each selected source track will be encoded with all selected encoders."
 msgstr ""
+"Doda zvočni kodirnik.\n"
+"Vsaka izbrana izvorna steza bo zakodirana z vsemi izbranimi kodirniki."
 
 #: src/ui/ghb.ui:5295
 msgid "Use only first encoder for secondary audio"
-msgstr ""
+msgstr "Za sekundarni zvok uporabi le prvi kodirnik"
 
 #: src/ui/ghb.ui:5297
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "  All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
+"S celim seznamom kodirnikov bo zakodirana le primarna zvočna steza.\n"
+"  Vse druge zvočne steze bodo zakodirane zgolj s prvim kodirnikom."
 
 #: src/ui/ghb.ui:5310
 msgid "Add Multiple Titles"
@@ -1852,11 +1866,11 @@ msgstr "Najkrajše trajanje naslova na DVD-ju/Blu-rayju (v sekundah)"
 
 #: src/ui/ghb.ui:5555
 msgid "Maximum DVD/Blu-ray title duration (seconds)"
-msgstr ""
+msgstr "Najdaljše trajanje naslova DVD-ja/Blu-rayja (v sekundah)"
 
 #: src/ui/ghb.ui:5575
 msgid "Keep duplicate titles"
-msgstr ""
+msgstr "Obdrži podvojene naslove"
 
 #: src/ui/ghb.ui:5581
 msgid "Use the same settings for all titles in a batch"
@@ -1895,6 +1909,8 @@ msgid ""
 "The following file extensions will be ignored when scanning a folder. The "
 "list is case insensitive."
 msgstr ""
+"Med skeniranjem mape bodo prezrte datoteke s končnicami s tega seznama. "
+"Velikost črk je važna."
 
 #: src/ui/ghb.ui:5624
 msgctxt "Queue tab in Preferences window"
@@ -1903,7 +1919,7 @@ msgstr "Vrsta"
 
 #: src/ui/ghb.ui:5637
 msgid "Pause queue if disk space is lower than:"
-msgstr ""
+msgstr "Začasno ustavi vrsto, če je na disku prostora manj kot:"
 
 #: src/ui/ghb.ui:5653
 msgid "Disk Free Space Limit"
@@ -1915,21 +1931,23 @@ msgstr "GB"
 
 #: src/ui/ghb.ui:5671
 msgid "Clear completed jobs after an encode completes"
-msgstr ""
+msgstr "Po zaključku kodiranja počisti opravljena opravila"
 
 #: src/ui/ghb.ui:5673
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
 "  Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
+"Opravljena opravila privzeto prejmejo ustrezno oznako in ostanejo v vrsti.\n"
+" To odkljukajte, če želite, da se opravljena opravila sproti pobrišejo iz vrste."
 
 #: src/ui/ghb.ui:5681
 msgid "Power Saving"
-msgstr ""
+msgstr "Varčevanje z energijo"
 
 #: src/ui/ghb.ui:5695
 msgid "Pause encoding when in Power Saver mode"
-msgstr ""
+msgstr "V načinu za varčevanje z energijo začasno ustavi kodiranje"
 
 #: src/ui/ghb.ui:5699
 msgid ""
@@ -1940,7 +1958,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5707
 msgid "Pause encoding when on battery power"
-msgstr ""
+msgstr "Začasno ustavi kodiranje, ko se naprava napaja z baterijo"
 
 #: src/ui/ghb.ui:5711
 msgid ""
@@ -1951,7 +1969,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5719
 msgid "Pause encoding when battery is low"
-msgstr ""
+msgstr "Začasno ustavi kodiranje, ko zmanjkuje energije"
 
 #: src/ui/ghb.ui:5723
 msgid ""
@@ -1959,6 +1977,9 @@ msgid ""
 "level is low. Encoding will resume when the\n"
 "battery is charged."
 msgstr ""
+"Če to odkljukate, se bo kodiranje začasno ustavilo takrat,\n"
+"ko bo baterija skoraj prazna, in nadaljevalo,\n"
+"ko se bo spet začela polniti."
 
 #: src/ui/ghb.ui:5735
 msgid "When Done"
@@ -1966,15 +1987,15 @@ msgstr "Po koncu"
 
 #: src/ui/ghb.ui:5747
 msgid "Default action when queue is completed:"
-msgstr ""
+msgstr "Privzeto dejanje, ko se vrsta zaključi:"
 
 #: src/ui/ghb.ui:5760
 msgid "Show notification when queue is completed"
-msgstr ""
+msgstr "Ob zaključitvi vrste pokaže obvestilo"
 
 #: src/ui/ghb.ui:5768
 msgid "Show notification when each item is completed"
-msgstr ""
+msgstr "Ob vsakem opravljenem elementu pokaže obvestilo"
 
 #: src/ui/ghb.ui:5780
 msgid "Advanced"
@@ -1982,7 +2003,7 @@ msgstr "Napredno"
 
 #: src/ui/ghb.ui:5796
 msgid "Set a custom directory for Handbrake temporary files"
-msgstr ""
+msgstr "Nastavi poseben imenik za začasne datoteke HandBrakea"
 
 #: src/ui/ghb.ui:5798 src/ui/ghb.ui:5814
 msgid ""
@@ -2005,43 +2026,43 @@ msgstr ""
 
 #: src/ui/ghb.ui:5858
 msgid "Use dvdnav (instead of libdvdread)"
-msgstr ""
+msgstr "Uporabi dvdnav (namesto libdvdread)"
 
 #: src/ui/ghb.ui:5876
 msgid "Put individual encode logs in same location as movie"
-msgstr ""
+msgstr "Zapiše posamezne zabeležbe kodiranja na isto lokacijo kot film"
 
 #: src/ui/ghb.ui:5896
 msgid "Activity Log Verbosity Level"
-msgstr ""
+msgstr "Nivo beleženja dejavnosti"
 
 #: src/ui/ghb.ui:5915
 msgid "Activity Log Longevity"
-msgstr ""
+msgstr "Življenjska doba beleženja dejavnosti"
 
 #: src/ui/ghb.ui:5928
 msgid "Scale down High Definition previews"
-msgstr ""
+msgstr "Zmanjšaj predoglede visoke ločljivosti"
 
 #: src/ui/ghb.ui:5940
 msgid "Automatically Scan DVD when loaded"
-msgstr ""
+msgstr "Ob nalaganju DVD-ja ga samodejno odčitaj"
 
 #: src/ui/ghb.ui:5942
 msgid "Scans the DVD whenever a new disc is loaded"
-msgstr ""
+msgstr "Kadar računalnik prebere plošček DVD, ga program odčita"
 
 #: src/ui/ghb.ui:5969
 msgid "Activity Window Font Size"
-msgstr ""
+msgstr "Velikost pisave v oknu dejavnosti"
 
 #: src/ui/ghb.ui:5987
 msgid "Allow Tweaks"
-msgstr ""
+msgstr "Dovoli prilagoditve"
 
 #: src/ui/ghb.ui:6000
 msgid "Allow HandBrake For Dummies"
-msgstr ""
+msgstr "Dovoli HandBrake za telebane"
 
 #: src/ui/ghb.ui:6024
 msgid "Rename Preset"
@@ -2073,11 +2094,11 @@ msgstr "Privzeta predloga"
 
 #: src/ui/ghb.ui:6229
 msgid "Make this the default Preset when HandBrake starts"
-msgstr ""
+msgstr "Ko se HandBrake zažene, naj bo to privzeta predloga"
 
 #: src/ui/ghb.ui:6268
 msgid "HandBrake Preview"
-msgstr ""
+msgstr "Predogled HandBrake"
 
 #: src/ui/ghb.ui:6336
 msgid "Select preview frames."
@@ -2088,18 +2109,20 @@ msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
 msgstr ""
+"Zakodira in predvaja krajši posnetek, začenši od trenutnega položaja "
+"predogleda naprej."
 
 #: src/ui/ghb.ui:6364
 msgid "Preview Video Position"
-msgstr ""
+msgstr "Položaj predogleda posnetka"
 
 #: src/ui/ghb.ui:6377
 msgid "Preview Encode Progress"
-msgstr ""
+msgstr "Napredek kodiranja predogleda"
 
 #: src/ui/ghb.ui:6386
 msgid "Click to toggle full screen mode"
-msgstr ""
+msgstr "S klikom preklopite celozaslonski način"
 
 #: src/ui/ghb.ui:6401
 msgid "<b>Duration:</b>"
@@ -2107,7 +2130,7 @@ msgstr "<b>Trajanje:</b>"
 
 #: src/ui/ghb.ui:6409
 msgid "Set the duration of the live preview in seconds."
-msgstr ""
+msgstr "Nastavi sekunde trajanja predogleda v živo."
 
 #: src/ui/ghb.ui:6419
 msgid "Source Resolution"
@@ -2115,7 +2138,7 @@ msgstr "Ločljivost vira"
 
 #: src/ui/ghb.ui:6422
 msgid "Reset preview window to the source video's resolution"
-msgstr ""
+msgstr "Ponastavi okno predogleda na ločljivost izvornega videoposnetka"
 
 #: src/ui/ghb-chapter-row.ui:38
 msgid "Chapter Title"
@@ -2127,7 +2150,7 @@ msgstr "(Brez)"
 
 #: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:272 src/ghb-queue-row.c:288
 msgid "Pending Queue Item"
-msgstr ""
+msgstr "Čakajoči element"
 
 #: src/ui/ghb-queue-row.ui:31
 msgid "Delete this item"
@@ -2145,7 +2168,7 @@ msgstr "Stanje kodiranja"
 #: src/hb-backend.c:386
 #, c-format
 msgid "Off"
-msgstr ""
+msgstr "Izklopljeno"
 
 #: src/audiohandler.c:439 src/audiohandler.c:768 src/audiohandler.c:1253
 #, c-format
@@ -2179,7 +2202,7 @@ msgstr "Bitna hitrost: %.4g kb/s"
 #: src/audiohandler.c:789
 #, c-format
 msgid "<small>Passthru</small>"
-msgstr ""
+msgstr "<small>Prepuščanje</small>"
 
 #: src/audiohandler.c:798
 #, c-format
@@ -2188,6 +2211,9 @@ msgid ""
 "DRC: %s\n"
 "Track Name: %s"
 msgstr ""
+"%sOjačitev: %s\n"
+"DRC: %s\n"
+"Ime steze: %s"
 
 #: src/audiohandler.c:803
 #, c-format
@@ -2195,6 +2221,8 @@ msgid ""
 "%sGain: %s\n"
 "DRC: %s"
 msgstr ""
+"%sOjačitev: %s\n"
+"DRC: %s"
 
 #: src/audiohandler.c:1409
 msgid "Add Audio Track"
@@ -2297,7 +2325,7 @@ msgstr "Rekurzivno preišči imenike"
 
 #: src/callbacks.c:1896
 msgid "Single Title"
-msgstr ""
+msgstr "En naslov"
 
 #: src/callbacks.c:2253 src/callbacks.c:2397
 msgid "FPS"
@@ -2401,11 +2429,11 @@ msgstr[3] "+ še %d stez s podnapisi"
 
 #: src/callbacks.c:2686
 msgid "storage"
-msgstr ""
+msgstr "shramba"
 
 #: src/callbacks.c:2687
 msgid "display"
-msgstr ""
+msgstr "prikaz"
 
 #: src/callbacks.c:2688
 msgid "Pixel Aspect Ratio"
@@ -2456,7 +2484,7 @@ msgstr "Prekliči trenutno, začni naslednje"
 
 #: src/callbacks.c:4135
 msgid "Finish Current and Stop"
-msgstr ""
+msgstr "Končaj trenutno in ustavi"
 
 #: src/callbacks.c:4135 src/callbacks.c:4159 src/queuehandler.c:1696
 msgid "Continue Encoding"
@@ -2544,7 +2572,7 @@ msgstr "Kodiranje neuspešno."
 
 #: src/callbacks.c:4703
 msgid "Muxing: This may take a while..."
-msgstr ""
+msgstr "Zvijam. To lahko traja nekaj časa..."
 
 #: src/callbacks.c:5513 src/callbacks.c:5520 src/callbacks.c:5528
 msgid "Your encode is complete."
@@ -2582,27 +2610,27 @@ msgstr "_Izberi"
 
 #: src/ghb-queue-row.c:267
 msgid "Running Queue Item"
-msgstr ""
+msgstr "Element v teku"
 
 #: src/ghb-queue-row.c:276
 msgid "Failed Queue Item"
-msgstr ""
+msgstr "Spodleteli element"
 
 #: src/ghb-queue-row.c:280
 msgid "Cancelled Queue Item"
-msgstr ""
+msgstr "Preklicani element"
 
 #: src/ghb-queue-row.c:284
 msgid "Completed Queue Item"
-msgstr ""
+msgstr "Opravljeni element"
 
 #: src/hb-backend.c:55 src/hb-backend.c:80
 msgid "First Matching Selected Languages"
-msgstr ""
+msgstr "Prvi ujemajoči izbrani jeziki"
 
 #: src/hb-backend.c:56 src/hb-backend.c:81
 msgid "All Matching Selected Languages"
-msgstr ""
+msgstr "Vsi ujemajoči izbrani jeziki"
 
 #: src/hb-backend.c:67
 msgid "Foreign Audio Subtitle Track"
@@ -2610,11 +2638,11 @@ msgstr ""
 
 #: src/hb-backend.c:68
 msgid "First Selected Track"
-msgstr ""
+msgstr "Prva izbrana steza"
 
 #: src/hb-backend.c:69
 msgid "Foreign Audio, then First Selected Track"
-msgstr ""
+msgstr "Tujejezični zvok, potem prva izbrana steza"
 
 #: src/hb-backend.c:91 src/queuehandler.c:162
 msgid "Chapters:"
@@ -2739,11 +2767,11 @@ msgstr "480p NTSC"
 
 #: src/hb-backend.c:262
 msgid "Height (Letterbox)"
-msgstr ""
+msgstr "Višina (robovi vodoravno)"
 
 #: src/hb-backend.c:263
 msgid "Width (Pillarbox)"
-msgstr ""
+msgstr "Širina (robovi navpično)"
 
 #: src/hb-backend.c:264
 msgid "Width &amp; Height"
@@ -2751,71 +2779,71 @@ msgstr "Širina &amp; višina"
 
 #: src/hb-backend.c:275
 msgid "Black"
-msgstr ""
+msgstr "Črna"
 
 #: src/hb-backend.c:276
 msgid "Dark Gray"
-msgstr ""
+msgstr "Temnosiva"
 
 #: src/hb-backend.c:277
 msgid "Gray"
-msgstr ""
+msgstr "Siva"
 
 #: src/hb-backend.c:278
 msgid "White"
-msgstr ""
+msgstr "Bela"
 
 #: src/hb-backend.c:289
 msgid "Spatial"
-msgstr ""
+msgstr "Prostorsko"
 
 #: src/hb-backend.c:290
 msgid "Temporal"
-msgstr ""
+msgstr "Časovno"
 
 #: src/hb-backend.c:302
 msgid "Fast"
-msgstr ""
+msgstr "Hitro"
 
 #: src/hb-backend.c:303
 msgid "Optimal"
-msgstr ""
+msgstr "Optimalno"
 
 #: src/hb-backend.c:314
 msgid "Strict"
-msgstr ""
+msgstr "Natančno"
 
 #: src/hb-backend.c:315
 msgid "Normal"
-msgstr ""
+msgstr "Normalno"
 
 #: src/hb-backend.c:326
 msgid "Simple"
-msgstr ""
+msgstr "Preprosto"
 
 #: src/hb-backend.c:327
 msgid "Smart"
-msgstr ""
+msgstr "Pametno"
 
 #: src/hb-backend.c:337
 msgid "Diamond"
-msgstr ""
+msgstr "Diamant"
 
 #: src/hb-backend.c:338
 msgid "Hexagon"
-msgstr ""
+msgstr "Šestkotnik"
 
 #: src/hb-backend.c:339
 msgid "Uneven Multi-Hexagon"
-msgstr ""
+msgstr "Nepravilen večkratni šestkotnik"
 
 #: src/hb-backend.c:340
 msgid "Exhaustive"
-msgstr ""
+msgstr "Temeljito"
 
 #: src/hb-backend.c:341
 msgid "Hadamard Exhaustive"
-msgstr ""
+msgstr "Temeljito (Hadamard)"
 
 #: src/hb-backend.c:351
 msgid "0: SAD, no subpel"
@@ -2867,64 +2895,64 @@ msgstr ""
 
 #: src/hb-backend.c:372
 msgid "Most"
-msgstr ""
+msgstr "Večina"
 
 #: src/hb-backend.c:374
 msgid "Some"
-msgstr ""
+msgstr "Nekaj"
 
 #: src/hb-backend.c:375
 msgid "All"
-msgstr ""
+msgstr "Vse"
 
 #: src/hb-backend.c:387
 msgid "Encode only"
-msgstr ""
+msgstr "Samo kodiranje"
 
 #: src/hb-backend.c:388
 msgid "Always"
-msgstr ""
+msgstr "Vedno"
 
 #: src/hb-backend.c:1476 src/hb-backend.c:1536 src/hb-backend.c:1615
 msgid "Same as source"
-msgstr ""
+msgstr "Enako kot izvor"
 
 #: src/hb-backend.c:1629
 msgid "(NTSC Film)"
-msgstr ""
+msgstr "(NTSC Film)"
 
 #: src/hb-backend.c:1633
 msgid "(PAL Film/Video)"
-msgstr ""
+msgstr "(PAL Film/Video)"
 
 #: src/hb-backend.c:1637
 msgid "(NTSC Video)"
-msgstr ""
+msgstr "(NTSC Video)"
 
 #: src/hb-backend.c:2205
 #, c-format
 msgid "%s - (%05d.MPLS)"
-msgstr ""
+msgstr "%s - (%05d.MPLS)"
 
 #: src/hb-backend.c:2356
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
-msgstr ""
+msgstr "%3d - %02d ur, %02d min, %02d s - %s"
 
 #: src/hb-backend.c:2375
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
-msgstr ""
+msgstr "%3d - %02d ur, %02d min, %02d s - (%05d.MPLS)"
 
 #: src/hb-backend.c:2381
 #, c-format
 msgid "%3d - (%05d.MPLS)"
-msgstr ""
+msgstr "%3d - (%05d.MPLS)"
 
 #: src/hb-backend.c:2387
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
-msgstr ""
+msgstr "%3d - %02d ur, %02d min, %02d s"
 
 #: src/hb-backend.c:2420
 msgid "No Titles"
@@ -2946,11 +2974,11 @@ msgstr "Po meri:"
 
 #: src/hb-backend.c:4334 src/hb-backend.c:4342
 msgid "Invalid Comb Detect Settings"
-msgstr ""
+msgstr "Neveljavne nastavitve zaznavanje resic"
 
 #: src/hb-backend.c:4369 src/hb-backend.c:4378
 msgid "Invalid Deinterlace Settings"
-msgstr ""
+msgstr "Neveljavne nastavitve razpletanja"
 
 #: src/hb-backend.c:4371 src/hb-backend.c:4380 src/hb-backend.c:4407
 #: src/hb-backend.c:4432
@@ -2959,11 +2987,11 @@ msgstr "Filter:"
 
 #: src/hb-backend.c:4405
 msgid "Invalid Denoise Settings"
-msgstr ""
+msgstr "Neveljavne nastavitve razšumljanja"
 
 #: src/hb-backend.c:4430
 msgid "Invalid Sharpen Settings"
-msgstr ""
+msgstr "Neveljavne nastavitve izostritve"
 
 #. mp4/theora combination is not supported.
 #: src/hb-backend.c:4459
@@ -3072,7 +3100,7 @@ msgstr ""
 
 #: src/hb-backend.c:4853
 msgid "Comb Detect"
-msgstr ""
+msgstr "Zaznava resic"
 
 #: src/hb-backend.c:4855
 msgid "Detelecine"
@@ -3171,7 +3199,7 @@ msgstr "Kodiranje na pavzi"
 
 #: src/presets.c:52
 msgid "My Presets"
-msgstr ""
+msgstr "Moje predloge"
 
 #: src/presets.c:87
 msgid "Preset Name"
@@ -3210,16 +3238,16 @@ msgstr "Prepiši"
 
 #: src/presets.c:2124 src/presets.c:2506
 msgid "Overwrite Preset?"
-msgstr ""
+msgstr "Prepišem predlogo?"
 
 #: src/presets.c:2125 src/presets.c:2507
 #, c-format
 msgid "The preset “%s” already exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "Predloga \"%s\" že obstaja. Jo želite prepisati?"
 
 #: src/presets.c:2214
 msgid "Import Preset"
-msgstr ""
+msgstr "Uvozi predlogo"
 
 #: src/presets.c:2220
 msgid "Presets (*.json)"
@@ -3324,7 +3352,7 @@ msgstr "%sPredloga %s"
 #: src/queuehandler.c:341
 #, c-format
 msgid "%sTune %s"
-msgstr ""
+msgstr "%sPrilagodi %s"
 
 #: src/queuehandler.c:346
 #, c-format
@@ -3528,7 +3556,7 @@ msgstr "Zapečeni v sliko"
 
 #: src/subtitlehandler.c:113
 msgid "Passthru"
-msgstr ""
+msgstr "Prepuščanje"
 
 #: src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"
