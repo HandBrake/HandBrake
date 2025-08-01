@@ -1753,9 +1753,14 @@ static void do_job(hb_job_t *job)
         // Init hwaccel context if needed
         if (job->hw_accel)
         {
-            hb_hwaccel_hw_device_ctx_init(job->hw_accel->type,
-                                          job->hw_device_index,
-                                         &job->hw_device_ctx);
+            result = hb_hwaccel_hw_device_ctx_init(job->hw_accel->type,
+                                                   job->hw_device_index,
+                                                  &job->hw_device_ctx);
+            if (result)
+            {
+                job->hw_accel = NULL;
+                job->hw_pix_fmt = AV_PIX_FMT_NONE;
+            }
         }
 
         // Select the optimal pixel formats for the pipeline
