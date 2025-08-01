@@ -2234,12 +2234,14 @@ int hb_qsv_setup_job(hb_job_t *job)
         return 1;
     }
 
-    job->hw_device_index = hb_qsv_get_default_adapter_index();
-
     // Parse the json parameter
-    if (job->hw_device_index >= -1)
+    if (job->hw_device_index > -1)
     {
         hb_qsv_param_parse_dx_index(job, job->hw_device_index);
+    }
+    else
+    {
+        job->hw_device_index = hb_qsv_get_default_adapter_index();
     }
 
     // Parse the advanced options parameter
@@ -3821,6 +3823,7 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
         }
     }
     job->hw_device_index = hb_qsv_get_adapter_index();
+    hb_log("qsv: default qsv adapter has been selected");
     return -1;
 }
 
