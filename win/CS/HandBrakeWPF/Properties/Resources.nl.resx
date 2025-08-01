@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -505,7 +505,7 @@ Met deze bewerking worden geen gecodeerde bestanden verwijderd.</value>
     <value>Wachtrij niet actief</value>
   </data>
   <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
-    <value>Wachtrij gereed</value>
+    <value>Wachtrij voltooid</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
     <value>Laatste taak in wachtrij voltooid</value>
@@ -521,7 +521,7 @@ Met deze bewerking worden geen gecodeerde bestanden verwijderd.</value>
 Weet u zeker dat u HandBrake wilt afsluiten?</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>Voorvertoning</value>
+    <value>Voorbeeld</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
     <value>Vorig voorbeeldbestand is niet verwijderd. Mogelijk is de voorbeeldweergave nog steeds geopend in de mediaspeler. Sluit dit alstublieft.</value>
@@ -533,7 +533,7 @@ Weet u zeker dat u HandBrake wilt afsluiten?</value>
     <value>Geen voorbeeldbestand aangetroffen. Het bestand is mogelijk verwijderd of de codering is mislukt. Controleer het activiteitenlogboek voor details.</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
-    <value>Handrem codeert momenteel al een video!  Op elk moment kan slechts één bestand worden gecodeerd.</value>
+    <value>Handbrake codeert momenteel al een video!  Er kan slechts een bestand tegelijk gecodeerd worden.</value>
   </data>
   <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
     <value>Ondertiteling standaardinstellingen</value>
@@ -562,7 +562,7 @@ Het bestand met de oude voorinstellingen is gearchiveerd naar:</value>
     <value> met {0} geconstateerde fouten. Bestudeer het wachtrijvenster voor details.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
-    <value>Beperkte schijfruimte</value>
+    <value>Weinig schijfruimte</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
     <value>Waarschuwing, de schijf heeft weinig ruimte. HandBrake kan deze codering niet voltooien als er onvoldoende schijfruimte is.</value>
@@ -862,13 +862,13 @@ Tip: de optie Bestanden overschrijven kan worden ingesteld bij voorkeuren.</valu
     <value>Deïnterliniëren-voorinstelling:</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>Denoise:</value>
+    <value>Ruisverwijdering:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>Denoise-voorinstelling</value>
+    <value>Ruisverwijdering-voorinstelling</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>Denoise-afstemming</value>
+    <value>Ruisverwijdering-afstemming</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
     <value>Detelecine:</value>
@@ -892,13 +892,13 @@ Tip: de optie Bestanden overschrijven kan worden ingesteld bij voorkeuren.</valu
     <value>Rotatie:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Sharpen:</value>
+    <value>Verscherpen:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>Sharpen-voorinstelling</value>
+    <value>Verscherpen-voorinstelling</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>Sharpen-afstemming</value>
+    <value>Verscherpen-afstemming</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
     <value>Afstemming:</value>
@@ -1189,7 +1189,7 @@ Tip: de optie Bestanden overschrijven kan worden ingesteld bij voorkeuren.</valu
     <value>DVD lezen</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>LibDVDNav uitschakelen. (libdvdread wordt gebruikt)</value>
+    <value>LibDVDNav uitschakelen (libdvdread wordt gebruikt).</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
     <value>Coderen</value>
@@ -1642,6 +1642,9 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
   <data name="VideoView_Codec" xml:space="preserve">
     <value>Video-encoder:</value>
   </data>
+  <data name="VideoView_ColourRange" xml:space="preserve">
+    <value>Kleurbereik:</value>
+  </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Constante framesnelheid</value>
   </data>
@@ -1790,7 +1793,7 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>De map met HandBrake logboekbestanden is gewist!</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
-    <value>Kennisgeving</value>
+    <value>Mededeling</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
     <value>Voorbereiden op nieuwe versie…</value>
@@ -1865,10 +1868,10 @@ Dit heeft geen invloed op de software-encoders.</value>
 U kunt de bovenstaande tekst slepen/neerzetten of invoeren.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>Vraag om het bestand te overschrijven</value>
+    <value>Vragen om het bestand te overschrijven</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>Probeer het bestand automatisch een andere naam te geven</value>
+    <value>Proberen om het bestand automatisch een andere naam te geven</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
     <value>Het bestand overschrijven</value>
@@ -2199,7 +2202,7 @@ Kies een andere voorinstelling.</value>
     <value>Aangepast (zonder beperkingen)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Breedte &amp; hoogte</value>
+    <value>Breedte en hoogte</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
     <value>Hoogte (brievenbus)</value>
@@ -2259,7 +2262,7 @@ Kies een andere voorinstelling.</value>
     <value>Maximum afmetingen:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
-    <value>Resolutielimiet</value>
+    <value>Resolutielimiet:</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
     <value>Geen</value>
@@ -2292,10 +2295,10 @@ Kies een andere voorinstelling.</value>
     <value>(Niet ondersteund op dit systeem)</value>
   </data>
   <data name="QueueView_Stop" xml:space="preserve">
-    <value>Stop</value>
+    <value>Stoppen</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>De ingevoerde categorienaam bestaat al. Kies een andere naam.</value>
@@ -2476,7 +2479,7 @@ U kunt uw keuze op elk moment wijzigen door de opties in Voorkeuren -&gt; Algeme
     <value>Voorinstelling:</value>
   </data>
   <data name="LogViewModel_Complete" xml:space="preserve">
-    <value>[Klaar]</value>
+    <value>[Voltooid]</value>
   </data>
   <data name="QueueViewModel_EditJob" xml:space="preserve">
     <value>Taak bewerken?</value>
@@ -2651,7 +2654,7 @@ Dit kan te wijten zijn aan beperkingen van de geselecteerde bestandscontainer. Z
     <value>Geen</value>
   </data>
   <data name="SourceSelection_UpdateNow" xml:space="preserve">
-    <value>Nu updaten!</value>
+    <value>Nu bijwerken!</value>
   </data>
   <data name="CropMode_Auto" xml:space="preserve">
     <value>Automatisch</value>
@@ -2864,16 +2867,16 @@ Om meerdere gelijktijdige coderingen toe te staan, schakelt u "Procesisolatie" i
     <value>Logboekvenster openen</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Aangepast</value>
@@ -2975,15 +2978,36 @@ Om meerdere gelijktijdige coderingen toe te staan, schakelt u "Procesisolatie" i
     <value>Vertraging annuleren</value>
   </data>
   <data name="QueueView_StartQueueNow" xml:space="preserve">
-    <value>Wachtrij starten (direct)</value>
+    <value>Wachtrij starten (onmiddellijk)</value>
+  </data>
+  <data name="AudioTrackNaming_None" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="AudioTrackNaming_Unnamed" xml:space="preserve">
+    <value>Alleen zonder naam</value>
+  </data>
+  <data name="AudioTrackNaming_All" xml:space="preserve">
+    <value>Alle sporen</value>
+  </data>
+  <data name="AudioDefaultsView_NamingBehaviour" xml:space="preserve">
+    <value>Gedrag naamgeving van sporen:</value>
+  </data>
+  <data name="AudioDefaultsView_AutoNaming" xml:space="preserve">
+    <value>Autom. naamgeving</value>
+  </data>
+  <data name="AudioDefaultsView_PassthruTrackNames" xml:space="preserve">
+    <value>Namen van sporen doorvoeren</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PassthruTrackName" xml:space="preserve">
+    <value>Namen van sporen doorvoeren</value>
   </data>
   <data name="VideoColourRange_SameAsSource" xml:space="preserve">
-    <value />
+    <value>Zelfde als bron</value>
   </data>
   <data name="VideoColourRange_Full" xml:space="preserve">
-    <value />
+    <value>Volledig</value>
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
-    <value />
+    <value>Beperkt</value>
   </data>
 </root>

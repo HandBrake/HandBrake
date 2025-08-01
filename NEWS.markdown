@@ -94,6 +94,8 @@ Download available from Microsoft:
 - Added new translations
   - Galician (Galego)
   - Hungarian (Magyar)
+- Removed orphaned, no longer maintained locales or locales without active translators (cs-CZ). Removed locales are welcome back as soon as the locales are updated.
+- Updated existing and maintained locales.
 
 
 ## HandBrake 1.9.2

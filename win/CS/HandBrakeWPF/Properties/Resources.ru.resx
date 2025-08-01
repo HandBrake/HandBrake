@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -148,19 +148,19 @@ Custom: при желании вы можете установить макси�
 Source maximum: кодирование всегда будет происходить из исходных файлов, когда это возможно.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+    <value>Эта программа является свободным программным обеспечением; вы можете
+распространять и/или изменять её на условиях GNU General Public License,
+опубликованной Free Software Foundation, версии 2 или (по вашему выбору)
+любой более поздней версии.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Эта программа распространяется в надежде, что она будет полезной,
+но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ; даже без подразумеваемых гарантий
+КОММЕРЧЕСКОЙ ЦЕННОСТИ или ПРИГОДНОСТИ ДЛЯ КОНКРЕТНЫХ ЦЕЛЕЙ.
+См. GNU General Public License для получения дополнительных сведений.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+Вы должны были получить копию GNU General Public License вместе с этой программой;
+если это не так, напишите в Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
     <value>ВНИМАНИЕ: У вас не включено автоматическое именование файлов. Включите его в настройках.</value>
@@ -522,10 +522,10 @@ The Activity log may have further information.</value>
 Вы уверены, что хотите выйти из HandBrake?</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>Изображения предпросмотра</value>
+    <value>Предпросмотр изображения</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Невозможно удалить предыдущий файл предпросмотра. Возможно, в вашем медиаплеере все еще открыт предпросмотр. Пожалуйста, закройте это.</value>
+    <value>Невозможно удалить предыдущий файл предпросмотра. Возможно, в вашем медиаплеере все еще открыт предпросмотр. Пожалуйста, закройте его.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Вы должны сперва сканировать источник и установить кодирование, прежде чем создавать предпросмотр.</value>
@@ -1121,7 +1121,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Метаданные</value>
   </data>
   <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
-    <value>Allow use of DirectX Decoding</value>
+    <value>Разрешить использование декодирования DirectX</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Выбранный формат файла включает в себя недопустимые символы. Они были убраны.</value>
@@ -1133,7 +1133,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Проиграть звук, когда очередь будет закончена</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>Показывать превью на вкладке сводки.</value>
+    <value>Показывать предпросмотр на вкладке сводки.</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Показывать состояние кодирования в заголовке окна приложения.</value>
@@ -1190,7 +1190,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Чтение DVD</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>Выключить LibDVDNav. (вместо него будет использоваться libdvdread)</value>
+    <value>Выключить LibDVDNav. (вместо этого будет использоваться libdvdread)</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
     <value>Кодирование</value>
@@ -1229,7 +1229,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>При запуске</value>
   </data>
   <data name="Options_Output" xml:space="preserve">
-    <value>Выходные файлы:</value>
+    <value>Выходные файлы</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Путь: </value>
@@ -1241,7 +1241,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Предотвращать переход системы в спящий режим во время кодирования</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Количество изображений-превью:</value>
+    <value>Количество изображений-превью для сканирования:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
     <value>Приоритет процесса кодирования:</value>
@@ -1262,7 +1262,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Сбросить до 'Ничего не делать', когда приложение будет перезапущено.</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>Выберите Масштабирование:</value>
+    <value>Выберите масштабирование:</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
     <value>Масштабирование</value>
@@ -1554,7 +1554,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Продолжительность:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Предпросмотр кодир.</value>
+    <value>Предпросмотр кодирования</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Выберите картинку для предварительного просмотра</value>
@@ -1642,6 +1642,9 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
     <value>Видеокодировщик:</value>
+  </data>
+  <data name="VideoView_ColourRange" xml:space="preserve">
+    <value>Color Range:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Постоянная</value>
@@ -1862,8 +1865,8 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Портативный режим: Невозможно прочесть portable.ini. Возможно, в этом файле ошибка. Пожалуйста, попробуйте снова, используя файл portable.ini.template в качестве руководства.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Replacement Options:
-You can drag/drop or enter the text above.</value>
+    <value>Варианты замены:
+Вы можете перетащить/сбросить или ввести текст выше.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Спрашивать</value>
@@ -1943,7 +1946,7 @@ You can drag/drop or enter the text above.</value>
     <value>Экспортировать очередь (только для интерфейса командной строки - CLI)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Использовать Темную Тему. (Необходим Перезапуск, только для Windows 10)</value>
+    <value>Использовать темную тему. (Необходим перезапуск, только для Windows 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>Недоступно</value>
@@ -1958,16 +1961,16 @@ You can drag/drop or enter the text above.</value>
     <value>Критическое состояние батареи! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>System Battery Low! ({0} %). Your encode has been paused.</value>
+    <value>Низкий заряд батареи! ({0} %). Кодирование приостановлено.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
     <value>Свободное пространство на указанном диске ниже {0} ГБ. Ставлю кодирование на паузу...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Automatic Audio Selections</value>
+    <value>Автоматический выбор аудио</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Automatic Subtitle Selections</value>
+    <value>Автоматический выбор субтитров</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
     <value>Система</value>
@@ -2045,7 +2048,7 @@ You can drag/drop or enter the text above.</value>
     <value>Первая совпадающая с выбранными языками</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
-    <value>(Нет)</value>
+    <value>Нет</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
     <value>Первая дорожка</value>
@@ -2057,7 +2060,7 @@ You can drag/drop or enter the text above.</value>
     <value>Иноязычного аудио-дорожка</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
-    <value>(Нет)</value>
+    <value>Нет</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
     <value>Поиск иноязычного аудио</value>
@@ -2126,16 +2129,16 @@ You can drag/drop or enter the text above.</value>
     <value>Всегда использовать путь по умолчанию для каждого нового сгенерированного имени.</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
-    <value>Port range must be between 5000 and 32767</value>
+    <value>Диапазон портов должен быть между 5000 и 32767</value>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Доступна новая версия!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
+    <value>Авторское право (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
-    <value>Low battery level:</value>
+    <value>Низкий уровень батареи:</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
     <value>Приостанавливать задания при низком уровне заряда батареи.</value>
@@ -2159,7 +2162,7 @@ You can drag/drop or enter the text above.</value>
     <value>Каждую задачу в очереди запускать в отдельном процессе-исполнителе</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
-    <value>Default network port for worker:</value>
+    <value>Стандартный сетевой порт для рабочего процесса:</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
     <value>Выбранный шаблон недоступен для использования на данной системе.
@@ -2178,7 +2181,7 @@ You can drag/drop or enter the text above.</value>
     <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Maximum number of simultaneous encodes:</value>
+    <value>Максимальное количество одновременных декодирований:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Отмена</value>
@@ -2193,22 +2196,22 @@ You can drag/drop or enter the text above.</value>
     <value>Сбросить настройки</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
-    <value>Are you sure you wish to reset HandBrake to default settings?</value>
+    <value>Вы уверены, что хотите сбросить HandBrake к настройкам по умолчанию?</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
     <value>Custom (Not Limited)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (Surround)</value>
+    <value>Width &amp; Height</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (Pillarbox)</value>
+    <value>Height (Letterbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Нет</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (Letterbox)</value>
+    <value>Width (Pillarbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
     <value>Fill:</value>
@@ -2217,13 +2220,13 @@ You can drag/drop or enter the text above.</value>
     <value>Colour:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Borders:</value>
+    <value>Границы:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Resolution and Scaling:</value>
+    <value>Разрешение и масштабирование:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Orientation and Cropping:</value>
+    <value>Ориентация и кадрирование:</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Фильтры:</value>
@@ -2256,7 +2259,7 @@ You can drag/drop or enter the text above.</value>
     <value>Пользовательский</value>
   </data>
   <data name="PictureSettingsView_MaxSize" xml:space="preserve">
-    <value>Maximum Size:</value>
+    <value>Максимальный размер:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Лимит разрешения:</value>
@@ -2274,7 +2277,7 @@ You can drag/drop or enter the text above.</value>
     <value>Export selected preset</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>Import Preset(s) from file</value>
+    <value>Импорт шаблона(ов) из файла</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
     <value>Инфо о шаблоне:</value>
@@ -2295,22 +2298,22 @@ You can drag/drop or enter the text above.</value>
     <value>Стоп</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>The category name you entered already exists. Please choose a different name.</value>
+    <value>Введенное название категории уже существует. Пожалуйста, выберите другое имя.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>The category name was empty. Please provide a name.</value>
+    <value>Имя категории пустое. Пожалуйста, укажите имя.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>Enter a name: </value>
+    <value>Введите имя:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
     <value>Шаблон не выбран.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Экспорт польз. настроек:</value>
+    <value>Экспорт всех польз. шаблонов</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
     <value>Предупреждать при объёме памяти менее:</value>
@@ -2319,10 +2322,10 @@ You can drag/drop or enter the text above.</value>
     <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
-    <value>(Not Available)</value>
+    <value>(Недоступно)</value>
   </data>
   <data name="AddPresetView_IsDefault" xml:space="preserve">
-    <value>Is Default:</value>
+    <value>По умолчанию:</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>Но</value>
@@ -2337,16 +2340,16 @@ You can drag/drop or enter the text above.</value>
     <value>Show crop adjustment controls.</value>
   </data>
   <data name="DarkTheme_dark" xml:space="preserve">
-    <value>Use Dark</value>
+    <value>Использовать темную</value>
   </data>
   <data name="DarkTheme_light" xml:space="preserve">
-    <value>Use Light</value>
+    <value>Использовать светлую</value>
   </data>
   <data name="DarkTheme_system" xml:space="preserve">
-    <value>Match System</value>
+    <value>Соответствует системной</value>
   </data>
   <data name="OptionsView_DarkThemeMode" xml:space="preserve">
-    <value>Theme:</value>
+    <value>Тема:</value>
   </data>
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
     <value>(необходим перезапуск)</value>
@@ -2361,7 +2364,7 @@ You can drag/drop or enter the text above.</value>
     <value>Colourspace</value>
   </data>
   <data name="PictureSettingsView_SeePreview" xml:space="preserve">
-    <value>Open Preview</value>
+    <value>Открыть предпросмотр</value>
   </data>
   <data name="SummaryView_SourcePreview" xml:space="preserve">
     <value>Source Preview:</value>
@@ -2388,7 +2391,7 @@ You can drag/drop or enter the text above.</value>
     <value>Errors detected while trying to read source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
-    <value>Unknown failure. Check log for details.</value>
+    <value>Неизвестная ошибка. Проверьте подробности в журнале.</value>
   </data>
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
     <value>Worker Crashed. Check log for details.</value>
@@ -2400,16 +2403,16 @@ You can drag/drop or enter the text above.</value>
     <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
-    <value>Black</value>
+    <value>Черный</value>
   </data>
   <data name="PadColour_Custom" xml:space="preserve">
     <value>Пользовательский</value>
   </data>
   <data name="PadColour_White" xml:space="preserve">
-    <value>White</value>
+    <value>Белый</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
-    <value>RGB Value:</value>
+    <value>Значение RGB:</value>
   </data>
   <data name="SummaryView_Padded" xml:space="preserve">
     <value>(padded)</value>
@@ -2418,7 +2421,7 @@ You can drag/drop or enter the text above.</value>
     <value>Flip:</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>Source Dimensions:</value>
+    <value>Размеры источника:</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
     <value>Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}</value>
@@ -2461,22 +2464,22 @@ You can change your choice at any time by changing the options in Preferences -&
     <value>(По умолчанию)</value>
   </data>
   <data name="PresetDisplayMode_Category" xml:space="preserve">
-    <value>Categories</value>
+    <value>По категориям</value>
   </data>
   <data name="PresetDisplayMode_Flat" xml:space="preserve">
-    <value>Flat</value>
+    <value>Плоско</value>
   </data>
   <data name="PresetDisplayMode_Partial" xml:space="preserve">
-    <value>Partially Flat</value>
+    <value>Частично плоско</value>
   </data>
   <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
-    <value>Choose how presets are displayed in menus:</value>
+    <value>Выберите, как отображаются шаблоны в меню:</value>
   </data>
   <data name="QueueView_SelectedPresets" xml:space="preserve">
     <value>Шаблон:</value>
   </data>
   <data name="LogViewModel_Complete" xml:space="preserve">
-    <value>[Finished]</value>
+    <value>[Завершено]</value>
   </data>
   <data name="QueueViewModel_EditJob" xml:space="preserve">
     <value>Edit Job?</value>
@@ -2564,7 +2567,7 @@ Only queue files from the current version are supported.</value>
     <value>Отправить уведомление на панель задач Windows.</value>
   </data>
   <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
-    <value>Windows Notifications</value>
+    <value>Уведомления Windows</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
     <value>{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.</value>
@@ -2588,7 +2591,7 @@ Only queue files from the current version are supported.</value>
     <value>Выкл</value>
   </data>
   <data name="RightToLeft_TextOnly" xml:space="preserve">
-    <value>Text Only</value>
+    <value>Только текст</value>
   </data>
   <data name="RightToLeft_WholeInterface" xml:space="preserve">
     <value>Entire User Interface</value>
@@ -2708,7 +2711,7 @@ Hardware encoding support can be re-enabled in preferences. </value>
     <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
   </data>
   <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
-    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+    <value>Сканирование субтитров {0:00.00}%, время ожидания: {1}</value>
   </data>
   <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
     <value>Развернуть инфо очереди</value>
@@ -2744,7 +2747,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Источник</value>
   </data>
   <data name="AboutView_Documentation" xml:space="preserve">
-    <value>Documentation:</value>
+    <value>Документация:</value>
   </data>
   <data name="AboutView_GithubTracker" xml:space="preserve">
     <value>Трекер проблем на GitHub:</value>
@@ -2774,16 +2777,16 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Добавить расширение</value>
   </data>
   <data name="Options_ExcludeExtensions" xml:space="preserve">
-    <value>Exclude File Extensions:</value>
+    <value>Исключить расширения файлов:</value>
   </data>
   <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
     <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
-    <value>This file extension already exists in the list.</value>
+    <value>Это расширение файла уже существует в списке.</value>
   </data>
   <data name="Options_FileHandling" xml:space="preserve">
-    <value>File Handling (Scanning)</value>
+    <value>Обработка файлов (сканирование)</value>
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Recursively scan directories when using the folder scan mode.</value>
@@ -2822,7 +2825,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
   </data>
   <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
-    <value>Range Limits:</value>
+    <value>Пределы диапазона:</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
     <value>Limit the length of the titles added to the queue.</value>
@@ -2837,43 +2840,43 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Start Later</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>Queue Start Time:</value>
+    <value>Queue will automatically start at:</value>
   </data>
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
     <value>Shutting Down Encode ...</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>Allow Upscaling</value>
+    <value>Разрешить масштабирование</value>
   </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
-    <value>Optimal Size</value>
+    <value>Оптимальный размер</value>
   </data>
   <data name="OptionsView_Available" xml:space="preserve">
-    <value>Available on this system.</value>
+    <value>Доступно в этой системе.</value>
   </data>
   <data name="OptionsView_NotAvailable" xml:space="preserve">
-    <value>Not available on this system.</value>
+    <value>Недоступно в этой системе.</value>
   </data>
   <data name="MainView_ScanningStatus" xml:space="preserve">
-    <value>Please wait ...</value>
+    <value>Пожалуйста, подождите...</value>
   </data>
   <data name="MainView_Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
   <data name="MainView_OpenLog" xml:space="preserve">
-    <value>Open Log Window</value>
+    <value>Открыть окно с журналами</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Пользовательский</value>
@@ -2938,17 +2941,73 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="Options_RunAction" xml:space="preserve">
     <value>Run Script / Executable: </value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="OptionsViewModel_PortableMode" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="OptionsViewModel_PortableMode" xml:space="preserve">
+    <value>HandBrake is currently configured in portable mode. To update a portable install, please download the latest update from the website.</value>
+  </data>
+  <data name="MetaData_Add" xml:space="preserve">
+    <value>Add Row</value>
+  </data>
+  <data name="MainView_DebugMenu" xml:space="preserve">
+    <value>Debug Menu</value>
+  </data>
+  <data name="MainView_DebugExportData" xml:space="preserve">
+    <value>Export debug file (JSON)</value>
+  </data>
+  <data name="MainView_DebugImportData" xml:space="preserve">
+    <value>Import debug file (JSON)</value>
+  </data>
+  <data name="MainView_DebugQualitySweep" xml:space="preserve">
+    <value>Add to Queue - Quality Sweep</value>
+  </data>
+  <data name="LogView_ChooseLogFile" xml:space="preserve">
+    <value>Choose log file :</value>
+  </data>
+  <data name="LogView_AutoScrolling" xml:space="preserve">
+    <value>Auto Scroll</value>
+  </data>
+  <data name="LogLevel_Minimised" xml:space="preserve">
+    <value>Minimised</value>
+  </data>
+  <data name="LogLevel_Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="LogLevel_Extended" xml:space="preserve">
+    <value>Extended</value>
+  </data>
+  <data name="QueueView_CancelDelayStart" xml:space="preserve">
+    <value>Cancel Delay</value>
+  </data>
+  <data name="QueueView_StartQueueNow" xml:space="preserve">
+    <value>Start Queue (Immediately)</value>
+  </data>
+  <data name="AudioTrackNaming_None" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="AudioTrackNaming_Unnamed" xml:space="preserve">
+    <value>Unnamed Only</value>
+  </data>
+  <data name="AudioTrackNaming_All" xml:space="preserve">
+    <value>All Tracks</value>
+  </data>
+  <data name="AudioDefaultsView_NamingBehaviour" xml:space="preserve">
+    <value>Track Naming Behaviour:</value>
+  </data>
+  <data name="AudioDefaultsView_AutoNaming" xml:space="preserve">
+    <value>Autonaming:</value>
+  </data>
+  <data name="AudioDefaultsView_PassthruTrackNames" xml:space="preserve">
+    <value>Passthru Track Names</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PassthruTrackName" xml:space="preserve">
+    <value>Passthru Track Names</value>
   </data>
   <data name="VideoColourRange_SameAsSource" xml:space="preserve">
-    <value />
+    <value>Как в источнике</value>
   </data>
   <data name="VideoColourRange_Full" xml:space="preserve">
-    <value />
+    <value>Full</value>
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
-    <value />
+    <value>Limited</value>
   </data>
 </root>

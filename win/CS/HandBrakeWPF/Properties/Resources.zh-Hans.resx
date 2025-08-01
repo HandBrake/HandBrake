@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1633,6 +1633,9 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="VideoView_Codec" xml:space="preserve">
     <value>视频编码器：</value>
   </data>
+  <data name="VideoView_ColourRange" xml:space="preserve">
+    <value>颜色范围：</value>
+  </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>固定帧率</value>
   </data>
@@ -2191,16 +2194,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>自定义（不限制）</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>填充（环绕）</value>
+    <value>宽&amp;高</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>高度（左右黑边）</value>
+    <value>高度（上下黑边）</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>无</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>宽度（上下黑边）</value>
+    <value>宽度（左右黑边）</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
     <value>填充：</value>
@@ -2287,7 +2290,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>停止</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>您输入的分类名称已经存在。请选择一个不同的名称。</value>
@@ -2829,7 +2832,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>稍后开始</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>队列开始时间：</value>
+    <value>队列将自动开始于：</value>
   </data>
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
     <value>正在关闭编码...</value>
@@ -2856,16 +2859,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>打开日志窗口</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>自定义</value>
@@ -2916,31 +2919,87 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>帧数</value>
   </data>
   <data name="Options_RangeModeSelection" xml:space="preserve">
-    <value>Default Range Mode for Titles:</value>
+    <value>标题的默认范围模式：</value>
   </data>
   <data name="WhenDone_CustomAction" xml:space="preserve">
-    <value>Custom Action</value>
+    <value>自定义操作</value>
   </data>
   <data name="OptionsView_CustomActionConfig" xml:space="preserve">
-    <value>'Custom Action' Configuration:</value>
+    <value>“自定义操作” 配置：</value>
   </data>
   <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
-    <value>Open Autoname Preferences</value>
+    <value>打开自动命名预设</value>
   </data>
   <data name="Options_RunAction" xml:space="preserve">
-    <value>Run Script / Executable: </value>
+    <value>运行脚本 / 可执行文件：</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="OptionsViewModel_PortableMode" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="OptionsViewModel_PortableMode" xml:space="preserve">
+    <value>HandBrake 当前以便携模式运行。如需更新便携版安装，请从官方网站下载最新版本进行更新。</value>
+  </data>
+  <data name="MetaData_Add" xml:space="preserve">
+    <value>添加行</value>
+  </data>
+  <data name="MainView_DebugMenu" xml:space="preserve">
+    <value>调试菜单</value>
+  </data>
+  <data name="MainView_DebugExportData" xml:space="preserve">
+    <value>导出调试文件（JSON）</value>
+  </data>
+  <data name="MainView_DebugImportData" xml:space="preserve">
+    <value>导入调试文件（JSON）</value>
+  </data>
+  <data name="MainView_DebugQualitySweep" xml:space="preserve">
+    <value>添加到队列 - 质量扫描</value>
+  </data>
+  <data name="LogView_ChooseLogFile" xml:space="preserve">
+    <value>选择日志文件：</value>
+  </data>
+  <data name="LogView_AutoScrolling" xml:space="preserve">
+    <value>自动滚动</value>
+  </data>
+  <data name="LogLevel_Minimised" xml:space="preserve">
+    <value>最小化</value>
+  </data>
+  <data name="LogLevel_Standard" xml:space="preserve">
+    <value>标准</value>
+  </data>
+  <data name="LogLevel_Extended" xml:space="preserve">
+    <value>扩展</value>
+  </data>
+  <data name="QueueView_CancelDelayStart" xml:space="preserve">
+    <value>取消延迟</value>
+  </data>
+  <data name="QueueView_StartQueueNow" xml:space="preserve">
+    <value>开始队列（立即）</value>
+  </data>
+  <data name="AudioTrackNaming_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="AudioTrackNaming_Unnamed" xml:space="preserve">
+    <value>仅未命名</value>
+  </data>
+  <data name="AudioTrackNaming_All" xml:space="preserve">
+    <value>所有轨道</value>
+  </data>
+  <data name="AudioDefaultsView_NamingBehaviour" xml:space="preserve">
+    <value>轨道命名行为：</value>
+  </data>
+  <data name="AudioDefaultsView_AutoNaming" xml:space="preserve">
+    <value>自动命名：</value>
+  </data>
+  <data name="AudioDefaultsView_PassthruTrackNames" xml:space="preserve">
+    <value>直通轨道名称</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PassthruTrackName" xml:space="preserve">
+    <value>直通轨道名称</value>
   </data>
   <data name="VideoColourRange_SameAsSource" xml:space="preserve">
-    <value />
+    <value>与源视频相同</value>
   </data>
   <data name="VideoColourRange_Full" xml:space="preserve">
-    <value />
+    <value>完整</value>
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
-    <value />
+    <value>限制</value>
   </data>
 </root>
