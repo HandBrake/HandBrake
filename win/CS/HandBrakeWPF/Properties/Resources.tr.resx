@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -201,7 +201,7 @@ bulentbt5@gmail.com</value>
     <value>HandBrake</value>
   </data>
   <data name="Main_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake zaten kodlama yapıyor.</value>
+    <value>HandBrake zaten şu anda kodlama yapıyor.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
     <value>Kuyrukta aynı hedef yola sahip işler var. Lütfen bu iş için farklı bir yol seçin.
@@ -1641,6 +1641,9 @@ VLC ve MPC-HC desteklenmektedir. Diğer oynatıcılar da çalışabilir ancak do
   <data name="VideoView_Codec" xml:space="preserve">
     <value>Video Kodlayıcı:</value>
   </data>
+  <data name="VideoView_ColourRange" xml:space="preserve">
+    <value>Color Range:</value>
+  </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Sabit Kare Hızı</value>
   </data>
@@ -2199,16 +2202,16 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Özel (Sınırsız)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Dolgu (Çevreleme)</value>
+    <value>Genişlik &amp; Yükseklik</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Yükseklik (Sütun Kutusu)</value>
+    <value>Yükseklik (Yazı Kutusu)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Yok</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Genişlik (Posta Kutusu)</value>
+    <value>Genişlik (Sütun kutusu)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
     <value>Dolgu:</value>
@@ -2295,7 +2298,7 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Durdur</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Girdiğiniz kategori adı zaten mevcut. Lütfen farklı bir isim seçin.</value>
@@ -2543,7 +2546,7 @@ Yalnızca mevcut sürümdeki kuyruk dosyaları desteklenir.</value>
     <value>HandBrake kodlamayı tamamladı!</value>
   </data>
   <data name="Notifications_QueueDone" xml:space="preserve">
-    <value>HandBrake sıra görevini bitirdi!</value>
+    <value>HandBrake sıraya eklenen görevleri bitirdi!</value>
   </data>
   <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
     <value>Bu aynı zamanda 'Bittiğinde' sekmesindeki Windows görev çubuğu bildirimlerini göster seçeneklerini de devre dışı bırakacaktır. Bu özelliği yeniden etkinleştirmek istiyorsanız bunları yeniden etkinleştirin.</value>
@@ -2837,7 +2840,7 @@ Birden fazla eşzamanlı kodlamaya izin vermek için, Araçlar Menüsü -&gt; Te
     <value>Daha Sonra Başla</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>Sıra Başlangıç ​​Zamanı:</value>
+    <value>Sıra otomatik olarak şu saatte başlayacak:</value>
   </data>
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
     <value>Kodlama Kapatılıyor...</value>
@@ -2864,16 +2867,16 @@ Birden fazla eşzamanlı kodlamaya izin vermek için, Araçlar Menüsü -&gt; Te
     <value>Günlük Penceresini Aç</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Özel</value>
@@ -2938,17 +2941,73 @@ Birden fazla eşzamanlı kodlamaya izin vermek için, Araçlar Menüsü -&gt; Te
   <data name="Options_RunAction" xml:space="preserve">
     <value>Komut / Yürütülebilir Dosyayı Çalıştır:</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="OptionsViewModel_PortableMode" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="OptionsViewModel_PortableMode" xml:space="preserve">
+    <value>HandBrake şu anda taşınabilir modda yapılandırılmış durumda. Taşınabilir bir kurulumu güncellemek için lütfen web sitesinden en son güncellemeyi indirin.</value>
+  </data>
+  <data name="MetaData_Add" xml:space="preserve">
+    <value>Satır Ekle</value>
+  </data>
+  <data name="MainView_DebugMenu" xml:space="preserve">
+    <value>Hata Ayıklama Menüsü</value>
+  </data>
+  <data name="MainView_DebugExportData" xml:space="preserve">
+    <value>Hata ayıklama dosyasını dışa aktar (JSON)</value>
+  </data>
+  <data name="MainView_DebugImportData" xml:space="preserve">
+    <value>Hata ayıklama dosyasını içe aktar (JSON)</value>
+  </data>
+  <data name="MainView_DebugQualitySweep" xml:space="preserve">
+    <value>Sıraya Ekle - Kaliteli Tarama</value>
+  </data>
+  <data name="LogView_ChooseLogFile" xml:space="preserve">
+    <value>Günlük dosyasını seç:</value>
+  </data>
+  <data name="LogView_AutoScrolling" xml:space="preserve">
+    <value>Otomatik Kaydırma</value>
+  </data>
+  <data name="LogLevel_Minimised" xml:space="preserve">
+    <value>Küçültülmüş</value>
+  </data>
+  <data name="LogLevel_Standard" xml:space="preserve">
+    <value>Standart</value>
+  </data>
+  <data name="LogLevel_Extended" xml:space="preserve">
+    <value>Genişletilmiş</value>
+  </data>
+  <data name="QueueView_CancelDelayStart" xml:space="preserve">
+    <value>Gecikmeyi İptal Et</value>
+  </data>
+  <data name="QueueView_StartQueueNow" xml:space="preserve">
+    <value>Sırayı Başlat (Hemen)</value>
+  </data>
+  <data name="AudioTrackNaming_None" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="AudioTrackNaming_Unnamed" xml:space="preserve">
+    <value>Sadece İsimsiz</value>
+  </data>
+  <data name="AudioTrackNaming_All" xml:space="preserve">
+    <value>Tüm Parçalar</value>
+  </data>
+  <data name="AudioDefaultsView_NamingBehaviour" xml:space="preserve">
+    <value>Parça Adlandırma Davranışı:</value>
+  </data>
+  <data name="AudioDefaultsView_AutoNaming" xml:space="preserve">
+    <value>Otomatik Adlandırma:</value>
+  </data>
+  <data name="AudioDefaultsView_PassthruTrackNames" xml:space="preserve">
+    <value>Geçiş Parçası Adları</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PassthruTrackName" xml:space="preserve">
+    <value>Geçiş Parçası Adları</value>
   </data>
   <data name="VideoColourRange_SameAsSource" xml:space="preserve">
-    <value />
+    <value>Kaynakla Aynı</value>
   </data>
   <data name="VideoColourRange_Full" xml:space="preserve">
-    <value />
+    <value>Full</value>
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
-    <value />
+    <value>Limited</value>
   </data>
 </root>

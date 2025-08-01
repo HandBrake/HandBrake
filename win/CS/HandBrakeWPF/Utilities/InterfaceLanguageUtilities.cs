@@ -29,7 +29,6 @@ namespace HandBrakeWPF.Utilities
                        new InterfaceLanguage("bg", "Bulgarian (Български)"),
                        new InterfaceLanguage("ca", "Catalan (Català)"),
                        new InterfaceLanguage("co", "Corsican (Corsu)"),
-                       new InterfaceLanguage("cs-CZ", "Czech (čeština)"),
                        new InterfaceLanguage("gl-ES", "Galician (Galego)"),
                        new InterfaceLanguage("de", "German (Deutsch)"),
                        DefaultEnglishLanguage,

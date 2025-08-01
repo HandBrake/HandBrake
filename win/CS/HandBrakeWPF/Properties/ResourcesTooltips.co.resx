@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -163,13 +163,13 @@ I parametri troppu forte di riduzzione di trostu ponu dannighjà a qualità di a
 I dischi di fonte Blu-ray è DVD anu aspessu parechji tituli ; da bona regula, u più longu hè l’elementu principale</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>« Anamorficu » permette dimensioni arbitrarie d’allucamentu tuttu preservendu l’aspettu d’origine durante a ripruduzzione.
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+« None » disattiveghja « Anamorficu ». E dimensioni d’allucamentu di a video è quelle di l’affissera seranu uguale. Solu ghjuvevule per a cumpatibilità cù certi apparechji anziani.
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+« Automatic » megliureghja a risuluzione d’allucamentu tuttu preservendu e prupurzioni d’affissera d’origine. Ricumandatu.
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+« Custom » permette di definisce dapervoi tutti i parametri. Ghjuvevule per currege un aspettu incurrettu d’affissera di a fonte è per i prufessiunali chì anu bisognu d’un cuntrollu espertu in post-pruduzzione.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Runzicà autumaticamente i bordi neri intornu à a video.</value>
@@ -261,15 +261,13 @@ Supraneghja tutti l’altri parametri.</value>
     <value>Attiveghja una frequenza di fiure d’esciuta variabile cù una frequenza di cresta determinata da u parametru di a frequenza di fiure.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
+    <value>Adatteghja i parametri di u cudificatore per bilancià trà a faccindaghjine di a cumpressione è a vitezza di cudificazione.
 
-This establishes your default encoder settings.
-Tunes, profiles, levels and advanced option string will be applied to this.
-You should generally set this option to the slowest you can bear since slower
-settings will result in better quality or smaller files.
+Què definisce i vostri parametri predefiniti di cudificatore. 
+Rigature, prufili, livelli è ozzioni d’espertu seranu appiecati à st’operazione.
+Di regula, duveriate definisce st’ozzione à u valore u più lentu chì vo siate capace d’accettà, perchè parametri più lenti vi danu una più bella qualità o schedarii più chjuchi.
 
-Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
-or to the left to increase encoding speed at the expense of compression efficiency.</value>
+Trascinate u cursore versu à diritta per aumentà a faccindaghjine di a cumpressione à dannu di a vitezza di a cudificazione, o versu à manca per aumentà a vitezza di a cudificazione à dannu di a faccindaghjine di a cumpressione.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Definisce è assicureghja a cunfurmità cù u prufilu specificatu.
@@ -563,15 +561,15 @@ U flussu binariu cambierà d’una fonte à l’altra.</value>
     <value>Lineetta (-), puntu (.) è virgula (,)</value>
   </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
-    <value>Use highest resolution permitted by above settings</value>
+    <value>Impiegà a risuluzione a più alta permessa da i parametri insù</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+    <value>S’è l’ozzione hè disattivata, e dimensioni à a scala seranu cunfinate à quelle di a fonte.</value>
   </data>
   <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
-    <value>Changing the displays size will stretch the video</value>
+    <value>U cambiamentu di dimensione di l’affissera stinzerà a video</value>
   </data>
   <data name="Video_ColourRange" xml:space="preserve">
-    <value />
+    <value>Gamma di culore. Determineghja i valori di u neru è di u biancu di referenza. Definitu cum’è limitatu per aumentà a cumpatibilità.</value>
   </data>
 </root>

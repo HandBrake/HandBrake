@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -427,10 +427,10 @@ Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
     <value>Zu den Spuren zurückkehren</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
-    <value>Speichern der Kapitelmarkerdatei fehlgeschlagen!</value>
+    <value>Speichern der Kapitelmarkierungsdatei fehlgeschlagen!</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
-    <value>Namen von Kapitelmarkern werden NICHT im Encodierten gesichert.</value>
+    <value>Namen der Kapitelmarkierungen werden NICHT im Encodierten gesichert.</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
     <value>Die Aktion „{0}“ wird in {1} Sekunden ausgeführt.</value>
@@ -587,7 +587,7 @@ Die alten Voreinstellungen wurden archiviert unter:</value>
     <value>Nicht unterstützter Dateityp der Kapiteldatei</value>
   </data>
   <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
-    <value>Ungültige Kapitelinformation oder Quellmedium</value>
+    <value>Ungültige Kapitelinformation des Quellmediums</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
     <value>Die Anzahl der Kapitel des Quellmediums
@@ -616,7 +616,8 @@ Sollen die Kapitelnamen wirklich importiert werden?</value>
     <value>Die Dauer der Kapitel zwischen Quelle und Eingangsdatei stimmen nicht überein.</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>Beim Stoppen der Einlesung ist ein Fehler aufgetreten. Bitte HandBrake neu starten.</value>
+    <value>Ein Fehler ist beim Beenden des Einlesens aufgetreten Bitte HandBrake neu starten.
+ </value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
     <value>HandBrake kann die Voreinstellungsdatei nicht auf eine neue Version aktualisieren.
@@ -654,7 +655,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
     <value>Öffnen des Ausgabeverzeichnises fehlgeschlagen.</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>Bitte überprüfen, dass das Ausgabeverzeichnis gültig ist.</value>
+    <value>Bitte prüfen, ob das Ausgabeverzeichnis gültig ist.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
     <value>Durchgang {0} von {1} wird verarbeitet, (Untertitelscan) {2:00.00} %, verbleibende Einleszeit: {3}, vergangen: {4}</value>
@@ -670,7 +671,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
 Encodiere 1 Aufgabe</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>Warteschlange angehalten. Warnung, auf dem Volume auf dem encodiert wird ist nicht genügend Speicherplatz vorhanden. Bitte mehr Speicherplatz freigeben und „Start“ auswählen, um fortzufahren. Außerdem kann der minimale Speicherplatzwert in den Einstellungen angepasst werden.</value>
+    <value>Warteschlange angehalten. Warnung, auf dem Laufwerk auf dem encodiert wird ist nicht genügend Speicherplatz vorhanden. Bitte mehr Speicherplatz freigeben und „Start“ auswählen, um fortzufahren. Außerdem kann der minimale Speicherplatzwert in den Einstellungen angepasst werden.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
     <value>Warteschlange angehalten</value>
@@ -681,7 +682,7 @@ Encodiere 1 Aufgabe</value>
   <data name="Main_LowDiskspace" xml:space="preserve">
     <value>Das Ausgabeverzeichnis hat wenig freien Speicherplatz.
 
-In den Einstellungen kann definiert werden, ab welcher Batteriekapazität diese Warnung erscheint.
+In den Einstellungen kann definiert werden, ab welcher Speicherplatzkapazität diese Warnung erscheint.
 
 Soll fortgefahren werden?</value>
   </data>
@@ -803,7 +804,7 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
     <value>Wenn  „Auto Passthru“ als der Audiocodec ausgewählt ist.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
-    <value>Kapitelmarker</value>
+    <value>Kapitelmarkierungen</value>
   </data>
   <data name="ChaptersView_ChapterName" xml:space="preserve">
     <value>Kapitelname</value>
@@ -812,7 +813,7 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
     <value>Kapitel</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
-    <value>Kapitelmarker erstellen</value>
+    <value>Kapitelmarkierungen erstellen</value>
   </data>
   <data name="ChaptersView_Duration" xml:space="preserve">
     <value>Dauer</value>
@@ -959,7 +960,7 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
     <value>Erweitert</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>A/V synchron</value>
+    <value>A/V synchronisieren</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
     <value>Winkel:</value>
@@ -1022,7 +1023,7 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
     <value>Bildgröße</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Voreinstellungen editieren</value>
+    <value>Voreinstellungen bearbeiten</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Voreinstellung-Kontextmenü</value>
@@ -1593,7 +1594,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Eingebrannt</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
-    <value>Kapitelmarker</value>
+    <value>Kapitelmarkierungen</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
     <value>Deblock</value>
@@ -1611,7 +1612,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Keine Tonspuren</value>
   </data>
   <data name="SummaryView_NoChapters" xml:space="preserve">
-    <value>Keine Kapitelmarker</value>
+    <value>Keine Kapitelmarkierungen</value>
   </data>
   <data name="SummaryView_NoFilters" xml:space="preserve">
     <value>Keine Filter</value>
@@ -1632,7 +1633,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Drehung</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>Original</value>
+    <value>Speicher</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
     <value>Encodierung in mehreren Durchgängen</value>
@@ -1642,6 +1643,9 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
     <value>Videoencoder:</value>
+  </data>
+  <data name="VideoView_ColourRange" xml:space="preserve">
+    <value>Farbpalette:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Konstante Bildfrequenz</value>
@@ -2052,7 +2056,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Erste Spur</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>Fremdsprache bevorzugt, andere zuerst</value>
+    <value>Fremdsprache bevorzugt, sonst Erste</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
     <value>Fremdsprachentonspur</value>
@@ -2133,7 +2137,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Eine neue Version ist verfügbar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2025 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Geringe Batteriekapazität:</value>
@@ -2189,7 +2193,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Voreinstellung:</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
-    <value>Wie die Quelle</value>
+    <value>Wie Quelle</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
     <value>Einstellungen zurücksetzen</value>
@@ -2297,7 +2301,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Stop</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Der eingegebene Name der Kategorie existiert schon. Bitte einen anderen Namen wählen.</value>
@@ -2840,7 +2844,7 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
     <value>Später starten</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>Warteschlange startet sofort um:</value>
+    <value>Warteschlange startet automatisch um:</value>
   </data>
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
     <value>Encodierung beenden …</value>
@@ -2867,16 +2871,16 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
     <value>Aktivitätsprotokoll öffnen</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Eigene</value>
@@ -2963,7 +2967,7 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
     <value>Log-Datei auswählen:</value>
   </data>
   <data name="LogView_AutoScrolling" xml:space="preserve">
-    <value>Auto-Scrollen</value>
+    <value>Automatischer Bildlauf</value>
   </data>
   <data name="LogLevel_Minimised" xml:space="preserve">
     <value>Minimiert</value>
@@ -2978,15 +2982,36 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
     <value>Verzögerung abbrechen</value>
   </data>
   <data name="QueueView_StartQueueNow" xml:space="preserve">
-    <value>Warteschlange starten (sofort)</value>
+    <value>Warteschlange (sofort) starten</value>
+  </data>
+  <data name="AudioTrackNaming_None" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="AudioTrackNaming_Unnamed" xml:space="preserve">
+    <value>Nur Namenlose</value>
+  </data>
+  <data name="AudioTrackNaming_All" xml:space="preserve">
+    <value>Alle Spuren</value>
+  </data>
+  <data name="AudioDefaultsView_NamingBehaviour" xml:space="preserve">
+    <value>Verhalten der Spurbenennung:</value>
+  </data>
+  <data name="AudioDefaultsView_AutoNaming" xml:space="preserve">
+    <value>Automatische Benennung:</value>
+  </data>
+  <data name="AudioDefaultsView_PassthruTrackNames" xml:space="preserve">
+    <value>Passthru Spurnamen</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PassthruTrackName" xml:space="preserve">
+    <value>Passthru Untertitelnamen</value>
   </data>
   <data name="VideoColourRange_SameAsSource" xml:space="preserve">
-    <value />
+    <value>Wie Quelle</value>
   </data>
   <data name="VideoColourRange_Full" xml:space="preserve">
-    <value />
+    <value>Vollständig</value>
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
-    <value />
+    <value>Begrenzt</value>
   </data>
 </root>
