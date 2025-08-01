@@ -238,16 +238,11 @@ int hb_hwaccel_hw_device_ctx_init(enum AVHWDeviceType device_type, int device_in
     AVBufferRef *ctx;
     AVDictionary *dict = NULL;
 
-    if (device_index >= 0)
+    if (device_index > -1)
     {
         char device[32];
         snprintf(device, 32, "%u", device_index);
-
-        err = av_dict_set(&dict, "child_device", device, 0);
-        if (err < 0)
-        {
-            return err;
-        }
+        av_dict_set(&dict, "child_device", device, 0);
     }
 
 #if defined(_WIN32) || defined(__MINGW32__)
@@ -257,7 +252,7 @@ int hb_hwaccel_hw_device_ctx_init(enum AVHWDeviceType device_type, int device_in
     }
 #endif
 
-    if ((err = av_hwdevice_ctx_create(&ctx, device_type, NULL, NULL, 0)) < 0)
+    if ((err = av_hwdevice_ctx_create(&ctx, device_type, NULL, dict, 0)) < 0)
     {
         hb_error("hwaccel: failed to create hwdevice");
     }
