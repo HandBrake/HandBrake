@@ -182,6 +182,44 @@ int hb_vce_av1_available()
     return is_vcn_av1_available;
 }
 
+int hb_map_vce_preset_name(int vcodec, const char *preset)
+{
+    if (vcodec == HB_VCODEC_FFMPEG_VCE_AV1)
+    {
+        if (strcmp(preset, "high quality") == 0) {
+            return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_HIGH_QUALITY;
+        }  else if (strcmp(preset, "quality") == 0) {
+            return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_QUALITY;
+        } else if (strcmp(preset, "balanced") == 0) {
+            return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_BALANCED;
+        } else if (strcmp(preset, "speed") == 0) {
+            return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_SPEED;
+        }
+    }
+    else if (vcodec == HB_VCODEC_FFMPEG_VCE_H265 ||
+             vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
+    {
+        if (strcmp(preset, "quality") == 0) {
+            return AMF_VIDEO_ENCODER_HEVC_QUALITY_PRESET_QUALITY;
+        } else if (strcmp(preset, "balanced") == 0) {
+            return AMF_VIDEO_ENCODER_HEVC_QUALITY_PRESET_BALANCED;
+        } else if (strcmp(preset, "speed") == 0) {
+            return AMF_VIDEO_ENCODER_HEVC_QUALITY_PRESET_SPEED;
+        }
+    }
+    else if (vcodec == HB_VCODEC_FFMPEG_VCE_H264)
+    {
+        if (strcmp(preset, "quality") == 0) {
+            return AMF_VIDEO_ENCODER_QUALITY_PRESET_QUALITY;
+        } else if (strcmp(preset, "balanced") == 0) {
+            return AMF_VIDEO_ENCODER_QUALITY_PRESET_BALANCED;
+        } else if (strcmp(preset, "speed") == 0) {
+            return  AMF_VIDEO_ENCODER_QUALITY_PRESET_SPEED;
+        }
+    }
+    return 0;
+}
+
 #else // !HB_PROJECT_FEATURE_VCE
 
 int hb_vce_h264_available()
@@ -221,5 +259,9 @@ int hb_vce_av1_available()
     return -1;
 }
 
+int hb_map_vce_preset_name(int vcodec, const char *preset)
+{
+    return 0;
+}
 
 #endif // HB_PROJECT_FEATURE_VCE

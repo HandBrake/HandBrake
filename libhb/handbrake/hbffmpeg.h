@@ -58,8 +58,6 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat, int srcRang
                    int dstW, int dstH, enum AVPixelFormat dstFormat, int dstRange,
                    int flags, int colorspace);
 
-static const char* const hb_vce_preset_names[] = { "speed", "balanced", "quality", NULL, };
-
 void            hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t **buf);
 hb_buffer_t   * hb_avframe_to_video_buffer(AVFrame *frame,
                                            AVRational time_base);

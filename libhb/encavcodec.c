@@ -1367,21 +1367,10 @@ static int apply_encoder_options(hb_job_t *job, AVCodecContext *context, AVDicti
     return 0;
 }
 
-static int apply_vce_preset(AVDictionary **av_opts, const char *preset)
+static int apply_vce_preset(AVDictionary **av_opts, int vcodec, const char *preset)
 {
-    if (!strcasecmp(preset, "speed"))
-    {
-        av_dict_set(av_opts, "quality", "10", 0);
-    }
-    else if (!strcasecmp(preset, "balanced"))
-    {
-        av_dict_set(av_opts, "quality", "5", 0);
-    }
-    else if (!strcasecmp(preset, "quality"))
-    {
-        av_dict_set(av_opts, "quality", "0", 0);
-    }
-
+    int quality = hb_map_vce_preset_name(vcodec, preset);
+    av_dict_set_int(av_opts, "quality", quality, 0);
     return 0;
 }
 
@@ -1487,7 +1476,7 @@ static int apply_encoder_preset(int vcodec, AVCodecContext *context,
         case HB_VCODEC_FFMPEG_VCE_H265:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
         case HB_VCODEC_FFMPEG_VCE_AV1:
-            return apply_vce_preset(av_opts, preset);
+            return apply_vce_preset(av_opts, vcodec, preset);
 
 #if HB_PROJECT_FEATURE_NVENC
         case HB_VCODEC_FFMPEG_NVENC_H264:
@@ -1648,8 +1637,10 @@ const char* const* hb_av_preset_get_names(int encoder)
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_VCE_H265:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
-        case HB_VCODEC_FFMPEG_VCE_AV1:
             return hb_vce_preset_names;
+
+        case HB_VCODEC_FFMPEG_VCE_AV1:
+            return hb_vce_av1_preset_names;
 
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
