@@ -756,19 +756,6 @@ ghb_application_activate (GApplication *app)
     signal_user_data_t *ud = self->ud = g_malloc0(sizeof(signal_user_data_t));
     g_autoptr(GtkCssProvider) provider = gtk_css_provider_new();
 
-    if (ghb_dict_get_bool(ud->prefs, "CustomTmpEnable"))
-    {
-        const char *tmp_dir = ghb_dict_get_string(ud->prefs, "CustomTmpDir");
-        if (tmp_dir != NULL && tmp_dir[0] != 0)
-        {
-#if defined(_WIN32)
-           _putenv_s("TEMP", tmp_dir);
-#else
-            setenv("TEMP", tmp_dir, 1);
-#endif
-        }
-    }
-
     gtk_css_provider_load_from_resource(provider, "/fr/handbrake/ghb/ui/custom.css");
     color_scheme_set_async(APP_PREFERS_LIGHT);
 
@@ -853,6 +840,15 @@ ghb_application_activate (GApplication *app)
     ghb_prefs_load(ud);
     // Store user preferences into ud->prefs
     ghb_prefs_to_settings(ud->prefs);
+
+    if (ghb_dict_get_bool(ud->prefs, "CustomTmpEnable"))
+    {
+        const char *tmp_dir = ghb_dict_get_string(ud->prefs, "CustomTmpDir");
+        if (tmp_dir != NULL && tmp_dir[0] != 0)
+        {
+            hb_set_temporary_directory(tmp_dir);
+        }
+    }
 
     int logLevel = ghb_dict_get_int(ud->prefs, "LoggingLevel");
 
