@@ -1,44 +1,50 @@
+/* Class = "NSMenuItem"; title = "Limited"; ObjectID = "0jj-Au-RHD"; */
+"0jj-Au-RHD.title" = "Обмежений";
+
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "auto"; ObjectID = "4Hq-BG-Ulb"; */
-"4Hq-BG-Ulb.ibShadowedIsNilPlaceholder" = "auto";
+"4Hq-BG-Ulb.ibShadowedIsNilPlaceholder" = "Авто";
 
 /* Class = "NSButtonCell"; title = "Constant Framerate"; ObjectID = "6Dd-IP-Pwt"; */
-"6Dd-IP-Pwt.title" = "Constant Framerate";
+"6Dd-IP-Pwt.title" = "Постійна частота кадрів";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings."; ObjectID = "8CM-4G-oId"; */
-"8CM-4G-oId.ibShadowedToolTip" = "Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings.";
+"8CM-4G-oId.ibShadowedToolTip" = "Рівень відеокодера. Встановлює та забезпечує дотримання вказаного рівня стандарту стиснення відео. Перевизначає всі інші налаштування.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Framerate (Frames Per Second). Number of pictures displayed during each second of video."; ObjectID = "9tc-EO-QMd"; */
-"9tc-EO-QMd.ibShadowedToolTip" = "Framerate (Frames Per Second). Number of pictures displayed during each second of video.";
+"9tc-EO-QMd.ibShadowedToolTip" = "Частота кадрів (кадрів в секунду). Кількість зображень, що відображаються протягом кожної секунди відео.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
-"A3o-Zx-OfM.ibShadowedToolTip" = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video.";
+"A3o-Zx-OfM.ibShadowedToolTip" = "Середній бітрейт змінює якість, щоб швидкість передачі даних залишалася відносно постійною протягом усього відео.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
-"bnV-aE-FVh.ibShadowedToolTip" = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode.";
+"bnV-aE-FVh.ibShadowedToolTip" = "Багатопрохідне кодування аналізує все вихідне відео перед кодуванням. Зібрана інформація дозволяє кодеру приймати більш обґрунтовані рішення щодо якості та швидкості передачі даних у режимі середнього бітрейту.";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
 
 /* Class = "NSTextFieldCell"; title = "Unparse:"; ObjectID = "CLk-dp-1b7"; */
-"CLk-dp-1b7.title" = "Unparse:";
+"CLk-dp-1b7.title" = "Не розбирати:";
 
 /* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "cRF-pz-1jt"; */
-"cRF-pz-1jt.title" = "Encoder Options:";
+"cRF-pz-1jt.title" = "Параметри кодера:";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "auto"; ObjectID = "CRz-On-Jen"; */
-"CRz-On-Jen.ibShadowedIsNilPlaceholder" = "auto";
+"CRz-On-Jen.ibShadowedIsNilPlaceholder" = "Авто";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios."; ObjectID = "cXd-X7-OhB"; */
-"cXd-X7-OhB.ibShadowedToolTip" = "Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios.";
+"cXd-X7-OhB.ibShadowedToolTip" = "Налаштування відеокодера. Додатково налаштовує попередні налаштування кодера для оптимізації налаштувань для конкретних сценаріїв.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Displays all internal video encoder options."; ObjectID = "dwn-bf-Ua0"; */
-"dwn-bf-Ua0.ibShadowedToolTip" = "Displays all internal video encoder options.";
+"dwn-bf-Ua0.ibShadowedToolTip" = "Відображає всі внутрішні параметри відеокодера.";
 
 /* Class = "NSButtonCell"; title = "Fast Decode"; ObjectID = "EcY-w1-bc8"; */
-"EcY-w1-bc8.title" = "Fast Decode";
+"EcY-w1-bc8.title" = "Швидке декодування";
 
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
-"F3s-qR-qeE.title" = "Quality:";
+"F3s-qR-qeE.title" = "Якість:";
+
+/* Class = "NSMenuItem"; title = "Same As Source"; ObjectID = "F37-pp-Zet"; */
+"F37-pp-Zet.title" = "Те саме що і джерело";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.\n\nAdjust the slider to the right to increase compression efficiency at the expense of encoding speed, or to the left to increase encoding speed at the expense of compression efficiency."; ObjectID = "fue-2d-Bjn"; */
 "fue-2d-Bjn.ibShadowedToolTip" = "Попереднє налаштування відеокодера. Налаштовує параметри кодера, щоб збалансувати ефективність стиснення та швидкість кодування. У повільніших попередніх налаштуваннях кодера можуть використовуватися параметри, які є менш сумісними з певними пристроями.\n\nПеремістіть повзунок праворуч, щоб збільшити ефективність стиснення за рахунок швидкості кодування, або ліворуч, щоб збільшити швидкість кодування за рахунок ефективності стиснення.";
@@ -46,66 +52,69 @@
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "Звучання:";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
-"gEp-lv-YUY.ibShadowedToolTip" = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar";
-
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
-"GPu-Ht-bKg.ibShadowedToolTip" = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0.";
+"GPu-Ht-bKg.ibShadowedToolTip" = "Постійна якість змінює бітрейт, щоб візуальна якість залишалася відносно стабільною протягом усього відео.\n\nПересувайте повзунок якості праворуч, щоб збільшити якість, або ліворуч, щоб зменшити якість, з невеликим кроком плюс-мінус 1-2.\n\nРекомендовані значення для кодерів x264 і x265 - RF 18-28. Вищі значення якості можуть призвести до надмірно великих файлів.\n\nx264 кодується без втрат при RF 0.";
 
 /* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "Hho-GY-qOR"; */
-"Hho-GY-qOR.title" = "Profile:";
+"Hho-GY-qOR.title" = "Профіль:";
 
 /* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ja7-Zr-y1P"; */
-"ja7-Zr-y1P.title" = "Additional Options:";
+"ja7-Zr-y1P.title" = "Додаткові опції:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "kh8-d2-hSD"; */
-"kh8-d2-hSD.ibShadowedToolTip" = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings.";
-
-/* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "kPs-u2-fDn"; */
-"kPs-u2-fDn.title" = "Encoder Options:";
+"kh8-d2-hSD.ibShadowedToolTip" = "Профіль відеокодера. Встановлює та забезпечує дотримання вказаного профілю стандарту стиснення відео. Перевизначає всі інші налаштування.";
 
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
-"Mrb-6Q-0YM.title" = "Video Encoder:";
+"Mrb-6Q-0YM.title" = "Відеокодер:";
 
 /* Class = "NSButtonCell"; title = "Multi-pass encoding"; ObjectID = "nPA-nO-Eik"; */
-"nPA-nO-Eik.title" = "Multi-pass encoding";
+"nPA-nO-Eik.title" = "Багатопрохідне кодування";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
-"olm-zg-k9Y.ibShadowedToolTip" = "Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis.";
+"olm-zg-k9Y.ibShadowedToolTip" = "Турбо перший прохід прискорює аналіз багатопрохідного коду з незначним зниженням якості аналізу.";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "Пресет:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility."; ObjectID = "R00-pj-eFX"; */
+"R00-pj-eFX.ibShadowedToolTip" = "Колірний діапазон. Визначає значення еталонних чорного та білого кольорів. Встановлено на обмежений для максимальної сумісності.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r18-GT-7jT"; */
 "r18-GT-7jT.title" = "OtherViews";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "rbo-w6-ENd"; */
-"rbo-w6-ENd.ibShadowedToolTip" = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz";
+"rbo-w6-ENd.ibShadowedToolTip" = "Додаткові параметри відеокодера. Тільки для розширеного використання.\n\nСинтаксис: option-1=foo:opt2=bar,baz";
 
 /* Class = "NSTextFieldCell"; title = "RF:"; ObjectID = "rRB-9F-pHn"; */
 "rRB-9F-pHn.title" = "RF:";
 
 /* Class = "NSTextFieldCell"; title = "Framerate (FPS):"; ObjectID = "SJc-tv-AMH"; */
-"SJc-tv-AMH.title" = "Framerate (FPS):";
+"SJc-tv-AMH.title" = "Частота кадрів (FPS):";
 
 /* Class = "NSTextFieldCell"; title = "Level:"; ObjectID = "sTM-lk-DBC"; */
-"sTM-lk-DBC.title" = "Level:";
+"sTM-lk-DBC.title" = "Рівняння:";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering."; ObjectID = "stU-Fo-Avu"; */
-"stU-Fo-Avu.ibShadowedToolTip" = "Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering.";
+"stU-Fo-Avu.ibShadowedToolTip" = "Швидке декодування використовує налаштування, які зменшують використання процесора під час відтворення закодованого відео. Корисно для пристроїв, які намагаються відтворювати відео без заїкання.";
+
+/* Class = "NSMenuItem"; title = "Full"; ObjectID = "TVE-3O-C2l"; */
+"TVE-3O-C2l.title" = "Повний";
 
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
-"VQe-CK-YDR.title" = "Average Bitrate (kbps):";
+"VQe-CK-YDR.title" = "Середній бітрейт (кбіт/с):";
 
 /* Class = "NSButtonCell"; title = "Turbo analysis pass"; ObjectID = "vSc-VB-NEv"; */
-"vSc-VB-NEv.title" = "Turbo analysis pass";
+"vSc-VB-NEv.title" = "Проходження турбо-аналізу";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder. Determines video type and settings used during encoding."; ObjectID = "xwK-Yu-a1e"; */
-"xwK-Yu-a1e.ibShadowedToolTip" = "Video encoder. Determines video type and settings used during encoding.";
+"xwK-Yu-a1e.ibShadowedToolTip" = "Кодер відео. Визначає тип відео та налаштування, що використовуються під час кодування.";
+
+/* Class = "NSTextFieldCell"; title = "Color Range:"; ObjectID = "yBk-7V-j1G"; */
+"yBk-7V-j1G.title" = "Колірна гамма:";
 
 /* Class = "NSButtonCell"; title = "Constant Quality"; ObjectID = "ZjL-cY-O5f"; */
-"ZjL-cY-O5f.title" = "Constant Quality";
+"ZjL-cY-O5f.title" = "Постійна якість";
 
 /* Class = "NSButtonCell"; title = "Variable Framerate"; ObjectID = "zZo-75-1WG"; */
-"zZo-75-1WG.title" = "Variable Framerate";
+"zZo-75-1WG.title" = "Змінна частота кадрів";
 

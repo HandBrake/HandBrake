@@ -101,7 +101,7 @@
 "jFk-Eg-o2W.ibExternalAccessibilityDescription" = "Chroma Smooth Tune";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Chroma Smooth tune. Further adjusts the Chroma Smooth preset to optimize settings for specific scenarios."; ObjectID = "jFk-Eg-o2W"; */
-"jFk-Eg-o2W.ibShadowedToolTip" = "Chroma Smooth tune. Further adjusts the Chroma Smooth preset to optimize settings for specific scenarios.";
+"jFk-Eg-o2W.ibShadowedToolTip" = "Налаштування згладжування кольоровості. Додатково налаштовує попереднє налаштування згладжування кольоровості для оптимізації налаштувань для певних сценаріїв.";
 
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "KiY-kz-54k"; */
 "KiY-kz-54k.title" = "Користувацький:";
@@ -134,7 +134,7 @@
 "TwB-ag-L1L.title" = "Підвищення різкості:";
 
 /* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "uDH-ts-vs5"; */
-"uDH-ts-vs5.title" = "Color:";
+"uDH-ts-vs5.title" = "Колір:";
 
 /* Class = "NSTextFieldCell"; title = "Deinterlace:"; ObjectID = "VsK-mC-9Pj"; */
 "VsK-mC-9Pj.title" = "Деінтерлейсінг:";
@@ -143,7 +143,7 @@
 "vTS-MJ-8nt.title" = "Detelecine:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace removes comb artifacts from the picture.\n\nBwdif and Yadif are two popular and fast deinterlacers.\n\nDecomb switches between multiple interpolation algorithms for speed and quality."; ObjectID = "xct-UB-bKm"; */
-"xct-UB-bKm.ibShadowedToolTip" = "Deinterlace removes comb artifacts from the picture.\n\nBwdif and Yadif are two popular and fast deinterlacers.\n\nDecomb switches between multiple interpolation algorithms for speed and quality.";
+"xct-UB-bKm.ibShadowedToolTip" = "Деінтерлейс видаляє артефакти гребінця з зображення.\n\nBwdif та Yadif - два популярні та швидкі деінтерлейсери.\n\nDecomb перемикається між кількома алгоритмами інтерполяції для швидкості та якості.";
 
 /* Class = "NSTextFieldCell"; title = "Interlace Detection:"; ObjectID = "xHD-vC-ePQ"; */
 "xHD-vC-ePQ.title" = "Interlace Detection:";

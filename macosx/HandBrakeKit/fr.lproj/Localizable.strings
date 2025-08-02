@@ -345,7 +345,7 @@ HBFilters -> off display name */
 "Range:" = "Plage :";
 
 /* HBVideo -> frame rates display name */
-"Same as source" = "Comme la source";
+"Same as source" = "Identique à la source";
 
 /* Video description */
 "Same as source (constant)" = "Comme la source (constant)";

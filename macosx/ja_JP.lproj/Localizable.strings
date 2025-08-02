@@ -93,6 +93,9 @@ Touch bar */
 /* Main Window -> Same as source destination open panel */
 "Allow" = "許可";
 
+/* Preferences -> Output Name Token */
+"Angle" = "アングル";
+
 /* HBLanguage -> Any language */
 "Any" = "全て";
 
@@ -252,6 +255,9 @@ Queue done notification failed message */
 /* Preferences -> Output Name Token */
 "Height" = "高さ";
 
+/* Queue -> sidebar menu */
+"Hide Sidebar" = "サイドバーを隠す";
+
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "HandBrakeを終了すると現在のエンコードは次回起動時にキューに再読み込みされます。本当に終了しますか＞";
 
@@ -372,6 +378,9 @@ Preview -> window title */
 /* Preview -> window title format */
 "Preview - %@ %@" = "プレビュー - %1$@ %2$@";
 
+/* Preview -> accessibility label */
+"Preview Image, Size: %f x %f, Scale: %.0f%%" = "プレビュー画像, サイズ: %1$f x %2$f, 大きさ: %3$.0f%%";
+
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "コンピューターをスリープ";
 
@@ -477,6 +486,9 @@ Touch bar */
 /* Main Window Presets Toolbar Item */
 "Show Queue Window" = "キューウインドウを表示";
 
+/* Queue -> sidebar menu */
+"Show Sidebar" = "サイドバーを表示する";
+
 /* Queue Window When Done Toolbar Item */
 "Shut Down Computer" = "コンピューターをシャットダウン";
 
@@ -573,6 +585,9 @@ Rename preset window -> name alert message */
 
 /* Preferences -> Output Name Token */
 "Title" = "タイトル";
+
+/* Queue Window Details Toolbar Item */
+"Toggle details sidebar" = "詳細サイドバーの切り替え";
 
 /* HBLanguage -> Unknown language */
 "Unknown" = "不明";

@@ -25,8 +25,14 @@
 /* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
 "66v-2g-DHn.title" = "Impiegà solu u primu cudificatore per a traccia audio secundaria";
 
+/* Class = "NSMenuItem"; title = "Off"; ObjectID = "AaG-rx-x5W"; */
+"AaG-rx-x5W.title" = "Nò";
+
 /* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
 "AQe-Sg-Qgh.title" = "In casu di fiascu di a ricopia :";
+
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "aQn-7q-tQG"; */
+"aQn-7q-tQG.title" = "Nome :";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Audio Track Languages"; ObjectID = "aTC-39-h6S"; */
 "aTC-39-h6S.ibExternalAccessibilityDescription" = "Lingue di a traccia audio";
@@ -84,6 +90,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
 "GHJ-25-kZl.ibShadowedToolTip" = "Attivà st’ozzione s’è u vostru apparechju di ripruduzzione accetta u furmatu MP2. Què permette di selezziunà a ricopia MP2 quandu l’ozzione di ricopia autumatica hè attivata.";
+
+/* Class = "NSMenuItem"; title = "Unnamed Tracks"; ObjectID = "gjw-kg-H3W"; */
+"gjw-kg-H3W.title" = "Traccie senza nome";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "gOm-E9-8K7"; */
 "gOm-E9-8K7.ibShadowedToolTip" = "Attivà st’ozzione s’è u vostru apparechju di ripruduzzione accetta u furmatu FLAC. Què permette di selezziunà a ricopia FLAC quandu l’ozzione di ricopia autumatica hè attivata.";
@@ -169,6 +178,9 @@
 /* Class = "NSButtonCell"; title = "Vorbis"; ObjectID = "rXl-qc-MHk"; */
 "rXl-qc-MHk.title" = "Vorbis";
 
+/* Class = "NSMenuItem"; title = "All Tracks"; ObjectID = "s0U-gp-0sK"; */
+"s0U-gp-0sK.title" = "Tutte e traccie";
+
 /* Class = "NSButtonCell"; title = "ALAC"; ObjectID = "S0X-gJ-f6A"; */
 "S0X-gJ-f6A.title" = "ALAC";
 
@@ -205,11 +217,17 @@
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Cellula di vista di tavula";
 
+/* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "XmJ-lo-ciO"; */
+"XmJ-lo-ciO.title" = "Nome di a traccia di passeghju";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibExternalAccessibilityDescription" = "Guadagnu";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibShadowedToolTip" = "Guadagnu audio in decibel (dB). Aumenteghja o diminuisce u vulume audio.";
+
+/* Class = "NSTextFieldCell"; title = "Autonaming:"; ObjectID = "XOM-af-vzp"; */
+"XOM-af-vzp.title" = "Dinuminazione autumatica :";
 
 /* Class = "NSButtonCell"; title = "MP2"; ObjectID = "Z8O-AS-UdA"; */
 "Z8O-AS-UdA.title" = "MP2";

@@ -97,6 +97,9 @@
 /* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
 "QRj-KI-a03.title" = "Текст";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track."; ObjectID = "QsM-28-Pya"; */
+"QsM-28-Pya.ibShadowedToolTip" = "Конфигуриране на писти за субтитри Поведение при избор. Тези настройки влияят на това кои песни ще бъдат добавени в списъка с песни за субтитри и на настройките, използвани за всяка песен.";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Character Encoding"; ObjectID = "QV0-kE-4yR"; */
 "QV0-kE-4yR.ibExternalAccessibilityDescription" = "SRT/SSA Кодировка";
 
@@ -114,6 +117,9 @@
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
 "S2I-Jd-Lyg.title" = "Добави всички пътечки";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Subtitle tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the subtitle Selection Behavior dialog."; ObjectID = "Syo-rH-vof"; */
+"Syo-rH-vof.ibShadowedToolTip" = "Списък с песни със субтитри. Поведението и настройките за избор на песни се зареждат от избраната предварителна настройка и могат да бъдат конфигурирани чрез диалоговия прозорец Поведение при избор на субтитри.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Selected track"; ObjectID = "Tf3-cP-TGw"; */
 "Tf3-cP-TGw.ibExternalAccessibilityDescription" = "Избрана пътечка";

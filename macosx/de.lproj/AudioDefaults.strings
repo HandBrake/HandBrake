@@ -31,8 +31,8 @@
 /* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
 "AQe-Sg-Qgh.title" = "Passthru-Fallback:";
 
-/* Class = "NSTextFieldCell"; title = "Track name:"; ObjectID = "aQn-7q-tQG"; */
-"aQn-7q-tQG.title" = "Spurname:";
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "aQn-7q-tQG"; */
+"aQn-7q-tQG.title" = "Titel:";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Audio Track Languages"; ObjectID = "aTC-39-h6S"; */
 "aTC-39-h6S.ibExternalAccessibilityDescription" = "Sprachen der Tonspuren";
@@ -217,8 +217,8 @@
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Table View Cell";
 
-/* Class = "NSButtonCell"; title = "Passthru name"; ObjectID = "XmJ-lo-ciO"; */
-"XmJ-lo-ciO.title" = "Passthru Name";
+/* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "XmJ-lo-ciO"; */
+"XmJ-lo-ciO.title" = "Passthru Spurname";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibExternalAccessibilityDescription" = "Verstärkung";

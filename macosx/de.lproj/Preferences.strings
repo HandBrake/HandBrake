@@ -182,7 +182,7 @@
 "FOr-iY-GVl.title" = "Doppelte Titel behalten";
 
 /* Class = "NSButtonCell"; title = "Play notification sound"; ObjectID = "GFD-Ju-1n9"; */
-"GFD-Ju-1n9.title" = "Hinweiston spielen";
+"GFD-Ju-1n9.title" = "Hinweiston abspielen";
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "ImU-Vn-SGr"; */
 "ImU-Vn-SGr.title" = "Einstellungen:";

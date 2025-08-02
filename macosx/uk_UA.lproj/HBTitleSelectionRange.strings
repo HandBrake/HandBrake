@@ -2,58 +2,58 @@
 "4nB-36-clJ.title" = "Діапазон:";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in seconds"; ObjectID = "5mE-y0-UqZ"; */
-"5mE-y0-UqZ.ibExternalAccessibilityDescription" = "Start time in seconds";
+"5mE-y0-UqZ.ibExternalAccessibilityDescription" = "Час запуску в секундах";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "First second to encode."; ObjectID = "5mE-y0-UqZ"; */
-"5mE-y0-UqZ.ibShadowedToolTip" = "First second to encode.";
+"5mE-y0-UqZ.ibShadowedToolTip" = "Перша секунда для кодування.";
 
 /* Class = "NSMenuItem"; title = "To"; ObjectID = "6gI-bi-QlH"; */
 "6gI-bi-QlH.title" = " доки";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in seconds"; ObjectID = "7ug-HX-q9j"; */
-"7ug-HX-q9j.ibExternalAccessibilityDescription" = "End time in seconds";
+"7ug-HX-q9j.ibExternalAccessibilityDescription" = "Час закінчення в секундах";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "7ug-HX-q9j"; */
-"7ug-HX-q9j.ibShadowedToolTip" = "Last second to encode.";
+"7ug-HX-q9j.ibShadowedToolTip" = "Остання секунда для кодування.";
 
 /* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "9A3-Zn-guz"; */
 "9A3-Zn-guz.title" = "Обрізний кінець";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "aeA-ul-8yt"; */
-"aeA-ul-8yt.ibExternalAccessibilityDescription" = "End time in frames";
+"aeA-ul-8yt.ibExternalAccessibilityDescription" = "Час закінчення у фреймах";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "aeA-ul-8yt"; */
-"aeA-ul-8yt.ibShadowedToolTip" = "Last frame to encode.";
+"aeA-ul-8yt.ibShadowedToolTip" = "Останній кадр для кодування.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Range Selection"; ObjectID = "aM2-P8-m4w"; */
-"aM2-P8-m4w.ibExternalAccessibilityDescription" = "Range Selection";
+"aM2-P8-m4w.ibExternalAccessibilityDescription" = "Вибір діапазону";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "aM2-P8-m4w"; */
-"aM2-P8-m4w.ibShadowedToolTip" = "Source range selection. By default, all chapters are selected and the entire source is encoded.";
+"aM2-P8-m4w.ibShadowedToolTip" = "Вибір діапазону джерела. За замовчуванням вибираються всі розділи і кодується все джерело.";
 
 /* Class = "NSMenuItem"; title = "To"; ObjectID = "eap-Rn-0qW"; */
 "eap-Rn-0qW.title" = " доки";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "eoO-dc-hc3"; */
-"eoO-dc-hc3.ibExternalAccessibilityDescription" = "Start Chapter";
+"eoO-dc-hc3.ibExternalAccessibilityDescription" = "Початок розділу";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "eoO-dc-hc3"; */
-"eoO-dc-hc3.ibShadowedToolTip" = "First chapter to encode.";
+"eoO-dc-hc3.ibShadowedToolTip" = "Перший розділ для кодування.";
 
 /* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "gKJ-mm-7Zy"; */
 "gKJ-mm-7Zy.title" = "Обрізний кінець";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "guU-KE-TeY"; */
-"guU-KE-TeY.ibExternalAccessibilityDescription" = "Start time in frames";
+"guU-KE-TeY.ibExternalAccessibilityDescription" = "Час початку в фреймах";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "First frame to encode."; ObjectID = "guU-KE-TeY"; */
-"guU-KE-TeY.ibShadowedToolTip" = "First frame to encode.";
+"guU-KE-TeY.ibShadowedToolTip" = "Перший кадр для кодування.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "End Chapter"; ObjectID = "OHn-dK-gFi"; */
-"OHn-dK-gFi.ibExternalAccessibilityDescription" = "End Chapter";
+"OHn-dK-gFi.ibExternalAccessibilityDescription" = "Кінець розділу";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "OHn-dK-gFi"; */
-"OHn-dK-gFi.ibShadowedToolTip" = "Last chapter to encode.";
+"OHn-dK-gFi.ibShadowedToolTip" = "Останній розділ кодуємо.";
 
 /* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "tOX-Dr-TiC"; */
 "tOX-Dr-TiC.title" = "Обрізний кінець";

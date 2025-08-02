@@ -1,6 +1,9 @@
 /* Class = "NSWindow"; title = "Rename Preset"; ObjectID = "C4G-OG-ksc"; */
 "C4G-OG-ksc.title" = "Rinuminà a prerigatura";
 
+/* Class = "NSTextFieldCell"; title = "New description:"; ObjectID = "GiC-Xi-NGv"; */
+"GiC-Xi-NGv.title" = "Discrizzione nova :";
+
 /* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "N2f-jz-YyX"; */
 "N2f-jz-YyX.title" = "Abbandunà";
 

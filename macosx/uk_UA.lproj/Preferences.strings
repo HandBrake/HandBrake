@@ -1,47 +1,47 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "1mY-Wc-qrc"; */
-"1mY-Wc-qrc.ibShadowedToolTip" = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments.";
+"1mY-Wc-qrc.ibShadowedToolTip" = "Визначає деталізацію контролю якості x264 Constant Quality. Менші значення дають змогу отримати більш дрібні кроки якості.";
 
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "2Js-R4-g0K"; */
-"2Js-R4-g0K.title" = "Shut Down Computer";
+"2Js-R4-g0K.title" = "Вимкнути комп'ютер";
 
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
-"5.title" = "Preferences";
+"5.title" = "Уподобання";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum title duration in seconds. Longer titles will be skipped"; ObjectID = "5AX-Hp-nby"; */
 "5AX-Hp-nby.ibShadowedToolTip" = "Максимальна тривалість заголовка в секундах. Довші заголовки будуть пропущені";
 
 /* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "6Sg-su-vLd"; */
-"6Sg-su-vLd.title" = "Keep preset edits when selecting a new title";
+"6Sg-su-vLd.title" = "Зберігайте попередньо встановлені редагування під час вибору нового заголовка";
 
 /* Class = "NSButtonCell"; title = "Show preview images on summary tab"; ObjectID = "7CY-9s-SGl"; */
-"7CY-9s-SGl.title" = "Show preview images on summary tab";
+"7CY-9s-SGl.title" = "Показати попередній перегляд зображень на вкладці зведення";
 
 /* Class = "NSTextFieldCell"; title = "None"; ObjectID = "7hX-9H-spK"; */
 "7hX-9H-spK.title" = "Відсутня";
 
 /* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "7JH-3c-gwW"; */
-"7JH-3c-gwW.title" = "Quit HandBrake";
+"7JH-3c-gwW.title" = "Кидай HandBrake";
 
 /* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "7Qh-m6-OUo"; */
-"7Qh-m6-OUo.title" = "Do Nothing";
+"7Qh-m6-OUo.title" = "Нічого не робити";
 
 /* Class = "NSTextFieldCell"; title = "When Done:"; ObjectID = "9yk-Cr-cB6"; */
-"9yk-Cr-cB6.title" = "When Done:";
+"9yk-Cr-cB6.title" = "Коли буде готово:";
 
 /* Class = "NSButtonCell"; title = "Automatically check for updates weekly"; ObjectID = "305"; */
-"305.title" = "Automatically check for updates weekly";
+"305.title" = "Автоматична перевірка оновлень щотижня";
 
 /* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
-"307.title" = "At Launch:";
+"307.title" = "На старті:";
 
 /* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
-"348.title" = "Store Activity Logs in same location as video";
+"348.title" = "Зберігайте журнали активності в тому ж місці, що й відео";
 
 /* Class = "NSTextFieldCell"; title = "Activity Logs:"; ObjectID = "351"; */
-"351.title" = "Activity Logs:";
+"351.title" = "Журнали активності:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "352"; */
-"352.ibShadowedToolTip" = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time.";
+"352.ibShadowedToolTip" = "Кількість попередніх переглядів зображень для сканування. Більші значення можуть підвищити точність автоматичного обрізання за рахунок часу сканування титрів.";
 
 /* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
 "355.title" = "10";
@@ -53,10 +53,10 @@
 "357.title" = "20";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "359"; */
-"359.ibShadowedToolTip" = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time.";
+"359.ibShadowedToolTip" = "Кількість попередніх переглядів зображень для сканування. Більші значення можуть підвищити точність автоматичного обрізання за рахунок часу сканування титрів.";
 
 /* Class = "NSTextFieldCell"; title = "Number of picture previews to scan:"; ObjectID = "360"; */
-"360.title" = "Number of picture previews to scan:";
+"360.title" = "Кількість попередніх переглядів зображень для сканування:";
 
 /* Class = "NSMenuItem"; title = "25"; ObjectID = "361"; */
 "361.title" = "25";
@@ -65,25 +65,25 @@
 "362.title" = "30";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "363"; */
-"363.ibShadowedToolTip" = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less.";
+"363.ibShadowedToolTip" = "Рівень багатослівності. Розширена багатослівність записує більше технічної інформації до журналу активності. Мінімальна багатослівність записує менше.";
 
 /* Class = "NSMenuItem"; title = "Extended"; ObjectID = "368"; */
-"368.title" = "Extended";
+"368.title" = "Розширений";
 
 /* Class = "NSMenuItem"; title = "Standard"; ObjectID = "369"; */
-"369.title" = "Standard";
+"369.title" = "Стандартний";
 
 /* Class = "NSMenuItem"; title = "Minimised"; ObjectID = "370"; */
-"370.title" = "Minimised";
+"370.title" = "Мінімізовано";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "371"; */
-"371.ibShadowedToolTip" = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less.";
+"371.ibShadowedToolTip" = "Рівень багатослівності. Розширена багатослівність записує більше технічної інформації до журналу активності. Мінімальна багатослівність записує менше.";
 
 /* Class = "NSTextFieldCell"; title = "Verbosity Level:"; ObjectID = "372"; */
-"372.title" = "Verbosity Level:";
+"372.title" = "Рівень багатослівності:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "387"; */
-"387.ibShadowedToolTip" = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments.";
+"387.ibShadowedToolTip" = "Визначає деталізацію контролю якості x264 Constant Quality. Менші значення дають змогу отримати більш дрібні кроки якості.";
 
 /* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
 "390.title" = "0.20";
@@ -98,16 +98,16 @@
 "394.title" = "1.0";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "395"; */
-"395.ibShadowedToolTip" = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments.";
+"395.ibShadowedToolTip" = "Визначає деталізацію контролю якості x264 Constant Quality. Менші значення дають змогу отримати більш дрібні кроки якості.";
 
 /* Class = "NSTextFieldCell"; title = "Constant Quality fractional granularity:"; ObjectID = "396"; */
-"396.title" = "Constant Quality fractional granularity:";
+"396.title" = "Постійна якість фракційної зернистості:";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)."; ObjectID = "398"; */
-"398.ibShadowedToolTip" = "Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare).";
+"398.ibShadowedToolTip" = "Використовуйте libdvdnav для читання DVD-дисків. Вимикайте її лише для проблемних DVD-дисків, на яких libdvdread працює краще (рідко).";
 
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
-"399.title" = "Use libdvdnav (instead of libdvdread)";
+"399.title" = "Використовуйте libdvdnav (замість libdvdread)";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped"; ObjectID = "480"; */
 "480.ibShadowedToolTip" = "Мінімальна тривалість заголовка в секундах. Коротші заголовки будуть пропущені";
@@ -131,7 +131,7 @@
 "519.title" = "60";
 
 /* Class = "NSTableView"; ibShadowedToolTip = "The following file extensions will be ignored when scanning a folder. The list is case insensitive"; ObjectID = "ax0-hR-WPq"; */
-"ax0-hR-WPq.ibShadowedToolTip" = "The following file extensions will be ignored when scanning a folder. The list is case insensitive";
+"ax0-hR-WPq.ibShadowedToolTip" = "Наступні розширення файлів буде проігноровано під час сканування теки. Список не залежить від регістру";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Keep all the titles to match the titles numbers of a Blu-ray player"; ObjectID = "AYI-kG-it2"; */
 "AYI-kG-it2.ibShadowedToolTip" = "Зберігайте всі епізоди відповідно до номерів епізодів на програвачі Blu-ray";
@@ -140,58 +140,58 @@
 "bG9-Tu-YsZ.title" = "DVD і Blu-ray:";
 
 /* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
-"BHK-QU-DwS.title" = "Enable the VideoToolbox hardware decoders";
+"BHK-QU-DwS.title" = "Увімкніть апаратні декодери VideoToolbox";
 
 /* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "BKV-oH-uht"; */
 "BKV-oH-uht.title" = "GB";
 
 /* Class = "NSTextFieldCell"; title = "Scan:"; ObjectID = "c0L-TU-WML"; */
-"c0L-TU-WML.title" = "Scan:";
+"c0L-TU-WML.title" = "Скануй:";
 
 /* Class = "NSMenuItem"; title = "2"; ObjectID = "Cge-hb-Nh8"; */
 "Cge-hb-Nh8.title" = "2";
 
 /* Class = "NSTextFieldCell"; title = "Encode up to"; ObjectID = "cI9-ML-lqx"; */
-"cI9-ML-lqx.title" = "Encode up to";
+"cI9-ML-lqx.title" = "Кодувати до";
 
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
-"cqp-xU-GOe.title" = "Encoder:";
+"cqp-xU-GOe.title" = "Кодер:";
 
 /* Class = "NSMenuItem"; title = "Auto"; ObjectID = "cZP-RL-fcB"; */
 "cZP-RL-fcB.title" = "Авто";
 
 /* Class = "NSButtonCell"; title = "Also use in combination with software encoders"; ObjectID = "d9B-Vd-jMM"; */
-"d9B-Vd-jMM.title" = "Also use in combination with software encoders";
+"d9B-Vd-jMM.title" = "Використовуйте також у поєднанні з програмними енкодерами";
 
 /* Class = "NSButtonCell"; title = "Pause queue when switching to battery power"; ObjectID = "dMs-sk-W4G"; */
-"dMs-sk-W4G.title" = "Pause queue when switching to battery power";
+"dMs-sk-W4G.title" = "Призупинення черги при переході на живлення від батареї";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed."; ObjectID = "Doh-Ja-Gh7"; */
-"Doh-Ja-Gh7.ibShadowedToolTip" = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed.";
+"Doh-Ja-Gh7.ibShadowedToolTip" = "Апаратні декодери зменшують навантаження на процесор і витрату заряду батареї у поєднанні з апаратним кодувальником. Залежно від швидкості процесора, вони можуть підвищувати або знижувати швидкість кодування.";
 
 /* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "f47-PN-ctH"; */
-"f47-PN-ctH.title" = "Reset to \"Do nothing\" on launch";
+"f47-PN-ctH.title" = "Скидання до «Нічого не робити» під час запуску";
 
 /* Class = "NSMenuItem"; title = "4"; ObjectID = "FB2-Vr-VKP"; */
 "FB2-Vr-VKP.title" = "4";
 
 /* Class = "NSButtonCell"; title = "Show notification when each job is completed"; ObjectID = "fdI-zP-r7j"; */
-"fdI-zP-r7j.title" = "Show notification when each job is completed";
+"fdI-zP-r7j.title" = "Показувати сповіщення після завершення кожного завдання";
 
 /* Class = "NSButtonCell"; title = "Keep duplicate titles"; ObjectID = "FOr-iY-GVl"; */
 "FOr-iY-GVl.title" = "Зберігайте дублікати назв";
 
 /* Class = "NSButtonCell"; title = "Play notification sound"; ObjectID = "GFD-Ju-1n9"; */
-"GFD-Ju-1n9.title" = "Play notification sound";
+"GFD-Ju-1n9.title" = "Відтворити звук сповіщення";
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "ImU-Vn-SGr"; */
-"ImU-Vn-SGr.title" = "Options:";
+"ImU-Vn-SGr.title" = "Варіанти:";
 
 /* Class = "NSMenuItem"; title = "3"; ObjectID = "IWj-tu-UhC"; */
 "IWj-tu-UhC.title" = "3";
 
 /* Class = "NSTextFieldCell"; title = "Decoder:"; ObjectID = "j6w-xf-tC0"; */
-"j6w-xf-tC0.title" = "Decoder:";
+"j6w-xf-tC0.title" = "Декодер:";
 
 /* Class = "NSButtonCell"; title = "Ignore titles shorter than:"; ObjectID = "jNT-vQ-h0c"; */
 "jNT-vQ-h0c.title" = "Ігноруйте назви, коротші за:";
@@ -200,13 +200,13 @@
 "JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "Відсутня";
 
 /* Class = "NSTextFieldCell"; title = "jobs simultaneously"; ObjectID = "kBl-mO-erf"; */
-"kBl-mO-erf.title" = "jobs simultaneously";
+"kBl-mO-erf.title" = "завдань одночасно";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "kCF-8e-gXS"; */
 "kCF-8e-gXS.title" = "Текстова комірка таблиці";
 
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
-"klQ-DW-Kc6.title" = "seconds";
+"klQ-DW-Kc6.title" = "Секунди";
 
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "Ktg-Bh-1Pt"; */
 "Ktg-Bh-1Pt.title" = "Формат:";
@@ -215,19 +215,19 @@
 "l9y-MS-HnS.title" = "Текстова комірка";
 
 /* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 7 days"; ObjectID = "lgn-RF-k0d"; */
-"lgn-RF-k0d.title" = "Remove old logs from main Activity Logs folder after 7 days";
+"lgn-RF-k0d.title" = "Видаляйте старі журнали з основної папки Activity Logs через 7 днів";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "MSp-go-i1C"; */
-"MSp-go-i1C.title" = "Drag labels to Format to compose a naming format.";
+"MSp-go-i1C.title" = "Перетягніть мітки до пункту Формат, щоб створити формат іменування.";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "ODf-uW-BrD"; */
-"ODf-uW-BrD.title" = "Pause queue if disk space is lower than:";
+"ODf-uW-BrD.title" = "Призупинити чергу, якщо місця на диску менше, ніж:";
 
 /* Class = "NSTableColumn"; headerCell.title = "Extensions"; ObjectID = "p5b-EU-Y2V"; */
-"p5b-EU-Y2V.headerCell.title" = "Extensions";
+"p5b-EU-Y2V.headerCell.title" = "Розширення";
 
 /* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "P5f-Vq-TeL"; */
-"P5f-Vq-TeL.title" = "Send file to:";
+"P5f-Vq-TeL.title" = "Надішліть файл:";
 
 /* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "phv-oU-WnC"; */
 "phv-oU-WnC.title" = ".m4v";
@@ -236,71 +236,71 @@
 "PoY-PD-tSq.title" = "Ігноруйте заголовки довші за:";
 
 /* Class = "NSButtonCell"; title = "Show notification when queue is completed"; ObjectID = "Qdg-Tw-rlf"; */
-"Qdg-Tw-rlf.title" = "Show notification when queue is completed";
+"Qdg-Tw-rlf.title" = "Показувати сповіщення про завершення черги";
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "saX-n7-YV0"; */
-"saX-n7-YV0.title" = "Options:";
+"saX-n7-YV0.title" = "Варіанти:";
 
 /* Class = "NSButtonCell"; title = "Clear completed jobs after an encode completes"; ObjectID = "szf-YE-Wml"; */
-"szf-YE-Wml.title" = "Clear completed jobs after an encode completes";
+"szf-YE-Wml.title" = "Очистити виконані завдання після завершення кодування";
 
 /* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "t9b-CO-ShI"; */
-"t9b-CO-ShI.title" = "Use ISO Date Format (YYYY-MM-DD)";
+"t9b-CO-ShI.title" = "Використовуйте формат дати ISO (YYYY-MM-DD)";
 
 /* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "tAb-w4-Xwt"; */
-"tAb-w4-Xwt.title" = "Replace underscores with spaces";
+"tAb-w4-Xwt.title" = "Замініть підкреслення на пробіли";
 
 /* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "UCC-tm-0Sa"; */
-"UCC-tm-0Sa.title" = "Automatically name output files";
+"UCC-tm-0Sa.title" = "Автоматично називати вихідні файли";
 
 /* Class = "NSButtonCell"; title = "Clear completed jobs at launch"; ObjectID = "uIJ-tX-PEA"; */
-"uIJ-tX-PEA.title" = "Clear completed jobs at launch";
+"uIJ-tX-PEA.title" = "Видалити завершені завдання під час запуску";
 
 /* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "v6r-mL-XmA"; */
-"v6r-mL-XmA.title" = "Default MP4 Extension:";
+"v6r-mL-XmA.title" = "Розширення MP4 за замовчуванням:";
 
 /* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "vGu-jb-kdW"; */
-"vGu-jb-kdW.title" = "Remove common punctuation";
+"vGu-jb-kdW.title" = "Видалити поширені розділові знаки";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum free space on destination disk."; ObjectID = "VSi-rk-Vk2"; */
-"VSi-rk-Vk2.ibShadowedToolTip" = "Minimum free space on destination disk.";
+"VSi-rk-Vk2.ibShadowedToolTip" = "Мінімум вільного місця на диску.";
 
 /* Class = "NSMenuItem"; title = "1"; ObjectID = "WAI-Bu-jIu"; */
 "WAI-Bu-jIu.title" = "1";
 
 /* Class = "NSSegmentedCell"; wbU-4j-344.ibShadowedToolTips[0] = "Add Extension"; ObjectID = "wbU-4j-344"; */
-"wbU-4j-344.ibShadowedToolTips[0]" = "Add Extension";
+"wbU-4j-344.ibShadowedToolTips[0]" = "Додати розширення";
 
 /* Class = "NSSegmentedCell"; wbU-4j-344.ibShadowedToolTips[1] = "Remove Selected Extension"; ObjectID = "wbU-4j-344"; */
-"wbU-4j-344.ibShadowedToolTips[1]" = "Remove Selected Extension";
+"wbU-4j-344.ibShadowedToolTips[1]" = "Видалити вибране розширення";
 
 /* Class = "NSTextFieldCell"; title = "Excluded file extensions:"; ObjectID = "wFM-UD-vzS"; */
-"wFM-UD-vzS.title" = "Excluded file extensions:";
+"wFM-UD-vzS.title" = "Вилучені розширення файлів:";
 
 /* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "wgg-7I-LBB"; */
 "wgg-7I-LBB.title" = ".mp4";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "wOW-0q-lpT"; */
-"wOW-0q-lpT.ibShadowedToolTip" = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores.";
+"wOW-0q-lpT.ibShadowedToolTip" = "Вищі значення можуть допомогти повністю використати процесор, якщо одне кодування не може масштабуватися на всі доступні ядра процесора.";
 
 /* Class = "NSButtonCell"; title = "Use same destination folder as source when possible"; ObjectID = "wXE-Fz-Dru"; */
-"wXE-Fz-Dru.title" = "Use same destination folder as source when possible";
+"wXE-Fz-Dru.title" = "Використовуйте ту саму папку призначення, що й джерело, коли це можливо";
 
 /* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "x7i-WX-w6l"; */
-"x7i-WX-w6l.title" = "Put Computer To Sleep";
+"x7i-WX-w6l.title" = "Переведення комп'ютера в режим сну";
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "Y9B-ue-3sE"; */
-"Y9B-ue-3sE.title" = "Change case to Title Case";
+"Y9B-ue-3sE.title" = "Змінити регістр на регістр заголовка";
 
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "zOc-PA-WQr"; */
-"zOc-PA-WQr.title" = "seconds";
+"zOc-PA-WQr.title" = "Секунди";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "zot-Bx-Ch3"; */
-"zot-Bx-Ch3.title" = "Browse…";
+"zot-Bx-Ch3.title" = "Переглянути...";
 
 /* Class = "NSButtonCell"; title = "Show Open Source panel"; ObjectID = "Zqz-Kn-xOS"; */
-"Zqz-Kn-xOS.title" = "Show Open Source panel";
+"Zqz-Kn-xOS.title" = "Показати панель з відкритим кодом";
 
 /* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Zvg-MF-RQF"; */
-"Zvg-MF-RQF.ibShadowedToolTip" = "Drag labels to the Format field to compose a naming format.";
+"Zvg-MF-RQF.ibShadowedToolTip" = "Перетягніть мітки до поля Формат, щоб створити формат іменування.";
 

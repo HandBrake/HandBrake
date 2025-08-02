@@ -1,14 +1,26 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Denoise Tune"; ObjectID = "1XQ-md-5cQ"; */
 "1XQ-md-5cQ.ibExternalAccessibilityDescription" = "Denoise 조정";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.\n\nNone uses the default preset settings.\n\nFilm refines settings for use with most live action content.\n\nGrain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.\n\nHigh Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.\n\nAnimation is useful for cel animation such as anime and cartoons.\n\nTape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.\n\nSprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video."; ObjectID = "1XQ-md-5cQ"; */
+"1XQ-md-5cQ.ibShadowedToolTip" = "노이즈 제거 조정. 특정 시나리오에 맞게 설정을 최적화하도록 노이즈 프리셋을 추가로 조정합니다.\n\n없음은 기본 프리셋 설정을 사용합니다.\n\n필름은 대부분의 라이브 액션 콘텐츠에 사용할 수 있도록 설정을 세분화합니다.\n\n그레인은 컬러 채널만 처리합니다. 컬러 노이즈를 줄이거나 제거하면서 휘도 그레인의 필름과 같은 느낌을 유지하는 데 유용합니다.\n\n하이 모션은 컬러 채널의 시간적 처리를 피하여 움직임이 많은 장면에서 색 번짐을 줄입니다. 스포츠 및 액션 동영상에 유용합니다.\n\n애니메이션은 애니메이션이나 만화와 같은 셀 애니메이션에 유용합니다.\n\n테이프는 필름으로 원하는 결과를 얻지 못하는 VHS와 같이 디테일이 낮은 아날로그 테이프 소스에 유용합니다.\n\n스프라이트는 1-/4-/8-/16비트 2차원 게임에 유용합니다. 스프라이트는 고화질 비디오용으로 설계되지 않았습니다.";
+
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "5Vt-0j-92R"; */
 "5Vt-0j-92R.title" = "조정:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace filter preset.\n\nDefault is well balanced for speed and quality.\n\nSkip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.\n\nEEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.\n\nBob attempts to better preserve motion for a slight penalty to perceived resolution."; ObjectID = "6nG-zk-FMo"; */
+"6nG-zk-FMo.ibShadowedToolTip" = "디인터레이스 필터 프리셋.\n\n기본값은 속도와 화질의 균형이 잘 잡혀 있습니다.\n\n공간 검사 건너뛰기를 사용하면 Yadif가 피할 수 있는 특정 아티팩트 보정을 건너뛰고 속도를 약간 높일 수 있습니다.\n\nEEDI2는 디콤브에 더 느리고 품질이 높은 보간 알고리즘을 사용합니다. 가장 어려운 소스에 유용합니다.\n\nBob은 인지 해상도에 약간의 불이익을 감수하고 모션을 더 잘 보존하려고 시도합니다.";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "8am-ve-1Xl"; */
 "8am-ve-1Xl.title" = "사전설정:";
 
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "aem-qz-Cqk"; */
 "aem-qz-Cqk.title" = "사용자 지정:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Sharpen parameters.\n\nUnsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7\n\nLapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap"; ObjectID = "bBr-vV-iAz"; */
+"bBr-vV-iAz.ibShadowedToolTip" = "사용자 지정 선명하게 하기 매개변수.\n\n선명하지 않음 구문: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\n언샤프 기본값: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7\n\n랩샤프 구문: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\n랩샤프 기본값: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.\n\nUnsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.\n\nLapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking."; ObjectID = "boo-YC-gWm"; */
+"boo-YC-gWm.ibShadowedToolTip" = "선명하게 하면 디테일, 특히 가장자리의 표현이 향상됩니다. 선명하게 설정이 지나치게 강하면 링잉 아티팩트가 생성되고 노이즈가 증가하여 화질이 손상되어 압축 효율이 떨어질 수 있습니다.\n\n선명하지 않음은 일반적인 목적의 선명하지 않은 마스킹 필터입니다. 흐리게 처리한 다음 흐리게 처리된 사진과 원본 사진의 차이를 계산하여 선명하게 합니다.\n\n랩샤프는 라플라시안 에지 필터에 근사한 컨볼루션 커널을 사용하여 선명하게 처리하며, 때로는 언샤프 마스킹보다 더 높은 품질의 결과를 생성합니다.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Tune"; ObjectID = "bRd-Km-Wa8"; */
 "bRd-Km-Wa8.ibExternalAccessibilityDescription" = "선명도 조정";
@@ -43,6 +55,9 @@
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "Da7-pY-5vu"; */
 "Da7-pY-5vu.title" = "사용자 지정:";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates."; ObjectID = "DER-tS-cLx"; */
+"DER-tS-cLx.ibShadowedToolTip" = "디텔리카인은 영화 프레임 레이트를 텔레비전 프레임 레이트로 변환하는 프로세스인 텔레시네의 결과물인 빗 아티팩트를 제거합니다.";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Deblock parameters.\n\nstrength=s:thresh=t:blocksize=b"; ObjectID = "DI9-Ed-acp"; */
 "DI9-Ed-acp.ibShadowedToolTip" = "사용자 정의 블록제거 파라미터.\n\nstrength=s:thresh=t:blocksize=b";
 
@@ -58,14 +73,29 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Tune"; ObjectID = "Hcn-5m-N9x"; */
 "Hcn-5m-N9x.ibExternalAccessibilityDescription" = "선명도 조정";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.\n\nNone uses the default preset settings.\n\nUnsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.\n\nLapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.\n\nLapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.\n\nLapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.\n\nLapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges."; ObjectID = "Hcn-5m-N9x"; */
+"Hcn-5m-N9x.ibShadowedToolTip" = "선명하게 조정. 특정 시나리오에 맞게 설정을 최적화하도록 선명도 사전 설정을 추가로 조정합니다.\n\n없음은 기본 프리셋 설정을 사용합니다.\n\n선명하지 않음은 초미세, 미세, 중간, 거칠게 또는 매우 거칠게로 선명하게 조정할 수 있습니다. 출력 사진 해상도와 향상할 디테일의 미세함에 따라 하나를 선택하세요.\n\n랩샤프의 필름 조정은 대부분의 라이브 액션 콘텐츠에 사용할 수 있도록 설정을 세분화합니다. 필름은 등방성 라플라시안 커널을 사용하여 모든 가장자리를 유사하게 선명하게 하고 휘도(밝기) 정보를 크로미넌스(색상) 정보보다 더 선명하게 합니다.\n\n랩샤프의 그레인 조정은 필름과 비슷하지만 가우시안 커널의 등방성 라플라스키안을 사용하여 노이즈와 그레인에 대한 영향을 줄입니다. 그레인을 보존하는 데 유용하며 필름 튠의 일반적인 대안으로 사용할 수 있습니다.\n\n랩샤프의 애니메이션 튠은 애니메이션이나 만화와 같은 셀 애니메이션에 유용합니다. 애니메이션은 필름과 동일하지만 아티팩트 생성을 방지하기 위해 전체적인 강도가 감소합니다.\n\n랩샤프의 스프라이트 튜닝은 1-/4-/8-/16비트 2차원 게임에 유용합니다. 스프라이트는 대각선 가장자리보다 수직 및 수평 가장자리를 더 향상시키는 4-네이버 라플라시안 커널을 사용합니다.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Chroma Smooth Preset"; ObjectID = "hiK-Va-rbJ"; */
+"hiK-Va-rbJ.ibExternalAccessibilityDescription" = "크로마 스무드 프리셋";
+
 /* Class = "NSTextFieldCell"; title = "Colorspace:"; ObjectID = "HVj-4g-OVv"; */
 "HVj-4g-OVv.title" = "색공간:";
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "hyH-QP-Zdi"; */
 "hyH-QP-Zdi.title" = "조정:";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.\n\nNLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.\n\nHQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail."; ObjectID = "ins-7X-kbN"; */
+"ins-7X-kbN.ibShadowedToolTip" = "노이즈 제거는 노이즈와 입자의 모양을 줄이거나 제거합니다. 이렇게 하면 압축 효율이 향상되고 더 작은 파일 크기로 더 높은 품질의 동영상을 만들 수 있습니다. 노이즈 제거를 지나치게 강하게 설정하면 디테일이 사라져 화질이 손상될 수 있습니다.\n\nNLMeans는 속도 대비 비용이 높은 고품질 노이즈 제거 필터입니다. 속도보다 품질이 더 중요한 경우에 사용하세요.\n\nHQDN3D는 적응형 저역 통과 필터로, NLMeans보다 빠르지만 미세한 디테일을 보존하는 데는 덜 효과적입니다.";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom deleteline settings."; ObjectID = "ipJ-z3-XnJ"; */
 "ipJ-z3-XnJ.ibExternalAccessibilityDescription" = "사용자정의 인터레이스제거 설정";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Detelecine parameters.\n\nSyntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0"; ObjectID = "ipJ-z3-XnJ"; */
+"ipJ-z3-XnJ.ibShadowedToolTip" = "사용자 지정 구분 매개변수.\n\n구문: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\n기본값: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames."; ObjectID = "IQG-Nn-HTb"; */
+"IQG-Nn-HTb.ibShadowedToolTip" = "인터레이스 감지를 활성화하면 디인터레이스 필터가 인터레이스된 비디오 프레임만 처리할 수 있습니다.";
 
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "KiY-kz-54k"; */
 "KiY-kz-54k.title" = "사용자 지정:";
@@ -75,6 +105,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "oWz-qF-JYk"; */
 "oWz-qF-JYk.title" = "사용자 지정:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Grayscale removes the color component of the video. Often referred to as Black & White video."; ObjectID = "Psx-nN-XiT"; */
+"Psx-nN-XiT.ibShadowedToolTip" = "그레이 스케일은 비디오의 컬러 구성 요소를 제거합니다. 흔히 흑백 비디오라고도 합니다.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Interlace Detection parameters.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16"; ObjectID = "rPg-F2-gtl"; */
 "rPg-F2-gtl.ibShadowedToolTip" = "인터레이스 감지 사용자 정의 파라미터.\n\n구문: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\n기본값: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
@@ -108,6 +141,12 @@
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "ydN-tP-vpt"; */
 "ydN-tP-vpt.title" = "조정:";
+
+/* Class = "NSTextFieldCell"; title = "Chroma Smooth:"; ObjectID = "ZLl-Q6-HpE"; */
+"ZLl-Q6-HpE.title" = "크로마 스무스:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Denoise parameters.\n\nNLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3"; ObjectID = "ZR9-YG-pfn"; */
+"ZR9-YG-pfn.ibShadowedToolTip" = "사용자 지정 노이즈 제거 매개변수.\n\nNLMeans 구문: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans 기본값: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D 구문: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D 기본값: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3\n";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "zvZ-ZX-yKE"; */
 "zvZ-ZX-yKE.title" = "사전설정:";

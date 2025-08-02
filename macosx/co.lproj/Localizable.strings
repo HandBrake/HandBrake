@@ -93,6 +93,9 @@ Touch bar */
 /* Main Window -> Same as source destination open panel */
 "Allow" = "Permette";
 
+/* Preferences -> Output Name Token */
+"Angle" = "Angulu";
+
 /* HBLanguage -> Any language */
 "Any" = "Qualsiasi";
 
@@ -252,6 +255,9 @@ Queue done notification failed message */
 /* Preferences -> Output Name Token */
 "Height" = "Altezza";
 
+/* Queue -> sidebar menu */
+"Hide Sidebar" = "Piattà a barra laterale";
+
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "S’è vo iscete d’HandBrake, a vostra cudificazione attuale serà ricaricata in a fila d’attesa à u prossimu avviu. Vulete esce quantunque ?";
 
@@ -372,6 +378,9 @@ Preview -> window title */
 /* Preview -> window title format */
 "Preview - %@ %@" = "Fighjulata - %1$@ %2$@";
 
+/* Preview -> accessibility label */
+"Preview Image, Size: %f x %f, Scale: %.0f%%" = "Fighjulata di a fiura, dimensione : %1$f x %2$f, scala :: %3$.0f%%";
+
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "Mette l’urdinatore in veghja";
 
@@ -477,6 +486,9 @@ Touch bar */
 /* Main Window Presets Toolbar Item */
 "Show Queue Window" = "Affissà a finestra di a fila d’attesa";
 
+/* Queue -> sidebar menu */
+"Show Sidebar" = "Affissà a barra laterale";
+
 /* Queue Window When Done Toolbar Item */
 "Shut Down Computer" = "Piantà l’urdinatore";
 
@@ -573,6 +585,9 @@ Rename preset window -> name alert message */
 
 /* Preferences -> Output Name Token */
 "Title" = "Titulu";
+
+/* Queue Window Details Toolbar Item */
+"Toggle details sidebar" = "Attivà o disattivà a barra laterale di detaglii";
 
 /* HBLanguage -> Unknown language */
 "Unknown" = "Scunnisciutu";

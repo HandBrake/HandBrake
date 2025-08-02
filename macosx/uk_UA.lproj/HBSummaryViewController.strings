@@ -1,38 +1,38 @@
 /* Class = "NSTextFieldCell"; title = "Tracks:"; ObjectID = "3mF-Bb-Gon"; */
-"3mF-Bb-Gon.title" = "Tracks:";
+"3mF-Bb-Gon.title" = "Доріжки:";
 
 /* Class = "NSTextFieldCell"; title = "Size:"; ObjectID = "B4a-co-0ly"; */
-"B4a-co-0ly.title" = "Size:";
+"B4a-co-0ly.title" = "Розмір:";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Filters summary"; ObjectID = "BHq-Mt-3eA"; */
-"BHq-Mt-3eA.ibExternalAccessibilityDescription" = "Filters summary";
+"BHq-Mt-3eA.ibExternalAccessibilityDescription" = "Огляд фільтрів";
 
 /* Class = "NSButtonCell"; title = "Passthru Common Metadata"; ObjectID = "CZZ-bW-jZc"; */
-"CZZ-bW-jZc.title" = "Passthru Common Metadata";
+"CZZ-bW-jZc.title" = "Загальні метадані Passthru";
 
 /* Class = "NSButtonCell"; title = "Align A/V Start"; ObjectID = "De0-Je-MAm"; */
-"De0-Je-MAm.title" = "Align A/V Start";
+"De0-Je-MAm.title" = "Вирівняти A/V Почати";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Copy metadata from source to output"; ObjectID = "eJx-BO-rhL"; */
-"eJx-BO-rhL.ibShadowedToolTip" = "Copy metadata from source to output";
+"eJx-BO-rhL.ibShadowedToolTip" = "Копіювання метаданих з джерела у вихідні дані";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists."; ObjectID = "fPv-Vw-I89"; */
-"fPv-Vw-I89.ibShadowedToolTip" = "Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.";
+"fPv-Vw-I89.ibShadowedToolTip" = "Вирівнює початкові мітки часу всіх аудіо- та відеопотоків, вставляючи порожні кадри або видаляючи кадри. Може покращити синхронізацію аудіо/відео для несправних програвачів, які не підтримують списки редагування MP4.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
-"Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Size summary";
+"Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Зведення розмірів";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
-"lUi-Oc-208.ibShadowedToolTip" = "Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.";
+"lUi-Oc-208.ibShadowedToolTip" = "Оптимізація для поступового завантаження. Після кодування дані реорганізуються і переписуються, щоб забезпечити негайне відтворення через мережу без необхідності завантажувати весь файл.";
 
 /* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
-"m5a-0z-QQ4.ibExternalAccessibilityDescription" = "Preview";
+"m5a-0z-QQ4.ibExternalAccessibilityDescription" = "Перегляд";
 
 /* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
 "OCw-f6-uA0.title" = "Фільтри:";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility."; ObjectID = "QKv-GR-d2g"; */
-"QKv-GR-d2g.ibShadowedToolTip" = "Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility.";
+"QKv-GR-d2g.ibShadowedToolTip" = "Додайте спеціальний маркер MP4, щоб дозволити відтворення на вінтажних пристроях iPod 5-го покоління приблизно 2006 року. Інші налаштування можуть вплинути на сумісність.";
 
 /* Class = "NSTextFieldCell"; title = "None"; ObjectID = "RIB-ME-Yhh"; */
 "RIB-ME-Yhh.title" = "Відсутня";
@@ -41,10 +41,10 @@
 "RXJ-DZ-4mh.title" = "Формат:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility."; ObjectID = "txV-1R-WoD"; */
-"txV-1R-WoD.ibShadowedToolTip" = "Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility.";
+"txV-1R-WoD.ibShadowedToolTip" = "Контейнерний формат. Відео, аудіо та інші доріжки об'єднані в один файл цього типу. Впливає на сумісність.";
 
 /* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "wcc-5d-Dgj"; */
-"wcc-5d-Dgj.title" = "Web Optimized";
+"wcc-5d-Dgj.title" = "Оптимізовано для Інтернету";
 
 /* Class = "NSTextFieldCell"; title = "None"; ObjectID = "xmy-Jl-mR4"; */
 "xmy-Jl-mR4.title" = "Відсутня";
@@ -53,8 +53,8 @@
 "xzc-qg-AMn.title" = "Відсутня";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Tracks summary"; ObjectID = "yRE-5c-FhX"; */
-"yRE-5c-FhX.ibExternalAccessibilityDescription" = "Tracks summary";
+"yRE-5c-FhX.ibExternalAccessibilityDescription" = "Короткий опис треків";
 
 /* Class = "NSButtonCell"; title = "iPod 5G Support"; ObjectID = "zz5-qY-GSA"; */
-"zz5-qY-GSA.title" = "iPod 5G Support";
+"zz5-qY-GSA.title" = "Підтримка iPod 5G";
 

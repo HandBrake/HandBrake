@@ -13,6 +13,9 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
 "A3o-Zx-OfM.ibShadowedToolTip" = "Средната побитова скорост варира качеството, за да подсигури побитовата скорост е сравнително постоянна през цялото видео.";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
+"bnV-aE-FVh.ibShadowedToolTip" = "Многопроходното кодиране анализира целия видеоизточник преди кодирането. Събраната информация позволява на енкодера да взема по-информирани решения за качеството и скоростта на предаване на данни в режим „Среден битрейт“.";
+
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
 
@@ -25,17 +28,26 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "auto"; ObjectID = "CRz-On-Jen"; */
 "CRz-On-Jen.ibShadowedIsNilPlaceholder" = "автоматично";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios."; ObjectID = "cXd-X7-OhB"; */
+"cXd-X7-OhB.ibShadowedToolTip" = "Настройка на видеокодер. Допълнително регулира предварителната настройка на енкодера, за да оптимизира настройките за конкретни сценарии.";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Displays all internal video encoder options."; ObjectID = "dwn-bf-Ua0"; */
+"dwn-bf-Ua0.ibShadowedToolTip" = "Показва всички опции на вътрешния видеокодер.";
+
 /* Class = "NSButtonCell"; title = "Fast Decode"; ObjectID = "EcY-w1-bc8"; */
 "EcY-w1-bc8.title" = "Бързо декодиране";
 
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
 "F3s-qR-qeE.title" = "Качество:";
 
+/* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.\n\nAdjust the slider to the right to increase compression efficiency at the expense of encoding speed, or to the left to increase encoding speed at the expense of compression efficiency."; ObjectID = "fue-2d-Bjn"; */
+"fue-2d-Bjn.ibShadowedToolTip" = "Предварителна настройка на видеокодер. Регулира настройките на енкодера, за да балансира ефективността на компресията и скоростта на кодиране. По-бавните предварителни настройки на енкодера може да използват настройки, които са по-малко съвместими с определени устройства.\n\nНастройте плъзгача надясно, за да увеличите ефективността на компресиране за сметка на скоростта на кодиране, или наляво, за да увеличите скоростта на кодиране за сметка на ефективността на компресиране.";
+
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "Настройка:";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
-"gEp-lv-YUY.ibShadowedToolTip" = "Допълнителни опции за видео енкодер. Само за напреднали.\n\nСинтаксис: option-1=foo:opt2=bar";
+/* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
+"GPu-Ht-bKg.ibShadowedToolTip" = "Constant Quality (Постоянно качество) променя битрейта, за да гарантира, че визуалното качество остава относително постоянно в целия видеоклип.\n\nРегулирайте плъзгача за качество надясно, за да увеличите качеството, или наляво, за да го намалите, с малки стъпки от плюс или минус 1-2.\n\nПрепоръчителните стойности за енкодерите x264 и x265 са RF 18-28. По-високите настройки на качеството могат да доведат до създаването на изключително големи файлове.\n\nx264 е без загуби при RF 0.";
 
 /* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "Hho-GY-qOR"; */
 "Hho-GY-qOR.title" = "Профил:";
@@ -43,14 +55,23 @@
 /* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ja7-Zr-y1P"; */
 "ja7-Zr-y1P.title" = "Допълнителни опции:";
 
-/* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "kPs-u2-fDn"; */
-"kPs-u2-fDn.title" = "Опции за енкодер:";
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "kh8-d2-hSD"; */
+"kh8-d2-hSD.ibShadowedToolTip" = "Профил на видео енкодера. Задава и осигурява съответствие със зададения стандартен профил за компресиране на видео. Отменя всички други настройки.";
 
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "Видео енкодер:";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
+"olm-zg-k9Y.ibShadowedToolTip" = "Първото преминаване на турбо ускорява преминаването на анализа при многопроходно кодиране за сметка на леки загуби при анализа.";
+
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "Шаблон:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility."; ObjectID = "R00-pj-eFX"; */
+"R00-pj-eFX.ibShadowedToolTip" = "Цветен диапазон. Определя стойностите на референтните черно и бяло. Задайте на ограничено, за да увеличите съвместимостта.";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r18-GT-7jT"; */
+"r18-GT-7jT.title" = "ДругиИзгледи";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "rbo-w6-ENd"; */
 "rbo-w6-ENd.ibShadowedToolTip" = "Допълнителни опции за видео енкодер. Само за напреднали.\n\nСинтаксис: option-1=foo:opt2=bar,baz";
@@ -63,6 +84,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Level:"; ObjectID = "sTM-lk-DBC"; */
 "sTM-lk-DBC.title" = "Ниво:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering."; ObjectID = "stU-Fo-Avu"; */
+"stU-Fo-Avu.ibShadowedToolTip" = "Бързото декодиране използва настройки, които намаляват използването на процесора по време на възпроизвеждането на кодирания видеоклип. Полезно за устройства, които трудно възпроизвеждат видео без заекване.";
 
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
 "VQe-CK-YDR.title" = "Средна побитова скорост (kbps):";

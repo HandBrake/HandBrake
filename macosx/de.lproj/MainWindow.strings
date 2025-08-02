@@ -146,7 +146,7 @@
 "cgS-BU-Nfd.title" = "Neu laden";
 
 /* Class = "NSBox"; title = "Box"; ObjectID = "d0E-xw-bxh"; */
-"d0E-xw-bxh.title" = "Box";
+"d0E-xw-bxh.title" = "Kasten";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Scan only the specified title instead of all titles."; ObjectID = "DN4-48-aOI"; */
 "DN4-48-aOI.ibShadowedToolTip" = "Nur den ausgewählten, statt alle Titel einlesen.";

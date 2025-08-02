@@ -32,10 +32,10 @@
 "jHg-nh-9NJ.title" = "Abbrechen";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "JqJ-5C-Yhw"; */
-"JqJ-5C-Yhw.title" = "Check";
+"JqJ-5C-Yhw.title" = "Prüfen";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "k84-a6-eZ7"; */
-"k84-a6-eZ7.title" = "Check";
+"k84-a6-eZ7.title" = "Prüfen";
 
 /* Class = "NSMenuItem"; title = "Disable All"; ObjectID = "MIb-bL-Z6i"; */
 "MIb-bL-Z6i.title" = "Alle deaktivieren";

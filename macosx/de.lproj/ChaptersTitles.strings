@@ -5,7 +5,7 @@
 "3SP-6e-RPS.ibShadowedToolTip" = "Exportiere die Liste an Kapitelnamen in eine CSV-Datei.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add a chapter markers track to the video."; ObjectID = "7Xf-c0-jsr"; */
-"7Xf-c0-jsr.ibShadowedToolTip" = "Füge eine Kapitelmarkerspur hinzu.";
+"7Xf-c0-jsr.ibShadowedToolTip" = "Füge eine Kapitelmarkierungssspur hinzu.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "All-Bz-NLv"; */
 "All-Bz-NLv.title" = "Text Cell";
@@ -23,7 +23,7 @@
 "InF-gR-Lia.ibExternalAccessibilityDescription" = "Kapiteltitel";
 
 /* Class = "NSButtonCell"; title = "Create chapter markers"; ObjectID = "lJL-wX-DVP"; */
-"lJL-wX-DVP.title" = "Kapitelmarker erstellen";
+"lJL-wX-DVP.title" = "Kapitelmarkierungen erstellen";
 
 /* Class = "NSTableColumn"; headerCell.title = "Start"; ObjectID = "NlF-th-Cg9"; */
 "NlF-th-Cg9.headerCell.title" = "Start";

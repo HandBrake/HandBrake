@@ -235,6 +235,9 @@
 /* Class = "NSMenuItem"; title = "Video"; ObjectID = "Jef-U4-eQT"; */
 "Jef-U4-eQT.title" = "Video";
 
+/* Class = "NSMenuItem"; title = "Show Sidebar"; ObjectID = "khp-X3-3Ws"; */
+"khp-X3-3Ws.title" = "Mostra la barra laterale";
+
 /* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "KKV-n0-Fmr"; */
 "KKV-n0-Fmr.title" = "Personalizza la barra strumenti…";
 

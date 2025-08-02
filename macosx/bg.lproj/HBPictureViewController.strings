@@ -13,6 +13,9 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
 "1Z0-JT-vst.ibExternalAccessibilityDescription" = "Изрязване отдолу";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels"; ObjectID = "1Z0-JT-vst"; */
+"1Z0-JT-vst.ibShadowedToolTip" = "Размер на изрязване на долния край в пиксели";
+
 /* Class = "NSMenuItem"; title = "2160p 4K Ultra HD"; ObjectID = "1Zm-mM-8Tb"; */
 "1Zm-mM-8Tb.title" = "2160p 4K Ultra HD";
 
@@ -46,6 +49,9 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "6Jp-gt-DbX"; */
 "6Jp-gt-DbX.ibExternalAccessibilityDescription" = "Запълване отгоре";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge border amount in pixels"; ObjectID = "6Jp-gt-DbX"; */
+"6Jp-gt-DbX.ibShadowedToolTip" = "Размер на границата на горния край в пиксели";
+
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "6Qy-ik-hiE"; */
 "6Qy-ik-hiE.title" = "Няма";
 
@@ -69,6 +75,9 @@
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "41c-48-2XJ"; */
 "41c-48-2XJ.ibExternalAccessibilityDescription" = "Изрязване отгоре";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels"; ObjectID = "41c-48-2XJ"; */
+"41c-48-2XJ.ibShadowedToolTip" = "Размер на изрязване на горния край в пиксели";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom border color"; ObjectID = "aby-WS-tzS"; */
 "aby-WS-tzS.ibExternalAccessibilityDescription" = "Персонализиран цвят на рамка";
@@ -96,6 +105,9 @@
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "ck0-Gu-lGg"; */
 "ck0-Gu-lGg.ibExternalAccessibilityDescription" = "Запълване отдясно";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge border amount in pixels"; ObjectID = "ck0-Gu-lGg"; */
+"ck0-Gu-lGg.ibShadowedToolTip" = "Размер на границата на десния край в пиксели";
 
 /* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "d0T-QG-WXU"; */
 "d0T-QG-WXU.title" = "Лимит на разделителна способност";
@@ -141,6 +153,9 @@
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum height"; ObjectID = "FGm-oJ-FVW"; */
 "FGm-oJ-FVW.ibExternalAccessibilityDescription" = "Максимална височина";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "The maximum height that the video will be stored at."; ObjectID = "FGm-oJ-FVW"; */
+"FGm-oJ-FVW.ibShadowedToolTip" = "Максималната височина, на която ще се съхранява видеото.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Use highest resolution permitted by above settings"; ObjectID = "fjj-ZH-nqb"; */
 "fjj-ZH-nqb.ibShadowedToolTip" = "Използвай най-високата разделителна способност, позволена от горните настройки";
@@ -211,6 +226,9 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "LTu-ic-Ty9"; */
 "LTu-ic-Ty9.ibExternalAccessibilityDescription" = "Изрязване вляво";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels"; ObjectID = "LTu-ic-Ty9"; */
+"LTu-ic-Ty9.ibShadowedToolTip" = "Размер на изрязване на левия край в пиксели";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Numerator"; ObjectID = "LWv-Y9-b0S"; */
 "LWv-Y9-b0S.ibExternalAccessibilityDescription" = "Числител на съотношението на пикселите";
 
@@ -234,6 +252,9 @@
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum width"; ObjectID = "NRy-vc-8qX"; */
 "NRy-vc-8qX.ibExternalAccessibilityDescription" = "Максимална ширина";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "The maximum width that the video will be stored at."; ObjectID = "NRy-vc-8qX"; */
+"NRy-vc-8qX.ibShadowedToolTip" = "Максималната ширина, с която ще се съхранява видеото.";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "ob5-QF-mOC"; */
 "ob5-QF-mOC.ibShadowedIsNilPlaceholder" = "0";
@@ -261,6 +282,9 @@
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "r9l-cH-pFW"; */
 "r9l-cH-pFW.ibExternalAccessibilityDescription" = "Изрязване вляво";
+
+/* Class = "NSButton"; ibShadowedToolTip = "If not enabled, scaled dimensions will be limited to source dimensions"; ObjectID = "ROS-UT-TiG"; */
+"ROS-UT-TiG.ibShadowedToolTip" = "Ако не е разрешено, мащабираните размери ще бъдат ограничени до размерите на източника.";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sg1-tR-fnw"; */
 "sg1-tR-fnw.ibShadowedIsNilPlaceholder" = "0";
@@ -327,6 +351,9 @@
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "WfM-tx-rC5"; */
 "WfM-tx-rC5.ibExternalAccessibilityDescription" = "Запълване отдолу";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge border amount in pixels"; ObjectID = "WfM-tx-rC5"; */
+"WfM-tx-rC5.ibShadowedToolTip" = "Размер на границата на долния край в пиксели";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "wsq-TS-cC6"; */
 "wsq-TS-cC6.ibExternalAccessibilityDescription" = "Изрязване вдясно";

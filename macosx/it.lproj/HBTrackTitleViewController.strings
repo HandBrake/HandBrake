@@ -2,7 +2,7 @@
 "eBw-qE-Hyb.title" = "Nome:";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Track name"; ObjectID = "FpM-Jx-vLD"; */
-"FpM-Jx-vLD.ibExternalAccessibilityDescription" = "Titolo traccia";
+"FpM-Jx-vLD.ibExternalAccessibilityDescription" = "Nome traccia";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Players may use this in the audio/subtitles selection list."; ObjectID = "FpM-Jx-vLD"; */
 "FpM-Jx-vLD.ibShadowedToolTip" = "I riproduttori potrebbero usare questo nome nell'elenco per selezionare l'audio o i sottotitoli.";

@@ -93,6 +93,9 @@ Touch bar */
 /* Main Window -> Same as source destination open panel */
 "Allow" = "Autoriser";
 
+/* Preferences -> Output Name Token */
+"Angle" = "Angle";
+
 /* HBLanguage -> Any language */
 "Any" = "Tout";
 
@@ -251,6 +254,9 @@ Queue done notification failed message */
 
 /* Preferences -> Output Name Token */
 "Height" = "Hauteur";
+
+/* Queue -> sidebar menu */
+"Hide Sidebar" = "Masquer la barre latérale";
 
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Si vous quittez HandBrake, votre encodage actuel sera remis en file d'attente au prochain démarrage. Voulez-vous quand même quitter ?";
@@ -480,6 +486,9 @@ Touch bar */
 /* Main Window Presets Toolbar Item */
 "Show Queue Window" = "Afficher la fenêtre de la file d'attente";
 
+/* Queue -> sidebar menu */
+"Show Sidebar" = "Afficher la barre latérale";
+
 /* Queue Window When Done Toolbar Item */
 "Shut Down Computer" = "Éteindre l'ordinateur";
 
@@ -576,6 +585,9 @@ Rename preset window -> name alert message */
 
 /* Preferences -> Output Name Token */
 "Title" = "Titre";
+
+/* Queue Window Details Toolbar Item */
+"Toggle details sidebar" = "Afficher/Masquer la barre latérale des détails";
 
 /* HBLanguage -> Unknown language */
 "Unknown" = "Inconnu";

@@ -5,65 +5,65 @@
 "6BQ-wU-p2C.title" = "Доріжки";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "End Live Preview"; ObjectID = "84p-08-fGK"; */
-"84p-08-fGK.ibExternalAccessibilityDescription" = "End Live Preview";
+"84p-08-fGK.ibExternalAccessibilityDescription" = "Завершити перегляд у реальному часі";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Exit player and return to still image previews."; ObjectID = "84p-08-fGK"; */
-"84p-08-fGK.ibShadowedToolTip" = "Exit player and return to still image previews.";
+"84p-08-fGK.ibShadowedToolTip" = "Вийдіть з програвача і поверніться до попереднього перегляду зображень.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
-"CQ0-pk-SFk.ibExternalAccessibilityDescription" = "Go To End";
+"CQ0-pk-SFk.ibExternalAccessibilityDescription" = "Перейти до кінця";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
-"CQ0-pk-SFk.ibShadowedToolTip" = "Go To End";
+"CQ0-pk-SFk.ibShadowedToolTip" = "Перейти до кінця";
 
 /* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "dGi-LK-P1E"; */
 "dGi-LK-P1E.title" = "00:00:00";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
-"euL-Tg-dmT.ibExternalAccessibilityDescription" = "Mute Volume";
+"euL-Tg-dmT.ibExternalAccessibilityDescription" = "Вимкнути звук";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
-"euL-Tg-dmT.ibShadowedToolTip" = "Mute Volume";
+"euL-Tg-dmT.ibShadowedToolTip" = "Вимкнути звук";
 
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "Volume Control"; ObjectID = "gzA-no-jdv"; */
-"gzA-no-jdv.ibExternalAccessibilityDescription" = "Volume Control";
+"gzA-no-jdv.ibExternalAccessibilityDescription" = "Регулювання гучності";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Drag to change volume."; ObjectID = "gzA-no-jdv"; */
-"gzA-no-jdv.ibShadowedToolTip" = "Drag to change volume.";
+"gzA-no-jdv.ibShadowedToolTip" = "Перетягніть, щоб змінити гучність.";
 
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "Timeline"; ObjectID = "lBp-JT-ehn"; */
-"lBp-JT-ehn.ibExternalAccessibilityDescription" = "Timeline";
+"lBp-JT-ehn.ibExternalAccessibilityDescription" = "Хронологія";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Drag to change timeline position."; ObjectID = "lBp-JT-ehn"; */
-"lBp-JT-ehn.ibShadowedToolTip" = "Drag to change timeline position.";
+"lBp-JT-ehn.ibShadowedToolTip" = "Перетягніть, щоб змінити положення на часовій шкалі.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Play/Pause"; ObjectID = "mLA-ei-4sK"; */
-"mLA-ei-4sK.ibExternalAccessibilityDescription" = "Play/Pause";
+"mLA-ei-4sK.ibExternalAccessibilityDescription" = "Відтворення/Пауза";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Toggle Play/Pause"; ObjectID = "mLA-ei-4sK"; */
-"mLA-ei-4sK.ibShadowedToolTip" = "Toggle Play/Pause";
+"mLA-ei-4sK.ibShadowedToolTip" = "Перемикання відтворення/паузи";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Time Remaining"; ObjectID = "PVD-pq-1ZG"; */
-"PVD-pq-1ZG.ibExternalAccessibilityDescription" = "Time Remaining";
+"PVD-pq-1ZG.ibExternalAccessibilityDescription" = "Час, що залишився";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Time remaining."; ObjectID = "PVD-pq-1ZG"; */
-"PVD-pq-1ZG.ibShadowedToolTip" = "Time remaining.";
+"PVD-pq-1ZG.ibShadowedToolTip" = "Залишився час.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Current Timeline Position"; ObjectID = "uYx-2C-8et"; */
-"uYx-2C-8et.ibExternalAccessibilityDescription" = "Current Timeline Position";
+"uYx-2C-8et.ibExternalAccessibilityDescription" = "Поточна позиція на шкалі часу";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Current timeline position."; ObjectID = "uYx-2C-8et"; */
-"uYx-2C-8et.ibShadowedToolTip" = "Current timeline position.";
+"uYx-2C-8et.ibShadowedToolTip" = "Поточна позиція на часовій шкалі.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Tracks Selection"; ObjectID = "Vj1-Za-AUV"; */
-"Vj1-Za-AUV.ibExternalAccessibilityDescription" = "Tracks Selection";
+"Vj1-Za-AUV.ibExternalAccessibilityDescription" = "Вибір доріжок";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Enable or disable tracks."; ObjectID = "Vj1-Za-AUV"; */
-"Vj1-Za-AUV.ibShadowedToolTip" = "Enable or disable tracks.";
+"Vj1-Za-AUV.ibShadowedToolTip" = "Увімкнути або вимкнути треки.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
-"WuP-9l-8AN.ibExternalAccessibilityDescription" = "Go To Beginning";
+"WuP-9l-8AN.ibExternalAccessibilityDescription" = "Перейти до початку";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
-"WuP-9l-8AN.ibShadowedToolTip" = "Go To Beginning";
+"WuP-9l-8AN.ibShadowedToolTip" = "Перейти до початку";
 

@@ -25,8 +25,14 @@
 /* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
 "66v-2g-DHn.title" = "サブ音声に1番目のエンコーダーのみを使用する";
 
+/* Class = "NSMenuItem"; title = "Off"; ObjectID = "AaG-rx-x5W"; */
+"AaG-rx-x5W.title" = "オフ";
+
 /* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
 "AQe-Sg-Qgh.title" = "パススルーフォールバック:";
+
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "aQn-7q-tQG"; */
+"aQn-7q-tQG.title" = "名前:";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Audio Track Languages"; ObjectID = "aTC-39-h6S"; */
 "aTC-39-h6S.ibExternalAccessibilityDescription" = "音声トラック言語";
@@ -84,6 +90,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
 "GHJ-25-kZl.ibShadowedToolTip" = "再生デバイスがMP2に対応しているときに有効化してください。自動パススルーが有効になっている場合、MP2をパススルー出来るようになります。";
+
+/* Class = "NSMenuItem"; title = "Unnamed Tracks"; ObjectID = "gjw-kg-H3W"; */
+"gjw-kg-H3W.title" = "無名のトラック";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "gOm-E9-8K7"; */
 "gOm-E9-8K7.ibShadowedToolTip" = "再生デバイスがFLACに対応しているときに有効化してください。自動パススルーが有効になっている場合、FLACをパススルー出来るようになります。";
@@ -169,6 +178,9 @@
 /* Class = "NSButtonCell"; title = "Vorbis"; ObjectID = "rXl-qc-MHk"; */
 "rXl-qc-MHk.title" = "Vorbis";
 
+/* Class = "NSMenuItem"; title = "All Tracks"; ObjectID = "s0U-gp-0sK"; */
+"s0U-gp-0sK.title" = "全トラック";
+
 /* Class = "NSButtonCell"; title = "ALAC"; ObjectID = "S0X-gJ-f6A"; */
 "S0X-gJ-f6A.title" = "ALAC";
 
@@ -205,11 +217,17 @@
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "テーブルビューセル";
 
+/* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "XmJ-lo-ciO"; */
+"XmJ-lo-ciO.title" = "パススルー・トラック名";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibExternalAccessibilityDescription" = "ゲイン";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibShadowedToolTip" = "デシベル(dB)単位のオーディオゲインです。音量を増やしたり減らしたりします。";
+
+/* Class = "NSTextFieldCell"; title = "Autonaming:"; ObjectID = "XOM-af-vzp"; */
+"XOM-af-vzp.title" = "オートネーミング：";
 
 /* Class = "NSButtonCell"; title = "MP2"; ObjectID = "Z8O-AS-UdA"; */
 "Z8O-AS-UdA.title" = "MP2";

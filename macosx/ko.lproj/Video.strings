@@ -34,9 +34,6 @@
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "조정:";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
-"gEp-lv-YUY.ibShadowedToolTip" = "고급 설정을 위한 추가 인코더 옵션. \n\n구문: 옵션-1=값:옵션2=값,값";
-
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
 "GPu-Ht-bKg.ibShadowedToolTip" = "전반적인 품질은 비디오 전체에 걸쳐 시각적 화질이 비교적 일관적일 수 있도록 비트레이트를 변화시킵니다.\n\n품질을 높이려면 슬라이더를 오른쪽으로 조정하고, 품질을 낮추려면 왼쪽으로 + 또는 - 1-2의 작은 단위로 조정하십시오.\n\nx264와 x265에 대한 추천 값은 RF 18-28입니다. 더 높은 품질 설정은 파일의 크기가 과도하게 커질 수 있습니다.\n\nx264는 RF 0에서 손실이 없습니다.";
 
@@ -46,14 +43,14 @@
 /* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ja7-Zr-y1P"; */
 "ja7-Zr-y1P.title" = "추가 옵션:";
 
-/* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "kPs-u2-fDn"; */
-"kPs-u2-fDn.title" = "인코더 옵션:";
-
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "비디오 인코더:";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "사전설정:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r18-GT-7jT"; */
+"r18-GT-7jT.title" = "다른 견해들";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "rbo-w6-ENd"; */
 "rbo-w6-ENd.ibShadowedToolTip" = "고급 설정을 위한 추가 인코더 옵션. \n\n구문: 옵션-1=값:옵션2=값,값";

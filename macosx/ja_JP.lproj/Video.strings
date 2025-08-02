@@ -40,11 +40,14 @@
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
 "F3s-qR-qeE.title" = "品質:";
 
+/* Class = "NSMenuItem"; title = "Same As Source"; ObjectID = "F37-pp-Zet"; */
+"F37-pp-Zet.title" = "ソースと同じ";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.\n\nAdjust the slider to the right to increase compression efficiency at the expense of encoding speed, or to the left to increase encoding speed at the expense of compression efficiency."; ObjectID = "fue-2d-Bjn"; */
+"fue-2d-Bjn.ibShadowedToolTip" = "ビデオエンコーダーのプリセットです。圧縮効率とエンコード速度のバランスをとるためにエンコーダー設定を調整します。遅いエンコードプリセットはいくつかの端末に対応していない設定を使うことがあります。\n\nエンコード速度を犠牲にして圧縮効率を上げるにはスライダーを右に調整し、圧縮効率を犠牲にしてエンコード速度を上げるにはスライダーを左に調整します。";
+
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "チューニング:";
-
-/* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
-"gEp-lv-YUY.ibShadowedToolTip" = "追加のビデオエンコーダーオプションです。応用的な利用のみ。\n\nSyntax: option-1=foo:opt2=bar";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
 "GPu-Ht-bKg.ibShadowedToolTip" = "固定品質は映像の全てを通して比較的同じ品質を保つようにビットレートを調整します。\n\n品質スライダーを右に調節すると品質が上がり左では下がり、1から2ごとに増減できます。\n\nx264とx265エンコーダーでの推奨値はRF 18-28です。高い品質の設定は非常に大きなファイルサイズになることがあります。\n\nx264はRF 0でロスレスです。";
@@ -58,9 +61,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "kh8-d2-hSD"; */
 "kh8-d2-hSD.ibShadowedToolTip" = "ビデオエンコーダーのプロファイルです。指定の圧縮標準プロファイルを設定してそれに従います。他の設定を全て上書きします。";
 
-/* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "kPs-u2-fDn"; */
-"kPs-u2-fDn.title" = "エンコーダーオプション:";
-
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "ビデオエンコーダー:";
 
@@ -72,6 +72,12 @@
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "プリセット:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility."; ObjectID = "R00-pj-eFX"; */
+"R00-pj-eFX.ibShadowedToolTip" = "カラー・レンジ。基準となる黒と白の値を決定する。互換性を最大にするためにlimitedに設定する。";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r18-GT-7jT"; */
+"r18-GT-7jT.title" = "他のビュー";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "rbo-w6-ENd"; */
 "rbo-w6-ENd.ibShadowedToolTip" = "追加のビデオエンコーダーオプションです。応用的な利用のみ。\n\nSyntax: option-1=foo:opt2=bar,baz";
