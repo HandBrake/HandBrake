@@ -19,7 +19,6 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// </summary>
         public Video()
         {
-            this.QSV = new QSV();
         }
 
         /// <summary>
@@ -81,11 +80,6 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// Gets or sets the tune.
         /// </summary>
         public string Tune { get; set; }
-
-        /// <summary>
-        /// Gets or sets the qsv.
-        /// </summary>
-        public QSV QSV { get; set; }
 
         /// <summary>
         /// HB_DECODE_SUPPORT constants in common.h
