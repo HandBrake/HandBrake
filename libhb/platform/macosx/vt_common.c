@@ -336,7 +336,7 @@ hb_buffer_t * hb_vt_buffer_dup(const hb_buffer_t *src)
     return out;
 }
 
-hb_buffer_t * copy_video_buffer_to_hw_video_buffer(const hb_job_t *job, hb_buffer_t **in)
+hb_buffer_t * copy_video_buffer_to_hw_video_buffer(void *hw_frames_ctx, hb_buffer_t **in)
 {
     hb_buffer_t *buf = *in;
 

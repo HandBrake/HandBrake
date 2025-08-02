@@ -251,7 +251,7 @@ struct hb_hwaccel_s
 
     int           (*can_filter)   (hb_list_t *filter_list);
     void *        (*find_decoder) (int codec_param);
-    hb_buffer_t * (*upload)       (const hb_job_t *job, hb_buffer_t **buf_in);
+    hb_buffer_t * (*upload)       (void *hw_frames_ctx, hb_buffer_t **buf_in);
 
     int caps;
 };

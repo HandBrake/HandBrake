@@ -11,34 +11,20 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/qsv_common.h"
 
-static int hwframe_init(const hb_job_t *job, AVFrame **frame)
+static hb_buffer_t * upload(void *hw_frames_ctx, hb_buffer_t **buf_in)
 {
-    AVBufferRef *hw_frames_ctx = NULL;
-    AVBufferRef *hw_device_ctx = job->hw_device_ctx;
-
-    if (!hw_device_ctx || !frame)
-    {
-        hb_error("hwaccel: failed to initialize hw frame");
-        return 1;
-    }
-
-    *frame = av_frame_alloc();
-    hw_frames_ctx = hb_hwaccel_init_hw_frames_ctx(hw_device_ctx,
-                                                  job->input_pix_fmt, job->hw_pix_fmt,
-                                                  job->width, job->height, 0);
-    return av_hwframe_get_buffer(hw_frames_ctx, *frame, 0);
-}
-
-static hb_buffer_t * upload(const hb_job_t *job, hb_buffer_t **buf_in)
-{
+    int ret = 0;
     AVFrame frame = {{0}};
-    AVFrame *hw_frame = NULL;
+    AVFrame *hw_frame = av_frame_alloc();
 
-    int ret;
+    if (hw_frame == NULL)
+    {
+        goto fail;
+    }
 
     hb_video_buffer_to_avframe(&frame, buf_in);
 
-    ret = hwframe_init(job, &hw_frame);
+    ret = av_hwframe_get_buffer(hw_frames_ctx, hw_frame, 0);
     if (ret < 0)
     {
         goto fail;

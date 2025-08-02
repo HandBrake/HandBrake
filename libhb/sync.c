@@ -409,14 +409,17 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
 
             if (stream->common->job->hw_pix_fmt != AV_PIX_FMT_NONE)
             {
-                buf = stream->common->job->hw_accel->upload(stream->common->job, &buf);
+                hb_job_t *job = stream->common->job;
+                AVBufferRef *hw_frames_ctx = hb_hwaccel_init_hw_frames_ctx(job->hw_device_ctx,
+                                                                           job->input_pix_fmt, job->hw_pix_fmt,
+                                                                           job->width, job->height, 0);
+                buf = stream->common->job->hw_accel->upload(hw_frames_ctx, &buf);
+                av_buffer_unref(&hw_frames_ctx);
             }
         }
         else
         {
-            {
-                buf = hb_buffer_dup(buf);
-            }
+            buf = hb_buffer_shallow_dup(buf);
         }
         buf->s.start     = next_pts;
         next_pts        += frame_dur;
