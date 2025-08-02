@@ -358,23 +358,23 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
     // dts problems lead to problems with frame duration.
     double             frame_dur, next_pts, duration;
     hb_buffer_list_t   list;
-    hb_buffer_t      * buf = NULL;
+    hb_buffer_t       *buf = NULL;
+    hb_job_t          *job = stream->common->job;
 
     hb_buffer_list_clear(&list);
     duration = dur;
     next_pts = pts;
 
-    frame_dur = 90000. * stream->common->job->title->vrate.den /
-                         stream->common->job->title->vrate.num;
+    frame_dur = 90000. * job->title->vrate.den / job->title->vrate.num;
 
     // Only create black buffers of frame_dur or longer
     while (duration >= frame_dur)
     {
         if (buf == NULL)
         {
-            buf = hb_frame_buffer_init(stream->common->job->input_pix_fmt,
-                                   stream->common->job->title->geometry.width,
-                                   stream->common->job->title->geometry.height);
+            buf = hb_frame_buffer_init(job->input_pix_fmt,
+                                       job->title->geometry.width,
+                                       job->title->geometry.height);
             uint8_t *planes[4];
             ptrdiff_t linesizes[4];
             for (int i = 0; i <= buf->f.max_plane; ++i)
@@ -382,24 +382,25 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
                 planes[i] = buf->plane[i].data;
                 linesizes[i] = buf->plane[i].stride;
             }
-            av_image_fill_black(planes, linesizes, stream->common->job->input_pix_fmt,
-                                stream->common->job->color_range, buf->f.width, buf->f.height);
-            buf->f.color_prim = stream->common->job->title->color_prim;
-            buf->f.color_transfer = stream->common->job->title->color_transfer;
-            buf->f.color_matrix = stream->common->job->title->color_matrix;
-            buf->f.color_range = stream->common->job->color_range;
-            buf->f.chroma_location = stream->common->job->chroma_location;
+            av_image_fill_black(planes, linesizes,
+                                job->input_pix_fmt, job->color_range,
+                                buf->f.width, buf->f.height);
+            buf->f.color_prim      = job->title->color_prim;
+            buf->f.color_transfer  = job->title->color_transfer;
+            buf->f.color_matrix    = job->title->color_matrix;
+            buf->f.color_range     = job->color_range;
+            buf->f.chroma_location = job->chroma_location;
 
             // Dolby Vision requires a RPU on every buffer, attach the first
             // found during scan in the absence of something better
-            if (stream->common->job->title->initial_rpu)
+            if (job->title->initial_rpu)
             {
-                hb_data_t *rpu = stream->common->job->title->initial_rpu;
+                hb_data_t *rpu = job->title->initial_rpu;
                 AVBufferRef *ref = av_buffer_alloc(rpu->size);
                 memcpy(ref->data, rpu->bytes, rpu->size);
 
                 AVFrameSideData *sd_dst = NULL;
-                sd_dst = hb_buffer_new_side_data_from_buf(buf, stream->common->job->title->initial_rpu_type, ref);
+                sd_dst = hb_buffer_new_side_data_from_buf(buf, job->title->initial_rpu_type, ref);
 
                 if (!sd_dst)
                 {
@@ -407,13 +408,12 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
                 }
             }
 
-            if (stream->common->job->hw_pix_fmt != AV_PIX_FMT_NONE)
+            if (job->hw_pix_fmt != AV_PIX_FMT_NONE)
             {
-                hb_job_t *job = stream->common->job;
                 AVBufferRef *hw_frames_ctx = hb_hwaccel_init_hw_frames_ctx(job->hw_device_ctx,
                                                                            job->input_pix_fmt, job->hw_pix_fmt,
                                                                            job->width, job->height, 0);
-                buf = stream->common->job->hw_accel->upload(hw_frames_ctx, &buf);
+                buf = job->hw_accel->upload(hw_frames_ctx, &buf);
                 av_buffer_unref(&hw_frames_ctx);
             }
         }
