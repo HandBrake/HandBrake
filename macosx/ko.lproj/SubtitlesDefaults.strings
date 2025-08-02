@@ -7,6 +7,9 @@
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Subtitles Track Languages"; ObjectID = "aTC-39-h6S"; */
 "aTC-39-h6S.ibExternalAccessibilityDescription" = "자막 트랙 언어";
 
+/* Class = "NSScrollView"; ibShadowedToolTip = "Select the languages to use with the Track Selection Behavior setting."; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibShadowedToolTip" = "트랙 선택 동작 설정에 사용할 언어를 선택합니다.";
+
 /* Class = "NSButtonCell"; title = "Blu-ray Subtitles"; ObjectID = "bfV-9D-6dh"; */
 "bfV-9D-6dh.title" = "Blu-ray 자막";
 
@@ -28,6 +31,12 @@
 /* Class = "NSButtonCell"; title = "OK"; ObjectID = "iLI-Nb-D7t"; */
 "iLI-Nb-D7t.title" = "확인";
 
+/* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
+"jDd-Ji-7Sm.title" = "선택한 언어와 첫 번째 일치";
+
+/* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "KXY-tz-asI"; */
+"KXY-tz-asI.title" = "통과 트랙 이름";
+
 /* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
 "mAT-Jp-SG1.title" = "언어:";
 
@@ -36,6 +45,12 @@
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NJl-q3-zXL"; */
 "NJl-q3-zXL.title" = "옵션:";
+
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "Nks-nt-ePt"; */
+"Nks-nt-ePt.title" = "이름:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
+"oiD-QI-wly.ibShadowedToolTip" = "트랙 선택 동작.\n\n없음은 기본적으로 오디오 트랙을 선택하지 않습니다.\n\n첫 번째 일치하는 선택된 언어는 소스에 있는 각 선택된 언어와 일치하는 첫 번째 오디오 트랙을 추가합니다.\n\n선택한 모든 언어 일치는 소스에 있는 선택한 각 언어와 일치하는 모든 오디오 트랙을 추가합니다.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
 "QRd-XH-6TH.title" = "외부 오디오 자막 트랙";

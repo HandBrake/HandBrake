@@ -226,7 +226,7 @@ Queue done notification failed message */
 "Export presets" = "Voreinstellungen exportieren";
 
 /* Default name for a newly added excluded file extension */
-"extension" = "erweiterung";
+"extension" = "Erweiterung";
 
 /* File already exists alert -> message */
 "File already exists." = "Die Datei existiert bereits.";

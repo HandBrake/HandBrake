@@ -4,6 +4,9 @@
 /* Class = "NSMenuItem"; title = "Off"; ObjectID = "1O3-th-4M5"; */
 "1O3-th-4M5.title" = "끔";
 
+/* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "1Pn-6x-bhx"; */
+"1Pn-6x-bhx.title" = "보수적";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
 "1Z0-JT-vst.ibExternalAccessibilityDescription" = "아래쪽 자르기";
 

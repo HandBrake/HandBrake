@@ -1,5 +1,5 @@
 /* Class = "NSWindow"; title = "Rename Preset"; ObjectID = "C4G-OG-ksc"; */
-"C4G-OG-ksc.title" = "Rename Preset";
+"C4G-OG-ksc.title" = "Перейменувати пресет";
 
 /* Class = "NSTextFieldCell"; title = "New description:"; ObjectID = "GiC-Xi-NGv"; */
 "GiC-Xi-NGv.title" = "Новий опис:";
@@ -8,11 +8,11 @@
 "N2f-jz-YyX.title" = "Скасувати";
 
 /* Class = "NSTextFieldCell"; title = "Untitled"; ObjectID = "NQn-fS-Rbd"; */
-"NQn-fS-Rbd.title" = "Untitled";
+"NQn-fS-Rbd.title" = "Без назви";
 
 /* Class = "NSTextFieldCell"; title = "New preset name:"; ObjectID = "Pe0-gr-Yv4"; */
-"Pe0-gr-Yv4.title" = "New preset name:";
+"Pe0-gr-Yv4.title" = "Нове ім'я:";
 
 /* Class = "NSButtonCell"; title = "Rename"; ObjectID = "Z9M-dc-5Ml"; */
-"Z9M-dc-5Ml.title" = "Rename";
+"Z9M-dc-5Ml.title" = "Перейменувати";
 

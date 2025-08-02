@@ -1,35 +1,35 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Scale preview to fill the display."; ObjectID = "12K-c3-Z7A"; */
-"12K-c3-Z7A.ibShadowedToolTip" = "Scale preview to fill the display.";
+"12K-c3-Z7A.ibShadowedToolTip" = "Масштабуйте попередній перегляд, щоб заповнити дисплей.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Encode and play a preview video using current settings."; ObjectID = "16b-R9-bBU"; */
-"16b-R9-bBU.ibShadowedToolTip" = "Encode and play a preview video using current settings.";
+"16b-R9-bBU.ibShadowedToolTip" = "Кодування та відтворення попереднього перегляду відео з поточними налаштуваннями.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Duration to encode in seconds."; ObjectID = "ASA-X8-16P"; */
-"ASA-X8-16P.ibShadowedToolTip" = "Duration to encode in seconds.";
+"ASA-X8-16P.ibShadowedToolTip" = "Тривалість кодування в секундах.";
 
 /* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
-"ksF-Ma-hB1.title" = "sec";
+"ksF-Ma-hB1.title" = "сек.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Show cropping settings"; ObjectID = "mV7-hU-tMt"; */
-"mV7-hU-tMt.ibShadowedToolTip" = "Show cropping settings";
+"mV7-hU-tMt.ibShadowedToolTip" = "Показати налаштування обрізання";
 
 /* Class = "NSButtonCell"; title = "Crop"; ObjectID = "NWd-Lq-c1A"; */
-"NWd-Lq-c1A.title" = "Crop";
+"NWd-Lq-c1A.title" = "Урожай";
 
 /* Class = "NSButtonCell"; title = "Scale To Screen"; ObjectID = "STc-Po-p1X"; */
-"STc-Po-p1X.title" = "Scale To Screen";
+"STc-Po-p1X.title" = "Масштаб до екрану";
 
 /* Class = "NSTextFieldCell"; title = "Duration:"; ObjectID = "USR-Qf-N5v"; */
-"USR-Qf-N5v.title" = "Duration:";
+"USR-Qf-N5v.title" = "Тривалість:";
 
 /* Class = "NSButtonCell"; title = "Live Preview"; ObjectID = "vkh-GY-5qx"; */
-"vkh-GY-5qx.title" = "Live Preview";
+"vkh-GY-5qx.title" = "Перегляд у реальному часі";
 
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "preview image"; ObjectID = "wUk-SQ-GhS"; */
 "wUk-SQ-GhS.ibExternalAccessibilityDescription" = "preview image";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Starting point for the preview encode."; ObjectID = "wUk-SQ-GhS"; */
-"wUk-SQ-GhS.ibShadowedToolTip" = "Starting point for the preview encode.";
+"wUk-SQ-GhS.ibShadowedToolTip" = "Початкова точка для кодування попереднього перегляду.";
 
 /* Class = "NSMenuItem"; title = "240"; ObjectID = "XYh-Ls-slf"; */
 "XYh-Ls-slf.title" = "240";

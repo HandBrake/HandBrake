@@ -38,7 +38,7 @@
 "1189.title" = "Fenster";
 
 /* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "1190"; */
-"1190.title" = "Zoomen";
+"1190.title" = "Alles nach vorne bringen";
 
 /* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "1191"; */
 "1191.title" = "Im Dock ablegen";
@@ -50,7 +50,7 @@
 "1198.title" = "Quelle öffnen …";
 
 /* Class = "NSMenuItem"; title = "File"; ObjectID = "1200"; */
-"1200.title" = "Ablage";
+"1200.title" = "Datei";
 
 /* Class = "NSMenu"; title = "File"; ObjectID = "1209"; */
 "1209.title" = "Ablage";

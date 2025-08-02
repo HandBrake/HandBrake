@@ -40,9 +40,6 @@
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "Настройка:";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
-"gEp-lv-YUY.ibShadowedToolTip" = "Дополнительные параметры кодировщика видео. Только для продвинутых пользователей.\n\nСинтаксис: option-1=foo:opt2=bar";
-
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
 "GPu-Ht-bKg.ibShadowedToolTip" = "Постоянное качество меняет битрейт, чтобы удостоверится, что визуальное качество изображения остается относительно постоянным на всем протяжении видео.\n\nПереместите ползунок правее для увеличения качества или левее для уменьшения качества, небольшими шагами в плюс или минус 1-2.\n\nРекомендованные значения для кодировщиков x264 и x265 - RF 18-28. Большие значения могут привести к чрезвычайно большому размеру файла.\n\nx264 без сжатия находится на RF 0.";
 
@@ -55,14 +52,14 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "kh8-d2-hSD"; */
 "kh8-d2-hSD.ibShadowedToolTip" = "Профиль кодировщика видео. Устанавливает и обеспечивает соответствие заданному стандартному профилю сжатия видео. Переопределяет все прочие настройки.";
 
-/* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "kPs-u2-fDn"; */
-"kPs-u2-fDn.title" = "Опции кодировщика:";
-
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "Кодировщик видео:";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "Пресет:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r18-GT-7jT"; */
+"r18-GT-7jT.title" = "OtherViews";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "rbo-w6-ENd"; */
 "rbo-w6-ENd.ibShadowedToolTip" = "Дополнительные параметры кодировщика видео. Только для продвинутых пользователей.\n\nСинтаксис: option-1=foo:opt2=bar,baz";

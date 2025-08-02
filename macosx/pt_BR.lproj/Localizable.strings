@@ -577,6 +577,9 @@ Rename preset window -> name alert message */
 /* Preferences -> Output Name Token */
 "Title" = "Título";
 
+/* Queue Window Details Toolbar Item */
+"Toggle details sidebar" = "Alternar barra lateral de detalhes";
+
 /* HBLanguage -> Unknown language */
 "Unknown" = "Desconhecido";
 

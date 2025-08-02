@@ -31,6 +31,9 @@
 /* Class = "NSTextFieldCell"; title = "Activity Logs:"; ObjectID = "351"; */
 "351.title" = "Дневници на дейностите:";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "352"; */
+"352.ibShadowedToolTip" = "Брой на визуализациите на картините за сканиране. По-високите стойности могат да увеличат точността на автоматичното изрязване за сметка на времето за сканиране на заглавието.";
+
 /* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
 "355.title" = "10";
 
@@ -39,6 +42,12 @@
 
 /* Class = "NSMenuItem"; title = "20"; ObjectID = "357"; */
 "357.title" = "20";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "359"; */
+"359.ibShadowedToolTip" = "Брой на визуализациите на картините за сканиране. По-високите стойности могат да увеличат точността на автоматичното изрязване за сметка на времето за сканиране на заглавието.";
+
+/* Class = "NSTextFieldCell"; title = "Number of picture previews to scan:"; ObjectID = "360"; */
+"360.title" = "Брой визуализации на снимки за сканиране:";
 
 /* Class = "NSMenuItem"; title = "25"; ObjectID = "361"; */
 "361.title" = "25";
@@ -91,6 +100,9 @@
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
 "399.title" = "Използвай libdvdnav (вместо libdvdread)";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped"; ObjectID = "480"; */
+"480.ibShadowedToolTip" = "Минимална продължителност на заглавието в секунди. По-кратките заглавия ще бъдат пропуснати.";
+
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
 
@@ -109,6 +121,12 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Keep all the titles to match the titles numbers of a Blu-ray player"; ObjectID = "AYI-kG-it2"; */
+"AYI-kG-it2.ibShadowedToolTip" = "Запазете всички заглавия, за да съответстват на номерата на заглавията на Blu-ray плейъра";
+
+/* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
+"BHK-QU-DwS.title" = "Активиране на хардуерните декодери на VideoToolbox";
+
 /* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "BKV-oH-uht"; */
 "BKV-oH-uht.title" = "GB";
 
@@ -123,6 +141,9 @@
 
 /* Class = "NSMenuItem"; title = "Auto"; ObjectID = "cZP-RL-fcB"; */
 "cZP-RL-fcB.title" = "Автоматично";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed."; ObjectID = "Doh-Ja-Gh7"; */
+"Doh-Ja-Gh7.ibShadowedToolTip" = "Хардуерните декодери ще намалят използването на процесора и ще намалят консумацията на батерията, когато се комбинират с хардуерен енкодер. В зависимост от скоростта на процесора те могат да подобрят или да намалят скоростта на кодиране.";
 
 /* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "f47-PN-ctH"; */
 "f47-PN-ctH.title" = "Върни на \"Не прави нищо\" при стартиране";
@@ -162,6 +183,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "saX-n7-YV0"; */
 "saX-n7-YV0.title" = "Опции:";
+
+/* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "t9b-CO-ShI"; */
+"t9b-CO-ShI.title" = "Използване на формат за дата по ISO (YYYY-MM-DD)";
 
 /* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "tAb-w4-Xwt"; */
 "tAb-w4-Xwt.title" = "Замени долните черти с интервали";

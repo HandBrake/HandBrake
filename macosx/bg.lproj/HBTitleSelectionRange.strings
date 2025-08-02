@@ -22,6 +22,9 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Range Selection"; ObjectID = "aM2-P8-m4w"; */
 "aM2-P8-m4w.ibExternalAccessibilityDescription" = "Избор на интервал";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "aM2-P8-m4w"; */
+"aM2-P8-m4w.ibShadowedToolTip" = "Избор на обхват на източника. По подразбиране се избират всички глави и се кодира целият източник.";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "eoO-dc-hc3"; */
 "eoO-dc-hc3.ibExternalAccessibilityDescription" = "Начална глава";
 

@@ -142,6 +142,9 @@ Preferences -> Output Name Token */
 /* Queue Alert -> cancel rip first button */
 "Continue Encoding" = "Продължи кодиране";
 
+/* Copy Protection Alert -> message */
+"Copy-Protected sources are not supported." = "Източниците, защитени от копиране, не се поддържат.";
+
 /* Preferences -> Output Name Token */
 "Creation-Date" = "Дата на създаване";
 
@@ -227,6 +230,9 @@ Queue done notification failed message */
 
 /* Preview -> live preview alert informative text */
 "HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake не може да възпроизведе тази комбинация от видео/аудио/контейнер. Искате ли да го отворите във външен плеър?";
+
+/* Main Window -> Same as source destination open panel */
+"HandBrake does not have permission to write to this folder. To allow HandBrake to write to this folder, click \"Allow\"" = "HandBrake няма разрешение да записва в тази папка. За да разрешите на HandBrake да записва в тази папка, щракнете върху „Allow“.";
 
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Ако изключите HandBrake, текущото кодиране ще бъде добавено в опашката при следващото стартиране. Искате ли да излезете все пак?";
@@ -409,6 +415,9 @@ Touch bar */
 /* HBRange -> display name */
 "Seconds" = "Секунди";
 
+/* Queue Alert -> cancel rip informative text */
+"Select Continue Encoding to dismiss this dialog without making changes." = "Изберете Continue Encoding (Продължи кодирането), за да прекратите този диалогов прозорец, без да правите промени.";
+
 /* Preferences -> send to app destination open panel */
 "Select the desired external application" = "Изберете желаното външно приложение";
 
@@ -506,6 +515,12 @@ Toolbar Start/Stop Item */
 
 /* Chapters import -> invalid CSV recovery suggestion */
 "The CSV file is not a valid chapters CSV file." = "CSV файлът не е валиден CSV файл.";
+
+/* Destination same as source alert -> informative text */
+"The destination is the same as the source, you can not overwrite your source file!" = "Дестинацията е същата като източника, не можете да презаписвате изходния си файл!";
+
+/* Chapters import -> invalid CSV line count recovery suggestion */
+"The line count in the chapters CSV file does not match the number of chapters in the movie." = "Броят на редовете в CSV файла с глави не съвпада с броя на главите във филма.";
 
 /* Add preset window -> name alert message
 Rename preset window -> name alert message */

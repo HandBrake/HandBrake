@@ -16,6 +16,9 @@
 /* Class = "NSButtonCell"; title = "Blu-ray Subtitles"; ObjectID = "bfV-9D-6dh"; */
 "bfV-9D-6dh.title" = "Субтитри за Blu-ray";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "ceZ-On-t5S"; */
+"ceZ-On-t5S.ibShadowedToolTip" = "Запишете първата избрана DVD песен със субтитри. Всички останали записи на DVD субтитри ще бъдат изхвърлени. Използвайте тази опция, ако софтуерът или устройството за възпроизвеждане не поддържат DVD субтитри.\n\nМоже да бъде записана само една песен със субтитри.";
+
 /* Class = "NSMenuItem"; title = "Foreign Audio, then First Selected Track"; ObjectID = "d79-2j-fhc"; */
 "d79-2j-fhc.title" = "Чуждо аудио, след това първа избрана пътечка";
 
@@ -40,6 +43,9 @@
 /* Class = "NSWindow"; title = "Subtitles Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
 "kwM-lz-5lG.title" = "Поведение на избрани субтитри";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.\n\nOnly one subtitles track can be burned in."; ObjectID = "Lsa-kB-2BP"; */
+"Lsa-kB-2BP.ibShadowedToolTip" = "Поведение при прегаряне. Изберете кои субтитри да бъдат постоянни, като се наслагват върху видеопистата.\n\nМоже да бъде записана само една писта със субтитри.";
+
 /* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
 "mAT-Jp-SG1.title" = "Езици:";
 
@@ -52,11 +58,17 @@
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NJl-q3-zXL"; */
 "NJl-q3-zXL.title" = "Опции:";
 
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "Nks-nt-ePt"; */
+"Nks-nt-ePt.title" = "Име:";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
 "oiD-QI-wly.ibShadowedToolTip" = "Поведение при избор на писта.\n\nПо подразбиране няма да се избират аудиописти.\n\nFirst Matching Selected Languages (Първа, съответстваща на избраните езици) добавя първата аудиописта, съответстваща на всеки от избраните езици в източника.\n\nAll Matching Selected Languages (Всички, съответстващи на избраните езици) добавя всички аудиопътеки, съответстващи на всеки от избраните езици в източника.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default."; ObjectID = "OOC-GZ-OFA"; */
 "OOC-GZ-OFA.ibShadowedToolTip" = "\"Търсене на чуждо аудио\" сканира източника за кратки поредици от чуждо аудио, които се показват по подразбиране.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "Px8-G6-NVX"; */
+"Px8-G6-NVX.ibShadowedToolTip" = "Запишете първата избрана Blu-ray песен със субтитри. Всички останали Blu-ray песни със субтитри ще бъдат изхвърлени. Използвайте тази опция, ако софтуерът или устройството за възпроизвеждане не поддържат Blu-ray субтитри.\n\nМоже да бъде записана само една песен със субтитри.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
 "QRd-XH-6TH.title" = "Пътечка за субтитри за чуждо аудио";

@@ -57,22 +57,22 @@ HBStateFormatter -> work time format */
 "%.6g FPS" = "%.6g FPS";
 
 /* Audio description */
-"%@ ▸ Encoder: %@" = "%1$@ ▸ Encoder: %2$@";
+"%@ ▸ Encoder: %@" = "%1$@ ▸ Кодер: %2$@";
 
 /* HBPicture -> short info */
-"%@Output: %dx%d" = "%1$@Output: %2$dx%3$d";
+"%@Output: %dx%d" = "%1$@Виходьте:%2$dx%3$d";
 
 /* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Automatic" = "%1$@Output: %2$dx%3$d, Anamorphic: %4$dx%5$d Automatic";
+"%@Output: %dx%d, Anamorphic: %dx%d Automatic" = "%1$@Вихід: %2$dx%3$d, Анаморфний:  %4$dx%5$d Автоматично";
 
 /* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Output: %2$dx%3$d, Anamorphic: %4$dx%5$d Custom";
+"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Вихід: %2$dx%3$d, Anamorphic: %4$dx%5$d Custom";
 
 /* HBPicture -> short non anamorphic info */
 "%dx%d" = "%1$dx%2$d";
 
 /* HBPicture -> short info */
-"%dx%d Storage, %dx%d Display" = "%1$dx%2$d Storage, %3$dx%4$d Display";
+"%dx%d Storage, %dx%d Display" = "%1$dx%2$d Зберігання, %3$dx%4$d Відображення";
 
 /* HBJob -> audio short description */
 "+ %lu additional audio tracks" = "+ %lu додаткових аудіо доріжок";
@@ -131,11 +131,11 @@ Title description */
 
 /* Filters description
 HBJob -> filters short description */
-"Chroma Smooth" = "Chroma Smooth";
+"Chroma Smooth" = "Згладжування кольоровості";
 
 /* Filters description
 HBJob -> filters short description */
-"Colorspace" = "Colorspace";
+"Colorspace" = "Кольоровий простір";
 
 /* HBJob -> filters short description */
 "Comb Detect" = "Comb Detect";
@@ -168,7 +168,7 @@ Subtitles description */
 "Default: " = "За замовчуванням:";
 
 /* Filters description */
-"Denoise" = "Denoise";
+"Denoise" = "Деніз.";
 
 /* Destination description */
 "Destination:" = "Пункт Призначення:";
@@ -227,13 +227,13 @@ HBJob -> filters short description */
 "HQDN3D" = "HQDN3D";
 
 /* HBFilters -> invalid Bwdif custom string description */
-"Invalid Bwdif custom settings." = "Invalid Bwdif custom settings.";
+"Invalid Bwdif custom settings." = "Інвалідні кастомні налаштування  Bwdif.";
 
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid chroma smooth custom settings." = "Invalid chroma smooth custom settings.";
 
 /* HBFilters -> invalid chroma smooth custom string description */
-"Invalid colorspace custom settings." = "Invalid colorspace custom settings.";
+"Invalid colorspace custom settings." = "Неправильні користувацькі налаштування простору кольорів.";
 
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "Invalid custom comb detect settings.";
@@ -251,7 +251,7 @@ HBJob -> filters short description */
 "Invalid deblock custom settings." = "Invalid deblock custom settings.";
 
 /* HBFilters -> invalid Decomb custom string description */
-"Invalid Decomb custom settings." = "Invalid Decomb custom settings.";
+"Invalid Decomb custom settings." = "Інвалідні кастомні налаштування  Decomb.";
 
 /* HBFilters -> invalid lapsharp custom string description */
 "Invalid lapsharp custom settings." = "Invalid lapsharp custom settings.";
@@ -263,7 +263,7 @@ HBJob -> filters short description */
 "Invalid preset" = "Некоректний пресет";
 
 /* HBFilters -> invalid unsharp custom string description */
-"Invalid unsharp custom settings." = "Invalid unsharp custom settings.";
+"Invalid unsharp custom settings." = "Недійсні нечіткі користувацькі налаштування.";
 
 /* HBFilters -> invalid Yadif custom string description */
 "Invalid Yadif custom settings." = "Інвалідні кастомні налаштування Yadif.";
@@ -287,7 +287,7 @@ HBJob -> filters short description */
 "Mono (Right Only)" = "Моно (тільки правий канал)";
 
 /* Title description */
-"Multi Passes" = "Multi Passes";
+"Multi Passes" = "Мульти абонементи";
 
 /* Title description */
 "Multi Passes Turbo" = "Multi Passes Turbo";
@@ -369,7 +369,7 @@ HBFilters -> off display name */
 "Seconds %d through %d" = "З %1$d до %2$d секунди";
 
 /* Filters description */
-"Sharpen" = "Sharpen";
+"Sharpen" = "Підвищення різкості:";
 
 /* Source description */
 "Source:" = "Джерело:";
@@ -412,10 +412,10 @@ HBFilters -> off display name */
 
 /* Audio track title description
 Subtitles track title description */
-"Title: %@" = "Title: %@";
+"Title: %@" = "Заголовок: %@";
 
 /* Video description */
-"Tune: " = "Tune: ";
+"Tune: " = "Налаштуйся:";
 
 /* HBJob -> video short description encoder name
 Video description */

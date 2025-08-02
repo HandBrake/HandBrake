@@ -1,21 +1,21 @@
 /* Class = "NSWindow"; title = "Activity"; ObjectID = "5"; */
-"5.title" = "Activity";
+"5.title" = "Діяльність";
 
 /* Class = "NSMenu"; title = "Menu"; ObjectID = "11"; */
-"11.title" = "Menu";
+"11.title" = "Меню";
 
 /* Class = "NSMenuItem"; title = "Clear Window Contents"; ObjectID = "12"; */
-"12.title" = "Clear Window Contents";
+"12.title" = "Очистити вміст вікна";
 
 /* Class = "NSMenuItem"; title = "Copy Window Contents"; ObjectID = "24"; */
-"24.title" = "Copy Window Contents";
+"24.title" = "Копіювання вмісту вікна";
 
 /* Class = "NSMenuItem"; title = "Open Activity Log For This Session In Default Application"; ObjectID = "33"; */
-"33.title" = "Open Activity Log For This Session In Default Application";
+"33.title" = "Відкрити журнал активності для цього сеансу у програмі за замовчуванням";
 
 /* Class = "NSMenuItem"; title = "Clear Activity Log For This Session"; ObjectID = "35"; */
-"35.title" = "Clear Activity Log For This Session";
+"35.title" = "Очистити журнал активності для цього сеансу";
 
 /* Class = "NSMenuItem"; title = "Open Activity Logs Directory In Finder"; ObjectID = "43"; */
-"43.title" = "Open Activity Logs Directory In Finder";
+"43.title" = "Відкрийте каталог журналів у Finder";
 

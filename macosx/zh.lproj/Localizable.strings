@@ -93,6 +93,9 @@ Touch bar */
 /* Main Window -> Same as source destination open panel */
 "Allow" = "允许";
 
+/* Preferences -> Output Name Token */
+"Angle" = "角度";
+
 /* HBLanguage -> Any language */
 "Any" = "任何";
 
@@ -251,6 +254,9 @@ Queue done notification failed message */
 
 /* Preferences -> Output Name Token */
 "Height" = "高度";
+
+/* Queue -> sidebar menu */
+"Hide Sidebar" = "隐藏侧边栏";
 
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "如果您退出 HandBrake，您当前的编码将在下一次启动时重新加载到你的队列中。真的想要退出吗?";
@@ -480,6 +486,9 @@ Touch bar */
 /* Main Window Presets Toolbar Item */
 "Show Queue Window" = "显示队列窗口";
 
+/* Queue -> sidebar menu */
+"Show Sidebar" = "显示侧边栏";
+
 /* Queue Window When Done Toolbar Item */
 "Shut Down Computer" = "关闭电脑";
 
@@ -576,6 +585,9 @@ Rename preset window -> name alert message */
 
 /* Preferences -> Output Name Token */
 "Title" = "标题";
+
+/* Queue Window Details Toolbar Item */
+"Toggle details sidebar" = "显示/隐藏详情侧边栏";
 
 /* HBLanguage -> Unknown language */
 "Unknown" = "未知";

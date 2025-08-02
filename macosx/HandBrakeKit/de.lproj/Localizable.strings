@@ -30,7 +30,7 @@ HBStateFormatter -> work time format */
 ", 1 subtitles track" = ", 1 Untertitelspur";
 
 /* Format description */
-", Align A/V Start" = ", A/V synchron";
+", Align A/V Start" = ", A/V synchronisieren";
 
 /* HBPicture -> summary */
 ", Border: %d/%d/%d/%d" = ", Ränder: %1$d/%2$d/%3$d/%4$d";
@@ -39,7 +39,7 @@ HBStateFormatter -> work time format */
 ", Burned" = ", Eingebrannt";
 
 /* Format description */
-", Chapter Markers" = ", Kapitelmarker";
+", Chapter Markers" = ", Kapitelmarkierungen";
 
 /* HBPicture -> summary */
 ", Crop: %@ %d/%d/%d/%d" = ", Beschneiden: %1$@ %2$d/%3$d/%4$d/%5$d";
@@ -121,7 +121,7 @@ Title description */
 "Chapter %d" = "Kapitel %d";
 
 /* HBJob -> chapters short description */
-"Chapter Markers" = "Kapitelmarker";
+"Chapter Markers" = "Kapitelmarkierungen";
 
 /* HBRange -> display name */
 "Chapters" = "Kapitel";
@@ -348,7 +348,7 @@ HBFilters -> off display name */
 "Same as source" = "Wie die Quelle";
 
 /* Video description */
-"Same as source (constant)" = "Wie die Quelle (konstant)";
+"Same as source (constant)" = "Wie Quelle (konstant)";
 
 /* Video description */
 "Same as source (variable)" = "Wie die Quelle (variabel)";
@@ -428,7 +428,7 @@ Video description */
 "VFR" = "VFR";
 
 /* Video description */
-"Video Options:" = "Parameter:";
+"Video Options:" = "Videoparameter:";
 
 /* Video description */
 "Video:" = "Video:";

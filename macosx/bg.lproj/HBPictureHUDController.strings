@@ -28,6 +28,9 @@
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "preview image"; ObjectID = "wUk-SQ-GhS"; */
 "wUk-SQ-GhS.ibExternalAccessibilityDescription" = "визуализация на изображение";
 
+/* Class = "NSSlider"; ibShadowedToolTip = "Starting point for the preview encode."; ObjectID = "wUk-SQ-GhS"; */
+"wUk-SQ-GhS.ibShadowedToolTip" = "Начална точка за кодиране на предварителен преглед.";
+
 /* Class = "NSMenuItem"; title = "240"; ObjectID = "XYh-Ls-slf"; */
 "XYh-Ls-slf.title" = "240";
 

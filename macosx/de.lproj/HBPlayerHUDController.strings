@@ -53,7 +53,7 @@
 "uYx-2C-8et.ibExternalAccessibilityDescription" = "Momentane Position auf der Zeitleiste";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Current timeline position."; ObjectID = "uYx-2C-8et"; */
-"uYx-2C-8et.ibShadowedToolTip" = "Momentane Position auf der Zeitleiste.";
+"uYx-2C-8et.ibShadowedToolTip" = "Aktuelle Position auf der Zeitleiste.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Tracks Selection"; ObjectID = "Vj1-Za-AUV"; */
 "Vj1-Za-AUV.ibExternalAccessibilityDescription" = "Spurenauswahl";

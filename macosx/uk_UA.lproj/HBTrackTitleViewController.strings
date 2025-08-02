@@ -1,12 +1,12 @@
 /* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "eBw-qE-Hyb"; */
-"eBw-qE-Hyb.title" = "Name:";
+"eBw-qE-Hyb.title" = "Ім'я:";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Track name"; ObjectID = "FpM-Jx-vLD"; */
-"FpM-Jx-vLD.ibExternalAccessibilityDescription" = "Track name";
+"FpM-Jx-vLD.ibExternalAccessibilityDescription" = "Назва треку";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Players may use this in the audio/subtitles selection list."; ObjectID = "FpM-Jx-vLD"; */
-"FpM-Jx-vLD.ibShadowedToolTip" = "Players may use this in the audio/subtitles selection list.";
+"FpM-Jx-vLD.ibShadowedToolTip" = "Плеєри можуть використовувати його у списку вибору аудіо/субтитрів.";
 
 /* Class = "NSButtonCell"; title = "Done"; ObjectID = "Vzr-yd-VKe"; */
-"Vzr-yd-VKe.title" = "Done";
+"Vzr-yd-VKe.title" = "Зроблено.";
 

@@ -1,60 +1,60 @@
 /* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[0] = "Create a new custom preset based on the currently selected settings."; ObjectID = "0di-xq-jgi"; */
-"0di-xq-jgi.ibShadowedToolTips[0]" = "Create a new custom preset based on the currently selected settings.";
+"0di-xq-jgi.ibShadowedToolTips[0]" = "Створіть новий користувацький пресет на основі поточних налаштувань.";
 
 /* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[1] = "Delete the selected preset."; ObjectID = "0di-xq-jgi"; */
-"0di-xq-jgi.ibShadowedToolTips[1]" = "Delete the selected preset.";
+"0di-xq-jgi.ibShadowedToolTips[1]" = "Видаліть вибраний пресет.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "4tC-UE-40G"; */
 "4tC-UE-40G.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
-"cm5-Kl-dB3.title" = "Reset Official Presets";
+"cm5-Kl-dB3.title" = "Скинути офіційні пресети";
 
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "cUW-79-8BY"; */
-"cUW-79-8BY.title" = "Make Default";
+"cUW-79-8BY.title" = "За замовчуванням";
 
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "D2t-YG-Frn"; */
-"D2t-YG-Frn.title" = "Make Default";
+"D2t-YG-Frn.title" = "За замовчуванням";
 
 /* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
 "Io0-Vm-Qez.title" = "Нова Категорія";
 
 /* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "k6z-1U-qsp"; */
-"k6z-1U-qsp.title" = "Rename…";
+"k6z-1U-qsp.title" = "Перейменувати...";
 
 /* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
-"LQk-kD-5sj.title" = "Presets Action Menu";
+"LQk-kD-5sj.title" = "Меню дій з пресетами";
 
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
-"LUl-ag-Iu6.title" = "Import…";
+"LUl-ag-Iu6.title" = "Імпорт...";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "M33-MU-aWd"; */
-"M33-MU-aWd.title" = "Export…";
+"M33-MU-aWd.title" = "Експорт...";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
 "oBC-Nh-TwB.title" = "Table View Cell";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
-"r4V-6L-SO8.title" = "Presets";
+"r4V-6L-SO8.title" = "пресети";
 
 /* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "ryC-EH-q4k"; */
-"ryC-EH-q4k.title" = "Rename…";
+"ryC-EH-q4k.title" = "Перейменувати...";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Presets"; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibExternalAccessibilityDescription" = "Presets";
+"uad-bt-uKD.ibExternalAccessibilityDescription" = "пресети";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset."; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibShadowedToolTip" = "Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset.";
+"uad-bt-uKD.ibShadowedToolTip" = "Пресети - це групи налаштувань кодування, призначені для певних сценаріїв. Виберіть той, який найбільше відповідає вашим намірам.\n\nПеревизначає всі налаштування кодування. Після вибору пресета налаштування можна змінити.";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
-"xEQ-Un-J0n.title" = "Export…";
+"xEQ-Un-J0n.title" = "Експорт...";
 
 /* Class = "NSMenuItem"; title = "Delete…"; ObjectID = "xtN-lj-fJP"; */
 "xtN-lj-fJP.title" = "Видалити...";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Additional Options"; ObjectID = "Ybq-Zt-sta"; */
-"Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Additional Options";
+"Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Додаткові опції";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Show additional options."; ObjectID = "Ybq-Zt-sta"; */
-"Ybq-Zt-sta.ibShadowedToolTip" = "Show additional options.";
+"Ybq-Zt-sta.ibShadowedToolTip" = "Показати додаткові опції.";
 

@@ -52,9 +52,6 @@
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "Abstimmung:";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
-"gEp-lv-YUY.ibShadowedToolTip" = "Zusätzliche Videoencodiereinstellungen. Für erfahrene Anwender.\n\nSyntax: option-1=foo:opt2=bar";
-
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
 "GPu-Ht-bKg.ibShadowedToolTip" = "Konstante Qualität variiert die Bitrate um eine gleichbleibende visuelle Qualität über das ganze Video zu garantieren.\n\nWird der Qualitätsregler nach rechts bewegt erhöht sich die Qualität, nach links erniedrigt sie sich, jeweils in kleinen Schritten von plus oder minus 1–2.\n\nEmpfohlene Werte für x264 und x265 sind zwischen RF 18–28. Höhere Qualitätseinstellungen produzieren evtl. sehr große Dateien.\n\nx264 ist verlustfrei bei RF 0.";
 
@@ -66,9 +63,6 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "kh8-d2-hSD"; */
 "kh8-d2-hSD.ibShadowedToolTip" = "Videoencoderprofil. Garantiert die Erfüllung bestimmter Videostandardprofile. Überschreibt alle anderen Einstellungen.";
-
-/* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "kPs-u2-fDn"; */
-"kPs-u2-fDn.title" = "Encodereinstellungen:";
 
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "Videoencoder:";
@@ -107,7 +101,7 @@
 "TVE-3O-C2l.title" = "Voll";
 
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
-"VQe-CK-YDR.title" = "Mittlere Bitrate (kbps):";
+"VQe-CK-YDR.title" = "Durchschnittliche Bitrate (kbps):";
 
 /* Class = "NSButtonCell"; title = "Turbo analysis pass"; ObjectID = "vSc-VB-NEv"; */
 "vSc-VB-NEv.title" = "Beschleunigter Analysedurchgang";

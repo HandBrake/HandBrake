@@ -11,7 +11,7 @@
 "CZZ-bW-jZc.title" = "Metadaten-Passthru";
 
 /* Class = "NSButtonCell"; title = "Align A/V Start"; ObjectID = "De0-Je-MAm"; */
-"De0-Je-MAm.title" = "A/V synchron";
+"De0-Je-MAm.title" = "A/V synchronisieren";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Copy metadata from source to output"; ObjectID = "eJx-BO-rhL"; */
 "eJx-BO-rhL.ibShadowedToolTip" = "Kopiert die Metadaten der Quelldatei in die Ausgabedatei";
@@ -41,7 +41,7 @@
 "RXJ-DZ-4mh.title" = "Format:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility."; ObjectID = "txV-1R-WoD"; */
-"txV-1R-WoD.ibShadowedToolTip" = "Kontainerformat. Video, Audio und andere Spuren werden zu einer Datei kombiniert. Kann die Kompatibilität beeinflussen.";
+"txV-1R-WoD.ibShadowedToolTip" = "Containerformat. Video, Audio und andere Spuren werden zu einer Datei kombiniert. Kann die Kompatibilität beeinflussen.";
 
 /* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "wcc-5d-Dgj"; */
 "wcc-5d-Dgj.title" = "Web-optimiert";
