@@ -1225,7 +1225,7 @@ namespace HandBrakeWPF.ViewModels
                     Resources.MainView_ModifiedPreset);
                 temporaryPreset.Task = new EncodeTask(this.CurrentTask);
                 temporaryPreset.AudioTrackBehaviours = new AudioBehaviours(this.AudioViewModel.AudioBehaviours);
-                temporaryPreset.SubtitleTrackBehaviours = new SubtitleBehaviours(this.SubtitleViewModel.SubtitleBehaviours);
+                temporaryPreset.SubtitleTrackBehaviours = new SubtitleBehaviourRule(this.SubtitleViewModel.SubtitleBehaviours);
             }
 
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueSelectionViewModel));
@@ -1764,7 +1764,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.errorService.ShowMessageBox(Resources.Main_PresetUpdateConfirmation, Resources.AreYouSure, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                this.selectedPreset.Update(new EncodeTask(this.CurrentTask), new AudioBehaviours(this.AudioViewModel.AudioBehaviours), new SubtitleBehaviours(this.SubtitleViewModel.SubtitleBehaviours));
+                this.selectedPreset.Update(new EncodeTask(this.CurrentTask), new AudioBehaviours(this.AudioViewModel.AudioBehaviours), new SubtitleBehaviourRule(this.SubtitleViewModel.SubtitleBehaviours));
                 this.presetService.Update(this.selectedPreset.Name, this.selectedPreset);
                 this.IsModifiedPreset = false;
 
