@@ -717,15 +717,13 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         {
             hb_hwaccel_hw_device_ctx_init(AV_HWDEVICE_TYPE_QSV,
                                           job->hw_device_index,
-                                         &job->hw_device_ctx);
+                                         &context->hw_device_ctx);
 
             if (context->hw_device_ctx == NULL)
             {
                 ret = 1;
                 goto done;
             }
-
-            context->hw_device_ctx = av_buffer_ref(job->hw_device_ctx);
         }
 #endif
         context->pix_fmt = job->output_pix_fmt;
