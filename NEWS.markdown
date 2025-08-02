@@ -81,6 +81,7 @@ Download available from Microsoft:
 - Fixed queue jobs not being reloaded properly when the source is an .iso file
 - Fixed "Same as source" destination option, it didn't work properly in some case
 - Fixed reloading jobs from the queue when the source is a .iso file
+- Updated existing and maintained locales
 
 ### Windows
 
