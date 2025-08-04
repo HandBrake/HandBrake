@@ -2337,12 +2337,16 @@ static void redirect_thread_func(void * _data)
 #endif
     setvbuf(stderr, NULL, _IONBF, 0);
 
-    FILE * log_f = fdopen(pfd[0], "rb");
+    FILE *log_f = fdopen(pfd[0], "rb");
 
-    char line_buffer[500];
-    while(fgets(line_buffer, 500, log_f) != NULL)
+    if (log_f != NULL)
     {
-        hb_log_callback(line_buffer);
+        char line_buffer[500];
+        while(fgets(line_buffer, 500, log_f) != NULL)
+        {
+            hb_log_callback(line_buffer);
+        }
+        fclose(log_f);
     }
 }
 

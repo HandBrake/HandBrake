@@ -400,8 +400,10 @@ static OSType hb_vt_encoder_pixel_format_xlat(int vcodec, int profile, int color
             {
                 case HB_VT_H265_PROFILE_MAIN_10:
                     pix_fmt = hb_vt_get_best_pix_fmt(vcodec, "main-10");
+                    break;
                 case HB_VT_H265_PROFILE_MAIN_422_10:
                     pix_fmt = hb_vt_get_best_pix_fmt(vcodec, "main422-10");
+                    break;
             }
             break;
         default:

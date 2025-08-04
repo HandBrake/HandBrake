@@ -1157,8 +1157,8 @@ static int comb_detect_init(hb_filter_object_t *filter,
     pv->gamma_spatial_threshold6  = 6 * pv->gamma_spatial_threshold;
     pv->spatial_threshold_squared = pv->spatial_threshold * pv->spatial_threshold;
     pv->spatial_threshold6        = 6 * pv->spatial_threshold;
-    pv->comb32detect_min = 10 << (pv->depth - 8);
-    pv->comb32detect_max = 15 << (pv->depth - 8);
+    pv->comb32detect_min = pv->depth >= 8 ? 10 << (pv->depth - 8) : 10;
+    pv->comb32detect_max = pv->depth >= 8 ? 15 << (pv->depth - 8) : 15;
 
     pv->cpu_count = hb_get_cpu_count();
 

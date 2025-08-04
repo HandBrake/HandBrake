@@ -132,7 +132,7 @@ hb_decavsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     if (ctx->pkt == NULL)
     {
         hb_log("decavsubInit: av_packet_alloc failed");
-        return NULL;
+        goto fail;
     }
 
     // avcodec may create or change subtitle header

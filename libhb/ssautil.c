@@ -356,7 +356,7 @@ static char ** get_fields(char * line, int last)
     {
         result[ii] = get_field(&pos);
     }
-    result[ii] = strdup(pos);
+    result[ii] = pos != NULL ? strdup(pos) : NULL;
 
     return result;
 }
