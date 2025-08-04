@@ -1,3 +1,5 @@
+# macOS
+.DS_Store
 # Visual Studio
 win/CS/*/bin
 win/CS/*/obj
