@@ -1,3 +1,11 @@
+TimeBreak introduces a new feature in HandBrake that allows users to preserve and intelligently adjust date and time metadata from source video files.
+
+If the checkbox is enabled, exiftool is launched as a separate process to copy the AllDates, FileModifyDate, and FileCreateDate tags from the source file to the newly encoded destination file.
+
+In addition, the code checks the destination file's name for a YYYYMMDDhhmmss timestamp pattern. If a valid pattern is found, and it differs significantly (by more than 60 seconds) from the original file's modification date, the destination file's creation and modification dates are updated to match the timestamp in the filename.
+
+This feature is designed to provide greater control over metadata for users who want to preserve original file dates or who use standardized date-based naming conventions.
+
 # HandBrake [![macOS Build](https://github.com/HandBrake/HandBrake/workflows/macOS%20build/badge.svg)](https://github.com/HandBrake/HandBrake/actions?query=workflow%3A%22macOS+build%22) [![Windows Build](https://github.com/HandBrake/HandBrake/workflows/Windows%20Build/badge.svg)](https://github.com/HandBrake/HandBrake/actions?query=workflow%3A%22Windows+Build%22) [![Linux Build](https://github.com/HandBrake/HandBrake/workflows/Linux%20Build/badge.svg)](https://github.com/HandBrake/HandBrake/actions?query=workflow%3A%22Linux+Build%22)
 
 
