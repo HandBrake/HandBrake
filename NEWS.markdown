@@ -43,6 +43,10 @@ Download available from Microsoft:
 - SubRip/UTF-8 subtitles are now passed through to MKV without conversion to SSA
 - Fixed a crash that could happen when burning bitmap subtitles
 
+#### Filters
+
+- Fixed a crash that could happen when using the Chroma Smooth filter (#7033)
+
 #### Third-party libraries
 
 - Updated libraries
@@ -73,6 +77,7 @@ Download available from Microsoft:
 
 ### Mac
 
+- Added support for the VideoToolbox AV1 hardware decoder
 - Added a Metal accelerated Render Sub filter
 - Added a contextual menu to the presets popover
 - Updated Auto Naming Preferences to add "{angle}" as a filename generation option (#6086)
