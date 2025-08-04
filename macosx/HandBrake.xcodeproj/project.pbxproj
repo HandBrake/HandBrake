@@ -67,6 +67,7 @@
 		27D6C76F14B102DA00B785E4 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73E14B102DA00B785E4 /* libvorbisenc.a */; };
 		27D6C77114B102DA00B785E4 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73F14B102DA00B785E4 /* libx264.a */; };
 		3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3490BCB31614CF8D002A5AD7 /* HandBrake.icns */; };
+		A83576BF2E410E74007F6C4A /* exiftool in Resources */ = {isa = PBXBuildFile; fileRef = A83576BE2E410E74007F6C4A /* exiftool */; };
 		A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
 		A900E6BE1D7B1B6800CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
 		A903C5601CCE78060026B0ED /* NSWindow+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */; };
@@ -514,6 +515,7 @@
 		3490BCB31614CF8D002A5AD7 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		46AB433315F98A2B009C0961 /* HBDockTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBDockTextField.h; sourceTree = "<group>"; };
 		46AB433415F98A2B009C0961 /* HBDockTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBDockTextField.m; sourceTree = "<group>"; };
+		A83576BE2E410E74007F6C4A /* exiftool */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = exiftool; sourceTree = "<group>"; };
 		A900E6BC1D7B1B4800CB6C0A /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = external/contrib/lib/libopus.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A903C55E1CCE78060026B0ED /* NSWindow+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+HBAdditions.h"; sourceTree = "<group>"; };
 		A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+HBAdditions.m"; sourceTree = "<group>"; };
@@ -1561,6 +1563,7 @@
 				273F217914ADDDA10021BE6D /* English.lproj */,
 				D86C9DD41C6D372500F06F1B /* Assets.xcassets */,
 				273F212014ADCBF70021BE6D /* pdf icons */,
+				A83576BE2E410E74007F6C4A /* exiftool */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -2382,6 +2385,7 @@
 				A9E1468016BC2AD800C307BC /* NextTemplate.pdf in Resources */,
 				A9A96BB020CAD5BD00A39AFB /* Presets.xib in Resources */,
 				A9E1468116BC2AD800C307BC /* PauseTemplate.pdf in Resources */,
+				A83576BF2E410E74007F6C4A /* exiftool in Resources */,
 				A9A96BD420CAD63000A39AFB /* Queue.xib in Resources */,
 				A9A96BE020CAD66500A39AFB /* Preferences.xib in Resources */,
 				A91AD3471FB5D9AA00AEA822 /* AddPreset.xib in Resources */,

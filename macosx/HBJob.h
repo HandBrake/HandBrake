@@ -42,6 +42,9 @@ typedef NS_ENUM(NSUInteger, HBJobHardwareDecoderUsage) {
 @property (nonatomic, readonly) int titleIdx;
 @property (nonatomic, readonly) BOOL keepDuplicateTitles;
 
+//  "Preserve Time Metadata"-button
+@property (nonatomic, readwrite) BOOL preserveTimeMetadata;
+
 // Whether the source is a single file or a DVD-Video/Blu-ray
 @property (nonatomic, readonly, getter=isStream) BOOL stream;
 

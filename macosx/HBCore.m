@@ -612,9 +612,13 @@ static void cgimage_release_byte_pointer_callback(void *info, const void *pointe
 
 - (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
+    // VIKTIG: Den nye loggen din viser at verdien allerede er 0 når den kommer inn her.
+    // Dette betyr at problemet ikke er i HBCore.m, men i koden som kaller denne metoden.
+    // Det er mest sannsynlig i HBQueueWorker.m.
+    // Gå tilbake til HBQueueWorker.m for å fortsette feilsøkingen.
+    
     NSAssert(self.state == HBStateIdle, @"[HBCore encodeJob:] called while another scan or encode already in progress");
     NSAssert(job, @"[HBCore encodeJob:] called with nil job");
-
     // Copy the progress/completion blocks
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;

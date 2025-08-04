@@ -1,4 +1,4 @@
-/*  HBQueueWorker.h
+/* HBQueueWorker.h
 
  This file is part of the HandBrake source code.
  Homepage: <http://handbrake.fr/>.
@@ -25,6 +25,9 @@ NSString * const HBQueueWorkerProgressNotificationInfoKey = @"HBQueueWorkerProgr
 NSString * const HBQueueWorkerDidStartItemNotification = @"HBQueueWorkerDidStartItemNotification";
 NSString * const HBQueueWorkerDidCompleteItemNotification = @"HBQueueWorkerDidCompleteItemNotification";
 NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotificationItemKey";
+
+// LØSNING: Deklarerer HBPreserveTimeAndDateMetadata som en konstant
+NSString * const HBPreserveTimeAndDateMetadata = @"HBPreserveTimeAndDateMetadata";
 
 @interface HBQueueWorker ()
 
@@ -132,6 +135,137 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
 
     // Mark the encode just finished
     [self.item setDoneWithResult:result];
+
+    // After '[self.item setDoneWithResult:result];'
+    // We retrieve the job and then proceed with our custom logic.
+
+    HBJob *completedJob = self.item.job;
+
+    // LØSNING: Henter verdien for "preserve time metadata" direkte fra HBJob-objektet
+    // i stedet for NSUserDefaults for å unngå binding-problemer.
+    BOOL preserveTimeMetadata = completedJob.preserveTimeMetadata;
+
+    // LØSNING: Legger til en ny logglinje for å sjekke den faktiske verdien
+    // som blir brukt i dette steget
+    NSLog(@"Debugging HBJob.preserveTimeMetadata value before ExifTool logic: %d", preserveTimeMetadata);
+
+    if (completedJob && preserveTimeMetadata && completedJob.fileURL && completedJob.destinationURL) {
+        NSURL *originalFileURL = completedJob.fileURL;
+        NSURL *destinationFileURL = completedJob.destinationURL;
+
+        // MARK: Find ExifTool binary within the app bundle
+        // Endret koden til å lete etter filen 'exiftool' basert på brukerens tilbakemelding.
+        NSString *exifToolPath = [[NSBundle mainBundle] pathForResource:@"exiftool" ofType:nil];
+
+        if (exifToolPath == nil || ![[NSFileManager defaultManager] fileExistsAtPath:exifToolPath]) {
+            // LØSNING: En mer spesifikk feilmelding for å hjelpe med feilsøking
+            NSLog(@"FEIL: ExifTool binary-filen 'exiftool' ble ikke funnet i app-pakken. Sørg for at filen er lagt til i 'Copy Files' i Build Phases for prosjektet ditt. Den forventede banen var: '%@'", exifToolPath);
+        } else {
+            // MARK: 1. Run ExifTool to copy metadata
+            NSArray<NSString *> *exifToolArguments = @[
+                @"-overwrite_original",
+                @"-P",
+                @"-TagsFromFile", originalFileURL.path,
+                @"-AllDates",
+                @"-FileModifyDate",
+                @"-FileCreateDate",
+                destinationFileURL.path
+            ];
+
+            NSTask *exifToolTask = [[NSTask alloc] init];
+            [exifToolTask setLaunchPath:exifToolPath];
+            [exifToolTask setArguments:exifToolArguments];
+
+            NSPipe *outputPipe = [NSPipe pipe];
+            [exifToolTask setStandardOutput:outputPipe];
+            [exifToolTask setStandardError:outputPipe];
+            NSFileHandle *readHandle = [outputPipe fileHandleForReading];
+
+            @try {
+                [exifToolTask launch];
+                [exifToolTask waitUntilExit];
+
+                NSData *outputData = [readHandle readDataToEndOfFile];
+                NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+
+                if ([exifToolTask terminationStatus] == 0) {
+                    NSLog(@"ExifTool kopierte dato-metadata vellykket for: %@", destinationFileURL.lastPathComponent);
+
+                    // MARK: 2. Handle custom date from filename and adjust file timestamps
+                    NSError *error = nil;
+                    NSDictionary<NSFileAttributeKey, id> *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:originalFileURL.path error:&error];
+
+                    if (fileAttributes == nil) {
+                        NSLog(@"Feil ved henting av filattributter for originalfilen: %@", error.localizedDescription);
+                    } else {
+                        NSDate *originalMDate = fileAttributes[NSFileModificationDate];
+                        NSString *baseName = originalFileURL.lastPathComponent;
+
+                        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[^0-9]" options:0 error:&error];
+                        NSString *datePattern = [regex stringByReplacingMatchesInString:baseName options:0 range:NSMakeRange(0, baseName.length) withTemplate:@""];
+
+                        if (datePattern.length >= 14) {
+                            datePattern = [datePattern substringToIndex:14];
+                            NSPredicate *isNumeric = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^\\d{14}$"];
+                            
+                            if ([isNumeric evaluateWithObject:datePattern]) {
+                                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                                [formatter setDateFormat:@"yyyyMMddHHmmss"];
+                                // LØSNING: Fjernet linjen som tvinger tidssone til UTC,
+                                // slik at den lokale tidssonen brukes til å parse filnavndato.
+                                
+
+                                NSDate *customDate = [formatter dateFromString:datePattern];
+
+                                if (customDate) {
+                                    NSTimeInterval diffSeconds = fabs([customDate timeIntervalSinceDate:originalMDate]);
+
+                                    if (diffSeconds > 60.0) {
+                                        NSLog(@"Justerer tidsstempler basert på filnavn for: %@", destinationFileURL.lastPathComponent);
+                                        BOOL setTimesResult = [[NSFileManager defaultManager] setAttributes:@{NSFileCreationDate: customDate, NSFileModificationDate: customDate} ofItemAtPath:destinationFileURL.path error:&error];
+                                        if (!setTimesResult) {
+                                            NSLog(@"Feil ved setting av tidsstempler til '%@': %@", destinationFileURL.lastPathComponent, error.localizedDescription);
+                                        }
+                                    } else {
+                                        NSLog(@"Filnavndato er for nær originalfilens modifikasjonsdato for: %@. Bruker originalens tidsstempler.", destinationFileURL.lastPathComponent);
+                                        BOOL setTimesResult = [[NSFileManager defaultManager] setAttributes:@{NSFileCreationDate: fileAttributes[NSFileCreationDate], NSFileModificationDate: originalMDate} ofItemAtPath:destinationFileURL.path error:&error];
+                                        if (!setTimesResult) {
+                                            NSLog(@"Feil ved setting av tidsstempler til '%@': %@", destinationFileURL.lastPathComponent, error.localizedDescription);
+                                        }
+                                    }
+                                } else {
+                                    NSLog(@"Kunne ikke parse dato fra filnavn '%@' for: %@", datePattern, destinationFileURL.lastPathComponent);
+                                    BOOL setTimesResult = [[NSFileManager defaultManager] setAttributes:@{NSFileCreationDate: fileAttributes[NSFileCreationDate], NSFileModificationDate: originalMDate} ofItemAtPath:destinationFileURL.path error:&error];
+                                    if (!setTimesResult) {
+                                        NSLog(@"Feil ved setting av tidsstempler til '%@': %@", destinationFileURL.lastPathComponent, error.localizedDescription);
+                                    }
+                                }
+                            } else {
+                                NSLog(@"Filnavndato-mønster er ikke 14 sifre. Bruker originalens tidsstempler for: %@", destinationFileURL.lastPathComponent);
+                                BOOL setTimesResult = [[NSFileManager defaultManager] setAttributes:@{NSFileCreationDate: fileAttributes[NSFileCreationDate], NSFileModificationDate: originalMDate} ofItemAtPath:destinationFileURL.path error:&error];
+                                if (!setTimesResult) {
+                                    NSLog(@"Feil ved setting av tidsstempler til '%@': %@", destinationFileURL.lastPathComponent, error.localizedDescription);
+                                }
+                            }
+                        } else {
+                            NSLog(@"Filnavndato-mønster er kortere enn 14 sifre. Bruker originalens tidsstempler for: %@", destinationFileURL.lastPathComponent);
+                            BOOL setTimesResult = [[NSFileManager defaultManager] setAttributes:@{NSFileCreationDate: fileAttributes[NSFileCreationDate], NSFileModificationDate: originalMDate} ofItemAtPath:destinationFileURL.path error:&error];
+                            if (!setTimesResult) {
+                                NSLog(@"Feil ved setting av tidsstempler til '%@': %@", destinationFileURL.lastPathComponent, error.localizedDescription);
+                            }
+                        }
+                    }
+                } else {
+                    NSLog(@"ExifTool feilet for: %@. Status: %d, Output:\n%@", destinationFileURL.lastPathComponent, [exifToolTask terminationStatus], outputString);
+                }
+            } @catch (NSException *e) {
+                NSLog(@"Feil ved lansering av ExifTool: %@", e.reason);
+            }
+        }
+    } else {
+        NSLog(@"Originalfil eller destinasjonsfil URL mangler for ExifTool-operasjon for jobb: %@", completedJob.presetName);
+    }
+    
     self.item = nil;
 
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueWorkerProgressNotification
@@ -175,10 +309,23 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     // Progress handler
     void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
     {
-        [NSNotificationCenter.defaultCenter postNotificationName:HBQueueWorkerProgressNotification
-                                                          object:self
-                                                        userInfo:@{HBQueueWorkerProgressNotificationPercentKey: @0,
-                                                                   HBQueueWorkerProgressNotificationInfoKey: info}];
+        if (state == HBStateMuxing)
+        {
+            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueWorkerProgressNotification
+                                                              object:self
+                                                            userInfo:@{HBQueueWorkerProgressNotificationPercentKey: @0,
+                                                                       HBQueueWorkerProgressNotificationInfoKey: info}];
+        }
+        else
+        {
+            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueWorkerProgressNotification
+                                                              object:self
+                                                            userInfo:@{HBQueueWorkerProgressNotificationPercentKey: @(progress.percent),
+                                                                       HBQueueWorkerProgressNotificationHoursKey: @(progress.hours),
+                                                                       HBQueueWorkerProgressNotificationMinutesKey: @(progress.minutes),
+                                                                       HBQueueWorkerProgressNotificationSecondsKey: @(progress.seconds),
+                                                                       HBQueueWorkerProgressNotificationInfoKey: info}];
+        }
     };
 
     // Completion handler
@@ -216,6 +363,11 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
 - (void)realEncodeItem:(HBQueueJobItem *)item
 {
     HBJob *job = item.job;
+    // LØSNING: Setter en ny egenskap på HBJob-objektet basert på NSUserDefaults-verdien.
+    // Dette gir oss en mer pålitelig verdi senere, i stedet for å stole på UI-bindingen.
+    // Merk: Du må legge til 'preserveTimeMetadata' som en BOOL-egenskap i HBJob-klassen
+    // (for eksempel i HBJob.h) for at denne koden skal kompilere.
+    job.preserveTimeMetadata = [NSUserDefaults.standardUserDefaults boolForKey:HBPreserveTimeAndDateMetadata];
 
     if ([NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder])
     {

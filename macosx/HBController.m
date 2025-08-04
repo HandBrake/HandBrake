@@ -961,15 +961,23 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 - (nullable HBJob *)jobFromTitle:(HBTitle *)title
 {
     // If there is already a title loaded, save the current settings to a preset
-    [self updateCurrentPreset];
-
     NSArray<NSURL *> *subtitlesURLs = [self matchSubtitlesURLsWith:title.url];
     HBJob *job = [[HBJob alloc] initWithTitle:title preset:self.currentPreset subtitles:subtitlesURLs];
 
     if (job)
     {
+        // Før vi setter verdien, sjekker vi hva som er lagret i NSUserDefaults
+        BOOL shouldPreserveTimeMetadata = [NSUserDefaults.standardUserDefaults boolForKey:@"HBPreserveTimeAndDateMetadata"];
+        NSLog(@"Debugging NSUserDefaults value for 'HBPreserveTimeAndDateMetadata': %d", shouldPreserveTimeMetadata);
+
+        // Løsning: Bruk den riktige nøkkelen som er koblet til knappen
+        job.preserveTimeMetadata = shouldPreserveTimeMetadata;
+        
+        // NY FEILSØKINGS-LINJE: Sjekk verdien umiddelbart etter at vi setter den
+        NSLog(@"Debugging HBJob.preserveTimeMetadata value immediately after assignment: %d", job.preserveTimeMetadata);
+        
         [job setDestinationFolderURL:self.destinationFolderURL
-                        sameAsSource:[NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination]];
+                             sameAsSource:[NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination]];
 
         // If the source is not a stream, and autonaming is disabled,
         // keep the existing file name.

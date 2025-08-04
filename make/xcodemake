@@ -131,6 +131,7 @@ if [ -n "$reconfigure" ]; then
     export PATH="${PATH:1}"
     echo "Unclobbering PATH:"
     echo "    export PATH=\"${PATH}\""
+    export PATH="/opt/homebrew/bin:$PATH"
 
     if [ "$EXTERNAL_DRIVER" == "bootstrap" ]; then
         driver="--xcode-driver=terminal"
