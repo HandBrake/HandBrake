@@ -1,0 +1,14 @@
+diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
+index 4160514b9..c2784e967 100755
+--- a/source/CMakeLists.txt
++++ b/source/CMakeLists.txt
+@@ -789,6 +789,9 @@ if((MSVC_IDE OR XCODE OR GCC) AND ENABLE_ASSEMBLY)
+ 	elseif(ARM64 OR CROSS_COMPILE_ARM64)
+     # compile ARM64 arch asm files here
+         enable_language(ASM)
++        if(APPLE)
++            set(ARM_ARGS ${ARM_ARGS} -arch ${CMAKE_OSX_ARCHITECTURES})
++        endif()
+         foreach(ASM ${ARM_ASMS})
+             set(ASM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/aarch64/${ASM})
+             list(APPEND ASM_SRCS ${ASM_SRC})
