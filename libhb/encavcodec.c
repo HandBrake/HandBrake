@@ -1614,7 +1614,7 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
             break;
     }
 
-    context->level = FF_LEVEL_UNKNOWN;
+    context->level = AV_FIELD_UNKNOWN;
 
     if (level_names == NULL || level_values == NULL)
     {

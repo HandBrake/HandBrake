@@ -1,17 +1,17 @@
-From 2f4b1e3b6818ade62ae19e0abdcefdd50d401ad8 Mon Sep 17 00:00:00 2001
+From 9dc141ed29b5e713590492c6d662a5802327e835 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Thu, 13 Feb 2025 09:46:30 +0100
-Subject: [PATCH 2/2] avformat/movenc: write iTunEXTC and iTunMOVI metadata
+Subject: [PATCH 07/22] avformat/movenc: write iTunEXTC and iTunMOVI metadata
 
 ---
  libavformat/movenc.c | 45 ++++++++++++++++++++++++++++++++++++++++++++
  1 file changed, 45 insertions(+)
 
 diff --git a/libavformat/movenc.c b/libavformat/movenc.c
-index 11df7b0368..c45f15ad77 100644
+index e058b06280..4136a5d623 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -4552,6 +4552,48 @@ static int mov_write_trkn_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -4670,6 +4670,48 @@ static int mov_write_trkn_tag(AVIOContext *pb, MOVMuxContext *mov,
      return size;
  }
  
@@ -60,7 +60,7 @@ index 11df7b0368..c45f15ad77 100644
  static int mov_write_int8_metadata(AVFormatContext *s, AVIOContext *pb,
                                     const char *name, const char *tag,
                                     int len)
-@@ -4705,6 +4747,9 @@ static int mov_write_ilst_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -4823,6 +4865,9 @@ static int mov_write_ilst_tag(AVIOContext *pb, MOVMuxContext *mov,
      mov_write_trkn_tag(pb, mov, s, 0); // track number
      mov_write_trkn_tag(pb, mov, s, 1); // disc number
      mov_write_tmpo_tag(pb, s);

@@ -1,7 +1,7 @@
-From b62c3a69a5f286eee2be4d14cf3705c476a953a4 Mon Sep 17 00:00:00 2001
+From a03bd0278cb3acacda675e81d752d90ff11562f5 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Tue, 18 Feb 2025 07:32:08 +0100
-Subject: [PATCH 1/2] avformat/mov: read and write additional iTunes style
+Subject: [PATCH 06/22] avformat/mov: read and write additional iTunes style
  metadata
 
 ---
@@ -10,10 +10,10 @@ Subject: [PATCH 1/2] avformat/mov: read and write additional iTunes style
  2 files changed, 132 insertions(+), 5 deletions(-)
 
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index e1e668e40c..e64b0dbe63 100644
+index d419e5457e..c21130dde2 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -132,6 +132,33 @@ static int mov_metadata_int8_no_padding(MOVContext *c, AVIOContext *pb,
+@@ -131,6 +131,33 @@ static int mov_metadata_int8_no_padding(MOVContext *c, AVIOContext *pb,
      return 0;
  }
  
@@ -47,7 +47,7 @@ index e1e668e40c..e64b0dbe63 100644
  static int mov_metadata_gnre(MOVContext *c, AVIOContext *pb,
                               unsigned len, const char *key)
  {
-@@ -417,7 +444,13 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -437,7 +464,13 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG( 'a','k','I','D'): key = "account_type";
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'a','p','I','D'): key = "account_id"; break;
@@ -61,7 +61,7 @@ index e1e668e40c..e64b0dbe63 100644
      case MKTAG( 'c','p','i','l'): key = "compilation";
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'c','p','r','t'):
-@@ -436,6 +469,8 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -456,6 +489,8 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG( 'e','g','i','d'): key = "episode_uid";
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'F','I','R','M'): key = "firmware"; raw = 1; break;
@@ -70,7 +70,7 @@ index e1e668e40c..e64b0dbe63 100644
      case MKTAG( 'g','n','r','e'):
          key = "genre";
          parse = mov_metadata_gnre;
-@@ -451,6 +486,8 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -471,6 +506,8 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'H','M','M','T'):
          return mov_metadata_hmmt(c, pb, atom.size);
@@ -79,7 +79,7 @@ index e1e668e40c..e64b0dbe63 100644
      case MKTAG( 'k','e','y','w'): key = "keywords";  break;
      case MKTAG( 'l','d','e','s'): key = "synopsis";  break;
      case MKTAG( 'l','o','c','i'):
-@@ -462,9 +499,16 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -482,9 +519,16 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'p','g','a','p'): key = "gapless_playback";
          parse = mov_metadata_int8_no_padding; break;
@@ -96,7 +96,7 @@ index e1e668e40c..e64b0dbe63 100644
      case MKTAG( 's','o','a','a'): key = "sort_album_artist"; break;
      case MKTAG( 's','o','a','l'): key = "sort_album";   break;
      case MKTAG( 's','o','a','r'): key = "sort_artist";  break;
-@@ -473,6 +517,8 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -493,6 +537,8 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG( 's','o','s','n'): key = "sort_show";    break;
      case MKTAG( 's','t','i','k'): key = "media_type";
          parse = mov_metadata_int8_no_padding; break;
@@ -105,7 +105,7 @@ index e1e668e40c..e64b0dbe63 100644
      case MKTAG( 't','r','k','n'): key = "track";
          parse = mov_metadata_track_or_disc_number; break;
      case MKTAG( 't','v','e','n'): key = "episode_id"; break;
-@@ -482,17 +528,23 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -502,17 +548,23 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG( 't','v','s','h'): key = "show";      break;
      case MKTAG( 't','v','s','n'): key = "season_number";
          parse = mov_metadata_int8_bypass_padding; break;
@@ -130,7 +130,7 @@ index e1e668e40c..e64b0dbe63 100644
      case MKTAG(0xa9,'e','d','1'): key = "edit_date"; break;
      case MKTAG(0xa9,'e','n','c'): key = "encoder";   break;
      case MKTAG(0xa9,'f','m','t'): key = "original_format"; break;
-@@ -500,22 +552,35 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -520,22 +572,35 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG(0xa9,'g','r','p'): key = "grouping";  break;
      case MKTAG(0xa9,'h','s','t'): key = "host_computer"; break;
      case MKTAG(0xa9,'i','n','f'): key = "comment";   break;
@@ -167,10 +167,10 @@ index e1e668e40c..e64b0dbe63 100644
      case MKTAG( 'a','l','b','m'):
      case MKTAG( 'a','u','t','h'):
 diff --git a/libavformat/movenc.c b/libavformat/movenc.c
-index 3486c6e3e5..11df7b0368 100644
+index e60483ebb4..e058b06280 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -4557,15 +4557,19 @@ static int mov_write_int8_metadata(AVFormatContext *s, AVIOContext *pb,
+@@ -4675,15 +4675,19 @@ static int mov_write_int8_metadata(AVFormatContext *s, AVIOContext *pb,
                                     int len)
  {
      AVDictionaryEntry *t = NULL;
@@ -193,7 +193,7 @@ index 3486c6e3e5..11df7b0368 100644
  
      avio_wb32(pb, size);
      ffio_wfourcc(pb, name);
-@@ -4573,7 +4577,9 @@ static int mov_write_int8_metadata(AVFormatContext *s, AVIOContext *pb,
+@@ -4691,7 +4695,9 @@ static int mov_write_int8_metadata(AVFormatContext *s, AVIOContext *pb,
      ffio_wfourcc(pb, "data");
      avio_wb32(pb, 0x15);
      avio_wb32(pb, 0);
@@ -204,7 +204,7 @@ index 3486c6e3e5..11df7b0368 100644
      else        avio_w8 (pb, num);
  
      return size;
-@@ -4629,6 +4635,8 @@ static int mov_write_ilst_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -4747,6 +4753,8 @@ static int mov_write_ilst_tag(AVIOContext *pb, MOVMuxContext *mov,
      mov_write_string_metadata(s, pb, "\251lyr", "lyrics"   , 1);
      mov_write_string_metadata(s, pb, "desc",    "description",1);
      mov_write_string_metadata(s, pb, "ldes",    "synopsis" , 1);
@@ -213,7 +213,7 @@ index 3486c6e3e5..11df7b0368 100644
      mov_write_string_metadata(s, pb, "tvsh",    "show"     , 1);
      mov_write_string_metadata(s, pb, "tven",    "episode_id",1);
      mov_write_string_metadata(s, pb, "tvnn",    "network"  , 1);
-@@ -4639,6 +4647,60 @@ static int mov_write_ilst_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -4757,6 +4765,60 @@ static int mov_write_ilst_tag(AVIOContext *pb, MOVMuxContext *mov,
      mov_write_int8_metadata  (s, pb, "hdvd",    "hd_video",  1);
      mov_write_int8_metadata  (s, pb, "pgap",    "gapless_playback",1);
      mov_write_int8_metadata  (s, pb, "cpil",    "compilation", 1);
