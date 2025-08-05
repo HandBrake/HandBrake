@@ -1,17 +1,17 @@
-From 2a2fdb2c75d74e37840597cf88578d43ab2f5f70 Mon Sep 17 00:00:00 2001
+From 269e0ac6db97503fd80ceec683ee0f14037249e3 Mon Sep 17 00:00:00 2001
 From: cubicibo <55701024+cubicibo@users.noreply.github.com>
 Date: Thu, 22 Aug 2024 22:57:54 +0200
-Subject: [PATCH] lavc/pgssubdec: Add graphic plane and cropping.
+Subject: [PATCH 12/20] lavc/pgssubdec: Add graphic plane and cropping.
 
 ---
  libavcodec/pgssubdec.c | 554 ++++++++++++++++++++++++++---------------
  1 file changed, 353 insertions(+), 201 deletions(-)
 
 diff --git a/libavcodec/pgssubdec.c b/libavcodec/pgssubdec.c
-index 5f76f12615..973a264105 100644
+index 20583c9afa..b43ce23df9 100644
 --- a/libavcodec/pgssubdec.c
 +++ b/libavcodec/pgssubdec.c
-@@ -34,9 +34,11 @@
+@@ -35,9 +35,11 @@
  #include "libavutil/opt.h"
  
  #define RGBA(r,g,b,a) (((unsigned)(a) << 24) | ((r) << 16) | ((g) << 8) | (b))
@@ -26,7 +26,7 @@ index 5f76f12615..973a264105 100644
  
  enum SegmentType {
      PALETTE_SEGMENT      = 0x14,
-@@ -47,57 +49,80 @@ enum SegmentType {
+@@ -48,57 +50,80 @@ enum SegmentType {
  };
  
  typedef struct PGSSubObjectRef {
@@ -130,7 +130,7 @@ index 5f76f12615..973a264105 100644
  static void flush_cache(AVCodecContext *avctx)
  {
      PGSSubContext *ctx = avctx->priv_data;
-@@ -105,8 +130,11 @@ static void flush_cache(AVCodecContext *avctx)
+@@ -106,8 +131,11 @@ static void flush_cache(AVCodecContext *avctx)
  
      for (i = 0; i < ctx->objects.count; i++) {
          av_freep(&ctx->objects.object[i].rle);
@@ -143,7 +143,7 @@ index 5f76f12615..973a264105 100644
      }
      ctx->objects.count = 0;
      ctx->palettes.count = 0;
-@@ -143,6 +171,7 @@ static av_cold int init_decoder(AVCodecContext *avctx)
+@@ -144,6 +172,7 @@ static av_cold int init_decoder(AVCodecContext *avctx)
  
  static av_cold int close_decoder(AVCodecContext *avctx)
  {
@@ -151,7 +151,7 @@ index 5f76f12615..973a264105 100644
      flush_cache(avctx);
  
      return 0;
-@@ -158,48 +187,51 @@ static av_cold int close_decoder(AVCodecContext *avctx)
+@@ -159,48 +188,51 @@ static av_cold int close_decoder(AVCodecContext *avctx)
   * @param buf pointer to the RLE data to process
   * @param buf_size size of the RLE data to process
   */
@@ -220,7 +220,7 @@ index 5f76f12615..973a264105 100644
                  if (avctx->err_recognition & AV_EF_EXPLODE) {
                      return AVERROR_INVALIDDATA;
                  }
-@@ -208,13 +240,11 @@ static int decode_rle(AVCodecContext *avctx, AVSubtitleRect *rect,
+@@ -209,13 +241,11 @@ static int decode_rle(AVCodecContext *avctx, AVSubtitleRect *rect,
          }
      }
  
@@ -237,7 +237,7 @@ index 5f76f12615..973a264105 100644
      return 0;
  }
  
-@@ -236,7 +266,7 @@ static int parse_object_segment(AVCodecContext *avctx,
+@@ -237,7 +267,7 @@ static int parse_object_segment(AVCodecContext *avctx,
  
      uint8_t sequence_desc;
      unsigned int rle_bitmap_len, width, height;
@@ -246,7 +246,7 @@ index 5f76f12615..973a264105 100644
  
      if (buf_size <= 4)
          return AVERROR_INVALIDDATA;
-@@ -259,57 +289,71 @@ static int parse_object_segment(AVCodecContext *avctx,
+@@ -260,57 +290,71 @@ static int parse_object_segment(AVCodecContext *avctx,
      /* Read the Sequence Description to determine if start of RLE data or appended to previous RLE */
      sequence_desc = bytestream_get_byte(&buf);
  
@@ -359,7 +359,7 @@ index 5f76f12615..973a264105 100644
      return 0;
  }
  
-@@ -317,7 +361,7 @@ static int parse_object_segment(AVCodecContext *avctx,
+@@ -318,7 +362,7 @@ static int parse_object_segment(AVCodecContext *avctx,
   * Parse the palette segment packet.
   *
   * The palette segment contains details of the palette,
@@ -368,7 +368,7 @@ index 5f76f12615..973a264105 100644
   *
   * @param avctx contains the current codec context
   * @param buf pointer to the packet to process
-@@ -390,13 +434,17 @@ static int parse_presentation_segment(AVCodecContext *avctx,
+@@ -391,13 +435,17 @@ static int parse_presentation_segment(AVCodecContext *avctx,
                                        int64_t pts)
  {
      PGSSubContext *ctx = avctx->priv_data;
@@ -387,7 +387,7 @@ index 5f76f12615..973a264105 100644
      ctx->presentation.pts = pts;
  
      ff_dlog(avctx, "Video Dimensions %dx%d\n",
-@@ -405,88 +453,121 @@ static int parse_presentation_segment(AVCodecContext *avctx,
+@@ -406,88 +454,121 @@ static int parse_presentation_segment(AVCodecContext *avctx,
      if (ret < 0)
          return ret;
  
@@ -458,13 +458,13 @@ index 5f76f12615..973a264105 100644
 -    {
 -        PGSSubObjectRef *const object = &ctx->presentation.objects[i];
 +            if (buf_end - buf < 8) {
-+                av_log(avctx, AV_LOG_ERROR, "Insufficent space for object\n");
++                av_log(avctx, AV_LOG_ERROR, "Insufficient space for object\n");
 +                ctx->presentation.object_count = i;
 +                return AVERROR_INVALIDDATA;
 +            }
  
 -        if (buf_end - buf < 8) {
--            av_log(avctx, AV_LOG_ERROR, "Insufficent space for object\n");
+-            av_log(avctx, AV_LOG_ERROR, "Insufficient space for object\n");
 -            ctx->presentation.object_count = i;
 -            return AVERROR_INVALIDDATA;
 -        }
@@ -558,7 +558,7 @@ index 5f76f12615..973a264105 100644
   *
   * @param avctx contains the current codec context
   * @param data pointer to the data pertaining the subtitle to display
-@@ -499,26 +580,33 @@ static int display_end_segment(AVCodecContext *avctx, AVSubtitle *sub,
+@@ -500,26 +581,33 @@ static int display_end_segment(AVCodecContext *avctx, AVSubtitle *sub,
      PGSSubContext *ctx = avctx->priv_data;
      int64_t pts;
      PGSSubPalette *palette;
@@ -600,7 +600,7 @@ index 5f76f12615..973a264105 100644
      palette = find_palette(ctx->presentation.palette_id, &ctx->palettes);
      if (!palette) {
          // Missing palette.  Should only happen with damaged streams.
-@@ -527,57 +615,128 @@ static int display_end_segment(AVCodecContext *avctx, AVSubtitle *sub,
+@@ -528,57 +616,128 @@ static int display_end_segment(AVCodecContext *avctx, AVSubtitle *sub,
          avsubtitle_free(sub);
          return AVERROR_INVALIDDATA;
      }
@@ -772,7 +772,7 @@ index 5f76f12615..973a264105 100644
          rect->data[1]   = av_mallocz(AVPALETTE_SIZE);
          if (!rect->data[1])
              return AVERROR(ENOMEM);
-@@ -640,14 +799,7 @@ static int decode(AVCodecContext *avctx, AVSubtitle *sub,
+@@ -641,14 +800,7 @@ static int decode(AVCodecContext *avctx, AVSubtitle *sub,
              ret = parse_presentation_segment(avctx, buf, segment_length, sub->pts);
              break;
          case WINDOW_SEGMENT:
@@ -789,5 +789,5 @@ index 5f76f12615..973a264105 100644
          case DISPLAY_SEGMENT:
              if (*got_sub_ptr) {
 -- 
-2.32.0 (Apple Git-132)
+2.39.5 (Apple Git-154)
 
