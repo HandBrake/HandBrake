@@ -1056,6 +1056,13 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
+    // Enable bitexact to avoid having
+    // libavf putting an "Encoded by" metadata
+    if (job->mux == HB_MUX_AV_MP4)
+    {
+        m->oc->flags |= AVFMT_FLAG_BITEXACT;
+    }
+
     if (job->metadata)
     {
         hb_deep_log(2, "Writing Metadata to output file...");
