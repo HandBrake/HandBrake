@@ -113,7 +113,7 @@ namespace HandBrakeWPF.Converters
                     groupedMenu.Add(new Separator());
                 }
 
-                foreach (var preset in category.Presets.Reverse())
+                foreach (var preset in category.Presets)
                 {
                     groupedMenu.Add(GeneratePresetMenuItem(preset));
                 }
