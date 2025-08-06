@@ -4933,6 +4933,87 @@ ghb_log (const char *log, ...)
     va_end(args);
 }
 
+#if GTK_CHECK_VERSION(4, 10, 0)
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
+static void
+browse_uri_finish (GtkUriLauncher *launcher, GAsyncResult *result, gpointer data)
+{
+    g_autoptr(GError) error = NULL;
+    gtk_uri_launcher_launch_finish(launcher, result, &error);
+    if (error)
+    {
+        g_warning("Could not open URL: %s", error->message);
+    }
+}
+
+void
+ghb_browse_uri (const char *uri)
+{
+    GtkUriLauncher *launcher = gtk_uri_launcher_new(uri);
+    GtkApplication *app = GTK_APPLICATION(g_application_get_default());
+    GtkWindow *parent = gtk_application_get_active_window(app);
+    gtk_uri_launcher_launch(launcher, parent, NULL, (GAsyncReadyCallback) browse_uri_finish, NULL);
+}
+
+static void
+file_open_finish (GtkFileLauncher *launcher, GAsyncResult *result, gpointer data)
+{
+    g_autoptr(GError) error = NULL;
+    if (!gtk_file_launcher_launch_finish(launcher, result, &error))
+    {
+        g_warning("Unable to open file: %s", error->message);
+    }
+    g_object_unref(launcher);
+}
+
+static void
+file_open_containing_folder_finish (GtkFileLauncher *launcher, GAsyncResult *result, gpointer data)
+{
+    g_autoptr(GError) error = NULL;
+    if (!gtk_file_launcher_open_containing_folder_finish(launcher, result, &error))
+    {
+        g_warning("Unable to open containing folder: %s", error->message);
+    }
+    g_object_unref(launcher);
+}
+
+void
+ghb_file_open (GFile *file)
+{
+    if (!file) return;
+
+    GtkFileLauncher *launcher = gtk_file_launcher_new(file);
+    GtkApplication *app = GTK_APPLICATION(g_application_get_default());
+    GtkWindow *parent = gtk_application_get_active_window(app);
+    gtk_file_launcher_launch(launcher, parent, NULL, (GAsyncReadyCallback) file_open_finish, NULL);
+}
+
+void
+ghb_file_open_containing_folder (GFile *file)
+{
+    if (!file) return;
+
+    GtkApplication *app = GTK_APPLICATION(g_application_get_default());
+    GtkWindow *parent = gtk_application_get_active_window(app);
+    if (g_file_test(g_file_peek_path(file), G_FILE_TEST_EXISTS))
+    {
+        GtkFileLauncher *launcher = gtk_file_launcher_new(file);
+        gtk_file_launcher_open_containing_folder(launcher, parent, NULL,
+                (GAsyncReadyCallback) file_open_containing_folder_finish, NULL);
+    }
+    else
+    {
+        g_autoptr(GFile) dir = g_file_get_parent(file);
+        GtkFileLauncher *launcher = gtk_file_launcher_new(dir);
+        gtk_file_launcher_launch(launcher, parent, NULL,
+                (GAsyncReadyCallback) file_open_finish, NULL);
+    }
+}
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+#else
+
 static void
 browse_uri_finish (GtkWindow *parent, GAsyncResult *result, gpointer data)
 {
@@ -4952,6 +5033,30 @@ ghb_browse_uri (const gchar *uri)
     gtk_show_uri_full(parent, uri, GDK_CURRENT_TIME, NULL,
                       (GAsyncReadyCallback)browse_uri_finish, NULL);
 }
+
+void
+ghb_file_open (GFile *file)
+{
+    const gchar *path = g_file_peek_path(file);
+    g_autoptr(GError) error = NULL;
+    g_autofree char *uri = g_filename_to_uri(path, NULL, &error);
+    if (uri)
+        ghb_browse_uri(uri);
+    else
+        ghb_log("Could not convert path '%s' to URI: %s", path, error->message);
+}
+
+void
+ghb_file_open_containing_folder (GFile *file)
+{
+    if (!file) return;
+    
+    g_autoptr(GFile) dir = g_file_get_parent(file);
+    g_autofree char *uri = g_file_get_uri(dir);
+    ghb_browse_uri(uri);
+}
+
+#endif // GTK_CHECK_VERSION(4, 10, 0)
 
 G_MODULE_EXPORT void
 about_action_cb (GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
@@ -5765,10 +5870,6 @@ G_MODULE_EXPORT void
 log_directory_action_cb (GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 {
     g_autofree char *path = ghb_get_user_config_dir("EncodeLogs");
-    g_autofree char *uri = g_filename_to_uri(path, NULL, NULL);
-
-    if (!uri || !uri[0])
-        return;
-
-    ghb_browse_uri(uri);
+    g_autoptr(GFile) file = g_file_new_for_path(path);
+    ghb_file_open(file);
 }
