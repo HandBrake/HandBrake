@@ -1,0 +1,39 @@
+From 4fcfed0ac2a77ef7c20c4cb3dd955d346dd4ab3e Mon Sep 17 00:00:00 2001
+From: Kompalli Nithin <kompalli.nithin@multicorewareinc.com>
+Date: Wed, 6 Aug 2025 08:26:44 +0200
+Subject: [PATCH] Fix inconsistent bitrate in second pass
+
+---
+ source/common/lowres.cpp | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/source/common/lowres.cpp b/source/common/lowres.cpp
+index 856f716b8..2f684f7f4 100644
+--- a/source/common/lowres.cpp
++++ b/source/common/lowres.cpp
+@@ -418,12 +418,17 @@ void Lowres::init(PicYuv *origPic, int poc)
+     int cuCount = maxBlocksInRow * maxBlocksInCol;
+     int cuCountFullRes = (origPic->m_param->rc.qgSize > 8) ? cuCount : cuCount << 2;
+     memset(intraCost, 0, sizeof(int32_t) * cuCount);
+-    if (!!origPic->m_param->rc.aqMode || !!origPic->m_param->rc.hevcAq || !!origPic->m_param->bAQMotion || !!origPic->m_param->bEnableWeightedPred || !!origPic->m_param->bEnableWeightedBiPred)
+-        {
++    memset(edgeInclined, 0, sizeof(int) * cuCountFullRes);
++    if (!origPic->m_param->rc.bStatRead &&
++        (origPic->m_param->rc.aqMode || origPic->m_param->rc.hevcAq ||
++         origPic->m_param->bAQMotion || origPic->m_param->bEnableWeightedPred ||
++         origPic->m_param->bEnableWeightedBiPred))
++    {
+         memset(qpAqOffset, 0, sizeof(double) * cuCountFullRes);
+         memset(qpCuTreeOffset, 0,sizeof(double) * cuCountFullRes);
+-        memset(edgeInclined, 0, sizeof(int) * cuCountFullRes);
+-        }
+-     if (origPic->m_param->bAQMotion)
++    }
++    if (origPic->m_param->bAQMotion && !origPic->m_param->rc.bStatRead)
++    {
+         memset(qpAqMotionOffset, 0, sizeof(double) * cuCountFullRes);
++    }
+ }
+-- 
+2.39.5 (Apple Git-154)
+
