@@ -18,8 +18,7 @@ typedef enum {
     GHB_NOTIFY_PAUSED_POWER_SAVE,
 } GhbNotification;
 
-void ghb_send_notification(GhbNotification type, gint value,
-                            signal_user_data_t *ud);
+void ghb_send_notification(GhbNotification type, int64_t value, signal_user_data_t *ud);
 void ghb_withdraw_notification(GhbNotification type);
 
 G_END_DECLS

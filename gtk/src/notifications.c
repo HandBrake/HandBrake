@@ -21,6 +21,7 @@
 #include "notifications.h"
 
 #include "application.h"
+#include "util.h"
 
 static int n_succeeded = 0;
 static int n_failed = 0;
@@ -78,7 +79,7 @@ send_notification (const char *title, const char *body, const char *category)
 }
 
 static void
-notify_done (gboolean final, gboolean success, gint idx, signal_user_data_t *ud)
+notify_done (gboolean final, gboolean success, int64_t idx, signal_user_data_t *ud)
 {
     if (!final)
     {
@@ -123,10 +124,9 @@ notify_done (gboolean final, gboolean success, gint idx, signal_user_data_t *ud)
 }
 
 static void
-notify_paused (GhbNotification type, int value, signal_user_data_t *ud)
+notify_paused (GhbNotification type, int64_t value, signal_user_data_t *ud)
 {
     g_autofree char *body = NULL;
-    int gigabyte, decimal;
 
     if (!ghb_get_queue_done_action() &&
         !ghb_dict_get_bool(ud->prefs, "NotifyOnEncodeDone"))
@@ -146,17 +146,8 @@ notify_paused (GhbNotification type, int value, signal_user_data_t *ud)
             body = g_strdup(_("Power Saver mode has been activated."));
             break;
         case GHB_NOTIFY_PAUSED_LOW_DISK_SPACE:
-            gigabyte = value / 1000;
-            decimal = (value % 1000) / 100;
-            if (gigabyte != 0)
-            {
-                body = g_strdup_printf(_("%d.%d GB free space remaining."),
-                                       gigabyte, decimal);
-            }
-            else
-            {
-                body = g_strdup_printf(("%d MB free space remaining."), value);
-            }
+            g_autofree char *size_str = ghb_format_pretty_size(value);
+            body = g_strdup_printf(_("%s free space remaining."), size_str);
             break;
         default:
             body = NULL;
@@ -173,7 +164,7 @@ notify_paused (GhbNotification type, int value, signal_user_data_t *ud)
  * it is used as the index of the item to look up.
  */
 void
-ghb_send_notification (GhbNotification type, int value, signal_user_data_t *ud)
+ghb_send_notification (GhbNotification type, int64_t value, signal_user_data_t *ud)
 {
     switch (type)
     {
