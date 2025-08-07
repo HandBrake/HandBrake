@@ -39,8 +39,7 @@ config_h.set_quoted('GETTEXT_PACKAGE', 'ghb',
   description: 'GETTEXT package name')
 config_h.set('ENABLE_NLS', true,
   description: 'Define if translation of program messages is requested.')
-config_h.set_quoted('PACKAGE_LOCALE_DIR',
-  get_option('prefix') / get_option('localedir'),
+config_h.set_quoted('PACKAGE_LOCALE_DIR', get_option('localedir'),
   description: 'The directory to install the translation files in.')
 
 configure_file(configuration: config_h, output: 'config.h')
