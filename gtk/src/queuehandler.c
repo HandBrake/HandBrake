@@ -1601,7 +1601,7 @@ void ghb_low_disk_check (signal_user_data_t *ud)
         return;
     }
     // limit is in GB
-    free_limit = ghb_dict_get_int(ud->prefs, "DiskFreeLimitGB") * 1024;
+    free_limit = ghb_dict_get_int(ud->prefs, "DiskFreeLimitGB") * 1000 * 1000 * 1000;
     if (free_size > free_limit)
     {
         return;
@@ -1609,7 +1609,7 @@ void ghb_low_disk_check (signal_user_data_t *ud)
 
     ghb_pause_queue();
     ghb_send_notification(GHB_NOTIFY_PAUSED_LOW_DISK_SPACE,
-                          free_size / 1024, ud);
+                          free_size / (1000 * 1000), ud);
     dest      = ghb_dict_get_string(settings, "destination");
     hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
     dialog    = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
@@ -1619,7 +1619,7 @@ void ghb_low_disk_check (signal_user_data_t *ud)
         _("The destination filesystem is almost full: %"PRId64" MB free.\n"
           "Destination: %s\n"
           "Encode may be incomplete if you proceed."),
-        free_size / (1024 * 1024), dest);
+        free_size / (1000 * 1000), dest);
     gtk_dialog_add_buttons( GTK_DIALOG(dialog),
                            _("Resume, I've fixed the problem"), 1,
                            _("Resume, Don't tell me again"), 2,
