@@ -268,3 +268,23 @@ ghb_file_is_subtitle (const char *filename)
     return ghb_file_is_ssa_subtitle(filename) ||
            ghb_file_is_srt_subtitle(filename);
 }
+
+char *
+ghb_format_pretty_size (int64_t bytes)
+{
+    double kilobytes = bytes / 1000;
+    double megabytes = kilobytes / 1000;
+    double gigabytes = megabytes / 1000;
+    if (gigabytes != 0)
+    {
+        return g_strdup_printf("%0.1f %s", gigabytes, _("GB"));
+    }
+    else if (megabytes != 0)
+    {
+        return g_strdup_printf(_("%0.1f %s"), megabytes, _("MB"));
+    }
+    else
+    {
+        return g_strdup_printf(_("%0.1f %s"), kilobytes, _("KB"));
+    }
+}

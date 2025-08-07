@@ -35,6 +35,6 @@ char *ghb_file_chooser_get_current_folder(GtkFileChooser *chooser);
 gboolean ghb_file_is_subtitle(const char *filename);
 gboolean ghb_file_is_ssa_subtitle(const char *filename);
 gboolean ghb_file_is_srt_subtitle(const char *filename);
-
+char *ghb_format_pretty_size (int64_t bytes);
 G_END_DECLS
 
