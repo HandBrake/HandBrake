@@ -776,6 +776,25 @@ ghb_application_activate (GApplication *app)
     ud->settings = ghb_dict_new();
     ghb_array_append(ud->settings_array, ud->settings);
 
+    // Load preferences before builder is created so language
+    // preference is taken into account when building the UI.
+    // Some preset defaults may depend on preference settings.
+    // First load default values
+    ghb_settings_init(ud->prefs, "Preferences");
+    ghb_settings_init(ud->settings, "Initialization");
+    ghb_settings_init(ud->settings, "OneTimeInitialization");
+    // Load user preferences file
+    ghb_prefs_load(ud);
+    // Store user preferences into ud->prefs
+    ghb_prefs_to_settings(ud->prefs);
+
+    const char *ui_language = ghb_dict_get_string(ud->prefs, "UiLanguage");
+    if (ui_language && ui_language[0])
+    {
+        g_autofree char *locale = g_strdup_printf("%s.UTF-8", ui_language);
+        setlocale(LC_ALL, locale);
+    }
+
     self->builder = create_builder_or_die(BUILDER_NAME);
 
     // Initialize D-Bus connections to monitor power settings
@@ -830,17 +849,6 @@ ghb_application_activate (GApplication *app)
 
     ghb_init_audio_defaults_ui(ud);
     ghb_init_subtitle_defaults_ui(ud);
-
-    // Load prefs before presets.  Some preset defaults may depend
-    // on preference settings.
-    // First load default values
-    ghb_settings_init(ud->prefs, "Preferences");
-    ghb_settings_init(ud->settings, "Initialization");
-    ghb_settings_init(ud->settings, "OneTimeInitialization");
-    // Load user preferences file
-    ghb_prefs_load(ud);
-    // Store user preferences into ud->prefs
-    ghb_prefs_to_settings(ud->prefs);
 
     if (ghb_dict_get_bool(ud->prefs, "CustomTmpEnable"))
     {

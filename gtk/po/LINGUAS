@@ -1,5 +1,6 @@
 # please keep this list sorted alphabetically
-#
+# and up to date with the list of available
+# display languages in hb-backend.c
 bg
 ca
 co

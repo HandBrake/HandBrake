@@ -5872,7 +5872,27 @@ battery is charged.</property>
                         <property name="margin-start">12</property>
                         <child>
                           <object class="GtkGrid" id="AdvancedPrefsTable">
-                            <property name="row-spacing">2</property>
+                            <property name="row-spacing">2</property><child>
+                              <object class="GtkBox">
+                                <property name="orientation">horizontal</property>
+                                <property name="spacing">6</property>
+                                <property name="tooltip-text" translatable="yes">Select the language to use for the HandBrake user interface.</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">Display Language:</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="UiLanguage">
+                                    <signal name="changed" handler="ui_language_changed_cb" swapped="no"/>
+                                  </object>
+                                </child>
+                                <layout>
+                                  <property name="row">0</property>
+                                  <property name="column">0</property>
+                                </layout>
+                              </object>
+                            </child>
                             <child>
                               <object class="GtkBox" id="CustomTmpBox">
                                 <property name="orientation">vertical</property>
@@ -5912,7 +5932,7 @@ battery is charged.</property>
                                   </object>
                                 </child>
                                 <layout>
-                                  <property name="row">0</property>
+                                  <property name="row">1</property>
                                   <property name="column">0</property>
                                 </layout>
                               </object>
@@ -5935,7 +5955,7 @@ battery is charged.</property>
                                   </object>
                                 </child>
                                 <layout>
-                                  <property name="row">1</property>
+                                  <property name="row">2</property>
                                   <property name="column">0</property>
                                 </layout>
                               </object>
@@ -5947,7 +5967,7 @@ battery is charged.</property>
                                 <property name="halign">start</property>
                                 <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                                 <layout>
-                                  <property name="row">2</property>
+                                  <property name="row">3</property>
                                   <property name="column">0</property>
                                 </layout>
                               </object>
