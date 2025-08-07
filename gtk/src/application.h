@@ -19,8 +19,7 @@ G_DECLARE_FINAL_TYPE(GhbApplication, ghb_application, GHB, APPLICATION, GtkAppli
 
 GhbApplication *ghb_application_new(const char *exe_name);
 
-char *ghb_application_get_app_path(GhbApplication *self);
-char *ghb_application_get_app_dir(GhbApplication *self);
+const char *ghb_application_get_app_dir(GhbApplication *self);
 
 signal_user_data_t *ghb_ud (void);
 int ghb_get_cancel_status(void);

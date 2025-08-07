@@ -21,6 +21,34 @@
 #include "settings.h"
 #include "ui_res.h"
 
+static char *
+get_locale_dir (const char *app_dir)
+{
+    g_autofree char *prefix = g_path_get_dirname(app_dir);
+    return g_canonicalize_filename(PACKAGE_LOCALE_DIR, prefix);
+}
+
+static char *
+get_app_dir (const char *app_cmd)
+{
+    // The preferred method, only works on Linux and certain other OSes
+    g_autofree char *link = g_file_read_link("/proc/self/exe", NULL);
+    if (link != NULL)
+        return g_path_get_dirname(link);
+
+    // Alternatively, work out the path from the command name, path and cwd
+    if (g_path_is_absolute(app_cmd))
+        return g_path_get_dirname(app_cmd);
+
+    g_autofree char *path_cmd = g_find_program_in_path(app_cmd);
+    if (path_cmd != NULL)
+        return g_path_get_dirname(path_cmd);
+
+    g_autofree char *cwd = g_get_current_dir();
+    g_autofree char *cmd_dir = g_path_get_dirname(app_cmd);
+    return g_canonicalize_filename(app_cmd, cwd);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -28,12 +56,17 @@ main (int argc, char *argv[])
     // Tell gdk pixbuf where it's loader config file is.
     _putenv_s("GDK_PIXBUF_MODULE_FILE", "ghb.exe.local/loaders.cache");
 #endif
-
-    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+    g_autofree char *app_dir = get_app_dir(argv ? argv[0] : NULL);
+    const char *textdomaindir = getenv("TEXTDOMAINDIR");
+    g_autofree char *locale_dir;
+    if (textdomaindir)
+        locale_dir = g_strdup(textdomaindir);
+    else
+        locale_dir = get_locale_dir(app_dir); 
+    bindtextdomain(GETTEXT_PACKAGE, locale_dir);
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
     textdomain(GETTEXT_PACKAGE);
 
-    g_autofree char *app_cmd = (argc > 0) ? g_strdup(argv[0]) : NULL;
-    g_autoptr(GApplication) app = G_APPLICATION(ghb_application_new(app_cmd));
+    g_autoptr(GApplication) app = G_APPLICATION(ghb_application_new(app_dir));
     return g_application_run(app, argc, argv);
 }
