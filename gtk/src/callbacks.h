@@ -88,5 +88,6 @@ void ghb_break_pts_duration(gint64 ptsDuration,
 void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss);
 GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
                                    const char *name, const char *id);
+void ghb_check_send_to_available (void);
 
 G_END_DECLS

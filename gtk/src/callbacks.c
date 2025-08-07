@@ -4459,6 +4459,41 @@ searching_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     return status_str;
 }
 
+static gboolean is_flatpak = FALSE;
+static gboolean flatpak_spawn_enable = FALSE;
+static guint flatpak_spawn_watch_id = 0;
+
+static void
+flatpak_spawn_allowed (GDBusConnection *connection, const char *name,
+                       const char *name_owner, gpointer user_data)
+{
+    flatpak_spawn_enable = TRUE;
+    g_bus_unwatch_name(flatpak_spawn_watch_id);
+}
+
+static void
+flatpak_spawn_disallowed (GDBusConnection *connection, const char *name,
+                          gpointer user_data)
+{
+    gtk_widget_set_sensitive(ghb_builder_widget("SendFileTo"), FALSE);
+    g_bus_unwatch_name(flatpak_spawn_watch_id);
+}
+
+// Disable flatpak-spawn option if the org.freedesktop.Flatpak bus name is unavailable
+void
+ghb_check_send_to_available (void)
+{
+    if (g_access("/.flatpak-info", F_OK) == 0)
+    {
+        is_flatpak = TRUE;
+        flatpak_spawn_watch_id = g_bus_watch_name(G_BUS_TYPE_SESSION, "org.freedesktop.Flatpak",
+                                                  G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                                  (GBusNameAppearedCallback) flatpak_spawn_allowed,
+                                                  (GBusNameVanishedCallback) flatpak_spawn_disallowed,
+                                                  NULL, NULL);
+    }
+}
+
 static void
 send_to_external_app(gint index, signal_user_data_t * ud)
 {
@@ -4466,6 +4501,12 @@ send_to_external_app(gint index, signal_user_data_t * ud)
     const gchar * send_file_to_target = ghb_dict_get_string(ud->prefs, "SendFileToTarget");
     if (send_file_to && send_file_to_target != NULL && send_file_to_target[0] != '\0')
     {
+        if (is_flatpak && !flatpak_spawn_enable)
+        {
+            ghb_log("Could not run command outside Flatpak as fr.handbrake.ghb "
+                    "doesn't have the --talk-name=org.freedesktop.Flatpak override");
+            return;
+        }
         GhbValue *queueDict, *jobDict, *destDict;
         queueDict = ghb_array_get(ud->queue, index);
         jobDict = ghb_dict_get(queueDict, "Job");
@@ -4473,7 +4514,7 @@ send_to_external_app(gint index, signal_user_data_t * ud)
 
         gchar * file = g_shell_quote(ghb_dict_get_string(destDict, "File"));
         gchar * command_str;
-        if (g_access("/.flatpak-info", F_OK) == 0)
+        if (is_flatpak)
         {
             command_str = g_strjoin(" ", "flatpak-spawn", "--host", "--", send_file_to_target, file, NULL);
         }

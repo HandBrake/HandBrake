@@ -568,6 +568,7 @@ _ghb_idle_ui_init (signal_user_data_t *ud)
     }
 
     ghb_bind_dependencies();
+    ghb_check_send_to_available();
 
     return FALSE;
 }
