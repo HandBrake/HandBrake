@@ -3800,7 +3800,7 @@ prefs_response_cb (GtkWindow *dialog, gpointer data)
 
         // Toss up a warning dialog
         ghb_question_dialog_run(hb_window, GHB_ACTION_NORMAL, _("_Quit"), NULL,
-                                _("Temp Directory Changed"),
+                                _("Settings Changed"),
                                 _("You must restart HandBrake now."));
         application_quit();
     }
@@ -5288,6 +5288,13 @@ use_m4v_changed_cb (GtkWidget *widget, gpointer data)
 
 G_MODULE_EXPORT void
 tmp_dir_enable_changed_cb (GtkWidget *widget, gpointer data)
+{
+    pref_changed_cb(widget, ghb_ud());
+    prefs_require_restart = TRUE;
+}
+
+G_MODULE_EXPORT void
+ui_language_changed_cb (GtkWidget *widget, gpointer data)
 {
     pref_changed_cb(widget, ghb_ud());
     prefs_require_restart = TRUE;
