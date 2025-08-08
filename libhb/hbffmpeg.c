@@ -9,6 +9,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
+#include "libavutil/cpu.h"
 
 static int get_frame_type(int type)
 {
@@ -783,6 +784,13 @@ int hb_av_can_use_zscale(enum AVPixelFormat pix_fmt,
 {
 
 #if defined (__aarch64__) && defined(_WIN32)
+    {
+        return 0;
+    }
+#endif
+
+#if ARCH_X86_64 || ARCH_X86_32
+    if ((av_get_cpu_flags() & AV_CPU_FLAG_AVX2) == 0)
     {
         return 0;
     }
