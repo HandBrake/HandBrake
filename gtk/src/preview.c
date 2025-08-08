@@ -570,6 +570,22 @@ set_preview_image_static (signal_user_data_t *ud, GdkPixbuf * pix)
     }
 }
 
+G_MODULE_EXPORT void
+preview_last_cb (GtkButton *button, GtkScale *preview_frame)
+{
+    GtkAdjustment *adj = gtk_range_get_adjustment(GTK_RANGE(preview_frame));
+    double current = gtk_adjustment_get_value(adj);
+    gtk_adjustment_set_value(adj, current - 1);
+}
+
+G_MODULE_EXPORT void
+preview_next_cb (GtkButton *button, GtkScale *preview_frame)
+{
+    GtkAdjustment *adj = gtk_range_get_adjustment(GTK_RANGE(preview_frame));
+    double current = gtk_adjustment_get_value(adj);
+    gtk_adjustment_set_value(adj, current + 1);
+}
+
 static void
 init_preview_image(signal_user_data_t *ud)
 {
@@ -607,6 +623,16 @@ init_preview_image(signal_user_data_t *ud)
         pix_height = gdk_pixbuf_get_height(ud->preview->pix);
         preview_set_size(ud, pix_width, pix_height);
     }
+
+    // Update preview buttons on summary page
+    int preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
+    g_autofree char *count_label = g_strdup_printf("%d/%d",
+                                                   ud->preview->frame + 1, preview_count);
+    gtk_label_set_text(GTK_LABEL(ghb_builder_widget("summary_preview_count")), count_label);
+    gtk_widget_set_sensitive(ghb_builder_widget("summary_preview_last"),
+                             ud->preview->frame > 0);
+    gtk_widget_set_sensitive(ghb_builder_widget("summary_preview_next"),
+                             ud->preview->frame < preview_count - 1);
 }
 
 void
@@ -778,12 +804,11 @@ hud_fade_in (GtkWidget *hud)
 }
 
 static gboolean
-hud_timeout (signal_user_data_t *ud)
+hud_timeout (GtkWidget *widget)
 {
     ghb_log_func();
     if (live_preview_get_state() != PREVIEW_STATE_ENCODING)
     {
-        GtkWidget *widget = ghb_builder_widget("preview_hud");
         cancel_source_function(hud_fade_id);
         hud_fade_id = g_timeout_add(16, (GSourceFunc)hud_fade_out, widget);
         hud_timeout_id = 0;
@@ -798,7 +823,7 @@ hud_timeout (signal_user_data_t *ud)
 G_MODULE_EXPORT void
 hud_enter_cb (GtkEventControllerMotion *econ, double x, double y, gpointer data)
 {
-    GtkWidget *hud = ghb_builder_widget("preview_hud");
+    GtkWidget *hud = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(econ));
 
     cancel_source_function(hud_timeout_id);
     hud_timeout_id = 0;
@@ -821,24 +846,18 @@ preview_click_cb (GtkGesture *gest, int n_press, double x, double y, gpointer da
 }
 
 G_MODULE_EXPORT void
-preview_leave_cb (GtkEventControllerMotion *econ, gpointer data)
+preview_leave_cb (GtkEventControllerMotion *econ, GtkWidget *hud)
 {
-    signal_user_data_t *ud = ghb_ud();
-
     cancel_source_function(hud_timeout_id);
-    hud_timeout_id = g_timeout_add(500, (GSourceFunc)hud_timeout, ud);
+    hud_timeout_id = g_timeout_add(500, (GSourceFunc)hud_timeout, hud);
 }
 
 G_MODULE_EXPORT void
 preview_motion_cb (GtkEventControllerMotion *econ, double x, double y,
-                   gpointer data)
+                   GtkWidget *hud)
 {
-    GtkWidget * hud;
-    signal_user_data_t *ud = ghb_ud();
-
     cancel_source_function(hud_timeout_id);
     hud_timeout_id = 0;
-    hud = ghb_builder_widget("preview_hud");
     if (!gtk_widget_is_visible(hud))
     {
         gtk_widget_set_visible(hud, TRUE);
@@ -848,7 +867,7 @@ preview_motion_cb (GtkEventControllerMotion *econ, double x, double y,
 
     if (!in_hud)
     {
-        hud_timeout_id = g_timeout_add_seconds(4, (GSourceFunc)hud_timeout, ud);
+        hud_timeout_id = g_timeout_add_seconds(4, (GSourceFunc)hud_timeout, hud);
     }
 }
 

@@ -29,8 +29,9 @@
 
 .ghb-preview-hud
 {
-    border-radius: 16px;
+    border-radius: 12px;
     border-width: 1px;
+    padding: 6px;
 }
 
 .ghb-preview-image-frame
