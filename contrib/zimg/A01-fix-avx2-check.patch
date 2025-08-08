@@ -1,0 +1,23 @@
+From 0e56801f98db3e363c974fca794fa06022d40ee4 Mon Sep 17 00:00:00 2001
+From: sekrit-twc <noreply@example.com>
+Date: Sat, 26 Jul 2025 11:00:28 -0700
+Subject: [PATCH] colorspace: fix AVX2 check
+
+Fix #226
+---
+ src/zimg/colorspace/x86/operation_impl_x86.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/zimg/colorspace/x86/operation_impl_x86.cpp b/src/zimg/colorspace/x86/operation_impl_x86.cpp
+index f4ff8f6c..bb43dee2 100644
+--- a/src/zimg/colorspace/x86/operation_impl_x86.cpp
++++ b/src/zimg/colorspace/x86/operation_impl_x86.cpp
+@@ -16,7 +16,7 @@ std::unique_ptr<Operation> create_matrix_operation_x86(const Matrix3x3 &m, CPUCl
+ 	if (cpu_is_autodetect(cpu)) {
+ 		if (!ret && cpu == CPUClass::AUTO_64B && caps.avx512f)
+ 			ret = create_matrix_operation_avx512(m);
+-		if (!ret && caps.avx)
++		if (!ret && caps.avx2)
+ 			ret = create_matrix_operation_avx2(m);
+ 	} else {
+ 		if (!ret && cpu >= CPUClass::X86_AVX512)
