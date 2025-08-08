@@ -716,12 +716,34 @@ cancel_source_function (guint id)
     }
 }
 
+static void
+enable_animations_changed (GtkSettings *settings, GParamSpec *pspec, gboolean *result)
+{
+    g_object_get(settings, "gtk-enable-animations", result, NULL);
+}
+
+static gboolean
+get_enable_animations (void)
+{
+    static GtkSettings *settings = NULL;
+    static gboolean enable_animations = FALSE;
+    if (!settings)
+    {
+        settings = gtk_settings_get_for_display(gdk_display_get_default());
+        g_object_get(settings, "gtk-enable-animations", &enable_animations, NULL);
+        g_signal_connect(settings, "notify::gtk-enable-animations",
+                         G_CALLBACK(enable_animations_changed), &enable_animations);
+    }
+
+    return enable_animations;
+}
+
 static gboolean
 hud_fade_out (GtkWidget *hud)
 {
     double opacity = gtk_widget_get_opacity(hud);
 
-    if (opacity > 0.0)
+    if (get_enable_animations() && opacity > 0.0)
     {
         gtk_widget_set_opacity(hud, opacity - 0.0625);
         return G_SOURCE_CONTINUE;
@@ -740,13 +762,16 @@ hud_fade_in (GtkWidget *hud)
     double opacity = gtk_widget_get_opacity(hud);
     gtk_widget_set_visible(hud, TRUE);
 
-    if (opacity < 1.0)
+    if (get_enable_animations() && opacity < 1.0)
     {
         gtk_widget_set_opacity(hud, opacity + 0.0625);
         return G_SOURCE_CONTINUE;
     }
     else
     {
+        if (opacity < 1.0)
+            gtk_widget_set_opacity(hud, 1.0);
+
         hud_fade_id = 0;
         return G_SOURCE_REMOVE;
     }
