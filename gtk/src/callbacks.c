@@ -2321,14 +2321,14 @@ mini_preview_update (gboolean has_preview, signal_user_data_t *ud)
         widget = ghb_builder_widget("summary_image");
         gtk_widget_set_visible(widget, FALSE);
         widget = ghb_builder_widget("summary_preview_image");
-        gtk_widget_set_visible(widget, TRUE);
+        gtk_widget_set_visible(gtk_widget_get_parent(widget), TRUE);
     }
     else
     {
         widget = ghb_builder_widget("summary_image");
         gtk_widget_set_visible(widget, TRUE);
         widget = ghb_builder_widget("summary_preview_image");
-        gtk_widget_set_visible(widget, FALSE);
+        gtk_widget_set_visible(gtk_widget_get_parent(widget), FALSE);
     }
 }
 

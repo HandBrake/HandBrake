@@ -1994,17 +1994,71 @@ sync for broken players that do not honor MP4 edit lists.</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkPicture" id="summary_preview_image">
-                            <property name="visible">0</property>
-                            <property name="margin-bottom">4</property>
-                            <property name="margin-start">4</property>
-                            <property name="margin-end">4</property>
-                            <property name="hexpand">1</property>
-                            <property name="vexpand">1</property>
-                            <property name="keep-aspect-ratio">True</property>
-                            <accessibility>
-                              <property name="label" translatable="yes">Video Preview</property>
-                            </accessibility>
+                          <object class="GtkOverlay">
+                            <property name="visible">false</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkPicture" id="summary_preview_image">
+                                <property name="margin-bottom">4</property>
+                                <property name="margin-start">4</property>
+                                <property name="margin-end">4</property>
+                                <property name="hexpand">1</property>
+                                <property name="vexpand">1</property>
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <property name="keep-aspect-ratio">True</property>
+                                <child>
+                                  <object class="GtkEventControllerMotion">
+                                    <signal name="leave" handler="preview_leave_cb" object="summary_preview_hud" swapped="no"/>
+                                    <signal name="motion" handler="preview_motion_cb" object="summary_preview_hud" swapped="no"/>
+                                  </object>
+                                </child>
+                                <accessibility>
+                                  <property name="label" translatable="yes">Video Preview</property>
+                                </accessibility>
+                              </object>
+                            </child>
+                            <child type="overlay">
+                              <object class="GtkBox" id="summary_preview_hud">
+                                <property name="can-focus">False</property>
+                                <property name="halign">center</property>
+                                <property name="visible">False</property>
+                                <property name="opacity">0.0</property>
+                                <property name="valign">end</property>
+                                <property name="margin-bottom">30</property>
+                                <property name="css-classes">ghb-preview-hud
+osd
+app-notification</property>
+                                <child>
+                                  <object class="GtkEventControllerMotion">
+                                    <signal name="enter" handler="hud_enter_cb" swapped="no"/>
+                                    <signal name="leave" handler="hud_leave_cb" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="summary_preview_last">
+                                    <property name="icon-name">pan-start-symbolic</property>
+                                    <property name="css-classes">flat</property>
+                                    <signal name="clicked" handler="preview_last_cb" object="preview_frame" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="summary_preview_count">
+                                    <property name="label">1/1</property>
+                                    <property name="width-chars">5</property>
+                                    <property name="css-classes">numeric</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="summary_preview_next">
+                                    <property name="icon-name">pan-end-symbolic</property>
+                                    <property name="css-classes">flat</property>
+                                    <signal name="clicked" handler="preview_next_cb" object="preview_frame" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                             <layout>
                               <property name="row">0</property>
                               <property name="column">1</property>
@@ -6406,8 +6460,8 @@ battery is charged.</property>
                 </child>
                 <child>
                   <object class="GtkEventControllerMotion">
-                    <signal name="leave" handler="preview_leave_cb" swapped="no"/>
-                    <signal name="motion" handler="preview_motion_cb" swapped="no"/>
+                    <signal name="leave" handler="preview_leave_cb" object="preview_hud" swapped="no"/>
+                    <signal name="motion" handler="preview_motion_cb" object="preview_hud" swapped="no"/>
                   </object>
                 </child>
               </object>
@@ -6416,6 +6470,7 @@ battery is charged.</property>
         </property>
         <child type="overlay">
           <object class="GtkBox" id="preview_hud">
+            <property name="visible">False</property>
             <property name="can-focus">False</property>
             <property name="halign">center</property>
             <property name="valign">end</property>
