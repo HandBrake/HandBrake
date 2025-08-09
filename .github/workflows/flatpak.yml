@@ -12,42 +12,24 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
-
-    - name: Cargo-C Toolchain Cache
-      id: linux-cargo-c-toolchain
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.cargo/bin/cargo-capi
-          ~/.cargo/bin/cargo-cbuild
-          ~/.cargo/bin/cargo-cinstall
-        key: ${{ runner.os }}-${{ runner.arch }}-flatpak-linux-cargo-c-toolchain
      
     - name: Setup Environment
       run: |
         sudo apt-get update
-        sudo apt-get install -y autoconf automake autopoint appstream build-essential cmake git libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev libogg-dev libopus-dev libsamplerate-dev libspeex-dev -y 
-        sudo apt-get install -y libtheora-dev libtool libtool-bin libturbojpeg0-dev libvorbis-dev libx264-dev libxml2-dev libvpx-dev m4 make meson nasm ninja-build patch pkg-config tar zlib1g-dev
-        sudo apt-get install -y libva-dev libdrm-dev intltool libglib2.0-dev libunwind-dev libgtk-4-dev libgudev-1.0-dev libssl-dev
-        sudo python -m pip install meson
-        sudo apt-get install flatpak flatpak-builder
+        sudo apt-get install -y autoconf automake build-essential cmake git libnuma-dev libtool libtool-bin m4 make meson nasm ninja-build patch pkg-config tar flatpak flatpak-builder
         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        sudo flatpak install -y flathub org.freedesktop.Sdk//24.08 org.freedesktop.Platform//24.08 org.gnome.Platform//48 org.gnome.Sdk//48
-        sudo flatpak install -y org.freedesktop.Sdk.Extension.llvm18//24.08
-        sudo flatpak install -y org.freedesktop.Sdk.Extension.rust-stable//24.08
-        sudo apt-get upgrade -y
-
-    - name: Setup Cargo-C Toolchain
-      if: steps.linux-cargo-c-toolchain.outputs.cache-hit != 'true'
-      run: |
-        cargo install cargo-c
-        
+        sudo flatpak install -y flathub org.gnome.Platform//48 org.gnome.Sdk//48 org.freedesktop.Sdk.Extension.llvm18//24.08 org.freedesktop.Sdk.Extension.rust-stable//24.08
    
     - name: Build HandBrake
       run: |
-        ./configure --launch-jobs=1 --flatpak --enable-qsv --enable-vce --enable-nvdec
+        ./configure --launch-jobs=1 --flatpak --enable-qsv --enable-vce --enable-nvdec --enable-libdovi
         cd build
-        nice make pkg.create.flatpak
+        nice make pkg.create.gui.flatpak
+
+    - name: Build HandBrake Plugins
+      run: |
+        cd build
+        nice make pkg.create.plugins.flatpak
         
     - name: Upload Package
       uses: actions/upload-artifact@v4
