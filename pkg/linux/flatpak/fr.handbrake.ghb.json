@@ -9,6 +9,7 @@
         "--share=ipc",
         "--socket=fallback-x11",
         "--socket=wayland",
+        "--socket=pulseaudio",
         "--filesystem=host",
         "--filesystem=xdg-run/gvfs",
         "--filesystem=xdg-run/gvfsd",
