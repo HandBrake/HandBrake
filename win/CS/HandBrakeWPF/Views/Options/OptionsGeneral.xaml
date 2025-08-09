@@ -64,7 +64,7 @@
 
             <StackPanel Orientation="Horizontal"  Margin="20,15,0,5">
                 <TextBlock Text="{x:Static Properties:Resources.OptionsView_DarkThemeMode}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
-                <ComboBox ItemsSource="{Binding DarkThemeModes, Converter={StaticResource ThemeSettingConverter}}" SelectedItem="{Binding DarkThemeMode, Converter={StaticResource ThemeSettingConverter}}" 
+                <ComboBox ItemsSource="{Binding DarkThemeModes, Converter={StaticResource ThemeSettingConverter}}" SelectedItem="{Binding AppThemeMode, Converter={StaticResource ThemeSettingConverter}}" 
                                       Margin="5,0,0,0" HorizontalAlignment="Left" Width="150" />
                 <TextBlock Text="{x:Static Properties:Resources.OptionsView_RequiresRestart}" Margin="5,0,0,0" />
             </StackPanel>

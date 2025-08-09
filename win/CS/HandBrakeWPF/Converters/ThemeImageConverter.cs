@@ -28,13 +28,13 @@ namespace HandBrakeWPF.Converters
         public ThemeImageConverter()
         {
             this.userSettingService = IoCHelper.Get<IUserSettingService>();
-            DarkThemeMode mode = (DarkThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
+            AppThemeMode mode = (AppThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
 
             if (SystemParameters.HighContrast)
             {
                 this.isDarkTheme = false;
             } 
-            else if (mode == DarkThemeMode.Dark || (mode == DarkThemeMode.System && Utilities.SystemInfo.IsAppsUsingDarkTheme()))
+            else if (mode == AppThemeMode.Dark || (mode == AppThemeMode.System && Utilities.SystemInfo.IsAppsUsingDarkTheme()))
             {
                 this.isDarkTheme = true;
             }

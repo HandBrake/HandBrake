@@ -106,7 +106,7 @@ namespace HandBrakeWPF.ViewModels
         private string prePostFilenameText;
         private bool showPrePostFilenameBox;
         private bool whenDonePerformActionImmediately;
-        private DarkThemeMode darkThemeMode;
+        private AppThemeMode appThemeMode;
         private bool alwaysUseDefaultPath;
         private bool pauseOnLowBattery;
         private int lowBatteryLevel;
@@ -283,16 +283,22 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public BindingList<DarkThemeMode> DarkThemeModes { get; } = new BindingList<DarkThemeMode>(EnumHelper<DarkThemeMode>.GetEnumList().ToList());
+        public BindingList<AppThemeMode> DarkThemeModes { get; } = new BindingList<AppThemeMode>()
+                                                                   {
+                                                                       AppThemeMode.System,
+                                                                       AppThemeMode.Light,
+                                                                       AppThemeMode.Dark,
+                                                                       AppThemeMode.None
+                                                                   };
 
-        public DarkThemeMode DarkThemeMode
+        public AppThemeMode AppThemeMode
         {
-            get => this.darkThemeMode;
+            get => this.appThemeMode;
             set
             {
-                if (value == this.darkThemeMode) return;
-                this.darkThemeMode = value;
-                this.NotifyOfPropertyChange(() => this.DarkThemeMode);
+                if (value == this.appThemeMode) return;
+                this.appThemeMode = value;
+                this.NotifyOfPropertyChange(() => this.AppThemeMode);
             }
         }
 
@@ -1498,7 +1504,7 @@ namespace HandBrakeWPF.ViewModels
             this.ShowPreviewOnSummaryTab = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPreviewOnSummaryTab);
             this.ShowAddAllToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
             this.ShowAddSelectionToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
-            this.DarkThemeMode = (DarkThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
+            this.AppThemeMode = (AppThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
             this.SelectedPresetDisplayMode = (PresetDisplayMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.PresetMenuDisplayMode);
 
             // #############################
@@ -1769,7 +1775,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.DaysBetweenUpdateCheck, this.CheckForUpdatesFrequency);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowStatusInTitleBar, this.ShowStatusInTitleBar);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowPreviewOnSummaryTab, this.ShowPreviewOnSummaryTab);
-            this.userSettingService.SetUserSetting(UserSettingConstants.DarkThemeMode, this.DarkThemeMode);
+            this.userSettingService.SetUserSetting(UserSettingConstants.DarkThemeMode, this.AppThemeMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.UiLanguage, this.SelectedLanguage?.Culture);
             this.userSettingService.SetUserSetting(UserSettingConstants.RightToLeftUi, this.SelectedRightToLeftMode);
 

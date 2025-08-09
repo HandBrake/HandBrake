@@ -185,20 +185,21 @@ namespace HandBrakeWPF
             userSettingService.SetUserSetting(UserSettingConstants.RunCounter, runCounter + 1); // Only display once.
 
             // App Theme
-            DarkThemeMode useDarkTheme = (DarkThemeMode)userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
+            AppThemeMode useAppTheme = (AppThemeMode)userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
        
             Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Generic.xaml", UriKind.Relative) });
             bool themed = false;
+            bool loadBaseStyle = true;
             if (SystemParameters.HighContrast || !Portable.IsThemeEnabled())
             {
                 Application.Current.Resources["Ui.Light"] = new SolidColorBrush(SystemColors.HighlightTextColor);
                 Application.Current.Resources["Ui.ContrastLight"] = new SolidColorBrush(SystemColors.ActiveBorderBrush.Color);
-                useDarkTheme = DarkThemeMode.None;
+                useAppTheme = AppThemeMode.None;
             }
 
-            switch (useDarkTheme)
+            switch (useAppTheme)
             {
-                case DarkThemeMode.System:
+                case AppThemeMode.System:
                     if (SystemInfo.IsAppsUsingDarkTheme())
                     {
                         Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Dark.xaml", UriKind.Relative) });
@@ -210,23 +211,31 @@ namespace HandBrakeWPF
 
                     themed = true;
                     break;
-                case DarkThemeMode.Dark:
+                case AppThemeMode.Dark:
                     Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Dark.xaml", UriKind.Relative) });
                     themed = true;
                     break;
-                case DarkThemeMode.Light:
+                case AppThemeMode.Light:
                     Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Light.xaml", UriKind.Relative) });
                     themed = true;
                     break;
 
-                case DarkThemeMode.None:
+                case AppThemeMode.None:
                     Application.Current.Resources["Ui.Light"] = new SolidColorBrush(SystemColors.HighlightTextColor);
                     Application.Current.Resources["Ui.ContrastLight"] = new SolidColorBrush(SystemColors.ActiveBorderBrush.Color);
                     themed = false;
                     break;
+
+                case AppThemeMode.Modern:
+                    loadBaseStyle = false;
+                    break;
             }
 
             Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Views/Styles/Styles.xaml", UriKind.Relative) });
+            if (loadBaseStyle)
+            {
+                Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Views/Styles/BaseStyles.xaml", UriKind.Relative) });
+            }
 
             if (themed)
             {

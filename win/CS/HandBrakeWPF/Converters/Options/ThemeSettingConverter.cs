@@ -13,7 +13,7 @@ namespace HandBrakeWPF.Converters.Options
 
     using HandBrakeWPF.Model;
 
-    public class ThemeSettingConverter : ResourceConverterBase<DarkThemeMode>, IValueConverter
+    public class ThemeSettingConverter : ResourceConverterBase<AppThemeMode>, IValueConverter
     {
     }
 }

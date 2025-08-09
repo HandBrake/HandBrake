@@ -63,8 +63,8 @@ namespace HandBrakeWPF.Helpers
             try
             {
                 IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
-                DarkThemeMode mode = userSettingService.GetUserSetting<DarkThemeMode>(UserSettingConstants.DarkThemeMode);
-                if (mode == DarkThemeMode.Dark || (mode == DarkThemeMode.System && SystemInfo.IsAppsUsingDarkTheme()))
+                AppThemeMode mode = userSettingService.GetUserSetting<AppThemeMode>(UserSettingConstants.DarkThemeMode);
+                if (mode == AppThemeMode.Dark || (mode == AppThemeMode.System && SystemInfo.IsAppsUsingDarkTheme()))
                 {
                     var handle = new WindowInteropHelper(h).Handle;
                     Win32.SetDarkTheme(handle);

@@ -106,8 +106,8 @@ namespace HandBrakeWPF.Services
         /// </returns>
         public MessageBoxResult ShowMessageBox(string message, string header, MessageBoxButton buttons, MessageBoxImage image)
         {
-            DarkThemeMode mode = userSettingService.GetUserSetting<DarkThemeMode>(UserSettingConstants.DarkThemeMode);
-            if (mode == DarkThemeMode.Dark || (mode == DarkThemeMode.System && SystemInfo.IsAppsUsingDarkTheme()))
+            AppThemeMode mode = userSettingService.GetUserSetting<AppThemeMode>(UserSettingConstants.DarkThemeMode);
+            if (mode == AppThemeMode.Dark || (mode == AppThemeMode.System && SystemInfo.IsAppsUsingDarkTheme()))
             {
                 MessageBoxWindow window = new MessageBoxWindow();
                 window.Setup(header, message, buttons, image);
