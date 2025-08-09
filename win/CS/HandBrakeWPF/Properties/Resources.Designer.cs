@@ -1114,6 +1114,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modern.
+        /// </summary>
+        public static string DarkTheme_Modern {
+            get {
+                return ResourceManager.GetString("DarkTheme_Modern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
         public static string DarkTheme_None {

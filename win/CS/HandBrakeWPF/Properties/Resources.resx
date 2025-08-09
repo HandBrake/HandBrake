@@ -3010,4 +3010,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="VideoColourRange_Limited" xml:space="preserve">
     <value>Limited</value>
   </data>
+  <data name="DarkTheme_Modern" xml:space="preserve">
+    <value>Modern</value>
+  </data>
 </root>

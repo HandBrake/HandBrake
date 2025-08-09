@@ -72,12 +72,12 @@
                     VerticalAlignment="Stretch"
                     Orientation="Vertical">
             <!--  Main Menu  -->
-            <Menu Height="23" x:Name="mainAppMenu" Visibility="{Binding IsLegacyMenuShown, Converter={StaticResource boolToVisConverter}}"
+            <Menu MinHeight="23" x:Name="mainAppMenu" Visibility="{Binding IsLegacyMenuShown, Converter={StaticResource boolToVisConverter}}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Top">
                 <Menu.Resources>
                     <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
-                        <Setter Property="Height" Value="23" />
+                        <Setter Property="MinHeight" Value="23" />
                     </Style>
                 </Menu.Resources>
                 <MenuItem Header="{x:Static Properties:Resources.MainView_FileMenu}">
