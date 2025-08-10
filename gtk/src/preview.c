@@ -469,9 +469,9 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
         ud->preview->encoded[ud->preview->encode_frame] = TRUE;
         live_preview_start_new(ud);
         widget = ghb_builder_widget("live_encode_progress");
-        gtk_widget_hide (widget);
+        gtk_widget_set_visible(widget, FALSE);
         widget = ghb_builder_widget("live_preview_progress");
-        gtk_widget_show (widget);
+        gtk_widget_set_visible(widget, TRUE);
     }
     else
     {
@@ -598,16 +598,16 @@ init_preview_image(signal_user_data_t *ud)
     if (ud->preview->encoded[ud->preview->frame])
     {
         widget = ghb_builder_widget("live_encode_progress");
-        gtk_widget_hide (widget);
+        gtk_widget_set_visible(widget, FALSE);
         widget = ghb_builder_widget("live_preview_progress");
-        gtk_widget_show (widget);
+        gtk_widget_set_visible(widget, TRUE);
     }
     else
     {
         widget = ghb_builder_widget("live_preview_progress");
-        gtk_widget_hide (widget);
+        gtk_widget_set_visible(widget, FALSE);
         widget = ghb_builder_widget("live_encode_progress");
-        gtk_widget_show (widget);
+        gtk_widget_set_visible(widget, TRUE);
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(widget), "");
         gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(widget), 0);
     }
