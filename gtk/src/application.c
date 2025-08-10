@@ -966,7 +966,7 @@ ghb_application_handle_local_options (GApplication *app, GVariantDict *options)
         (void) freopen("NUL", "w", stdout);
     }
 #else
-    redirect_io = FALSE;
+        redirect_io = FALSE;
 #endif
 
     return G_APPLICATION_CLASS(ghb_application_parent_class)
