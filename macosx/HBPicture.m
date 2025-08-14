@@ -10,6 +10,7 @@
 #import "HBCodingUtilities.h"
 #import "HBMutablePreset.h"
 #import "NSDictionary+HBAdditions.h"
+#import "HBLocalizationUtilities.h"
 
 #include "handbrake/handbrake.h"
 
@@ -749,6 +750,40 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     {
         [self postChangedNotification];
     }
+}
+
+- (BOOL)validatePadColorCustom:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    BOOL retval = YES;
+
+    if (nil != *ioValue)
+    {
+        NSString *customValue = *ioValue;
+
+        uint32_t color = hb_rgb_lookup_by_name(customValue.UTF8String);
+
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^0x?([a-f0-9]{6})$"
+                                                                               options:NSRegularExpressionCaseInsensitive
+                                                                                 error:NULL];
+
+        NSUInteger numberOfMatches = [regex numberOfMatchesInString:customValue
+                                                            options:0
+                                                              range:NSMakeRange(0, customValue.length)];
+
+        if (color == 0 && numberOfMatches == 0)
+        {
+            retval = NO;
+            if (outError)
+            {
+                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid custom border color.",
+                                           @"HBPicture -> invalid pad custom string description"),
+                                           NSLocalizedRecoverySuggestionErrorKey: @"Try to use either a English color name, or a 0xRRGGBB sequence."};
+                *outError = [NSError errorWithDomain:@"HBPictureError" code:0 userInfo:userInfo];
+            }
+        }
+    }
+
+    return retval;
 }
 
 #pragma mark - Anamorphic
