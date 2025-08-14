@@ -1,0 +1,35 @@
+From de4dc0bc67d648c8efd7fecab8d378d44317c5f0 Mon Sep 17 00:00:00 2001
+From: Mr-Z-2697 <74594146+Mr-Z-2697 at users.noreply.github.com>
+Date: Sun, 13 Jul 2025 16:09:53 +0800
+Subject: [PATCH] Ensuring the mvdLX is compliant
+
+
+The value of the mvdLX should be in the range of [-2^15, 2^15-1], as specified in H.265 7.4.9.9 Motion vector difference semantics.
+However there was no safety check in this area, the mvdLX have been observed to exceed the range, under some rare circumstances.
+
+
+This casting will cause overflow and underflow, should the mvd exceeds the int16_t range.
+But because of the decoding process Equation 8-94 to 8-97, and the MV itself having the range of [-2^15, 2^15-1], the decoded MV will still be correct, and mvdLX will be in the legal range.
+---
+ source/encoder/entropy.cpp | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+
+diff --git a/source/encoder/entropy.cpp b/source/encoder/entropy.cpp
+index d4bf73d53..bc1c0d8e0 100644
+--- a/source/encoder/entropy.cpp
++++ b/source/encoder/entropy.cpp
+@@ -2104,8 +2104,9 @@ void Entropy::codeRefFrmIdx(const CUData& cu, uint32_t absPartIdx, int list)
+ void Entropy::codeMvd(const CUData& cu, uint32_t absPartIdx, int list)
+ {
+     const MV& mvd = cu.m_mvd[list][absPartIdx];
+-    const int hor = mvd.x;
+-    const int ver = mvd.y;
++    // to ensure the mvdLX is in the range of [-2^15, 2^15-1]
++    const int16_t hor = (int16_t)mvd.x;
++    const int16_t ver = (int16_t)mvd.y;
+ 
+     encodeBin(hor != 0 ? 1 : 0, m_contextState[OFF_MV_RES_CTX]);
+     encodeBin(ver != 0 ? 1 : 0, m_contextState[OFF_MV_RES_CTX]);
+-- 
+2.50.1.windows.1
