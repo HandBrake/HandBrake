@@ -23,7 +23,7 @@ Please read our [guide to contributing](https://handbrake.fr/docs/en/latest/cont
 
 ## Translations
 
-We are now accepting translations via  [Transifex](https://www.transifex.com/HandBrakeProject/public) 
+We are now accepting translations via  [Transifex](https://explore.transifex.com/HandBrakeProject/) 
 
 Please read our [Translations Guide](https://github.com/HandBrake/HandBrake/blob/master/TRANSLATION.markdown) and follow the instructions if you are interested in joining the translation effort.
 
