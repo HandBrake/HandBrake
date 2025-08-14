@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,7 +22,7 @@
                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P5q-5e-xlx">
                     <rect key="frame" x="20" y="295" width="324" height="36"/>
                     <subviews>
-                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vKA-Sa-wGh">
+                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vKA-Sa-wGh">
                             <rect key="frame" x="-2" y="22" width="112" height="14"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" title="Source Dimensions" id="Trk-C5-Npx">
                                 <font key="font" metaFont="smallSystemBold"/>
@@ -39,7 +39,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZtF-Dr-Q9I">
                                     <rect key="frame" x="0.0" y="0.0" width="100" height="14"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y0c-bm-peD">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y0c-bm-peD">
                                             <rect key="frame" x="-2" y="0.0" width="74" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Storage Size:" id="ZZ9-XW-Uib">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -50,7 +50,7 @@
                                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Zfk-xb-1A1"/>
                                             </connections>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Rw8-Yc-JRg">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Rw8-Yc-JRg">
                                             <rect key="frame" x="71" y="0.0" width="31" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="0 x 0" id="ZTy-fJ-cDa">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -78,7 +78,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="2" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lJ7-rP-yaL">
                                     <rect key="frame" x="119" y="0.0" width="96" height="14"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="So8-97-LO3">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="So8-97-LO3">
                                             <rect key="frame" x="-2" y="0.0" width="71" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Display Size:" id="1AB-bM-qTs">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -89,7 +89,7 @@
                                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="HGZ-Jt-Dkm"/>
                                             </connections>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xdm-1k-xBq">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xdm-1k-xBq">
                                             <rect key="frame" x="67" y="0.0" width="31" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="0 x 0" id="byr-LI-ap5">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -117,7 +117,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="woK-zN-dbx">
                                     <rect key="frame" x="234" y="0.0" width="90" height="14"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i1a-eO-STO">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i1a-eO-STO">
                                             <rect key="frame" x="-2" y="0.0" width="74" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Aspect Ratio:" id="Lz1-Cx-d30">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -128,7 +128,7 @@
                                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="npL-hT-m8l"/>
                                             </connections>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ibg-YD-AVt">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ibg-YD-AVt">
                                             <rect key="frame" x="74" y="0.0" width="18" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="1:1" id="lIt-eN-Uyd">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -181,7 +181,7 @@
                         <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zU5-gT-j2i">
                             <rect key="frame" x="0.0" y="35" width="218" height="152"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VhD-q6-iLb">
+                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VhD-q6-iLb">
                                     <rect key="frame" x="-2" y="138" width="133" height="14"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Orientation &amp; Cropping" id="u2U-SJ-szy">
                                         <font key="font" metaFont="smallSystemBold"/>
@@ -195,7 +195,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sru-ia-7VY">
                                     <rect key="frame" x="0.0" y="116" width="134" height="14"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="Kpm-FM-DTT">
+                                        <textField focusRingType="none" horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="Kpm-FM-DTT">
                                             <rect key="frame" x="-2" y="0.0" width="56" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Flipping:" id="ewx-pd-ANc">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -246,7 +246,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uev-zj-FIR">
                                     <rect key="frame" x="0.0" y="92" width="110" height="16"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="0rN-RP-Om4">
+                                        <textField focusRingType="none" horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="0rN-RP-Om4">
                                             <rect key="frame" x="-2" y="1" width="56" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Rotation:" id="vb2-DA-Pgr">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -305,7 +305,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZkN-1w-lLe">
                                     <rect key="frame" x="0.0" y="0.0" width="218" height="84"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="753" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="Aea-Uc-JnZ">
+                                        <textField focusRingType="none" horizontalHuggingPriority="753" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="Aea-Uc-JnZ">
                                             <rect key="frame" x="-2" y="69" width="56" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Cropping:" id="zsq-Le-41g">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -348,7 +348,7 @@
                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="xfh-Wp-ZQz">
                                                     <rect key="frame" x="0.0" y="0.0" width="158" height="60"/>
                                                     <subviews>
-                                                        <textField toolTip="Left edge cropping amount in pixels" verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="LTu-ic-Ty9">
+                                                        <textField toolTip="Left edge cropping amount in pixels" focusRingType="none" verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="LTu-ic-Ty9">
                                                             <rect key="frame" x="0.0" y="21" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XZs-gj-hoo">
@@ -377,7 +377,7 @@
                                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="VO1-zV-9wC"/>
                                                             </connections>
                                                         </textField>
-                                                        <textField toolTip="Bottom edge cropping amount in pixels" verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="1Z0-JT-vst">
+                                                        <textField toolTip="Bottom edge cropping amount in pixels" focusRingType="none" verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="1Z0-JT-vst">
                                                             <rect key="frame" x="54" y="2" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="DzX-1f-HsP">
@@ -406,7 +406,7 @@
                                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="iza-Pd-Pzx"/>
                                                             </connections>
                                                         </textField>
-                                                        <textField toolTip="Right edge cropping amount in pixels" verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="wsq-TS-cC6">
+                                                        <textField toolTip="Right edge cropping amount in pixels" focusRingType="none" verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="wsq-TS-cC6">
                                                             <rect key="frame" x="108" y="21" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CIG-PU-RMT">
@@ -535,7 +535,7 @@
                                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="wAQ-9J-HFt"/>
                                                             </connections>
                                                         </stepper>
-                                                        <textField toolTip="Top edge cropping amount in pixels" verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="41c-48-2XJ">
+                                                        <textField toolTip="Top edge cropping amount in pixels" focusRingType="none" verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="41c-48-2XJ">
                                                             <rect key="frame" x="54" y="40" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CZs-y7-1JV">
@@ -611,7 +611,7 @@
                         <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3sU-eh-1ja">
                             <rect key="frame" x="241" y="0.0" width="248" height="187"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Or0-9o-QjY">
+                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Or0-9o-QjY">
                                     <rect key="frame" x="-2" y="173" width="119" height="14"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Resolution &amp; Scaling" id="aVx-b3-2AK">
                                         <font key="font" metaFont="smallSystemBold"/>
@@ -625,7 +625,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uO6-48-Dmb">
                                     <rect key="frame" x="0.0" y="149" width="231" height="16"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="PJL-Y6-9ZV">
+                                        <textField focusRingType="none" horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="PJL-Y6-9ZV">
                                             <rect key="frame" x="-2" y="1" width="92" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Resolution Limit:" id="d0T-QG-WXU">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -678,7 +678,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="7" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QW6-1e-ZMT">
                                     <rect key="frame" x="96" y="122" width="128" height="19"/>
                                     <subviews>
-                                        <textField toolTip="The maximum width that the video will be stored at." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NRy-vc-8qX">
+                                        <textField toolTip="The maximum width that the video will be stored at." focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NRy-vc-8qX">
                                             <rect key="frame" x="0.0" y="0.0" width="54" height="19"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="54" id="gNB-FK-Qtf"/>
@@ -698,7 +698,7 @@
                                                 </binding>
                                             </connections>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="who-FI-Crq">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="who-FI-Crq">
                                             <rect key="frame" x="59" y="3" width="10" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="x" id="5Tj-xw-QuU">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -713,7 +713,7 @@
                                                 </binding>
                                             </connections>
                                         </textField>
-                                        <textField toolTip="The maximum height that the video will be stored at." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FGm-oJ-FVW">
+                                        <textField toolTip="The maximum height that the video will be stored at." focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FGm-oJ-FVW">
                                             <rect key="frame" x="74" y="0.0" width="54" height="19"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="54" id="EEm-90-oEg"/>
@@ -755,7 +755,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gTO-xc-fNR">
                                     <rect key="frame" x="0.0" y="98" width="174" height="16"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="JBo-0E-AsU">
+                                        <textField focusRingType="none" horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="JBo-0E-AsU">
                                             <rect key="frame" x="-2" y="1" width="92" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Anamorphic:" id="8vS-Mw-bny">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -809,7 +809,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lle-QN-4aa">
                                     <rect key="frame" x="0.0" y="71" width="248" height="19"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="hei-Cd-vcN">
+                                        <textField focusRingType="none" horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="hei-Cd-vcN">
                                             <rect key="frame" x="-2" y="2" width="92" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Pixel Aspect:" id="SPg-s0-Oh0">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -823,7 +823,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Jh-a4-mTP">
                                             <rect key="frame" x="96" y="0.0" width="152" height="19"/>
                                             <subviews>
-                                                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LWv-Y9-b0S">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LWv-Y9-b0S">
                                                     <rect key="frame" x="0.0" y="0.0" width="54" height="19"/>
                                                     <string key="toolTip">Pixel aspect defines the shape of the pixels.
 
@@ -877,7 +877,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                         <outlet property="nextKeyView" destination="Hkl-7Z-J2e" id="XaN-VN-Lhb"/>
                                                     </connections>
                                                 </stepper>
-                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="IVk-ye-fOe">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="IVk-ye-fOe">
                                                     <rect key="frame" x="71" y="3" width="10" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="6" id="nJL-sF-Y30"/>
@@ -891,7 +891,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="IKl-6V-I4V"/>
                                                     </connections>
                                                 </textField>
-                                                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQe-Vq-Og2">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQe-Vq-Og2">
                                                     <rect key="frame" x="83" y="0.0" width="54" height="19"/>
                                                     <string key="toolTip">Pixel aspect defines the shape of the pixels.
 
@@ -974,7 +974,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ZE-cV-x9d">
                                     <rect key="frame" x="0.0" y="44" width="248" height="19"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="9oG-zm-Y0W">
+                                        <textField focusRingType="none" horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="9oG-zm-Y0W">
                                             <rect key="frame" x="-2" y="2" width="92" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Scaled Size:" id="L7V-2e-qf9">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -989,7 +989,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8L9-DZ-yiv">
                                             <rect key="frame" x="96" y="0.0" width="152" height="19"/>
                                             <subviews>
-                                                <textField verticalHuggingPriority="751" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9hH-As-JSa">
+                                                <textField focusRingType="none" verticalHuggingPriority="751" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9hH-As-JSa">
                                                     <rect key="frame" x="0.0" y="0.0" width="54" height="19"/>
                                                     <string key="toolTip">Video scaled width. This is the number of pixels wide to be encoded. Scaled width may differ from display width depending on anamorphic settings and fill settings</string>
                                                     <constraints>
@@ -1051,7 +1051,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                         <outlet property="nextKeyView" destination="Hkl-7Z-J2e" id="uHh-Lp-0GY"/>
                                                     </connections>
                                                 </stepper>
-                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="uqQ-uA-3xF">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="uqQ-uA-3xF">
                                                     <rect key="frame" x="71" y="3" width="10" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="x" id="hN1-S9-zl8">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -1063,7 +1063,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="ZS2-6w-9e6"/>
                                                     </connections>
                                                 </textField>
-                                                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hkl-7Z-J2e">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hkl-7Z-J2e">
                                                     <rect key="frame" x="83" y="0.0" width="54" height="19"/>
                                                     <string key="toolTip">Video scaled height. This is the number of pixels tall to be encoded. Scaled height may differ from display height depending on anamorphic settings and fill settings</string>
                                                     <constraints>
@@ -1213,7 +1213,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                         <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EGb-Zz-WQd">
                             <rect key="frame" x="512" y="30" width="198" height="157"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qow-nB-nRv">
+                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qow-nB-nRv">
                                     <rect key="frame" x="-2" y="143" width="49" height="14"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Borders" id="ywF-EG-IYr">
                                         <font key="font" metaFont="smallSystemBold"/>
@@ -1227,7 +1227,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i16-mF-pVp">
                                     <rect key="frame" x="0.0" y="119" width="161" height="16"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="omM-pe-wBc">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="omM-pe-wBc">
                                             <rect key="frame" x="-2" y="1" width="36" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Fill:" id="iqM-GW-fCe">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1301,7 +1301,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                 </binding>
                                             </connections>
                                         </stepper>
-                                        <textField toolTip="Top edge border amount in pixels" verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Jp-gt-DbX">
+                                        <textField toolTip="Top edge border amount in pixels" focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Jp-gt-DbX">
                                             <rect key="frame" x="54" y="40" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="0yJ-2J-ept">
@@ -1330,7 +1330,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                 </binding>
                                             </connections>
                                         </textField>
-                                        <textField toolTip="Bottom edge border amount in pixels" verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WfM-tx-rC5">
+                                        <textField toolTip="Bottom edge border amount in pixels" focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WfM-tx-rC5">
                                             <rect key="frame" x="54" y="2" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="Wfu-ZW-M6N">
@@ -1359,7 +1359,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                 </binding>
                                             </connections>
                                         </textField>
-                                        <textField toolTip="Right edge border amount in pixels" verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ck0-Gu-lGg">
+                                        <textField toolTip="Right edge border amount in pixels" focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ck0-Gu-lGg">
                                             <rect key="frame" x="108" y="21" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="TIQ-pu-KHa">
@@ -1413,7 +1413,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                 </binding>
                                             </connections>
                                         </stepper>
-                                        <textField toolTip="Left edge border amount in pixels" verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l2V-GK-BgU">
+                                        <textField toolTip="Left edge border amount in pixels" focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l2V-GK-BgU">
                                             <rect key="frame" x="0.0" y="21" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="iYd-5t-kFE">
@@ -1501,7 +1501,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="65d-Xd-JdE">
                                     <rect key="frame" x="0.0" y="27" width="117" height="16"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="kJM-a0-qcw">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="kJM-a0-qcw">
                                             <rect key="frame" x="-2" y="1" width="36" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Color:" id="OCX-n7-THw">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1555,7 +1555,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                         <real value="3.4028234663852886e+38"/>
                                     </customSpacing>
                                 </stackView>
-                                <textField toolTip="Custom border color" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aby-WS-tzS">
+                                <textField toolTip="Custom border color in English, or a 0xRRGGBB sequence" focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aby-WS-tzS">
                                     <rect key="frame" x="40" y="0.0" width="86" height="19"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="86" id="6fv-RG-oTt"/>
@@ -1572,7 +1572,11 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                                             </dictionary>
                                         </binding>
-                                        <binding destination="-2" name="value" keyPath="self.picture.padColorCustom" id="zjV-LV-ksP"/>
+                                        <binding destination="-2" name="value" keyPath="self.picture.padColorCustom" id="bgU-X1-YrJ">
+                                            <dictionary key="options">
+                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                            </dictionary>
+                                        </binding>
                                     </connections>
                                 </textField>
                             </subviews>
@@ -1611,7 +1615,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F25-0x-6Ny">
                     <rect key="frame" x="20" y="27" width="508" height="41"/>
                     <subviews>
-                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xWj-2Z-c5a">
+                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xWj-2Z-c5a">
                             <rect key="frame" x="-2" y="27" width="99" height="14"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" title="Final Dimensions" id="Ux1-Pc-XSD">
                                 <font key="font" metaFont="smallSystemBold"/>
@@ -1628,7 +1632,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Tv-E1-W8A">
                                     <rect key="frame" x="0.0" y="2" width="100" height="14"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ec5-Zy-ccd">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ec5-Zy-ccd">
                                             <rect key="frame" x="-2" y="0.0" width="74" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Storage Size:" id="kOg-k4-0N2">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1639,7 +1643,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="j0J-rF-MxS"/>
                                             </connections>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="749-LV-gA6">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="749-LV-gA6">
                                             <rect key="frame" x="71" y="0.0" width="31" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="0 x 0" id="c9F-IW-Rln">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1667,7 +1671,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fzu-gf-GNJ">
                                     <rect key="frame" x="116" y="0.0" width="286" height="19"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pcB-TE-iFk">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pcB-TE-iFk">
                                             <rect key="frame" x="-2" y="2" width="71" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Display Size:" id="WBD-tH-x3h">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1681,7 +1685,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FHJ-9w-6BA">
                                             <rect key="frame" x="71" y="0.0" width="137" height="19"/>
                                             <subviews>
-                                                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ag1-Tk-hCm">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ag1-Tk-hCm">
                                                     <rect key="frame" x="0.0" y="0.0" width="54" height="19"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="54" id="qca-mb-bKn"/>
@@ -1744,7 +1748,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                         </binding>
                                                     </connections>
                                                 </stepper>
-                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="E5O-kn-GYm">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="E5O-kn-GYm">
                                                     <rect key="frame" x="71" y="3" width="10" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="x" id="C6R-PR-3gu">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -1756,7 +1760,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="YjI-CI-02L"/>
                                                     </connections>
                                                 </textField>
-                                                <textField verticalHuggingPriority="751" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eEF-b3-4o9">
+                                                <textField focusRingType="none" verticalHuggingPriority="751" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eEF-b3-4o9">
                                                     <rect key="frame" x="83" y="0.0" width="54" height="19"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="54" id="XAc-pJ-P2R"/>
@@ -1820,7 +1824,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                 <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kVA-lv-7eu">
                                     <rect key="frame" x="418" y="2" width="90" height="14"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vnF-ty-KXF">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vnF-ty-KXF">
                                             <rect key="frame" x="-2" y="0.0" width="74" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Aspect Ratio:" id="5Vi-N9-9kM">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1831,7 +1835,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Fvh-Cn-IOT"/>
                                             </connections>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0C9-5A-hFI">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0C9-5A-hFI">
                                             <rect key="frame" x="74" y="0.0" width="18" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="1:1" id="dnG-b9-LQR">
                                                 <font key="font" metaFont="smallSystem"/>
