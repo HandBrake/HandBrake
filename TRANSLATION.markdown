@@ -1,7 +1,7 @@
 # Translating HandBrake
 
 We use Transifex to manage the translation resources for this project.
-Please see: [Transifex - HandBrake Public Page](https://www.transifex.com/HandBrakeProject/public/)
+Please see: [Transifex - HandBrake Public Page](https://explore.transifex.com/HandBrakeProject/)
 
 ## Requirements and Rules
 
@@ -26,11 +26,11 @@ There are around 4000 to 7000 words to translate for each language, depending on
 
 ## Requesting a Language
 
-HandBrake is managed by a very small team of contributors and as such, we do not have the resources to support translations for every language that may be requested and keep all the user interfaces in sync. As such, we welcome anyone who is willing to help by submitting pull requests to keep the user interface language files in sync with the translations available on [Transifex](https://www.transifex.com/HandBrakeProject/public/).
+HandBrake is managed by a very small team of contributors and as such, we do not have the resources to support translations for every language that may be requested and keep all the user interfaces in sync. As such, we welcome anyone who is willing to help by submitting pull requests to keep the user interface language files in sync with the translations available on [Transifex](https://explore.transifex.com/HandBrakeProject/).
 
 Languages that fall out of date or lack sufficient maintainers may be removed from the UI until such time they are in a suitable state.
 
-You can request a language on the [Transifex - HandBrake Public Page](https://www.transifex.com/HandBrakeProject/public/)
+You can request a language on the [Transifex - HandBrake Public Page](https://explore.transifex.com/HandBrakeProject/)
 
 
 ## Viewing Updated Translations
