@@ -1,0 +1,579 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Funcția Deblocare reduce artefactele de blocare cauzate de compresia video de calitate scăzută.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Alege opțiunile de filtrare pentru decombinare sau deintercalare.
+
+Filtrul de decombinare deintercalează în mod selectiv cadrele care par a fi intercalate.
+
+Filtrul clasic de deintercalare este aplicat tuturor cadrelor.
+Cadrele care nu sunt intercalate vor suferi o anumită degradare a calității.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>Eliminarea zgomotului reduce sau elimină aspectul zgomotului și al granulației. Acest lucru poate îmbunătăți eficiența compresiei și poate crea videoclipuri de calitate superioară la fișiere de dimensiuni mai mici.
+Setările de reducere a zgomotului prea puternice pot afecta calitatea imaginii prin eliminarea detaliilor.
+
+
+NLMeans este un filtru de reducere a zgomotului de înaltă calitate, cu un raport calitate-viteză avantajos. Se poate utiliza acolo unde calitatea este mai importantă decât viteza.
+
+HQDN3D este un filtru adaptiv trece-jos, mai rapid decât NLMeans, dar mai puțin eficient în conservarea detaliilor fine.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Detelecinema elimină artefactele de pieptene care sunt rezultatul telecinema-ului, un proces de conversie a ratelor de cadre pe film în rate de cadre pe televiziune.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Tonurile de gri elimină componenta de culoare a videoclipului. Adesea denumit videoclip alb-negru.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Calea de destinație, inclusiv directorul și numele fișierului. Aici va fi creat noul tău videoclip și cum va fi numit.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>Adaugă un marcator MP4 special pentru a permite redarea pe dispozitive iPod vintage de a 5-a generație, circa 2006. Alte setări pot afecta compatibilitatea.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Format de tip container. Înregistrările video, audio și alte piste sunt combinate într-un singur fișier de acest tip. Afectează compatibilitatea.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Optimizează fișierul MP4 pentru descărcare progresivă. După codificare, datele sunt reorganizate și rescrise pentru a permite redarea imediată printr-o rețea, fără a fi nevoie să descarci întregul fișier.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Selectarea intervalului sursă. În mod implicit, toate capitolele sunt selectate și întreaga sursă este codată.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Titlul sau videoclipul de codat.
+Sursele Blu-ray și DVD au adesea mai multe titluri, cel mai lung dintre acestea fiind de obicei principalul element.</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorfic permite dimensiuni de stocare arbitrare, păstrând în același timp aspectul original în timpul redării.
+
+Fără dezactivează anamorficul. Dimensiunile de stocare video și dimensiunile de afișare vor fi identice. Util doar pentru compatibilitatea cu anumite dispozitive vechi.
+
+Automat maximizează rezoluția de stocare, păstrând în același timp raportul de aspect original al afișajului. Recomandat.
+
+Personalizat permite setarea manuală a tuturor parametrilor. Util pentru corectarea unui aspect incorect al afișajului sursă și pentru profesioniștii care au nevoie de control avansat în post-producție.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Decupează automat marginile negre din jurul videoclipului.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Decupează videoclipul de jos.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Decupează videoclipul din partea stângă.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Decupează videoclipul din partea dreaptă.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Decupează videoclipul de sus.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Aceasta este înălțimea la care va fi stocat videoclipul.
+Dimensiunile reale ale afișajului vor diferi dacă raportul de aspect al pixelilor nu este de 1:1.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Decupează manual videoclipul.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Aliniază dimensiunile de stocare la multiplii acestei valori.
+
+Această setare este necesară doar pentru compatibilitatea cu anumite dispozitive.
+Ar trebui să folosești 2, cu excepția cazului în care întâmpini probleme de compatibilitate.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Aspectul pixelului definește forma pixelilor.
+Un raport 1:1 definește un pixel pătrat. Alte valori definesc forme dreptunghiulare.
+Playerele vor scala imaginea pentru a obține aspectul specificat.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Aceasta este lățimea la care va fi stocat videoclipul.
+Dimensiunile reale ale afișajului vor diferi dacă raportul de aspect al pixelilor nu este 1:1.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>Șterge sarcina din coadă.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>Resetează starea sarcinilor din așteptare.</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>Trimite sarcina înapoi în fereastra principală pentru editare.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Setează rata de biți medie.
+
+Rata de biți instantanee poate fi mult mai mare sau mai mică în orice moment.
+Dar media pe o perioadă lungă de timp va fi valoarea setată aici. Dacă ai nevoie
+să limitezi rata de biți instantanee, verifică setările vbv-bufsize și vbv-maxrate ale x264.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Activează ieșirea cu rată constantă de cadre pe secundă.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Codoarele video disponibile.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Ajustează setările pentru a le optimiza pentru scenarii comune.
+
+Acest lucru poate îmbunătăți eficiența pentru anumite caracteristici ale sursei sau poate seta
+caracteristicile fișierului de ieșire. Modificările vor fi aplicate după
+presetare, dar înainte de toți ceilalți parametri.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Setări suplimentare ale codorului.
+
+Lista de opțiuni de codare separate prin două puncte.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Redu utilizarea CPU a decodorului.
+
+Setează această opțiune dacă dispozitivul are dificultăți în redarea ieșirii (cadre pierdute).</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Rata de cadre la ieșire.
+
+Se recomandă „Aceeași ca sursa”. Dacă videoclipul sursă are o rată de cadre variabilă, opțiunea „Aceeași ca sursa” o va păstra.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Stabilește și asigură conformitatea cu nivelul specificat.
+
+Suprascrie toate celelalte setări.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Activează ieșirea cu rată de cadre variabilă, cu o rată maximă determinată de setarea ratei de cadre.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Ajustează setările codorului pentru a compromite eficiența compresiei cu viteza de codare.
+
+Aceasta stabilește setările implicite ale codorului.
+Se vor aplica la aceasta melodii, profiluri, niveluri și șiruri de opțiuni avansate.
+În general, ar trebui să setezi această opțiune la cea mai lentă valoare posibilă, deoarece setările mai lente
+vor duce la fișiere de calitate mai bună sau mai mici.
+
+Ajustează cursorul spre dreapta pentru a crește eficiența compresiei în detrimentul vitezei de codare
+sau spre stânga pentru a crește viteza de codare în detrimentul eficienței compresiei.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Setează și asigură conformitatea cu profilul specificat.
+
+Suprascrie toate celelalte setări.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Setează factorul de calitate dorit.
+Codorul vizează o anumită calitate.
+Scara utilizată de fiecare codor video este diferită.
+
+Scara pentru x264 este logaritmică, iar valorile mai mici corespund unei calități superioare.
+Așadar, scăderi mici ale valorii vor duce la creșteri progresive ale dimensiunii
+fișierului rezultat. O valoare de 0 înseamnă fără pierderi și va duce la o
+dimensiune a fișierului mai mare decât sursa originală,
+cu excepția cazului în care sursa a fost, de asemenea, fără pierderi.
+Valorile sugerate sunt: ​​18 până la 20 pentru surse de definiție standard și de la 20 până la 23 pentru surse de înaltă definiție.
+
+Scara pentru FFMpeg și Theora este mai liniară.
+Aceste codoare nu au un mod fără pierderi.</value>
+  </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>În timpul analizei unei codări cu treceri multiple, folosește setări care accelerează procesul.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Efectuează codarea în mai mulți pași.
+
+Opțiunea „Rată de biți” este o condiție prealabilă. În timpul analizelor, se colectează statistici despre
+videoclip. Apoi, în etapa finală, aceste statistici sunt utilizate
+pentru a lua decizii privind alocarea ratei de biți.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Activează ieșirea cu rată de cadre variabilă.
+
+VFR nu este compatibil cu anumite playere.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>Când HandBrake a terminat coada curentă sau codarea, va efectua această acțiune.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Răsfoiește ca să selectezi o cale nouă de destinație și un nume de fișier pentru codare.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Unghiul video de codat. Se aplică numai pentru DVD-uri și Blu-ray-uri cu unghiuri multiple.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Adaugă o presetare nouă.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>Opțiuni de presetări suplimentare.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Presetările sunt grupuri de setări de codare adaptate pentru scenarii specifice. Selecteaz-o pe cea care se potrivește cel mai bine intenției tale.
+
+Suprascrie toate setările de codare. Setările pot fi ajustate suplimentar după selectarea unei presetări.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>Șterge presetarea selectată.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Unele surse pot conține mai multe videoclipuri sau o colecție de titluri. Sursele Blu-ray și DVD au adesea mai multe titluri.
+
+Dacă știi titlul specific pe care vrei să îl codezi, îl poți introduce aici, iar HandBrake va scana doar acel titlu, nu fiecare titlu din fișierul sursă. În caz contrar, lasă câmpul necompletat.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Parametri de reducere a zgomotului personalizați.
+
+Sintaxa pentru NLMeans: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+Valorile implicite pentru NLMeans: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+Sintaxa pentru HQDN3D: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+Valorile implicite pentru HQDN3D: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Presetare de filtru pentru reducerea zgomotului. Setează intensitatea filtrului.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Reglează reducerea zgomotului. Ajustează în continuare presetarea de reducere a zgomotului pentru optimizarea setărilor pentru scenarii specifice.
+
+- Niciuna utilizează setările presetate implicite.
+
+- Film rafinează setările pentru utilizare cu majoritatea conținutului cu acțiune live (în direct).
+
+- Granulația procesează doar canalele de culoare. Util pentru păstrarea aspectului de film al granulației de luminanță, reducând sau eliminând în același timp zgomotul de culoare.
+
+- Mișcarea intensă reduce din petele de culoare în scenele cu mișcare intensă, evitând procesarea temporală pentru canalele de culoare. Util pentru videoclipuri sportive și de acțiune.
+
+- Animația este utilă pentru animația cel, cum ar fi anime-urile și desenele animate.
+
+- Banda este utilă pentru surse de bandă analogică cu detalii reduse, cum ar fi VHS, unde Filmul nu produce un rezultat dorit.
+
+- Spirit este util pentru jocuri bidimensionale de 1/4/8/16 biți. Spirit nu este conceput pentru videoclipuri de înaltă definiție.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>Deintercalare elimină artefactele de tip pieptene din imagine.
+
+Bwdif și Yadif sunt două deintercalare populare și rapide.
+
+Decomb comută între mai mulți algoritmi de interpolare pentru viteză și calitate.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Parametri de deintercalare personalizați.
+
+Sintaxa Bwdif și Yadif: mode=m:parity=p
+
+Implicit Bwdif și Yadif: mode=3
+
+Sintaxa Decomb: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Decomb implicit: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Presetarea filtrului de deintercalare.
+
+Implicit, viteza și calitatea sunt bine echilibrate.
+
+Omiterea verificării spațiale permite lui Yadif să sară peste corectarea anumitor artefacte evitabile pentru o ușoară creștere a vitezei.
+
+EEDI2 folosește un algoritm de interpolare mai lent, de calitate superioară, pentru Decomb. Util pentru cele mai dificile surse.
+
+Bob încearcă să păstreze mai bine mișcarea pentru o ușoară penalizare a rezoluției percepute.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Răstoarnă (oglindește) imaginea pe axa orizontală.</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Detectarea intercalării, atunci când este activată, permite filtrului de deintercalare să proceseze doar cadrele video intercalate.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Parametri personalizați de detectare a intercalării.
+
+Sintaxă: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+
+Implicit: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Rotește imaginea în sensul acelor de ceasornic cu incrementări de 90 de grade.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Durata intervalului sursă selectat în ore:minute:secunde</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Opțiunea „Păstrează raportul de aspect” menține aspectul original al sursei. Dezactivarea acestei opțiuni poate duce la o imagine întinsă sau comprimată.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Parametri de clarificare personalizați.
+
+Sintaxa de neclarificare: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Valoare implicită de neclarificare: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Sintaxa Lapsharp: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Valoare implicită Lapsharp: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Clarificarea îmbunătățește aspectul detaliilor, în special al marginilor. Setările prea puternice pentru Clarificare pot afecta calitatea imaginii prin crearea de artefacte sonore și amplificarea zgomotului, ceea ce poate reduce eficiența compresiei.
+
+
+Unsharp este un filtru de mascare a clarificării, de uz general. Acesta mărește claritatea prin estompare, apoi calculând diferența dintre imaginea neclară și original.
+
+
+Lapsharp mărește claritatea folosind nuclee de convoluție care aproximează filtrele laplaciene pentru margini, producând uneori rezultate de calitate superioară decât mascarea pentru unsharp.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Presetarea filtrului de claritate. Setează intensitatea filtrului.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Reglarea clarității. Ajustează suplimentar presetarea Claritate pentru a optimiza setările pentru scenarii specifice.
+
+Niciuna nu utilizează setările prestabilite implicite.
+
+Nereglarea poate fi reglat pentru clarificare Ultrafină, Fină, Medie, Grosieră sau Foarte grosieră. Selectați una în funcție de rezoluția imaginii de ieșire și de finețea detaliilor pentru a le îmbunătăți.
+
+Reglarea pentru Film din Lapsharp rafinează setările pentru utilizarea cu majoritatea conținutului live action. Film folosește un nucleu laplacian izotrop pentru a clarifica toate marginile în mod similar, iar informațiile despre luminanță (luminozitate) sunt clarificate mai mult decât informațiile despre crominanță (culoare).
+
+Reglarea pentru Granulație din Lapsharp este similară cu cea pentru Film, dar folosește un nucleu laplacian izotrop gaussian pentru a reduce efectul asupra zgomotului și granulației. Utilă pentru păstrarea granulației și ca alternativă generală la reglarea Film.
+
+Reglarea pentru Animație din Lapsharp este utilă pentru animație cel, cum ar fi anime-urile și desenele animate. Animația este identică cu Filmul, dar puterea generală este redusă pentru a evita crearea de artefacte.
+
+Reglajul Spirit de la Lapsharp este util pentru jocuri bidimensionale de 1/4/8/16 biți. Sprite folosește un nucleu laplacian cu 4 vecini care îmbunătățește muchiile verticale și orizontale mai mult decât muchiile diagonale.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Aliniază marcajele temporale inițiale ale tuturor fluxurilor audio și video prin inserarea de cadre goale sau eliminarea de cadre. Poate îmbunătăți sincronizarea audio/video pentru playerele defecte care nu onorează listele de editare MP4.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Opțiuni pentru controlul presetărilor.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Punctul final pentru acest interval.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Punctul de plecare pentru acest interval.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Când este activat, sistemul de denumire automată va utiliza întotdeauna calea implicită.
+Când este dezactivată, va folosi calea din caseta de destinație din fereastra principală, dacă este completată, altfel va folosi calea implicită.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Filtrul spațiului de culori.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Filtrul de cromatică clară Chroma Smooth</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>Acest câmp poate accepta valori RGB precum: „0xFF0000” sau nume de culori precum „roșu”. Pentru o listă completă a culorilor denumite, consultă documentația filtrului de umplutură.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Inscripționează subtitrările în fluxul video.
+
+Reține că această opțiune va fi selectată automat dacă formatul pistei de subtitrare sursă nu este acceptat în tipul de fișier de ieșire.
+
+De exemplu, subtitrările PGS nu sunt acceptate în MP4.</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Plat - Presetările sunt afișate ca o listă plată.
+Parțial plat - Ultimele 8 presetări ale utilizatorului sunt afișate ca o listă plată, urmate de toate presetările afișate în lista de categorii.
+Categorii - Toate presetările sunt afișate într-un submeniu pe categorie.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Configurează comportamentele care dictează modul în care această filă adaugă automat piste audio la selectarea unei surse sau a unui titlu nou.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Reîmprospătează lista de mai jos în funcție de comportamentele configurate.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Configurează comportamentele care dictează modul în care această filă adaugă automat piste de subtitrare la selectarea unei surse sau a unui titlu nou.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>Următoarele variabile de mediu sunt întotdeauna setate:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Codurile de ieșire posibile sunt următoarele:
+0: Succes
+2: Eroare de argumente de intrare
+3: Inițializarea nu a reușit
+4: Eroare necunoscută
+5: Eroare la citirea fișierului sursă.
+
+Te rugăm să reții că codurile de eroare sunt cele mai bune și este posibil să nu fie întotdeauna precise.
+Se recomandă validarea fișierului de ieșire înainte de a efectua acțiuni asupra acestuia.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>Formatul fișierului de ieșire. Pe lângă orice caracter acceptat din sistemul de fișiere, poți utiliza oricare dintre substituenții care vor fi înlocuiți atunci când schimbi titlul sau scanați o sursă sau actualizați anumite setări.
+
+{source} - Numele fișierului sursă.
+{title} - Valoare întreagă. Aceasta reprezintă numărul titlului discului.
+{chapters} - Intervalul de capitole selectat.
+{creation-date} - Data la care a fost creat fișierul sursă (dacă este disponibilă).
+{creation-time} - Ora la care a fost creat fișierul sursă (dacă este disponibilă).
+{modification-date} - Data la care fișierul sursă a fost modificat ultima dată (dacă este disponibilă).
+{modification-time} - Ora la care fișierul sursă a fost modificat ultima dată (dacă este disponibilă).
+{date} - Astăzi. Setează la ora adăugării la coadă.
+
+{time} - Astăzi. Setează la ora adăugării la coadă. {quality_bitrate} - Numărul RF/CQ sau rata de biți
+{quality_type} - Afișează „kbps” sau „Q” în funcție de modul de calitate selectat în fila video.
+{preset} - Numele presetării selectate.
+{encode_bit_depth} - Valoare întreagă. De exemplu, 8, 10 sau 12
+{width} - Lățimea spațiului de stocare la ieșire
+{height} - Înălțimea spațiului de stocare la ieșire
+{codec} - Afișează formatul video.
+{encoder} - Afișează cheia de format scurtă a codorului utilizat.
+
+Orice caractere ilegale ale căii vor fi eliminate automat.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Pentru limbile care se scriu de la dreapta la stânga, puteți activa unul dintre cele două moduri. „Numai text” va reda textul doar în stil de la dreapta la stânga. „Întreaga interfață a utilizatorului” va reda toate controalele de la dreapta la stânga.
+
+Te rugăm să reții că pot exista imperfecțiuni în aspectul interfeței utilizator atunci când folosește aceste moduri. În funcție de limbă, ar putea merita să încerci ambele moduri pentru a o găsi cea mai potrivită.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Vizează un anumit nivel de calitate pentru audio.
+
+1 reprezintă cea mai scăzută calitate, iar 5 reprezintă cea mai înaltă calitate.
+
+Rata de biți va varia de la o sursă la alta.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>Următoarele pot fi folosite individual sau împreună pentru a construi o cale de destinație:
+
+{source_path} - În același folder (dosar) ca și calea sursă (dacă este posibil)
+{source_folder_name} – Numele directorului în care se află fișierul sursă, fără calea completă.
+{source} - Numele fișierului sursă.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Lansează site-ul web de documentație aflat la https://handbrake.fr/docs</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Cratimă (-), Punct (.) și Virgulă (,)</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Folosește cea mai mare rezoluție permisă de setările de mai sus</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Dacă nu este activată, dimensiunile scalate vor fi limitate la dimensiunile sursă.</value>
+  </data>
+  <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
+    <value>Modificarea dimensiunii afișajului va întinde videoclipul</value>
+  </data>
+  <data name="Video_ColourRange" xml:space="preserve">
+    <value>Intervalul de culori. Determină valorile alb-negru de referință. Setează-l la limitat pentru a maximiza compatibilitatea.</value>
+  </data>
+</root>
