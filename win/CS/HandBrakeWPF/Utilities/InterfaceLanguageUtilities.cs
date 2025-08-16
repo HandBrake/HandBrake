@@ -46,6 +46,7 @@ namespace HandBrakeWPF.Utilities
                        new InterfaceLanguage("nl", "Dutch (Nederlands)"),
                        new InterfaceLanguage("pl", "Polish (Polski)"),
                        new InterfaceLanguage("pt-BR", "Brazilian Portuguese (Português do Brasil)"),
+                       new InterfaceLanguage("ro", "Romanian (Română)"),
                        new InterfaceLanguage("ru", "Russian (Русский)"),
                        new InterfaceLanguage("sv", "Swedish (Svenska)"),
                        new InterfaceLanguage("th", "Thai (ไทย)"),
