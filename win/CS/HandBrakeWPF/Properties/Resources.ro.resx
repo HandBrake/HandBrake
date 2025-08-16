@@ -1,0 +1,3017 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Video_EncoderExtraArgs" xml:space="preserve">
+    <value>Lista completă a parametrilor codorului: 
+{0}</value>
+  </data>
+  <data name="Video_x264FastDecode" xml:space="preserve">
+    <value>Redu utilizarea procesorului (CPU-ului) pentru decodor.
+
+Setează această opțiune dacă dispozitivul tău are dificultăți în redarea ieșirii (de exemplu, cadre pierdute).</value>
+  </data>
+  <data name="Video_LosslessWarning" xml:space="preserve">
+    <value>Atenție: RF 0 este fără pierderi!</value>
+  </data>
+  <data name="Video_LosslessWarningTooltip" xml:space="preserve">
+    <value>O valoare de 0 înseamnă fără pierderi și va duce la o dimensiune a fișierului mai mare decât sursa originală,
+cu excepția cazului în care și sursa a fost fără pierderi.
+
+Scara x264 și x265 este logaritmică, iar valorile mai mici corespund unei calități mai mari.
+
+Așadar, creșteri mici ale valorii vor duce la creșteri progresive ale dimensiunii fișierului rezultat.</value>
+  </data>
+  <data name="AddPreset_PictureSizeMode" xml:space="preserve">
+    <value>Opțional, poți stoca setările unei imagini cu această presetare. Există 3 moduri:
+
+Niciuna: Setările imaginii nu sunt stocate în presetare. La încărcarea unei surse, acestea vor rămâne așa cum sunt, în limitele rezoluției sursei. Acest lucru afectează și rezoluția anamorfică, modulul, decuparea etc.
+
+Personalizat: Opțional, poți seta o lățime și o înălțime maxime. Când faci acest lucru, codarea va fi mai mică sau egală cu aceste valori. Opțiunea Păstrează raportul de aspect va fi activată automat.
+
+Maximul de sursă: Codează întotdeauna la rezoluția sursei, acolo unde este posibil.</value>
+  </data>
+  <data name="About_GPL" xml:space="preserve">
+    <value>Acest program este un software liber; îl poți redistribui și/sau
+modifica în conformitate cu termenii Licenței Publice Generale GNU
+așa cum a fost publicată de Free Software Foundation; fie versiunea 2
+a Licenței, fie (la alegerea ta) orice versiune ulterioară.
+
+Acest program este distribuit în speranța că va fi util,
+dar FĂRĂ NICIO GARANȚIE; fără nici măcar garanția implicită de
+VANDABILITATE sau POTRIVIRE PENTRU UN ANUMIT SCOP. Consultăi
+Licența Publică Generală GNU pentru mai multe detalii.
+
+Ar fi trebuit să primești o copie a Licenței Publice Generale GNU
+împreună cu acest program; dacă nu, scrie la Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, SUA.</value>
+  </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>AVERTISMENT: Nu ai activată denumirea automată a fișierelor. Te rugăm să o activezi în opțiuni.</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>AVERTISMENT: În prezent nu ai configurată selectarea automată a pistelor audio și a subtitrărilor. Poți configura comportamentul implicit de selectare a pistelor în opțiuni.</value>
+  </data>
+  <data name="Presets_ResetComplete" xml:space="preserve">
+    <value>Presetările încorporate au fost resetate.</value>
+  </data>
+  <data name="Presets_ResetHeader" xml:space="preserve">
+    <value>Resetare completă</value>
+  </data>
+  <data name="Video_HigherQuality" xml:space="preserve">
+    <value>Calitate mai bună |</value>
+  </data>
+  <data name="Video_LowQuality" xml:space="preserve">
+    <value>| Calitate mai slabă</value>
+  </data>
+  <data name="Video_PlaceboQuality" xml:space="preserve">
+    <value>Calitate placebo |</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Eroare</value>
+  </data>
+  <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
+    <value>Trebuie să activezi denumirea automată a fișierelor ȘI să setezi o cale implicită în preferințe înainte de a putea adăuga fișiere în coadă.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Avertisment</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Ești sigur(ă)?</value>
+  </data>
+  <data name="HandBrake_Title" xml:space="preserve">
+    <value>HandBrake</value>
+  </data>
+  <data name="Main_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake codifică deja.</value>
+  </data>
+  <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
+    <value>Există sarcini în coadă cu aceeași cale de destinație. Te rugăm să alegi o cale diferită pentru această sarcină.
+
+S-ar putea să vrei să configurezi opțiunile de denumire automată a fișierelor în „Meniul Instrumente -&gt; Preferințe -&gt; Fișiere de ieșire”.
+</value>
+  </data>
+  <data name="Main_JobsPending_addon" xml:space="preserve">
+    <value>Sarcini în așteptare {0}</value>
+  </data>
+  <data name="Main_NewDefaultPreset" xml:space="preserve">
+    <value>Set nou de presetări implicite: {0}</value>
+  </data>
+  <data name="Main_NewUpdate" xml:space="preserve">
+    <value>O nouă actualizare este disponibilă. Mergi la meniul Instrumente &gt; Opțiuni de instalare</value>
+  </data>
+  <data name="Main_NoPresetSelected" xml:space="preserve">
+    <value>Nu a fost selectată nicio presetare.</value>
+  </data>
+  <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
+    <value>Nu poți modifica presetările încorporate. Te rugăm să selectezi una dintre propriile presetări.</value>
+  </data>
+  <data name="Main_PleaseSelectFolder" xml:space="preserve">
+    <value>Te rugăm să alegi un folder (un dosar).</value>
+  </data>
+  <data name="Main_PreparingToEncode" xml:space="preserve">
+    <value>Se pregătește codarea ...</value>
+  </data>
+  <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
+    <value>Nu poți importa o presetare cu același nume ca o presetare încorporată.</value>
+  </data>
+  <data name="Main_PresetOverwriteWarning" xml:space="preserve">
+    <value>Presetarea „{0}” există deja. Vrei să o suprascrii?</value>
+  </data>
+  <data name="Main_Presets" xml:space="preserve">
+    <value>Presetări</value>
+  </data>
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
+    <value>Ești sigur(ă) că vrei să actualizezi presetarea selectată?</value>
+  </data>
+  <data name="Main_PresetUpdated" xml:space="preserve">
+    <value>Presetarea a fost acum actualizată cu setările tale actuale.</value>
+  </data>
+  <data name="Main_PresetUpdateNotification" xml:space="preserve">
+    <value>HandBrake a constatat că presetările încorporate sunt învechite... Aceste presetări vor fi acum actualizate.
+Presetările personalizate nu au fost actualizate, așa că este posibil să fie nevoie să le recreezi ștergându-le și adăugându-le din nou.
+La fișierul user_presets.xml anterior a fost făcut un backup (o copie de rezervă).</value>
+  </data>
+  <data name="Main_QueueFinished" xml:space="preserve">
+    <value>Coadă finalizată</value>
+  </data>
+  <data name="Main_ScanCancelled" xml:space="preserve">
+    <value>Scanare anulată.</value>
+  </data>
+  <data name="Main_ScanCompleted" xml:space="preserve">
+    <value>Scanare completă</value>
+  </data>
+  <data name="Main_ScanFailed_NoReason" xml:space="preserve">
+    <value>Scnaare eșuată:</value>
+  </data>
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
+    <value>Scanarea a eșuat... Consultă Jurnalul de activității pentru detalii.</value>
+  </data>
+  <data name="Main_ScanningPleaseWait" xml:space="preserve">
+    <value>Se scanează sursa, te rugăm să aștepți...</value>
+  </data>
+  <data name="Main_ScanningTitleXOfY" xml:space="preserve">
+    <value>Se scanează titlul {0} din {1} ({2}%) </value>
+  </data>
+  <data name="Main_ScanSource" xml:space="preserve">
+    <value>Mai întâi, trebuie să scanezi o sursă și să configurezi sarcina înainte de a începe o codare. Fă clic pe butonul „Sursă” din bara de instrumente ca să continui.</value>
+  </data>
+  <data name="Main_SelectPreset" xml:space="preserve">
+    <value>Asigură-te că ai selectat una dintre propriile presetări. Reține că nu poți exporta presetări încorporate.</value>
+  </data>
+  <data name="Main_SelectPresetForUpdate" xml:space="preserve">
+    <value>Te rugăm să selectezi o presetare de actualizat.</value>
+  </data>
+  <data name="Main_SelectSource" xml:space="preserve">
+    <value>Selectați „Sursa” pentru a continua</value>
+  </data>
+  <data name="Main_XEncodesPending" xml:space="preserve">
+    <value>{0} (de) sarcini în așteptare</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Notificare</value>
+  </data>
+  <data name="Overwrite" xml:space="preserve">
+    <value>Suprascrii?</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Întrebare</value>
+  </data>
+  <data name="State_Ready" xml:space="preserve">
+    <value>Gata</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Actualizat</value>
+  </data>
+  <data name="Preset_OldVersion_Header" xml:space="preserve">
+    <value>Versiunea presetării</value>
+  </data>
+  <data name="Preset_OldVersion_Message" xml:space="preserve">
+    <value>Presetarea pe care încerci să o importi este dintr-o altă versiune de HandBrake.
+S-ar putea să nu fie posibilă importarea tuturor valorilor din această presetare.
+Vrei să continui?</value>
+  </data>
+  <data name="Preset_UnableToImport_Header" xml:space="preserve">
+    <value>Nu s-a putut importa presetarea!</value>
+  </data>
+  <data name="Preset_UnableToImport_Message" xml:space="preserve">
+    <value>Nu se poate importa presetarea deoarece pare să fie coruptă sau provine dintr-o versiune mai veche de HandBrake.</value>
+  </data>
+  <data name="Main_SetDestination" xml:space="preserve">
+    <value>Mai întâi trebuie să setezi calea de destinație pentru fișierul de ieșire înainte să-l adaugi în coadă.</value>
+  </data>
+  <data name="Main_InvalidDestination" xml:space="preserve">
+    <value>Calea de destinație introdusă conține caractere nepermise și nu va fi actualizată.</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Previzualizare {0}</value>
+  </data>
+  <data name="Preview_Scaled" xml:space="preserve">
+    <value>Previzualizare (Scalată)</value>
+  </data>
+  <data name="PictureSettings_OutputResolution" xml:space="preserve">
+    <value>Ieșire: {0}</value>
+  </data>
+  <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
+    <value>Nu poți coda într-un fișier cu aceeași cale și nume de fișier ca fișierul sursă. Te rugăm să actualizezi numele fișierului destinație astfel încât să nu corespundă cu fișierul sursă.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
+    <value>Sistemul tău a împiedicat HandBrake să lanseze un browser web.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
+    <value>Poți accesa în continuare paginile de ajutor vizitând direct site-ul web la adresa: https://handbrake.fr</value>
+  </data>
+  <data name="Main_PresetImportFailed" xml:space="preserve">
+    <value>Nu se poate importa presetarea selectată.</value>
+  </data>
+  <data name="Main_PresetImportFailedSolution" xml:space="preserve">
+    <value>Presetarea poate fi coruptă sau provine de la o versiune mai veche de HandBrake, care nu este acceptată.
+Presetările din versiunile mai vechi trebuie recreate în versiunea actuală.</value>
+  </data>
+  <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
+    <value>Argumente avansate suplimentare care pot fi transmise codorului video.</value>
+  </data>
+  <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
+    <value>Niciuna - Vor fi inscripționate doar pistele în care containerul nu acceptă formatul.
+Pistă audio externă - Pista audio externă va fi inscripționată dacă este disponibilă.
+Prima pistă - Prima pistă va fi inscripționată.
+Pista audio străină preferată, altfel prima - Dacă pista audio străină există, aceasta va fi inscripționată, altfel va fi aleasă prima pistă.</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>Compatibilitatea subtitrărilor WebM</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>WebM în HandBrake acceptă doar subtitrările inscripționate pe un disc.
+
+Ar trebui să modifici selecțiile de subtitrări.
+
+Dacă continui, subtitrările neinscripționate pe disc se vor pierde.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFound" xml:space="preserve">
+    <value>Nu s-au găsit surse sau titluri valide.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
+    <value>HandBrake nu va putea coda sursa selectată pentru că nu a găsită o sursă validă cu titluri de codat. Acest lucru se poate datora unuia dintre următoarele motive:
+
+- Durata fiecărui titlu sursă este sub opțiunea prag „Durata minimă a titlului” din „Preferințe &gt; Avansat”.
+- Fișierul sursă nu este un fișier video valid sau este într-un format pe care HandBrake nu îl acceptă.
+- Este posibil să nu ai acces de citire la fișier sau o altă aplicație să aibă un blocaj asupra fișierului.
+- Sursa poate fi protejată împotriva copierii sau poate include DRM. Te rugăm să reții că HandBrake nu acceptă eliminarea protecțiilor împotriva copierii.
+
+Jurnalul de activități poate conține informații suplimentare.</value>
+  </data>
+  <data name="Main_QueueLabel" xml:space="preserve">
+    <value>Coadă {0}</value>
+  </data>
+  <data name="Main_Start" xml:space="preserve">
+    <value>Începe codarea</value>
+  </data>
+  <data name="Main_StartQueue" xml:space="preserve">
+    <value>Pornește coada</value>
+  </data>
+  <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
+    <value>Nu poți șterge presetarea implicită. Te rugăm să setezi mai întâi o altă presetare ca implicită.</value>
+  </data>
+  <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
+    <value>Ești sigur(ă) că vrei să ștergi presetarea:</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Codificare: Terminat {0} din {1}, {2:00.00}%, FPS (cadre/sec.): {3:000.0}, valoarea medie a FPS (cadrelor/sec.): {4:000.0}, Timp rămas: {5}, Timp scurs: {6} {7}</value>
+  </data>
+  <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
+    <value>O presetare trebuie să aibă un nume. te rugăm să completați câmpul Numele presetării.</value>
+  </data>
+  <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
+    <value>Există deja o presetare cu acest nume. Dorești să o suprascrii?</value>
+  </data>
+  <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
+    <value>Trebuie mai întâi să scanezi o sursă pentru folosirea opțiunii „Sursă maximă”.</value>
+  </data>
+  <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
+    <value>Câmpurile Lățime sau Înălțime personalizată trebuie completate pentru opțiunea „Personalizat”.</value>
+  </data>
+  <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
+    <value>Nu s-a putut adăuga presetarea</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Eroare necunoscută</value>
+  </data>
+  <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
+    <value>Setări audio implicite</value>
+  </data>
+  <data name="AudioViewModel_AudioTracks" xml:space="preserve">
+    <value>Piste audio</value>
+  </data>
+  <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Comportamentul de selecție ...</value>
+  </data>
+  <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
+    <value>Revino la piste</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
+    <value>Nu se poate salva fișierul cu marcaje a capitolelor!</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
+    <value>Numele marcatorilor de capitol NU vor fi salvate în codare.</value>
+  </data>
+  <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
+    <value>Următoarea acțiune „{0}” va avea loc în {1} (de) secunde.</value>
+  </data>
+  <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
+    <value>Dacă problema persistă, încercă să repornești HandBrake.</value>
+  </data>
+  <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
+    <value>Nu există alte informații disponibile despre această eroare.</value>
+  </data>
+  <data name="ErrorViewModel_UnknownError" xml:space="preserve">
+    <value>A apărut o eroare necunoscută.</value>
+  </data>
+  <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
+    <value>O nouă actualizare este disponibilă! Te rugăm să verifici site-ul web pentru notele de lansare.</value>
+  </data>
+  <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
+    <value>Nu există actualizări noi în acest moment.</value>
+  </data>
+  <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
+    <value>Actualizarea a fost descărcată</value>
+  </data>
+  <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
+    <value>Serviciul de actualizare indisponibil. Poți încerca să descărci actualizarea de pe https://handbrake.fr</value>
+  </data>
+  <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
+    <value>Actualizarea eșuat. Poți încerca să descărci actualizarea de pe https://handbrake.fr</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Dimensiunea stocării: {0}x{1}</value>
+  </data>
+  <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
+    <value>Adaugă în coadă</value>
+  </data>
+  <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
+    <value>Nicio codare nu e în așteptare</value>
+  </data>
+  <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
+    <value>Nu există sarcini de codificare în prezent</value>
+  </data>
+  <data name="QueueViewModel_Queue" xml:space="preserve">
+    <value>Coadă</value>
+  </data>
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
+    <value>Ești sigur(ă) că vrei să golești coada?</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmă</value>
+  </data>
+  <data name="QueueViewModel_JobsPending" xml:space="preserve">
+    <value>{0} (de) sarcini în așteptare</value>
+  </data>
+  <data name="QueueViewModel_QueuePending" xml:space="preserve">
+    <value>Coadă pauzată</value>
+  </data>
+  <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
+    <value>Ești sigur(ă) că vrei să ștergi sarcinile selectate?
+Niciun fișier codat nu va fi șters cu această operațiune.</value>
+  </data>
+  <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
+    <value>Această codare este în curs de desfășurare. Dacă o ștergi, codarea va fi oprită. Ești sigur(ă) că vrei să continui?</value>
+  </data>
+  <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
+    <value>Nu sunt sarcini în așteptare.</value>
+  </data>
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
+    <value>Ești sigur(ă) că dorești să editezi această sarcină? Va fi eliminată din coadă și trimisă în fereastra principală.</value>
+  </data>
+  <data name="QueueViewModel_QueueReady" xml:space="preserve">
+    <value>Coada e pregătită</value>
+  </data>
+  <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
+    <value>Coada nu rulează</value>
+  </data>
+  <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
+    <value>Coada a fost finalizată</value>
+  </data>
+  <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
+    <value>Ultima sarcină din coadă a fost finalizată</value>
+  </data>
+  <data name="QueueViewModel_QueueStarted" xml:space="preserve">
+    <value>Coad a început</value>
+  </data>
+  <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
+    <value>Codificare: Fișierul {0} din {1}, {2:00.00}%, FPS: {3:000.0}, Numărul mediu de FPS-uri: {4:000.0}, Timpul rămas: {5}, Timpul scurs: {6:z\:hh\:mm\:ss}</value>
+  </data>
+  <data name="ShellViewModel_CanClose" xml:space="preserve">
+    <value>O codare rulează în prezent. Ieșirea din HandBrake va opri această codare.
+Ești sigur(ă) că dorești să ieși din HandBrake?</value>
+  </data>
+  <data name="StaticPreviewViewModel_Title" xml:space="preserve">
+    <value>Previzualizează imaginea</value>
+  </data>
+  <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
+    <value>Nu se poate șterge fișierul de previzualizare anterior. Este posibil să ai încă o previzualizare deschisă în playerul media. Te rugăm să o închizi.</value>
+  </data>
+  <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
+    <value>Mai întâi trebuie să scanezi o sursă și să configurezi codarea înainte de a crearea unei previzualizări.</value>
+  </data>
+  <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
+    <value>Fișierul de previzualizare nu a putut fi găsit. Fișierul a fost șters sau codarea a eșuat. Verifică jurnalul de activități pentru detalii.</value>
+  </data>
+  <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
+    <value>Handbrake codează deja un videoclip! Poate fi codat un singur fișier odată.</value>
+  </data>
+  <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
+    <value>Valori implicite pentru subtitrări</value>
+  </data>
+  <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
+    <value>Piste de subtitrări</value>
+  </data>
+  <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
+    <value>Revino la piste</value>
+  </data>
+  <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Comportamentul de selecție ...</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>Fișier arhivat:</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>Nu se pot încărca presetările.</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>HandBrake nu a putut încărca fișierul presetărilor. Este posibil să provină dintr-o versiune mai veche, neacceptată de HandBrake sau să fie corupt.
+
+Fișierul presetărilor vechi a fost arhivat în:</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value>cu {0} (de) erori detectate / o eroare detectată. erifică fereastra Coadă pentru detalii.</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>Spațiu redus pe disc</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>Atenție, spațiul pe discul tău e insuficient. HandBrake nu va putea finaliza această codare dacă rămâi fără spațiu.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>Linia {0} este nevalidă. Nu se va importa nimic.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>Nu se poate importa fișierul capitolului</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>Toate liniile din fișierul capitolelor trebuie să aibă cel puțin 2 coloane de date</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>Prima coloană din fișierul capitolelor trebuie să conțină doar o valoare numerică întreagă mai mare decât zero (0)</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>Fișierele de capitol de tipul „{0}” nu sunt acceptate în prezent.</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>Tipul de fișier de capitol este neacceptat</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>Informații nevalide despre capitol pentru suportul media sursă</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>Numărul de capitole de pe suportul media sursă
+și numărul de capitole din fișierul de intrare nu corespund ({0} vs {1}).
+
+Dorești în continuare să imporți numele capitolelor?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>Numărul de capitole de pe suportul media sursă
+și numărul de capitole din fișierul de intrare nu corespund ({0} vs {1}).
+
+Dorești în continuare să imporți numele capitolelor?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>Numărul de capitole nu se potrivește între fișierul sursă și cel de intrare</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>Durata raportată a capitolelor pe suportul media sursă
+și durata capitolelor din fișierul de intrare diferă foarte mult.
+
+Este foarte probabil ca acest fișier de capitol să fi fost produs dintr-un alt suport media sursă.
+
+Ești sigur(ă) că vrei să imporți numele capitolelor?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>Durata capitolului nu se potrivește între fișierul sursă și cel de intrare</value>
+  </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>A apărut o eroare la încercarea de oprire a scanării. Te rugăm să repornești HandBrake.</value>
+  </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>HandBrake nu poate actualiza fișierul presetărilor la un format nou.
+Fișierul presetat va fi arhivat și va fi creat unul nou. Va trebui să îți recreezi propriile presetări.</value>
+  </data>
+  <data name="SettingService_SaveErrorReset" xml:space="preserve">
+    <value>Orice setări pe care le-ai modificat ar putea necesita resetare data viitoare când se lansează HandBrake.</value>
+  </data>
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
+    <value>A apărut o problemă când s-a încercat salvarea preferințelor tale.</value>
+  </data>
+  <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
+    <value>Atenție, setările tale Warning, your settings have been reset!</value>
+  </data>
+  <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
+    <value>Fișierul tău de setări ale utilizatorului a fost corupt sau inaccesibil. Setările au fost resetate la valorile implicite.</value>
+  </data>
+  <data name="UserSettings_UnableToLoad" xml:space="preserve">
+    <value>Nu s-a putut încărca fișierul de setări al utilizatorului: {0}</value>
+  </data>
+  <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
+    <value>Fișierul tău de setări al utilizatorului pare a fi inaccesibil sau corupt. Este posibil să fie nevoie să ștergi fișierul și să lași HandBrake să genereze unul nou.</value>
+  </data>
+  <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
+    <value>Directorul de ieșire pe care l-ai ales fie nu există, fie nu ai permisiuni de scriere a fișierelor în el.</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
+    <value>Creezi folderul (dosarul)?</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
+    <value>Folderul (Dosarul) în care încerci să scrii nu există. Vrei ca HandBrake să creeze următorul folder (dosar)?
+{0}</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
+    <value>Nu se poate lansa directorul de destinație.</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
+    <value>Te rugăm să verifici dacă ai un director de destinație valid.</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
+    <value>Se procesează operațiujnea de trecere {0} din {1}, (Scarea subtitrărilor)  {2:00.00}%, Timpul de scanare rămas: {3}, Timpul scurs: {4}</value>
+  </data>
+  <data name="NoAdditionalInformation" xml:space="preserve">
+    <value>Nicio informație suplimentară</value>
+  </data>
+  <data name="WindowTitleStatus" xml:space="preserve">
+    <value>{0} -({1}%, Trecere de {2} din {3})</value>
+  </data>
+  <data name="TaskTrayStatusTitle" xml:space="preserve">
+    <value>{0}
+Se codifică 1 sarcină</value>
+  </data>
+  <data name="PauseOnLowDiskspace" xml:space="preserve">
+    <value>Coada a fost întreruptă. Atenție, unitatea pe care codifici are puțin spațiu pe disc. Eliberează spațiu și apasă Start pentru a continua. De asemenea, poți ajusta nivelul minim de spațiu în preferințe.</value>
+  </data>
+  <data name="Main_QueuePaused" xml:space="preserve">
+    <value>Coadă pauzată</value>
+  </data>
+  <data name="QueueViewModel_QueuePaused" xml:space="preserve">
+    <value>Coadă pauzată</value>
+  </data>
+  <data name="Main_LowDiskspace" xml:space="preserve">
+    <value>Directorul de destinație are puțin spațiu pe disc.
+
+Poți configura nivelul la care apare această alertă în preferințe.
+
+Vrei să continui?</value>
+  </data>
+  <data name="Queue_UnableToResetJob" xml:space="preserve">
+    <value>Nu se poate reseta starea sarcinii deoarece nu se află în starea Eroare sau Finalizat.</value>
+  </data>
+  <data name="Queue_UnableToRestoreFile" xml:space="preserve">
+    <value>Nu se poate restaura fișierul din coadă.</value>
+  </data>
+  <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
+    <value>Fișierul poate fi corupt sau provine dintr-o versiune mai veche și incompatibilă de HandBrake.</value>
+  </data>
+  <data name="Queue_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake codifică deja un fișier.</value>
+  </data>
+  <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
+    <value>Te rugăm să oprești codarea actuală. Dacă problema persistă, te rugăm să repornești HandBrake.</value>
+  </data>
+  <data name="StaticPreviewView_Title" xml:space="preserve">
+    <value>Previzualizare ({0}% din dimensiunea actuală)</value>
+  </data>
+  <data name="OsBitnessWarning" xml:space="preserve">
+    <value>HandBrake necesită o versiune pe 64 de biți de Windows 10 sau o versiune ulterioară pentru a rula.</value>
+  </data>
+  <data name="OsVersionWarning" xml:space="preserve">
+    <value>HandBrake necesită Windows 10 sau o versiune ulterioară pentru a funcționa. Versiunile 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 și 8.x) au fost ultimele versiuni care au fost compatibile cu aceste sisteme de operare mai vechi.</value>
+  </data>
+  <data name="Main_ContinueAddingToQueue" xml:space="preserve">
+    <value>Vrei să continui încercarea de a adăuga restul?</value>
+  </data>
+  <data name="Main_QueueOverwritePrompt" xml:space="preserve">
+    <value>Fișierul „{0}” există deja!
+Dorești să îl suprascrii?
+
+Sugestie: Comportamentul de suprascriere a fișierelor poate fi controlat în preferințe.</value>
+  </data>
+  <data name="Clipboard_Unavailable" xml:space="preserve">
+    <value>Clipboard-ul de sistem nu este disponibil în prezent.</value>
+  </data>
+  <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
+    <value>Acest lucru se poate datora faptului că o altă aplicație monitorizează sau blochează clipboard-ul pentru uz propriu. Nu vei putea utiliza clipboard-ul până când nu este deblocat.</value>
+  </data>
+  <data name="AboutView_License" xml:space="preserve">
+    <value>Licență:</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>Versiunea:</value>
+  </data>
+  <data name="AddPresetView_AddNewCategory" xml:space="preserve">
+    <value>-- Adaugă o categorie nouă --</value>
+  </data>
+  <data name="AddPresetView_AddPreset" xml:space="preserve">
+    <value>Adaugă o presetare</value>
+  </data>
+  <data name="AddPresetView_Category" xml:space="preserve">
+    <value>Categorie:</value>
+  </data>
+  <data name="AddPresetView_Description" xml:space="preserve">
+    <value>Descriere:</value>
+  </data>
+  <data name="AddPresetView_Name" xml:space="preserve">
+    <value>Nume:</value>
+  </data>
+  <data name="AddPresetView_SavePictureSize" xml:space="preserve">
+    <value>Dimensiuni:</value>
+  </data>
+  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
+    <value>Selecția pistei sursă</value>
+  </data>
+  <data name="AudioView_AllowPassThruOf" xml:space="preserve">
+    <value>Permite operația de trecere prin a:</value>
+  </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>Configurează modul în care pistele audio sunt selectate și configurate automat atunci când selectezi un titlu nou sau un videoclip sursă nou.</value>
+  </data>
+  <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
+    <value>Comportamentul „Filtrului trece prin automat”:</value>
+  </data>
+  <data name="AudioView_Bitrate" xml:space="preserve">
+    <value>Rata de biți</value>
+  </data>
+  <data name="AudioView_Codec" xml:space="preserve">
+    <value>Codec</value>
+  </data>
+  <data name="AudioView_DRC" xml:space="preserve">
+    <value>Verificarea regulilor de proiectare (DRC)</value>
+  </data>
+  <data name="AudioView_Gain" xml:space="preserve">
+    <value>Putere</value>
+  </data>
+  <data name="AudioView_Hide" xml:space="preserve">
+    <value>Ascunde</value>
+  </data>
+  <data name="AudioView_Mixdown" xml:space="preserve">
+    <value>Mixdown</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>Codorul de rezervă:</value>
+  </data>
+  <data name="AudioView_ReloadDefaults" xml:space="preserve">
+    <value>Reîncarcă</value>
+  </data>
+  <data name="AudioView_Samplerate" xml:space="preserve">
+    <value>Rată de eșantionare</value>
+  </data>
+  <data name="AudioView_Show" xml:space="preserve">
+    <value>Afișare</value>
+  </data>
+  <data name="AudioView_TrackName" xml:space="preserve">
+    <value>Numele pistei</value>
+  </data>
+  <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Comportamentul pentru selecția pistei:</value>
+  </data>
+  <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
+    <value>Pentru pistele suplimentare:</value>
+  </data>
+  <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
+    <value>Atunci când este selectat „Filtrul trece prin automat” ca și codec audio.</value>
+  </data>
+  <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
+    <value>Marcatori pentru capitole</value>
+  </data>
+  <data name="ChaptersView_ChapterName" xml:space="preserve">
+    <value>Numele capitolului</value>
+  </data>
+  <data name="ChaptersView_ChapterNumber" xml:space="preserve">
+    <value>Capitol</value>
+  </data>
+  <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
+    <value>Crează marcatori pentru capitole</value>
+  </data>
+  <data name="ChaptersView_Duration" xml:space="preserve">
+    <value>Durată</value>
+  </data>
+  <data name="ChaptersView_Export" xml:space="preserve">
+    <value>Exportă</value>
+  </data>
+  <data name="ChaptersView_Import" xml:space="preserve">
+    <value>Importă</value>
+  </data>
+  <data name="ChapterView_ExportNames" xml:space="preserve">
+    <value>Exportă numele</value>
+  </data>
+  <data name="ChapterView_ImportNames" xml:space="preserve">
+    <value>Importă nume</value>
+  </data>
+  <data name="ChapterView_ResetChapterNames" xml:space="preserve">
+    <value>Resetează numele capitolelor</value>
+  </data>
+  <data name="CountdownAlterView_CancelAction" xml:space="preserve">
+    <value>Anulează acțiunea</value>
+  </data>
+  <data name="CountdownAlterView_Proceed" xml:space="preserve">
+    <value>Continuă</value>
+  </data>
+  <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
+    <value>Acțiune la finalizare</value>
+  </data>
+  <data name="ErrorView_ErrorDetails" xml:space="preserve">
+    <value>Detalii despre eroare:</value>
+  </data>
+  <data name="FiltersView_Custom" xml:space="preserve">
+    <value>Personalizat:</value>
+  </data>
+  <data name="FiltersView_Deblock" xml:space="preserve">
+    <value>Deblochează:</value>
+  </data>
+  <data name="FiltersView_Decomb" xml:space="preserve">
+    <value>Decomb</value>
+  </data>
+  <data name="FiltersView_Deinterlace" xml:space="preserve">
+    <value>Deinterlațare:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
+    <value>Presetare:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
+    <value>Presetare pentru deinterlațare</value>
+  </data>
+  <data name="FiltersView_Denoise" xml:space="preserve">
+    <value>Redu zgomotul:</value>
+  </data>
+  <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
+    <value>Presetarea de reducere a zgomotului</value>
+  </data>
+  <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
+    <value>Reglarea zgomotului</value>
+  </data>
+  <data name="FiltersView_Detelecine" xml:space="preserve">
+    <value>Detectează:</value>
+  </data>
+  <data name="FiltersView_Filters" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>Orizontal</value>
+  </data>
+  <data name="FiltersView_Grayscale" xml:space="preserve">
+    <value>Tonuri de gri</value>
+  </data>
+  <data name="FiltersView_InterlaceDetection" xml:space="preserve">
+    <value>Detectarea intercalării:</value>
+  </data>
+  <data name="FiltersView_Preset" xml:space="preserve">
+    <value>Presetare:</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>Rotație:</value>
+  </data>
+  <data name="FiltersView_Sharpen" xml:space="preserve">
+    <value>Claritate:</value>
+  </data>
+  <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
+    <value>Presetare claritate</value>
+  </data>
+  <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
+    <value>Claritatea tonului</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Tonul:</value>
+  </data>
+  <data name="Generic_Add" xml:space="preserve">
+    <value>Adaugă</value>
+  </data>
+  <data name="Generic_Cancel" xml:space="preserve">
+    <value>Revocare</value>
+  </data>
+  <data name="Generic_Clear" xml:space="preserve">
+    <value>Golește</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>Închide</value>
+  </data>
+  <data name="Generic_CopyToClipboard" xml:space="preserve">
+    <value>Copiază în clipboard</value>
+  </data>
+  <data name="Generic_MoveLeft" xml:space="preserve">
+    <value>Mută în stânga</value>
+  </data>
+  <data name="Generic_MoveRight" xml:space="preserve">
+    <value>Mută în dreapta</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>Salvare</value>
+  </data>
+  <data name="LogView_CopyClipboard" xml:space="preserve">
+    <value>Copiază în clipboard</value>
+  </data>
+  <data name="LogView_EncodeLog" xml:space="preserve">
+    <value>Jurnalul de codări</value>
+  </data>
+  <data name="LogView_OpenLogDir" xml:space="preserve">
+    <value>Deschide directorul de jurnale</value>
+  </data>
+  <data name="LogView_ScanLog" xml:space="preserve">
+    <value>Jurnalul de scanări</value>
+  </data>
+  <data name="MainView_ActivityLog" xml:space="preserve">
+    <value>Jurnalul de activități</value>
+  </data>
+  <data name="MainView_AddAll" xml:space="preserve">
+    <value>Adaugă-le pe toate</value>
+  </data>
+  <data name="MainView_AddCurrent" xml:space="preserve">
+    <value>Adaugă-l pe ce actual</value>
+  </data>
+  <data name="MainView_AddSelection" xml:space="preserve">
+    <value>Adaugă selecția</value>
+  </data>
+  <data name="MainView_AddToQueue" xml:space="preserve">
+    <value>Adaugă în coadă</value>
+  </data>
+  <data name="MainView_AdvancedTab" xml:space="preserve">
+    <value>Avansate</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Aliniază pornirea A/V</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Unghi:</value>
+  </data>
+  <data name="MainView_AudioTab" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="MainView_AudioTrackCount" xml:space="preserve">
+    <value>Piste audio</value>
+  </data>
+  <data name="MainView_Browser" xml:space="preserve">
+    <value>Răsfoire</value>
+  </data>
+  <data name="MainView_ChaptersTab" xml:space="preserve">
+    <value>Capitole</value>
+  </data>
+  <data name="MainView_Container" xml:space="preserve">
+    <value>Container</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Destinație</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Durată:</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>Salvează ca:</value>
+  </data>
+  <data name="MainView_FiltersTab" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="MainView_Format" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>Ajutor</value>
+  </data>
+  <data name="MainView_iPod5G" xml:space="preserve">
+    <value>Suport pentru iPod 5G</value>
+  </data>
+  <data name="MainView_MetaDataTab" xml:space="preserve">
+    <value>Metadate</value>
+  </data>
+  <data name="MainView_ModifiedPreset" xml:space="preserve">
+    <value>(Modificat)</value>
+  </data>
+  <data name="MainView_Muxing" xml:space="preserve">
+    <value>Muxing: Poate dura ceva timp...</value>
+  </data>
+  <data name="MainView_Options" xml:space="preserve">
+    <value>Opțiuni</value>
+  </data>
+  <data name="MainView_OutputSettings" xml:space="preserve">
+    <value>Setări de ieșire</value>
+  </data>
+  <data name="MainView_Pause" xml:space="preserve">
+    <value>Pauzează</value>
+  </data>
+  <data name="MainView_PictureTab" xml:space="preserve">
+    <value>Dimensiuni</value>
+  </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>Editează presetarea</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Meniul contextual pentru opțiunile presetărilor</value>
+  </data>
+  <data name="MainView_PresetRemove" xml:space="preserve">
+    <value>Șterge presetarea:</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Presetări</value>
+  </data>
+  <data name="MainView_Preview" xml:space="preserve">
+    <value>Previzualizare</value>
+  </data>
+  <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
+    <value>Se codează (Se codifică): {0}, {1:00.00}%, Timpul rămas: {2}, {3}</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Interval:</value>
+  </data>
+  <data name="MainView_Reload" xml:space="preserve">
+    <value>Reîncarcă</value>
+  </data>
+  <data name="MainView_Remove" xml:space="preserve">
+    <value>Ștergere</value>
+  </data>
+  <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
+    <value>Resetează presetările încorporate</value>
+  </data>
+  <data name="MainView_SaveNewPreset" xml:space="preserve">
+    <value>Salvează presetarea nouă</value>
+  </data>
+  <data name="MainView_Searching" xml:space="preserve">
+    <value>Se caută ora de începere</value>
+  </data>
+  <data name="MainView_SetDefault" xml:space="preserve">
+    <value>Setare implicită</value>
+  </data>
+  <data name="MainView_ShowPreview" xml:space="preserve">
+    <value>Previzualizare</value>
+  </data>
+  <data name="MainView_ShowQueue" xml:space="preserve">
+    <value>Coadă</value>
+  </data>
+  <data name="MainView_Source" xml:space="preserve">
+    <value>Sursa:</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>Deschide sursa</value>
+  </data>
+  <data name="MainView_StartEncode" xml:space="preserve">
+    <value>Începe codarea</value>
+  </data>
+  <data name="MainView_StartQueue" xml:space="preserve">
+    <value>Pornește coada</value>
+  </data>
+  <data name="MainView_Stop" xml:space="preserve">
+    <value>Oprește</value>
+  </data>
+  <data name="MainView_StopEncode" xml:space="preserve">
+    <value>Oprește codarea</value>
+  </data>
+  <data name="MainView_StopEncodeConfirm" xml:space="preserve">
+    <value>Ești sigur(ă) că vrei să oprești această codare?</value>
+  </data>
+  <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
+    <value>Te rugăm să alegi o sursă pentru codare înainte să încerci să imporți un fișier de subtitrări.</value>
+  </data>
+  <data name="MainView_SubtitlesTab" xml:space="preserve">
+    <value>Subtitrări</value>
+  </data>
+  <data name="MainView_SubtitleTracksCount" xml:space="preserve">
+    <value>Piste de subtitrări</value>
+  </data>
+  <data name="MainView_SummaryTab" xml:space="preserve">
+    <value>Rezumat</value>
+  </data>
+  <data name="MainView_through" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Titlu:</value>
+  </data>
+  <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
+    <value>Atualizează presetarea actuală</value>
+  </data>
+  <data name="MainView_VideoTab" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="MainView_WebOptimized" xml:space="preserve">
+    <value>Optimizat pentru web</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>Gestionează presetările</value>
+  </data>
+  <data name="MetaDataView_Title" xml:space="preserve">
+    <value>Metadate</value>
+  </data>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Permite utilizarea decodării DirectX</value>
+  </data>
+  <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
+    <value>Formatul de fișier introdus conținea caractere nevalide. Acestea au fost eliminate.</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
+    <value>Redă un sunet la finalizarea fiecărei codări</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
+    <value>Redă un sunet când coada se termină</value>
+  </data>
+  <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
+    <value>Afișează previzualizările în fila Rezumat.</value>
+  </data>
+  <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
+    <value>Afișează starea codării în bara de titlu a aplicației.</value>
+  </data>
+  <data name="Options_7DayLogClear" xml:space="preserve">
+    <value>Șterge fișierele jurnal mai vechi de 7 zile</value>
+  </data>
+  <data name="Options_About" xml:space="preserve">
+    <value>Despre HandBrake</value>
+  </data>
+  <data name="Options_Advanced" xml:space="preserve">
+    <value>Avansate</value>
+  </data>
+  <data name="Options_AdvancedOptions" xml:space="preserve">
+    <value>Opțiuni avansate</value>
+  </data>
+  <data name="Options_Arguments" xml:space="preserve">
+    <value>Argumente:</value>
+  </data>
+  <data name="Options_AutomaticFileNaming" xml:space="preserve">
+    <value>Denumirea automată a fișierelor</value>
+  </data>
+  <data name="Options_AutoNameOutput" xml:space="preserve">
+    <value>Denumește în mod automat fișierele de ieșire</value>
+  </data>
+  <data name="Options_CheckForUpdates" xml:space="preserve">
+    <value>Verifică pentru actualizări</value>
+  </data>
+  <data name="Options_ClearCompleted" xml:space="preserve">
+    <value>Șterge întotdeauna elementele finalizate din coadă după finalizarea unei codări</value>
+  </data>
+  <data name="Options_ClearLogs" xml:space="preserve">
+    <value>Șterge istoricul jurnalului</value>
+  </data>
+  <data name="Options_CopyLogToDir" xml:space="preserve">
+    <value>Pune o copie a jurnalelor individuale de codare într-o locație specificată:</value>
+  </data>
+  <data name="Options_CopyLogToEncDir" xml:space="preserve">
+    <value>Pune o copie a jurnalelor individuale de codare în aceeași locație ca și videoclipul codat</value>
+  </data>
+  <data name="Options_CurVersion" xml:space="preserve">
+    <value>Versiunea actuală</value>
+  </data>
+  <data name="Options_Decoding" xml:space="preserve">
+    <value>Se decodifică</value>
+  </data>
+  <data name="Options_DefaultPath" xml:space="preserve">
+    <value>Calea implicită:</value>
+  </data>
+  <data name="Options_DownloadUpdates" xml:space="preserve">
+    <value>Descarcă actualizarea</value>
+  </data>
+  <data name="Options_DVD" xml:space="preserve">
+    <value>Citirea DVD-ului</value>
+  </data>
+  <data name="Options_DvdRead" xml:space="preserve">
+    <value>Dezactivează LibDVDNav. (Se va folosi libdvdread în schimb)</value>
+  </data>
+  <data name="Options_Encoding" xml:space="preserve">
+    <value>Se codifică</value>
+  </data>
+  <data name="Options_Format" xml:space="preserve">
+    <value>Formatul fișierului:</value>
+  </data>
+  <data name="Options_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Options_Logging" xml:space="preserve">
+    <value>Jurnalizare</value>
+  </data>
+  <data name="Options_LogLevel" xml:space="preserve">
+    <value>Nivel de verbositate a jurnalului:</value>
+  </data>
+  <data name="Options_LogPath" xml:space="preserve">
+    <value>Cale:</value>
+  </data>
+  <data name="Options_LowDiskspaceSize" xml:space="preserve">
+    <value>Pauzează coada dacă spațiul pe disc este insuficient</value>
+  </data>
+  <data name="Options_MinimiseTray" xml:space="preserve">
+    <value>Minimizare în bara de sistem (necesită repornire)</value>
+  </data>
+  <data name="Options_MinTitleScanLength" xml:space="preserve">
+    <value>Durata minimă a titlurilor de pe DVD și de pe Blu-ray în secunde. Titlurile mai scurte vor fi omise:</value>
+  </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Păstrează titlurile duplicate pe sursele Blu-ray (Necesită repornire)</value>
+  </data>
+  <data name="Options_MP4FileExtension" xml:space="preserve">
+    <value>Extensia fișierului MP4:</value>
+  </data>
+  <data name="Options_OnStartup" xml:space="preserve">
+    <value>La pornire</value>
+  </data>
+  <data name="Options_Output" xml:space="preserve">
+    <value>Fișierele de ieșire</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>Calea:</value>
+  </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Calea către playerul media</value>
+  </data>
+  <data name="Options_PreventSleep" xml:space="preserve">
+    <value>Împiedică intrarea în repaus a sistemului în timpul codării</value>
+  </data>
+  <data name="Options_PreviewScanCount" xml:space="preserve">
+    <value>Numărul de previzualizări ale imaginilor de scanat:</value>
+  </data>
+  <data name="Options_PriorityLevel" xml:space="preserve">
+    <value>Nivelul de prioritate al lucrului:</value>
+  </data>
+  <data name="Options_QsvDecode" xml:space="preserve">
+    <value>Se preferă folosirea Intel QuickSync pentru decodarea videoclipurilor atunci când se utilizează codorul QuickSync și hardware-ul este disponibil pentru utilizare.</value>
+  </data>
+  <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
+    <value>Folosește și decodarea QuickSync atunci când nu folosești un codor QuickSync. (De exemplu, x265)</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Elimină punctuația comună</value>
+  </data>
+  <data name="Options_ReplaceUnderscores" xml:space="preserve">
+    <value>Înlocuiește sublinierile cu un spațiu</value>
+  </data>
+  <data name="Options_ResetDoNothing" xml:space="preserve">
+    <value>Resetează la „Nu face nimic” atunci când aplicația este relansată.</value>
+  </data>
+  <data name="Options_Scaler" xml:space="preserve">
+    <value>Alege scalatorul:</value>
+  </data>
+  <data name="Options_Scaling" xml:space="preserve">
+    <value>Scalare</value>
+  </data>
+  <data name="Options_SendFileTo" xml:space="preserve">
+    <value>Trimite fișierul la:</value>
+  </data>
+  <data name="Options_TitleCase" xml:space="preserve">
+    <value>Schimbă din cuvinte cu litere mari/mici în fiecarea literă din cuvânt cu majusculă</value>
+  </data>
+  <data name="Options_Updates" xml:space="preserve">
+    <value>Actualizări</value>
+  </data>
+  <data name="Options_UserInterface" xml:space="preserve">
+    <value>Interfața utilizatorului</value>
+  </data>
+  <data name="Options_Version" xml:space="preserve">
+    <value>Versiunea:</value>
+  </data>
+  <data name="Options_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="Options_VideoPreviewPath" xml:space="preserve">
+    <value>Această cale este utilizată doar pentru funcția de previzualizare video.
+VLC și MPC-HC sunt acceptate. Alte playere pot funcționa, dar nu sunt validate.</value>
+  </data>
+  <data name="Options_ViewLogDirectory" xml:space="preserve">
+    <value>Vezi directorul de jurnale</value>
+  </data>
+  <data name="Options_WhenDone" xml:space="preserve">
+    <value>Când e gata</value>
+  </data>
+  <data name="Options_x264" xml:space="preserve">
+    <value>Setări pentru x264/5</value>
+  </data>
+  <data name="Options_x264Granularity" xml:space="preserve">
+    <value>Granularitate fracționară de calitate constantă:</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorfic:</value>
+  </data>
+  <data name="PictureSettingsView_Automatic" xml:space="preserve">
+    <value>Automat</value>
+  </data>
+  <data name="PictureSettingsView_Bottom" xml:space="preserve">
+    <value>Jos</value>
+  </data>
+  <data name="PictureSettingsView_Cropping" xml:space="preserve">
+    <value>Decupare:</value>
+  </data>
+  <data name="PictureSettingsView_Custom" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
+    <value>Dimensiunea afișajului:</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Înălțimea:</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Automat</value>
+  </data>
+  <data name="PictureSettingsView_Left" xml:space="preserve">
+    <value>Stânga</value>
+  </data>
+  <data name="PictureSettingsView_Output" xml:space="preserve">
+    <value>Dimensiunile finale:</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Aspectul pixelilor:</value>
+  </data>
+  <data name="PictureSettingsView_Right" xml:space="preserve">
+    <value>Dreapta</value>
+  </data>
+  <data name="PictureSettingsView_Size" xml:space="preserve">
+    <value>Mărime</value>
+  </data>
+  <data name="PictureSettingsView_Top" xml:space="preserve">
+    <value>Sus</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Dimensiune scalată:</value>
+  </data>
+  <data name="Preset_Custom" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="Preset_Export" xml:space="preserve">
+    <value>Exportă în fișierul</value>
+  </data>
+  <data name="Preset_Import" xml:space="preserve">
+    <value>Importă din fișierul</value>
+  </data>
+  <data name="Preset_Official" xml:space="preserve">
+    <value>Oficial</value>
+  </data>
+  <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
+    <value>Alege titlurile:</value>
+  </data>
+  <data name="QueueSelectionView_Title" xml:space="preserve">
+    <value>Adaugă în coadă</value>
+  </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>Titlurile selectate vor fi adăugate folosind presetarea „{0}”.</value>
+  </data>
+  <data name="QueueView_Advanced" xml:space="preserve">
+    <value>Opțiuni video:</value>
+  </data>
+  <data name="QueueView_Audio" xml:space="preserve">
+    <value>Audio:</value>
+  </data>
+  <data name="QueueView_ClearAll" xml:space="preserve">
+    <value>Golește tot</value>
+  </data>
+  <data name="QueueView_ClearCompleted" xml:space="preserve">
+    <value>Golire finalizată</value>
+  </data>
+  <data name="QueueView_ClearQueue" xml:space="preserve">
+    <value>Golește coada</value>
+  </data>
+  <data name="QueueView_ClearSelected" xml:space="preserve">
+    <value>Șterge selecția</value>
+  </data>
+  <data name="QueueView_Delete" xml:space="preserve">
+    <value>Ștergere</value>
+  </data>
+  <data name="QueueView_Destination" xml:space="preserve">
+    <value>Destinația:</value>
+  </data>
+  <data name="WhenDone_DoNothing" xml:space="preserve">
+    <value>Nu face nimic</value>
+  </data>
+  <data name="QueueView_Duration" xml:space="preserve">
+    <value>Durata codării:</value>
+  </data>
+  <data name="QueueView_Edit" xml:space="preserve">
+    <value>Editare</value>
+  </data>
+  <data name="QueueView_EndTime" xml:space="preserve">
+    <value>Timpul de finalizare:</value>
+  </data>
+  <data name="QueueView_Export" xml:space="preserve">
+    <value>Exportă coada</value>
+  </data>
+  <data name="QueueView_FileSize" xml:space="preserve">
+    <value>Dimensiunea fișierului de ieșire:</value>
+  </data>
+  <data name="WhenDone_Hibernate" xml:space="preserve">
+    <value>Hibernare</value>
+  </data>
+  <data name="WhenDone_LockSystem" xml:space="preserve">
+    <value>Blochează sistemul</value>
+  </data>
+  <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
+    <value>Jurnalul va fi disponibil după finalizarea codării.</value>
+  </data>
+  <data name="WhenDone_Logoff" xml:space="preserve">
+    <value>Delogare</value>
+  </data>
+  <data name="QueueView_OpenDestDir" xml:space="preserve">
+    <value>Deschide directorul destinație</value>
+  </data>
+  <data name="QueueView_OpenSourceDir" xml:space="preserve">
+    <value>Deschide directorul sursă</value>
+  </data>
+  <data name="QueueView_Options" xml:space="preserve">
+    <value>Opțiuni</value>
+  </data>
+  <data name="QueueView_Pause" xml:space="preserve">
+    <value>Pauzează</value>
+  </data>
+  <data name="QueueView_PausedDuration" xml:space="preserve">
+    <value>Durata pauzei:</value>
+  </data>
+  <data name="QueueView_PictureSettings" xml:space="preserve">
+    <value>Setări pentru imagine:</value>
+  </data>
+  <data name="WhenDone_QuitHandBrake" xml:space="preserve">
+    <value>Ieși din HandBrake</value>
+  </data>
+  <data name="QueueView_ResetAllJobs" xml:space="preserve">
+    <value>Reîncearcă toate sarcinile</value>
+  </data>
+  <data name="QueueView_ResetFailed" xml:space="preserve">
+    <value>Reîncercare eșuată</value>
+  </data>
+  <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
+    <value>Resetează sarcinile selectate</value>
+  </data>
+  <data name="QueueView_Reset" xml:space="preserve">
+    <value>Resetează</value>
+  </data>
+  <data name="WhenDone_Shutdown" xml:space="preserve">
+    <value>Închidere</value>
+  </data>
+  <data name="QueueView_Source" xml:space="preserve">
+    <value>Sursa:</value>
+  </data>
+  <data name="QueueView_Start" xml:space="preserve">
+    <value>Pornește coada</value>
+  </data>
+  <data name="QueueView_StartTime" xml:space="preserve">
+    <value>Timpul de pornire:</value>
+  </data>
+  <data name="QueueView_Statistics" xml:space="preserve">
+    <value>Statistici</value>
+  </data>
+  <data name="QueueView_Subtitles" xml:space="preserve">
+    <value>Subtitrări:</value>
+  </data>
+  <data name="QueueView_Summary" xml:space="preserve">
+    <value>Rezumat</value>
+  </data>
+  <data name="WhenDone_Suspend" xml:space="preserve">
+    <value>Repaus</value>
+  </data>
+  <data name="QueueView_Video" xml:space="preserve">
+    <value>Video:</value>
+  </data>
+  <data name="QueueView_WhenDone" xml:space="preserve">
+    <value>Când e gata:</value>
+  </data>
+  <data name="Shared_AddAllForSelected" xml:space="preserve">
+    <value>Adaugă toate limbile selectate rămase</value>
+  </data>
+  <data name="Shared_AddAllRemaining" xml:space="preserve">
+    <value>Adaugă toate pistele rămase</value>
+  </data>
+  <data name="Shared_AddNewTrack" xml:space="preserve">
+    <value>Adaugă o pistă nouă</value>
+  </data>
+  <data name="Shared_AddTrack" xml:space="preserve">
+    <value>Piste</value>
+  </data>
+  <data name="Shared_AvailableLanguages" xml:space="preserve">
+    <value>Limbile disponibile:</value>
+  </data>
+  <data name="Shared_ChooseLanguages" xml:space="preserve">
+    <value>Alege limbile:</value>
+  </data>
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
+    <value>Limbile selectate:</value>
+  </data>
+  <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
+    <value>Configurează comportamentele implicite</value>
+  </data>
+  <data name="Shared_ReloadDefaults" xml:space="preserve">
+    <value>Reîncarcă</value>
+  </data>
+  <data name="SourceSelection_ChooseDisc" xml:space="preserve">
+    <value>Alege discul de scanat</value>
+  </data>
+  <data name="SourceSelection_ChooseFile" xml:space="preserve">
+    <value>Alege fișierul de scanat</value>
+  </data>
+  <data name="SourceSelection_ChooseFolder" xml:space="preserve">
+    <value>Alege folderul (dosarul) de scanat</value>
+  </data>
+  <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
+    <value>Opțional, alege un titlu specific:</value>
+  </data>
+  <data name="SourceSelection_ChooseVideo" xml:space="preserve">
+    <value>Apoi, alege videoclipul (videoclipurile) pe care dorești să le codezi:</value>
+  </data>
+  <data name="SourceSelection_File" xml:space="preserve">
+    <value>Fișier</value>
+  </data>
+  <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
+    <value>Folder/Dosar (Scanare în masă)</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>Deschide acest DVD sau disc Bluray</value>
+  </data>
+  <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
+    <value>Deschide un folder (un dosar) cu unul sau mai multe fișiere.</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
+    <value>Recuperează fișierele de coadă</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
+    <value>Este disponibilă o arhivă a cozii anterioare.</value>
+  </data>
+  <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
+    <value>Deschide fișierul (fișierele) video.</value>
+  </data>
+  <data name="SourceSelection_SourceSelection" xml:space="preserve">
+    <value>Selectarea sursei</value>
+  </data>
+  <data name="StaticPreviewView_Duration" xml:space="preserve">
+    <value>Durata:</value>
+  </data>
+  <data name="StaticPreviewView_LivePreview" xml:space="preserve">
+    <value>Previzualizează codarea</value>
+  </data>
+  <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
+    <value>Selectează o imagine de previzualizare</value>
+  </data>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Folosește o aplicație externă de tip player</value>
+  </data>
+  <data name="SubtitlesView_AddCC" xml:space="preserve">
+    <value>Adaugă subtitrări atunci când sunt disponibile</value>
+  </data>
+  <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
+    <value>Adaugă „Scanare audio străină”</value>
+  </data>
+  <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
+    <value>Comportamentul la inscripționare:</value>
+  </data>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>Importă subtitrarea</value>
+  </data>
+  <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Comportamentul pentru selecția pistei:</value>
+  </data>
+  <data name="SubtitleView_AddAllCC" xml:space="preserve">
+    <value>Adaugă toate subtitrările rămase</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
+    <value>Configurează modul în care pistele de subtitrare sunt selectate și configurate automat atunci când selectezi un titlu nou sau un videoclip sursă nou.</value>
+  </data>
+  <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
+    <value>Piste audio suplimentare</value>
+  </data>
+  <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
+    <value>Piste de subtitrări suplimentare</value>
+  </data>
+  <data name="SummaryView_Burned" xml:space="preserve">
+    <value>Inscripționat</value>
+  </data>
+  <data name="SummaryView_Chapters" xml:space="preserve">
+    <value>Marcatori pentru capitole</value>
+  </data>
+  <data name="SummaryView_Deblock" xml:space="preserve">
+    <value>Deblochează</value>
+  </data>
+  <data name="SummaryView_Detelecine" xml:space="preserve">
+    <value>Detectează</value>
+  </data>
+  <data name="SummaryView_display" xml:space="preserve">
+    <value>afișaj</value>
+  </data>
+  <data name="SummaryView_Grayscale" xml:space="preserve">
+    <value>Tonuri de gri</value>
+  </data>
+  <data name="SummaryView_NoAudioTracks" xml:space="preserve">
+    <value>Nicio pistă audio</value>
+  </data>
+  <data name="SummaryView_NoChapters" xml:space="preserve">
+    <value>Niciun marcator pentru capitole</value>
+  </data>
+  <data name="SummaryView_NoFilters" xml:space="preserve">
+    <value>Niciun filtru</value>
+  </data>
+  <data name="SummaryView_NoSource" xml:space="preserve">
+    <value>Nicio sursă</value>
+  </data>
+  <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
+    <value>Nicio pistă pentru subtitrări</value>
+  </data>
+  <data name="SummaryView_NoTracks" xml:space="preserve">
+    <value>Nicio pistă</value>
+  </data>
+  <data name="SummaryView_PreviewInfo" xml:space="preserve">
+    <value>Previzualizare {0} din {1}</value>
+  </data>
+  <data name="SummaryView_Rotation" xml:space="preserve">
+    <value>Rotație</value>
+  </data>
+  <data name="SummaryView_storage" xml:space="preserve">
+    <value>stocare</value>
+  </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Codificare de multi-trecere</value>
+  </data>
+  <data name="VideoView_AverageBitrate" xml:space="preserve">
+    <value>Rată medie de biți (kbps):</value>
+  </data>
+  <data name="VideoView_Codec" xml:space="preserve">
+    <value>Codorul video:</value>
+  </data>
+  <data name="VideoView_ColourRange" xml:space="preserve">
+    <value>Gamă de culori:</value>
+  </data>
+  <data name="VideoView_ConstantFramerate" xml:space="preserve">
+    <value>Rată de cadre constantă</value>
+  </data>
+  <data name="VideoView_ConstantQuality" xml:space="preserve">
+    <value>Calitate constantă:</value>
+  </data>
+  <data name="VideoView_EncoderLevel" xml:space="preserve">
+    <value>Nivelul codorului:</value>
+  </data>
+  <data name="VideoView_EncoderPreset" xml:space="preserve">
+    <value>Presetarea codorului:</value>
+  </data>
+  <data name="VideoView_EncoderProfile" xml:space="preserve">
+    <value>Profilul codorului:</value>
+  </data>
+  <data name="VideoView_EncodeTune" xml:space="preserve">
+    <value>Reglarea codorului:</value>
+  </data>
+  <data name="VideoView_ExtraOptions" xml:space="preserve">
+    <value>Opțiuni avansate:</value>
+  </data>
+  <data name="VideoView_FastDecode" xml:space="preserve">
+    <value>Decodare rapidă</value>
+  </data>
+  <data name="VideoView_Framerate" xml:space="preserve">
+    <value>Rata de cadre (FPS-uri):</value>
+  </data>
+  <data name="VideoView_OptimiseVideo" xml:space="preserve">
+    <value>Opțiunile codorului:</value>
+  </data>
+  <data name="VideoView_PeakFramerate" xml:space="preserve">
+    <value>Rată maximă de cadre</value>
+  </data>
+  <data name="VideoView_Quality" xml:space="preserve">
+    <value>Calitate:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Trecerea analizei turbo</value>
+  </data>
+  <data name="VideoView_VariableFramerate" xml:space="preserve">
+    <value>Rată de cadre variabilă</value>
+  </data>
+  <data name="VideoView_Video" xml:space="preserve">
+    <value>Video:</value>
+  </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>Limba:</value>
+  </data>
+  <data name="Language_UseSystem" xml:space="preserve">
+    <value>Folosește limba sistemului</value>
+  </data>
+  <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
+    <value>Despre HandBrake</value>
+  </data>
+  <data name="SourceSelection_DropFileHere" xml:space="preserve">
+    <value>Sau plasează un fișier, un set de fișiere sau un folder (un dosar) aici ...</value>
+  </data>
+  <data name="SourceSelection_Help" xml:space="preserve">
+    <value>Ajutor</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Preferințe</value>
+  </data>
+  <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
+    <value>Adaugă o pistă</value>
+  </data>
+  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
+    <value>Setări pentru codorul audio pentru fiecare piesă aleasă:</value>
+  </data>
+  <data name="AudioDefaultsView_Clear" xml:space="preserve">
+    <value>Golește</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Inscripționează-l</value>
+  </data>
+  <data name="SubtitlesView_Default" xml:space="preserve">
+    <value>Implicit</value>
+  </data>
+  <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
+    <value>Numai forțat</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>_Despre...</value>
+  </data>
+  <data name="MainView_ActivityLogMenu" xml:space="preserve">
+    <value>Jurnalul de _activități</value>
+  </data>
+  <data name="MainView_CheckForUpdates" xml:space="preserve">
+    <value>Verifi_că pentru actualizări</value>
+  </data>
+  <data name="MainView_Exit" xml:space="preserve">
+    <value>I_eșire</value>
+  </data>
+  <data name="MainView_ExportToFile" xml:space="preserve">
+    <value>_Exportă într-un fișier</value>
+  </data>
+  <data name="MainView_FileMenu" xml:space="preserve">
+    <value>_Fișier</value>
+  </data>
+  <data name="MainView_HandBrakeDocs" xml:space="preserve">
+    <value>Documentație pentru _HandBrake (HTTPS)</value>
+  </data>
+  <data name="MainView_HelpMenu" xml:space="preserve">
+    <value>_Ajutor</value>
+  </data>
+  <data name="MainView_ImportFromFile" xml:space="preserve">
+    <value>_Importă din fișier</value>
+  </data>
+  <data name="MainView_PreferencesMenu" xml:space="preserve">
+    <value>_Preferințe</value>
+  </data>
+  <data name="MainView_PresetsMenu" xml:space="preserve">
+    <value>_Presetări</value>
+  </data>
+  <data name="MainView_QueueMenu" xml:space="preserve">
+    <value>_Coadă</value>
+  </data>
+  <data name="MainView_ResetPresets" xml:space="preserve">
+    <value>_Resetează presetările încorporate</value>
+  </data>
+  <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
+    <value>_Setează actualul/actuala ca implicit(ă)</value>
+  </data>
+  <data name="MainView_ShowPresetPanel" xml:space="preserve">
+    <value>Afișea_ză panoul de presetări</value>
+  </data>
+  <data name="MainView_ShowQueueMenu" xml:space="preserve">
+    <value>Afișează coa_da</value>
+  </data>
+  <data name="MainView_ToolsMenu" xml:space="preserve">
+    <value>_Unelte</value>
+  </data>
+  <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
+    <value>Se verifică pentru actualizări ...</value>
+  </data>
+  <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
+    <value>Ești sigur(ă) că vrei să ștergi directorul fișierului de jurnal?</value>
+  </data>
+  <data name="OptionsView_ClearLogs" xml:space="preserve">
+    <value>Șterge jurnalele</value>
+  </data>
+  <data name="OptionsView_Downloading" xml:space="preserve">
+    <value>Se descarcă...</value>
+  </data>
+  <data name="OptionsView_LogsCleared" xml:space="preserve">
+    <value>Directorul fișierelor jurnal din HandBrake a fost șters!</value>
+  </data>
+  <data name="OptionsView_Notice" xml:space="preserve">
+    <value>Notificare</value>
+  </data>
+  <data name="OptionsView_PreparingUpdate" xml:space="preserve">
+    <value>Se pregătește pentru actualizare ...</value>
+  </data>
+  <data name="OptionsView_SelectFolder" xml:space="preserve">
+    <value>Te rugăm să alegi un folder (un dosar).</value>
+  </data>
+  <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
+    <value>Fă clic pe „Răsfoire” pentru setarea locației implicite</value>
+  </data>
+  <data name="MainView_Hide" xml:space="preserve">
+    <value>Ascunde</value>
+  </data>
+  <data name="MainView_Show" xml:space="preserve">
+    <value>Afișare</value>
+  </data>
+  <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
+    <value>„Adaugă totul” la coadă</value>
+  </data>
+  <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
+    <value>„Adaugă selecția” la coadă</value>
+  </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>Redă fișierul</value>
+  </data>
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
+    <value>Bara de unelte a aplicației</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>Afișează „Adaugă totul în coadă” în bara de instrumente</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>Afișează „Adaugă selecția în coadă” în bara de instrumente</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>Suportul pentru codarea hardware este dezactivat în prezent. Dacă nu ai pornit HandBrake cu opțiunea „--no-hardware”, te rugăm să te asiguri că folosești drivere actualizate pentru toate adaptoarele grafice din acest sistem.
+
+Acest lucru nu va afecta niciunul dintre codoarele software.</value>
+  </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>Te rugăm să corectezi setările de subtitrări înainte de a continua.</value>
+  </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>Se aplică</value>
+  </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>Reia codarea</value>
+  </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>Acțiuni</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Importă coada</value>
+  </data>
+  <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Se codează: Trecerea {0} din {1}, {2:00.00}%, FPS: {3:000.0}, Avg FPS: {4:000.0}
+Timpul rămas: {5}, Scurs: {6} {7}</value>
+  </data>
+  <data name="QueueView_DeleteSelected" xml:space="preserve">
+    <value>Șterge fișierul selectat</value>
+  </data>
+  <data name="Portable_TmpNotWritable" xml:space="preserve">
+    <value>Modul portabil: Nu se poate crea directorul TMP. Verifică dacă calea este corectă și dacă se poate scrie în el.</value>
+  </data>
+  <data name="Portable_StorageNotWritable" xml:space="preserve">
+    <value>Modul portabil: Nu se poate crea directorul de stocare. Verifică dacă calea este corectă și dacă se poate scrie în el.</value>
+  </data>
+  <data name="Portable_IniFileError" xml:space="preserve">
+    <value>Modul portabil: Nu se poate citi fișierul portable.ini. Este posibil să existe o eroare în acest fișier. Te rugăm să încerci din nou folosind portable.ini.template ca ghid.</value>
+  </data>
+  <data name="OptionsView_FormatOptions" xml:space="preserve">
+    <value>Opțiuni de înlocuire:
+Poți glisa/elibera sau introduce textul de mai sus.</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
+    <value>Cere suprascrierea fișierului</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
+    <value>Încearcă să redenumești fișierul automat</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
+    <value>Suprascrie fișierul</value>
+  </data>
+  <data name="Options_UIBehaviour" xml:space="preserve">
+    <value>Comportamentul interfeței utilizatorului</value>
+  </data>
+  <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
+    <value>Comportamentul suprascrierii fișierului:</value>
+  </data>
+  <data name="Options_EncodeCompleted" xml:space="preserve">
+    <value>Codarea a fost finalizată</value>
+  </data>
+  <data name="Options_Notifications" xml:space="preserve">
+    <value>Notificări sonore</value>
+  </data>
+  <data name="Options_QueueCompleted" xml:space="preserve">
+    <value>Coada a fost finalizată</value>
+  </data>
+  <data name="Options_WhenDoneColon" xml:space="preserve">
+    <value>Când e gata:</value>
+  </data>
+  <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
+    <value>Comportamentul la coliziunea numelor de fișiere:</value>
+  </data>
+  <data name="CollisionBehaviour_Post" xml:space="preserve">
+    <value>Postfix</value>
+  </data>
+  <data name="CollisionBehaviour_Pre" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
+    <value>Adaugă numărul</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
+    <value>VizualizareaFiltrelor_DeblocheazăPresetarea</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
+    <value>Deblochează melodia</value>
+  </data>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Notă: Nu toate codoarele hardware au preferințe suplimentare. Toate codoarele hardware disponibile și acceptate pe acest sistem vor fi disponibile pentru selectare în fila video din meniul derulant al codorului video.</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
+    <value>HandBrake a detectat mai multe fișiere de coadă neterminate. Acestea vor proveni din mai multe instanțe ale rulării HandBrake. Dorești să recuperezi toate sarcinile neterminate?</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
+    <value>HandBrake a detectat elemente neterminate în coadă de la ultima lansare a aplicației. Dorești să le recuperezi?</value>
+  </data>
+  <data name="Queue_RecoveryPossible" xml:space="preserve">
+    <value>Recuperarea cozii e posibilă</value>
+  </data>
+  <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
+    <value>Fișierul tău de presetări conținea presetări încorporate. Funcția de import nu permite importul acestora. Te rugăm să utilizezi „Meniul Presetări -&gt; Resetează presetările încorporate” pentru restaurarea presetărilor standard.
+
+Acolo unde se acceptă, orice presetări ale utilizatorului vor fi importate.</value>
+  </data>
+  <data name="Options_PromptBeforeAction" xml:space="preserve">
+    <value>Execută acțiunea imediat. (Aceasta va dezactiva caseta de dialog de confirmare de 60 de secunde)</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Răsfoire</value>
+  </data>
+  <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
+    <value>Nu a fost setat niciun fișier audio. Te rugăm să faci clic pe „Răsfoire” pentru a selecta un fișier wav sau mp3 pentru redare.</value>
+  </data>
+  <data name="OptionsView_Play" xml:space="preserve">
+    <value>Redă</value>
+  </data>
+  <data name="QueueView_ExportCLI" xml:space="preserve">
+    <value>Coadă de exportare (doar în linie de comandă (CLI))</value>
+  </data>
+  <data name="Options_DarkTheme" xml:space="preserve">
+    <value>Folosește Tema întunecată. (Necesită repornire, numai pentru Windows 10)</value>
+  </data>
+  <data name="QueueView_NotAvailable" xml:space="preserve">
+    <value>Nu e disponibil</value>
+  </data>
+  <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
+    <value>GB (GO)</value>
+  </data>
+  <data name="SystemService_ACMains" xml:space="preserve">
+    <value>Alimentarea de la rețeaua de CA a fost detectată. Se reia codarea... ({0} %)</value>
+  </data>
+  <data name="SystemService_CriticalBattery" xml:space="preserve">
+    <value>Bateria sistemului este critică! ({0} %)</value>
+  </data>
+  <data name="SystemService_LowBatteryLog" xml:space="preserve">
+    <value>Bateria sistemului e scăzută! ({0} %). Codarea ta va fi pauzată.</value>
+  </data>
+  <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
+    <value>Spațiul de stocare rămas pe unitatea de destinație a scăzut sub {0} GB. Se întrerupe codarea...</value>
+  </data>
+  <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Selecții audio automate</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Selecții de subtitrări automate</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>Sistemul</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Actorii:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Comentarii:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Descriere:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Directorul:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Genul:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Intriga:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Data de lansare:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Titlul:</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Vizualizatorul de jurnale</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Aspectul:</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Filtre:</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>Mărime:</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Piste:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>Fă clic pe „Verifică dacă există actualizări” pentru a verifica dacă există versiuni noi</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt; Înapoi</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>Pauzat(e) în prezent</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Fișierele de ieșire</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Capitole</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Cadre</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Previzualizare</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Secunde</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Toate limbile selectate potrivite</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>Prima limbă selectată potrivită</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>Niciunul</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Prima pistă</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>E preferată pista audio străină, altfel prima pistă</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Pistă audio străină</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>Niciunul</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Căutare de piste audio străine</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Scanare de piste audio străine</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Toate limbile selectate care corespund</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Folosește toate pistele ca șabloane</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>Prima limbă selectată potrivită</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Folosește prima pistă ca șablon</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>Nicio pistă audio</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Capitolul {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Automat</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Folosește întotdeauna M4V</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Folosește întotdeauna MP4</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>Niciunul</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Folosește întotdeauna rezoluția sursei</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Peste valoarea normală</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Sub valoarea normală</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>Înalt</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Scăzut</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Lunar</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Săptămânal</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Folosește întotdeauna calea implicită pentru fiecare nume nou generat.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Intervalul de porturi trebuie să fie între 5000 și 32767</value>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>Este disponibilă o nouă versiune!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Drepturi de autor (C) 2003-2024 Echipa HandBrake</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Nivel scăzut al bateriei:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Întrerupe orice sarcină în desfășurare atunci când bateria se descarcă.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Adaugă toate subtitrările rămase</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>Au fost detectate sarcini duplicate în fișierul coadă pe care încerci să îl imporți. Dorești să suprascrii înregistrările existente?
+Asta va opri și toate sarcinile existente în desfășurare.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>S-au detectat sarcini duplicate</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Activează hardware-ul QuickSync cu consum redus de energie (unde este compatibil).</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Te rugăm să selectezi o singură sarcină pentru vizualizarea rezumatului informațiilor.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Execută fiecare sarcină pusă în coadă într-un proces de lucru separat.</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Port de rețea implicit pentru procesul de lucru:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>Presetarea selectată nu este disponibilă pentru utilizare pe acest sistem.
+
+De obicei, aceasta indică faptul că sistemul tău nu este compatibil cu hardware-ul necesar pentru a o utiliza.
+
+Te rugăm să alegi o altă presetare.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Izolarea proceselor</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Te rugăm să reții că utilizarea acestei funcții va porni un server HTTP legat la 127.0.0.1 pe portul specificat.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>Dacă portul setat este utilizat, va găsi primul port liber la o distanță de +100 față de portul definit.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Număr maxim de codări simultane:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Revocare</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Presetare:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Aceeași ca sursa</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Resetează setările</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Ești sigur(ă) că dorești să resetezi HandBrake la setările implicite?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Personalizat (nelimitat)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Lățime și înălțime</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Înălțime (cutie poștală)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Niciunul</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Lățime (cutie de stâlpi)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Umplere:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Culoarea:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Borduri:</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Rezoluție și scalare:</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Orientare și decupare:</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Filtre:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>Implicit</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Forțat</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Mărimea maximă:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Limita rezoluției:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Niciunul</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Gestionează presetările</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Șterge presetările încorporate</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Exportă presetarea selectată</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Importă presetarea (presetările) din fișier</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Informații despre presetare:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Presetările încorporate nu pot fi modificate.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Setează presetarea selectată ca implicită</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Șterge presetarea:</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(Nu este acceptată pe acest sistem)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Oprește</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>Numele categoriei introdus există deja. Te rugăm să alegi un alt nume.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>Numele categoriei a fost gol. Te rugăm să introduci un nume.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Introdu un nume:</value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>Nu e nicio presetare selectată.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Exportă toate presetările utilizatorului</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Nivelul la care apar alertele de spațiu insuficient pe disc:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Notă: Aceasta este limita superioară a sarcinilor simultane. Pot intra în vigoare limitări hardware care reduc numărul real de sarcini simultane în timpul codificării. Setarea va avea efect numai la următorul lot de coadă sau la repornirea aplicației.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Nu e disponibil)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>E implicit:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Da</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Reglarea fină a setărilor de imagine</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Afișează comenzile de ajustare a decupării.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Folosește tema întunecată</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Folosește tema luminoasă</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Potrivește cu sistemul</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Necesită repornire)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Netezirea cromaticii:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Spațiul de culori:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Spațiul de culori</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Deschide previzualizarea</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Previzualizarea sursei:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Starea sarcinii:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Anulată</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Finalizată</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Setări nevalide. Verifică jurnalul pentru detalii.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Intrare nevalidă. Verifică jurnalul pentru detalii.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Stare necunoscută. Verifică jurnalul pentru detalii.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Erori detectate la încercarea de citire a sursei.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Eroare necunoscută. Verifică jurnalul pentru detalii.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Programul a crăpat. Verifică jurnalul pentru detalii.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Lipsește fișierul „hb.dll”. Te rugăm să îl reinstalezi.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Atenție: Reține că aceasta este o versiune de tip „Modul sigur” a HandBrake care nu include suport pentru codoare hardware. Dacă dorești să utilizezi suportul pentru codoare hardware, te rugăm să descarci o versiune care nu e de tip „Modul sigur” de pe site.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Negru</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>Alb</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>Valoarea RGB-ului:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(umplut)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Întoarcere:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Dimensiunile sursei:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Dimensiunea stocării: {0}x{1}     Dimensiunea afișajului:{2}x{3}      Raportul de aspect: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>A fost detectată o eroare în caseta de dialog a navigatorului de fișiere.
+
+- Te rugăm să reții că căile lungi către fișiere nu sunt complet acceptate. Te rugăm să păstrezi căile către fișiere mai scurte de 255 de caractere.
+- Ultimul director folosit pentru această fereastră a fost resetat pentru a preveni erorile data viitoare când încerci să scanezi un fișier.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Înălțimea maximă:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Lățimea maximă:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Raportul de aspect: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Metadate comune de transfer</value>
+  </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>Calea implicită pentru numele automat nu a fost validă. {0} nu trebuie să fie înainte de {1}</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>Vrei să-i permiți aplicației HandBrake să verifice automat actualizările?
+
+Îți poți schimba alegerea oricând, modificând opțiunile din Preferințe -&gt; General -&gt; Verifică pentru actualizări</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>Verifici pentru actualizări?</value>
+  </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>Înainte de actualizare:
+- Asigură-te că nu există codări în așteptare puse în coadă.
+- Fă o copie de rezervă (un backup) sau notează toate presetările personalizate pe care le-ai creat, deoarece este posibil să nu fie complet compatibile cu versiunile mai noi.</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>(Implicit)</value>
+  </data>
+  <data name="PresetDisplayMode_Category" xml:space="preserve">
+    <value>Categorii</value>
+  </data>
+  <data name="PresetDisplayMode_Flat" xml:space="preserve">
+    <value>Plat</value>
+  </data>
+  <data name="PresetDisplayMode_Partial" xml:space="preserve">
+    <value>Parțial plat</value>
+  </data>
+  <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
+    <value>Alege modul în care sunt afișate presetările în meniuri:</value>
+  </data>
+  <data name="QueueView_SelectedPresets" xml:space="preserve">
+    <value>Presetare:</value>
+  </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[Terminat]</value>
+  </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>Editezi sarcina?</value>
+  </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>Lungimea ieșirii:</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>Mută în jos</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>Mută în sus</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>Rata de biți de ieșire:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>Viteza medie de codare:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value>a fișierului sursă</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>Nu e disponibil</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>Lungimea sursei:</value>
+  </data>
+  <data name="Options_Reset" xml:space="preserve">
+    <value>Resetare</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
+    <value>Ești sigur(ă) că vrei să resetezi toate presetările încorporate?</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
+    <value>Resetează toate presetările încorporate la valorile implicite HandBrake:</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
+    <value>(Presetările utilizatorului nu vor fi resetate)</value>
+  </data>
+  <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
+    <value>Resetează toate setările HandBrake la valorile implicite:</value>
+  </data>
+  <data name="Options_BuiltInPresets" xml:space="preserve">
+    <value>Presetări încorporate</value>
+  </data>
+  <data name="Options_UserSettings" xml:space="preserve">
+    <value>Setările utilizatorului</value>
+  </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>Vizualizare arborescentă plutitoare</value>
+  </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>Te rugăm să te asiguri că ți-ai configurat asocierile de fișiere corespunzătoare în Windows pentru a permite deschiderea acestui fișier cu un player video compatibil</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Nu se poate citi fișierul de coadă.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>Fișierul poate fi corupt sau poate proveni de la o versiune anterioară de HandBrake.
+Sunt acceptate doar fișierele de coadă din versiunea curentă.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>Codarea ta făcută de HandBrake e gata!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>Coada ta din HandBrake e gata!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>Aceasta va dezactiva și opțiunile de afișare a notificărilor din bara de activități Windows din fila „Când ai terminat”. Reactivează-le dacă dorești să reactivezi această funcție.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Elimină HandBrake din panoul de control al notificărilor Windows.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Neinstalată</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Setările de notificări au fost eliminate.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Elimină și dezinstalează</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Trimite o notificare către bara de activități din Windows.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Notificări în Windows</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} sarcină finalizată / (de) sarcini finalizate. {1} Se lucrează la {2} (de) sarcini cu {3} care așteaptă să fie procesate.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Regenerare (Nume automat)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Deschide acest director</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Restrânge-le pe toate</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Extinde-le pe toate</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Modul de afișaj de la dreapta la stânga:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Oprit</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Numai text</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Întreaga interfață a utilizatorului</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>Versiunea de dezvoltare actuală pe care o utilizați se învechește. Poate vrei să o actualizezi!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Descarcă prin Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Descarcă versiunile de dezvoltare (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>Activează codorul QuickSync Deep Link Hyper Encode</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Preferă utilizarea mai multor motoare media pentru a accelera o singură codare, acolo unde este acceptată. Dezactiveaz-o pentru a se permite echilibrarea încărcării a mai multor codări paralele între motoarele media.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>Deschide HandBrake</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>Suportul pentru codarea hardware a fost dezactivat, deoarece este o cauză frecventă a problemelor de pornire.
+
+- Te rugăm să încerci să repornești HandBrake.
+
+- Dacă problema persistă, este posibil ca un driver de placă grafică învechit (integrat sau discret) să fie cauza problemei.
+
+Suportul pentru codarea hardware poate fi reactivat în preferințe.</value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake nu a putut porni.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Restează Modul sigur</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Te rugăm să repornești HandBrake.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Exportă datele statistice ale cozii (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Exportare finalizată!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>Mai întâi trebuie să scanezi o sursă și să ai un director de destinație inițial setat.</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Numai când fișierul există deja pe disc.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Informații</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>Nu au fost adăugate piste de subtitrare.
+
+Acest lucru se poate datora limitărilor containerului de fișiere selectat. Consultă documentația noastră de ajutor pentru subtitrări pentru mai multe informații.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>Niciunul</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Actualizează-l acum!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>Automat</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Conservativ</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>Niciunul</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>Se preferă utilizarea Nvidia NVDec pentru decodarea video atunci când se utilizează codorul NVEnc și hardware-ul este disponibil pentru utilizare.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>Asistență hardware</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>Sistemul nu a putut reda acest fișier.
+
+Reține că anumite codecuri, cum ar fi AV1 sau HEVC, necesită pluginurile de codecuri Microsoft AV1 sau HEVC din Microsoft Store pentru a fi redate.
+Alternativ, bifează caseta de selectare „Utilizează un player extern” de mai jos.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Închide playerul</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Redă</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Previzualizare video</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>Previzualizarea încorporată nu este disponibilă pentru containerul WebM. Trebuie utilizat un player extern.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Se codează previzualizarea ...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Previzualizări:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volumul: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Resetează</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Folosiți formatele de dată ISO (AAAA-LL-ZZ) în loc de formatul de sistem.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Trecerea {0} din {1}, {2:00.00}%, {3:000.0} (de) fps-uri (cadre/secundă), avg (media de) {4:000.0} (de) fps-uri (cadre/secundă), ETA (Ora estimată de sosire): {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Se scanează pentru subtitrări  {0:00.00}%, ETA  (Ora estimată de sosire): {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Informații despre coadă extinsă</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Minimizează informațiile cozii</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Ieșire: {0}, avg (media) {1} fps/(de) fps-uri</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Descrierea presetării:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Ascunde descrierea presetării</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Afișează descrierea presetării</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Se codează {1} (de) sarcini</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Nu se poate coda o previzualizare. Aplicația este ocupată în prezent cu codarea unui alt fișier.
+
+Pentru a permite mai multe codări simultane, activează „Izolarea proceselor” în Meniul Instrumente -&gt; Preferințe -&gt; Avansat -&gt; Izolarea proceselor -&gt; „Rulează fiecare sarcină din coadă într-un proces de lucru separat”.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Calitatea</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Sursa</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Documentație:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>Urmăritorul de probleme GitHub:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Site-ul web:</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Clonează presetarea</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Mută în jos</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Mută dedesubt</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Mută deasupra</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Mută în sus</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>În prezent, există sarcini care rulează. Dorești să finalizezi sarcinile curente înainte de a opri coada?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Adaugă extensia</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Exclude extensiile de fișiere:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>Următoarele extensii de fișiere vor fi ignorate la scanarea unui folder (unui dosar). Lista nu ține cont de majuscule/minuscule. "." nu este obligatoriu.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>Această extensie de fișiere există deja în listă.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>Manipularea fișierelor (scanare)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Scanează recursiv directoarele atunci când se utilizează modul de scanare a folderelor (a dosarelor).</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Calitatea pistei audio</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Numele pistei audio</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Rata de biți a pistei audio</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Șterge pista aceasta audio</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Modul de calitate al codorului audio</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Folosește vizualizarea avansată a cozii</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Folosește vizualizarea simplă a cozii</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Numai codare fără pierderi</value>
+  </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Ascunde meniul clasic</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Afișează meniul clasic</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Atenție: Un driver neacceptat a fost detectat! - Actualizare recomandată)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Limitele de interval:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Limitează lungimea titlurilor adăugate în coadă.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Activează limitele de interval</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Unele titluri nu au putut fi adăugate în coadă deoarece se aflau în afara limitelor intervalului selectat.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Pornește mai târziu</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Coada va începe automat la:</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Se oprește codarea...</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Permite mărirea videoclipului</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Dimensiunea optimă</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Disponibilă pe acest sistem.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>Nu e disponibilă pe acest sistem.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Te rugăm să aștepți ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Revocare</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Deschide fereastra jurnalului</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>Niciunul</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Automat</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>Oprit</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>Implicit</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>Oprit</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>Oprit</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>Oprit</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>Implicit</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>Oprit</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Durata maximă a titlului DVD și Blu-ray în secunde. Titlurile mai lungi vor fi omise:</value>
+  </data>
+  <data name="DefaultRangeMode_Chapters" xml:space="preserve">
+    <value>Capitole</value>
+  </data>
+  <data name="DefaultRangeMode_Seconds" xml:space="preserve">
+    <value>Secunde</value>
+  </data>
+  <data name="DefaultRangeMode_Frames" xml:space="preserve">
+    <value>Cadre</value>
+  </data>
+  <data name="Options_RangeModeSelection" xml:space="preserve">
+    <value>Modul intervalului implicit pentru titluri:</value>
+  </data>
+  <data name="WhenDone_CustomAction" xml:space="preserve">
+    <value>Acțiune personalizată</value>
+  </data>
+  <data name="OptionsView_CustomActionConfig" xml:space="preserve">
+    <value>Configurare „Acțiunii personalizate”:</value>
+  </data>
+  <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
+    <value>Deschide Preferințele de denumire automată</value>
+  </data>
+  <data name="Options_RunAction" xml:space="preserve">
+    <value>Executare scriptul / executabilul:</value>
+  </data>
+  <data name="OptionsViewModel_PortableMode" xml:space="preserve">
+    <value>HandBrake este configurat în prezent în modul portabil. Pentru a actualiza o instalare portabilă, te rugăm să descarci cea mai recentă actualizare de pe site.</value>
+  </data>
+  <data name="MetaData_Add" xml:space="preserve">
+    <value>Adaugă un rând</value>
+  </data>
+  <data name="MainView_DebugMenu" xml:space="preserve">
+    <value>Meniul de depanare</value>
+  </data>
+  <data name="MainView_DebugExportData" xml:space="preserve">
+    <value>Exportă fișierul de depanare (JSON)</value>
+  </data>
+  <data name="MainView_DebugImportData" xml:space="preserve">
+    <value>Importă fișierul de depanare (JSON)</value>
+  </data>
+  <data name="MainView_DebugQualitySweep" xml:space="preserve">
+    <value>Adaugă în coadă - Redu calitatea</value>
+  </data>
+  <data name="LogView_ChooseLogFile" xml:space="preserve">
+    <value>Alege fișierul de jurnal:</value>
+  </data>
+  <data name="LogView_AutoScrolling" xml:space="preserve">
+    <value>Derulare automată</value>
+  </data>
+  <data name="LogLevel_Minimised" xml:space="preserve">
+    <value>Minimizat</value>
+  </data>
+  <data name="LogLevel_Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="LogLevel_Extended" xml:space="preserve">
+    <value>Extins</value>
+  </data>
+  <data name="QueueView_CancelDelayStart" xml:space="preserve">
+    <value>Anulează întârzierea</value>
+  </data>
+  <data name="QueueView_StartQueueNow" xml:space="preserve">
+    <value>Pornește coada (Imediat)</value>
+  </data>
+  <data name="AudioTrackNaming_None" xml:space="preserve">
+    <value>Niciunul</value>
+  </data>
+  <data name="AudioTrackNaming_Unnamed" xml:space="preserve">
+    <value>Numai cele fără nume</value>
+  </data>
+  <data name="AudioTrackNaming_All" xml:space="preserve">
+    <value>Toate pistele</value>
+  </data>
+  <data name="AudioDefaultsView_NamingBehaviour" xml:space="preserve">
+    <value>Comportamentul denumirii pistelor:</value>
+  </data>
+  <data name="AudioDefaultsView_AutoNaming" xml:space="preserve">
+    <value>Autonumire:</value>
+  </data>
+  <data name="AudioDefaultsView_PassthruTrackNames" xml:space="preserve">
+    <value>Numele pistelor trece prin</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PassthruTrackName" xml:space="preserve">
+    <value>Numele pistelor trece prin</value>
+  </data>
+  <data name="VideoColourRange_SameAsSource" xml:space="preserve">
+    <value>Aceeași ca sursa</value>
+  </data>
+  <data name="VideoColourRange_Full" xml:space="preserve">
+    <value>Plin</value>
+  </data>
+  <data name="VideoColourRange_Limited" xml:space="preserve">
+    <value>Limitat</value>
+  </data>
+  <data name="DarkTheme_Modern" xml:space="preserve">
+    <value>Modern</value>
+  </data>
+</root>
