@@ -1,0 +1,34 @@
+From e5275dbc96e65dccf73f18a0dd90e60e0bbb7d1d Mon Sep 17 00:00:00 2001
+From: Timo Rothenpieler <timo@rothenpieler.org>
+Date: Fri, 1 Aug 2025 19:23:45 +0200
+Subject: [PATCH 11/13] avcodec/mfenc: fix compilation on modern gcc/clang
+
+---
+ libavcodec/mfenc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libavcodec/mfenc.c b/libavcodec/mfenc.c
+index b48ffecc56..8cc96c21bf 100644
+--- a/libavcodec/mfenc.c
++++ b/libavcodec/mfenc.c
+@@ -329,7 +329,7 @@ static int initialize_dxgi_manager(AVCodecContext *avctx)
+         return AVERROR_EXTERNAL;
+     }
+ 
+-    hr = IMFDXGIDeviceManager_ResetDevice(c->dxgiManager, c->device_hwctx->device, c->resetToken);
++    hr = IMFDXGIDeviceManager_ResetDevice(c->dxgiManager, (IUnknown*)c->device_hwctx->device, c->resetToken);
+     if (FAILED(hr)) {
+         av_log(avctx, AV_LOG_ERROR, "Failed to reset device: %s\n", ff_hr_str(hr));
+         return AVERROR_EXTERNAL;
+@@ -379,7 +379,7 @@ static int process_d3d11_frame(AVCodecContext *avctx, const AVFrame *frame, IMFS
+         return AVERROR_EXTERNAL;
+     }
+ 
+-    hr = func->MFCreateDXGISurfaceBuffer(&IID_ID3D11Texture2D, d3d11_texture, subIdx, 0, &buffer);
++    hr = func->MFCreateDXGISurfaceBuffer(&IID_ID3D11Texture2D, (IUnknown*)d3d11_texture, subIdx, 0, &buffer);
+     if (FAILED(hr)) {
+         av_log(avctx, AV_LOG_ERROR, "Failed to create DXGI surface buffer: %s\n", ff_hr_str(hr));
+         IMFSample_Release(sample);
+-- 
+2.43.0.windows.1
+
