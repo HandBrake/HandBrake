@@ -12,6 +12,32 @@ Download available from Microsoft:
 
 ## HandBrake 1.10.0
 
+### All platforms
+
+#### Video
+
+- Fixed a visual corruption issue that could happen when encoding with x265
+- Fixed SVT-AV1 presets 10, 9, and 8 not working properly with SSIM tune
+
+### Linux
+
+- Fixed preview audio when running the flatpak build
+
+### Mac
+
+- Improved custom border color validation
+
+### Windows
+
+- Added new translation
+  - Romanian (Română)
+- Fixed arm64 build
+
+
+## HandBrake 1.10.0
+
+### All platforms
+
 #### General
 
 - Added new "Social 10MB" presets
