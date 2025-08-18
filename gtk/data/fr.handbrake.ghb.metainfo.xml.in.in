@@ -109,6 +109,16 @@
   <releases>
     <release version="@RELEASE_TAG@" date="@RELEASE_DATE@">
       <description>
+        <p>Fixed issues:</p>
+        <ul>
+          <li>Fixed a visual corruption issue that could happen when encoding with x265</li>
+          <li>Fixed SVT-AV1 presets 10, 9, and 8 not working properly with SSIM tune</li>
+          <li>Fixed preview audio when running the Flatpak build</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.10.0" date="2025-08-10">
+      <description>
         <ul>
           <li>Added new "Social 10MB" presets</li>
           <li>Improved metadata passthru, preserving additional metadata</li>
