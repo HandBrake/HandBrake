@@ -10,7 +10,7 @@
   <update_contact>jstebbins.hb_AT_gmail.com</update_contact>
   <launchable type="desktop-id">fr.handbrake.ghb.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-2.0</project_license>
+  <project_license>GPL-2.0-only</project_license>
   <name>HandBrake</name>
   <summary>Video Transcoder</summary>
 
@@ -108,6 +108,19 @@
 
   <releases>
     <release version="@RELEASE_TAG@" date="@RELEASE_DATE@">
+      <description>
+        <ul>
+          <li>Uses GtkFileLauncher to open files in sandboxed apps.</li>
+          <li>Added buttons to cycle through previews on summary page.</li>
+          <li>Added an option to change the UI display language.</li>
+        </ul>
+        <p>Fixed issues:</p>
+        <ul>
+          <li>Fixed size calculation for disk space check.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.10.0" date="2025-08-10">
       <description>
         <ul>
           <li>Added new "Social 10MB" presets</li>
