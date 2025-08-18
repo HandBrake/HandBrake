@@ -367,7 +367,7 @@
 
 - (IBAction)openForums:(id)sender
 {
-    [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:@"https://forum.handbrake.fr/"]];
+    [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:@"https://handbrake.fr/community.php"]];
 }
 - (IBAction)openUserGuide:(id)sender
 {
