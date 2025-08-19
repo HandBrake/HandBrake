@@ -463,8 +463,14 @@ static void powerSourceCallback(void *context)
     NSIndexSet *indexes = [self.itemsInternal HB_indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
         return (item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateCanceled);
     }];
+
+    if (indexes.count == 0)
+    {
+        return;
+    }
+
     [self removeItemsAtIndexes:indexes];
-    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidRemoveItemNotification object:self userInfo:@{@"indexes": indexes}];
+    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidRemoveItemNotification object:self userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
     [self save];
 }
 
