@@ -514,7 +514,7 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
                     break;
                 case HB_ACODEC_VORBIS:
                 case HB_ACODEC_VORBIS_PASS:
-                    ghb_dict_set_bool(settings, "AudioAllowOPUSPass", 1);
+                    ghb_dict_set_bool(settings, "AudioAllowVORBISPass", 1);
                     break;
                 case HB_ACODEC_OPUS:
                 case HB_ACODEC_OPUS_PASS:
