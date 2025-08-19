@@ -208,7 +208,7 @@ namespace HandBrakeWPF.Services.Queue.Model
                     percentage = string.Format(" ({0} %{1})", Math.Round(difference, 3), Resources.QueueViewModel_DifferenceText);
                 }
 
-                return string.Format("{0:######.###} MB{1}", FinalFileSizeInMegaBytes, percentage);
+                return string.Format("{0:#####0.###} MB{1}", FinalFileSizeInMegaBytes, percentage);
             }
         }
 
