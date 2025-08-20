@@ -159,7 +159,6 @@
 
     self.window.contentViewController = _splitViewController;
     self.window.frameAutosaveName = @"HBQueueWindowFrameAutosave";
-    [self.window setFrameFromString:@"HBQueueWindowFrameAutosave"];
 
     // Set up observers
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
