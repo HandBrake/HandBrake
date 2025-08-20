@@ -19,7 +19,7 @@
  */
 
 #include "notifications.h"
-
+#include <libintl.h>
 #include "application.h"
 #include "util.h"
 
@@ -52,15 +52,15 @@ queue_complete_message (void)
 
     if (n_failed > 0)
     {
-        msg = g_strdup_printf((const char *)ngettext("%d item complete, %d failed",
-                                                     "%d items complete, %d failed",
-                                                     n_succeeded), n_succeeded, n_failed);
+        msg = g_strdup_printf(ngettext("%d item complete, %d failed",
+                                       "%d items complete, %d failed",
+                                       n_succeeded), n_succeeded, n_failed);
     }
     else
     {
-       msg = g_strdup_printf((const char *)ngettext("%d item has finished encoding",
-                                                    "%d items have finished encoding",
-                                                    n_succeeded), n_succeeded);
+        msg = g_strdup_printf(ngettext("%d item has finished encoding",
+                                      "%d items have finished encoding",
+                                      n_succeeded), n_succeeded);
     }
     return msg;
 }
@@ -146,11 +146,14 @@ notify_paused (GhbNotification type, int64_t value, signal_user_data_t *ud)
             body = g_strdup(_("Power Saver mode has been activated."));
             break;
         case GHB_NOTIFY_PAUSED_LOW_DISK_SPACE:
+        {
             g_autofree char *size_str = ghb_format_pretty_size(value);
             body = g_strdup_printf(_("%s free space remaining."), size_str);
+        }
             break;
         default:
             body = NULL;
+            break;
     }
 
     send_notification(_("Encoding Paused"), body, "hb-paused");
