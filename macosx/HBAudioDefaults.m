@@ -260,9 +260,11 @@
     self.allowDTSPassthru    = NO;
     self.allowDTSHDPassthru  = NO;
     self.allowEAC3Passthru   = NO;
+    self.allowALACPassthru   = NO;
     self.allowFLACPassthru   = NO;
     self.allowMP2Passthru    = NO;
     self.allowMP3Passthru    = NO;
+    self.allowVorbisPassthru = NO;
     self.allowOpusPassthru   = NO;
     self.allowTrueHDPassthru = NO;
 
