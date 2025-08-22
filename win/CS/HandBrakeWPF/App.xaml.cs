@@ -66,15 +66,7 @@ namespace HandBrakeWPF
                 Environment.Exit(-1);
                 return;
             }
-
-            if (SystemInfo.IsArmDevice && !File.Exists("hb_a64.dll") && !File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "hb_a64.dll")))
-            {
-                MessageBox.Show("hb_a64.dll file not found. Application will not run correctly without this. Please re-install HandBrake.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Shutdown();
-                Environment.Exit(-1);
-                return;
-            }
-
+            
             // We don't support Windows earlier than 10.
             if (!SystemInfo.IsWindows10OrLater())
             {
