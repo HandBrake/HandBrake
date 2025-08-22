@@ -1,7 +1,7 @@
-From 71b77865d4955440106015bd08172b876abed1f5 Mon Sep 17 00:00:00 2001
+From 6474762ed3f66a055d6893fb9923be805c70ccd5 Mon Sep 17 00:00:00 2001
 From: galinart <artem.galin@intel.com>
 Date: Tue, 12 Nov 2024 15:50:06 +0000
-Subject: [PATCH] qsv: enable av1 scc
+Subject: [PATCH 14/20] qsv: enable av1 scc
 
 ---
  libavcodec/qsvenc.c     | 42 +++++++++++++++++++++++++++++++++++++++++
@@ -10,7 +10,7 @@ Subject: [PATCH] qsv: enable av1 scc
  3 files changed, 53 insertions(+), 1 deletion(-)
 
 diff --git a/libavcodec/qsvenc.c b/libavcodec/qsvenc.c
-index c2bb5e5..284b608 100644
+index 039a108aae..95b0950fb8 100644
 --- a/libavcodec/qsvenc.c
 +++ b/libavcodec/qsvenc.c
 @@ -494,6 +494,9 @@ static void dump_video_av1_param(AVCodecContext *avctx, QSVEncContext *q,
@@ -89,7 +89,7 @@ index c2bb5e5..284b608 100644
  
      if (!QSV_RUNTIME_VERSION_ATLEAST(q->ver, 2, 5)) {
 diff --git a/libavcodec/qsvenc.h b/libavcodec/qsvenc.h
-index 4bc77f2..2e0a19b 100644
+index 4bc77f2f7c..2e0a19b203 100644
 --- a/libavcodec/qsvenc.h
 +++ b/libavcodec/qsvenc.h
 @@ -38,6 +38,7 @@
@@ -125,7 +125,7 @@ index 4bc77f2..2e0a19b 100644
  
  int ff_qsv_enc_init(AVCodecContext *avctx, QSVEncContext *q);
 diff --git a/libavcodec/qsvenc_av1.c b/libavcodec/qsvenc_av1.c
-index a86b409..4f035f3 100644
+index c7aa6e58d5..5edb5f3112 100644
 --- a/libavcodec/qsvenc_av1.c
 +++ b/libavcodec/qsvenc_av1.c
 @@ -189,6 +189,10 @@ static const AVOption options[] = {
@@ -140,5 +140,5 @@ index a86b409..4f035f3 100644
  };
  
 -- 
-2.25.1
+2.39.5 (Apple Git-154)
 
