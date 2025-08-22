@@ -22,6 +22,7 @@ Download available from Microsoft:
 ### Linux
 
 - Fixed preview audio when running the flatpak build
+- Fixed Vorbis passthru checkbox not being applied when the title changes
 
 ### Mac
 
@@ -32,7 +33,7 @@ Download available from Microsoft:
 - Added new translation
   - Romanian (Română)
 - Fixed arm64 build
-
+- Fixed audio track name generation
 
 ## HandBrake 1.10.0
 

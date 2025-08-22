@@ -788,7 +788,11 @@ namespace HandBrake.Interop.Interop
 
         public static string GetAutonameAudioTrack(string name, ulong layout, int mixdown, bool keep_name, int behaviour)
         {
-            IntPtr nameptr = Marshal.StringToHGlobalAnsi(name);
+            IntPtr nameptr = IntPtr.Zero;
+            if (name != null)
+            {
+                nameptr = InteropUtilities.ToUtf8PtrFromString(name);
+            }
 
             return Marshal.PtrToStringUTF8((IntPtr)HBFunctions.hb_audio_name_generate(nameptr, layout, mixdown, keep_name ? 1 : 0, behaviour));
         }
