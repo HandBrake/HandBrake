@@ -22,12 +22,13 @@
     </Window.Resources>
 
     <Grid>
-        <views:MainView x:Name="MainViewModel" DataContext="{Binding MainViewModel}"  
+        <views:MainView x:Name="MainView" DataContext="{Binding MainViewModel}"  
                         Panel.ZIndex="0"  Visibility="{Binding DataContext.ShowMainWindow, ElementName=shellView, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
                         IsEnabled="{Binding DataContext.IsMainPanelEnabled, ElementName=shellView}" />
 
-        <views:OptionsView x:Name="OptionsViewModel" DataContext="{Binding OptionsViewModel}"  
+        <views:OptionsView x:Name="OptionsView" DataContext="{Binding OptionsViewModel}"  
                            Panel.ZIndex="0"  Visibility="{Binding DataContext.ShowOptions, ElementName=shellView, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
                            IsEnabled="{Binding DataContext.IsMainPanelEnabled, ElementName=shellView}" />
     </Grid>
 </Window>
+
