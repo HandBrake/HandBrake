@@ -146,11 +146,13 @@ notify_paused (GhbNotification type, int64_t value, signal_user_data_t *ud)
             body = g_strdup(_("Power Saver mode has been activated."));
             break;
         case GHB_NOTIFY_PAUSED_LOW_DISK_SPACE:
+        {
             g_autofree char *size_str = ghb_format_pretty_size(value);
             body = g_strdup_printf(_("%s free space remaining."), size_str);
-            break;
+        } break;
         default:
             body = NULL;
+            break;
     }
 
     send_notification(_("Encoding Paused"), body, "hb-paused");
