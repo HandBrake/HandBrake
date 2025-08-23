@@ -124,11 +124,8 @@ namespace HandBrakeWPF.ViewModels
         private bool keepDuplicateTitles;
         private bool maxDurationEnabled;
         private DefaultRangeMode selectedDefaultRangeMode;
-
         private string queueDoneAction;
-
         private string queueDoneArguments;
-
         private bool queueDoneCustomActionEnabled;
 
         public OptionsViewModel(
@@ -151,7 +148,7 @@ namespace HandBrakeWPF.ViewModels
             this.OnLoad();
 
             this.SelectedTab = OptionsTab.General;
-            this.UpdateMessage = Resources.OptionsViewModel_CheckForUpdatesMsg;
+           // this.UpdateMessage = Resources.OptionsViewModel_CheckForUpdatesMsg;
             this.RemoveExtensionCommand = new SimpleRelayCommand<string>(this.RemoveExcludedExtension);
         }
 
@@ -203,6 +200,8 @@ namespace HandBrakeWPF.ViewModels
         }
 
         public bool CheckForUpdatesAllowed { get; set; }
+
+        public bool IsUpdateFound { get; set; }
 
         public bool ResetWhenDoneAction
         {
@@ -1184,8 +1183,20 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.updateMessage = value;
                 this.NotifyOfPropertyChange(() => this.UpdateMessage);
+
+                if (!string.IsNullOrEmpty(this.updateMessage))
+                {
+                    IsUpdateMessageSet = true;
+                }
+                else
+                {
+                    this.IsUpdateMessageSet = false;
+                }
+                this.NotifyOfPropertyChange(() => this.IsUpdateMessageSet);
             }
         }
+
+        public bool IsUpdateMessageSet { get; set; }
 
         public bool UpdateAvailable
         {
@@ -1391,6 +1402,8 @@ namespace HandBrakeWPF.ViewModels
         {
             this.UpdateMessage = Resources.OptionsView_CheckingForUpdates;
             this.updateService.CheckForUpdates(this.UpdateCheckComplete);
+            this.IsUpdateFound = true;
+            this.NotifyOfPropertyChange(() =>this.IsUpdateFound);
         }
 
         public void BrowseWhenDoneAudioFile()
@@ -1878,7 +1891,7 @@ namespace HandBrakeWPF.ViewModels
             this.updateInfo = info;
             if (info.NewVersionAvailable)
             {
-                this.UpdateMessage = Resources.OptionsViewModel_NewUpdate;
+                this.UpdateMessage = string.Format(Resources.OptionsViewModel_NewUpdate, info.Version);
                 this.UpdateAvailable = true;
             }
             else
@@ -1931,6 +1944,10 @@ namespace HandBrakeWPF.ViewModels
                 }
                 catch (Exception exc)
                 {
+                    this.IsUpdateFound = false;
+                    this.UpdateMessage = Resources.Options_UpdateNotComplete;
+                    this.DownloadProgressPercentage = 0;
+                    this.NotifyOfPropertyChange(() => this.IsUpdateFound);
                     Console.WriteLine(exc);
                 }
             }

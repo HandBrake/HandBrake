@@ -231,7 +231,8 @@ namespace HandBrakeWPF.Services
         {
             using (var httpClient = new HttpClient())
             {
-                httpClient.DefaultRequestHeaders.Add("User-Agent", string.Format("HandBrakeWinUpdate {0}", HandBrakeVersionHelper.Version));
+                string armDevice = SystemInfo.IsArmDevice ? "_ARM" : string.Empty;
+                httpClient.DefaultRequestHeaders.Add("User-Agent", string.Format("HandBrakeWinUpdate{0} {1}", armDevice, HandBrakeVersionHelper.Version));
 
                 var httpResponse = await httpClient.GetAsync(url);
                 httpResponse.EnsureSuccessStatusCode();
@@ -251,7 +252,9 @@ namespace HandBrakeWPF.Services
 
             using (HttpClient httpClient = new HttpClient())
             {
-                httpClient.DefaultRequestHeaders.Add("User-Agent", string.Format("HandBrakeWinUpdate {0}", HandBrakeVersionHelper.Version));
+                string armDevice = SystemInfo.IsArmDevice ? "_ARM" : string.Empty;
+
+                httpClient.DefaultRequestHeaders.Add("User-Agent", string.Format("HandBrakeWinUpdate{0} {1}", armDevice, HandBrakeVersionHelper.Version));
 
                 using (HttpResponseMessage httpResponse = await httpClient.GetAsync(new Uri(url), HttpCompletionOption.ResponseHeadersRead))
                 {

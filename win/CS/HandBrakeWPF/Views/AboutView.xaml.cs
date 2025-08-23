@@ -55,5 +55,10 @@ namespace HandBrakeWPF.Views
         {
             this.versionTextBox.SelectAll();
         }
+
+        private void GithubReleaseNotes_OnRequestNavigate_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start("explorer.exe", "https://github.com/HandBrake/HandBrake/releases");
+        }
     }
 }

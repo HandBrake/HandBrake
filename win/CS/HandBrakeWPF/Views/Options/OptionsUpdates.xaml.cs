@@ -6,8 +6,10 @@
 
 namespace HandBrakeWPF.Views.Options
 {
+    using System.Diagnostics;
     using System.Windows.Controls;
     using System.Windows.Input;
+    using System.Windows.Navigation;
 
     public partial class OptionsUpdates : UserControl
     {
@@ -19,6 +21,11 @@ namespace HandBrakeWPF.Views.Options
         private void VersionTextBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             this.versionTextBox.SelectAll();
+        }
+
+        private void GithubReleaseNotes_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start("explorer.exe", "https://github.com/HandBrake/HandBrake/releases");
         }
     }
 }

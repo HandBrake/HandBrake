@@ -48,7 +48,8 @@
         <TextBlock Text="{x:Static Properties:Resources.Options_Updates}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
 
         <StackPanel Margin="20,0,0,0" Orientation="Horizontal">
-            <Button Content="{x:Static Properties:Resources.Options_CheckForUpdates}" MaxWidth="130" Margin="0,0,5,0" Command="{Binding RelayCommand}" CommandParameter="PerformUpdateCheck" />
+            <Button Content="{x:Static Properties:Resources.Options_CheckForUpdates}" MaxWidth="130" Margin="0,0,5,0" Command="{Binding RelayCommand}" CommandParameter="PerformUpdateCheck"
+                    Visibility="{Binding IsUpdateFound, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
             <Button Content="{x:Static Properties:Resources.Options_DownloadUpdates}" Width="120" Command="{Binding RelayCommand}" CommandParameter="DownloadUpdate" Visibility="{Binding DownloadAvailable, Converter={StaticResource boolToVisConverter}}" />
         </StackPanel>
 
@@ -58,7 +59,12 @@
 
         </StackPanel>
 
-        <TextBlock Text="{Binding UpdateMessage}" Margin="20,5,10,0" VerticalAlignment="Center" TextWrapping="Wrap" />
+        <StackPanel Orientation="Horizontal"  Margin="20,10,10,0" Visibility="{Binding IsUpdateMessageSet, Converter={StaticResource boolToVisConverter}}">
+
+            <Image Source="../Images/information.png" Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBlock Text="{Binding UpdateMessage}" VerticalAlignment="Center" TextWrapping="Wrap" Style="{StaticResource sectionHeader}"/>
+
+        </StackPanel>
 
         <Grid Visibility="{Binding IsPortableModeUpdateAvailable, Converter={StaticResource boolToVisConverter}}" Margin="20,5,10,0">
             <Grid.ColumnDefinitions>
@@ -68,10 +74,21 @@
 
             <Image Source="../Images/warningsmall.png" Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0" />
             <TextBlock Text="{x:Static Properties:Resources.OptionsViewModel_PortableMode}" TextWrapping="Wrap" Grid.Column="1" Style="{StaticResource subHeader}" />
-
         </Grid>
-        
-        <TextBlock Text="{x:Static Properties:Resources.OptionsViewModel_UpdateNotice}" Margin="20,10,10,0" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" TextWrapping="Wrap" />
+
+        <StackPanel Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" Margin="0,10,10,0">
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_BeforeUpdating}" Style="{StaticResource subHeader}" Margin="0,10,0,5"/>
+            <TextBlock Text="{x:Static Properties:Resources.OptionsViewModel_UpdateNotice}" Margin="20,0,10,0" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" TextWrapping="Wrap" />
+
+            <TextBlock Text="{x:Static Properties:Resources.AboutView_ReleaseNotes}" Style="{StaticResource subHeader}" Margin="0,20,0,5"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="3"  Margin="20,5,0,0">
+                <TextBlock Text="{x:Static Properties:Resources.Options_ReleaseNotesDesc}" />
+                <TextBlock>           
+                    <Hyperlink x:Name="githubReleaseNotes" NavigateUri="/" RequestNavigate="GithubReleaseNotes_OnRequestNavigate" > https://github.com/HandBrake/HandBrake/releases</Hyperlink>
+                </TextBlock>
+            </StackPanel>
+        </StackPanel>
 
     </StackPanel>
 </UserControl>

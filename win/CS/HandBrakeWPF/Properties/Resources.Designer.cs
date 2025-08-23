@@ -116,6 +116,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Release Notes.
+        /// </summary>
+        public static string AboutView_ReleaseNotes {
+            get {
+                return ResourceManager.GetString("AboutView_ReleaseNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version: .
         /// </summary>
         public static string AboutView_Version {
@@ -3541,6 +3550,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Before Updating.
+        /// </summary>
+        public static string Options_BeforeUpdating {
+            get {
+                return ResourceManager.GetString("Options_BeforeUpdating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Built In Presets.
         /// </summary>
         public static string Options_BuiltInPresets {
@@ -3991,6 +4009,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can find out about the latest changes to HandBrake at:.
+        /// </summary>
+        public static string Options_ReleaseNotesDesc {
+            get {
+                return ResourceManager.GetString("Options_ReleaseNotesDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove common punctuation.
         /// </summary>
         public static string Options_RemovePunctuation {
@@ -4104,6 +4131,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_UIBehaviour {
             get {
                 return ResourceManager.GetString("Options_UIBehaviour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The update install was cancelled. .
+        /// </summary>
+        public static string Options_UpdateNotComplete {
+            get {
+                return ResourceManager.GetString("Options_UpdateNotComplete", resourceCulture);
             }
         }
         
@@ -4814,7 +4850,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A New Update is Available! Please check the website for release notes..
+        ///   Looks up a localized string similar to HandBrake {0} is now Available! Please check the website for release notes..
         /// </summary>
         public static string OptionsViewModel_NewUpdate {
             get {
@@ -4886,8 +4922,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Before Updating:
-        ///- Make sure there are no pending encodes in the queue. 
+        ///   Looks up a localized string similar to - Make sure there are no pending encodes in the queue. 
         ///- Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions..
         /// </summary>
         public static string OptionsViewModel_UpdateNotice {

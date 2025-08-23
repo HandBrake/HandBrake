@@ -32,6 +32,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -57,16 +58,25 @@
                     </TextBlock>
                 </StackPanel>
 
+
                 <StackPanel Orientation="Horizontal" Grid.Row="3"  Margin="5,5,0,0">
+                    <TextBlock Text="{x:Static Properties:Resources.AboutView_ReleaseNotes}" />
+                    <TextBlock>           
+                        <Hyperlink x:Name="githubReleaseNotes" NavigateUri="/" RequestNavigate="GithubReleaseNotes_OnRequestNavigate_OnRequestNavigate"  > https://github.com/HandBrake/HandBrake/releases</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+              
+
+                <StackPanel Orientation="Horizontal" Grid.Row="4"  Margin="5,5,0,0">
                     <TextBlock Text="{x:Static Properties:Resources.AboutView_Documentation}" />
                     <TextBlock>           
                         <Hyperlink x:Name="docWebsite" NavigateUri="/" RequestNavigate="DocWebsite_OnRequestNavigate"  >https://handbrake.fr/docs</Hyperlink>
                     </TextBlock>
                 </StackPanel>
 
-                <TextBlock Grid.Row="4" Margin="5,10,0,5" Text="{x:Static Properties:Resources.AboutView_License}" />
+                <TextBlock Grid.Row="5" Margin="5,10,0,5" Text="{x:Static Properties:Resources.AboutView_License}" />
 
-                <TextBox Text="{Binding License, Mode=OneWay}" Grid.Row="5" Margin="10,0,10,10" HorizontalAlignment="Stretch"
+                <TextBox Text="{Binding License, Mode=OneWay}" Grid.Row="6" Margin="10,0,10,10" HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
 
          

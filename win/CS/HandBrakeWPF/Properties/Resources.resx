@@ -443,7 +443,7 @@ The Activity log may have further information.</value>
     <value>An Unknown Error has occurred.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>A New Update is Available! Please check the website for release notes.</value>
+    <value>HandBrake {0} is now Available! Please check the website for release notes.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>There are no new updates at this time.</value>
@@ -2456,8 +2456,7 @@ You can change your choice at any time by changing the options in Preferences -&
     <value>Check for updates?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>Before Updating:
-- Make sure there are no pending encodes in the queue. 
+    <value>- Make sure there are no pending encodes in the queue. 
 - Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
@@ -3012,5 +3011,17 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="DarkTheme_Modern" xml:space="preserve">
     <value>Modern</value>
+  </data>
+  <data name="Options_BeforeUpdating" xml:space="preserve">
+    <value>Before Updating</value>
+  </data>
+  <data name="Options_UpdateNotComplete" xml:space="preserve">
+    <value>The update install was cancelled. </value>
+  </data>
+  <data name="AboutView_ReleaseNotes" xml:space="preserve">
+    <value>Release Notes</value>
+  </data>
+  <data name="Options_ReleaseNotesDesc" xml:space="preserve">
+    <value>You can find out about the latest changes to HandBrake at:</value>
   </data>
 </root>
