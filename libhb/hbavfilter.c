@@ -62,71 +62,44 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 #endif
 
     // Build filter input
+
+    if (init->hw_pix_fmt != AV_PIX_FMT_NONE)
     {
-        enum AVPixelFormat pix_fmt = init->pix_fmt;
-        if (init->hw_pix_fmt == AV_PIX_FMT_QSV)
+        int initial_pool_size = init->hw_pix_fmt == AV_PIX_FMT_QSV ? 32 : 0;
+
+        par = av_buffersrc_parameters_alloc();
+        par->format = init->hw_pix_fmt;
+        par->frame_rate.num = init->vrate.num;
+        par->frame_rate.den = init->vrate.den;
+        par->width  = init->geometry.width;
+        par->height = init->geometry.height;
+        par->sample_aspect_ratio.num = init->geometry.par.num;
+        par->sample_aspect_ratio.den = init->geometry.par.den;
+        par->time_base.num = init->time_base.num;
+        par->time_base.den = init->time_base.den;
+        par->color_space = init->color_matrix;
+        par->color_range = init->color_range;
+        par->hw_frames_ctx = hb_hwaccel_init_hw_frames_ctx((AVBufferRef*)init->job->hw_device_ctx,
+                                                           init->pix_fmt,
+                                                           init->hw_pix_fmt,
+                                                           par->width,
+                                                           par->height,
+                                                           initial_pool_size);
+        if (!par->hw_frames_ctx)
         {
-            par = av_buffersrc_parameters_alloc();
-            par->format = init->hw_pix_fmt;
-            // TODO: qsv_vpp changes time_base, adapt settings to hb pipeline
-            par->frame_rate.num = init->time_base.den;
-            par->frame_rate.den = init->time_base.num;
-
-            par->width = init->geometry.width;
-            par->height = init->geometry.height;
-
-            par->sample_aspect_ratio.num = init->geometry.par.num;
-            par->sample_aspect_ratio.den = init->geometry.par.den;
-
-            par->time_base.num = init->time_base.num;
-            par->time_base.den = init->time_base.den;
-            par->hw_frames_ctx = hb_hwaccel_init_hw_frames_ctx((AVBufferRef*)init->job->hw_device_ctx,
-                                                    init->pix_fmt,
-                                                    init->hw_pix_fmt,
-                                                    par->width,
-                                                    par->height,
-                                                            32);
-            if (!par->hw_frames_ctx)
-            {   
-                goto fail;
-            }
-            pix_fmt = init->hw_pix_fmt;
+            goto fail;
         }
-        else if (init->hw_pix_fmt == AV_PIX_FMT_CUDA)
-        {
-            par = av_buffersrc_parameters_alloc();
-            par->format = init->hw_pix_fmt;
-            par->frame_rate.num = init->geometry.par.num;
-            par->frame_rate.den = init->time_base.den;
-            par->width = init->geometry.width;
-            par->height = init->geometry.height;
-            par->hw_frames_ctx = hb_hwaccel_init_hw_frames_ctx((AVBufferRef*)init->job->hw_device_ctx,
-                                                    init->pix_fmt,
-                                                    init->hw_pix_fmt,
-                                                    par->width,
-                                                    par->height,
-                                                             0);
-            if (!par->hw_frames_ctx)
-            {   
-                goto fail;
-            }
-            par->sample_aspect_ratio.num = init->geometry.par.num;
-            par->sample_aspect_ratio.den = init->geometry.par.den;
-            par->time_base.num = init->time_base.num;
-            par->time_base.den = init->time_base.den;
+    }
 
-            pix_fmt = init->hw_pix_fmt;
-        }
-        filter_args = hb_strdup_printf(
+    filter_args = hb_strdup_printf(
                     "width=%d:height=%d:pix_fmt=%d:sar=%d/%d:"
                     "colorspace=%d:range=%d:"
                     "time_base=%d/%d:frame_rate=%d/%d",
-                    init->geometry.width, init->geometry.height, pix_fmt,
+                    init->geometry.width, init->geometry.height, init->pix_fmt,
                     init->geometry.par.num, init->geometry.par.den,
                     init->color_matrix, init->color_range,
                     init->time_base.num, init->time_base.den,
                     init->vrate.num, init->vrate.den);
-    }
 
     // buffer video source: the decoded frames from the decoder will be inserted here.
     result = avfilter_graph_create_filter(&graph->input, avfilter_get_by_name("buffer"), "in",
@@ -137,11 +110,13 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         hb_error("hb_avfilter_graph_init: failed to create buffer source filter");
         goto fail;
     }
+
     if (par)
     {
         result = av_buffersrc_parameters_set(graph->input, par);
         if (result < 0)
         {
+            hb_error("hb_avfilter_graph_init: failed to set buffer source parameters");
             goto fail;
         }
     }

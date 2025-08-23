@@ -1,7 +1,7 @@
-From 6085fc84ba629e701e89dff9f9091d1374a10ad1 Mon Sep 17 00:00:00 2001
+From 0a378e17bb6d24780bf000955b2fcaaad728386d Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Wed, 20 Mar 2024 09:17:17 +0100
-Subject: [PATCH 12/16] videotoolbox: disable H.264 10-bit on Intel macOS, it's
+Subject: [PATCH 16/20] videotoolbox: disable H.264 10-bit on Intel macOS, it's
  not decoded properly. Disable H.264 level 6.1 and 6.2 too, seems to have
  issue in some specific cases.
 
@@ -10,10 +10,10 @@ Subject: [PATCH 12/16] videotoolbox: disable H.264 10-bit on Intel macOS, it's
  1 file changed, 17 insertions(+)
 
 diff --git a/libavcodec/videotoolbox.c b/libavcodec/videotoolbox.c
-index 505483ef66..bbb00d2c8a 100644
+index ccba249140..0f8eea5baf 100644
 --- a/libavcodec/videotoolbox.c
 +++ b/libavcodec/videotoolbox.c
-@@ -916,6 +916,23 @@ static int videotoolbox_start(AVCodecContext *avctx)
+@@ -956,6 +956,23 @@ static int videotoolbox_start(AVCodecContext *avctx)
          break;
      }
  

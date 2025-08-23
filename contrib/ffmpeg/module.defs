@@ -12,9 +12,9 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/ffmpeg-7.1.1.tar.bz2
-FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-7.1.1.tar.bz2
-FFMPEG.FETCH.sha256 = 0c8da2f11579a01e014fc007cbacf5bb4da1d06afd0b43c7f8097ec7c0f143ba
+FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/ffmpeg-8.0.tar.bz2
+FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-8.0.tar.bz2
+FFMPEG.FETCH.sha256 = 3e74acc48ddb9f5f70b6747d3f439d51e7cc5497f097d58e5975c84488f4d186
 
 FFMPEG.GCC.args.c_std =
 
@@ -34,7 +34,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-filters \
     --disable-hwaccels \
     --disable-vdpau \
-    --disable-postproc \
     --disable-encoders \
     --enable-libmp3lame \
     --enable-encoder=aac \
