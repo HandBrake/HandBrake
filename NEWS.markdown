@@ -19,6 +19,11 @@ Download available from Microsoft:
 - Fixed a visual corruption issue that could happen when encoding with x265
 - Fixed SVT-AV1 presets 10, 9, and 8 not working properly with SSIM tune
 
+#### Third-party libraries
+
+- Updated libraries
+  - HarfBuzz 11.4.2 (subtitles)
+
 ### Linux
 
 - Fixed preview audio when running the flatpak build
