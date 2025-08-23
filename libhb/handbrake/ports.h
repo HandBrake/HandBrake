@@ -59,6 +59,13 @@ hb_display_t * hb_display_init(const char         * driver_name,
 void           hb_display_close(hb_display_t ** _d);
 
 /************************************************************************
+ * Operating system info utilities
+ ***********************************************************************/
+const char * hb_get_system_name(void);
+const char * hb_get_system_version(void);
+const char * hb_get_system_build(void);
+
+/************************************************************************
  * CPU info utilities
  ***********************************************************************/
 enum hb_cpu_platform

@@ -435,6 +435,15 @@ void hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
     free((char*)h->title_set.path);
     h->title_set.path = NULL;
 
+    /* Print operating system info here so that it's in all scan and encode logs */
+    const char *os_name    = hb_get_system_name();
+    const char *os_version = hb_get_system_version();
+    const char *os_build   = hb_get_system_build();
+    if (os_name != NULL && os_version != NULL && os_build != NULL)
+    {
+        hb_log("OS: %s %s (%s)", os_name, os_version, os_build);
+    }
+
     /* Print CPU info here so that it's in all scan and encode logs */
     const char *cpu_name = hb_get_cpu_name();
     const char *cpu_type = hb_get_cpu_platform_name();

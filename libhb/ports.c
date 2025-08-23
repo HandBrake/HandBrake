@@ -69,6 +69,10 @@
 #endif
 #endif
 
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_OPENBSD)
+#include <sys/utsname.h>
+#endif
+
 #ifdef __APPLE__
 #include <CoreServices/CoreServices.h>
 #include <IOKit/pwr_mgt/IOPMLib.h>
@@ -182,6 +186,73 @@ void hb_snooze( int delay )
 #else
     usleep( 1000 * delay );
 #endif
+}
+
+/************************************************************************
+ * Get information about the operaring system
+ ************************************************************************/
+static void init_system_info();
+struct
+{
+    const char *name;
+    const char *version;
+    const char *build;
+} hb_system_info;
+
+static void init_system_info()
+{
+    if (hb_system_info.name != NULL)
+    {
+        return;
+    }
+
+#if defined(SYS_DARWIN)
+    char buf[256];
+    size_t buflen = sizeof(buf);
+
+    if (sysctlbyname("kern.osproductversion", &buf, &buflen, NULL, 0) == 0)
+    {
+        hb_system_info.version = strdup(buf);
+    }
+
+    buflen = sizeof(buf);
+    if (sysctlbyname("kern.osversion", &buf, &buflen, NULL, 0) == 0)
+    {
+        hb_system_info.build = strdup(buf);
+    }
+
+    hb_system_info.name = "macOS";
+#elif defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_OPENBSD)
+    struct utsname uts;
+    if (uname(&uts) == 0)
+    {
+        hb_system_info.name    = strdup(uts.sysname);
+        hb_system_info.version = strdup(uts.release);
+        hb_system_info.build   = strdup(uts.version);
+    }
+#else
+    hb_system_info.name    = NULL;
+    hb_system_info.version = NULL;
+    hb_system_info.build   = NULL;
+#endif
+}
+
+const char * hb_get_system_name()
+{
+    init_system_info();
+    return hb_system_info.name;
+}
+
+const char * hb_get_system_version()
+{
+    init_system_info();
+    return hb_system_info.version;
+}
+
+const char * hb_get_system_build()
+{
+    init_system_info();
+    return hb_system_info.build;
 }
 
 /************************************************************************
