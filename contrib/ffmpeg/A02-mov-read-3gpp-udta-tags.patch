@@ -1,14 +1,14 @@
-From 05fcb953565349fb785e5eec3a464c5efaa2d540 Mon Sep 17 00:00:00 2001
+From 27fa9a8c880359ef546bcd058a0121efe2035ce9 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 20 Mar 2024 09:09:41 +0100
-Subject: [PATCH 03/16] mov: read 3gpp udta tags.
+Subject: [PATCH 02/20] mov: read 3gpp udta tags.
 
 ---
  libavformat/mov.c | 101 ++++++++++++++++++++++++++++++++++++++++++++--
  1 file changed, 98 insertions(+), 3 deletions(-)
 
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index 734de0a294..cdeb35d9db 100644
+index b29c41a6b6..2ff7d97f04 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
 @@ -56,6 +56,7 @@
@@ -19,7 +19,7 @@ index 734de0a294..cdeb35d9db 100644
  #include "internal.h"
  #include "avio_internal.h"
  #include "demux.h"
-@@ -326,6 +327,73 @@ static int mov_metadata_hmmt(MOVContext *c, AVIOContext *pb, unsigned len)
+@@ -341,6 +342,73 @@ static int mov_metadata_hmmt(MOVContext *c, AVIOContext *pb, unsigned len)
      return 0;
  }
  
@@ -93,7 +93,7 @@ index 734de0a294..cdeb35d9db 100644
  static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
  {
      char tmp_key[AV_FOURCC_MAX_STRING_SIZE] = {0};
-@@ -352,15 +420,33 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -372,15 +440,33 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG( 'c','a','t','g'): key = "category"; break;
      case MKTAG( 'c','p','i','l'): key = "compilation";
          parse = mov_metadata_int8_no_padding; break;
@@ -130,7 +130,7 @@ index 734de0a294..cdeb35d9db 100644
      case MKTAG( 'h','d','v','d'): key = "hd_video";
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'H','M','M','T'):
-@@ -431,6 +517,15 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -450,6 +536,15 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG(0xa9,'w','r','n'): key = "warning";   break;
      case MKTAG(0xa9,'w','r','t'): key = "composer";  break;
      case MKTAG(0xa9,'x','y','z'): key = "location";  break;
