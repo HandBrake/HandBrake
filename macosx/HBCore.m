@@ -543,6 +543,7 @@ static void pix_buf_callback(void * CV_NULLABLE releaseRefCon,
     return pix_buf;
 }
 
+#ifdef CGIMAGE_WRAP_HB_IMAGE
 static const void * cgimage_get_byte_pointer_callback(void *info)
 {
     hb_image_t *image = (hb_image_t *)info;
@@ -557,6 +558,7 @@ static void cgimage_release_byte_pointer_callback(void *info, const void *pointe
         hb_image_close(&image);
     }
 }
+#endif
 
 - (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index job:(HBJob *)job CF_RETURNS_RETAINED
 {
@@ -571,24 +573,51 @@ static void cgimage_release_byte_pointer_callback(void *info, const void *pointe
 
     if (image)
     {
-        // Wrap the hb_image_t in a CGImageRef.
         // The image data returned by hb_get_preview
         // is 3 bytes per pixel, AV_PIX_FMT_RGB24 format.
+#ifdef CGIMAGE_WRAP_HB_IMAGE
+        // Wrap the hb_image_t in a CGImageRef.
         CGDataProviderDirectCallbacks callbacks = {0};
         callbacks.getBytePointer = cgimage_get_byte_pointer_callback;
         callbacks.releaseBytePointer = cgimage_release_byte_pointer_callback;
 
         CGDataProviderRef dataProvider = CGDataProviderCreateDirect(image, image->plane[0].size, &callbacks);
+
+        size_t stride = image->plane[0].stride;
+#else
+        // Create an CGImageRef and copy the libhb image into it.
+        CFMutableDataRef imgData = CFDataCreateMutable(kCFAllocatorDefault, 0);
+        CFDataSetLength(imgData, 3 * image->width * image->height);
+
+        UInt8 *src_line = image->data;
+        UInt8 *dst = CFDataGetMutableBytePtr(imgData);
+        for (int r = 0; r < image->height; r++)
+        {
+            UInt8 *src = src_line;
+            for (int c = 0; c < image->width; c++)
+            {
+                *dst++ = src[0];
+                *dst++ = src[1];
+                *dst++ = src[2];
+                src += 3;
+            }
+            src_line += image->plane[0].stride;
+        }
+
+        size_t stride = image->width * 3;
+#endif
+
         CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNone;
         CGColorSpaceRef colorSpace = copyColorSpace(image->color_prim,
                                                     image->color_transfer,
                                                     image->color_matrix);
 
+        CGDataProviderRef dataProvider = CGDataProviderCreateWithCFData(imgData);
         img = CGImageCreate(image->width,
                             image->height,
                             8,
                             8 * 3,
-                            image->plane[0].stride,
+                            stride,
                             colorSpace,
                             bitmapInfo,
                             dataProvider,
@@ -598,6 +627,10 @@ static void cgimage_release_byte_pointer_callback(void *info, const void *pointe
 
         CGColorSpaceRelease(colorSpace);
         CGDataProviderRelease(dataProvider);
+#ifndef CGIMAGE_WRAP_HB_IMAGE
+        CFRelease(imgData);
+        hb_image_close(&image);
+#endif
     }
 
     return img;
