@@ -2267,9 +2267,6 @@ Please choose a different preset.</value>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
     <value>None</value>
   </data>
-  <data name="PresetManger_Title" xml:space="preserve">
-    <value>Manage Presets</value>
-  </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
     <value>Delete Built-in Presets</value>
   </data>

@@ -5646,15 +5646,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage Presets.
-        /// </summary>
-        public static string PresetManger_Title {
-            get {
-                return ResourceManager.GetString("PresetManger_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Preset Description:.
         /// </summary>
         public static string PresetPane_Desc {

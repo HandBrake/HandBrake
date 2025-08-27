@@ -67,15 +67,6 @@ namespace HandBrakeWPF.Converters
                                                  };
                 groupedMenu.Add(savePresetMenuItem);
 
-                MenuItem presetManagerMenuItem = new MenuItem
-                                        {
-                                            Header = Resources.PresetManger_Title,
-                                            Tag = null,
-                                            Command = new OpenPresetManagerCommand()
-                                        };
-                groupedMenu.Add(presetManagerMenuItem);
-
-
                 groupedMenu.Add(new Separator());
             }
 
