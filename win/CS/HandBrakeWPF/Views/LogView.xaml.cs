@@ -99,5 +99,13 @@ namespace HandBrakeWPF.Views
                 }
             }
         }
+
+        private void LogView_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
+        }
     }
 }

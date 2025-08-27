@@ -155,5 +155,31 @@ namespace HandBrakeWPF.Views
         {
             this.Titles.DisplayMemberPath = "ItemDisplayText";
         }
+
+        private void AddToQueueBtn_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space || e.Key == Key.Enter)
+            {
+                ((IMainViewModel)this.DataContext).AddToQueueWithErrorHandling();
+            }
+        }
+
+        private void Presetbtn_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space || e.Key == Key.Enter)
+            {
+                // Focus the keyboard navigation onto the floating panel and show it. 
+                KeyboardNavigation.SetTabNavigation(this.mainBodyGrid, ((MainViewModel)this.DataContext).IsPresetPaneDisplayed ? KeyboardNavigationMode.Continue : KeyboardNavigationMode.None);
+                ((MainViewModel)this.DataContext).TogglePresetPane();
+            }
+        }
+
+        private void PresetOverlayBtn_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space || e.Key == Key.Enter)
+            {
+                PresetsMenuButton_PreviewMouseDown(sender, null);
+            }
+        }
     }
 }

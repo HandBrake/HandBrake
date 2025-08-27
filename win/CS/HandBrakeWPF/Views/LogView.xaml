@@ -9,7 +9,8 @@
         MinWidth="625"
         MinHeight="600"
         WindowStartupLocation="CenterScreen"
-        TextOptions.TextFormattingMode="Display">
+        TextOptions.TextFormattingMode="Display"
+        PreviewKeyDown="LogView_OnPreviewKeyDown">
 
     <Window.Resources>
         <converters:ThemeImageConverter x:Key="themeConverter" />

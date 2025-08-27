@@ -297,5 +297,13 @@ namespace HandBrakeWPF.Views
 
             ((IQueueViewModel)this.DataContext).StartQueue();
         }
+
+        private void QueueView_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
+        }
     }
 }

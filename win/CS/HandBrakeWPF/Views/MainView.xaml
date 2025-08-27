@@ -203,7 +203,8 @@
 
                     <Separator />
 
-                    <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddToQueue}">
+                    <Button x:Name="AddToQueueBtn" PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddToQueue}"
+                            PreviewKeyDown="AddToQueueBtn_OnKeyDown">
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='AddToQueue.png'}" />
@@ -343,7 +344,8 @@
                     </Button>
 
                     <Button x:Name="presetbtn" PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}"
-                            Visibility="{Binding IsMenuStylePresetDisplayed, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
+                            Visibility="{Binding IsMenuStylePresetDisplayed, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" PreviewKeyDown="Presetbtn_OnPreviewKeyDown"
+                            >
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}" />
@@ -363,8 +365,8 @@
                     </Button>
 
 
-                    <Button PreviewMouseLeftButtonDown="PresetsMenuButton_PreviewMouseDown" Visibility="{Binding IsMenuStylePresetDisplayed, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
-                            ContextMenuService.IsEnabled="False"
+                    <Button x:Name="PresetOverlayBtn" PreviewMouseLeftButtonDown="PresetsMenuButton_PreviewMouseDown" Visibility="{Binding IsMenuStylePresetDisplayed, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
+                            ContextMenuService.IsEnabled="False" PreviewKeyDown="PresetOverlayBtn_OnPreviewKeyDown"
                             AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}">
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">

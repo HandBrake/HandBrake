@@ -23,6 +23,7 @@
         MinHeight="300"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
+        PreviewKeyDown="QueueView_OnPreviewKeyDown"
         mc:Ignorable="d">
 
     <Window.Resources>
