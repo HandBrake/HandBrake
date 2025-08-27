@@ -199,6 +199,13 @@
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_SourceOpen}"/>
                         </StackPanel>
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static Properties:Resources.MainView_SourceOpen}"/>
+                                <LineBreak/>
+                                <Run Text="Alt + O" FontStyle="Italic"/>
+                            </TextBlock>
+                        </Button.ToolTip>
                     </Button>
 
                     <Separator />
@@ -218,6 +225,15 @@
                             </Grid>
 
                         </StackPanel>
+
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static Properties:Resources.MainView_AddToQueue}"/>
+                                <LineBreak/>
+                                <Run Text="Alt + A" FontStyle="Italic"/>
+                            </TextBlock>
+                        </Button.ToolTip>
+
                         <Button.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="{x:Static Properties:Resources.MainView_AddCurrent}" Command="{Binding RelayCommand}" CommandParameter="AddToQueueWithErrorHandling" AutomationProperties.Name="Add Current" InputGestureText="Alt + A" />
@@ -260,6 +276,14 @@
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=true}">
+
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static Properties:Resources.MainView_StartEncode}"/>
+                                <LineBreak/>
+                                <Run Text="Ctrl + E" FontStyle="Italic"/>
+                            </TextBlock>
+                        </Button.ToolTip>
                         <StackPanel Orientation="Horizontal">
                             <Image Width="32"
                                Height="32"
@@ -275,6 +299,13 @@
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=false}">
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static Properties:Resources.MainView_Stop}"/>
+                                <LineBreak/>
+                                <Run Text="Ctrl + K" FontStyle="Italic"/>
+                            </TextBlock>
+                        </Button.ToolTip>
                         <StackPanel Orientation="Horizontal">
                             <Image Width="32"
                                Height="32"
@@ -291,6 +322,13 @@
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=false}">
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static Properties:Resources.MainView_Pause}"/>
+                                <LineBreak/>
+                                <Run Text="Alt + P" FontStyle="Italic"/>
+                            </TextBlock>
+                        </Button.ToolTip>
                         <StackPanel Orientation="Horizontal">
                             <Image Width="32"
                                Height="32"
@@ -318,6 +356,14 @@
                                 <TextBlock Text="{Binding QueueCount}" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Margin="9,2" />
                             </Border>
                         </StackPanel>
+
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static Properties:Resources.MainView_ShowQueue}"/>
+                                <LineBreak/>
+                                <Run Text="Ctrl + Q" FontStyle="Italic"/>
+                            </TextBlock>
+                        </Button.ToolTip>
                     </Button>
 
                     <Button Name="Preview" AutomationProperties.Name="{x:Static Properties:Resources.MainView_ShowPreview}" Command="{Binding RelayCommand}" CommandParameter="OpenPreviewWindow" >
@@ -330,6 +376,12 @@
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_ShowPreview}"/>
                         </StackPanel>
+
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static Properties:Resources.MainView_ShowPreview}"/>
+                            </TextBlock>
+                        </Button.ToolTip>
                     </Button>
 
                     <Button Name="ActivityWindow" AutomationProperties.Name="Activity Window" Command="{Binding RelayCommand}" CommandParameter="OpenLogWindow">
@@ -341,6 +393,13 @@
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_ActivityLog}"/>
                         </StackPanel>
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static Properties:Resources.MainView_ActivityLog}"/>
+                                <LineBreak/>
+                                <Run Text="Ctrl + L" FontStyle="Italic"/>
+                            </TextBlock>
+                        </Button.ToolTip>
                     </Button>
 
                     <Button x:Name="presetbtn" PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}"
@@ -398,6 +457,12 @@
                                 <MenuItem Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" Command="{Binding RelayCommand}" CommandParameter="PresetDeleteBuildIn" />
                             </ContextMenu>
                         </Button.ContextMenu>
+
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static Properties:Resources.MainView_Presets}"/>
+                            </TextBlock>
+                        </Button.ToolTip>
                     </Button>
                 </ToolBar>
 
@@ -445,6 +510,12 @@
                                 <MenuItem Header="{x:Static Properties:Resources.MainView_About}" Command="{Binding RelayCommand}" CommandParameter="OpenAboutApplication" />
                             </ContextMenu>
                         </Button.ContextMenu>
+
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static Properties:Resources.MainView_Presets}"/>
+                            </TextBlock>
+                        </Button.ToolTip>
                     </Button>
                 </ToolBar>
 
