@@ -290,6 +290,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.MediaPlayerPath, @"C:\Program Files\VideoLAN\vlc\vlc.exe");
             defaults.Add(UserSettingConstants.PresetMenuDisplayMode, 0);
             defaults.Add(UserSettingConstants.RightToLeftUi, 0); 
+            defaults.Add(UserSettingConstants.PresetUiType, 1);
             
             // Output Files
             defaults.Add(UserSettingConstants.AutoNaming, true);

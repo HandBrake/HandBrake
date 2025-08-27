@@ -9,8 +9,6 @@
 
 namespace HandBrakeWPF
 {
-    using System;
-
     /// <summary>
     /// Constants for the User Settings Service
     /// </summary>
@@ -97,10 +95,10 @@ namespace HandBrakeWPF
         public const string HardwareDetectTimeoutSeconds = "HardwareDetectTimeoutSeconds";
         public const string ShowPresetDesc = "ShowPresetDescription";
         public const string ExcludedExtensions = "ExcludedFileExtensions";
-        public static string RecursiveFolderScan = "RecursiveFolderScan";
-        public static string SimpleQueueView = "SimpleQueueView";
-        public static string IsLegacyMenuShown = "IsLegacyMenuShown";
-        public static string DefaultRangeMode = "DefaultRangeMode";
-
+        public const string RecursiveFolderScan = "RecursiveFolderScan";
+        public const string SimpleQueueView = "SimpleQueueView";
+        public const string IsLegacyMenuShown = "IsLegacyMenuShown";
+        public const string DefaultRangeMode = "DefaultRangeMode";
+        public const string PresetUiType = "PresetUiType";
     }
 }

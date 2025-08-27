@@ -72,6 +72,20 @@ namespace HandBrakeWPF.Views
             ((MainViewModel)this.DataContext).TogglePresetPane();
         }
 
+        private void PresetsMenuButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // If we've clicked the dropdown part of the button, display the context menu below the button.
+            Button button = (sender as Button);
+            if (button != null)
+            {
+                button.ContextMenu.IsEnabled = true;
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                button.ContextMenu.IsOpen = true;
+                return;
+            }
+        }
+
         private void TabControl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl && e.AddedItems.Count > 0)

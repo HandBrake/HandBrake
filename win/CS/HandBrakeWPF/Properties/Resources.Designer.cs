@@ -4616,6 +4616,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display toolbar preset popup as:.
+        /// </summary>
+        public static string OptionsView_PresetUiType {
+            get {
+                return ResourceManager.GetString("OptionsView_PresetUiType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Process Isolation.
         /// </summary>
         public static string OptionsView_ProcessIsolation {
@@ -5831,6 +5840,24 @@ namespace HandBrakeWPF.Properties {
         public static string PresetService_UnableToLoadPresets {
             get {
                 return ResourceManager.GetString("PresetService_UnableToLoadPresets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Menu.
+        /// </summary>
+        public static string PresetUiType_Menu {
+            get {
+                return ResourceManager.GetString("PresetUiType_Menu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overlay.
+        /// </summary>
+        public static string PresetUiType_Overlay {
+            get {
+                return ResourceManager.GetString("PresetUiType_Overlay", resourceCulture);
             }
         }
         

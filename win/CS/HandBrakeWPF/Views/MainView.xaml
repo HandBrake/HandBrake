@@ -344,7 +344,8 @@
                         </StackPanel>
                     </Button>
 
-                    <Button x:Name="presetbtn" PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}">
+                    <Button x:Name="presetbtn" PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}"
+                            Visibility="{Binding IsMenuStylePresetDisplayed, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}" />
@@ -360,6 +361,42 @@
 
                         <Button.ContextMenu>
                             <ContextMenu ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}, ConverterParameter=true}" MaxHeight="600" />
+                        </Button.ContextMenu>
+                    </Button>
+
+
+                    <Button PreviewMouseLeftButtonDown="PresetsMenuButton_PreviewMouseDown" Visibility="{Binding IsMenuStylePresetDisplayed, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
+                            ContextMenuService.IsEnabled="False"
+                            AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}" />
+                                <Label Margin="2,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.MainView_Presets}" />
+                            </StackPanel>
+
+                            <Grid x:Name="presetsDropdownMenu" Background="Transparent" >
+                                <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                      Data="M 0 0 L 4 4 L 8 0 Z"
+                                      Fill="{DynamicResource ButtonGlyphBrush}" x:Name="presetsDropdownArrowMenu" />
+                            </Grid>
+
+                        </StackPanel>
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetsMenu}" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}" />
+                                <Separator />
+                                <MenuItem Header="{x:Static Properties:Resources.AddPresetView_AddPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetAdd" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetUpdate" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_SetCurrentAsDefault}" Command="{Binding RelayCommand}" CommandParameter="PresetSetDefault" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" Command="{Binding RelayCommand}" CommandParameter="PresetManage" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" Command="{Binding RelayCommand}" CommandParameter="PresetRemoveSelected" />
+                                <Separator />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_ImportFromFile}" Command="{Binding RelayCommand}" CommandParameter="PresetImport" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_ExportToFile}" Command="{Binding RelayCommand}" CommandParameter="PresetExport" />
+                                <Separator />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_ResetPresets}" Command="{Binding RelayCommand}" CommandParameter="PresetReset" />
+                                <MenuItem Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" Command="{Binding RelayCommand}" CommandParameter="PresetDeleteBuildIn" />
+                            </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
                 </ToolBar>

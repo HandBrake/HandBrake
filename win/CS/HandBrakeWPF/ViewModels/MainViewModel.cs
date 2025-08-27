@@ -850,6 +850,8 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsPresetDescriptionVisible { get; set; }
 
+        public bool IsMenuStylePresetDisplayed { get; set; }
+
         public bool IsLegacyMenuShown { get; set; }
 
         public string ShowHideMenuText => this.IsLegacyMenuShown ? Resources.MainView_HideClassicMenu : Resources.MainView_ShowClassicMenu;
@@ -930,6 +932,11 @@ namespace HandBrakeWPF.ViewModels
             this.IsLegacyMenuShown = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.IsLegacyMenuShown);
             this.NotifyOfPropertyChange(() => this.IsLegacyMenuShown);
             this.NotifyOfPropertyChange(() => this.ShowHideMenuText);
+
+            // Preset UI
+            PresetUiType uiType = this.userSettingService.GetUserSetting<PresetUiType>(UserSettingConstants.PresetUiType);
+            this.IsMenuStylePresetDisplayed = uiType == PresetUiType.Menu;
+            this.NotifyOfPropertyChange(() => IsMenuStylePresetDisplayed);
         }
 
         public void Shutdown()
@@ -2563,6 +2570,12 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.ShowAddSelectionToQueue);
                     this.NotifyOfPropertyChange(() => this.ShowAddAllMenuName);
                     this.NotifyOfPropertyChange(() => this.ShowAddSelectionMenuName);
+                    break;
+
+                case UserSettingConstants.PresetUiType:
+                    PresetUiType uiType = this.userSettingService.GetUserSetting<PresetUiType>(UserSettingConstants.PresetUiType);
+                    this.IsMenuStylePresetDisplayed = uiType == PresetUiType.Menu;
+                    this.NotifyOfPropertyChange(() => IsMenuStylePresetDisplayed);
                     break;
             }
         }

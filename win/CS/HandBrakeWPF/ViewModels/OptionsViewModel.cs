@@ -128,6 +128,8 @@ namespace HandBrakeWPF.ViewModels
         private string queueDoneArguments;
         private bool queueDoneCustomActionEnabled;
 
+        private PresetUiType selectedPresetUiType;
+
         public OptionsViewModel(
             IUserSettingService userSettingService,
             IUpdateService updateService,
@@ -311,6 +313,23 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.selectedPresetDisplayMode) return;
                 this.selectedPresetDisplayMode = value;
                 this.NotifyOfPropertyChange(() => this.SelectedPresetDisplayMode);
+            }
+        }
+
+        public BindingList<PresetUiType> PresetUiTypes { get; } = new BindingList<PresetUiType>(EnumHelper<PresetUiType>.GetEnumList().ToList());
+        
+        public PresetUiType SelectedPresetUiType
+        {
+            get => this.selectedPresetUiType;
+            set
+            {
+                if (value == this.selectedPresetUiType)
+                {
+                    return;
+                }
+
+                this.selectedPresetUiType = value;
+                this.NotifyOfPropertyChange(() => this.SelectedPresetUiType);
             }
         }
 
@@ -1519,7 +1538,8 @@ namespace HandBrakeWPF.ViewModels
             this.ShowAddSelectionToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
             this.AppThemeMode = (AppThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
             this.SelectedPresetDisplayMode = (PresetDisplayMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.PresetMenuDisplayMode);
-
+            this.SelectedPresetUiType = (PresetUiType)this.userSettingService.GetUserSetting<int>(UserSettingConstants.PresetUiType);
+            
             // #############################
             // When Done
             // #############################
@@ -1795,6 +1815,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, this.ShowAddAllToQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, this.ShowAddSelectionToQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.PresetMenuDisplayMode, this.SelectedPresetDisplayMode);
+            this.userSettingService.SetUserSetting(UserSettingConstants.PresetUiType, this.SelectedPresetUiType);
+
 
             /* When Done */
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, (int)this.WhenDone);

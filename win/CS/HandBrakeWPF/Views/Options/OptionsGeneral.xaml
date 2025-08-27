@@ -28,6 +28,7 @@
         <options:UpdateCheckConverter x:Key="UpdateCheckConverter" />
         <options:ThemeSettingConverter x:Key="ThemeSettingConverter" />
         <options:PresetDisplayModeConverter x:Key="PresetDisplayModeConverter" />
+        <options:PresetUiTypeConverter x:Key="PresetUiTypeConverter" />
         <options:RightToLeftConverter x:Key="RightToLeftConverter" />
         <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
 
@@ -82,6 +83,14 @@
                                       Margin="5,0,0,0" HorizontalAlignment="Left" Width="150" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_PresetDisplayModes}" />
 
             </StackPanel>
+
+            <StackPanel Orientation="Horizontal"  Margin="20,0,0,5">
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_PresetUiType}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding PresetUiTypes, Converter={StaticResource PresetUiTypeConverter}}" SelectedItem="{Binding SelectedPresetUiType, Converter={StaticResource PresetUiTypeConverter}}" 
+                          Margin="5,0,0,0" HorizontalAlignment="Left" Width="150" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_PresetDisplayModes}" />
+
+            </StackPanel>
+
 
             <TextBlock Text="{x:Static Properties:Resources.Options_ApplicationToolbar}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
             <StackPanel Orientation="Vertical" Margin="20,0,0,0">
