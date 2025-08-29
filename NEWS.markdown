@@ -10,6 +10,24 @@ Download available from Microsoft:
 - [For x64 (AMD or Intel CPUs)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe)
 - [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-arm64.exe)
 
+## HandBrake 1.10.2
+
+### All platforms
+
+#### Video
+
+- Fixed a crash that could happen when encoding high depth video
+
+#### Third-party libraries
+
+- Updated libraries
+  - SVT-AV1 3.1.2 (AV1 video encoding)
+
+### Mac
+
+- Added a workaround to avoid a rare crash on Apple Silicon Macs
+
+
 ## HandBrake 1.10.1
 
 ### All platforms
@@ -39,6 +57,7 @@ Download available from Microsoft:
   - Romanian (Română)
 - Fixed arm64 build
 - Fixed audio track name generation
+
 
 ## HandBrake 1.10.0
 
