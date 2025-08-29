@@ -1,7 +1,7 @@
-From 5edf4807db4474da366895be5bcd3d9227afa2eb Mon Sep 17 00:00:00 2001
+From b1ea22c23e3f5f6db08a9fa48cbe7697fe806b9c Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 20 Mar 2024 09:08:52 +0100
-Subject: [PATCH 02/16] movenc: write 3gpp track 'titl' tag
+Subject: [PATCH 02/22] movenc: write 3gpp track 'titl' tag
 
 Apple software used to use 'name' raw tag for track titles.  When they rewrote everything with AVFoundation, they switched to using 3gpp 'titl' tag for track titles and 'name' no longer works.
 ---
@@ -9,10 +9,10 @@ Apple software used to use 'name' raw tag for track titles.  When they rewrote e
  1 file changed, 39 insertions(+), 38 deletions(-)
 
 diff --git a/libavformat/movenc.c b/libavformat/movenc.c
-index d20e45cf81..c526658bb1 100644
+index 585a018e35..9511142708 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -4051,6 +4051,34 @@ static int mov_write_udta_sdp(AVIOContext *pb, MOVTrack *track)
+@@ -4169,6 +4169,34 @@ static int mov_write_udta_sdp(AVIOContext *pb, MOVTrack *track)
      return len + 24;
  }
  
@@ -47,7 +47,7 @@ index d20e45cf81..c526658bb1 100644
  static int mov_write_track_metadata(AVIOContext *pb, AVStream *st,
                                      const char *tag, const char *str)
  {
-@@ -4125,8 +4153,10 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -4243,8 +4271,10 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
      if (ret < 0)
          return ret;
  
@@ -59,7 +59,7 @@ index d20e45cf81..c526658bb1 100644
  
      if (mov->mode & MODE_MP4) {
          if ((ret = mov_write_track_kinds(pb_buf, st)) < 0)
-@@ -4723,35 +4753,6 @@ static int ascii_to_wc(AVIOContext *pb, const uint8_t *b)
+@@ -4841,35 +4871,6 @@ static int ascii_to_wc(AVIOContext *pb, const uint8_t *b)
      return 0;
  }
  
@@ -95,7 +95,7 @@ index d20e45cf81..c526658bb1 100644
  static int mov_write_chpl_tag(AVIOContext *pb, AVFormatContext *s)
  {
      int64_t pos = avio_tell(pb);
-@@ -4790,14 +4791,14 @@ static int mov_write_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -4908,14 +4909,14 @@ static int mov_write_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
          return ret;
  
      if (mov->mode & MODE_3GP) {

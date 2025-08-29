@@ -1,7 +1,7 @@
-From 95676fcc5c7141124a10bab0498110aed88680ce Mon Sep 17 00:00:00 2001
+From 82a75013402293f86fca38a8ffc1b3c7fe6d8b0e Mon Sep 17 00:00:00 2001
 From: galinart <artem.galin@intel.com>
 Date: Thu, 17 Oct 2024 16:17:36 +0100
-Subject: [PATCH] libavcodec/qsvenc.c: update has_b_frames value after
+Subject: [PATCH 16/22] libavcodec/qsvenc.c: update has_b_frames value after
  initialization of encoder
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH] libavcodec/qsvenc.c: update has_b_frames value after
  1 file changed, 7 insertions(+)
 
 diff --git a/libavcodec/qsvenc.c b/libavcodec/qsvenc.c
-index 8200a14..c2bb5e5 100644
+index 318a99e2a1..039a108aae 100644
 --- a/libavcodec/qsvenc.c
 +++ b/libavcodec/qsvenc.c
 @@ -1842,6 +1842,13 @@ int ff_qsv_enc_init(AVCodecContext *avctx, QSVEncContext *q)
@@ -27,5 +27,5 @@ index 8200a14..c2bb5e5 100644
  
      return 0;
 -- 
-2.25.1
+2.39.5 (Apple Git-154)
 

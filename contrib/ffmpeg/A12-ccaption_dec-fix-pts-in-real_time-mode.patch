@@ -1,7 +1,7 @@
-From e4b1555ed0c72377c41c66a5198f5c1bf9c321d0 Mon Sep 17 00:00:00 2001
+From e8991642000428af9c898bbcf9950db572040d62 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Wed, 20 Mar 2024 09:14:43 +0100
-Subject: [PATCH 10/16] ccaption_dec: fix pts in real_time mode.
+Subject: [PATCH 12/22] ccaption_dec: fix pts in real_time mode.
 
 end_display_time and pts changes should be performed only in non real_time mode.
 ---
@@ -9,13 +9,13 @@ end_display_time and pts changes should be performed only in non real_time mode.
  1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/libavcodec/ccaption_dec.c b/libavcodec/ccaption_dec.c
-index d8b992bb94..4a38664875 100644
+index 6f4d4fca41..82be6de51d 100644
 --- a/libavcodec/ccaption_dec.c
 +++ b/libavcodec/ccaption_dec.c
-@@ -889,12 +889,13 @@ static int decode(AVCodecContext *avctx, AVSubtitle *sub,
+@@ -892,12 +892,13 @@ static int decode(AVCodecContext *avctx, AVSubtitle *sub,
  
          if (ctx->buffer[bidx].str[0] || ctx->real_time) {
-             ff_dlog(ctx, "cdp writing data (%s)\n", ctx->buffer[bidx].str);
+             ff_dlog(avctx, "cdp writing data (%s)\n", ctx->buffer[bidx].str);
 -            start_time = ctx->buffer_time[0];
 -            sub->pts = start_time;
 -            end_time = ctx->buffer_time[1];
