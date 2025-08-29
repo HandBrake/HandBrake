@@ -157,14 +157,17 @@ HB_OBJC_DIRECT_MEMBERS
             return nil;
         }
 
-        // macOS Sonoma moved the parent of our temporary folder
-        // to the app sandbox container, and the user might have deleted it,
-        // so ensure the whole path is available to avoid failing later
-        // when trying to write the temp files
-        NSURL *directoryURL = HBCore.temporaryDirectoryURL;
-        if (directoryURL)
+        if (@available(macOS 14, *))
         {
-            [NSFileManager.defaultManager createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:NULL];
+            // macOS Sonoma moved the parent of our temporary folder
+            // to the app sandbox container, and the user might have deleted it,
+            // so ensure the whole path is available to avoid failing later
+            // when trying to write the temp files
+            NSURL *directoryURL = HBCore.temporaryDirectoryURL;
+            if (directoryURL)
+            {
+                [NSFileManager.defaultManager createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:NULL];
+            }
         }
     }
 
