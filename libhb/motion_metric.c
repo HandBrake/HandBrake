@@ -176,6 +176,8 @@ static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,            
     buf_b     = (uint##nbits##_t *)b;                                                       \
     bw        = width / 16;                                                                 \
     bh        = height / 16;                                                                \
+    stride_a /= pv->bps;                                                                    \
+    stride_b /= pv->bps;                                                                    \
                                                                                             \
     uint64_t sum = 0;                                                                       \
     for (int y = 0; y < bh; y++)                                                            \
