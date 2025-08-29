@@ -230,6 +230,23 @@ static void init_system_info()
         hb_system_info.version = strdup(uts.release);
         hb_system_info.build   = strdup(uts.version);
     }
+#elif defined(SYS_MINGW)
+    NTSYSAPI NTSTATUS RtlGetVersion(PRTL_OSVERSIONINFOW);
+
+    OSVERSIONINFOW vi = {0};
+    vi.dwOSVersionInfoSize = sizeof(vi);
+    char buf[32];
+
+    if (RtlGetVersion(&vi) == 0)
+    {
+        snprintf(buf, sizeof(buf), "%lu.%lu", vi.dwMajorVersion, vi.dwMinorVersion);
+        hb_system_info.version = strdup(buf);
+
+        snprintf(buf, sizeof(buf), "%lu", vi.dwBuildNumber);
+        hb_system_info.build = strdup(buf);
+    }
+
+    hb_system_info.name = "Windows";
 #else
     hb_system_info.name    = NULL;
     hb_system_info.version = NULL;
