@@ -1,0 +1,10 @@
+--- libudfread-1.2.0/src/meson.build	2025-08-25 19:06:02.000000000 +0100
++++ libudfread-1.2.0-patched/src/meson.build	2025-08-25 17:27:23.400210200 +0100
+@@ -45,6 +45,7 @@
+ if not get_option('embed_udfread')
+     pkg_mod = import('pkgconfig')
+     pkg_mod.generate(libraries: libudfread,
++        install_dir: 'lib/pkgconfig',
+         version: meson.project_version(),
+         name: 'libudfread',
+         description: 'UDF filesystem access library')

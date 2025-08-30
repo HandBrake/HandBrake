@@ -1,0 +1,10 @@
+--- libbluray-1.4.0/src/meson.build	2025-08-25 19:06:02.000000000 +0100
++++ libbluray-1.4.0-patched/src/meson.build	2025-08-25 17:27:23.400210200 +0100
+@@ -125,6 +125,7 @@
+# Generate pkg-config .pc file
+ pkg_mod = import('pkgconfig')
+ pkg_mod.generate(libraries: libbluray,
++    install_dir: 'lib/pkgconfig',
+     version: meson.project_version(),
+     name: 'libbluray',
+     description: 'library supporting Blu-ray playback',
