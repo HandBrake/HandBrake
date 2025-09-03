@@ -940,8 +940,15 @@ namespace HandBrakeWPF.ViewModels
                 }
                 else // Supporting negative ranges
                 {
-                    float augment = limits.Low > 0 ? 0 : (limits.Low * -1);
-                    this.RF = (int)(limits.High * cqStep) - ((int)(quality * cqStep) - (int)(limits.Low * cqStep));
+                    if (quality >= 0)
+                    {
+                        this.RF = (int)(limits.High * cqStep) - ((int)(quality * cqStep) - (int)(limits.Low * cqStep));
+                    }
+                    else
+                    {
+                        int augment = limits.Low >= 0 ? 0 : (int)(limits.Low * cqStep) * -1; // Handle negative ranges
+                        this.RF = (int)(limits.High * cqStep) - augment + (int)(quality * cqStep * -1);
+                    }
                 }
             }
         }
@@ -968,7 +975,9 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (limits.Low > 0)
                 {
-                    sliderValue -= (int)limits.Low; // Handles the non 0 Starting point. MPEG-4, MPEG-2
+                    int invCqStep = (int)(1 / cqStep); // Inverse 
+
+                    sliderValue -= (int)(limits.Low * invCqStep); // Handles the non 0 Starting point. MPEG-4, MPEG-2
                 }
 
                 float augment = limits.Low > 0 ? 0 : (limits.Low * -1); // Handle negative ranges
