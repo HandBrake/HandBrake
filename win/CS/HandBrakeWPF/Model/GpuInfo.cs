@@ -10,8 +10,6 @@
 namespace HandBrakeWPF.Model
 {
     using System;
-    using System.Linq;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     public class GpuInfo
     {
@@ -39,6 +37,12 @@ namespace HandBrakeWPF.Model
                 {
                     warning = string.Format(" - (Unsupported Driver Detected)");
                 }
+
+                if (this.IsNvidia && !IsNvidiaDriverSupported)
+                {
+                    warning = string.Format(" - (Unsupported Driver Detected)");
+                }
+
 
                 return string.Format("{0} - {1}{2}", Name, Version, warning);
             }
@@ -86,14 +90,14 @@ namespace HandBrakeWPF.Model
             {
                 if (this.IsNvidia && !string.IsNullOrEmpty(Version)) 
                 {
-                    // 551.76  or later is required
+                    // 576.52  or later is required
                     string result = Version.Substring(Version.Length - 6);
                     if (!string.IsNullOrEmpty(result))
                     {
                         result = result.Replace(".", "");
                         int.TryParse(result, out int version);
 
-                        if (version > 55176)
+                        if (version >= 57065)
                         {
                             return true;
                         }
