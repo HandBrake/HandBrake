@@ -1719,6 +1719,7 @@ namespace HandBrakeWPF.ViewModels
 
 
             // Warnings
+            // Reset Settings where incompatible drivers are found
             ThreadPool.QueueUserWorkItem(
                 delegate
                 {
@@ -1727,13 +1728,24 @@ namespace HandBrakeWPF.ViewModels
                         GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
                         if (info != null)
                         {
-                            this.DisplayIntelDriverWarning = !info.IsIntelDriverSupported;
+                            if (!info.IsIntelDriverSupported)
+                            {
+                                this.DisplayIntelDriverWarning = !info.IsIntelDriverSupported;
+                                this.EnableQuickSyncDecoding = false;
+                                this.UseQSVDecodeForNonQSVEnc = false;
+                                this.Save();
+                            }
                         }
 
                         info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsNvidia);
                         if (info != null)
                         {
-                            this.DisplayNvidiaDriverWarning = !info.IsNvidiaDriverSupported;
+                            if (!info.IsNvidiaDriverSupported)
+                            {
+                                this.DisplayNvidiaDriverWarning = true;
+                                this.EnableNvDecSupport = false;
+                                this.Save();
+                            }
                         }
 
                         this.NotifyOfPropertyChange(() => this.DisplayIntelDriverWarning);
