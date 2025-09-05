@@ -21,11 +21,16 @@ Download available from Microsoft:
 #### Third-party libraries
 
 - Updated libraries
+  - HarfBuzz 11.4.5 (subtitles)
   - SVT-AV1 3.1.2 (AV1 video encoding)
 
 ### Mac
 
 - Added a workaround to avoid a rare crash on Apple Silicon Macs
+
+### Windows
+
+- Fixed some incorrect behaviour on CQ/RF calcuations and handling of presets
 
 
 ## HandBrake 1.10.1
