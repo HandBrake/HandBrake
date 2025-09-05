@@ -31,6 +31,7 @@ Download available from Microsoft:
 ### Windows
 
 - Fixed some incorrect behaviour on CQ/RF calcuations and handling of presets
+- The app will now automatically disable QSV or NVDec decoders if an out-of-date driver is detected.
 
 
 ## HandBrake 1.10.1
