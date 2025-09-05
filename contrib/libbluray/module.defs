@@ -1,23 +1,44 @@
 $(eval $(call import.MODULE.defs,LIBBLURAY,libbluray, FREETYPE))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
-LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libbluray-1.3.4.tar.bz2
-LIBBLURAY.FETCH.url    += https://download.videolan.org/pub/videolan/libbluray/1.3.4/libbluray-1.3.4.tar.bz2
-LIBBLURAY.FETCH.sha256  = 478ffd68a0f5dde8ef6ca989b7f035b5a0a22c599142e5cd3ff7b03bbebe5f2b
+LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libbluray-1.4.0.tar.xz
+LIBBLURAY.FETCH.url    += https://download.videolan.org/pub/videolan/libbluray/1.4.0/libbluray-1.4.0.tar.xz
+LIBBLURAY.FETCH.sha256  = 77937baf07eadda4b2b311cf3af4c50269d2ea3165041f5843d96476c4c92777
 
-LIBBLURAY.GCC.args.c_std =
+LIBBLURAY.build_dir             = build/
+LIBBLURAY.CONFIGURE.exe         = $(MESON.exe) setup
+LIBBLURAY.prefix                = $(call fn.ABSOLUTE,$(LIBBLURAY.prefix/))contrib/
+LIBBLURAY.CONFIGURE.deps        =
+LIBBLURAY.CONFIGURE.shared      =
+LIBBLURAY.CONFIGURE.host        =
+LIBBLURAY.CONFIGURE.build       =
+LIBBLURAY.CONFIGURE.static      = -Ddefault_library=static
+LIBBLURAY.CONFIGURE.extra       = --libdir=$(call fn.ABSOLUTE,$(LIBBLURAY.prefix/))contrib/lib/ -Denable_tools=false -Dbdj_jar=disabled -Dembed_udfread=false -Dfontconfig=disabled -Dfreetype=disabled -Dlibxml2=disabled \
+                                  -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,LIBBLURAY.GCC,*archs *sysroot *minver ?extra)" \
+                                  -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,LIBBLURAY.GCC,*archs *sysroot *minver ?extra.exe)"
+LIBBLURAY.CONFIGURE.env         =
 
-ifeq (none,$(LIBBLURAY.GCC.O))
-	LIBBLURAY.CONFIGURE.extra += --disable-optimizations
+ifneq (none,$(LIBBLURAY.GCC.g))
+    LIBBLURAY.CONFIGURE.extra += --buildtype=debug
+    ifeq (none,$(LIBBLURAY.GCC.O))
+        LIBBLURAY.CONFIGURE.extra += --optimization=g
+    endif
+else
+    LIBBLURAY.CONFIGURE.extra += --buildtype=release
+    ifneq (,$(filter $(LIBBLURAY.GCC.O),size size-aggressive))
+        LIBBLURAY.CONFIGURE.extra += --optimization=s
+    endif
 endif
 
-LIBBLURAY.CONFIGURE.extra += --disable-doxygen-doc --disable-examples --disable-bdjava-jar --without-freetype --without-fontconfig
-LIBBLURAY.CONFIGURE.extra += --without-external-libudfread --without-libxml2
-
-ifeq (mingw,$(HOST.system))
-    LIBBLURAY.GCC.D += MINGW_HAS_SECURE_API=1
+ifeq (darwin,$(HOST.system))
+        LIBBLURAY.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(SRC/))make/cross/$(HOST.machine)-darwin-gcc.meson
 endif
 
-ifneq (none,$(FFMPEG.GCC.g))
-    LIBBLURAY.GCC.args.extra += -g
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
+    LIBBLURAY.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(SRC/))make/cross/$(HOST.machine)-w64-mingw32.meson
 endif
+
+LIBBLURAY.BUILD.make       = $(NINJA.exe)
+LIBBLURAY.BUILD.extra      = -v
+LIBBLURAY.INSTALL.make     = $(NINJA.exe)
+LIBBLURAY.CLEAN.make       = $(NINJA.exe)
