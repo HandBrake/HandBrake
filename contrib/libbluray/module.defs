@@ -1,4 +1,6 @@
-$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray, FREETYPE))
+__deps__ := LIBUDFREAD
+
+$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
 LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libbluray-1.4.0.tar.xz
