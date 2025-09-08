@@ -1611,6 +1611,10 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
         case HB_VCODEC_FFMPEG_FFV1:
             level_names = hb_ffv1_level_names;
             level_values = hb_ffv1_level_values;
+            if (!strcasecmp(encoder_level, "auto"))
+            {
+                encoder_level = "3";
+            }
             break;
     }
 
