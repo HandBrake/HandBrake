@@ -18,6 +18,7 @@
 
 @property (nonatomic, readonly) NSCache<NSNumber *, id> *previewsCache;
 @property (nonatomic, readonly) NSCache<NSNumber *, id> *smallPreviewsCache;
+@property (nonatomic, strong) NSTimer *timer;
 
 @property (nonatomic, readonly) dispatch_queue_t queue;
 @property (nonatomic, readonly) dispatch_group_t group;
@@ -28,6 +29,8 @@
 @property (nonatomic) BOOL reloadInQueue;
 
 @end
+
+#define NSCACHE_LIFETIME 60
 
 @implementation HBPreviewGenerator
 
@@ -68,6 +71,8 @@
 {
     _invalidated = true;
 
+    [self stopCacheTimer];
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSRunLoop mainRunLoop] cancelPerformSelectorsWithTarget:self];
     [self.core cancelEncode];
@@ -107,6 +112,8 @@
         CFRetain(pixelBuffer);
     }
 
+    [self startCacheTimer];
+
     return pixelBuffer;
 }
 
@@ -141,7 +148,39 @@
         CFRetain(image);
     }
 
+    [self startCacheTimer];
+
     return image;
+}
+
+- (void)startCacheTimer
+{
+    if (self.timer == nil)
+    {
+        self.timer = [NSTimer timerWithTimeInterval:NSCACHE_LIFETIME
+                                             target:self
+                                           selector:@selector(cacheTimerFired:)
+                                           userInfo:nil
+                                            repeats:NO];
+        [NSRunLoop.mainRunLoop addTimer:self.timer forMode:NSDefaultRunLoopMode];
+    }
+    else
+    {
+        self.timer.fireDate = [NSDate dateWithTimeIntervalSinceNow:NSCACHE_LIFETIME];
+    }
+}
+
+
+- (void)stopCacheTimer
+{
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
+- (void)cacheTimerFired:(NSTimer *)timer
+{
+    [self purgeImageCache];
+    [self stopCacheTimer];
 }
 
 /**
