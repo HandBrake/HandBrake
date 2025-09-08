@@ -539,5 +539,5 @@ hb_hwaccel_t hb_hwaccel_videotoolbox =
     .hw_pix_fmt = AV_PIX_FMT_VIDEOTOOLBOX,
     .can_filter = are_filters_supported,
     .upload     = copy_video_buffer_to_hw_video_buffer,
-    .caps       = HB_HWACCEL_CAP_SCAN | HB_HWACCEL_CAP_ROTATE
+    .caps       = HB_HWACCEL_CAP_SCAN | HB_HWACCEL_CAP_ROTATE | HB_HWACCEL_CAP_COLOR_RANGE
 };
