@@ -157,11 +157,17 @@ static int is_rotation_supported(hb_hwaccel_t *hwaccel, int rotation)
     return rotation != HB_ROTATION_0 && (hwaccel->caps & HB_HWACCEL_CAP_ROTATE) == 0 ? 0 : 1;
 }
 
-int hb_hwaccel_can_use_full_hw_pipeline(hb_hwaccel_t *hwaccel, hb_list_t *list_filter, int encoder, int rotation)
+static int is_color_range_supported(hb_hwaccel_t *hwaccel, int color_range)
+{
+    return color_range != 0 && (hwaccel->caps & HB_HWACCEL_CAP_COLOR_RANGE) == 0 ? 0 : 1;
+}
+
+int hb_hwaccel_can_use_full_hw_pipeline(hb_hwaccel_t *hwaccel, hb_list_t *list_filter, int encoder, int rotation, int color_range)
 {
     return hwaccel != NULL &&
         hwaccel->can_filter(list_filter) &&
         is_rotation_supported(hwaccel, rotation) &&
+        is_color_range_supported(hwaccel, color_range) &&
         is_encoder_supported(hwaccel, encoder);
 }
 

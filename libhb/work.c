@@ -1743,7 +1743,8 @@ static void do_job(hb_job_t *job)
         if (hb_hwaccel_can_use_full_hw_pipeline(hwaccel,
                                                 job->list_filter,
                                                 job->vcodec,
-                                                job->title->rotation))
+                                                job->title->rotation,
+                                                job->color_range != job->title->color_range))
         {
             job->hw_accel = hwaccel;
             job->hw_pix_fmt = hwaccel->hw_pix_fmt;
