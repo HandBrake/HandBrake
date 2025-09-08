@@ -245,6 +245,7 @@ struct hb_encoder_s
 #define HB_HWACCEL_CAP_SCAN                 0x01
 #define HB_HWACCEL_CAP_ROTATE               0x02
 #define HB_HWACCEL_CAP_FORMAT_REQUIRED      0x04
+#define HB_HWACCEL_CAP_COLOR_RANGE          0x08
 
 
 struct hb_hwaccel_s
