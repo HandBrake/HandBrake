@@ -34,6 +34,7 @@ const char* const* hb_av_preset_get_names(int encoder);
 const char* const* hb_av_tune_get_names(int encoder);
 
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode);
+int      hb_ff_mixdown_ch_xlat(AVChannelLayout *channel_layout, int hb_mixdown, int *downmix_mode);
 void     hb_ff_set_sample_fmt(AVCodecContext *, const AVCodec *, enum AVSampleFormat);
 
 int hb_sws_get_colorspace(int color_matrix);

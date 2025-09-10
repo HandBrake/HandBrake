@@ -437,10 +437,8 @@ static hb_audio_config_t * better_audio(hb_audio_config_t * audio_a,
     if (audio_b == NULL)
         return audio_a;
 
-    channels_a = hb_layout_get_discrete_channel_count(
-                        audio_a->in.channel_layout);
-    channels_b = hb_layout_get_discrete_channel_count(
-                        audio_b->in.channel_layout);
+    channels_a = audio_a->in.ch_layout->nb_channels;
+    channels_b = audio_b->in.ch_layout->nb_channels;
     if (channels_a > channels_b)
     {
         return audio_a;
@@ -527,10 +525,8 @@ static hb_audio_config_t * best_linked_audio(hb_list_t * list_audio,
         int channels_pass = 0;
         int channels_enc;
 
-        channels_enc  = hb_layout_get_discrete_channel_count(
-                                best_audio->in.channel_layout);
-        channels_pass = hb_layout_get_discrete_channel_count(
-                            best_pass_audio->in.channel_layout);
+        channels_enc  = best_audio->in.ch_layout->nb_channels;
+        channels_pass = best_pass_audio->in.ch_layout->nb_channels;
         if (channels_pass >= channels_enc ||
             (channels_pass >= 6 && channels_pass >= mix_channels))
         {
@@ -718,16 +714,17 @@ void hb_sanitize_audio_settings(const hb_title_t * title,
     }
     else
     {
-        int layout = AV_CH_LAYOUT_5POINT1;
+        AVChannelLayout ch_layout = AV_CHANNEL_LAYOUT_5POINT1;
         if (audio_config != NULL)
         {
-            layout = audio_config->in.channel_layout;
+            av_channel_layout_copy(&ch_layout, audio_config->in.ch_layout);
         }
         if (mix == HB_AMIXDOWN_NONE)
         {
             mix = HB_INVALID_AMIXDOWN;
         }
-        mix = hb_mixdown_get_best(codec, layout, mix);
+        mix = hb_mixdown_get_best(codec, &ch_layout, mix);
+        av_channel_layout_uninit(&ch_layout);
         if (quality_enable)
         {
             float low, high, gran;
@@ -935,7 +932,7 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                 behavior = hb_audio_autonaming_behavior_get_from_name(behavior_name);
 
                 name = hb_audio_name_generate(aconfig->in.name,
-                                              aconfig->in.channel_layout,
+                                              aconfig->in.ch_layout,
                                               mixdown, keep_name, behavior);
 
                 if (name != NULL && name[0] != 0)

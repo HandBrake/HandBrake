@@ -1620,8 +1620,8 @@ static void ShowHelp(void)
     {
         if (!(encoder->codec & HB_ACODEC_PASS_FLAG))
         {
-            // layout: UINT64_MAX (all channels) should work with any mixdown
-            int mixdown = hb_mixdown_get_default(encoder->codec, UINT64_MAX);
+            // layout: 7.1 should work with all supported mixdowns
+            int mixdown = hb_mixdown_get_default_s(encoder->codec, "7.1");
             // assumes that the encoder short name is <= 16 characters long
             fprintf(out, "                               %-16s up to %s\n",
                     encoder->short_name, hb_mixdown_get_short_name(mixdown));
@@ -5521,7 +5521,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                     int mixdown = hb_mixdown_get_from_name(mixdown_name);
 
                     const char *name = hb_audio_name_generate(audio->in.name,
-                                                              audio->in.channel_layout,
+                                                              (void *)&audio->in.ch_layout,
                                                               mixdown, keep_name, behavior);
 
                     if (name)

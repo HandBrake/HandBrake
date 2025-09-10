@@ -175,7 +175,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             // audio, and will error out unless we translate the layout
             if (in_channel_layout == AV_CH_LAYOUT_5POINT1)
                 out_channel_layout  = AV_CH_LAYOUT_5POINT1_BACK;
-            if (hb_layout_get_discrete_channel_count(in_channel_layout) > 2)
+
+            AVChannelLayout ch_layout = {0};
+            av_channel_layout_from_mask(&ch_layout, out_channel_layout);
+            if (hb_layout_get_discrete_channel_count(&ch_layout) > 2)
                 av_dict_set(&av_opts, "mapping_family", "1", 0);
             break;
 

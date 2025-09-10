@@ -140,7 +140,7 @@ gint64 ghb_get_chapter_duration(const hb_title_t *title, gint chap);
 gint64 ghb_get_chapter_start(const hb_title_t *title, gint chap);
 gint64 ghb_chapter_range_get_duration(const hb_title_t *title,
                                       gint sc, gint ec);
-gint ghb_get_best_mix(uint64_t layout, gint acodec, gint mix);
+gint ghb_get_best_mix(const char *layout, gint acodec, gint mix);
 gboolean ghb_audio_is_passthru(gint acodec);
 gboolean ghb_audio_can_passthru(gint acodec);
 gint ghb_get_default_acodec(void);

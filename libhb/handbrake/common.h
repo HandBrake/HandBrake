@@ -71,6 +71,10 @@
 #define HB_DEBUG_ASSERT(x, y) { if ((x)) { hb_error("ASSERT: %s", y); exit(1); } }
 #endif
 
+#ifndef __LIBHB__
+typedef void hb_channel_layout_t;
+#endif
+
 #define EVEN( a )               ((a) + ((a) & 1))
 #define MULTIPLE_MOD(a, b)      (((b) * (int)(((a) + ((b) / 2)) / (b))))
 #define MULTIPLE_MOD_UP(a, b)   (((b) * (int)(((a) + ((b) - 1)) / (b))))
@@ -159,6 +163,7 @@ hb_audio_t *hb_audio_copy(const hb_audio_t *src);
 hb_list_t *hb_audio_list_copy(const hb_list_t *src);
 void hb_audio_close(hb_audio_t **audio);
 void hb_audio_config_init(hb_audio_config_t * audiocfg);
+void hb_audio_config_close(hb_audio_config_t * audiocfg);
 int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg);
 hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i);
 
@@ -485,7 +490,7 @@ void             hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int
 const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 
 
-const char * hb_audio_name_get_default(uint64_t layout, int mixdown);
+const char * hb_audio_name_get_default(hb_channel_layout_t *ch_layout, int mixdown);
 
 typedef enum
 {
@@ -497,8 +502,12 @@ typedef enum
 int          hb_audio_autonaming_behavior_get_from_name(const char *name);
 
 const char * hb_audio_name_generate(const char *name,
-                                    uint64_t layout, int mixdown, int keep_name,
+                                    hb_channel_layout_t *ch_layout, int mixdown, int keep_name,
                                     hb_audio_autonaming_behavior_t behaviour);
+
+const char * hb_audio_name_generate_s(const char *name,
+                                      const char *layout, int mixdown, int keep_name,
+                                      hb_audio_autonaming_behavior_t behaviour);
 
 void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 const char* hb_video_quality_get_name(uint32_t codec);
@@ -537,13 +546,16 @@ int                hb_audio_dither_get_from_name(const char *name);
 const char*        hb_audio_dither_get_description(int method);
 const hb_dither_t* hb_audio_dither_get_next(const hb_dither_t *last);
 
-int                 hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout);
+int                 hb_mixdown_is_supported(int mixdown, uint32_t codec, hb_channel_layout_t *ch_layout);
+int                 hb_mixdown_is_supported_s(int mixdown, uint32_t codec, const char *layout);
 int                 hb_mixdown_has_codec_support(int mixdown, uint32_t codec);
-int                 hb_mixdown_has_remix_support(int mixdown, uint64_t layout);
+int                 hb_mixdown_has_remix_support(int mixdown, hb_channel_layout_t *ch_layout);
 int                 hb_mixdown_get_discrete_channel_count(int mixdown);
 int                 hb_mixdown_get_low_freq_channel_count(int mixdown);
-int                 hb_mixdown_get_best(uint32_t codec, uint64_t layout, int mixdown);
-int                 hb_mixdown_get_default(uint32_t codec, uint64_t layout);
+int                 hb_mixdown_get_best(uint32_t codec, hb_channel_layout_t *ch_layout, int mixdown);
+int                 hb_mixdown_get_best_s(uint32_t codec, const char *layout, int mixdown);
+int                 hb_mixdown_get_default(uint32_t codec, hb_channel_layout_t *ch_layout);
+int                 hb_mixdown_get_default_s(uint32_t codec, const char *layout);
 hb_mixdown_t*       hb_mixdown_get_from_mixdown(int mixdown);
 int                 hb_mixdown_get_from_name(const char *name);
 const char*         hb_mixdown_get_name(int mixdown);
@@ -551,9 +563,9 @@ const char*         hb_mixdown_get_short_name(int mixdown);
 const char*         hb_mixdown_sanitize_name(const char *name);
 const hb_mixdown_t* hb_mixdown_get_next(const hb_mixdown_t *last);
 
-void                hb_layout_get_name(char * name, int size, int64_t layout);
-int                 hb_layout_get_discrete_channel_count(int64_t layout);
-int                 hb_layout_get_low_freq_channel_count(int64_t layout);
+int                 hb_layout_get_name(const hb_channel_layout_t *ch_layout, char *name, int size);
+int                 hb_layout_get_discrete_channel_count(const hb_channel_layout_t *ch_layout);
+int                 hb_layout_get_low_freq_channel_count(const hb_channel_layout_t *ch_layout);
 
 int                 hb_video_encoder_get_default(int muxer);
 hb_encoder_t*       hb_video_encoder_get_from_codec(int codec);
@@ -1071,8 +1083,7 @@ struct hb_audio_config_s
         PRIVATE int samples_per_frame; /* Number of samples per frame */
         PRIVATE int bitrate; /* Input bitrate (bps) */
         PRIVATE int matrix_encoding; /* Source matrix encoding mode, set by the audio decoder */
-        PRIVATE uint64_t channel_layout; /* Source channel layout, set by the audio decoder */
-        PRIVATE hb_chan_map_t * channel_map; /* Source channel map, set by the audio decoder */
+        PRIVATE hb_channel_layout_t *ch_layout; /* Source channel layout, set by the audio decoder */
         PRIVATE int encoder_delay; /* Encoder delay in samples.
                                     * These samples should be dropped
                                     * when decoding */
@@ -1434,8 +1445,7 @@ typedef struct hb_work_info_s
         };
         struct
         {    // info only valid for audio decoders
-            uint64_t channel_layout;
-            hb_chan_map_t * channel_map;
+            hb_channel_layout_t *ch_layout;
             int samples_per_frame;
             int sample_bit_depth;
             int matrix_encoding;

@@ -266,11 +266,11 @@
 - (int)sanitizeMixdownValue:(int)proposedMixdown
 {
     HBTitleAudioTrack *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
-    uint64_t channelLayout = sourceTrack.channelLayout;
+    const char *channelLayout = sourceTrack.chLayout.UTF8String;
 
-    if (!hb_mixdown_is_supported(proposedMixdown, self.encoder, channelLayout))
+    if (channelLayout && !hb_mixdown_is_supported_s(proposedMixdown, self.encoder, channelLayout))
     {
-        return hb_mixdown_get_default(self.encoder, channelLayout);
+        return hb_mixdown_get_default_s(self.encoder, channelLayout);
     }
     return proposedMixdown;
 }
@@ -360,15 +360,18 @@
     NSMutableArray<NSString *> *mixdowns = [[NSMutableArray alloc] init];
 
     HBTitleAudioTrack *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
-    uint64_t channelLayout = sourceTrack.channelLayout;
+    const char *channelLayout = sourceTrack.chLayout.UTF8String;
 
-    for (const hb_mixdown_t *mixdown = hb_mixdown_get_next(NULL);
-         mixdown != NULL;
-         mixdown  = hb_mixdown_get_next(mixdown))
+    if (channelLayout)
     {
-        if (hb_mixdown_is_supported(mixdown->amixdown, self.encoder, channelLayout))
+        for (const hb_mixdown_t *mixdown = hb_mixdown_get_next(NULL);
+             mixdown != NULL;
+             mixdown  = hb_mixdown_get_next(mixdown))
         {
-            [mixdowns addObject:@(mixdown->name)];
+            if (hb_mixdown_is_supported_s(mixdown->amixdown, self.encoder, channelLayout))
+            {
+                [mixdowns addObject:@(mixdown->name)];
+            }
         }
     }
     return mixdowns;

@@ -7,11 +7,7 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-/* This file handles the following two scenarios:
- *
- * 1) remapping audio from decoder order to libav order (for downmixing)
- *
- * 2) remapping audio from libav order to encoder order (for encoding)
+/* This file handles remapping audio channels
  *
  * We only need to support:
  *
@@ -27,6 +23,7 @@
 #define HANDBRAKE_AUDIO_REMAP_H
 
 #include <stdint.h>
+#include "libavutil/channel_layout.h"
 #include "libavutil/samplefmt.h"
 
 /* we only need to support the 11 "most common" channels */
@@ -37,12 +34,25 @@ typedef struct
     uint64_t channel_order_map[HB_AUDIO_REMAP_MAX_CHANNELS + 1];
 } hb_chan_map_t;
 
+/*
+ * Predefined channel maps for common channel orders.
+ */
+extern hb_chan_map_t hb_vorbis_chan_map;
+extern hb_chan_map_t hb_aac_chan_map;
+
+/*
+ * Configures a AVChannelLayout with a hb_chan_map_t.
+*/
+void             hb_audio_remap_map_channel_layout(hb_chan_map_t *map,
+                                                   AVChannelLayout *ch_layout_out,
+                                                   const AVChannelLayout *ch_layout_in);
+
 typedef struct
 {
     int nchannels;
     int remap_needed;
-    hb_chan_map_t *channel_map_in;
-    hb_chan_map_t *channel_map_out;
+    AVChannelLayout ch_layout_in;
+    AVChannelLayout ch_layout_out;
     int table[HB_AUDIO_REMAP_MAX_CHANNELS];
 
     void (*remap)(uint8_t **samples, int nsamples,
@@ -50,30 +60,13 @@ typedef struct
 } hb_audio_remap_t;
 
 /*
- * Predefined channel maps for common channel orders.
- */
-extern hb_chan_map_t hb_libav_chan_map;
-extern hb_chan_map_t hb_liba52_chan_map;
-extern hb_chan_map_t hb_vorbis_chan_map;
-extern hb_chan_map_t hb_aac_chan_map;
-
-/*
  * Initialize an hb_audio_remap_t to remap audio with the specified sample
- * format, from the input to the output channel order (indicated by
- * channel_map_in and channel_map_out, respectively).
+ * format, from the input to the output channel layout (indicated by
+ * ch_layout_in and ch_layout_out, respectively).
  */
 hb_audio_remap_t* hb_audio_remap_init(enum AVSampleFormat sample_fmt,
-                                      hb_chan_map_t *channel_map_out,
-                                      hb_chan_map_t *channel_map_in);
-
-/*
- * Updates an hb_audio_remap_t's number of channels and remap table to work with
- * the specified channel layout.
- *
- * Must be called at least once before remapping.
- */
-void              hb_audio_remap_set_channel_layout(hb_audio_remap_t *remap,
-                                                    uint64_t channel_layout);
+                                      const AVChannelLayout *ch_layout_out,
+                                      const AVChannelLayout *ch_layout_in);
 
 /*
  * Free an hb_audio_remap_t.
@@ -96,9 +89,8 @@ void              hb_audio_remap(hb_audio_remap_t *remap, uint8_t **samples,
  *
  * remap_table is allocated by the caller.
  */
-void              hb_audio_remap_build_table(hb_chan_map_t *channel_map_out,
-                                             hb_chan_map_t *channel_map_in,
-                                             uint64_t channel_layout,
+void              hb_audio_remap_build_table(AVChannelLayout *ch_layout_out,
+                                             AVChannelLayout *ch_layout_in,
                                              int *remap_table);
 
 #endif /* HANDBRAKE_AUDIO_REMAP_H */

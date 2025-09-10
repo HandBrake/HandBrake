@@ -133,7 +133,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             // If the mixdown isn't supported, downgrade it.
             if (track.IsPassthru && track.MixDown != null && validatedEncoder != null && !HandBrakeEncoderHelpers.MixdownIsSupported(track.MixDown, validatedEncoder, sourceTrack.ChannelLayout))
             {
-                HBMixdown changedMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(validatedEncoder, (ulong)sourceTrack.ChannelLayout);
+                HBMixdown changedMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(validatedEncoder, sourceTrack.ChannelLayout);
                 if (changedMixdown != null)
                 {
                     this.mixDown = changedMixdown.ShortName;
@@ -517,7 +517,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
                 if (this.ScannedTrack != null)
                 {
-                    ulong layout = (ulong)this.scannedTrack.ChannelLayout;
+                    string layout = this.scannedTrack.ChannelLayout;
                     bool keep = PassthruTracks != null ? PassthruTracks() : true;
                     HBMixdown currentMixdown = HandBrakeEncoderHelpers.GetMixdown(this.mixDown);
                     this.TrackName = HandBrakeEncoderHelpers.GetAutonameAudioTrack(this.TrackName,
@@ -644,11 +644,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
 
             HBMixdown currentMixdown = HandBrakeEncoderHelpers.GetMixdown(this.mixDown);
-            HBMixdown sanitisedMixdown = HandBrakeEncoderHelpers.SanitizeMixdown(currentMixdown, this.Encoder, (uint)this.ScannedTrack.ChannelLayout);
+            HBMixdown sanitisedMixdown = HandBrakeEncoderHelpers.SanitizeMixdown(currentMixdown, this.Encoder, this.ScannedTrack.ChannelLayout);
             HBMixdown defaultMixdown = sanitisedMixdown;
             if (this.Encoder != null)
             {
-                defaultMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(this.Encoder, (uint)this.ScannedTrack.ChannelLayout);
+                defaultMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(this.Encoder, this.ScannedTrack.ChannelLayout);
             }
          
             if (this.mixDown == null || this.mixDown == "none")

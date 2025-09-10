@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) int sampleRate;
 @property (nonatomic, readonly) int codec;
 @property (nonatomic, readonly) int codecParam;
-@property (nonatomic, readonly) uint64_t channelLayout;
+@property (nonatomic, readonly) NSString *chLayout;
 
 @property (nonatomic, readonly) NSString *isoLanguageCode;
 

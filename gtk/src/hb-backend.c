@@ -1413,7 +1413,7 @@ ghb_mix_opts_filter(GtkComboBox *combo, gint acodec)
 }
 
 static void
-grey_mix_opts(signal_user_data_t *ud, gint acodec, uint64_t layout)
+grey_mix_opts(signal_user_data_t *ud, gint acodec, const char *layout)
 {
     ghb_log_func();
 
@@ -1422,7 +1422,7 @@ grey_mix_opts(signal_user_data_t *ud, gint acodec, uint64_t layout)
          mix = hb_mixdown_get_next(mix))
     {
         grey_builder_combo_box_item("AudioMixdown", mix->amixdown,
-                !hb_mixdown_is_supported(mix->amixdown, acodec, layout));
+                !hb_mixdown_is_supported_s(mix->amixdown, acodec, layout));
     }
 }
 
@@ -1496,8 +1496,18 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 
     acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
 
-    uint64_t layout = aconfig != NULL ? aconfig->in.channel_layout : UINT64_MAX;
-    guint32 in_codec = aconfig != NULL ? aconfig->in.codec : 0;
+    const char *layout = "7.1";
+    guint32 in_codec = 0;
+    char layout_name[256];
+
+    if (aconfig != NULL)
+    {
+        hb_layout_get_name(aconfig->in.ch_layout,
+            layout_name, sizeof(layout_name));
+        layout = layout_name;
+        in_codec = aconfig->in.codec;
+    }
+
     fallback = ghb_select_fallback(ud->settings, acodec);
     gint copy_mask = ghb_get_copy_mask(ud->settings);
     acodec = ghb_select_audio_codec(mux->format, in_codec, acodec,
@@ -1506,12 +1516,12 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 }
 
 gint
-ghb_get_best_mix(uint64_t layout, gint acodec, gint mix)
+ghb_get_best_mix(const char *layout, gint acodec, gint mix)
 {
     if (mix == HB_AMIXDOWN_NONE)
         mix = HB_INVALID_AMIXDOWN;
 
-    return hb_mixdown_get_best(acodec, layout, mix);
+    return hb_mixdown_get_best_s(acodec, layout, mix);
 }
 
 // Set up the model for the combo box
