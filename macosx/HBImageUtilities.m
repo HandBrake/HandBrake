@@ -40,7 +40,7 @@ CGImageRef CreateScaledCGImageFromCGImage(CGImageRef image, CGFloat thumbnailHei
     // specified here by CGBitmapContextCreate.
     CGColorSpaceRef colorspace = CGImageGetColorSpace(image);
     context = CGBitmapContextCreate (bitmapData,width,height,8,bitmapBytesPerRow,
-                                     colorspace,kCGImageAlphaNoneSkipFirst);
+                                     colorspace, (CGBitmapInfo)kCGImageAlphaNoneSkipFirst);
 
     if (context == NULL)
     {
@@ -78,7 +78,7 @@ CGImageRef CGImageRotated(CGImageRef imgRef, CGFloat angle, BOOL flipped) CF_RET
                                                    8,
                                                    0,
                                                    colorSpace,
-                                                   kCGImageAlphaPremultipliedFirst);
+                                                   (CGBitmapInfo)kCGImageAlphaPremultipliedFirst);
     CGContextSetAllowsAntialiasing(bmContext, FALSE);
     CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
 

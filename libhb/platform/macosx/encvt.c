@@ -240,12 +240,10 @@ static void hb_vt_check_result(OSStatus err, CFStringRef propertyKey)
 {
     if (err != noErr)
     {
-        static const int VAL_BUF_LEN = 256;
-        char valBuf[VAL_BUF_LEN];
-
+        char valBuf[256];
         Boolean haveStr = CFStringGetCString(propertyKey,
                                              valBuf,
-                                             VAL_BUF_LEN,
+                                             256,
                                              kCFStringEncodingUTF8);
         if (haveStr)
         {
@@ -1154,12 +1152,10 @@ static OSStatus hb_vt_init_session(hb_work_object_t *w, hb_job_t *job, hb_work_p
 
         if (err == noErr)
         {
-            static const int VAL_BUF_LEN = 256;
-            char valBuf[VAL_BUF_LEN];
-
+            char valBuf[256];
             Boolean haveStr = CFStringGetCString(encoderID,
                                                  valBuf,
-                                                 VAL_BUF_LEN,
+                                                 256,
                                                  kCFStringEncodingUTF8);
             if (haveStr)
             {
