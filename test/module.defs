@@ -17,7 +17,7 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 TEST.libs = $(LIBHB.a)
 
 TEST.pkgconfig_libs = libass libavformat libavfilter libavcodec libavutil libswresample dvdnav \
-	dvdread libswscale theoraenc theoradec vorbis vorbisenc ogg x264 libbluray libudfread \
+	dvdread libswscale theoraenc theoradec vorbis vorbisenc ogg x264 libbluray \
 	jansson libturbojpeg SvtAv1Enc
 
 TEST.pkgconfig_libs += $(foreach m,$(MODULES.NAMES),$($m.OSL.libs))
