@@ -10,7 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBToolbarItem : NSToolbarItem
 
-@property (nonatomic, copy) NSString *badgeValue;
+@property (nonatomic, copy) NSString *HB_badgeValue;
 
 @end
 

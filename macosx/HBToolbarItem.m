@@ -9,7 +9,7 @@
 
 @interface HBToolbarItem ()
 
-@property (nonatomic, nullable) HBBadgeView *badgeView;
+@property (nonatomic, nullable) HBBadgeView *HB_badgeView;
 
 @end
 
@@ -21,21 +21,31 @@
     return self;
 }
 
-- (void)setBadgeValue:(NSString *)badgeValue
+- (void)setHB_badgeValue:(NSString *)badgeValue
 {
-    if (![_badgeValue isEqualToString:badgeValue])
+    if (![_HB_badgeValue isEqualToString:badgeValue])
     {
-        _badgeValue = [badgeValue copy];
+        _HB_badgeValue = [badgeValue copy];
     }
-    if (self.view && self.badgeView == nil)
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 160000
+    if (@available(macOS 26.0, *))
     {
-        NSSize size = self.view.frame.size;
-        NSRect frame = NSMakeRect(0, 0, size.width, size.height);
-        self.badgeView = [[HBBadgeView alloc] initWithFrame:frame];
-        self.badgeView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-        [self.view addSubview:self.badgeView];
+        self.badge = badgeValue.length ? [NSItemBadge badgeWithText:badgeValue] : nil;
     }
-    self.badgeView.badgeValue = badgeValue;
+    else
+#endif
+    {
+        if (self.view && self.HB_badgeView == nil)
+        {
+            NSSize size = self.view.frame.size;
+            NSRect frame = NSMakeRect(0, 0, size.width, size.height);
+            self.HB_badgeView = [[HBBadgeView alloc] initWithFrame:frame];
+            self.HB_badgeView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+            [self.view addSubview:self.HB_badgeView];
+        }
+        self.HB_badgeView.badgeValue = badgeValue;
+    }
 }
 
 - (NSMenuItem *)menuFormRepresentation
