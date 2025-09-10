@@ -157,6 +157,17 @@ namespace HandBrakeWPF.ViewModelItems.Filters
         {
             this.CurrentTask = task;
 
+            this.currentFilterId = this.CurrentTask.Denoise switch
+            {
+                Denoise.NLMeans => (int)hb_filter_ids.HB_FILTER_NLMEANS,
+                Denoise.hqdn3d => (int)hb_filter_ids.HB_FILTER_HQDN3D,
+                Denoise.Off => 0,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            this.NotifyOfPropertyChange(() => this.DenoisePresets);
+            this.NotifyOfPropertyChange(() => this.DenoiseTunes);
+
             this.NotifyOfPropertyChange(() => this.SelectedDenoise);
             this.NotifyOfPropertyChange(() => this.SelectedDenoisePreset);
             this.NotifyOfPropertyChange(() => this.SelectedDenoiseTune);
