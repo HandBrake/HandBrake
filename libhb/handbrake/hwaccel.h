@@ -36,6 +36,6 @@ AVBufferRef *hb_hwaccel_init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
 
 int hb_hwaccel_is_available(hb_hwaccel_t *hwaccel, int codec_id);
 int hb_hwaccel_can_use_full_hw_pipeline(hb_hwaccel_t *hwaccel, hb_list_t *list_filter,
-                                        int encoder, int rotation);
+                                        int encoder, int rotation, int color_range);
 
 #endif // HANDBRAKE_HWACCEL_COMMON_H
