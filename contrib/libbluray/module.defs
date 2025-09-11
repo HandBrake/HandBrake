@@ -13,7 +13,7 @@ LIBBLURAY.CONFIGURE.shared      =
 LIBBLURAY.CONFIGURE.host        =
 LIBBLURAY.CONFIGURE.build       =
 LIBBLURAY.CONFIGURE.static      = -Ddefault_library=static
-LIBBLURAY.CONFIGURE.extra       = --libdir=$(call fn.ABSOLUTE,$(LIBBLURAY.prefix/))contrib/lib/ --force-fallback-for=libudfread \ 
+LIBBLURAY.CONFIGURE.extra       = --libdir=$(call fn.ABSOLUTE,$(LIBBLURAY.prefix/))contrib/lib/ --force-fallback-for=libudfread \
                                   -Denable_tools=false -Dbdj_jar=disabled -Dfontconfig=disabled -Dfreetype=disabled -Dlibxml2=disabled \
                                   -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,LIBBLURAY.GCC,*archs *sysroot *minver ?extra)" \
                                   -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,LIBBLURAY.GCC,*archs *sysroot *minver ?extra.exe)"
