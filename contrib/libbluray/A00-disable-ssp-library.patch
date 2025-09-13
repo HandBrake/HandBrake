@@ -1,0 +1,11 @@
+diff --git a/meson.build b/meson.build
+--- a/meson.build	2025-08-11 22:23:19.000000000 +0200
++++ b/meson.build	2025-08-25 21:00:59.125934900 +0200
+@@ -43,7 +43,6 @@
+ if host_machine.system() == 'windows'
+     test_args += ['-D_WIN32_WINNT=0x0502', '-D_WIN32_IE=0x0501']
+     if cc.get_argument_syntax() != 'msvc'
+-        extra_dependencies += cc.find_library('ssp')
+         test_args += '-D__USE_MINGW_ANSI_STDIO=1'
+     endif
+ else
