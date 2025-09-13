@@ -60,6 +60,7 @@
         _displayName = [displayName copy];
         _title = @"";
         _isoLanguageCode = @"";
+        _chLayout = @"";
     }
     return self;
 }
@@ -76,7 +77,10 @@
         _sampleRate = audio->in.samplerate;
         _codec = audio->in.codec;
         _codecParam = audio->in.codec_param;
-        _channelLayout = audio->in.channel_layout;
+
+        char channelLayoutDescription[256];
+        hb_layout_get_name(audio->in.ch_layout, channelLayoutDescription, sizeof(channelLayoutDescription));
+        _chLayout = @(channelLayoutDescription);
 
         _isoLanguageCode = @(audio->lang.iso639_2);
     }
@@ -94,8 +98,7 @@
     encodeInt(_sampleRate);
     encodeInt(_codec);
     encodeInt(_codecParam);
-    encodeInteger(_channelLayout);
-
+    encodeObject(_chLayout);
     encodeObject(_isoLanguageCode);
 }
 
@@ -111,7 +114,7 @@
         decodeInt(_sampleRate);
         decodeInt(_codec);
         decodeInt(_codecParam);
-        decodeInteger(_channelLayout);
+        decodeObjectOrFail(_chLayout, NSString);
         decodeObjectOrFail(_isoLanguageCode, NSString);
     }
     return self;

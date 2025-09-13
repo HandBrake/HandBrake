@@ -133,10 +133,16 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
     pv->list = hb_list_init();
 
     // channel remapping
-    uint64_t layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
-    hb_audio_remap_build_table(&hb_vorbis_chan_map,
-                               audio->config.in.channel_map, layout,
+    AVChannelLayout out_layout, mixdown_layout;
+    hb_ff_mixdown_ch_xlat(&mixdown_layout, audio->config.out.mixdown, NULL);
+    hb_audio_remap_map_channel_layout(&hb_vorbis_chan_map, &out_layout, &mixdown_layout);
+
+    hb_audio_remap_build_table(&out_layout,
+                               &mixdown_layout,
                                pv->remap_table);
+
+    av_channel_layout_uninit(&out_layout);
+    av_channel_layout_uninit(&mixdown_layout);
 
     return 0;
 }

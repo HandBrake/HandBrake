@@ -1203,7 +1203,7 @@ static int sanitize_audio(hb_job_t *job)
             /* Mixdown not specified, set the default mixdown */
             audio->config.out.mixdown =
                 hb_mixdown_get_default(audio->config.out.codec,
-                                       audio->config.in.channel_layout);
+                                       audio->config.in.ch_layout);
             hb_log("work: mixdown not specified, track %d setting mixdown %s",
                    audio->config.out.track,
                    hb_mixdown_get_name(audio->config.out.mixdown));
@@ -1212,7 +1212,7 @@ static int sanitize_audio(hb_job_t *job)
         {
             best_mixdown =
                 hb_mixdown_get_best(audio->config.out.codec,
-                                    audio->config.in.channel_layout,
+                                    audio->config.in.ch_layout,
                                     audio->config.out.mixdown);
             if (audio->config.out.mixdown != best_mixdown)
             {

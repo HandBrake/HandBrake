@@ -58,10 +58,10 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 {
     HBTitleAudioTrack *track = [self sourceTrackAtIndex:idx];
 
-    const char *title = hb_audio_name_generate(track.title.UTF8String,
-                                               track.channelLayout, mixdown,
-                                               self.defaults.passthruName,
-                                               (hb_audio_autonaming_behavior_t)self.defaults.automaticNamingBehavior);
+    const char *title = hb_audio_name_generate_s(track.title.UTF8String,
+                                                 track.chLayout.UTF8String, mixdown,
+                                                 self.defaults.passthruName,
+                                                 (hb_audio_autonaming_behavior_t)self.defaults.automaticNamingBehavior);
 
     return title ? @(title) : nil;
 }

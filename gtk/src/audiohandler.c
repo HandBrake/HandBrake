@@ -119,7 +119,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud, GhbValue *asettings)
 
         int track, mix, acodec;
         GhbValue * atrack;
-        uint64_t layout;
+        const char * layout;
 
         track = ghb_dict_get_int(asettings, "Track");
 
@@ -133,7 +133,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud, GhbValue *asettings)
         {
             sr = ghb_dict_get_int(atrack, "SampleRate");
         }
-        layout = ghb_dict_get_int(atrack, "ChannelLayout");
+        layout = ghb_dict_get_string(atrack, "ChannelLayout");
         mix = ghb_get_best_mix(layout, acodec, mix);
         hb_audio_bitrate_get_limits(acodec, sr, mix, &low, &high);
 
@@ -549,7 +549,7 @@ audio_add_track(
     atrack = ghb_get_title_audio_track(settings, track);
     if (atrack != NULL)
     {
-        int layout = ghb_dict_get_int(atrack, "ChannelLayout");
+        const char * layout = ghb_dict_get_string(atrack, "ChannelLayout");
         mix = ghb_get_best_mix(layout, encoder, mix);
 
         int keep_name = ghb_dict_get_int(settings, "AudioTrackNamePassthru");
@@ -557,8 +557,8 @@ audio_add_track(
         int behavior = hb_audio_autonaming_behavior_get_from_name(behavior_name);
 
         const char * name = ghb_dict_get_string(atrack, "Name");
-        const char * generated_name = hb_audio_name_generate(name, layout, mix,
-                                                            keep_name, behavior);
+        const char * generated_name = hb_audio_name_generate_s(name, layout, mix,
+                                                               keep_name, behavior);
         if (generated_name != NULL)
         {
             ghb_dict_set_string(asettings, "Name", generated_name);
@@ -1016,7 +1016,7 @@ audio_codec_changed_cb (GtkWidget *widget, gpointer data)
         // pref settings
         gint track;
         gint br, sr, mix;
-        uint64_t layout;
+        const char * layout;
         GhbValue * atrack;
 
         if (asettings != NULL)
@@ -1045,7 +1045,7 @@ audio_codec_changed_cb (GtkWidget *widget, gpointer data)
         {
             sr = ghb_dict_get_int(atrack, "SampleRate");
         }
-        layout = ghb_dict_get_int(atrack, "ChannelLayout");
+        layout = ghb_dict_get_string(atrack, "ChannelLayout");
         mix = ghb_get_best_mix(layout, acodec, mix);
         br = hb_audio_bitrate_get_best(acodec, br, sr, mix);
         ghb_ui_update("AudioBitrate",

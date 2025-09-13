@@ -15,6 +15,8 @@
 #include "libavutil/frame.h"
 #include "handbrake/project.h"
 
+typedef AVChannelLayout hb_channel_layout_t;
+
 /***********************************************************************
  * common.c
  **********************************************************************/
