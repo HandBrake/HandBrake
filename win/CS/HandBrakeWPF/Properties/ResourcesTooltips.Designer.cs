@@ -71,7 +71,7 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Target a specific quality level for audio.
-        ///1 is lowest quality and 5 is highest quality.
+        ///Higher values mean higher quality.
         ///
         ///Bitrate will vary source to source..
         /// </summary>
@@ -849,7 +849,7 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("Video_ColourRange", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Enables constant framerate output..
         /// </summary>
