@@ -136,6 +136,25 @@ const char *metadata_keys[][META_MUX_LAST] =
     {"iTunEXTC",            "iTunEXTC",               NULL,                                   NULL},
     {"iTunMOVI",            "iTunMOVI",               NULL,                                   NULL},
     {"Location",            "location",               "com.apple.quicktime.location.ISO6709", NULL},
+    
+    // Comprehensive metadata fields from exiftool
+    {"CameraMake",          "com.apple.quicktime.make",          "com.apple.quicktime.make",          "CAMERA_MAKE"},
+    {"CameraModel",         "com.apple.quicktime.model",         "com.apple.quicktime.model",         "CAMERA_MODEL"},
+    {"LensMake",            "com.apple.quicktime.lens.make",     "com.apple.quicktime.lens.make",     "LENS_MAKE"},
+    {"LensModel",           "com.apple.quicktime.lens.model",    "com.apple.quicktime.lens.model",    "LENS_MODEL"},
+    {"LensInfo",            "com.apple.quicktime.lens",          "com.apple.quicktime.lens",          "LENS_INFO"},
+    {"GPSLatitude",         "gps_latitude",           "com.apple.quicktime.gps.latitude",      "GPS_LATITUDE"},
+    {"GPSLongitude",        "gps_longitude",          "com.apple.quicktime.gps.longitude",     "GPS_LONGITUDE"},
+    {"GPSAltitude",         "gps_altitude",           "com.apple.quicktime.gps.altitude",      "GPS_ALTITUDE"},
+    {"ISO",                 "iso",                    "com.apple.quicktime.camera.iso",        "ISO"},
+    {"Aperture",            "com.apple.quicktime.camera.aperture","com.apple.quicktime.camera.aperture","APERTURE"},
+    {"ShutterSpeed",        "shutter_speed",          "com.apple.quicktime.camera.shutter",    "SHUTTER_SPEED"},
+    {"FocalLength",         "com.apple.quicktime.camera.focal_length",  "com.apple.quicktime.camera.focal_length",  "FOCAL_LENGTH"},
+    {"WhiteBalance",        "white_balance",          "com.apple.quicktime.camera.wb",         "WHITE_BALANCE"},
+    {"Flash",               "flash",                  "com.apple.quicktime.camera.flash",      "FLASH"},
+    {"ColorSpace",          "color_space",            "com.apple.quicktime.colorspace",        "COLOR_SPACE"},
+    {"Software",            "software",               "com.apple.quicktime.software",          "SOFTWARE"},
+    
     {NULL}
 };
 
@@ -298,9 +317,9 @@ static int avformatInit( hb_mux_object_t * m )
             av_dict_set(&av_opts, "brand", "mp42", 0);
             av_dict_set(&av_opts, "strict", "experimental", 0);
             if (job->optimize)
-                av_dict_set(&av_opts, "movflags", "faststart+disable_chpl+write_colr", 0);
+                av_dict_set(&av_opts, "movflags", "faststart+disable_chpl+write_colr+use_metadata_tags", 0);
             else
-                av_dict_set(&av_opts, "movflags", "+disable_chpl+write_colr", 0);
+                av_dict_set(&av_opts, "movflags", "+disable_chpl+write_colr+use_metadata_tags", 0);
             break;
 
         case HB_MUX_AV_MKV:
@@ -1065,7 +1084,18 @@ static int avformatInit( hb_mux_object_t * m )
 
     if (job->metadata)
     {
-        hb_deep_log(2, "Writing Metadata to output file...");
+        hb_log("muxavformat: Writing Metadata to output file...");
+
+        // Identify primary video stream for track-level metadata duplication
+        AVStream *video_st = NULL;
+        for (int ti = 0; ti < m->ntracks; ti++)
+        {
+            if (m->tracks[ti] && m->tracks[ti]->type == MUX_TYPE_VIDEO)
+            {
+                video_st = m->tracks[ti]->st;
+                break;
+            }
+        }
 
         if (job->metadata->dict)
         {
@@ -1088,6 +1118,96 @@ static int avformatInit( hb_mux_object_t * m )
                         if (mux_key != NULL)
                         {
                             av_dict_set(&m->oc->metadata, mux_key, str, 0);
+                            if (video_st)
+                                av_dict_set(&video_st->metadata, mux_key, str, 0);
+                            hb_log("muxavformat: Added metadata %s -> %s = %s", key, mux_key, str);
+                            
+                            // Special case: ReleaseDate should also be written to all timestamp fields
+                            // since it represents the actual recording start time
+                            if (strcmp(key, "ReleaseDate") == 0 && meta_mux == META_MUX_MP4)
+                            {
+                                av_dict_set(&m->oc->metadata, "date_taken", str, 0);
+                                av_dict_set(&m->oc->metadata, "creation_time", str, 0);
+                                av_dict_set(&m->oc->metadata, "media_create_date", str, 0);
+                                av_dict_set(&m->oc->metadata, "media_modify_date", str, 0);
+                                av_dict_set(&m->oc->metadata, "track_create_date", str, 0);
+                                av_dict_set(&m->oc->metadata, "track_modify_date", str, 0);
+                                if (video_st)
+                                {
+                                    av_dict_set(&video_st->metadata, "date_taken", str, 0);
+                                    av_dict_set(&video_st->metadata, "creation_time", str, 0);
+                                }
+                                hb_log("muxavformat: Added metadata %s to all timestamp fields = %s", key, str);
+                            }
+
+                            // Special case: duplicate critical camera/lens fields with Apple QuickTime keys
+                            if (meta_mux == META_MUX_MP4)
+                            {
+                                if (strcmp(key, "CameraMake") == 0)
+                                {
+                                    av_dict_set(&m->oc->metadata, "com.apple.quicktime.make", str, 0);
+                                    if (video_st) av_dict_set(&video_st->metadata, "com.apple.quicktime.make", str, 0);
+                                    hb_log("muxavformat: Duplicated CameraMake to com.apple.quicktime.make = %s", str);
+                                }
+                                else if (strcmp(key, "CameraModel") == 0)
+                                {
+                                    av_dict_set(&m->oc->metadata, "com.apple.quicktime.model", str, 0);
+                                    if (video_st) av_dict_set(&video_st->metadata, "com.apple.quicktime.model", str, 0);
+                                    hb_log("muxavformat: Duplicated CameraModel to com.apple.quicktime.model = %s", str);
+                                }
+                                else if (strcmp(key, "LensMake") == 0)
+                                {
+                                    av_dict_set(&m->oc->metadata, "com.apple.quicktime.lens.make", str, 0);
+                                    if (video_st) av_dict_set(&video_st->metadata, "com.apple.quicktime.lens.make", str, 0);
+                                    hb_log("muxavformat: Duplicated LensMake to com.apple.quicktime.lens.make = %s", str);
+                                }
+                                else if (strcmp(key, "LensModel") == 0)
+                                {
+                                    av_dict_set(&m->oc->metadata, "com.apple.quicktime.lens.model", str, 0);
+                                    if (video_st) av_dict_set(&video_st->metadata, "com.apple.quicktime.lens.model", str, 0);
+                                    hb_log("muxavformat: Duplicated LensModel to com.apple.quicktime.lens.model = %s", str);
+                                }
+                                else if (strcmp(key, "LensInfo") == 0)
+                                {
+                                    // Include additional aliases seen in the wild
+                                    av_dict_set(&m->oc->metadata, "lens_model", str, 0);
+                                    av_dict_set(&m->oc->metadata, "camera_lens", str, 0);
+                                    if (video_st)
+                                    {
+                                        av_dict_set(&video_st->metadata, "lens_model", str, 0);
+                                        av_dict_set(&video_st->metadata, "camera_lens", str, 0);
+                                    }
+                                    hb_log("muxavformat: Added metadata %s to additional lens fields = %s", key, str);
+                                }
+                            }
+
+                            // Special case: FocalLength should also be written with 35mm equivalent field
+                            // for iPhone Camera Focal Length 35mm Equivalent compatibility
+                            if (strcmp(key, "FocalLength") == 0 && meta_mux == META_MUX_MP4)
+                            {
+                                av_dict_set(&m->oc->metadata, "focal_length_35mm", str, 0);  // 35mm equivalent focal length
+                                if (video_st) av_dict_set(&video_st->metadata, "focal_length_35mm", str, 0);
+                                // Also write generic and QuickTime-only aliases
+                                av_dict_set(&m->oc->metadata, "focal_length", str, 0);
+                                av_dict_set(&m->oc->metadata, "com.apple.quicktime.focal_length", str, 0);
+                                if (video_st)
+                                {
+                                    av_dict_set(&video_st->metadata, "focal_length", str, 0);
+                                    av_dict_set(&video_st->metadata, "com.apple.quicktime.focal_length", str, 0);
+                                }
+                                hb_log("muxavformat: Added metadata %s to focal_length_35mm equivalent = %s", key, str);
+                            }
+                            // Also mirror Aperture to a common alias
+                            if (strcmp(key, "Aperture") == 0 && meta_mux == META_MUX_MP4)
+                            {
+                                av_dict_set(&m->oc->metadata, "com.apple.quicktime.fnumber", str, 0);
+                                if (video_st) av_dict_set(&video_st->metadata, "com.apple.quicktime.fnumber", str, 0);
+                                hb_log("muxavformat: Added metadata %s to fnumber alias = %s", key, str);
+                            }
+                        }
+                        else
+                        {
+                            hb_log("muxavformat: No mux mapping for metadata key '%s', skipping", key);
                         }
                     }
                 }

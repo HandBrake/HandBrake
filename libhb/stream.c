@@ -6011,6 +6011,226 @@ static int ffmpeg_decmetadata( AVDictionary *m, hb_title_t *title )
     return result;
 }
 
+// Map exiftool metadata keys to HandBrake keys
+static const char * hb_map_exiftool_key(const char *exiftool_key)
+{
+    // Date and time mappings - prioritize original capture date
+    if (strcmp(exiftool_key, "Create Date") == 0 || 
+        strcmp(exiftool_key, "Date/Time Original") == 0 ||
+        strcmp(exiftool_key, "Content Create Date") == 0 ||
+        strcmp(exiftool_key, "Track Create Date") == 0) {
+        return "DateTaken";
+    }
+    
+    // Camera information
+    if (strcmp(exiftool_key, "Make") == 0 ||
+        strcmp(exiftool_key, "Camera Make") == 0) {
+        return "CameraMake";
+    }
+    if (strcmp(exiftool_key, "Model") == 0 ||
+        strcmp(exiftool_key, "Camera Model") == 0 ||
+        strcmp(exiftool_key, "Camera Model Name") == 0) {
+        return "CameraModel";
+    }
+    
+    // Lens information
+    if (strcmp(exiftool_key, "Lens Make") == 0) {
+        return "LensMake";
+    }
+    if (strcmp(exiftool_key, "Lens Model") == 0 ||
+        strcmp(exiftool_key, "Camera Lens Model (und-US)") == 0) {
+        return "LensModel";
+    }
+    if (strcmp(exiftool_key, "Lens Info") == 0 ||
+        strcmp(exiftool_key, "Lens") == 0) {
+        return "LensInfo";
+    }
+    
+    // GPS coordinates
+    if (strcmp(exiftool_key, "GPS Latitude") == 0 ||
+        strcmp(exiftool_key, "GPS Latitude Ref") == 0) {
+        return "GPSLatitude";
+    }
+    if (strcmp(exiftool_key, "GPS Longitude") == 0 ||
+        strcmp(exiftool_key, "GPS Longitude Ref") == 0) {
+        return "GPSLongitude";
+    }
+    if (strcmp(exiftool_key, "GPS Altitude") == 0 ||
+        strcmp(exiftool_key, "GPS Altitude Ref") == 0) {
+        return "GPSAltitude";
+    }
+    
+    // Camera settings
+    if (strcmp(exiftool_key, "ISO") == 0 || 
+        strcmp(exiftool_key, "Base ISO") == 0 ||
+        strcmp(exiftool_key, "ISO Speed Rating") == 0 ||
+        strcmp(exiftool_key, "Recommended Exposure Index") == 0) {
+        return "ISO";
+    }
+    if (strcmp(exiftool_key, "F Number") == 0 || 
+        strcmp(exiftool_key, "Aperture") == 0 ||
+        strcmp(exiftool_key, "Aperture Value") == 0) {
+        return "Aperture";
+    }
+    if (strcmp(exiftool_key, "Exposure Time") == 0 || 
+        strcmp(exiftool_key, "Shutter Speed") == 0 ||
+        strcmp(exiftool_key, "Shutter Speed Value") == 0) {
+        return "ShutterSpeed";
+    }
+    if (strcmp(exiftool_key, "Focal Length") == 0 ||
+        strcmp(exiftool_key, "Focal Length In 35mm Format") == 0) {
+        return "FocalLength";
+    }
+    if (strcmp(exiftool_key, "White Balance") == 0 ||
+        strcmp(exiftool_key, "White Balance Mode") == 0) {
+        return "WhiteBalance";
+    }
+    if (strcmp(exiftool_key, "Flash") == 0 ||
+        strcmp(exiftool_key, "Flash Mode") == 0) {
+        return "Flash";
+    }
+    
+    // Color and technical information
+    if (strcmp(exiftool_key, "Color Space") == 0 ||
+        strcmp(exiftool_key, "Color Space Data") == 0) {
+        return "ColorSpace";
+    }
+    if (strcmp(exiftool_key, "Software") == 0 ||
+        strcmp(exiftool_key, "Creator Tool") == 0 ||
+        strcmp(exiftool_key, "Processing Software") == 0) {
+        return "Software";
+    }
+    
+    // Return NULL for keys we don't want to map
+    return NULL;
+}
+
+static void hb_extract_comprehensive_metadata( const char *path, hb_title_t *title )
+{
+    char command[4096];
+    FILE *pipe;
+    char line[1024];
+    char *key, *value;
+    int metadata_count = 0;
+    
+    hb_log("hb_extract_comprehensive_metadata: Starting comprehensive metadata extraction for: %s", path);
+    
+    // Check if exiftool is available by trying multiple common paths
+    const char *exiftool_paths[] = {
+        "/usr/local/bin/exiftool",  // Common Homebrew location
+        "/opt/homebrew/bin/exiftool", // Apple Silicon Homebrew location
+        "/usr/bin/exiftool",        // System installation
+        "exiftool",                 // PATH lookup
+        NULL
+    };
+    
+    char exiftool_cmd[256] = {0};
+    char version[64];
+    int has_exiftool = 0;
+    
+    for (int i = 0; exiftool_paths[i] != NULL; i++) {
+        snprintf(exiftool_cmd, sizeof(exiftool_cmd), "%s -ver 2>/dev/null", exiftool_paths[i]);
+        FILE *test_pipe = popen(exiftool_cmd, "r");
+        if (test_pipe != NULL) {
+            if (fgets(version, sizeof(version), test_pipe) != NULL) {
+                has_exiftool = 1;
+                strncpy(exiftool_cmd, exiftool_paths[i], sizeof(exiftool_cmd) - 1);
+                pclose(test_pipe);
+                break;
+            }
+            pclose(test_pipe);
+        }
+    }
+    
+    if (!has_exiftool) {
+        hb_log("hb_extract_comprehensive_metadata: exiftool not found in standard locations, skipping comprehensive metadata extraction");
+        return;
+    }
+    
+    // Remove newline from version string
+    version[strcspn(version, "\n")] = 0;
+    hb_log("hb_extract_comprehensive_metadata: Found exiftool version: %s", version);
+    
+    // Build the exiftool command to extract all metadata as key-value pairs
+    // Use standard format which outputs "Key Name: Value" format
+    snprintf(command, sizeof(command), 
+             "%s -charset utf8 '%s' 2>/dev/null", exiftool_cmd, path);
+    
+    hb_log("hb_extract_comprehensive_metadata: Running command: %s", command);
+    
+    pipe = popen(command, "r");
+    if (pipe == NULL) {
+        hb_deep_log(2, "hb_extract_comprehensive_metadata: Failed to execute exiftool command");
+        return;
+    }
+    
+    hb_log("hb_extract_comprehensive_metadata: Extracting metadata from: %s", path);
+    
+    while (fgets(line, sizeof(line), pipe) != NULL) {
+        // Remove newline and carriage return
+        line[strcspn(line, "\n\r")] = 0;
+        
+        // Skip empty lines
+        if (strlen(line) == 0) continue;
+        
+        hb_log("hb_extract_comprehensive_metadata: Raw exiftool output: '%s'", line);
+        
+        // Find the separator
+        char *sep = strstr(line, ": ");
+        if (sep == NULL) {
+            hb_log("hb_extract_comprehensive_metadata: No separator found in line, skipping");
+            continue;
+        }
+        
+        // Split into key and value
+        *sep = '\0';
+        key = line;
+        value = sep + 2;
+        
+        // Trim whitespace from key name
+        char *trimmed_key = key;
+        int key_len = strlen(key);
+        while (key_len > 0 && (key[key_len-1] == ' ' || key[key_len-1] == '\t')) {
+            key[key_len-1] = '\0';
+            key_len--;
+        }
+        while (*trimmed_key == ' ' || *trimmed_key == '\t') trimmed_key++;
+        
+        // Skip if value is empty or just whitespace
+        char *trimmed_value = value;
+        while (*trimmed_value == ' ' || *trimmed_value == '\t') trimmed_value++;
+        if (strlen(trimmed_value) == 0) {
+            hb_log("hb_extract_comprehensive_metadata: Empty value for key '%s', skipping", trimmed_key);
+            continue;
+        }
+        
+        hb_log("hb_extract_comprehensive_metadata: Parsed key='%s' value='%s'", trimmed_key, trimmed_value);
+        
+        // Map exiftool keys to HandBrake metadata keys
+        const char *hb_key = hb_map_exiftool_key(trimmed_key);
+        if (hb_key != NULL) {
+            // Only update if we don't already have this metadata from FFmpeg
+            if (hb_dict_get(title->metadata->dict, hb_key) == NULL) {
+                hb_update_meta_dict(title->metadata->dict, hb_key, trimmed_value);
+                hb_log("hb_extract_comprehensive_metadata: Added %s -> %s = %s", trimmed_key, hb_key, trimmed_value);
+                metadata_count++;
+            } else {
+                hb_log("hb_extract_comprehensive_metadata: Skipped %s (already exists as %s)", trimmed_key, hb_key);
+            }
+        } else {
+            hb_log("hb_extract_comprehensive_metadata: No mapping for key '%s', skipping", trimmed_key);
+        }
+    }
+    
+    int exit_status = pclose(pipe);
+    if (exit_status == 0) {
+        hb_log("hb_extract_comprehensive_metadata: Completed successfully: %d fields added", metadata_count);
+    } else {
+        hb_log("hb_extract_comprehensive_metadata: Completed with warnings (exit code: %d): %d fields added", 
+                    exit_status, metadata_count);
+    }
+}
+
 static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
 {
     AVFormatContext *ic = stream->ffmpeg_ic;
@@ -6268,6 +6488,16 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
      * Fill the metadata.
      */
     ffmpeg_decmetadata( ic->metadata, title );
+    
+    /*
+     * Fill comprehensive metadata using exiftool if enabled.
+     * This extracts additional metadata like GPS, camera info, lens data, etc.
+     * that may not be available through FFmpeg's standard metadata dictionary.
+     * 
+     * Note: We extract this during title scanning so it's available for all jobs.
+     * The actual usage will be controlled by MetadataPassthru setting during muxing.
+     */
+    hb_extract_comprehensive_metadata( stream->path, title );
 
     if( hb_list_count( title->list_chapter ) == 0 )
     {
