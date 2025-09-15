@@ -1,14 +1,14 @@
-From 0e807f8f65631047514c328e327db1840bf5045a Mon Sep 17 00:00:00 2001
+From 5a3f0197a3c1d1d39fd1758dc9d0cb3061130085 Mon Sep 17 00:00:00 2001
 From: Dash Santosh <dash.sathyanarayanan@multicorewareinc.com>
 Date: Sun, 27 Jul 2025 19:09:07 +0200
 Subject: [PATCH] Enable Neon DotProd and I8MM in SVT-AV1 for Windows On ARM
 
 ---
- Source/Lib/Codec/common_dsp_rtcd.c | 44 ++++++++++++++++++++++++++++--
- 1 file changed, 41 insertions(+), 3 deletions(-)
+ Source/Lib/Codec/common_dsp_rtcd.c | 42 ++++++++++++++++++++++++++++--
+ 1 file changed, 40 insertions(+), 2 deletions(-)
 
 diff --git a/Source/Lib/Codec/common_dsp_rtcd.c b/Source/Lib/Codec/common_dsp_rtcd.c
-index 41c91719..a1ff5684 100644
+index 41c91719..2eca994f 100644
 --- a/Source/Lib/Codec/common_dsp_rtcd.c
 +++ b/Source/Lib/Codec/common_dsp_rtcd.c
 @@ -188,7 +188,41 @@ EbCpuFlags svt_aom_get_cpu_flags(void) {
@@ -54,21 +54,19 @@ index 41c91719..a1ff5684 100644
  
  // IsProcessorFeaturePresent() parameter documentation:
  // https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent#parameters
-@@ -208,8 +242,12 @@ EbCpuFlags svt_aom_get_cpu_flags(void) {
+@@ -208,7 +242,11 @@ EbCpuFlags svt_aom_get_cpu_flags(void) {
      }
  #endif // defined(PF_ARM_V82_DP_INSTRUCTIONS_AVAILABLE)
  #endif // HAVE_NEON_DOTPROD
 -    // No I8MM or SVE feature detection available on Windows at time of writing.
--    return flags;
 +#if HAVE_NEON_I8MM
-+    if (check_i8mm_regkey())
-+        {
-+            flags |= EB_CPU_FLAGS_NEON_I8MM;
-+        }
-+#endif  // HAVE_NEON_I8MM    return flags;
++    if (check_i8mm_regkey()) {
++        flags |= EB_CPU_FLAGS_NEON_I8MM;
++    }
++#endif  // HAVE_NEON_I8MM
+     return flags;
  }
  
- #else // end _MSC_VER
 -- 
-2.39.5 (Apple Git-154)
+2.34.1
 
