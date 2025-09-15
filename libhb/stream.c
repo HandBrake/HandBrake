@@ -6011,7 +6011,6 @@ static int ffmpeg_decmetadata( AVDictionary *m, hb_title_t *title )
     return result;
 }
 
-
 static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
 {
     AVFormatContext *ic = stream->ffmpeg_ic;
