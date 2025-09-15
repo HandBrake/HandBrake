@@ -1203,7 +1203,7 @@ static int sanitize_audio(hb_job_t *job)
             /* Mixdown not specified, set the default mixdown */
             audio->config.out.mixdown =
                 hb_mixdown_get_default(audio->config.out.codec,
-                                       audio->config.in.channel_layout);
+                                       audio->config.in.ch_layout);
             hb_log("work: mixdown not specified, track %d setting mixdown %s",
                    audio->config.out.track,
                    hb_mixdown_get_name(audio->config.out.mixdown));
@@ -1212,7 +1212,7 @@ static int sanitize_audio(hb_job_t *job)
         {
             best_mixdown =
                 hb_mixdown_get_best(audio->config.out.codec,
-                                    audio->config.in.channel_layout,
+                                    audio->config.in.ch_layout,
                                     audio->config.out.mixdown);
             if (audio->config.out.mixdown != best_mixdown)
             {
@@ -1455,7 +1455,10 @@ static void sanitize_filter_list_post(hb_job_t *job)
     }
 #endif
 
-    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0)
+    hb_hwaccel_t *hwaccel = job->hw_accel;
+
+    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0 ||
+        (job->hw_pix_fmt != AV_PIX_FMT_NONE && hwaccel && (hwaccel->caps & HB_HWACCEL_CAP_FORMAT_REQUIRED)))
     {
         // Some encoders require a specific input pixel format
         // that could be different from the current pipeline format.
@@ -1740,7 +1743,8 @@ static void do_job(hb_job_t *job)
         if (hb_hwaccel_can_use_full_hw_pipeline(hwaccel,
                                                 job->list_filter,
                                                 job->vcodec,
-                                                job->title->rotation))
+                                                job->title->rotation,
+                                                job->color_range != job->title->color_range))
         {
             job->hw_accel = hwaccel;
             job->hw_pix_fmt = hwaccel->hw_pix_fmt;

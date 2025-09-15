@@ -510,22 +510,23 @@ hb_list_t * hb_get_title_coverarts( hb_handle_t * h, int title )
     return emptyList;
 }
 
+#define HB_PLANES_MAX   3
+#define HB_FORMAT_CHARS 4
+
 int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf, int format )
 {
     FILE    * file;
     char    * filename;
     char      reason[80];
-    const int planes_max   = 3;
-    const int format_chars = 4;
-    char      format_string[format_chars];
+    char      format_string[HB_FORMAT_CHARS];
 
     switch (format)
     {
         case HB_PREVIEW_FORMAT_YUV:
-            strncpy(format_string, "yuv", format_chars);
+            strncpy(format_string, "yuv", HB_FORMAT_CHARS);
             break;
         case HB_PREVIEW_FORMAT_JPG:
-            strncpy(format_string, "jpg", format_chars);
+            strncpy(format_string, "jpg", HB_FORMAT_CHARS);
             break;
         default:
             hb_error("hb_save_preview: Unsupported preview format %d", format);
@@ -551,7 +552,7 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf, 
     if (format == HB_PREVIEW_FORMAT_YUV)
     {
         int pp, hh;
-        for(pp = 0; pp < planes_max; pp++)
+        for(pp = 0; pp < HB_PLANES_MAX; pp++)
         {
             const uint8_t * data = buf->plane[pp].data;
             const int     stride = buf->plane[pp].stride;
@@ -584,10 +585,10 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf, 
         const int       jpeg_quality = 90;
         unsigned long   jpeg_size    = 0;
         unsigned char * jpeg_data    = NULL;
-        int             planes_stride[planes_max];
-        uint8_t       * planes_data[planes_max];
+        int             planes_stride[HB_PLANES_MAX];
+        uint8_t       * planes_data[HB_PLANES_MAX];
         int             pp, compressor_result;
-        for (pp = 0; pp < planes_max; pp++)
+        for (pp = 0; pp < HB_PLANES_MAX; pp++)
         {
             planes_stride[pp] = buf->plane[pp].stride;
             planes_data[pp]   = buf->plane[pp].data;
@@ -638,9 +639,7 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview, i
     FILE    * file = NULL;
     char    * filename = NULL;
     char      reason[80];
-    const int planes_max   = 3;
-    const int format_chars = 4;
-    char      format_string[format_chars];
+    char      format_string[HB_FORMAT_CHARS];
 
     hb_buffer_t * buf;
     buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P,
@@ -660,10 +659,10 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview, i
     switch (format)
     {
         case HB_PREVIEW_FORMAT_YUV:
-            strncpy(format_string, "yuv", format_chars);
+            strncpy(format_string, "yuv", HB_FORMAT_CHARS);
             break;
         case HB_PREVIEW_FORMAT_JPG:
-            strncpy(format_string, "jpg", format_chars);
+            strncpy(format_string, "jpg", HB_FORMAT_CHARS);
             break;
         default:
             hb_error("hb_read_preview: Unsupported preview format %d", format);
@@ -689,7 +688,7 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview, i
     if (format == HB_PREVIEW_FORMAT_YUV)
     {
         int pp, hh;
-        for (pp = 0; pp < planes_max; pp++)
+        for (pp = 0; pp < HB_PLANES_MAX; pp++)
         {
             uint8_t       * data = buf->plane[pp].data;
             const int     stride = buf->plane[pp].stride;
@@ -740,10 +739,10 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview, i
         }
 
         tjhandle   jpeg_decompressor = tjInitDecompress();
-        int        planes_stride[planes_max];
-        uint8_t  * planes_data[planes_max];
+        int        planes_stride[HB_PLANES_MAX];
+        uint8_t  * planes_data[HB_PLANES_MAX];
         int        pp, decompressor_result;
-        for (pp = 0; pp < planes_max; pp++)
+        for (pp = 0; pp < HB_PLANES_MAX; pp++)
         {
             planes_stride[pp] = buf->plane[pp].stride;
             planes_data[pp]   = buf->plane[pp].data;

@@ -65,6 +65,13 @@ static int format_init(hb_filter_object_t *filter, hb_filter_init_t *init)
         hb_dict_set(avfilter, "vpp_qsv", avsettings);
     }
     else
+#elif HB_PROJECT_FEATURE_MF
+    if (init->hw_pix_fmt == AV_PIX_FMT_D3D11)
+    {
+        hb_dict_set_string(avsettings, "format", format);
+        hb_dict_set(avfilter, "scale_d3d11", avsettings);
+    }
+    else
 #endif
     {
         if (init->hw_pix_fmt == AV_PIX_FMT_CUDA)

@@ -223,8 +223,64 @@ int hb_directx_available()
     return 1;
 }
 
+int hb_mf_are_filters_supported(hb_list_t *filters)
+{
+    if (filters == NULL || hb_list_count(filters) == 0)
+    {
+        hb_log("D3D11: No filters to process");
+        return 1;
+    }
+
+    for (int i = 0; i < hb_list_count(filters); i++)
+    {
+        hb_filter_object_t *filter = hb_list_item(filters, i);
+        if (filter == NULL)
+        {
+            hb_log("D3D11: Null filter object encountered");
+            return 0;
+        }
+
+        switch (filter->id)
+        {
+            case HB_FILTER_CROP_SCALE:
+                hb_log("D3D11: Scaling filter supported");
+                break;
+            case HB_FILTER_FORMAT:
+                hb_log("D3D11: Format supported");
+                break;
+
+            case HB_FILTER_AVFILTER:
+                hb_log("D3D11: AVFilter filter supported");
+                break;
+
+            case HB_FILTER_VFR:
+                {
+                    int mode = hb_dict_get_int(filter->settings, "mode");
+                    hb_log("Checking VFR mode: %d", mode);
+                    if (mode == 2)
+                    {
+                        hb_log("D3D11: Unsupported VFR mode %d detected", mode);
+                        return 0;
+                    }
+                    hb_log("D3D11: VFR mode %d supported", mode);
+                    continue;
+                }
+
+            default:
+                hb_log("D3D11: Unsupported filter %s (id: %d)", filter->name, filter->id);
+                return 0;
+        }
+    }
+
+    hb_log("D3D11: All filters are supported");
+    return 1;
+}
+
 static const int mf_encoders[] =
 {
+    HB_VCODEC_FFMPEG_MF_H264,
+    HB_VCODEC_FFMPEG_MF_H265,
+    HB_VCODEC_FFMPEG_MF_AV1,
     HB_VCODEC_INVALID
 };
 
@@ -235,7 +291,8 @@ hb_hwaccel_t hb_hwaccel_mf =
     .encoders   = mf_encoders,
     .type       = AV_HWDEVICE_TYPE_D3D11VA,
     .hw_pix_fmt = AV_PIX_FMT_D3D11,
-    .caps       = HB_HWACCEL_CAP_SCAN
+    .can_filter = hb_mf_are_filters_supported,
+    .caps       = HB_HWACCEL_CAP_SCAN | HB_HWACCEL_CAP_FORMAT_REQUIRED
 };
 
 #else // HB_PROJECT_FEATURE_MF

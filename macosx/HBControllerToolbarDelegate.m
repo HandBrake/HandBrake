@@ -256,7 +256,7 @@
 - (void)updateToolbarQueueBadge:(NSString *)value toolbar:(NSToolbar *)toolbar
 {
     HBToolbarItem *queueToolbarItem = (HBToolbarItem *)[toolbar HB_toolbarItemWithIdentifier:TOOLBAR_QUEUE];
-    queueToolbarItem.badgeValue = value;
+    queueToolbarItem.HB_badgeValue = value;
 }
 
 @end

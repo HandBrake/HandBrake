@@ -149,7 +149,7 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         {
             get
             {
-                return this.ShortName.Contains("flac"); // TODO Find a better way to do this. 
+                return this.ShortName.Contains("flac") || this.ShortName.Contains("alac"); 
             }
         }
 

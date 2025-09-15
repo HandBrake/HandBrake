@@ -291,7 +291,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "AV1 10-bit (NVEnc)",          "nvenc_av1_10bit",  "AV1 10-bit (NVEnc)",             HB_VCODEC_FFMPEG_NVENC_AV1_10BIT, HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
     { { "AV1 (AMD VCE)",               "vce_av1",          "AV1 (AMD VCE)",                  HB_VCODEC_FFMPEG_VCE_AV1,    HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_VCE,    },
     { { "AV1 (MediaFoundation)",       "mf_av1",           "AV1 (MediaFoundation)",          HB_VCODEC_FFMPEG_MF_AV1,     HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_MF,     },
-    { { "FFV1",                        "ffv1",             "FFV1 (libavcodec)",              HB_VCODEC_FFMPEG_FFV1,                                        HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_FFV1,       },
+    { { "FFV1",                        "ffv1",             "FFV1 (libavcodec)",              HB_VCODEC_FFMPEG_FFV1,                        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_FFV1,       },
     { { "H.264 (x264)",                "x264",             "H.264 (libx264)",                HB_VCODEC_X264_8BIT,                          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
     { { "H.264 10-bit (x264)",         "x264_10bit",       "H.264 10-bit (libx264)",         HB_VCODEC_X264_10BIT,                         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
     { { "H.264 (Intel QSV)",           "qsv_h264",         "H.264 (Intel QSV)",              HB_VCODEC_FFMPEG_QSV_H264,                    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_QSV,   },
@@ -1479,7 +1479,7 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last)
     return ((hb_rate_internal_t*)last)->next;
 }
 
-const char * hb_audio_name_get_default(uint64_t layout, int mixdown)
+const char * hb_audio_name_get_default(hb_channel_layout_t *ch_layout, int mixdown)
 {
     int mix_channels = 2;
 
@@ -1489,7 +1489,7 @@ const char * hb_audio_name_get_default(uint64_t layout, int mixdown)
     }
     else
     {
-        mix_channels = hb_layout_get_discrete_channel_count(layout);
+        mix_channels = hb_layout_get_discrete_channel_count(ch_layout);
     }
 
     switch (mix_channels)
@@ -1528,7 +1528,7 @@ int hb_audio_autonaming_behavior_get_from_name(const char *name)
 }
 
 const char * hb_audio_name_generate(const char *name,
-                                    uint64_t layout, int mixdown, int keep_name,
+                                    hb_channel_layout_t *ch_layout, int mixdown, int keep_name,
                                     hb_audio_autonaming_behavior_t behavior)
 {
     const char *out = NULL;
@@ -1554,10 +1554,28 @@ const char * hb_audio_name_generate(const char *name,
     if (behavior == HB_AUDIO_AUTONAMING_ALL ||
         (behavior == HB_AUDIO_AUTONAMING_UNNAMED && (name == NULL || name[0] == 0)))
     {
-        out = hb_audio_name_get_default(layout, mixdown);
+        out = hb_audio_name_get_default(ch_layout, mixdown);
     }
 
     return out;
+}
+
+const char * hb_audio_name_generate_s(const char *name,
+                                      const char *layout, int mixdown, int keep_name,
+                                      hb_audio_autonaming_behavior_t behaviour)
+{
+    int ret;
+    const char *generated_name = NULL;
+    AVChannelLayout ch_layout = {0};
+    ret = av_channel_layout_from_string(&ch_layout, layout);
+    if (ret < 0)
+    {
+        goto fail;
+    }
+    generated_name = hb_audio_name_generate(name, &ch_layout, mixdown, keep_name, behaviour);
+    av_channel_layout_uninit(&ch_layout);
+fail:
+    return generated_name;
 }
 
 // Get limits and hints for the UIs.
@@ -2523,10 +2541,30 @@ static int mixdown_get_opus_coupled_stream_count(int mixdown)
     }
 }
 
-int hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout)
+int hb_mixdown_is_supported(int mixdown, uint32_t codec, hb_channel_layout_t *ch_layout)
 {
     return (hb_mixdown_has_codec_support(mixdown, codec) &&
-            hb_mixdown_has_remix_support(mixdown, layout));
+            hb_mixdown_has_remix_support(mixdown, ch_layout));
+}
+
+int hb_mixdown_is_supported_s(int mixdown, uint32_t codec, const char *layout)
+{
+    int ret;
+    AVChannelLayout ch_layout = {0};
+
+    if (layout == NULL)
+    {
+        return 0;
+    }
+
+    ret = av_channel_layout_from_string(&ch_layout, layout);
+    if (ret < 0)
+    {
+        return 0;
+    }
+    ret = hb_mixdown_is_supported(mixdown, codec, &ch_layout);
+    av_channel_layout_uninit(&ch_layout);
+    return ret;
 }
 
 int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
@@ -2565,54 +2603,56 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
     }
 }
 
-int hb_mixdown_has_remix_support(int mixdown, uint64_t layout)
+int hb_mixdown_has_remix_support(int mixdown, hb_channel_layout_t *ch_layout)
 {
     /*
      * Where there isn't a source (e.g. audio defaults panel), we have no input
      * layout; assume remix support, as the mixdown will be sanitized later on.
      */
-    if (!layout)
+    if (!ch_layout)
     {
         return 1;
     }
+
     switch (mixdown)
     {
         // stereo + front left/right of center
         case HB_AMIXDOWN_5_2_LFE:
-            return ((layout & AV_CH_FRONT_LEFT_OF_CENTER) &&
-                    (layout & AV_CH_FRONT_RIGHT_OF_CENTER) &&
-                    (layout & AV_CH_LAYOUT_STEREO) == AV_CH_LAYOUT_STEREO);
+            return (av_channel_layout_subset(ch_layout, AV_CH_FRONT_LEFT_OF_CENTER) &&
+                    av_channel_layout_subset(ch_layout, AV_CH_FRONT_RIGHT_OF_CENTER) &&
+                    av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_STEREO) == AV_CH_LAYOUT_STEREO);
 
         // 7.0 or better
         case HB_AMIXDOWN_7POINT1:
-            return ((layout & AV_CH_LAYOUT_7POINT0) == AV_CH_LAYOUT_7POINT0);
+            return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_7POINT0) == AV_CH_LAYOUT_7POINT0);
 
         // 6.0 or better
         case HB_AMIXDOWN_6POINT1:
-            return ((layout & AV_CH_LAYOUT_7POINT0) == AV_CH_LAYOUT_7POINT0 ||
-                    (layout & AV_CH_LAYOUT_6POINT0) == AV_CH_LAYOUT_6POINT0 ||
-                    (layout & AV_CH_LAYOUT_HEXAGONAL) == AV_CH_LAYOUT_HEXAGONAL);
+            return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_7POINT0) == AV_CH_LAYOUT_7POINT0 ||
+                    av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_6POINT0) == AV_CH_LAYOUT_6POINT0 ||
+                    av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_HEXAGONAL) == AV_CH_LAYOUT_HEXAGONAL);
 
         // stereo + either of front center, side or back left/right, back center
         case HB_AMIXDOWN_5POINT1:
-            return ((layout & AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
-                    (layout & AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
-                    (layout & AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD ||
-                    (layout & AV_CH_LAYOUT_SURROUND) == AV_CH_LAYOUT_SURROUND);
+            return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
+                    av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
+                    av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD ||
+                    av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_SURROUND) == AV_CH_LAYOUT_SURROUND);
 
         // stereo + either of side or back left/right, back center
         // also, allow Dolby Surround output if the input is already Dolby
         case HB_AMIXDOWN_DOLBY:
         case HB_AMIXDOWN_DOLBYPLII:
-            return ((layout & AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
-                    (layout & AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
-                    (layout & AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD ||
-                    (layout == AV_CH_LAYOUT_STEREO_DOWNMIX && // decavcodecaBSInfo tells us the input signals matrix encoding
+            return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
+                    av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
+                    av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD ||
+                    (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_STEREO_DOWNMIX) == AV_CH_LAYOUT_STEREO_DOWNMIX &&
+                     ch_layout->nb_channels == 2 &&  // decavcodecaBSInfo tells us the input signals matrix encoding
                      mixdown == HB_AMIXDOWN_DOLBY)); // allows signaling matrix encoding in output w/encoders that support it
 
         // more than 1 channel
         case HB_AMIXDOWN_STEREO:
-            return (hb_layout_get_discrete_channel_count(layout) > 1);
+            return (hb_layout_get_discrete_channel_count(ch_layout) > 1);
 
         /*
          * The following mixdowns have a very specific purpose!!!
@@ -2629,7 +2669,8 @@ int hb_mixdown_has_remix_support(int mixdown, uint64_t layout)
          */
         case HB_AMIXDOWN_LEFT:
         case HB_AMIXDOWN_RIGHT:
-            return (layout == AV_CH_LAYOUT_STEREO);
+            return av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_STEREO) == AV_CH_LAYOUT_STEREO &&
+                    ch_layout->nb_channels == 2;
 
         // mono remix always supported
         // HB_AMIXDOWN_NONE always supported (for Passthru)
@@ -2685,7 +2726,7 @@ int hb_mixdown_get_low_freq_channel_count(int amixdown)
     }
 }
 
-int hb_mixdown_get_best(uint32_t codec, uint64_t layout, int mixdown)
+int hb_mixdown_get_best(uint32_t codec, hb_channel_layout_t *ch_layout, int mixdown)
 {
     // Passthru, only "None" mixdown is supported
     if (codec & HB_ACODEC_PASS_FLAG)
@@ -2698,7 +2739,7 @@ int hb_mixdown_get_best(uint32_t codec, uint64_t layout, int mixdown)
     while ((audio_mixdown = hb_mixdown_get_next(audio_mixdown)) != NULL)
     {
         if ((mixdown == HB_INVALID_AMIXDOWN || audio_mixdown->amixdown <= mixdown) &&
-            (hb_mixdown_is_supported(audio_mixdown->amixdown, codec, layout)))
+            (hb_mixdown_is_supported(audio_mixdown->amixdown, codec, ch_layout)))
         {
             best_mixdown = audio_mixdown->amixdown;
         }
@@ -2706,7 +2747,27 @@ int hb_mixdown_get_best(uint32_t codec, uint64_t layout, int mixdown)
     return best_mixdown;
 }
 
-int hb_mixdown_get_default(uint32_t codec, uint64_t layout)
+int hb_mixdown_get_best_s(uint32_t codec, const char *layout, int mixdown)
+{
+    int ret;
+    AVChannelLayout ch_layout = {0};
+
+    if (layout == NULL)
+    {
+        return 0;
+    }
+
+    ret = av_channel_layout_from_string(&ch_layout, layout);
+    if (ret < 0)
+    {
+        return 0;
+    }
+    ret = hb_mixdown_get_best(codec, &ch_layout, mixdown);
+    av_channel_layout_uninit(&ch_layout);
+    return ret;
+}
+
+int hb_mixdown_get_default(uint32_t codec, hb_channel_layout_t *ch_layout)
 {
     int mixdown;
     switch (codec)
@@ -2739,7 +2800,27 @@ int hb_mixdown_get_default(uint32_t codec, uint64_t layout)
     }
 
     // return the best available mixdown up to the selected default
-    return hb_mixdown_get_best(codec, layout, mixdown);
+    return hb_mixdown_get_best(codec, ch_layout, mixdown);
+}
+
+int hb_mixdown_get_default_s(uint32_t codec, const char *layout)
+{
+    int ret;
+    AVChannelLayout ch_layout = {0};
+
+    if (layout == NULL)
+    {
+        return 0;
+    }
+
+    ret = av_channel_layout_from_string(&ch_layout, layout);
+    if (ret < 0)
+    {
+        return 0;
+    }
+    ret = hb_mixdown_get_default(codec, &ch_layout);
+    av_channel_layout_uninit(&ch_layout);
+    return ret;
 }
 
 hb_mixdown_t* hb_mixdown_get_from_mixdown(int mixdown)
@@ -2827,28 +2908,23 @@ const hb_mixdown_t* hb_mixdown_get_next(const hb_mixdown_t *last)
     return ((hb_mixdown_internal_t*)last)->next;
 }
 
-void hb_layout_get_name(char *name, int size, int64_t layout)
+int hb_layout_get_name(const hb_channel_layout_t *ch_layout, char *name, int size)
 {
-    AVChannelLayout ch_layout = {0};
-    av_channel_layout_from_mask(&ch_layout, layout);
-    av_channel_layout_describe(&ch_layout, name, size);
-    av_channel_layout_uninit(&ch_layout);
+    return av_channel_layout_describe(ch_layout, name, size);
 }
 
-int hb_layout_get_discrete_channel_count(int64_t layout)
+int hb_layout_get_discrete_channel_count(const hb_channel_layout_t *ch_layout)
 {
-    int nb_channels = 0;
-    AVChannelLayout ch_layout = {0};
-    av_channel_layout_from_mask(&ch_layout, layout);
-    nb_channels = ch_layout.nb_channels;
-    av_channel_layout_uninit(&ch_layout);
-    return nb_channels;
+    return ch_layout->nb_channels;
 }
 
-int hb_layout_get_low_freq_channel_count(int64_t layout)
+int hb_layout_get_low_freq_channel_count(const hb_channel_layout_t *ch_layout)
 {
-    return !!(layout & AV_CH_LOW_FREQUENCY) +
-           !!(layout & AV_CH_LOW_FREQUENCY_2);
+    uint64_t subset = av_channel_layout_subset(ch_layout,
+                                               AV_CH_LOW_FREQUENCY |
+                                               AV_CH_LOW_FREQUENCY_2);
+    return !!(subset & AV_CH_LOW_FREQUENCY) +
+           !!(subset & AV_CH_LOW_FREQUENCY_2);
 }
 
 int hb_video_encoder_get_default(int muxer)
@@ -3177,13 +3253,13 @@ void hb_autopassthru_apply_settings(hb_job_t *job)
                 {
                     audio->config.out.mixdown =
                         hb_mixdown_get_default(audio->config.out.codec,
-                                               audio->config.in.channel_layout);
+                                               audio->config.in.ch_layout);
                 }
                 else
                 {
                     audio->config.out.mixdown =
                         hb_mixdown_get_best(audio->config.out.codec,
-                                            audio->config.in.channel_layout,
+                                            audio->config.in.ch_layout,
                                             audio->config.out.mixdown);
                 }
                 if (audio->config.out.samplerate <= 0)
@@ -5500,6 +5576,9 @@ hb_audio_t *hb_audio_copy(const hb_audio_t *src)
     {
         audio = calloc(1, sizeof(*audio));
         memcpy(audio, src, sizeof(*audio));
+        AVChannelLayout *ch_layout = calloc(1, sizeof(*ch_layout));
+        av_channel_layout_copy(ch_layout, src->config.in.ch_layout);
+        audio->config.in.ch_layout = ch_layout;
         if ( src->config.out.name )
         {
             audio->config.out.name = strdup(src->config.out.name);
@@ -5559,15 +5638,9 @@ void hb_audio_close( hb_audio_t **_audio )
     if ( _audio && *_audio )
     {
         hb_audio_t * audio = *_audio;
-        void       * item;
 
         hb_data_close(&(audio)->priv.extradata);
-        while ((item = hb_list_item(audio->config.list_linked_index, 0)))
-        {
-            hb_list_rem(audio->config.list_linked_index, item);
-            free(item);
-        }
-        hb_list_close(&audio->config.list_linked_index);
+        hb_audio_config_close(&audio->config);
         free((char*)audio->config.in.name);
         free((char*)audio->config.out.name);
         free(audio);
@@ -5599,8 +5672,8 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->in.samples_per_frame = -1;
     audiocfg->in.bitrate = -1;
     audiocfg->in.matrix_encoding = AV_MATRIX_ENCODING_NONE;
-    audiocfg->in.channel_layout = 0;
-    audiocfg->in.channel_map = NULL;
+    audiocfg->in.ch_layout = calloc(1, sizeof(*audiocfg->in.ch_layout));
+    av_channel_layout_default(audiocfg->in.ch_layout, 0);
     audiocfg->lang.description[0] = 0;
     audiocfg->lang.simple[0] = 0;
     audiocfg->lang.iso639_2[0] = 0;
@@ -5619,6 +5692,26 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->out.normalize_mix_level = 0;
     audiocfg->out.dither_method = hb_audio_dither_get_default();
     audiocfg->out.name = NULL;
+}
+
+void hb_audio_config_close(hb_audio_config_t *audiocfg)
+{
+    if (audiocfg)
+    {
+        void *item;
+
+        while ((item = hb_list_item(audiocfg->list_linked_index, 0)))
+        {
+            hb_list_rem(audiocfg->list_linked_index, item);
+            free(item);
+        }
+        hb_list_close(&audiocfg->list_linked_index);
+        if (audiocfg->in.ch_layout != NULL)
+        {
+            av_channel_layout_uninit(audiocfg->in.ch_layout);
+            free(audiocfg->in.ch_layout);
+        }
+    }
 }
 
 /**********************************************************************

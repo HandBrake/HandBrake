@@ -144,7 +144,7 @@ namespace HandBrake.Interop.Interop.HbLib
         public static extern int hb_audio_autonaming_behavior_get_from_name(IntPtr name);
 
         [DllImport("hb", EntryPoint = "hb_audio_name_generate", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hb_audio_name_generate(IntPtr name, ulong layout, int mixdown, int keep_name, int behaviour);
+        public static extern IntPtr hb_audio_name_generate_s(IntPtr name, IntPtr layout, int mixdown, int keep_name, int behaviour);
 
         [DllImport("hb", EntryPoint = "hb_video_quality_get_limits", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_video_quality_get_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
@@ -179,8 +179,8 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_audio_encoder_get_fallback_for_passthru", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_audio_encoder_get_fallback_for_passthru(int passthru);
         
-        [DllImport("hb", EntryPoint = "hb_mixdown_is_supported", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_mixdown_is_supported(int mixdown, uint codec, ulong layout);
+        [DllImport("hb", EntryPoint = "hb_mixdown_is_supported_s", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_mixdown_is_supported_s(int mixdown, uint codec, IntPtr layout);
 
         [DllImport("hb", EntryPoint = "hb_mixdown_has_codec_support", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_mixdown_has_codec_support(int mixdown, uint codec);
@@ -188,11 +188,11 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_mixdown_has_remix_support", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_mixdown_has_remix_support(int mixdown, ulong layout);
 
-        [DllImport("hb", EntryPoint = "hb_mixdown_get_best", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_mixdown_get_best(uint codec, ulong layout, int mixdown);
+        [DllImport("hb", EntryPoint = "hb_mixdown_get_best_s", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_mixdown_get_best_s(uint codec, IntPtr layout, int mixdown);
 
-        [DllImport("hb", EntryPoint = "hb_mixdown_get_default", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_mixdown_get_default(uint codec, ulong layout);
+        [DllImport("hb", EntryPoint = "hb_mixdown_get_default_s", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_mixdown_get_default_s(uint codec, IntPtr layout);
 
         [DllImport("hb", EntryPoint = "hb_mixdown_get_next", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_mixdown_get_next(IntPtr last);

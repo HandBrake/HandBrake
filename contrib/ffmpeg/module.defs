@@ -208,6 +208,7 @@ FFMPEG.CONFIGURE.extra += \
       --enable-hwaccel=hevc_d3d11va2 \
       --enable-hwaccel=av1_d3d11va2 \
       --enable-hwaccel=vp9_d3d11va2 \
+      --enable-filter=scale_d3d11 \
       --enable-encoder=h264_mf \
       --enable-encoder=hevc_mf \
       --enable-encoder=av1_mf

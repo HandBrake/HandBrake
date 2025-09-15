@@ -776,9 +776,7 @@ static int avformatInit( hb_mux_object_t * m )
         track->st->codecpar->sample_rate = audio->config.out.samplerate;
         if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
         {
-            AVChannelLayout ch_layout = {0};
-            av_channel_layout_from_mask(&ch_layout, audio->config.in.channel_layout);
-            track->st->codecpar->ch_layout = ch_layout;
+            av_channel_layout_copy(&track->st->codecpar->ch_layout, audio->config.in.ch_layout);
         }
         else
         {

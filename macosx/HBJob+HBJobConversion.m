@@ -478,6 +478,7 @@
             }
 
             hb_audio_add(job, &audio);
+            hb_audio_config_close(&audio);
         }
     }
 
