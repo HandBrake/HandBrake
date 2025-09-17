@@ -261,16 +261,6 @@ static int hb_nvenc_are_filters_supported(hb_list_t *filters)
                 // Mode 0 doesn't require access to the frame data
                 supported = hb_dict_get_int(filter->settings, "mode") == 0;
                 break;
-            case HB_FILTER_CROP_SCALE:
-            {
-                // Crop is not supported
-                int top    = hb_dict_get_int(filter->settings, "crop-top");
-                int bottom = hb_dict_get_int(filter->settings, "crop-bottom");
-                int left   = hb_dict_get_int(filter->settings, "crop-left");
-                int right  = hb_dict_get_int(filter->settings, "crop-right");
-                supported = top == 0 && bottom == 0 && left == 0 && right == 0;
-                break;
-            }
             case HB_FILTER_FORMAT:
             case HB_FILTER_AVFILTER:
                 break;
