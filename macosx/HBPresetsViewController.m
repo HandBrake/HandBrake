@@ -59,9 +59,14 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 @property (nonatomic, readwrite) HBPreset *selectedPresetInternal;
 @property (nonatomic, weak) IBOutlet NSTreeController *treeController;
 @property (nonatomic, weak) IBOutlet NSSegmentedControl *actionsControl;
+@property (nonatomic, weak) IBOutlet NSPopUpButton *actionsPopUp;
 
 @property (nonatomic, strong) IBOutlet NSTextField *headerLabel;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *headerTopConstraint;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *headerBottomConstraint;
+
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *leftConstraint;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *rightConstraint;
 
 /**
  *  Helper var for drag & drop
@@ -111,6 +116,19 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
     [self.treeController setSelectionIndexPath:[self.manager indexPathOfPreset:self.selectedPreset]];
     [self.treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:HBPresetsViewControllerContext];
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 160000
+    if (@available(macOS 26.0, *))
+    {
+        self.headerTopConstraint.constant = 12;
+
+        self.leftConstraint.constant  = 8;
+        self.rightConstraint.constant = 8;
+
+        self.actionsControl.borderShape = NSControlBorderShapeCapsule;
+        self.actionsPopUp.borderShape   = NSControlBorderShapeCapsule;
+    }
+#endif
 
     [self.actionsControl setEnabled:self.enabled forSegment:0];
 }
