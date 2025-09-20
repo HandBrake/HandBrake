@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,JANSSON,jansson))
 $(eval $(call import.CONTRIB.defs,JANSSON))
 
-JANSSON.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/jansson-2.14.tar.bz2
-JANSSON.FETCH.url    += https://github.com/akheron/jansson/releases/download/v2.14/jansson-2.14.tar.bz2
-JANSSON.FETCH.sha256  = fba956f27c6ae56ce6dfd52fbf9d20254aad42821f74fa52f83957625294afb9
+JANSSON.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/jansson-2.14.1.tar.bz2
+JANSSON.FETCH.url    += https://github.com/akheron/jansson/releases/download/v2.14.1/jansson-2.14.1.tar.bz2
+JANSSON.FETCH.sha256  = 6bd82d3043dadbcd58daaf903d974891128d22aab7dada5d399cb39094af49ce
 
 JANSSON.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; mkdir m4; autoreconf -fiv;
 
