@@ -558,7 +558,7 @@ static int init_cpu_count()
 #endif
 
     cpu_count = MAX( 1, cpu_count );
-    cpu_count = MIN( cpu_count, 64 );
+    cpu_count = MIN( cpu_count, 384 );
 
     return cpu_count;
 }

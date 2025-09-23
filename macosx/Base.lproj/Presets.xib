@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPresetsViewController">
             <connections>
                 <outlet property="actionsControl" destination="K9F-81-kPO" id="cAi-q4-950"/>
+                <outlet property="actionsPopUp" destination="Ybq-Zt-sta" id="f0B-29-DnL"/>
                 <outlet property="headerBottomConstraint" destination="jy6-AG-t3l" id="00N-L2-0U3"/>
                 <outlet property="headerLabel" destination="jCz-Aw-giC" id="Vl8-2g-l9P"/>
+                <outlet property="headerTopConstraint" destination="WCV-tV-CtJ" id="dKt-R6-2Ez"/>
+                <outlet property="leftConstraint" destination="UV6-xv-JfW" id="DAg-js-xdV"/>
                 <outlet property="outlineView" destination="00W-tb-wgY" id="T3u-ix-uIb"/>
+                <outlet property="rightConstraint" destination="Awe-NX-Pxq" id="dIc-wN-eHK"/>
                 <outlet property="treeController" destination="ohT-Pp-wBT" id="YGP-sN-dS3"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="xR8-5v-xDQ"/>
             </connections>
@@ -180,7 +184,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                         </menu>
                     </popUpButtonCell>
                     <constraints>
-                        <constraint firstAttribute="width" constant="44" id="ROP-Ic-SbK"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="ROP-Ic-SbK"/>
                     </constraints>
                     <accessibility description="Additional Options"/>
                 </popUpButton>
@@ -189,14 +193,15 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                 <constraint firstItem="Ybq-Zt-sta" firstAttribute="leading" secondItem="K9F-81-kPO" secondAttribute="trailing" constant="8" symbolic="YES" id="0fg-bb-Kxm"/>
                 <constraint firstItem="K9F-81-kPO" firstAttribute="top" secondItem="uad-bt-uKD" secondAttribute="bottom" constant="8" id="13f-Rt-TWz"/>
                 <constraint firstAttribute="trailing" secondItem="uad-bt-uKD" secondAttribute="trailing" constant="6" id="Awe-NX-Pxq"/>
+                <constraint firstItem="Ybq-Zt-sta" firstAttribute="height" secondItem="K9F-81-kPO" secondAttribute="height" id="IpY-t0-18m"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ybq-Zt-sta" secondAttribute="trailing" constant="20" id="MTA-L0-QDh"/>
                 <constraint firstItem="jCz-Aw-giC" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="NYS-NA-dEh"/>
                 <constraint firstItem="uad-bt-uKD" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="6" id="UV6-xv-JfW"/>
-                <constraint firstItem="K9F-81-kPO" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="6" id="VW4-WQ-izC"/>
                 <constraint firstItem="jCz-Aw-giC" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="6" id="WCV-tV-CtJ"/>
                 <constraint firstItem="Ybq-Zt-sta" firstAttribute="centerY" secondItem="K9F-81-kPO" secondAttribute="centerY" id="cKG-ER-z11"/>
                 <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="jCz-Aw-giC" secondAttribute="bottom" constant="6" id="jy6-AG-t3l"/>
                 <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" priority="250" constant="8" id="pHI-00-oq1"/>
+                <constraint firstItem="K9F-81-kPO" firstAttribute="leading" secondItem="uad-bt-uKD" secondAttribute="leading" id="vlc-Yi-cs6"/>
                 <constraint firstAttribute="bottom" secondItem="K9F-81-kPO" secondAttribute="bottom" constant="8" id="y22-EC-5uA"/>
             </constraints>
             <point key="canvasLocation" x="-15" y="-7"/>

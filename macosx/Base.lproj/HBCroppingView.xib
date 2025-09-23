@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21223" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21223"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,15 +14,15 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <userDefaultsController representsSharedInstance="YES" id="vUw-ux-GVV"/>
-        <view wantsLayer="YES" id="G0m-eh-cUI">
-            <rect key="frame" x="0.0" y="0.0" width="198" height="124"/>
+        <view wantsLayer="YES" misplaced="YES" id="G0m-eh-cUI">
+            <rect key="frame" x="0.0" y="0.0" width="192" height="137"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RXb-dd-41D">
-                    <rect key="frame" x="20" y="20" width="158" height="84"/>
+                    <rect key="frame" x="20" y="20" width="152" height="97"/>
                     <subviews>
                         <popUpButton toolTip="Rotate the picture clockwise in 90 degree increments." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cWv-q0-EN9">
-                            <rect key="frame" x="-4" y="64" width="166" height="22"/>
+                            <rect key="frame" x="-4" y="77" width="160" height="22"/>
                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Pqk-fS-pyy" id="rRi-AL-IKl">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -47,155 +47,233 @@
                                 <binding destination="-2" name="selectedTag" keyPath="self.picture.cropMode" id="YYm-Ox-FuZ"/>
                             </connections>
                         </popUpButton>
-                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="3IY-Qm-KMJ">
-                            <rect key="frame" x="0.0" y="0.0" width="158" height="60"/>
+                        <stackView distribution="fill" orientation="vertical" alignment="centerX" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AAj-2L-pzv">
+                            <rect key="frame" x="0.0" y="0.0" width="152" height="73"/>
                             <subviews>
-                                <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="Td7-sa-0TV">
-                                    <rect key="frame" x="0.0" y="21" width="36" height="19"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="iF7-Kp-18L">
-                                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="4eK-Cz-G5y"/>
-                                        <font key="font" metaFont="smallSystem"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <accessibility description="Crop left"/>
-                                    <connections>
-                                        <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="yDf-4g-FLl">
-                                            <dictionary key="options">
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="3wv-2f-6xB"/>
-                                    </connections>
-                                </textField>
-                                <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="6Gj-ZU-E1E">
-                                    <rect key="frame" x="54" y="2" width="36" height="19"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XSa-sK-bkZ">
-                                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="Ob3-hm-TP9"/>
-                                        <font key="font" metaFont="smallSystem"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <accessibility description="Crop bottom"/>
-                                    <connections>
-                                        <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="oN8-74-lk0">
-                                            <dictionary key="options">
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="srC-rj-gXM"/>
-                                    </connections>
-                                </textField>
-                                <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="php-p6-Nz6">
-                                    <rect key="frame" x="108" y="21" width="36" height="19"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XLL-Lm-ivc">
-                                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="KaO-A4-kXq"/>
-                                        <font key="font" metaFont="smallSystem"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <accessibility description="Crop right"/>
-                                    <connections>
-                                        <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="Pbe-2e-W29">
-                                            <dictionary key="options">
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="VwH-vn-EsZ"/>
-                                    </connections>
-                                </textField>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="y7P-yk-q46">
-                                    <rect key="frame" x="143" y="18" width="15" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="SA2-eh-4Jb">
-                                        <font key="font" metaFont="smallSystem"/>
-                                    </stepperCell>
-                                    <accessibility description="Crop right"/>
-                                    <connections>
-                                        <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="Wsh-SC-RmH">
-                                            <dictionary key="options">
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="JQM-oa-Ucm"/>
-                                    </connections>
-                                </stepper>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="8e5-zI-IBg">
-                                    <rect key="frame" x="89" y="38" width="15" height="22"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="c11-EG-77U">
-                                        <font key="font" metaFont="smallSystem"/>
-                                    </stepperCell>
-                                    <accessibility description="Crop top"/>
-                                    <connections>
-                                        <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="bJl-KS-VCU">
-                                            <dictionary key="options">
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="o4T-Q0-FG9"/>
-                                    </connections>
-                                </stepper>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Yua-R6-mWU">
-                                    <rect key="frame" x="35" y="18" width="15" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="yPe-lP-KfM">
-                                        <font key="font" metaFont="smallSystem"/>
-                                    </stepperCell>
-                                    <accessibility description="Crop left"/>
-                                    <connections>
-                                        <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="Idt-Df-QOQ">
-                                            <dictionary key="options">
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="dBc-zu-QOM"/>
-                                    </connections>
-                                </stepper>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="sWf-fq-lvl">
-                                    <rect key="frame" x="89" y="-1" width="15" height="22"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="w45-AO-bJL">
-                                        <font key="font" metaFont="smallSystem"/>
-                                    </stepperCell>
-                                    <accessibility description="Crop bottom"/>
-                                    <connections>
-                                        <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="kwp-8o-xAt">
-                                            <dictionary key="options">
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="Cir-0Q-phe"/>
-                                    </connections>
-                                </stepper>
-                                <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="Cp5-xz-x1h">
-                                    <rect key="frame" x="54" y="40" width="36" height="19"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="WKu-TR-fzG">
-                                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="Zhe-d6-XZG"/>
-                                        <font key="font" metaFont="smallSystem"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <accessibility description="Crop top"/>
-                                    <connections>
-                                        <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="Mfe-8c-gIn">
-                                            <dictionary key="options">
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="kH1-Bw-UWp"/>
-                                    </connections>
-                                </textField>
+                                <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pee-og-J0v">
+                                    <rect key="frame" x="48" y="54" width="57" height="19"/>
+                                    <subviews>
+                                        <textField toolTip="Top edge cropping amount in pixels." focusRingType="none" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cp5-xz-x1h">
+                                            <rect key="frame" x="0.0" y="0.0" width="42" height="19"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="42" id="aRV-lA-Tkw"/>
+                                            </constraints>
+                                            <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="WKu-TR-fzG">
+                                                <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="Zhe-d6-XZG"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <accessibility description="Crop top"/>
+                                            <connections>
+                                                <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="Mfe-8c-gIn">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="kH1-Bw-UWp"/>
+                                            </connections>
+                                        </textField>
+                                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8e5-zI-IBg">
+                                            <rect key="frame" x="44" y="-2" width="15" height="22"/>
+                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="c11-EG-77U">
+                                                <font key="font" metaFont="smallSystem"/>
+                                            </stepperCell>
+                                            <accessibility description="Crop top"/>
+                                            <connections>
+                                                <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="bJl-KS-VCU">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="o4T-Q0-FG9"/>
+                                            </connections>
+                                        </stepper>
+                                    </subviews>
+                                    <visibilityPriorities>
+                                        <integer value="1000"/>
+                                        <integer value="1000"/>
+                                    </visibilityPriorities>
+                                    <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
+                                        <real value="3.4028234663852886e+38"/>
+                                    </customSpacing>
+                                </stackView>
+                                <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="38" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QPx-6r-6Ri">
+                                    <rect key="frame" x="0.0" y="27" width="152" height="19"/>
+                                    <subviews>
+                                        <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nSa-2Z-KJZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="57" height="19"/>
+                                            <subviews>
+                                                <textField toolTip="Left edge cropping amount in pixels." focusRingType="none" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Td7-sa-0TV">
+                                                    <rect key="frame" x="0.0" y="0.0" width="42" height="19"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="42" id="YSB-Nc-Idv"/>
+                                                    </constraints>
+                                                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="iF7-Kp-18L">
+                                                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="4eK-Cz-G5y"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <accessibility description="Crop left"/>
+                                                    <connections>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="yDf-4g-FLl">
+                                                            <dictionary key="options">
+                                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="3wv-2f-6xB"/>
+                                                    </connections>
+                                                </textField>
+                                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yua-R6-mWU">
+                                                    <rect key="frame" x="44" y="-2" width="15" height="22"/>
+                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="yPe-lP-KfM">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                    </stepperCell>
+                                                    <accessibility description="Crop left"/>
+                                                    <connections>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="Idt-Df-QOQ">
+                                                            <dictionary key="options">
+                                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="dBc-zu-QOM"/>
+                                                    </connections>
+                                                </stepper>
+                                            </subviews>
+                                            <visibilityPriorities>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                            </visibilityPriorities>
+                                            <customSpacing>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                            </customSpacing>
+                                        </stackView>
+                                        <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XSi-6c-K9K">
+                                            <rect key="frame" x="95" y="0.0" width="57" height="19"/>
+                                            <subviews>
+                                                <textField toolTip="Right edge cropping amount in pixels." focusRingType="none" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="php-p6-Nz6">
+                                                    <rect key="frame" x="0.0" y="0.0" width="42" height="19"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="42" id="bWG-DK-0dV"/>
+                                                    </constraints>
+                                                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XLL-Lm-ivc">
+                                                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="KaO-A4-kXq"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <accessibility description="Crop right"/>
+                                                    <connections>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="Pbe-2e-W29">
+                                                            <dictionary key="options">
+                                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="VwH-vn-EsZ"/>
+                                                    </connections>
+                                                </textField>
+                                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y7P-yk-q46">
+                                                    <rect key="frame" x="44" y="-2" width="15" height="22"/>
+                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="SA2-eh-4Jb">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                    </stepperCell>
+                                                    <accessibility description="Crop right"/>
+                                                    <connections>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="Wsh-SC-RmH">
+                                                            <dictionary key="options">
+                                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="JQM-oa-Ucm"/>
+                                                    </connections>
+                                                </stepper>
+                                            </subviews>
+                                            <visibilityPriorities>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                            </visibilityPriorities>
+                                            <customSpacing>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                            </customSpacing>
+                                        </stackView>
+                                    </subviews>
+                                    <visibilityPriorities>
+                                        <integer value="1000"/>
+                                        <integer value="1000"/>
+                                    </visibilityPriorities>
+                                    <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
+                                        <real value="3.4028234663852886e+38"/>
+                                    </customSpacing>
+                                </stackView>
+                                <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sJF-QS-3Q4">
+                                    <rect key="frame" x="48" y="0.0" width="57" height="19"/>
+                                    <subviews>
+                                        <textField toolTip="Bottom edge cropping amount in pixels." focusRingType="none" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Gj-ZU-E1E">
+                                            <rect key="frame" x="0.0" y="0.0" width="42" height="19"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="42" id="kc8-Vk-juj"/>
+                                            </constraints>
+                                            <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XSa-sK-bkZ">
+                                                <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="Ob3-hm-TP9"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <accessibility description="Crop bottom"/>
+                                            <connections>
+                                                <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="oN8-74-lk0">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="srC-rj-gXM"/>
+                                            </connections>
+                                        </textField>
+                                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sWf-fq-lvl">
+                                            <rect key="frame" x="44" y="-2" width="15" height="22"/>
+                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="w45-AO-bJL">
+                                                <font key="font" metaFont="smallSystem"/>
+                                            </stepperCell>
+                                            <accessibility description="Crop bottom"/>
+                                            <connections>
+                                                <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="kwp-8o-xAt">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="Cir-0Q-phe"/>
+                                            </connections>
+                                        </stepper>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="6Gj-ZU-E1E" firstAttribute="centerY" secondItem="sWf-fq-lvl" secondAttribute="centerY" id="Rqk-Nk-Qd8"/>
+                                    </constraints>
+                                    <visibilityPriorities>
+                                        <integer value="1000"/>
+                                        <integer value="1000"/>
+                                    </visibilityPriorities>
+                                    <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
+                                        <real value="3.4028234663852886e+38"/>
+                                    </customSpacing>
+                                </stackView>
                             </subviews>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="60" id="fwG-bv-NtO"/>
-                                <constraint firstAttribute="width" constant="158" id="ph6-P5-diB"/>
-                            </constraints>
-                        </customView>
+                            <visibilityPriorities>
+                                <integer value="1000"/>
+                                <integer value="1000"/>
+                                <integer value="1000"/>
+                            </visibilityPriorities>
+                            <customSpacing>
+                                <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
+                            </customSpacing>
+                        </stackView>
                     </subviews>
                     <visibilityPriorities>
                         <integer value="1000"/>
@@ -208,12 +286,12 @@
                 </stackView>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="RXb-dd-41D" secondAttribute="bottom" constant="20" symbolic="YES" id="0xo-XX-onz"/>
                 <constraint firstItem="RXb-dd-41D" firstAttribute="top" secondItem="G0m-eh-cUI" secondAttribute="top" constant="20" symbolic="YES" id="5Hd-UT-PWu"/>
                 <constraint firstItem="RXb-dd-41D" firstAttribute="leading" secondItem="G0m-eh-cUI" secondAttribute="leading" constant="20" symbolic="YES" id="Y0r-vG-Ppl"/>
+                <constraint firstAttribute="bottom" secondItem="RXb-dd-41D" secondAttribute="bottom" constant="20" symbolic="YES" id="fh4-0s-8Fu"/>
                 <constraint firstAttribute="trailing" secondItem="RXb-dd-41D" secondAttribute="trailing" constant="20" symbolic="YES" id="lql-tL-Lc3"/>
             </constraints>
-            <point key="canvasLocation" x="-788" y="-257"/>
+            <point key="canvasLocation" x="-800" y="-262.5"/>
         </view>
     </objects>
 </document>

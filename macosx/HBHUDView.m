@@ -10,25 +10,40 @@
 
 - (instancetype)initWithFrame:(NSRect)frame
 {
-    self = [super initWithFrame:frame];
-
-    if (self)
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 160000
+    if (@available(macOS 26.0, *))
     {
-        self.wantsLayer = YES;
-
-        CGFloat radius = 4;
-        if (@available (macOS 11, *))
+        NSGlassEffectView *glassView = [[NSGlassEffectView alloc] initWithFrame:frame];
+        if (glassView)
         {
-            radius = 10;
+            glassView.cornerRadius = 20;
+            glassView.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
         }
-        self.layer.cornerRadius = radius;
-
-        self.blendingMode = NSVisualEffectBlendingModeWithinWindow;
-        self.material = NSVisualEffectMaterialDark;
-        self.state = NSVisualEffectStateActive;
-
-        self.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
+        self = (HBHUDView *)glassView;
     }
+    else
+#endif
+    {
+        self = [super initWithFrame:frame];
+        if (self)
+        {
+            self.wantsLayer = YES;
+
+            CGFloat radius = 4;
+            if (@available (macOS 11, *))
+            {
+                radius = 10;
+            }
+            self.layer.cornerRadius = radius;
+
+            self.blendingMode = NSVisualEffectBlendingModeWithinWindow;
+            self.material = NSVisualEffectMaterialDark;
+            self.state = NSVisualEffectStateActive;
+
+            self.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
+        }
+    }
+
     return self;
 }
 

@@ -55,6 +55,13 @@
         // currently hard set default to 15 seconds
         [self.durationPopUp selectItemAtIndex:0];
     }
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 160000
+    if (@available(macOS 26, *))
+    {
+        self.slider.tintProminence = NSTintProminenceNone;
+    }
+#endif
 }
 
 - (BOOL)canBeHidden
