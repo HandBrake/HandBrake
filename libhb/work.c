@@ -1744,7 +1744,7 @@ static void do_job(hb_job_t *job)
                                                 job->list_filter,
                                                 job->vcodec,
                                                 job->title->rotation,
-                                                job->color_range != job->title->color_range))
+                                                job->color_range && job->color_range != job->title->color_range))
         {
             job->hw_accel = hwaccel;
             job->hw_pix_fmt = hwaccel->hw_pix_fmt;
