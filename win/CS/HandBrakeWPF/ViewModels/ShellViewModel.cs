@@ -156,16 +156,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets WindowTitle.
-        /// </summary>
-        public string WindowTitle
-        {
-            get
-            {
-                return "HandBrake";
-            }
-        }
 
         #endregion
 
@@ -216,4 +206,5 @@ namespace HandBrakeWPF.ViewModels
             return true;
         }
     }
+
 }
