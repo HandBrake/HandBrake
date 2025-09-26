@@ -1,0 +1,12 @@
+diff -Naur libdvdnav-7.0.0/package/crossfiles/x86_64-w64-mingw32.meson libdvdnav-7.0.0-patched/package/crossfiles/x86_64-w64-mingw32.meson
+--- libdvdnav-7.0.0/package/crossfiles/x86_64-w64-mingw32.meson	2025-09-23 16:53:05.000000000 +0200
++++ libdvdnav-7.0.0-patched/package/crossfiles/x86_64-w64-mingw32.meson	2025-09-26 05:58:38.107031154 +0200
+@@ -4,7 +4,7 @@
+ ar = 'x86_64-w64-mingw32-ar'
+ strip = 'x86_64-w64-mingw32-strip'
+ windres = 'x86_64-w64-mingw32-windres'
+-pkgconfig = 'x86_64-w64-mingw32-pkg-config'
++pkgconfig = 'pkg-config'
+ exe_wrapper = 'wine'
+ 
+ [built-in options]
