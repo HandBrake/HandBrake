@@ -12,6 +12,7 @@ namespace HandBrake.Worker
     using System;
     using System.Collections.Generic;
     using System.Net;
+    using System.Runtime.CompilerServices;
     using System.Threading;
 
     using HandBrake.Interop.Interop;
@@ -99,7 +100,8 @@ namespace HandBrake.Worker
 
             Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers = RegisterApiHandlers();
             HttpServer webServer = new HttpServer(apiHandlers, port, TokenService);
-            if (webServer.Run())
+            int runCode = webServer.Run();
+            if (runCode == 0)
             {
                 ConsoleOutput.WriteLine("Worker: Server Started", ConsoleColor.White, true);
                 manualResetEvent.WaitOne();
@@ -108,7 +110,8 @@ namespace HandBrake.Worker
             }
             else
             {
-                ConsoleOutput.WriteLine("Worker is exiting ...");
+                ConsoleOutput.WriteLine(string.Format("Worker is exiting ... ({0})", runCode));
+                Environment.Exit(runCode);
             }
         }
 

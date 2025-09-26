@@ -25,7 +25,7 @@ namespace HandBrake.Worker
         private ITokenService tokenService;
         private HttpListener httpListener;
         private Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers;
-        private bool failedStart;
+        private int failedStart = 0;
         private int count = 0;
 
         public HttpServer(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port, ITokenService tokenService)
@@ -41,15 +41,20 @@ namespace HandBrake.Worker
             }
         }
 
-        public bool Run()
+        public int Run()
         {
+            if (this.failedStart > 0)
+            {
+                return failedStart;
+            }
+
             httpListener.BeginGetContext(new AsyncCallback(ListenerCallback), this.httpListener);
-            return true;
+            return 0;
         }
 
         public void ListenerCallback(IAsyncResult result)
         {
-            if (this.failedStart)
+            if (this.failedStart > 0)
             {
                 return;
             }
@@ -166,7 +171,7 @@ namespace HandBrake.Worker
             }
             catch (Exception e)
             {
-                this.failedStart = true;
+                this.failedStart = 2;
 
                 Console.WriteLine("Worker: Unable to start HTTP Server. Maybe the port {0} is in use?", port);
                 Console.WriteLine("Worker Exception: " + e);
