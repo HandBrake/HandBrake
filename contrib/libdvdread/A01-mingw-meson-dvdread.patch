@@ -1,0 +1,12 @@
+diff -Naur libdvdread-7.0.0/package/crossfiles/x86_64-w64-mingw32.meson libdvdread-7.0.0-patched/package/crossfiles/x86_64-w64-mingw32.meson
+--- libdvdread-7.0.0/package/crossfiles/x86_64-w64-mingw32.meson	2025-09-23 16:04:12.000000000 +0200
++++ libdvdread-7.0.0-patched/package/crossfiles/x86_64-w64-mingw32.meson	2025-09-26 06:01:51.875267502 +0200
+@@ -4,7 +4,7 @@
+ ar = 'x86_64-w64-mingw32-ar'
+ strip = 'x86_64-w64-mingw32-strip'
+ windres = 'x86_64-w64-mingw32-windres'
+-pkg-config = 'x86_64-w64-mingw32-pkg-config'
++pkgconfig = 'pkg-config'
+ exe_wrapper = 'wine'
+ 
+ [built-in options]
