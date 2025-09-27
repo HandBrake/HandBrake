@@ -26,7 +26,7 @@ ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
 LIBDVDREAD.GCC.args.extra += $(LIBDVDREAD.GCC.args.O.$(LIBDVDREAD.GCC.O))
 
 ifeq (darwin,$(HOST.system))
-    LIBDVDREAD.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(SRC/))make/cross/$(HOST.machine)-darwin-gcc.meson
+    LIBDVDREAD.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDVDREAD.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-darwin-gcc.meson
 endif
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
