@@ -29,6 +29,8 @@ namespace HandBrakeWPF.Instance
         internal bool serverStarted;
         internal Process workerProcess;
 
+        private bool hasRetried = false;
+
         public RemoteBase(ILog logService, IUserSettingService userSettingService, IPortService portService)
         {
             this.logService = logService;
@@ -65,6 +67,8 @@ namespace HandBrakeWPF.Instance
 
         public void Initialize(int verbosityLvl, bool noHardwareMode)
         {
+            // Input Params are handled on the Start API calls, not when the process is started.
+
             try
             {
                 if (this.workerProcess == null || this.workerProcess.HasExited)
@@ -224,6 +228,14 @@ namespace HandBrakeWPF.Instance
 
         private void WorkerProcess_Exited(object sender, EventArgs e)
         {
+            if (this.workerProcess != null && this.workerProcess.ExitCode == 2 && !hasRetried)
+            {
+                // Try one more time on a different port.
+                hasRetried = true;
+                this.ServiceLogMessage("Exit Code 2 Detected. Will retry one more time ...");
+                this.Initialize(0, false);
+            }
+
             this.ServiceLogMessage("Worker process exited!");
         }
 

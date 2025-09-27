@@ -9,12 +9,12 @@ concurrency:
 jobs:
   build:
     name: Build on macOS
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
     - uses: actions/checkout@v5
     - uses: actions/setup-python@v6
       with:
-        python-version: '3.12.3'
+        python-version: '3.13.7'
 
     - name: Toolchain Cache
       id: mac-toolchain
@@ -37,6 +37,7 @@ jobs:
       run: |
         echo ~/mac-toolchain/bin >> $GITHUB_PATH
         rustup target add x86_64-apple-darwin
+        xcodebuild -downloadComponent MetalToolchain
 
     - name: Setup Toolchain
       if: steps.mac-toolchain.outputs.cache-hit != 'true'
