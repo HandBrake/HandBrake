@@ -27,7 +27,7 @@ endif
 LIBDVDNAV.GCC.args.extra += $(LIBDVDNAV.GCC.args.O.$(LIBDVDNAV.GCC.O))
 
 ifeq (darwin,$(HOST.system))
-    LIBDVDNAV.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(SRC/))make/cross/$(HOST.machine)-darwin-gcc.meson
+    LIBDVDNAV.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDVDNAV.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-darwin-gcc.meson
 endif
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
