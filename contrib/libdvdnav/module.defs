@@ -1,12 +1,41 @@
 $(eval $(call import.MODULE.defs,LIBDVDNAV,libdvdnav,LIBDVDREAD))
 $(eval $(call import.CONTRIB.defs,LIBDVDNAV))
 
-LIBDVDNAV.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libdvdnav-6.1.1.tar.bz2
-LIBDVDNAV.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2
-LIBDVDNAV.FETCH.sha256  = c191a7475947d323ff7680cf92c0fb1be8237701885f37656c64d04e98d18d48
+LIBDVDNAV.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libdvdnav-7.0.0.tar.bz2
+LIBDVDNAV.FETCH.url    += https://code.videolan.org/videolan/libdvdnav/-/archive/7.0.0/libdvdnav-7.0.0.tar.bz2
+LIBDVDNAV.FETCH.sha256  = 1363cdfaf6e92c0b574579299b5480f5867fb32989451468a28f3f402ec48787
+
+
+LIBDVDNAV.build_dir             = build/
+LIBDVDNAV.CONFIGURE.exe         = $(MESON.exe) setup
+LIBDVDNAV.prefix                = $(call fn.ABSOLUTE,$(LIBDVDNAV.prefix/))contrib/
+LIBDVDNAV.CONFIGURE.deps        =
+LIBDVDNAV.CONFIGURE.shared      =
+LIBDVDNAV.CONFIGURE.host        =
+LIBDVDNAV.CONFIGURE.build       =
+LIBDVDNAV.CONFIGURE.static      = -Ddefault_library=static
+LIBDVDNAV.CONFIGURE.extra       = --libdir=$(call fn.ABSOLUTE,$(LIBDVDNAV.prefix/))contrib/lib/ \
+                                  -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,LIBDVDNAV.GCC,*archs *sysroot *minver ?extra)" \
+                                  -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,LIBDVDNAV.GCC,*archs *sysroot *minver ?extra.exe)" \
+								  -Dpkg_config_path=$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/pkgconfig)
+LIBDVDNAV.CONFIGURE.env         =
 
 ifneq (max,$(LIBDVDNAV.GCC.g))
     LIBDVDNAV.GCC.D += NDEBUG
 endif
 
 LIBDVDNAV.GCC.args.extra += $(LIBDVDNAV.GCC.args.O.$(LIBDVDNAV.GCC.O))
+
+ifeq (darwin,$(HOST.system))
+    LIBDVDNAV.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDVDNAV.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-darwin-gcc.meson
+endif
+
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
+    LIBDVDNAV.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDVDNAV.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-w64-mingw32.meson
+endif
+
+LIBDVDNAV.BUILD.make       = $(NINJA.exe)
+LIBDVDNAV.BUILD.extra      = -v
+LIBDVDNAV.INSTALL.make     = $(NINJA.exe)
+LIBDVDNAV.CLEAN.make       = $(NINJA.exe)
+LIBDVDNAV.UNINSTALL.make   = $(NINJA.exe)

@@ -1,0 +1,38 @@
+diff -ruN libdvdnav-7.0.0/package/crossfiles/arm64-darwin-gcc.meson libdvdnav-7.0.0-patched/package/crossfiles/arm64-darwin-gcc.meson
+--- libdvdnav-7.0.0/package/crossfiles/arm64-darwin-gcc.meson	1970-01-01 01:00:00.000000000 +0100
++++ libdvdnav-7.0.0-patched/package/crossfiles/arm64-darwin-gcc.meson	2025-09-27 15:34:38.228540400 +0200
+@@ -0,0 +1,15 @@
++[binaries]
++c = 'clang'
++cpp = 'clang++'
++ar = 'ar'
++strip = 'strip'
++pkgconfig = 'pkg-config'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++
++[host_machine]
++system = 'MACOSX'
++cpu_family = 'aarch64'
++cpu = 'aarch64'
++endian = 'little'
+diff -ruN libdvdnav-7.0.0/package/crossfiles/x86_64-darwin-gcc.meson libdvdnav-7.0.0-patched/package/crossfiles/x86_64-darwin-gcc.meson
+--- libdvdnav-7.0.0/package/crossfiles/x86_64-darwin-gcc.meson	1970-01-01 01:00:00.000000000 +0100
++++ libdvdnav-7.0.0-patched/package/crossfiles/x86_64-darwin-gcc.meson	2025-09-27 15:38:34.003984800 +0200
+@@ -0,0 +1,15 @@
++[binaries]
++c = 'clang'
++cpp = 'clang++'
++ar = 'ar'
++strip = 'strip'
++pkgconfig = 'pkg-config'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++
++[host_machine]
++system = 'MACOSX'
++cpu_family = 'aarch64'
++cpu = 'aarch64'
++endian = 'little'
