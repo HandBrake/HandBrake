@@ -6,7 +6,7 @@ diff -Naur libdvdread-7.0.0/package/crossfiles/x86_64-w64-mingw32.meson libdvdre
  strip = 'x86_64-w64-mingw32-strip'
  windres = 'x86_64-w64-mingw32-windres'
 -pkg-config = 'x86_64-w64-mingw32-pkg-config'
-+pkgconfig = 'pkg-config'
++pkg-config = 'pkg-config'
  exe_wrapper = 'wine'
  
  [built-in options]
