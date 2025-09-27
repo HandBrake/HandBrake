@@ -3,7 +3,7 @@
     "branch": "1",
     "runtime": "fr.handbrake.ghb",
     "runtime-version": "development",
-    "sdk": "org.gnome.Sdk//48",
+    "sdk": "org.gnome.Sdk//49",
     "build-extension": true,
     "separate-locales": false,
     "modules": [
@@ -12,13 +12,14 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.5.2.tar.gz",
-                    "sha256": "dbf7cc401de7ff386306a23c1c61b3cf7bd86a4d9001b3a1d16a81e6b0e3ab2b"
+                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.8.2.tar.gz",
+                    "sha256": "2e43e538a002574f45d480a24e02297c960963dc7914b7328791d9836832ff43"
                 }
             ],
             "buildsystem": "cmake-ninja",
             "builddir": true,
             "config-opts": [
+                "-DCMAKE_POLICY_VERSION_MINIMUM=3.10",
                 "-DCMAKE_BUILD_TYPE=Release",
                 "-DCMAKE_INSTALL_LIBDIR=lib"
             ],
@@ -70,19 +71,21 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-24.3.4.tar.gz",
-                    "sha256": "58978f9ee4981532e60be2f2768673b1f3825db09971ebb98fbd7e8819cab6eb"
+                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-25.3.4.tar.gz",
+                    "sha256": "ef9a7a0881b250d23df7d4676341a3729b28887bcf404a74d48db5f44ffa0220"
                 }
             ],
             "buildsystem": "cmake-ninja",
             "builddir": true,
             "config-opts": [
+                "-DCMAKE_POLICY_VERSION_MINIMUM=3.10",
                 "-DCMAKE_BUILD_TYPE=Release",
                 "-DCMAKE_INSTALL_LIBDIR=lib",
                 "-DMEDIA_RUN_TEST_SUITE=OFF",
                 "-DENABLE_PRODUCTION_KMD=ON"
             ],
             "build-options": {
+                "cxxflags": "-Wno-error=array-bounds=",
                 "prefix" : "/app/extensions/IntelMediaSDK",
                 "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig",
                 "strip": true
@@ -93,6 +96,7 @@
             "buildsystem": "cmake-ninja",
             "builddir": true,
             "config-opts": [
+                "-DCMAKE_POLICY_VERSION_MINIMUM=3.10",
                 "-DCMAKE_BUILD_TYPE=Release",
                 "-DCMAKE_INSTALL_LIBDIR=lib",
                 "-DBUILD_SAMPLES=OFF",
@@ -141,8 +145,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/vpl-gpu-rt/archive/refs/tags/intel-onevpl-24.3.4.tar.gz",
-                    "sha256": "978672104e6767223fbfb34fa9a0c0d954dcff9109891dc4911413dbc553ed71"
+                    "url": "https://github.com/intel/vpl-gpu-rt/archive/refs/tags/intel-onevpl-25.2.6.tar.gz",
+                    "sha256": "d236ede2ab87063d0d8d52932779ff446a885b8dc4ef840d1a756c6776ef6fef"
                 },
                 {
                     "type": "file",
