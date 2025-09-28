@@ -16,7 +16,8 @@ LIBDVDREAD.CONFIGURE.static      = -Ddefault_library=static
 LIBDVDREAD.CONFIGURE.extra       = --libdir=$(call fn.ABSOLUTE,$(LIBDVDREAD.prefix/))contrib/lib/ \
                                   -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,LIBDVDREAD.GCC,*archs *sysroot *minver ?extra)" \
                                   -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,LIBDVDREAD.GCC,*archs *sysroot *minver ?extra.exe)" \
-								  -Dpkg_config_path=$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/pkgconfig)
+                                  -Dpkg_config_path=$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/pkgconfig) \
+                                  -Dlibdvdcss=disabled
 LIBDVDREAD.CONFIGURE.env         =
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
