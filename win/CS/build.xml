@@ -120,8 +120,9 @@
   </PropertyGroup>
 
   <Target Name="CodeSign" Condition="'$(SignEnabled)' == 'true'">
-    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*Win_GUI.exe&quot;" />
-    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*Win_GUI.msi&quot;" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*.exe&quot;" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*.dll&quot;" />
   </Target>
 
 </Project>
+
