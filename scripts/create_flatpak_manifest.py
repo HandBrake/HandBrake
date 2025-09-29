@@ -74,9 +74,9 @@ class FlatpakManifest:
             self.manifest["runtime-version"] = runtime
 
         if "nvenc" in features:
-            self.extensions += ['org.freedesktop.Sdk.Extension.llvm18'];
-            self.build_path += ['/usr/lib/sdk/llvm18/bin'];
-            self.ld_path    += ['/usr/lib/sdk/llvm18/lib'];
+            self.extensions += ['org.freedesktop.Sdk.Extension.llvm21'];
+            self.build_path += ['/usr/lib/sdk/llvm21/bin'];
+            self.ld_path    += ['/usr/lib/sdk/llvm21/lib'];
 
         if "libdovi" in features:
             self.extensions += ['org.freedesktop.Sdk.Extension.rust-stable'];
