@@ -1,7 +1,7 @@
 {
     "app-id": "fr.handbrake.ghb",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "48",
+    "runtime-version": "49",
     "sdk": "org.gnome.Sdk",
     "command": "ghb",
     "finish-args": [
@@ -38,13 +38,13 @@
             "name": "numactl",
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/numactl/numactl.git",
-                    "tag": "v2.0.18",
-                    "commit": "3871b1c42fc71bceadafd745d2eff5dddfc2d67e",
+                    "type": "archive",
+                    "url": "https://github.com/numactl/numactl/archive/refs/tags/v2.0.19.tar.gz",
+                    "sha256": "8b84ffdebfa0d730fb2fc71bb7ec96bb2d38bf76fb67246fde416a68e04125e4",
                     "x-checker-data": {
-                        "type": "git",
-                        "tag-pattern": "^v([\\d.]+)$"
+                        "type": "anitya",
+                        "project-id": 2507,
+                        "url-template": "https://github.com/numactl/numactl/archive/refs/tags/v$version.tar.gz"
                     }
                 }
             ],

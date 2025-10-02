@@ -82,5 +82,7 @@ GPLv2 license.</string>
 	<string>HandBrake needs access to shut down or put the computer to sleep</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
+	<key>NSAutoFillRequiresTextContentTypeForOneTimeCodeOnMac</key>
+	<true />
 </dict>
 </plist>
