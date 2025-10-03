@@ -1,0 +1,4139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025 HandBrake Team
+# This file is distributed under the same license as the ghb package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Ilya Ilyushenok <ilya4795@gmail.com>, 2024
+# Victor, 2025
+# VictorR2007 <victorr2007@yandex.ru>, 2025
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ghb 20250818-git-c7466a55e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-18 09:50+0100\n"
+"PO-Revision-Date: 2018-10-10 18:14+0000\n"
+"Last-Translator: VictorR2007 <victorr2007@yandex.ru>, 2025\n"
+"Language-Team: Russian (https://app.transifex.com/HandBrakeProject/teams/92423/ru/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: src/ui/menu.ui:6
+msgid "_File"
+msgstr "_Файл"
+
+#: src/ui/menu.ui:10 src/ui/menu.ui:456
+msgid "_Open Source…"
+msgstr "_Открыть источник"
+
+#: src/ui/menu.ui:14 src/ui/menu.ui:460
+msgid "Open _Directory…"
+msgstr "Открыть _каталог"
+
+#: src/ui/menu.ui:18 src/ui/menu.ui:176
+msgid "_Set Destination…"
+msgstr "Установить _назначение"
+
+#: src/ui/menu.ui:26 src/ui/menu.ui:196
+msgid "_Preferences"
+msgstr "_Параметры"
+
+#. Toss up a warning dialog
+#: src/ui/menu.ui:30 src/ui/menu.ui:210 src/callbacks.c:3802
+msgid "_Quit"
+msgstr "_Выход"
+
+#: src/ui/menu.ui:35 src/ui/menu.ui:80
+msgid "_Queue"
+msgstr "_Очередь"
+
+#: src/ui/menu.ui:39
+msgid "_Add"
+msgstr "_Добавить"
+
+#: src/ui/menu.ui:43 src/ui/menu.ui:443
+msgid "Add _Multiple…"
+msgstr "Добавить _несколько"
+
+#: src/ui/menu.ui:47 src/ui/menu.ui:447
+msgid "Add A_ll"
+msgstr "Добавить в_се"
+
+#: src/ui/menu.ui:53 src/queuehandler.c:1876
+msgid "_Start Encoding"
+msgstr "_Начать кодирование"
+
+#: src/ui/menu.ui:57 src/queuehandler.c:1919
+msgid "_Pause Encoding"
+msgstr "_Приостановить кодирование"
+
+#: src/ui/menu.ui:63 src/ui/menu.ui:182 src/ui/menu.ui:334
+msgid "_Import Queue…"
+msgstr "_Импорт очереди…"
+
+#: src/ui/menu.ui:67 src/ui/menu.ui:186 src/ui/menu.ui:338
+msgid "_Export Queue…"
+msgstr "_Экспорт очереди…"
+
+#: src/ui/menu.ui:72
+msgid "_View"
+msgstr "_Вид"
+
+#: src/ui/menu.ui:76
+msgid "Presets _List"
+msgstr "_Список предустановок"
+
+#: src/ui/menu.ui:84
+msgid "_Preview"
+msgstr "_Просмотр"
+
+#: src/ui/menu.ui:88 src/ui/menu.ui:192
+msgid "_Activity Window"
+msgstr "_Окно активности"
+
+#: src/ui/menu.ui:93
+msgid "_Presets"
+msgstr "_Предустановки"
+
+#: src/ui/menu.ui:97 src/ui/menu.ui:219 src/ui/menu.ui:262
+msgid "Set De_fault"
+msgstr "Установить по умолчанию"
+
+#: src/ui/menu.ui:103 src/ui/menu.ui:225
+msgid "_New Preset…"
+msgstr "_Новая предустановка…"
+
+#: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:6199
+#: src/ui/ghb.ui:6289 src/ui/ghb.ui:6629 src/ui/ghb.ui:6901
+#: src/callbacks.c:2123 src/chapters.c:455 src/ghb-file-button.c:219
+#: src/presets.c:2369 src/queuehandler.c:1386
+msgid "_Save"
+msgstr "_Сохранить"
+
+#: src/ui/menu.ui:111 src/ui/menu.ui:233 src/ui/menu.ui:272
+msgid "_Rename…"
+msgstr "_Переименовать…"
+
+#: src/ui/menu.ui:115 src/ui/menu.ui:237 src/ui/menu.ui:276
+msgid "_Delete…"
+msgstr "_Удалить…"
+
+#: src/ui/menu.ui:121 src/ui/menu.ui:243
+msgid "_Import Preset…"
+msgstr "_Импорт предустановки…"
+
+#: src/ui/menu.ui:125 src/ui/menu.ui:247 src/ui/menu.ui:282
+msgid "_Export Preset…"
+msgstr "_Экспорт предустановки…"
+
+#: src/ui/menu.ui:131 src/ui/menu.ui:253
+msgid "Reset _Built-in Presets"
+msgstr "_Сбросить предустановки"
+
+#: src/ui/menu.ui:140 src/ui/menu.ui:200
+msgid "_Help"
+msgstr "_Помощь"
+
+#: src/ui/menu.ui:144
+msgid "_Online Documentation"
+msgstr "_Документация"
+
+#: src/ui/menu.ui:148
+msgid "_About"
+msgstr "_О программе"
+
+#: src/ui/menu.ui:158
+msgid "HandBrake For _Dummies"
+msgstr "HandBrake для _чайников"
+
+#: src/ui/menu.ui:204
+msgid "A_bout HandBrake"
+msgstr "О _программе"
+
+#: src/ui/menu.ui:290 src/ui/menu.ui:369
+msgid "_Play File"
+msgstr "_Воспроизвести файл"
+
+#: src/ui/menu.ui:294 src/ui/menu.ui:373
+msgid "Open _Source Directory"
+msgstr "Открыть каталог _источника"
+
+#: src/ui/menu.ui:298 src/ui/menu.ui:377
+msgid "Open _Destination Directory"
+msgstr "Открыть каталог _назначения"
+
+#: src/ui/menu.ui:304 src/ui/menu.ui:382
+msgid "Open Encode _Log"
+msgstr "Открыть каталог _журнала"
+
+#: src/ui/menu.ui:308 src/ui/menu.ui:386
+msgid "Open _Encode Log Directory"
+msgstr "Открыть каталог журнала _кодирования"
+
+#: src/ui/menu.ui:316
+msgid "Reset _Failed Jobs"
+msgstr "Сбросить _неудачные задания"
+
+#: src/ui/menu.ui:320
+msgid "_Reset All Jobs"
+msgstr "_Сбросить все задания"
+
+#: src/ui/menu.ui:324
+msgid "_Clear Completed Jobs"
+msgstr "_Очистить завершённые задания"
+
+#: src/ui/menu.ui:328
+msgid "Clear _All Jobs"
+msgstr "Очистить _все задания"
+
+#: src/ui/menu.ui:346
+msgid "_Add Track"
+msgstr "_Добавить дорожку"
+
+#: src/ui/menu.ui:350 src/ui/menu.ui:419 src/ui/menu.ui:431
+msgid "Add A_ll Tracks"
+msgstr "Добавить в_се дорожки"
+
+#: src/ui/menu.ui:354 src/ui/menu.ui:435
+msgid "Add _Foreign Audio Scan"
+msgstr "Добавить _сканирование иностранного языка"
+
+#: src/ui/menu.ui:360
+msgid "Add External Subtitle File"
+msgstr "Добавить файл внешних субтитров"
+
+#: src/ui/menu.ui:393
+msgid "Move to _Top"
+msgstr "Переместиться _вверх"
+
+#: src/ui/menu.ui:397
+msgid "Move to _Bottom"
+msgstr "Переместиться _вниз"
+
+#: src/ui/menu.ui:403
+msgid "_Edit"
+msgstr "_Изменить"
+
+#: src/ui/menu.ui:407
+msgid "_Reset"
+msgstr "_Сбросить"
+
+#: src/ui/menu.ui:415 src/ui/menu.ui:427
+msgid "_Add New Track"
+msgstr "_Добавить новую дорожку"
+
+#: src/ui/ghb.ui:93
+msgid ""
+"Render the subtitle over the video.\n"
+"\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr ""
+"Отображение субтитров на видео.\n"
+"\n"
+"Субтитры будут на части видео и не могут быть отключены."
+
+#: src/ui/ghb.ui:96
+msgid "<b>Burned In</b>"
+msgstr "<b>Встроенные</b>"
+
+#: src/ui/ghb.ui:100 src/ui/ghb.ui:6870
+msgid ""
+"Set the default output subtitle track.\n"
+"\n"
+"Most players will automatically display this\n"
+"subtitle track whenever the video is played.\n"
+"\n"
+"This is useful for creating a \"forced\" track\n"
+"in your output."
+msgstr ""
+"Устанавливает по умолчанию дорожку субтитров вывода.\n"
+"\n"
+"Большинство проигрывателей будет автоматически отображать эту\n"
+"дорожку субтитров при воспроизводится видео.\n"
+"\n"
+"Это эффективно для создания «форсированной» дорожки\n"
+"в выводе."
+
+#: src/ui/ghb.ui:107
+msgid "<b>Default</b>"
+msgstr "<b>По умолчанию</b>"
+
+#: src/ui/ghb.ui:111 src/ui/ghb.ui:6846
+msgid ""
+"Use only subtitles that have been flagged\n"
+"as forced in the source subtitle track\n"
+"\n"
+"\"Forced\" subtitles are usually used to show\n"
+"subtitles during scenes where someone is speaking\n"
+"a foreign language."
+msgstr ""
+"Использует только те субтитры, которые были помечены\n"
+"как форсированные, в дорожке субтитров источника\n"
+"\n"
+"«Форсированные» субтитры, как правило, используется, чтобы показать\n"
+"субтитры во время сцен, где кто-то говорит\n"
+"на иностранном языке."
+
+#: src/ui/ghb.ui:117
+msgid "<b>Forced Only</b>"
+msgstr "<b>Только форсированные</b>"
+
+#: src/ui/ghb.ui:121
+msgid ""
+"Add (or subtract) an offset (in milliseconds)\n"
+"to the start of the SRT subtitle track.\n"
+"\n"
+"Often, the start of an external SRT file\n"
+"does not coincide with the start of the video.\n"
+"This setting allows you to synchronize the files."
+msgstr ""
+"Добавить (или вычесть) смещение (в миллисекундах)\n"
+"с начала дорожки SRT субтитров.\n"
+"\n"
+"Часто, начало внешнего SRT файла\n"
+"не совпадает с началом видео.\n"
+"Этот параметр позволяет синхронизировать файлы."
+
+#: src/ui/ghb.ui:127
+msgid "<b>SRT Offset</b>"
+msgstr "<b>Смещение SRT</b>"
+
+#: src/ui/ghb.ui:131
+msgid ""
+"The source subtitle track\n"
+"\n"
+"You can choose any of the subtitles\n"
+"recognized in your source file.\n"
+"\n"
+"In addition, there is a special track option\n"
+"\"Foreign Audio Scan\".  This option will add\n"
+"an extra pass to the encode that searches for\n"
+"subtitles that may correspond to a foreign\n"
+"language scene.  This option is best used in\n"
+"conjunction with the \"Forced\" option."
+msgstr ""
+"Дорожка субтитров источника\n"
+"\n"
+"Вы можете выбрать любые из субтитров,\n"
+"распознанных в исходном файле.\n"
+"\n"
+"Кроме того, есть специальный вариант дорожки\n"
+"«Сканирование иностранного языка».  Эта опция добавит\n"
+"дополнительный проход в кодирование, который ищет\n"
+"субтитры, которые могут соответствовать сцене с\n"
+"иностранным языком.Эту опцию лучше всего использовать в\n"
+"сочетании с опцией «Форсированные»."
+
+#: src/ui/ghb.ui:142
+msgid "<b>Track</b>"
+msgstr "<b>Дорожка</b>"
+
+#: src/ui/ghb.ui:146 src/ui/ghb.ui:1440
+msgid "Presets"
+msgstr "Предустановки"
+
+#: src/ui/ghb.ui:157
+msgid "Save as new preset"
+msgstr "Сохранить как новую предустановку"
+
+#: src/ui/ghb.ui:166 src/ui/ghb.ui:430
+msgid "Actions"
+msgstr "Действия"
+
+#: src/ui/ghb.ui:205
+msgid "HandBrake Queue"
+msgstr "Очередь"
+
+#: src/ui/ghb.ui:212 src/ui/ghb.ui:1416 src/queuehandler.c:1849
+#: src/queuehandler.c:1862
+msgid "Start Encoding"
+msgstr "Начать кодирование"
+
+#: src/ui/ghb.ui:213 src/ui/ghb.ui:1417 src/ui/ghb.ui:4233
+#: src/queuehandler.c:1848 src/queuehandler.c:1861
+msgid "Start"
+msgstr "Старт"
+
+#: src/ui/ghb.ui:221 src/ui/ghb.ui:1424 src/queuehandler.c:1893
+#: src/queuehandler.c:1906
+msgid "Pause Encoding"
+msgstr "Приостановить кодирование"
+
+#: src/ui/ghb.ui:222 src/ui/ghb.ui:1425 src/queuehandler.c:1892
+#: src/queuehandler.c:1905
+msgid "Pause"
+msgstr "Пауза"
+
+#: src/ui/ghb.ui:235 src/ui/ghb.ui:1456
+msgid "Queue"
+msgstr "Очередь"
+
+#: src/ui/ghb.ui:241
+msgid "0 jobs pending"
+msgstr "0 заданий в ожидании"
+
+#: src/ui/ghb.ui:251
+msgid "Options"
+msgstr "Параметры"
+
+#: src/ui/ghb.ui:322 src/ui/ghb.ui:4617
+msgid "When Done:"
+msgstr "По завершении:"
+
+#: src/ui/ghb.ui:335
+msgid "Show/hide the queue details panel"
+msgstr "Показать/скрыть панель сведений об очереди"
+
+#: src/ui/ghb.ui:364 src/ui/ghb.ui:1733
+msgid "Summary"
+msgstr "Описание"
+
+#: src/ui/ghb.ui:382
+msgid ""
+"Mark selected queue entry as pending.\n"
+"Resets the queue job to pending and ready to run again."
+msgstr ""
+"Отметить выбранные записи очереди, как в ожидании.\n"
+"Сбросить ожидание очереди заданий и продолжить выполнять задание снова."
+
+#: src/ui/ghb.ui:397
+msgid "Reset"
+msgstr "Сбросить"
+
+#: src/ui/ghb.ui:419
+msgid "Edit"
+msgstr "Изменить"
+
+#: src/ui/ghb.ui:456 src/ui/ghb.ui:2999 src/ui/ghb.ui:3123 src/ui/ghb.ui:3264
+#: src/ui/ghb.ui:3661 src/hb-backend.c:4408 src/hb-backend.c:4415
+#: src/hb-backend.c:4439 src/hb-backend.c:4447 src/hb-backend.c:4475
+#: src/hb-backend.c:4484 src/hb-backend.c:4511 src/hb-backend.c:4536
+msgid "Preset:"
+msgstr "Предустановка:"
+
+#: src/ui/ghb.ui:483
+msgid "Source:"
+msgstr "Источник:"
+
+#: src/ui/ghb.ui:515 src/ui/ghb.ui:4282
+msgid "Title:"
+msgstr "Название:"
+
+#: src/ui/ghb.ui:546
+msgid "Destination:"
+msgstr "Назначение:"
+
+#: src/ui/ghb.ui:578
+msgid "Dimensions:"
+msgstr "Размеры:"
+
+#: src/ui/ghb.ui:605
+msgid "Video:"
+msgstr "Видео:"
+
+#: src/ui/ghb.ui:632
+msgid "Audio:"
+msgstr "Звук:"
+
+#: src/ui/ghb.ui:659
+msgid "Subtitles:"
+msgstr "Субтитры:"
+
+#: src/ui/ghb.ui:691
+msgid "Statistics"
+msgstr "Статистика"
+
+#: src/ui/ghb.ui:720
+msgid "Pass:"
+msgstr "Проход:"
+
+#: src/ui/ghb.ui:748
+msgid "Start Time:"
+msgstr "Время начала:"
+
+#: src/ui/ghb.ui:775
+msgid "End Time:"
+msgstr "Время завершения:"
+
+#: src/ui/ghb.ui:806
+msgid "Paused Duration:"
+msgstr "Продолжительность паузы:"
+
+#: src/ui/ghb.ui:837
+msgid "Encode Time:"
+msgstr "Время кодирования:"
+
+#: src/ui/ghb.ui:864
+msgid "File Size:"
+msgstr "Размер файла:"
+
+#: src/ui/ghb.ui:891
+msgid "Status:"
+msgstr "Состояние:"
+
+#: src/ui/ghb.ui:923 src/ui/ghb.ui:958 src/ui/ghb.ui:980 src/ui/ghb.ui:1008
+#: src/ui/ghb.ui:1040
+msgid "Activity Log"
+msgstr "Журнал действий"
+
+#: src/ui/ghb.ui:1300
+msgid "About HandBrake"
+msgstr "О программе"
+
+#: src/ui/ghb.ui:1303
+msgid ""
+"Copyright © 2008-2024 John Stebbins\n"
+"Copyright © 2004-2024, HandBrake Devs"
+msgstr ""
+"Авторские права © 2008-2024 John Stebbins\n"
+"Авторские права © 2004-2024, HandBrake Devs"
+
+#: src/ui/ghb.ui:1305
+msgid "Multithreaded video transcoder"
+msgstr "Многопоточный транскодер видео"
+
+#: src/ui/ghb.ui:1334 data/fr.handbrake.ghb.desktop.in:2
+msgid "HandBrake"
+msgstr "HandBrake"
+
+#: src/ui/ghb.ui:1363 src/callbacks.c:4630
+msgid "Choose Video Source"
+msgstr "Выбрать исходное видео"
+
+#: src/ui/ghb.ui:1364 src/callbacks.c:1855 src/callbacks.c:4629
+msgid "Open Source"
+msgstr "Открыть источник"
+
+#: src/ui/ghb.ui:1391
+msgid "Add to Queue"
+msgstr "Добавить в очередь"
+
+#: src/ui/ghb.ui:1392
+msgid "Add To Queue"
+msgstr "Добавить в очередь"
+
+#: src/ui/ghb.ui:1439
+msgid "Show Presets Window"
+msgstr "Показать окно предустановок"
+
+#: src/ui/ghb.ui:1447
+msgid "Show Preview Window"
+msgstr "Показать окно просмотра"
+
+#: src/ui/ghb.ui:1448
+msgid "Preview"
+msgstr "Предварительный просмотр"
+
+#: src/ui/ghb.ui:1455
+msgid "Show Queue"
+msgstr "Показать очередь"
+
+#: src/ui/ghb.ui:1463
+msgid "Show Activity Window"
+msgstr "Показать окно активности"
+
+#: src/ui/ghb.ui:1464
+msgid "Activity"
+msgstr "Активность"
+
+#: src/ui/ghb.ui:1482
+msgid "<b>Source:</b>"
+msgstr "<b>Источник:</b>"
+
+#: src/ui/ghb.ui:1498 src/hb-backend.c:54 src/hb-backend.c:66
+#: src/hb-backend.c:78 src/hb-backend.c:91 src/hb-backend.c:129
+#: src/hb-backend.c:229 src/hb-backend.c:274 src/hb-backend.c:285
+#: src/hb-backend.c:312 src/hb-backend.c:397 src/hb-backend.c:2853
+#: src/subtitlehandler.c:1439
+msgid "None"
+msgstr "Нет"
+
+#: src/ui/ghb.ui:1526 src/callbacks.c:4602
+msgid "Scanning..."
+msgstr "Сканирование…"
+
+#: src/ui/ghb.ui:1546
+msgid "<b>Title:</b>"
+msgstr "<b>Название:</b>"
+
+#: src/ui/ghb.ui:1564
+msgid ""
+"Set the title to encode.\n"
+"By default the longest title is chosen.\n"
+"This is often the feature title of a DVD."
+msgstr ""
+"Установить название для кодирования.\n"
+"По умолчанию выбрано длинное название.\n"
+"Часто  это название функций DVD."
+
+#: src/ui/ghb.ui:1580
+msgid "<b>Angle:</b>"
+msgstr "<b>Угол:</b>"
+
+#: src/ui/ghb.ui:1588
+msgid "For multi-angle DVD's, select the desired angle to encode."
+msgstr "Для нескольких ракурсов DVD, выберите нужный ракурс для кодирования."
+
+#: src/ui/ghb.ui:1599
+msgid "<b>Range:</b>"
+msgstr "<b>Диапазон:</b>"
+
+#: src/ui/ghb.ui:1605
+msgid "Range of title to encode. Can be chapters, seconds, or frames."
+msgstr ""
+"Диапазон заголовков для кодирования. Могут быть главы, секунды или кадры."
+
+#: src/ui/ghb.ui:1613
+msgid "Set the first chapter to encode."
+msgstr "Установить первую главу для кодирования."
+
+#: src/ui/ghb.ui:1624
+msgid "-"
+msgstr "-"
+
+#: src/ui/ghb.ui:1631
+msgid "Set the last chapter to encode."
+msgstr "Установить последнюю главу для кодирования."
+
+#: src/ui/ghb.ui:1649
+msgid "<b>Preset:</b>"
+msgstr "<b>Предустановка:</b>"
+
+#: src/ui/ghb.ui:1666
+msgid "Choose Preset"
+msgstr "Выберите предустановку"
+
+#: src/ui/ghb.ui:1675
+msgid "<u><i>Modified</i></u>"
+msgstr "<u><i>Изменён</i></u>"
+
+#: src/ui/ghb.ui:1681 src/ui/ghb.ui:3936 src/ui/ghb.ui:4090
+msgid "Reload"
+msgstr "Перезагрузить"
+
+#: src/ui/ghb.ui:1684
+msgid ""
+"Reload the settings for the currently selected preset.\n"
+"Modifications will be discarded."
+msgstr "Перезагрузить настройки для текущей выбранной предустановки."
+
+#: src/ui/ghb.ui:1693
+msgid "Save New Preset"
+msgstr "Сохранить новую предустановку"
+
+#: src/ui/ghb.ui:1696
+msgid "Save the current settings to a new Preset."
+msgstr "Применить текущие настройки в новую предустановку."
+
+#: src/ui/ghb.ui:1746
+msgid "Format:"
+msgstr "Формат:"
+
+#: src/ui/ghb.ui:1760
+msgid "Format to mux encoded tracks to."
+msgstr "Формат мультиплексора кодирования дорожек."
+
+#: src/ui/ghb.ui:1770 src/queuehandler.c:225
+msgid "Web Optimized"
+msgstr "Оптимизация для интернет-трансляции"
+
+#: src/ui/ghb.ui:1772
+msgid ""
+"Optimize the layout of the MP4 file for progressive download.\n"
+"This allows a player to initiate playback before downloading the entire file."
+msgstr ""
+"Оптимизирует структуру файлов mp4 для последовательной загрузки.\n"
+"Это позволяет проигрывателю начать воспроизведение до загрузки всего файла."
+
+#: src/ui/ghb.ui:1785
+msgid "Align A/V Start"
+msgstr "Запуск выравнивания А/В"
+
+#: src/ui/ghb.ui:1787
+msgid ""
+"Aligns the initial timestamps of all audio and video streams by\n"
+"inserting blank frames or dropping frames. May improve audio/video\n"
+"sync for broken players that do not honor MP4 edit lists."
+msgstr ""
+"Выравнивает начальные временные метки всех аудио- и видеопотоков,\n"
+"вставляя пустые кадры или пропуская кадры. Может улучшить синхронизацию аудио / видео\n"
+" для проигрывателей, которые не читают списки редактирования MP4."
+
+#: src/ui/ghb.ui:1801
+msgid "iPod 5G Support"
+msgstr "Поддержка iPod 5G"
+
+#: src/ui/ghb.ui:1803
+msgid "Add iPod Atom needed by some older iPods."
+msgstr "Добавить iPod Atom, необходимый некоторым старым плеерам."
+
+#: src/ui/ghb.ui:1815
+msgid "Passthru Common Metadata"
+msgstr "Передача через общие метаданные"
+
+#: src/ui/ghb.ui:1817
+msgid "Copy metadata from source to output."
+msgstr "Копировать метаданные из источника в выходные данные"
+
+#: src/ui/ghb.ui:1850
+msgid "Duration:"
+msgstr "Продолжительность:"
+
+#: src/ui/ghb.ui:1863
+msgid "hh:mm:ss"
+msgstr "чч:мм:сс"
+
+#: src/ui/ghb.ui:1874
+msgid "Tracks:"
+msgstr "Дорожки:"
+
+#: src/ui/ghb.ui:1907
+msgid "Filters:"
+msgstr "Фильтры:"
+
+#: src/ui/ghb.ui:1940
+msgid "Size:"
+msgstr "Размер:"
+
+#: src/ui/ghb.ui:1987 src/ui/ghb.ui:2018 src/ui/ghb.ui:6454
+msgid "Video Preview"
+msgstr "Предпросмотр видео"
+
+#: src/ui/ghb.ui:2076
+msgid "Dimensions"
+msgstr "Размер изображения"
+
+#: src/ui/ghb.ui:2090
+msgid "<b>Source Dimensions</b>"
+msgstr "<b>Размеры источника</b>"
+
+#: src/ui/ghb.ui:2105 src/ui/ghb.ui:2751
+msgid "Storage Size:"
+msgstr "Размер источника:"
+
+#: src/ui/ghb.ui:2128 src/ui/ghb.ui:2778
+msgid "Display Size:"
+msgstr "Размер дисплея:"
+
+#: src/ui/ghb.ui:2151 src/ui/ghb.ui:2845
+msgid "Aspect Ratio:"
+msgstr "Соотношение сторон:"
+
+#: src/ui/ghb.ui:2183
+msgid "<b>Orientation &amp; Cropping</b>"
+msgstr "<b>Ориентация и обрезка</b>"
+
+#: src/ui/ghb.ui:2202
+msgid "Flipping:"
+msgstr "Отражение:"
+
+#: src/ui/ghb.ui:2211
+msgid "Horizontal ⇌"
+msgstr "По горизонтали ⇌"
+
+#: src/ui/ghb.ui:2213
+msgid "Flip video horizontally."
+msgstr "Отразить видео по горизонтали."
+
+#: src/ui/ghb.ui:2226
+msgid "Rotation:"
+msgstr "Вращение:"
+
+#: src/ui/ghb.ui:2237
+msgid "Rotate the video clockwise in 90 degree increments."
+msgstr "Повернуть видео по часовой стрелке на 90 градусов."
+
+#: src/ui/ghb.ui:2249
+msgid "Cropping:"
+msgstr "Обрезка:"
+
+#: src/ui/ghb.ui:2260
+msgid "How to apply crop settings."
+msgstr "Как применить настройки обрезки."
+
+#: src/ui/ghb.ui:2274
+msgid "Left Crop"
+msgstr "Обрезка слева"
+
+#: src/ui/ghb.ui:2288
+msgid "Top Crop"
+msgstr "Обрезка сверху"
+
+#: src/ui/ghb.ui:2302
+msgid "Bottom Crop"
+msgstr "Обрезка снизу"
+
+#: src/ui/ghb.ui:2316
+msgid "Right Crop"
+msgstr "Обрезка справа"
+
+#: src/ui/ghb.ui:2347
+msgid "<b>Resolution &amp; Scaling</b>"
+msgstr "<b>Разрешение и масштабирование</b>"
+
+#: src/ui/ghb.ui:2365
+msgid "Resolution Limit:"
+msgstr "Ограничения разрешения:"
+
+#: src/ui/ghb.ui:2375
+msgid "Resolution limits for common video formats."
+msgstr "Ограничения разрешения для распространенных видеоформатов."
+
+#: src/ui/ghb.ui:2388
+msgid "Maximum Size:"
+msgstr "Максимальный размер:"
+
+#: src/ui/ghb.ui:2400
+msgid "This is the maximum width that the video will be stored at."
+msgstr "Это максимальная ширина для сохранения видео."
+
+#: src/ui/ghb.ui:2425
+msgid "This is the maximum height that the video will be stored at."
+msgstr "Это максимальная высота для сохранения видео."
+
+#: src/ui/ghb.ui:2437
+msgid "Anamorphic:"
+msgstr "Анаморфотный:"
+
+#: src/ui/ghb.ui:2447
+msgid ""
+"<b>Anamorphic Modes:</b><small><tt>\n"
+"    Automatic - Use a pixel aspect ratio that maximizes\n"
+"        storage resolution while preserving the original\n"
+"        display aspect ratio.\n"
+"    None      - Force pixel aspect ratio to 1:1.\n"
+"    Custom    - Enter a custom pixel aspect ratio.</tt></small>"
+msgstr ""
+"<b>Анаморфные режимы:</b><small><tt>\n"
+"Автоматически - используйте соотношение сторон пикселей, которое\n"
+"максимизирует разрешение источника при сохранении\n"
+"исходного соотношения сторон дисплея\n"
+"Нет - принудительное соотношение сторон пикселей 1:1.\n"
+"Пользовательский - введите пользовательское соотношение сторон пикселей.</tt></small>"
+
+#: src/ui/ghb.ui:2464
+msgid "Pixel Aspect:"
+msgstr "Пропорции в пикселах:"
+
+#: src/ui/ghb.ui:2475
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"Соотношение сторон пикселей определяет форму пикселей.\n"
+"\n"
+"Соотношение 1:1 определяет квадратный пиксель. Другие значения определяют прямоугольные формы.\n"
+"Проигрыватели будут масштабировать изображение, чтобы достичь указанного соотношения."
+
+#: src/ui/ghb.ui:2490
+msgid ":"
+msgstr ":"
+
+#: src/ui/ghb.ui:2501
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"Соотношение сторон пикселей определяет форму пикселей.\n"
+"Соотношение 1:1 определяет квадратный пиксель. Другие значения определяют прямоугольные формы.\n"
+"Проигрыватели будут масштабировать изображение, чтобы достичь указанного соотношения."
+
+#: src/ui/ghb.ui:2515
+msgid "Scaled Size:"
+msgstr "Размер масштабирования:"
+
+#: src/ui/ghb.ui:2526
+msgid ""
+"This is the width that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+"Это ширина, в которой будет храниться видео.\n"
+"Фактические размеры дисплей будут отличаться, если соотношение сторон пиксела не равно 1:1."
+
+#: src/ui/ghb.ui:2539 src/ui/ghb.ui:2801
+msgid "×"
+msgstr "×"
+
+#: src/ui/ghb.ui:2550
+msgid ""
+"This is the height that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+"Это высота, в которой будет храниться видео.\n"
+"Фактические размеры дисплей будут отличаться, если соотношение сторон пиксела не равно 1:1."
+
+#: src/ui/ghb.ui:2562
+msgid "Optimal Size"
+msgstr "Оптимальный размер"
+
+#: src/ui/ghb.ui:2564
+msgid "Use highest resolution permitted by above settings."
+msgstr ""
+"Использовать самое высокое разрешение, разрешенное вышеуказанными "
+"настройками."
+
+#: src/ui/ghb.ui:2576
+msgid "Allow Upscaling"
+msgstr "Разрешить апскейлинг"
+
+#: src/ui/ghb.ui:2578
+msgid ""
+"If not enabled, scaled dimensions will be limited to source dimensions."
+msgstr ""
+"Если этот параметр не включен, размеры масштабирования будут ограничены "
+"исходными размерами."
+
+#: src/ui/ghb.ui:2602
+msgid "<b>Borders</b>"
+msgstr "<b>Рамки</b>"
+
+#: src/ui/ghb.ui:2621
+msgid "Fill:"
+msgstr "Заливка:"
+
+#: src/ui/ghb.ui:2633
+msgid "Add a border around the video."
+msgstr "Добавить рамку вокруг видео."
+
+#: src/ui/ghb.ui:2646
+msgid "Left Pad"
+msgstr "Левая область"
+
+#: src/ui/ghb.ui:2660
+msgid "Top Pad"
+msgstr "Верхняя область"
+
+#: src/ui/ghb.ui:2674
+msgid "Bottom Pad"
+msgstr "Нижняя область"
+
+#: src/ui/ghb.ui:2688
+msgid "Right Pad"
+msgstr "Правая область"
+
+#: src/ui/ghb.ui:2701
+msgid "Color:"
+msgstr "Цвет:"
+
+#: src/ui/ghb.ui:2713
+msgid "Color of border added around video."
+msgstr "Цвет рамки вокруг видео."
+
+#: src/ui/ghb.ui:2737
+msgid "<b>Final Dimensions</b>"
+msgstr "<b>Окончательные размеры</b>"
+
+#: src/ui/ghb.ui:2789 src/ui/ghb.ui:2812 src/ui/ghb.ui:2825
+msgid "Changing the display size will stretch the video."
+msgstr "Изменение размера отображения приведет к растяжению видео."
+
+#: src/ui/ghb.ui:2823 src/hb-backend.c:128 src/hb-backend.c:231
+#: src/hb-backend.c:315
+msgid "Automatic"
+msgstr "Автоматически"
+
+#: src/ui/ghb.ui:2874
+msgid "Filters"
+msgstr "Фильтры"
+
+#: src/ui/ghb.ui:2884
+msgid "Detelecine:"
+msgstr "Детелесин:"
+
+#: src/ui/ghb.ui:2895
+msgid ""
+"This filter removes 'combing' artifacts that are the result of telecining.\n"
+"\n"
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
+msgstr ""
+"Этот фильтр устраняет артефакты «гребенки», которые являются результатом телесина.\n"
+"\n"
+"Телесин, это процесс, который регулирует частоту кадров фильма 24fps в NTSC, в видео с частотой кадров 30fps."
+
+#: src/ui/ghb.ui:2911 src/ui/ghb.ui:3337
+msgid ""
+"Custom detelecine filter string format\n"
+"\n"
+"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+msgstr ""
+"Пользовательский фильтр  детелесина\n"
+"\n"
+"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+
+#: src/ui/ghb.ui:2926
+msgid "Interlace Detection:"
+msgstr "Предустановки деинтерлейсинга:"
+
+#: src/ui/ghb.ui:2937
+msgid ""
+"This filter detects interlaced frames.\n"
+"\n"
+"If a deinterlace filter is enabled, only frames that this filter finds\n"
+"to be interlaced will be deinterlaced."
+msgstr ""
+"Этот фильтр обнаруживает чересстрочные кадры.\n"
+"\n"
+"Если включен фильтр деинтерлейса, только фрагменты, которые этот фильтр находит\n"
+" чересстрочным, будут исправлены."
+
+#: src/ui/ghb.ui:2952
+msgid ""
+"Custom interlace detection filter string format\n"
+"\n"
+"Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:\n"
+"Block Thresh: Block Width: Block Height"
+msgstr ""
+"Пользовательский фильтр формата обнаружения чередования строки\n"
+"\n"
+"Режим: пространственный Метрика: движение Отсечение: пространственное Отсечение: маска Режим фильтра:\n"
+"Блокировка отсечения: блокировка ширины: блокировка высоты"
+
+#: src/ui/ghb.ui:2968
+msgid "Deinterlace:"
+msgstr "Деинтерлейсинг:"
+
+#: src/ui/ghb.ui:2979
+msgid ""
+"Choose decomb or deinterlace filter.\n"
+"\n"
+"The decomb filter supports a variety of interpolation algorithms.\n"
+"The deinterlace filter is a classic YADIF deinterlacer.\n"
+msgstr ""
+"Выберите фильтр устранения гребёнки или деинтерлейса.\n"
+"\n"
+"Фильтр устранения гребёнки поддерживает множество алгоритмов интерполяции.\n"
+"Фильтр деинтерлейса является классическим деинтерлейсером YADIF.\n"
+
+#: src/ui/ghb.ui:3006
+msgid ""
+"Choose decomb or deinterlace filter options.\n"
+"\n"
+"    The decomb filter supports a variety of interpolation algorithms.\n"
+"    The deinterlace filter is a classic YADIF deinterlacer.\n"
+"    "
+msgstr ""
+"Выберите параметры фильтра устранения гребёнки или деинтерлейса\n"
+"\n"
+"Фильтр устранения гребёнки поддерживает множество алгоритмов интерполяции.\n"
+"Фильтр деинтерлейса является классическим деинтерлейсером YADIF.\n"
+"    "
+
+#: src/ui/ghb.ui:3033
+msgid "Deblock Filter:"
+msgstr "Фильтр подавления блоков:"
+
+#: src/ui/ghb.ui:3044
+msgid ""
+"The deblocking filter removes a common type of compression artifact.\n"
+"If your source exhibits 'blockiness', this filter may help clean it up."
+msgstr ""
+"Фильтр для устранения «блочности» устраняет распространенный тип артефактов сжатия.\n"
+"Если в источнике существует «блочность», этот фильтр может помочь в ее очистке."
+
+#: src/ui/ghb.ui:3061 src/ui/ghb.ui:3141 src/ui/ghb.ui:3203 src/ui/ghb.ui:3281
+#: src/ui/ghb.ui:3720 src/hb-backend.c:4512 src/hb-backend.c:4537
+msgid "Tune:"
+msgstr "Настройки:"
+
+#: src/ui/ghb.ui:3068
+msgid ""
+"The deblocking filter removes a common type of compression artifact.\n"
+"    If your source exhibits 'blockiness', this filter may help clean it up."
+msgstr ""
+"Фильтр для устранения «блочности» устраняет распространенный тип артефактов сжатия.\n"
+"Если в источнике существует «блочность», этот фильтр может помочь в ее очистке."
+
+#: src/ui/ghb.ui:3077 src/ui/ghb.ui:3219
+msgid ""
+"Custom deblock filter string format\n"
+"\n"
+"    strength=weak|strong:thresh=0-100:blocksize=4-512"
+msgstr ""
+"Пользовательский формат строки фильтра подавления блоков\n"
+"\n"
+"    strength=weak|strong:thresh=0-100:blocksize=4-512"
+
+#: src/ui/ghb.ui:3094
+msgid "Denoise Filter:"
+msgstr "Фильтр шумоподавления:"
+
+#: src/ui/ghb.ui:3105
+msgid ""
+"Denoise filtering reduces or removes the appearance of noise and grain.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
+"Using this filter on such sources can result in smaller file sizes."
+msgstr ""
+"Фильтр шумоподавления уменьшает или устраняет появление шума и зернистости.\n"
+"Зернистость фильма и другие виды высокочастотного шума сложно сжимать.\n"
+"Использование этого фильтра на таких источниках может привести к уменьшению размеров файлов."
+
+#: src/ui/ghb.ui:3130 src/ui/ghb.ui:3148
+msgid ""
+"Denoise filtering reduces or removes the appearance of noise and grain.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
+"    Using this filter on such sources can result in smaller file sizes."
+msgstr ""
+"Фильтр шумоподавления уменьшает или устраняет появление шума и зернистости.\n"
+"Зернистость фильма и другие виды высокочастотного шума сложно сжимать.\n"
+"Использование этого фильтра на таких источниках может привести к уменьшению размеров файлов."
+
+#: src/ui/ghb.ui:3158 src/ui/ghb.ui:3297
+msgid ""
+"Custom denoise filter string format\n"
+"\n"
+"    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+msgstr ""
+"Пользовательский фильтр удаления шумов\n"
+"\n"
+"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+
+#: src/ui/ghb.ui:3175
+msgid "Chroma Smooth Filter:"
+msgstr "Фильтр сглаживания цветности:"
+
+#: src/ui/ghb.ui:3186
+msgid ""
+"The chroma smooth filter removes common color artifacts.\n"
+"Lower resolution analog source content may benefit from this filter."
+msgstr ""
+"Фильтр сглаживания цветности удаляет распространенные цветовые артефакты.\n"
+"Этот фильтр может принести пользу аналоговому исходному контенту с более низким разрешением."
+
+#: src/ui/ghb.ui:3210
+msgid ""
+"The chroma smooth filter removes common color artifacts.\n"
+"    Lower resolution analog source content may benefit from this filter."
+msgstr ""
+"Фильтр сглаживания цветности удаляет распространенные цветовые артефакты.\n"
+"Этот фильтр может принести пользу аналоговому исходному контенту с более низким разрешением."
+
+#: src/ui/ghb.ui:3236
+msgid "Sharpen Filter:"
+msgstr "Фильтр резкости:"
+
+#: src/ui/ghb.ui:3247
+msgid ""
+"Sharpen filtering enhances edges and other\n"
+"high frequency components in the video."
+msgstr ""
+"Фильтрация резкости усиливает края и другиеr\n"
+"высокочастотные компоненты в видео."
+
+#: src/ui/ghb.ui:3271 src/ui/ghb.ui:3288
+msgid ""
+"Sharpen filtering enhances edges and other\n"
+"    high frequency components in the video."
+msgstr ""
+"Фильтрация резкости усиливает края и другиеr\n"
+"высокочастотные компоненты в видео."
+
+#: src/ui/ghb.ui:3314
+msgid "Colorspace:"
+msgstr "Цветовое пространство:"
+
+#: src/ui/ghb.ui:3325
+msgid "Translate the colorspace of the source."
+msgstr "Перенести цветовое пространство источника."
+
+#: src/ui/ghb.ui:3351 src/hb-backend.c:4981
+msgid "Grayscale"
+msgstr "Чёрно-белое"
+
+#: src/ui/ghb.ui:3353
+msgid "If enabled, filter colour components out of video."
+msgstr "Если включено, фильтр вывода оттенков цвета в видео."
+
+#: src/ui/ghb.ui:3370 src/callbacks.c:5831
+msgid "Video"
+msgstr "Видео"
+
+#: src/ui/ghb.ui:3385
+msgid "Video Encoder:"
+msgstr "Кодировщик видео:"
+
+#: src/ui/ghb.ui:3395
+msgid "Available video encoders."
+msgstr "Доступные кодировщики видео."
+
+#: src/ui/ghb.ui:3406
+msgid "Framerate:"
+msgstr "Частота кадров:"
+
+#: src/ui/ghb.ui:3416
+msgid ""
+"Output framerate.\n"
+"\n"
+"'Same as source' is recommended. If your source video has\n"
+"a variable framerate, 'Same as source' will preserve it."
+msgstr ""
+"Частота кадров на выходе.\n"
+"\n"
+"Рекомендуется «Как в источнике». Если исходное видео имеет\n"
+"переменную частоту кадров, выбор «Как в источнике» сохранит ее."
+
+#: src/ui/ghb.ui:3432
+msgid "Constant Framerate"
+msgstr "Постоянная частота кадров"
+
+#: src/ui/ghb.ui:3433
+msgid "Enables constant framerate output."
+msgstr "Включает постоянную частоту кадров вывода."
+
+#: src/ui/ghb.ui:3440
+msgid "Peak Framerate (VFR)"
+msgstr "Пик частоты кадров (VFR)"
+
+#: src/ui/ghb.ui:3441
+msgid ""
+"Enables variable framerate output with a peak\n"
+"    rate determined by the framerate setting.\n"
+"\n"
+"    VFR is not compatible with some players."
+msgstr ""
+"Включает переменную частоту кадров на выходе с пиковой\n"
+"скоростью, определенной настройкой частоты кадров.\n"
+"\n"
+"VFR не совместим с некоторыми проигрывателями."
+
+#: src/ui/ghb.ui:3452
+msgid "Variable Framerate"
+msgstr "Переменная частота кадров"
+
+#: src/ui/ghb.ui:3453
+msgid ""
+"Enables variable framerate output.\n"
+"\n"
+"    VFR is not compatible with some players."
+msgstr ""
+"Включает переменную частоту кадров.\n"
+"\n"
+"VFR не совместим с некоторыми проигрывателями."
+
+#: src/ui/ghb.ui:3470
+msgid "Color Range:"
+msgstr "Цветовой диапазон."
+
+#: src/ui/ghb.ui:3481
+msgid ""
+"Color Range. Determines the values of the reference black and white. Set to "
+"limited to maximize compatibility."
+msgstr ""
+"Цветовой диапазон. Определяет значения эталонного чёрного и белого. "
+"Установите значение «Ограниченный» для максимальной совместимости."
+
+#: src/ui/ghb.ui:3501
+msgid "Constant Quality:"
+msgstr "Постоянное качество:"
+
+#: src/ui/ghb.ui:3502
+msgid ""
+"Set the desired quality factor.\n"
+"  The encoder targets a certain quality.\n"
+"  The scale used by each video encoder is different.\n"
+"\n"
+"  x264's scale is logarithmic and lower values correspond to higher quality.\n"
+"  So small decreases in value will result in progressively larger increases\n"
+"  in the resulting file size.  A value of 0 means lossless and will result\n"
+"  in a file size that is larger than the original source, unless the source\n"
+"  was also lossless.\n"
+"\n"
+"  FFMpeg's and Theora's scale is more linear.\n"
+"  These encoders do not have a lossless mode."
+msgstr ""
+"Установите требуемый коэффициент качества.\n"
+"Конкретное качество для кодировщика целевого файла.\n"
+"Шкала, используемая каждым видео кодировщиком, различается.\n"
+"\n"
+"Шкала X264 является логарифмической и более низкие значения соответствуют более\n"
+"высокому качеству. Так, небольшое снижение значения приведет к прогрессивно более значительному\n"
+"увеличению размера файла. Значение 0 означает без потерь и приведет к размеру файла не больше, чем\n"
+"у источника, если только источник также без потерь.\n"
+"\n"
+"У FFMpeg и Theora шкала является более линейной.\n"
+"Эти кодировщики не имеет режима без потерь."
+
+#: src/ui/ghb.ui:3541
+msgid ""
+"Set the desired quality factor.\n"
+"The encoder targets a certain quality.\n"
+"The scale used by each video encoder is different.\n"
+"\n"
+"x264's scale is logarithmic and lower values correspond to higher quality.\n"
+"So small decreases in value will result in progressively larger increases\n"
+"in the resulting file size.  A value of 0 means lossless and will result\n"
+"in a file size that is larger than the original source, unless the source\n"
+"was also lossless.\n"
+"\n"
+"FFMpeg's and Theora's scale is more linear.\n"
+"These encoders do not have a lossless mode."
+msgstr ""
+"Установите требуемый коэффициент качества.\n"
+"Конкретное качество для кодировщика целевого файла.\n"
+"Шкала, используемая каждым видео кодировщиком, различается.\n"
+"\n"
+"Шкала X264 является логарифмической и более низкие значения соответствуют более\n"
+"высокому качеству. Так, небольшое снижение значения приведет к прогрессивно более значительному\n"
+"увеличению размера файла. Значение 0 означает без потерь и приведет к размеру файла не больше, чем\n"
+"у источника, если только источник также без потерь.\n"
+"\n"
+"У FFMpeg и Theora шкала является более линейной.\n"
+"Эти кодировщики не имеет режима без потерь."
+
+#: src/ui/ghb.ui:3557 src/ui/ghb.ui:7073 src/audiohandler.c:1790
+msgid "Quality"
+msgstr "Качество"
+
+#: src/ui/ghb.ui:3568
+msgid "Bitrate (kbps):    "
+msgstr "Битрейт (кбит/с):   "
+
+#: src/ui/ghb.ui:3569 src/ui/ghb.ui:3586
+msgid ""
+"Set the average bitrate.\n"
+"\n"
+"The instantaneous bitrate can be much higher or lower at any point in time.\n"
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
+msgstr ""
+"Установите средний битрейт.\n"
+"\n"
+"Кратковременный битрейт может быть гораздо выше или ниже в любой момент времени.\n"
+"Но средний, на протяжении длительного срока, будет на установленном здесь значении.\n"
+"Если нужно ограничить кратковременный битрейт, смотрите настройки x264 vbv-bufsize и vbv-maxrate."
+
+#: src/ui/ghb.ui:3615
+msgid "Multi-Pass Encoding"
+msgstr "Многопроходное кодирование"
+
+#: src/ui/ghb.ui:3617
+msgid ""
+"Perform Multi Pass Encoding.\n"
+"\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
+"the video are collected.  Then in the final pass, those statistics are used\n"
+"to make bitrate allocation decisions."
+msgstr ""
+"Выполните многопроходное кодирование.\n"
+"\n"
+"Опция «Битрейт» является обязательным условием. В ходе анализа собирается\n"
+"статистика о видео.  Затем на последнем проходе эта статистика используется\n"
+"для принятия решений о распределении битрейта."
+
+#: src/ui/ghb.ui:3628
+msgid "Turbo Analysis Pass"
+msgstr "Проход турбо-анализа"
+
+#: src/ui/ghb.ui:3630
+msgid ""
+"During the analysis pass of a multi pass encode, use settings that speed "
+"things along."
+msgstr ""
+"Во время анализа многопроходного кодирования используйте настройки, "
+"ускоряющие работу."
+
+#: src/ui/ghb.ui:3675
+msgid ""
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
+"\n"
+"This establishes your default encoder settings.\n"
+"Tunes, profiles, levels and extra options string will be applied to this.\n"
+"You should generally set this option to the slowest you can bear since slower\n"
+"settings will result in better quality or smaller files.\n"
+"\n"
+"Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,\n"
+"or to the left to increase encoding speed at the expense of compression efficiency."
+msgstr ""
+"Регулирует настройки кодировщика, балансируя между эффективностью сжатия и скоростью кодирования.\n"
+"\n"
+"Это определяют настройки кодировщика по умолчанию.\n"
+"Регулировка, профили, уровни и дополнительные параметры строки, будут применять это.\n"
+"Как правило, нужно установить этот параметр на самый медленный, Медленная настройка\n"
+"приведёт к улучшению качества или несколько меньшему размеру файла.\n"
+"\n"
+"Переместите ползунок вправо, чтобы увеличить эффективность сжатия за счёт скорости кодирования,\n"
+"или влево, чтобы увеличить скорость кодирования за счёт эффективности сжатия."
+
+#: src/ui/ghb.ui:3693
+msgid "Encoder Preset"
+msgstr "Предустановка кодировщика"
+
+#: src/ui/ghb.ui:3730
+msgid ""
+"Tune settings to optimize for common scenarios.\n"
+"\n"
+"This can improve efficiency for particular source characteristics or set\n"
+"characteristics of the output file.  Changes will be applied after the\n"
+"preset but before all other parameters."
+msgstr ""
+"Оптимизированные настройки параметров для выполнения типовых сценариев.\n"
+"\n"
+"Это может улучшить эффективность для конкретных характеристик исходного или заданных\n"
+"характеристик выходного файла. Изменения будут применены после предустановки, но\n"
+"до всех остальных параметров."
+
+#: src/ui/ghb.ui:3744
+msgid "Fast Decode"
+msgstr "Быстрое кодирование"
+
+#: src/ui/ghb.ui:3746
+msgid ""
+"Reduce decoder CPU usage.\n"
+"\n"
+"Set this if your device is struggling to play the output (dropped frames)."
+msgstr ""
+"Уменьшает использование CPU при декодировании.\n"
+"\n"
+"Установите ее, если ваше устройство  имеет затруднение с воспроизведением на выходе (пропускает кадры)."
+
+#: src/ui/ghb.ui:3761
+msgid "Zero Latency"
+msgstr "Нулевая задержка"
+
+#: src/ui/ghb.ui:3763
+msgid ""
+"Minimize latency between input to encoder and output of decoder.\n"
+"\n"
+"This is useful for broadcast of live streams.\n"
+"\n"
+"Since HandBrake is not suitable for live stream broadcast purposes,\n"
+"this setting is of little value here."
+msgstr ""
+"Минимизация задержки между входом в кодировщик и выходом декодера.\n"
+"\n"
+"Это полезно для трансляции потокового вещания.\n"
+"\n"
+"Поскольку HandBrake не подходит  трансляции потокового вещания,\n"
+"этот параметр не имеет здесь большого значения."
+
+#: src/ui/ghb.ui:3781
+msgid "Profile:"
+msgstr "Профиль:"
+
+#: src/ui/ghb.ui:3791
+msgid ""
+"Sets and ensures compliance with the specified profile.\n"
+"\n"
+"Overrides all other settings."
+msgstr ""
+"Устанавливает и обеспечивает соблюдение указанного профиля.\n"
+"\n"
+"Подавляет все другие настройки."
+
+#: src/ui/ghb.ui:3804
+msgid "Level:"
+msgstr "Уровень:"
+
+#: src/ui/ghb.ui:3814
+msgid ""
+"Sets and ensures compliance with the specified level.\n"
+"\n"
+"Overrides all other settings."
+msgstr ""
+"Устанавливает и обеспечивает соблюдение указанного уровня.\n"
+"\n"
+"Подавляет все другие настройки."
+
+#: src/ui/ghb.ui:3830
+msgid "Additional Options:"
+msgstr "Дополнительные параметры:"
+
+#: src/ui/ghb.ui:3870
+msgid "Audio"
+msgstr "Аудио"
+
+#: src/ui/ghb.ui:3887
+msgid "Add audio tracks to the list"
+msgstr "Добавить в список звуковые дорожки"
+
+#: src/ui/ghb.ui:3899
+msgid "Show audio default selection options"
+msgstr "Показать параметры выбора звука по умолчанию"
+
+#: src/ui/ghb.ui:3913 src/ui/ghb.ui:4067
+msgid "Selection Behavior…"
+msgstr "Выбор поведения…"
+
+#: src/ui/ghb.ui:3922
+msgid "Reload all audio settings from defaults"
+msgstr "Перезагрузить все настройки звука по умолчанию"
+
+#: src/ui/ghb.ui:3951
+msgid "Remove the selected audio track"
+msgstr "Удалить выбранную звуковую дорожку"
+
+#: src/ui/ghb.ui:3965 src/ui/ghb.ui:4119 src/ui/ghb.ui:4765 src/ui/ghb.ui:5041
+msgid "Remove"
+msgstr "Удалить"
+
+#: src/ui/ghb.ui:3974
+msgid "Remove all audio tracks"
+msgstr "Удалить все звуковые дорожки"
+
+#: src/ui/ghb.ui:3988 src/ui/ghb.ui:4142
+msgid "Clear"
+msgstr "Очистить"
+
+#: src/ui/ghb.ui:4024
+msgid "Subtitles"
+msgstr "Субтитры"
+
+#: src/ui/ghb.ui:4040
+msgid "Tracks"
+msgstr "Дорожки"
+
+#: src/ui/ghb.ui:4041
+msgid "Add subtitle tracks to the list"
+msgstr "Добавить дорожки субтитров в список"
+
+#: src/ui/ghb.ui:4053
+msgid "Show subtitle default selection options"
+msgstr "Показать параметры выбора субтитров по умолчанию"
+
+#: src/ui/ghb.ui:4076
+msgid "Reload all subtitle settings from defaults"
+msgstr "Перезагрузить все настройки субтитров по умолчанию"
+
+#: src/ui/ghb.ui:4105
+msgid "Remove the selected subtitle track"
+msgstr "Удалить выбранную дорожку субтитров"
+
+#: src/ui/ghb.ui:4128
+msgid "Remove all subtitle tracks"
+msgstr "Удалить все дорожки субтитров"
+
+#: src/ui/ghb.ui:4178
+msgid "Chapters"
+msgstr "Главы"
+
+#: src/ui/ghb.ui:4189 src/callbacks.c:2521 src/queuehandler.c:215
+msgid "Chapter Markers"
+msgstr "Маркеры глав"
+
+#: src/ui/ghb.ui:4191
+msgid "Add chapter markers to output file."
+msgstr "Добавить маркеры глав в выходной файл."
+
+#: src/ui/ghb.ui:4198
+msgid "Import Chapters"
+msgstr "Импорт глав"
+
+#: src/ui/ghb.ui:4200
+msgid "Import chapter list from an XML file"
+msgstr "Импортировать список глав из файла XML"
+
+#: src/ui/ghb.ui:4208
+msgid "Export Chapters"
+msgstr "Экспорт главы"
+
+#: src/ui/ghb.ui:4210
+msgid "Export chapter list as an XML file"
+msgstr "Экспортировать список глав в виде файла XML"
+
+#: src/ui/ghb.ui:4226
+msgid "Index"
+msgstr "Индекс"
+
+#: src/ui/ghb.ui:4240
+msgid "Duration"
+msgstr "Продолжительность"
+
+#: src/ui/ghb.ui:4246
+msgid "Title"
+msgstr "Название"
+
+#: src/ui/ghb.ui:4272
+msgid "Tags"
+msgstr "Теги"
+
+#: src/ui/ghb.ui:4310
+msgid "Actors:"
+msgstr "Актеры:"
+
+#: src/ui/ghb.ui:4338
+msgid "Director:"
+msgstr "Режиссёр:"
+
+#: src/ui/ghb.ui:4366
+msgid "Release Date:"
+msgstr "Дата выпуска:"
+
+#: src/ui/ghb.ui:4394
+msgid "Comment:"
+msgstr "Комментарий:"
+
+#: src/ui/ghb.ui:4422
+msgid "Genre:"
+msgstr "Жанр:"
+
+#: src/ui/ghb.ui:4450 src/ui/ghb.ui:6250 src/ui/ghb.ui:6402
+msgid "Description:"
+msgstr "Описание:"
+
+#: src/ui/ghb.ui:4478
+msgid "Plot:"
+msgstr "Сюжет:"
+
+#: src/ui/ghb.ui:4529
+msgid "<b>Save As:</b>"
+msgstr "<b>Сохранить как:</b>"
+
+#: src/ui/ghb.ui:4541
+msgid "Destination filename for your encode."
+msgstr "Название папки для перекодированных файлов."
+
+#: src/ui/ghb.ui:4555
+msgid "<b>To:</b>"
+msgstr "<b>В:</b>"
+
+#: src/ui/ghb.ui:4566
+msgid "Destination directory for your encode."
+msgstr "Папка назначения для перекодированных файлов."
+
+#: src/ui/ghb.ui:4568 src/title-add.c:480
+msgid "Destination Directory"
+msgstr "Каталог назначения"
+
+#: src/ui/ghb.ui:4647
+msgid "Subtitle Selection Behavior"
+msgstr "Выбор поведения субтитров"
+
+#: src/ui/ghb.ui:4673 src/ui/ghb.ui:4955
+msgid "Track Selection Behavior:"
+msgstr "Выбор поведения дорожки:"
+
+#: src/ui/ghb.ui:4684
+msgid "Choose which subtitle tracks of the source media are used."
+msgstr "Выберите, какие дорожки субтитров исходного носителя используются."
+
+#: src/ui/ghb.ui:4734
+msgid ""
+"Create a list of languages you would like to select subtitles for.\n"
+"  Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
+"\n"
+"  The first language in this list is your \"preferred\" language and will be used\n"
+"  for determining subtitle selection settings when there is foreign audio."
+msgstr ""
+"Создайте список языков, для которых вы хотели бы выбрать субтитры.\n"
+"Дорожки, соответствующие этим языкам, будут выбраны с помощью «Выбор поведения».\n"
+"\n"
+"Первый язык в этом списке «Предпочтительных» языков и будет использоваться\n"
+"для определения настроек выбора субтитров при наличии иностранного звука."
+
+#: src/ui/ghb.ui:4752 src/ui/ghb.ui:5028 src/ui/ghb.ui:5440
+msgid "Add"
+msgstr "Добавить"
+
+#: src/ui/ghb.ui:4778 src/ui/ghb.ui:5054
+msgid "Available Languages"
+msgstr "Доступные языки"
+
+#: src/ui/ghb.ui:4787 src/ui/ghb.ui:5063
+msgid "Selected Languages"
+msgstr "Выбранные языки"
+
+#: src/ui/ghb.ui:4797
+msgid "Preferred Language: None"
+msgstr "Предпочитаемый язык: нет"
+
+#: src/ui/ghb.ui:4814
+msgid "Add Foreign Audio Scan Pass"
+msgstr "Добавить в проход сканирование иностранного языка"
+
+#: src/ui/ghb.ui:4816
+msgid ""
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
+"  This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
+"\n"
+"  This option requires a language to be set in the Selected Languages list."
+msgstr ""
+"Добавить «Сканирование иностранного звука», если звуковая дорожка по умолчанию является вашим предпочтительным языком.\n"
+" Этот поисковый запрос позволяет находить короткие фрагменты иностранной аудиозаписи и добавлять к ним субтитры.\n"
+"\n"
+" Для этого параметра требуется указать язык в списке выбранных языков."
+
+#: src/ui/ghb.ui:4827
+msgid "Add subtitle track if default audio is foreign"
+msgstr "Добавить дорожку субтитров, если по умолчанию будет иностранный звук"
+
+#: src/ui/ghb.ui:4829
+msgid ""
+"When the default audio track is not your preferred language, add a subtitle track.\n"
+"\n"
+"  This option requires a language to be set in the Selected Languages list."
+msgstr ""
+"Когда для звуковой дорожки по умолчанию нет нужного языка, добавить дорожку субтитров.\n"
+"\n"
+" Эта опция требует установки  языка в списке выбранных языков."
+
+#: src/ui/ghb.ui:4839
+msgid "Add Closed Captions when available"
+msgstr "Добавлять скрытые субтитры, когда возможно"
+
+#: src/ui/ghb.ui:4841
+msgid ""
+"Closed captions are text subtitles that can be added to any container as a "
+"soft subtitle track"
+msgstr ""
+"Текстовые субтитры, которые могут быть добавлены в любой контейнер, как "
+"дорожка мягких субтитров"
+
+#: src/ui/ghb.ui:4848 src/ui/ghb.ui:5298
+msgid "Passthru track names"
+msgstr "Названия транзитных дорожек"
+
+#: src/ui/ghb.ui:4850
+msgid "Preserve the source track names"
+msgstr "Сохранять названия исходных дорожек"
+
+#: src/ui/ghb.ui:4861
+msgid "Burn-In Behavior*:"
+msgstr "Поведение вшитых субтитров*:"
+
+#: src/ui/ghb.ui:4868
+msgid ""
+"Set the behavior of subtitle \"Burn-In\".\n"
+"\n"
+"  Burned-In subtitles are part of the video and can not be disabled during playback.\n"
+"  Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
+msgstr ""
+"Установить поведение «Вшитых» субтитров.\n"
+"\n"
+" Вшитые субтитры являются частью видео и не могут быть отключены во время воспроизведения.\n"
+" Может быть записана только одна дорожка субтитров! Могут возникать конфликты. Победит первый выбранный."
+
+#: src/ui/ghb.ui:4883
+msgid "Burn-In for deficient players*:"
+msgstr "Вшитые субтитры для слабых проигрывателей*:"
+
+#: src/ui/ghb.ui:4889
+msgid "DVD Subtitles"
+msgstr "Субтитры DVD"
+
+#: src/ui/ghb.ui:4891
+msgid ""
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
+"  Use this option if your player software or device does not support DVD subtitles.\n"
+"\n"
+"  Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
+msgstr ""
+"Записать первую выбранную дорожку субтитров DVD. Все остальные дорожки субтитров DVD будут отброшены.\n"
+" Используйте эту опцию, если ваш проигрыватель или устройство не поддерживает субтитры DVD.\n"
+"\n"
+" Может быть записана только одна дорожка субтитров! Могут возникать конфликты. Победит первый выбранный."
+
+#: src/ui/ghb.ui:4901
+msgid "Blu-ray Subtitles"
+msgstr "Субтитры Blu-ray"
+
+#: src/ui/ghb.ui:4903
+msgid ""
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
+"  Use this option if your player software or device does not support Blu-ray subtitles.\n"
+"\n"
+"  Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
+msgstr ""
+"Записать первую выбранную дорожку субтитров Blu-ray. Все остальные дорожки субтитров Blu-ray будут отброшены.\n"
+" Используйте эту опцию, если ваш проигрыватель или устройство не поддерживает субтитры Blu-ray.\n"
+"\n"
+" Может быть записана только одна дорожка субтитров! Могут возникать конфликты. Победит первый выбранный."
+
+#: src/ui/ghb.ui:4916
+msgid ""
+"<small>* Only one of the above subtitle burn options will be applied, "
+"starting with the top.</small>"
+msgstr ""
+"<small>* Будет применяться только один из указанных выше вариантов "
+"субтитров, начиная с верхнего.</small>"
+
+#: src/ui/ghb.ui:4917
+msgid ""
+"Only one subtitle track can be burned! Since conflicts can occur, the first "
+"chosen wins."
+msgstr ""
+"Может быть записана только одна дорожка субтитров! Могут возникать "
+"конфликты. Победит первый выбранный."
+
+#: src/ui/ghb.ui:4925
+msgid "Audio Selection Behavior"
+msgstr "Выбор поведения звука"
+
+#: src/ui/ghb.ui:4966
+msgid "Choose which audio tracks of the source media are used."
+msgstr "Выберите, какие звуковые дорожки исходного носителя используются."
+
+#: src/ui/ghb.ui:5014
+msgid ""
+"Create a list of languages you would like to select audio for.\n"
+"Tracks matching these languages will be selected using the chosen Selection Behavior."
+msgstr ""
+"Создать список языков, которые вы хотите выбрать для аудио.\n"
+"Дорожки, соответствующие этим языкам, будут выбраны с помощью «Выбор поведения»."
+
+#: src/ui/ghb.ui:5087
+msgid "Auto Passthru:"
+msgstr "Автопроходные без перекодирования:"
+
+#: src/ui/ghb.ui:5096
+msgid "MP2"
+msgstr "MP2"
+
+#: src/ui/ghb.ui:5098
+msgid ""
+"Enable this if your playback device supports MP2.\n"
+"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает MP2.\n"
+"Это позволяет при необходимости вызвать MP2, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5111
+msgid "MP3"
+msgstr "MP3"
+
+#: src/ui/ghb.ui:5113
+msgid ""
+"Enable this if your playback device supports MP3.\n"
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает MP3.\n"
+"Это позволяет при необходимости вызвать MP3, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5126
+msgid "AC-3"
+msgstr "AC-3"
+
+#: src/ui/ghb.ui:5128
+msgid ""
+"Enable this if your playback device supports AC-3.\n"
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает AC-3.\n"
+"Это позволяет при необходимости вызвать AC-3, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5141
+msgid "EAC-3"
+msgstr "EAC-3"
+
+#: src/ui/ghb.ui:5143
+msgid ""
+"Enable this if your playback device supports EAC-3.\n"
+"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает EAC-3.\n"
+"Это позволяет при необходимости вызвать EAC-3, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5156
+msgid "DTS"
+msgstr "DTS"
+
+#: src/ui/ghb.ui:5158
+msgid ""
+"Enable this if your playback device supports DTS.\n"
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает DTS.\n"
+"Это позволяет при необходимости вызвать DTS, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5171
+msgid "DTS-HD"
+msgstr "DTS-HD"
+
+#: src/ui/ghb.ui:5173
+msgid ""
+"Enable this if your playback device supports DTS-HD.\n"
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает DTS-HD.\n"
+"Это позволяет при необходимости вызвать DTS-HD, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5186
+msgid "TrueHD"
+msgstr "TrueHD"
+
+#: src/ui/ghb.ui:5188
+msgid ""
+"Enable this if your playback device supports TrueHD.\n"
+"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает TrueHD.\n"
+"Это позволяет при необходимости вызвать TrueHD, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5201
+msgid "ALAC"
+msgstr "ALAC"
+
+#: src/ui/ghb.ui:5203
+msgid ""
+"Enable this if your playback device supports ALAC.\n"
+"This permits ALAC passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает ALAC.\n"
+"Это позволяет при необходимости вызвать ALAC, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5216
+msgid "FLAC"
+msgstr "FLAC"
+
+#: src/ui/ghb.ui:5218
+msgid ""
+"Enable this if your playback device supports FLAC.\n"
+"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает FLAC.\n"
+"Это позволяет при необходимости вызвать FLAC, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5231
+msgid "AAC"
+msgstr "AAC"
+
+#: src/ui/ghb.ui:5233
+msgid ""
+"Enable this if your playback device supports AAC.\n"
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает AAC.\n"
+"Это позволяет при необходимости вызвать AAC, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5246
+msgid "Vorbis"
+msgstr "Vorbis"
+
+#: src/ui/ghb.ui:5248
+msgid ""
+"Enable this if your playback device supports Vorbis.\n"
+"This permits Vorbis passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает Vorbis.\n"
+"Это позволяет при необходимости вызвать  Vorbis, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5261
+msgid "Opus"
+msgstr "Opus"
+
+#: src/ui/ghb.ui:5263
+msgid ""
+"Enable this if your playback device supports Opus.\n"
+"This permits Opus passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Включите это, если ваше устройство воспроизведения поддерживает Opus.\n"
+"Это позволяет при необходимости вызвать  Opus, если включен автоматический выбор."
+
+#: src/ui/ghb.ui:5284
+msgid "Passthru Fallback:"
+msgstr "Резервный без перекодирования:"
+
+#: src/ui/ghb.ui:5290
+msgid ""
+"Set the audio codec to encode with when a suitable track can not be found "
+"for audio passthru."
+msgstr ""
+"Установить кодировщика аудио для кодирования с тем, что бы использовать "
+"когда подходящий декодер не найден."
+
+#: src/ui/ghb.ui:5300
+msgid "Preserve the source track names."
+msgstr "Сохранять названия исходных дорожек."
+
+#: src/ui/ghb.ui:5314
+msgid "Autonaming:"
+msgstr "Автоматическое присвоение имени:"
+
+#: src/ui/ghb.ui:5320
+msgid "Set the automatic naming behaviour."
+msgstr "Установить режим автоматического присвоения имен."
+
+#: src/ui/ghb.ui:5336
+msgid "Audio encoder settings for each selected track:"
+msgstr "Настройки аудиокодера для каждой выбранной дорожки:"
+
+#: src/ui/ghb.ui:5337
+msgid "Each selected source track will be encoded with all selected encoders"
+msgstr ""
+"Каждая дорожка выбранного источника будет закодирована со всеми выбранными "
+"кодировщиками."
+
+#: src/ui/ghb.ui:5347 src/ui/ghb.ui:6984
+msgid "Encoder"
+msgstr "Кодировщик"
+
+#: src/ui/ghb.ui:5353 src/ui/ghb.ui:6993
+msgid "Bitrate/Quality"
+msgstr "Битрейт/Качество"
+
+#: src/ui/ghb.ui:5359
+msgid "Mixdown"
+msgstr "Микширование"
+
+#: src/ui/ghb.ui:5365
+msgid "Samplerate"
+msgstr "Частота дискретизации"
+
+#: src/ui/ghb.ui:5371 src/ui/ghb.ui:7024 src/queuehandler.c:550
+msgid "Gain"
+msgstr "Усиление"
+
+#: src/ui/ghb.ui:5377 src/ui/ghb.ui:7039
+msgid "DRC"
+msgstr "DRC"
+
+#: src/ui/ghb.ui:5405
+msgid "Add Track"
+msgstr "Добавить дорожку"
+
+#: src/ui/ghb.ui:5406
+msgid ""
+"Add an audio encoder.\n"
+"Each selected source track will be encoded with all selected encoders."
+msgstr ""
+"Добавить аудио кодировщик.\n"
+"Каждая дорожка выбранного источника будет закодирована со всеми выбранными кодировщиками."
+
+#: src/ui/ghb.ui:5413
+msgid "Use only first encoder for secondary audio"
+msgstr "Использовать только первый кодировщик для вторичного аудиосигнала"
+
+#: src/ui/ghb.ui:5415
+msgid ""
+"Only the primary audio track will be encoded with the full encoder list.\n"
+"  All other secondary audio output tracks will be encoded with first encoder only."
+msgstr ""
+"Только основная звуковая дорожка будет закодирован полным списком кодировщиков.\n"
+"Все другие, вторичные звуковые дорожки, будут закодированы только первым кодировщиком."
+
+#: src/ui/ghb.ui:5428
+msgid "Add Multiple Titles"
+msgstr "Добавить несколько заголовков"
+
+#: src/ui/ghb.ui:5434 src/ui/ghb.ui:6193 src/ui/ghb.ui:6283 src/ui/ghb.ui:6623
+#: src/ui/ghb.ui:6895 src/hb-backend.c:4580 src/hb-backend.c:4630
+#: src/hb-backend.c:4647 src/hb-backend.c:4664 src/hb-backend.c:4721
+#: src/hb-backend.c:4774 src/presets.c:2161 src/presets.c:2543
+#: src/presets.c:2768 src/title-add.c:124 src/title-add.c:134
+msgid "Cancel"
+msgstr "Отмена"
+
+#: src/ui/ghb.ui:5458
+msgid "Select All"
+msgstr "Выбрать все"
+
+#: src/ui/ghb.ui:5460
+msgid "Mark all titles for adding to the queue"
+msgstr "Отметить все названия для добавления в очередь"
+
+#: src/ui/ghb.ui:5469
+msgid "Clear All"
+msgstr "Очистить все"
+
+#: src/ui/ghb.ui:5471
+msgid "Unmark all titles"
+msgstr "Снять все названия"
+
+#: src/ui/ghb.ui:5480
+msgid "Invert Selection"
+msgstr "Обратить выделение"
+
+#: src/ui/ghb.ui:5513 src/title-add.c:357
+msgid "Destination files OK.  No duplicates detected."
+msgstr "С файлами назначения все хорошо. Дубликаты не обнаружены."
+
+#: src/ui/ghb.ui:5525
+msgid "Preferences"
+msgstr "Параметры"
+
+#: src/ui/ghb.ui:5570
+msgid "General"
+msgstr "Общие"
+
+#: src/ui/ghb.ui:5577
+msgid "Use automatic naming (uses modified source name)"
+msgstr ""
+"Использовать автоматический идентификатор (использует измененное исходное "
+"имя)"
+
+#: src/ui/ghb.ui:5579
+msgid "Create destination filename from source filename or volume label"
+msgstr "Создать имя файла назначения из имени исходного файла или метки тома"
+
+#: src/ui/ghb.ui:5594
+msgid "Auto-Name Template"
+msgstr "Шаблон автонаименования"
+
+#: src/ui/ghb.ui:5602
+msgid ""
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
+" {time} {creation-date} {creation-time} {modification-date} {modification-"
+"time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
+msgstr ""
+"Доступные параметры: {source-path} {source} {title} {preset} {chapters} "
+"{date} {time} {creation-date} {creation-time} {modification-date} "
+"{modification-time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
+
+#: src/ui/ghb.ui:5616
+msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
+msgstr ""
+"Использовать дружественное iPod/iTunes расширение файла (.m4v) для MP4"
+
+#: src/ui/ghb.ui:5627
+msgid "Number of previews"
+msgstr "Количество миниатюр"
+
+#: src/ui/ghb.ui:5650
+msgid "Minimum DVD/Blu-ray title duration (seconds)"
+msgstr "Минимальная продолжительность заголовка DVD/Blu-ray (в секундах)"
+
+#: src/ui/ghb.ui:5673
+msgid "Maximum DVD/Blu-ray title duration (seconds)"
+msgstr "Максимальная продолжительность заголовка DVD/Blu-ray (в секундах)"
+
+#: src/ui/ghb.ui:5693
+msgid "Keep duplicate titles"
+msgstr "Сохранять повторяющиеся заголовки"
+
+#: src/ui/ghb.ui:5699
+msgid "Use the same settings for all titles in a batch"
+msgstr "Использовать те же настройки для всех заголовков в партии"
+
+#: src/ui/ghb.ui:5701
+msgid ""
+"When checked, every title will use the same settings when adding a\n"
+"batch of titles to the queue.\n"
+"\n"
+"Uncheck this if you want to allow changing each title's settings independently."
+msgstr ""
+"Если флажок установлен, каждый заголовок будет использовать те же настройки\n"
+"при добавлении в очередь партии.\n"
+"\n"
+"Снимите этот флажок, если вы хотите разрешить изменение настроек каждого заголовка независимо."
+
+#: src/ui/ghb.ui:5711
+msgid "Show preview image in Summary tab"
+msgstr "Показывать изображение предварительного просмотра на вкладке «Сводка»"
+
+#: src/ui/ghb.ui:5714
+msgid ""
+"Uncheck this if you want to hide the video preview image on the Summary tab "
+"for privacy reasons."
+msgstr ""
+"Снимите этот флажок, если хотите скрыть изображение предварительного "
+"просмотра видео на вкладке «Сводка» из соображений конфиденциальности."
+
+#: src/ui/ghb.ui:5723
+msgid "Excluded File Extensions:"
+msgstr "Исключенные расширения файлов:"
+
+#: src/ui/ghb.ui:5732
+msgid ""
+"The following file extensions will be ignored when scanning a folder. The "
+"list is case insensitive."
+msgstr ""
+"Следующие расширения файлов будут игнорироваться при сканировании папки. "
+"Список нечувствителен к регистру."
+
+#: src/ui/ghb.ui:5742
+msgctxt "Queue tab in Preferences window"
+msgid "Queue"
+msgstr "Очередь"
+
+#: src/ui/ghb.ui:5755
+msgid "Pause queue if disk space is lower than:"
+msgstr "Приостановить очередь, если на диске осталось меньше места, чем:"
+
+#: src/ui/ghb.ui:5771
+msgid "Disk Free Space Limit"
+msgstr "Ограничение на свободное дисковое пространство"
+
+#: src/ui/ghb.ui:5779 src/queuehandler.c:798 src/queuehandler.c:1288
+msgid "GB"
+msgstr "ГБ"
+
+#: src/ui/ghb.ui:5789
+msgid "Clear completed jobs after an encode completes"
+msgstr "Очистить завершенные задания после завершения кодирования"
+
+#: src/ui/ghb.ui:5791
+msgid ""
+"By default, completed jobs remain in the queue and are marked as complete.\n"
+"  Check this if you want the queue to clean itself up by deleting completed jobs."
+msgstr ""
+"По умолчанию, выполненные задания остаются в очереди и помечаются как завершенные.\n"
+"Отметьте это, если хотите очищать очередь до окончания выполнения задания."
+
+#: src/ui/ghb.ui:5799
+msgid "Power Saving"
+msgstr "Энергосбережение"
+
+#: src/ui/ghb.ui:5813
+msgid "Pause encoding when in Power Saver mode"
+msgstr "Приостанавливать кодирование в режиме энергосбережения"
+
+#: src/ui/ghb.ui:5817
+msgid ""
+"If checked, encoding will be paused when the device\n"
+"enters Power Saver mode. Encoding will resume when\n"
+"Power Saver mode is disabled."
+msgstr ""
+"Если этот флажок установлен, кодирование будет приостановлено, когда устройство перейдет\n"
+"в режим энергосбережения. Кодирование возобновится после отключения\n"
+"режима энергосбережения."
+
+#: src/ui/ghb.ui:5825
+msgid "Pause encoding when on battery power"
+msgstr "Приостанавливать кодирование при питании от батареи"
+
+#: src/ui/ghb.ui:5829
+msgid ""
+"If checked, encoding will be paused when charger is\n"
+"unplugged. Encoding will resume when reconnected to\n"
+"a mains power source."
+msgstr ""
+"Если этот флажок установлен, кодирование будет приостановлено при отключении\n"
+"зарядного устройства. Кодирование возобновится при повторном подключении\n"
+"к источнику питания."
+
+#: src/ui/ghb.ui:5837
+msgid "Pause encoding when battery is low"
+msgstr "Приостанавливать кодирование при низком заряде батареи"
+
+#: src/ui/ghb.ui:5841
+msgid ""
+"If checked, encoding will be paused when the battery\n"
+"level is low. Encoding will resume when the\n"
+"battery is charged."
+msgstr ""
+"Если этот флажок установлен, кодирование будет приостановлено при низком\n"
+"ровне заряда батареи. Кодирование возобновится, когда\n"
+"аккумулятор будет заряжен."
+
+#: src/ui/ghb.ui:5853
+msgid "When Done"
+msgstr "По завершении"
+
+#: src/ui/ghb.ui:5865
+msgid "Default action when queue is completed:"
+msgstr "Действие по умолчанию при заполнении очереди:"
+
+#: src/ui/ghb.ui:5878
+msgid "Show notification when queue is completed"
+msgstr "Показывать уведомление о заполнении очереди"
+
+#: src/ui/ghb.ui:5886
+msgid "Show notification when each item is completed"
+msgstr "Показывать уведомление о завершении каждого пункта"
+
+#: src/ui/ghb.ui:5897
+msgid "Send file to:"
+msgstr "Отправить файл по адресу:"
+
+#: src/ui/ghb.ui:5920
+msgid "Advanced"
+msgstr "Дополнительно"
+
+#: src/ui/ghb.ui:5933
+msgid "Select the language to use for the HandBrake user interface."
+msgstr "Выберите язык пользовательского интерфейса HandBrake."
+
+#: src/ui/ghb.ui:5936
+msgid "Display Language:"
+msgstr "Язык отображения:"
+
+#: src/ui/ghb.ui:5956
+msgid "Set a custom directory for Handbrake temporary files"
+msgstr "Установить собственный каталог для временных файлов"
+
+#: src/ui/ghb.ui:5958 src/ui/ghb.ui:5974
+msgid ""
+"Temporary files that HandBrake creates will be placed under this directory.\n"
+"\n"
+"  Changing this setting will require restarting HandBrake.\n"
+"\n"
+"  This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
+"\n"
+"  Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
+msgstr ""
+"Временные файлы, создаваемые HandBrake, будут размещаться в этом каталоге.\n"
+"\n"
+"  Изменение этого параметра потребует перезапуска HandBrake.\n"
+"\n"
+"  Этот параметр переопределяет переменную среды TEMP, которая обычно   используется для определения этого каталога.\n"
+"\n"
+"  Пользователям Flatpak может потребоваться настроить это для правильной работы   определенных рабочих процессов. Размер каталога TEMP по умолчанию в песочнице   Flatpak равен 1/2 размера физической памяти и может быть слишком мал для таких   вещей, как файл статистики за 2 прохода."
+
+#: src/ui/ghb.ui:5983
+msgid "Temp Directory"
+msgstr "Временный каталог"
+
+#: src/ui/ghb.ui:6007
+msgid "Constant Quality fractional granularity"
+msgstr "Незначительная зернистость при постоянном качестве"
+
+#: src/ui/ghb.ui:6019
+msgid "Use dvdnav (instead of libdvdread)"
+msgstr "Использовать dvdnav (вместо libdvdread)"
+
+#: src/ui/ghb.ui:6037
+msgid "Put individual encode logs in same location as movie"
+msgstr ""
+"Помещать индивидуальные логи кодирования в то же расположение, что и фильм"
+
+#: src/ui/ghb.ui:6057
+msgid "Activity Log Verbosity Level"
+msgstr "Подробный журнал уровня деятельности"
+
+#: src/ui/ghb.ui:6076
+msgid "Activity Log Longevity"
+msgstr "Долговечный журнала операций"
+
+#: src/ui/ghb.ui:6089
+msgid "Scale down High Definition previews"
+msgstr "Уменьшать высокую четкость просмотра"
+
+#: src/ui/ghb.ui:6101
+msgid "Automatically Scan DVD when loaded"
+msgstr "Автоматически сканировать DVD при загрузке"
+
+#: src/ui/ghb.ui:6103
+msgid "Scans the DVD whenever a new disc is loaded"
+msgstr "Сканировать DVD после загрузки нового диска"
+
+#: src/ui/ghb.ui:6130
+msgid "Activity Window Font Size"
+msgstr "Размер шрифта окна активности"
+
+#: src/ui/ghb.ui:6148
+msgid "Allow Tweaks"
+msgstr "Разрешить тонкие настройки"
+
+#: src/ui/ghb.ui:6161
+msgid "Allow HandBrake For Dummies"
+msgstr "Сделать HandBrake для чайников"
+
+#: src/ui/ghb.ui:6185
+msgid "Rename Preset"
+msgstr "Переименовать предустановку"
+
+#: src/ui/ghb.ui:6229 src/ui/ghb.ui:6363
+msgid "Preset Name:"
+msgstr "Название предустановки:"
+
+#: src/ui/ghb.ui:6275
+msgid "New Preset"
+msgstr "Новая предустановка"
+
+#: src/ui/ghb.ui:6318
+msgid "Category:"
+msgstr "Категория:"
+
+#: src/ui/ghb.ui:6328
+msgid "Set the category that this preset will be shown under."
+msgstr "Установить категорию, в которой будет отображаться эта предустановка."
+
+#: src/ui/ghb.ui:6339
+msgid "Category Name:"
+msgstr "Название категории:"
+
+#: src/ui/ghb.ui:6388
+msgid "Default Preset"
+msgstr "Предустановка по умолчанию"
+
+#: src/ui/ghb.ui:6390
+msgid "Make this the default Preset when HandBrake starts"
+msgstr "Сделать эту предустановку по умолчанию при запуске HandBrake"
+
+#: src/ui/ghb.ui:6429
+msgid "HandBrake Preview"
+msgstr "Предпросмотр"
+
+#: src/ui/ghb.ui:6499
+msgid "Select preview frames."
+msgstr "Выбор кадра просмотра."
+
+#: src/ui/ghb.ui:6514 src/preview.c:167
+msgid ""
+"Encode and play a short sequence of video starting from the current preview "
+"position."
+msgstr ""
+"Кодировать и воспроизводить короткие последовательности видео, начиная с "
+"текущего положения просмотра."
+
+#: src/ui/ghb.ui:6527
+msgid "Preview Video Position"
+msgstr "Предварительный просмотр позиции видео"
+
+#: src/ui/ghb.ui:6540
+msgid "Preview Encode Progress"
+msgstr "Предпросмотр хода кодирования"
+
+#: src/ui/ghb.ui:6549
+msgid "Click to toggle full screen mode"
+msgstr "Нажмите, чтобы переключить полноэкранный режим"
+
+#: src/ui/ghb.ui:6564
+msgid "<b>Duration:</b>"
+msgstr "<b>Продолжительность:</b>"
+
+#: src/ui/ghb.ui:6572
+msgid "Set the duration of the live preview in seconds."
+msgstr "Установить продолжительность предварительного просмотра в секундах."
+
+#: src/ui/ghb.ui:6582
+msgid "Source Resolution"
+msgstr "Разрешение источника"
+
+#: src/ui/ghb.ui:6585
+msgid "Reset preview window to the source video's resolution"
+msgstr ""
+"Сбросить окно предварительного просмотра до разрешения исходного видео"
+
+#: src/ui/ghb.ui:6615 src/subtitlehandler.c:1811
+msgid "Edit Subtitles"
+msgstr "Редактировать субтитры"
+
+#: src/ui/ghb.ui:6653
+msgid "Import SRT"
+msgstr "Импорт SRT"
+
+#: src/ui/ghb.ui:6654
+msgid "Enable settings to import an SRT subtitle file"
+msgstr "Включить настройки импорта файла субтитров SRT"
+
+#: src/ui/ghb.ui:6661
+msgid "Import SSA"
+msgstr "Импорт SSA"
+
+#: src/ui/ghb.ui:6662
+msgid "Enable settings to import an SSA subtitle file"
+msgstr "Включить настройки для импорта файла субтитров SSA"
+
+#: src/ui/ghb.ui:6670
+msgid "Embedded Subtitle List"
+msgstr "Список встроенных субтитров"
+
+#: src/ui/ghb.ui:6671
+msgid "Enable settings to select embedded subtitles"
+msgstr "Включить настройки выбранных встроенных субтитров"
+
+#: src/ui/ghb.ui:6686 src/ui/ghb.ui:6927
+msgid "Source Track"
+msgstr "Дорожка источника"
+
+#: src/ui/ghb.ui:6696
+msgid "List of subtitle tracks available from your source."
+msgstr "Список дорожек субтитров доступных в источнике."
+
+#: src/ui/ghb.ui:6706 src/ui/ghb.ui:6948
+msgid "Track Name:"
+msgstr "Название дорожки:"
+
+#: src/ui/ghb.ui:6718
+msgid ""
+"Set the subtitle track name.\n"
+"\n"
+"Players may use this in the subtitle selection list."
+msgstr ""
+"Установить название дорожки субтитров.\n"
+"\n"
+"Проигрыватели могут использовать это списке выбора субтитров."
+
+#: src/ui/ghb.ui:6740
+msgid "Language"
+msgstr "Язык"
+
+#: src/ui/ghb.ui:6749
+msgid "Character Code"
+msgstr "Кодировка"
+
+#: src/ui/ghb.ui:6758
+msgid "File:"
+msgstr "Файл:"
+
+#: src/ui/ghb.ui:6768
+msgid "Offset (ms)"
+msgstr "Смещение (мс)"
+
+#: src/ui/ghb.ui:6778
+msgid ""
+"Set the language of this subtitle.\n"
+"This value will be used by players in subtitle menus."
+msgstr ""
+"Установить язык этих субтитров.\n"
+"Это значение будет использоваться проигрывателями в меню субтитров."
+
+#: src/ui/ghb.ui:6790
+msgid ""
+"Set the character code used by the SRT file you are importing.\n"
+"\n"
+"SRTs come in all flavours of character sets.\n"
+"We translate the character set to UTF-8.\n"
+"The source's character code is needed in order to perform this translation."
+msgstr ""
+"Установить кодирокау символов, используемую SRT для импортируемого файла.\n"
+"\n"
+"SRT бывают для всех разновидностей кодировок.\n"
+"Мы переводим набор символов в UTF-8.\n"
+"Кодировка источника необходима для того, чтобы выполнить этот перевод."
+
+#: src/ui/ghb.ui:6811
+msgid "Select the SRT file to import."
+msgstr "Выберите файл srt для импорта."
+
+#: src/ui/ghb.ui:6813
+msgid "Import File"
+msgstr "Импорт файла"
+
+#: src/ui/ghb.ui:6827
+msgid "Adjust the offset in milliseconds between video and SRT timestamps"
+msgstr ""
+"Установить смещение в миллисекундах между видео и  метками времени SRT"
+
+#: src/ui/ghb.ui:6844 src/subtitlehandler.c:116
+msgid "Forced Subtitles Only"
+msgstr "Только форсированные субтитры"
+
+#: src/ui/ghb.ui:6858
+msgid "Burn into video"
+msgstr "Записать в видео"
+
+#: src/ui/ghb.ui:6860
+msgid ""
+"Render the subtitle over the video.\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr ""
+"Отображение субтитров на видео.\n"
+"Субтитры будут на части видео и не могут быть отключены."
+
+#: src/ui/ghb.ui:6868
+msgid "Set Default Track"
+msgstr "Установить дорожку по умолчанию"
+
+#: src/ui/ghb.ui:6887 src/audiohandler.c:1508
+msgid "Edit Audio Track"
+msgstr "Изменить звуковую дорожку"
+
+#: src/ui/ghb.ui:6938
+msgid "List of audio tracks available from your source."
+msgstr "Список доступных в источнике звуковых дорожек."
+
+#: src/ui/ghb.ui:6960
+msgid ""
+"Set the audio track name.\n"
+"\n"
+"Players may use this in the audio selection list."
+msgstr ""
+"Установить название звуковой дорожки.\n"
+"\n"
+"Проигрыватели могут использовать это списке выбора звука. "
+
+#: src/ui/ghb.ui:7004
+msgid "Mix"
+msgstr "Смешивание"
+
+#: src/ui/ghb.ui:7013
+msgid "Sample Rate"
+msgstr "Частота дискретизации"
+
+#: src/ui/ghb.ui:7035 src/ui/ghb.ui:7183 src/audiohandler.c:1922
+msgid ""
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
+"\n"
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
+msgstr ""
+"<b>Динамическое сжатие диапазона:</b>\n"
+"Для источника звука, который имеет широкий динамический диапазон. Очень громкие и очень мягкие последовательности, DRC позволяет сжимать диапазон, делая громкие разделы мягче и мягкие разделы громче."
+
+#: src/ui/ghb.ui:7051 src/audiohandler.c:1773
+msgid "Set the audio codec to encode this track with."
+msgstr "Установить аудио кодек для кодирования этой дорожки."
+
+#: src/ui/ghb.ui:7066 src/audiohandler.c:1787
+msgid "Bitrate"
+msgstr "Битрейт"
+
+#: src/ui/ghb.ui:7067
+msgid "Enable bitrate setting"
+msgstr "Включить настройку битрейта"
+
+#: src/ui/ghb.ui:7074
+msgid "Enable quality setting"
+msgstr "Включить настройку качества"
+
+#: src/ui/ghb.ui:7085 src/audiohandler.c:1805
+msgid "Set the bitrate to encode this track with."
+msgstr "Установить битрейт для кодирования этой дорожки."
+
+#: src/ui/ghb.ui:7095
+msgid ""
+"<b>Quality:</b> For output codec's that support it, adjust the quality of "
+"the output."
+msgstr ""
+"<b>Качество:</b> Для выходного кодека, который поддерживают это, установить "
+"качество вывода."
+
+#: src/ui/ghb.ui:7112
+msgid "00.0"
+msgstr "00.0"
+
+#: src/ui/ghb.ui:7128 src/audiohandler.c:1857
+msgid "Set the mixdown of the output audio track."
+msgstr "Установить микширование каналов выходной звуковой дорожки."
+
+#: src/ui/ghb.ui:7139 src/audiohandler.c:1870
+msgid "Set the sample rate of the output audio track."
+msgstr "Установить частоту дискретизации дорожки вывода звука."
+
+#: src/ui/ghb.ui:7153 src/audiohandler.c:1891
+msgid ""
+"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
+"audio track."
+msgstr ""
+"<b>Усиление звука:</b> Регулирует усиление или ослабление звуковой дорожки "
+"вывода."
+
+#. Audio Gain Label
+#: src/ui/ghb.ui:7166 src/audiohandler.c:1902
+msgid "0dB"
+msgstr "0дБ"
+
+#. Audio DRC Label
+#: src/ui/ghb.ui:7196 src/audiohandler.c:427 src/audiohandler.c:779
+#: src/audiohandler.c:1190 src/audiohandler.c:1936 src/callbacks.c:5687
+#: src/hb-backend.c:192 src/hb-backend.c:205 src/hb-backend.c:217
+#: src/hb-backend.c:242 src/hb-backend.c:325 src/hb-backend.c:337
+#: src/hb-backend.c:349 src/hb-backend.c:410
+#, c-format
+msgid "Off"
+msgstr "Выкл"
+
+#: src/ui/ghb-chapter-row.ui:38
+msgid "Chapter Title"
+msgstr "Название главы"
+
+#: src/ui/ghb-file-button.ui:23 src/ghb-file-button.c:293
+msgid "(None)"
+msgstr "(нет)"
+
+#: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:272 src/ghb-queue-row.c:288
+msgid "Pending Queue Item"
+msgstr "Элемент очереди в ожидании"
+
+#: src/ui/ghb-queue-row.ui:31
+msgid "Delete this item"
+msgstr "Удалить этот элемент"
+
+#: src/ui/ghb-queue-row.ui:52
+msgid "Encode Progress"
+msgstr "Прогресс кодирования"
+
+#: src/audiohandler.c:439 src/audiohandler.c:775 src/audiohandler.c:1260
+#, c-format
+msgid "%ddB"
+msgstr "%dдБ"
+
+#: src/audiohandler.c:751
+msgid "Quality: "
+msgstr "Качество: "
+
+#: src/audiohandler.c:758
+#, c-format
+msgid "Bitrate: %dkbps\n"
+msgstr "Битрейт: %dкбит/с\n"
+
+#: src/audiohandler.c:770
+#, c-format
+msgid "%.4gkHz"
+msgstr "%.4gкГц"
+
+#: src/audiohandler.c:785
+#, c-format
+msgid "<small>%d - %s (%.4gkHz)</small>"
+msgstr "<small>%d - %s (%.4gкГц)</small>"
+
+#: src/audiohandler.c:790
+#, c-format
+msgid "Bitrate: %.4gkbps"
+msgstr "Битрейт: %.4gкбит/с"
+
+#: src/audiohandler.c:796
+#, c-format
+msgid "<small>Passthru</small>"
+msgstr "<small>Транзитная передача</small>"
+
+#: src/audiohandler.c:805
+#, c-format
+msgid ""
+"%sGain: %s\n"
+"DRC: %s\n"
+"Track Name: %s"
+msgstr ""
+"%sУсиление: %s\n"
+"DRC: %s\n"
+"Название дорожки: %s"
+
+#: src/audiohandler.c:810
+#, c-format
+msgid ""
+"%sGain: %s\n"
+"DRC: %s"
+msgstr ""
+"%sУсиление: %s\n"
+"DRC: %s"
+
+#: src/audiohandler.c:1416
+msgid "Add Audio Track"
+msgstr "Добавить звуковую дорожку"
+
+#: src/audiohandler.c:1830
+msgid ""
+"<b>Audio Quality:</b>\n"
+"For encoders that support it, adjust the quality of the output."
+msgstr ""
+"<b>Качество звука:</b>\n"
+"Для выходного кодека, который поддерживают это, установить качество вывода."
+
+#: src/audiohandler.c:1953
+msgid "Remove this audio encoder"
+msgstr "Удалить этот кодировщик звука"
+
+#: src/callbacks.c:279
+msgid "An encode is in progress."
+msgstr "Выполняется кодирование."
+
+#: src/callbacks.c:1107 src/callbacks.c:1118 src/callbacks.c:1774
+msgid "Not Selected"
+msgstr "Не выбрано"
+
+#: src/callbacks.c:1116
+msgid "Detected DVD devices:"
+msgstr "Обнаружено устройство DVD:"
+
+#. This needs to be in scanning and working since scanning
+#. happens fast enough that it can be missed
+#: src/callbacks.c:1443 src/callbacks.c:4687
+msgid "Scanning ..."
+msgstr "Сканирование…"
+
+#: src/callbacks.c:1475 src/callbacks.c:1476 src/callbacks.c:1498
+#: src/callbacks.c:1499
+msgid "Stop Scan"
+msgstr "Остановить сканирование"
+
+#: src/callbacks.c:1855
+msgid "Open Source Directory"
+msgstr "Открыть каталог источника"
+
+#: src/callbacks.c:1858 src/chapters.c:483 src/ghb-file-button.c:222
+#: src/presets.c:2254 src/queuehandler.c:1469
+msgid "_Open"
+msgstr "_Открыть"
+
+#: src/callbacks.c:1859 src/callbacks.c:2124 src/chapters.c:456
+#: src/chapters.c:484 src/ghb-file-button.c:355 src/presets.c:2255
+#: src/presets.c:2370 src/queuehandler.c:1387 src/queuehandler.c:1470
+msgid "_Cancel"
+msgstr "_Отмена"
+
+#: src/callbacks.c:1866
+msgid "Recursively scan directories"
+msgstr "Рекурсивное сканирование каталогов"
+
+#: src/callbacks.c:1878
+msgid "Single Title"
+msgstr "Одно название"
+
+#: src/callbacks.c:2235 src/callbacks.c:2379
+msgid "FPS"
+msgstr "FPS"
+
+#: src/callbacks.c:2239
+#, c-format
+msgid "Dolby Vision %d.%d"
+msgstr "Dolby Vision %d.%d"
+
+#: src/callbacks.c:2243 src/callbacks.c:2246
+msgid "HDR10+"
+msgstr "HDR10+"
+
+#: src/callbacks.c:2248
+msgid "HDR10"
+msgstr "HDR10"
+
+#: src/callbacks.c:2250
+msgid "HDR"
+msgstr "HDR"
+
+#: src/callbacks.c:2252
+msgid "SDR"
+msgstr "SDR"
+
+#. TRANSLATORS: This is the bit depth of the video
+#: src/callbacks.c:2260
+#, c-format
+msgid "%d-bit"
+msgstr "%d-bit"
+
+#: src/callbacks.c:2282
+msgid "Audio Track"
+msgid_plural "Audio Tracks"
+msgstr[0] "Аудиодорожка"
+msgstr[1] "Аудиодорожки"
+msgstr[2] "Аудиодорожек"
+msgstr[3] "Аудиодорожка"
+
+#: src/callbacks.c:2285
+msgid "Subtitle Track"
+msgid_plural "Subtitle Tracks"
+msgstr[0] "Дорожка субтитров"
+msgstr[1] "Дорожки субтитров"
+msgstr[2] "Дорожек субтитров"
+msgstr[3] "Дорожка субтитров"
+
+#: src/callbacks.c:2383
+msgid "CFR"
+msgstr "CFR"
+
+#: src/callbacks.c:2387
+msgid "PFR"
+msgstr "PFR"
+
+#: src/callbacks.c:2391
+msgid "VFR"
+msgstr "VFR"
+
+#: src/callbacks.c:2433
+#, c-format
+msgid "+ %d more audio track"
+msgid_plural "+ %d more audio tracks"
+msgstr[0] "+ ещё %d аудиодорожка"
+msgstr[1] "+ ещё %d аудиодорожки"
+msgstr[2] "+ ещё %d аудиодорожек"
+msgstr[3] "+ ещё %d аудиодорожка"
+
+#: src/callbacks.c:2464 src/queuehandler.c:587 src/queuehandler.c:1022
+#: src/subtitlehandler.c:415 src/subtitlehandler.c:1297
+msgid "Foreign Audio Scan"
+msgstr "Сканирование иностранного языка"
+
+#: src/callbacks.c:2467 src/callbacks.c:2499 src/queuehandler.c:590
+#: src/queuehandler.c:627
+#, c-format
+msgid ", Forced Only"
+msgstr ", только форсированные"
+
+#: src/callbacks.c:2471 src/callbacks.c:2503 src/queuehandler.c:594
+#: src/queuehandler.c:631
+#, c-format
+msgid ", Burned"
+msgstr ", встроенные"
+
+#: src/callbacks.c:2475 src/callbacks.c:2507 src/queuehandler.c:598
+#: src/queuehandler.c:635
+#, c-format
+msgid ", Default"
+msgstr ", по умолчанию"
+
+#: src/callbacks.c:2513
+#, c-format
+msgid "+ %d more subtitle track"
+msgid_plural "+ %d more subtitle tracks"
+msgstr[0] "+ ещё %d дорожка с субтитрами"
+msgstr[1] "+ ещё %d дорожки с субтитрами"
+msgstr[2] "+ ещё %d дорожек с субтитрами"
+msgstr[3] "+ ещё %d дорожка с субтитрами"
+
+#: src/callbacks.c:2668
+msgid "storage"
+msgstr "хранилище"
+
+#: src/callbacks.c:2669
+msgid "display"
+msgstr "дисплей"
+
+#: src/callbacks.c:2670
+msgid "Pixel Aspect Ratio"
+msgstr "Соотношение сторон пикселей"
+
+#: src/callbacks.c:2671
+msgid "Display Aspect Ratio"
+msgstr "Соотношение сторон экрана"
+
+#: src/callbacks.c:2806 src/hb-backend.c:2305 src/hb-backend.c:2426
+#: src/hb-backend.c:2438
+msgid "No Title Found"
+msgstr "Название не найдено"
+
+#: src/callbacks.c:2807
+msgid "New Video"
+msgstr "Новое видео"
+
+#: src/callbacks.c:3803
+msgid "Settings Changed"
+msgstr "Параметры изменены"
+
+#: src/callbacks.c:3804
+msgid "You must restart HandBrake now."
+msgstr "Вы должны перезапустить HandBrake сейчас."
+
+#: src/callbacks.c:3831 src/callbacks.c:3841 src/callbacks.c:3859
+#: src/callbacks.c:3908
+#, c-format
+msgid "%s in %d seconds…"
+msgstr "%s в %d секунд…"
+
+#: src/callbacks.c:4114
+msgid "Stop Encoding?"
+msgstr "Остановить кодирование?"
+
+#: src/callbacks.c:4115 src/callbacks.c:4140 src/queuehandler.c:1701
+msgid "Your movie will be lost if you don't continue encoding."
+msgstr "Ваш фильм будет потерян, если вы не продолжать кодирование."
+
+#: src/callbacks.c:4116 src/queuehandler.c:1626
+msgid "Cancel Current and Stop"
+msgstr "Отменить текущий и остановить"
+
+#: src/callbacks.c:4116
+msgid "Cancel Current, Start Next"
+msgstr "Отменить текущий, начать следующий"
+
+#: src/callbacks.c:4117
+msgid "Finish Current and Stop"
+msgstr "Завершить текущий и остановить"
+
+#: src/callbacks.c:4117 src/callbacks.c:4141 src/queuehandler.c:1702
+msgid "Continue Encoding"
+msgstr "Продолжить кодирование"
+
+#: src/callbacks.c:4139
+msgid "Quit HandBrake?"
+msgstr "Выйти из Handbrake?"
+
+#: src/callbacks.c:4141
+msgid "Cancel All and Quit"
+msgstr "Отменить все и выйти"
+
+#: src/callbacks.c:4307
+#, c-format
+msgid "%d encode pending"
+msgid_plural "%d encodes pending"
+msgstr[0] "В ожидании кодирования %d"
+msgstr[1] "В ожидании кодирования %d"
+msgstr[2] "В ожидании кодирования %d"
+msgstr[3] "В ожидании кодирования %d"
+
+#: src/callbacks.c:4366 src/callbacks.c:4434
+#, c-format
+msgid "job %d of %d, "
+msgstr "задание %d из %d, "
+
+#: src/callbacks.c:4376
+#, c-format
+msgid "pass %d (subtitle scan) of %d, "
+msgstr "проход %d (сканирование субтитров) из %d, "
+
+#: src/callbacks.c:4381
+#, c-format
+msgid "pass %d of %d, "
+msgstr "проход %d из %d, "
+
+#: src/callbacks.c:4394
+#, c-format
+msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
+msgstr ""
+"Кодирование: %s%s%.2f %% (%.2f fps, средний %.2f fps, время до окончания "
+"%02d час %02d мин %02d сек)."
+
+#: src/callbacks.c:4404 src/callbacks.c:4444
+#, c-format
+msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
+msgstr ""
+"Кодирование: %s%s%.2f %% (время до окончания %02d час %02d мин %02d сек)."
+
+#: src/callbacks.c:4414 src/callbacks.c:4453
+#, c-format
+msgid "Encoding: %s%s%.2f %%"
+msgstr "Кодирование: %s%s%.2f %%."
+
+#: src/callbacks.c:4440
+#, c-format
+msgid "Searching for start time, "
+msgstr "Поиск времени начала, "
+
+#: src/callbacks.c:4607
+#, c-format
+msgid "Scanning title %d of %d..."
+msgstr "Сканирование фильма %d из  %d..."
+
+#: src/callbacks.c:4611
+#, c-format
+msgid "Scanning title %d of %d preview %d..."
+msgstr "Сканирование фильма %d из %d просмотр %d..."
+
+#: src/callbacks.c:4698
+msgid "Paused"
+msgstr "Приостановлено"
+
+#: src/callbacks.c:4725
+msgid "Encode Done!"
+msgstr "Кодирование завершено!"
+
+#: src/callbacks.c:4731
+msgid "Encode Canceled."
+msgstr "Кодирование отменено."
+
+#: src/callbacks.c:4736
+msgid "Encode Failed."
+msgstr "Ошибка кодирования."
+
+#: src/callbacks.c:4778
+msgid "Muxing: This may take a while..."
+msgstr "Мультиплексирование: Это может занять некоторое время..."
+
+#: src/callbacks.c:5700 src/callbacks.c:5707 src/callbacks.c:5715
+msgid "Your encode is complete."
+msgstr "Кодирование завершено."
+
+#: src/callbacks.c:5701
+msgid "Quitting HandBrake"
+msgstr "Очередь"
+
+#: src/callbacks.c:5708
+msgid "Putting computer to sleep"
+msgstr "Переход в спящий режим"
+
+#: src/callbacks.c:5716
+msgid "Shutting down the computer"
+msgstr "Выключение компьютера"
+
+#. Add filters
+#: src/callbacks.c:5830 src/chapters.c:458 src/chapters.c:486
+#: src/presets.c:2257 src/queuehandler.c:1473
+msgid "All Files"
+msgstr "Все файлы"
+
+#: src/chapters.c:459 src/chapters.c:487
+msgid "Chapters (*.xml)"
+msgstr "Главы (*.xml)"
+
+#: src/ghb-file-button.c:72
+msgid "Select a File"
+msgstr "Выберите файл"
+
+#: src/ghb-file-button.c:217
+msgid "_Select"
+msgstr "_Выбрать"
+
+#: src/ghb-queue-row.c:267
+msgid "Running Queue Item"
+msgstr "Выполнение элемента очереди"
+
+#: src/ghb-queue-row.c:276
+msgid "Failed Queue Item"
+msgstr "Неудачный элемент очереди"
+
+#: src/ghb-queue-row.c:280
+msgid "Cancelled Queue Item"
+msgstr "Отмененный элемент очереди"
+
+#: src/ghb-queue-row.c:284
+msgid "Completed Queue Item"
+msgstr "Завершенный элемент очереди"
+
+#: src/hb-backend.c:55
+msgid "Unnamed"
+msgstr "Безымянный"
+
+#: src/hb-backend.c:56 src/hb-backend.c:399
+msgid "All"
+msgstr "Все"
+
+#: src/hb-backend.c:67 src/hb-backend.c:92
+msgid "First Matching Selected Languages"
+msgstr "Первое соответствие выбранным языкам"
+
+#: src/hb-backend.c:68 src/hb-backend.c:93
+msgid "All Matching Selected Languages"
+msgstr "Все соответствующие выбранным языкам"
+
+#: src/hb-backend.c:79
+msgid "Foreign Audio Subtitle Track"
+msgstr "Дорожка субтитров иностранного языка"
+
+#: src/hb-backend.c:80
+msgid "First Selected Track"
+msgstr "Первая выбранная дорожка"
+
+#: src/hb-backend.c:81
+msgid "Foreign Audio, then First Selected Track"
+msgstr "Иностранный язык, затем первая выбранная дорожка"
+
+#: src/hb-backend.c:103 src/queuehandler.c:162
+msgid "Chapters:"
+msgstr "Главы:"
+
+#: src/hb-backend.c:104
+msgid "Seconds:"
+msgstr "Секунды:"
+
+#: src/hb-backend.c:105 src/queuehandler.c:183
+msgid "Frames:"
+msgstr "Кадры:"
+
+#: src/hb-backend.c:115
+msgid "Do Nothing"
+msgstr "Ничего не делать"
+
+#: src/hb-backend.c:116
+msgid "Quit Handbrake"
+msgstr "Выйти из Handbrake"
+
+#: src/hb-backend.c:117
+msgid "Put Computer To Sleep"
+msgstr "Перейти в спящий режим"
+
+#: src/hb-backend.c:118
+msgid "Shutdown Computer"
+msgstr "Выключить компьютер"
+
+#: src/hb-backend.c:130 src/hb-backend.c:232 src/hb-backend.c:275
+#: src/hb-backend.c:289 src/hb-backend.c:400
+msgid "Custom"
+msgstr "Другое"
+
+#: src/hb-backend.c:166
+msgid "Week"
+msgstr "Неделя"
+
+#: src/hb-backend.c:167
+msgid "Month"
+msgstr "Месяц"
+
+#: src/hb-backend.c:168
+msgid "Year"
+msgstr "Год"
+
+#: src/hb-backend.c:169
+msgid "Immortal"
+msgstr "Вечно"
+
+#: src/hb-backend.c:193 src/hb-backend.c:4965
+msgid "Decomb"
+msgstr "Устранение гребенки"
+
+#: src/hb-backend.c:194
+msgid "Yadif"
+msgstr "Yadif"
+
+#: src/hb-backend.c:195
+msgid "Bwdif"
+msgstr "Bwdif"
+
+#: src/hb-backend.c:206
+msgid "NLMeans"
+msgstr "NLMeans"
+
+#: src/hb-backend.c:207
+msgid "HQDN3D"
+msgstr "HQDN3D"
+
+#: src/hb-backend.c:218
+msgid "Unsharp"
+msgstr "Нерезкое"
+
+#: src/hb-backend.c:219
+msgid "Lapsharp"
+msgstr "Нерезкое"
+
+#: src/hb-backend.c:230
+msgid "Conservative"
+msgstr "Консервативный"
+
+#: src/hb-backend.c:243
+msgid "90°"
+msgstr "90°"
+
+#: src/hb-backend.c:244
+msgid "180°"
+msgstr "180°"
+
+#: src/hb-backend.c:245
+msgid "270°"
+msgstr "270°"
+
+#: src/hb-backend.c:255 src/hb-backend.c:1565 src/hb-backend.c:1625
+#: src/hb-backend.c:1704
+msgid "Same as source"
+msgstr "Как в источнике"
+
+#: src/hb-backend.c:256
+msgid "Limited"
+msgstr "Ограниченный"
+
+#: src/hb-backend.c:257
+msgid "Full"
+msgstr "Полный"
+
+#: src/hb-backend.c:267
+msgid "4320p 8K Ultra HD"
+msgstr "4320p 8K Ultra HD"
+
+#: src/hb-backend.c:268
+msgid "2160p 4K Ultra HD"
+msgstr "2160p 4K Ultra HD"
+
+#: src/hb-backend.c:269
+msgid "1440p 2.5K Quad HD"
+msgstr "1440p 2.5K Quad HD"
+
+#: src/hb-backend.c:270
+msgid "1080p Full HD"
+msgstr "1080p Full HD"
+
+#: src/hb-backend.c:271
+msgid "720p HD"
+msgstr "720p HD"
+
+#: src/hb-backend.c:272
+msgid "576p PAL"
+msgstr "576p PAL"
+
+#: src/hb-backend.c:273
+msgid "480p NTSC"
+msgstr "480p NTSC"
+
+#: src/hb-backend.c:286
+msgid "Height (Letterbox)"
+msgstr "Высота (Letterbox)"
+
+#: src/hb-backend.c:287
+msgid "Width (Pillarbox)"
+msgstr "Ширина (Pillarbox)"
+
+#: src/hb-backend.c:288
+msgid "Width &amp; Height"
+msgstr "Ширина &amp; высота"
+
+#: src/hb-backend.c:299
+msgid "Black"
+msgstr "Чёрный"
+
+#: src/hb-backend.c:300
+msgid "Dark Gray"
+msgstr "Темно-серый"
+
+#: src/hb-backend.c:301
+msgid "Gray"
+msgstr "Серый"
+
+#: src/hb-backend.c:302
+msgid "White"
+msgstr "Белый"
+
+#: src/hb-backend.c:313
+msgid "Spatial"
+msgstr "Пространственный"
+
+#: src/hb-backend.c:314
+msgid "Temporal"
+msgstr "Временной"
+
+#: src/hb-backend.c:326
+msgid "Fast"
+msgstr "Быстро"
+
+#: src/hb-backend.c:327
+msgid "Optimal"
+msgstr "Оптимально"
+
+#: src/hb-backend.c:338
+msgid "Strict"
+msgstr "Строгое"
+
+#: src/hb-backend.c:339
+msgid "Normal"
+msgstr "Обычные"
+
+#: src/hb-backend.c:350
+msgid "Simple"
+msgstr "Простые"
+
+#: src/hb-backend.c:351
+msgid "Smart"
+msgstr "Интеллектуальные"
+
+#: src/hb-backend.c:361
+msgid "Diamond"
+msgstr "Ромб"
+
+#: src/hb-backend.c:362
+msgid "Hexagon"
+msgstr "Шестиугольник"
+
+#: src/hb-backend.c:363
+msgid "Uneven Multi-Hexagon"
+msgstr "Неравномерный мульти-шестиугольник"
+
+#: src/hb-backend.c:364
+msgid "Exhaustive"
+msgstr "Полный"
+
+#: src/hb-backend.c:365
+msgid "Hadamard Exhaustive"
+msgstr "Исчерпывающая Адамара"
+
+#: src/hb-backend.c:375
+msgid "0: SAD, no subpel"
+msgstr "0: SAD, без субпиксельной"
+
+#: src/hb-backend.c:376
+msgid "1: SAD, qpel"
+msgstr "1: SAD, qpel"
+
+#: src/hb-backend.c:377
+msgid "2: SATD, qpel"
+msgstr "2: SATD, qpel"
+
+#: src/hb-backend.c:378
+msgid "3: SATD: multi-qpel"
+msgstr "3: SATD: multi-qpel"
+
+#: src/hb-backend.c:379
+msgid "4: SATD, qpel on all"
+msgstr "4: SATD, qpel во всех"
+
+#: src/hb-backend.c:380
+msgid "5: SATD, multi-qpel on all"
+msgstr "5: SATD, multi-qpel во всех"
+
+#: src/hb-backend.c:381
+msgid "6: RD in I/P-frames"
+msgstr "6: RD в I/P-кадрах"
+
+#: src/hb-backend.c:382
+msgid "7: RD in all frames"
+msgstr "7: RD во всех кадрах"
+
+#: src/hb-backend.c:383
+msgid "8: RD refine in I/P-frames"
+msgstr "8: RD улучшать в I/P-кадрах"
+
+#: src/hb-backend.c:384
+msgid "9: RD refine in all frames"
+msgstr "9: RD улучшать во всех кадрах"
+
+#: src/hb-backend.c:385
+msgid "10: QPRD in all frames"
+msgstr "10: QPRD во всех кадрах"
+
+#: src/hb-backend.c:386
+msgid "11: No early terminations in analysis"
+msgstr "11: Без ранние сделанных анализов"
+
+#: src/hb-backend.c:396
+msgid "Most"
+msgstr "Большинство"
+
+#: src/hb-backend.c:398
+msgid "Some"
+msgstr "Некоторые"
+
+#: src/hb-backend.c:411
+msgid "Encode only"
+msgstr "Только кодирование"
+
+#: src/hb-backend.c:412
+msgid "Always"
+msgstr "Всегда"
+
+#: src/hb-backend.c:425
+msgid "Use System Language"
+msgstr "Использовать системный язык"
+
+#: src/hb-backend.c:1718
+msgid "(NTSC Film)"
+msgstr "(Фильм NTSC)"
+
+#: src/hb-backend.c:1722
+msgid "(PAL Film/Video)"
+msgstr "(Фильм/видео PAL)"
+
+#: src/hb-backend.c:1726
+msgid "(NTSC Video)"
+msgstr "(Видео NTSC)"
+
+#: src/hb-backend.c:2294
+#, c-format
+msgid "%s - (%05d.MPLS)"
+msgstr "%s - (%05d.MPLS)"
+
+#: src/hb-backend.c:2445
+#, c-format
+msgid "%3d - %02dh%02dm%02ds - %s"
+msgstr "%3d - %02d час %02d мин %02d сек - %s"
+
+#: src/hb-backend.c:2464
+#, c-format
+msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
+msgstr "%3d - %02d час %02d мин %02d сек - (%05d.MPLS)"
+
+#: src/hb-backend.c:2470
+#, c-format
+msgid "%3d - (%05d.MPLS)"
+msgstr "%3d - (%05d.MPLS)"
+
+#: src/hb-backend.c:2476
+#, c-format
+msgid "%3d - %02dh%02dm%02ds"
+msgstr "%3d - %02d час %02d мин %02d сек"
+
+#: src/hb-backend.c:2509
+msgid "No Titles"
+msgstr "Без названия"
+
+#. No audio. set some default
+#: src/hb-backend.c:2781
+msgid "No Audio"
+msgstr "Нет звука"
+
+#: src/hb-backend.c:4406 src/hb-backend.c:4414
+msgid "Invalid Detelecine Settings"
+msgstr "Неверны настройки  детелесина"
+
+#: src/hb-backend.c:4409 src/hb-backend.c:4440 src/hb-backend.c:4476
+#: src/hb-backend.c:4513 src/hb-backend.c:4538
+msgid "Custom:"
+msgstr "Другое:"
+
+#: src/hb-backend.c:4437 src/hb-backend.c:4445
+msgid "Invalid Comb Detect Settings"
+msgstr "Недопустимые настройки обнаружения гребёнки"
+
+#: src/hb-backend.c:4472 src/hb-backend.c:4481
+msgid "Invalid Deinterlace Settings"
+msgstr "Неверны настройки  детелесина"
+
+#: src/hb-backend.c:4474 src/hb-backend.c:4483 src/hb-backend.c:4510
+#: src/hb-backend.c:4535
+msgid "Filter:"
+msgstr "Фильтр:"
+
+#: src/hb-backend.c:4508
+msgid "Invalid Denoise Settings"
+msgstr "Неверные настройки шумоподавления"
+
+#: src/hb-backend.c:4533
+msgid "Invalid Sharpen Settings"
+msgstr "Неверные настройки резкости"
+
+#. mp4/theora combination is not supported.
+#: src/hb-backend.c:4562
+msgid ""
+"Theora is not supported in the MP4 container.\n"
+"\n"
+"You should choose a different video codec or container.\n"
+"If you continue, FFMPEG will be chosen for you."
+msgstr ""
+"Theora не поддерживается в контейнере MP4.\n"
+"\n"
+"Необходимо выбрать другой видеокодек или контейнер.\n"
+"Если продолжите, для вас будет выбран ffmpeg."
+
+#. webm only supports vp8, vp9 and av1.
+#: src/hb-backend.c:4571
+msgid ""
+"Only VP8, VP9 and AV1 is supported in the WebM container.\n"
+"\n"
+"You should choose a different video codec or container.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"В контейнере WebM поддерживается только VP8, VP9 или AV1.\n"
+"\n"
+"Вам следует выбрать другой видеокодек или контейнер.\n"
+"Если вы продолжите, для вас будет выбран один из них."
+
+#: src/hb-backend.c:4579 src/hb-backend.c:4630 src/hb-backend.c:4647
+#: src/hb-backend.c:4664 src/hb-backend.c:4721 src/hb-backend.c:4774
+msgid "Continue"
+msgstr "Продолжить"
+
+#: src/hb-backend.c:4580
+msgid "Invalid Video Codec"
+msgstr "Неверный видеокодек"
+
+#. No valid title, stop right there
+#: src/hb-backend.c:4603 src/hb-backend.c:4689
+msgid "No title found.\n"
+msgstr "Название не найдено.\n"
+
+#: src/hb-backend.c:4630 src/hb-backend.c:4647
+msgid "Invalid Subtitle Selection"
+msgstr "Неверный выбор субтитров"
+
+#: src/hb-backend.c:4631
+msgid ""
+"Only one subtitle may be burned into the video.\n"
+"\n"
+"You should change your subtitle selections.\n"
+"If you continue, some subtitles will be lost."
+msgstr ""
+"Только одни субтитры могут быть записаны в видео.\n"
+"\n"
+"Вы должны изменить настройки субтитров.\n"
+"Если продолжите, некоторые субтитры будут потеряны."
+
+#: src/hb-backend.c:4648
+msgid ""
+"WebM in HandBrake only supports burned subtitles.\n"
+"\n"
+"You should change your subtitle selections.\n"
+"If you continue, some subtitles will be lost."
+msgstr ""
+"WebM в HandBrake поддерживает только записанные субтитры.\n"
+"\n"
+"Вам следует изменить выбор субтитров.\n"
+"Если вы продолжите, некоторые субтитры будут потеряны."
+
+#: src/hb-backend.c:4664
+msgid "Subtitle File Not Found"
+msgstr "Файл с субтитрами не найден"
+
+#: src/hb-backend.c:4665
+msgid ""
+"SRT file does not exist or not a regular file.\n"
+"\n"
+"You should choose a valid file.\n"
+"If you continue, this subtitle will be ignored."
+msgstr ""
+"SRT файл не существует или неправильный файл.\n"
+"\n"
+"Вам следует выбрать правильный файл.\n"
+"Если продолжите, эти субтитры будут игнорироваться."
+
+#: src/hb-backend.c:4721 src/hb-backend.c:4774
+msgid "Invalid Audio Selection"
+msgstr "Неверный выбор звука"
+
+#: src/hb-backend.c:4722
+msgid ""
+"The source does not support Pass-Thru.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"Источник не поддерживает транзитную передачу.\n"
+"\n"
+"Вы должны выбрать другой звуковой кодек.\n"
+"Если вы продолжите, один из них будет выбран для вас."
+
+#: src/hb-backend.c:4775
+#, c-format
+msgid ""
+"%s is not supported in the %s container.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"%s  не поддерживается в контейнере %s.\n"
+"\n"
+"Вам следует выбрать другой кодировщик звука.\n"
+"Если продолжите, один будет выбран для вас."
+
+#: src/hb-backend.c:4957
+msgid "Comb Detect"
+msgstr "Обнаружение гребенки"
+
+#: src/hb-backend.c:4959
+msgid "Detelecine"
+msgstr "Детелесин"
+
+#: src/hb-backend.c:4961
+msgid "Deinterlace (Yadif)"
+msgstr "Деинтерлейсинг(Yadif)"
+
+#: src/hb-backend.c:4963
+msgid "Deinterlace (Bwdif)"
+msgstr "Деинтерлейсинг (Bwdif)"
+
+#: src/hb-backend.c:4967
+msgid "Deblock"
+msgstr "Подавление блоков"
+
+#: src/hb-backend.c:4969
+msgid "Denoise (NLMeans)"
+msgstr "Шумоподавление (NLMeans)"
+
+#: src/hb-backend.c:4971
+msgid "Denoise (HQDN3D)"
+msgstr "Шумоподавление (HQDN3D)"
+
+#: src/hb-backend.c:4973
+msgid "Chroma Smooth"
+msgstr "Сглаживания цветности"
+
+#: src/hb-backend.c:4975
+msgid "Sharpen (Unsharp)"
+msgstr "Резкость (Нерезкость)"
+
+#: src/hb-backend.c:4977
+msgid "Rotate"
+msgstr "Вращение"
+
+#: src/hb-backend.c:4979
+msgid "Sharpen (lapsharp)"
+msgstr "Резкость (lapsharp)"
+
+#: src/hb-backend.c:4983
+msgid "Colorspace"
+msgstr "Цветовое пространство"
+
+#: src/notifications.c:55
+#, c-format
+msgid "%d item complete, %d failed"
+msgid_plural "%d items complete, %d failed"
+msgstr[0] "%d элемент завершен, %d не удалось выполнить"
+msgstr[1] "%d элемента завершено, %d не удалось выполнить"
+msgstr[2] "%d элементов завершено, %d не удалось выполнить"
+msgstr[3] "%d элемент завершен, %d не удалось выполнить"
+
+#: src/notifications.c:61
+#, c-format
+msgid "%d item has finished encoding"
+msgid_plural "%d items have finished encoding"
+msgstr[0] "кодирование %d элемента завершено"
+msgstr[1] "кодирование %d элементов завершено"
+msgstr[2] "кодирование %d элементов завершено"
+msgstr[3] "кодирование %d элемента завершено"
+
+#: src/notifications.c:107
+msgid "Put down that cocktail…"
+msgstr "Отставь свой коктейль…"
+
+#: src/notifications.c:117
+msgid "Encode Complete"
+msgstr "Кодирование завершено"
+
+#: src/notifications.c:117
+msgid "Encode Failed"
+msgstr "Ошибка кодирования"
+
+#: src/notifications.c:140
+msgid "Battery level is low."
+msgstr "Низкий уровень заряда батареи."
+
+#: src/notifications.c:143
+msgid "Charger has been disconnected."
+msgstr "Зарядное устройство было отсоединено."
+
+#: src/notifications.c:146
+msgid "Power Saver mode has been activated."
+msgstr "Активирован режим энергосбережения."
+
+#: src/notifications.c:150
+#, c-format
+msgid "%s free space remaining."
+msgstr "Осталось %s свободного места."
+
+#: src/notifications.c:156 src/queuehandler.c:1171
+msgid "Encoding Paused"
+msgstr "Кодирование приостановлено"
+
+#: src/presets.c:52
+msgid "My Presets"
+msgstr "Мои предустановки"
+
+#: src/presets.c:87
+msgid "Preset Name"
+msgstr "Название предустановки"
+
+#: src/presets.c:1318
+msgid "ghb_presets_menu_init: Failed to find presets folder."
+msgstr "ghb_presets_menu_init: Не удалось найти папку предустановок."
+
+#: src/presets.c:1493
+msgid "Failed to find parent folder when adding child."
+msgstr "Не удалось найти родительскую папку."
+
+#: src/presets.c:1980
+msgid "Load backup presets"
+msgstr "Загрузить резервную копию предустановки"
+
+#: src/presets.c:1980
+msgid "Get me out of here!"
+msgstr "Забери меня отсюда!"
+
+#: src/presets.c:1981
+msgid ""
+"Presets found are newer than what is supported by this version of HandBrake!\n"
+"\n"
+"Would you like to continue?"
+msgstr ""
+"Найденные предустановки новее, чем то, что поддерживается этой версией HandBrake!\n"
+"\n"
+"Продолжить?"
+
+#: src/presets.c:2161 src/presets.c:2543 src/title-add.c:124
+#: src/title-add.c:134
+msgid "Overwrite"
+msgstr "Перезаписать"
+
+#: src/presets.c:2162 src/presets.c:2544
+msgid "Overwrite Preset?"
+msgstr "Перезаписать предустановку?"
+
+#: src/presets.c:2163 src/presets.c:2545
+#, c-format
+msgid "The preset “%s” already exists. Do you want to overwrite it?"
+msgstr "Предустановка «%s» уже существует. Перезаписать ее?"
+
+#: src/presets.c:2252
+msgid "Import Preset"
+msgstr "Импорт предустановки"
+
+#: src/presets.c:2258
+msgid "Presets (*.json)"
+msgstr "Предустановки (*.json)"
+
+#: src/presets.c:2367
+msgid "Export Preset"
+msgstr "Экспорт предустановки"
+
+#: src/presets.c:2768
+msgid "_Delete"
+msgstr "_Удалить"
+
+#: src/presets.c:2769
+msgid "Delete Folder?"
+msgstr "Удалить папку?"
+
+#: src/presets.c:2769
+msgid "Delete Preset?"
+msgstr "Удалить предустановку?"
+
+#: src/presets.c:2770
+#, c-format
+msgid ""
+"Are you sure you want to delete “%s”?\n"
+"Deleted items cannot be recovered."
+msgstr ""
+"Удалить “%s”?\n"
+"Удаленные элементы восстановить невозможно."
+
+#: src/preview.c:154
+msgid "Pause Preview"
+msgstr "Приостановить предпросмотр"
+
+#: src/preview.c:158
+msgid "Stop Encoding Preview"
+msgstr "Остановить предпросмотр кодирования"
+
+#: src/preview.c:162
+msgid "Play Preview"
+msgstr "Проигрывать предпросмотр"
+
+#: src/preview.c:288
+msgid "Playback Error"
+msgstr "Ошибка воспроизведения"
+
+#: src/preview.c:291
+msgid "The video could not be played. For more details, see the Activity Log."
+msgstr ""
+"Не удалось воспроизвести видео. Более подробную информацию смотрите в "
+"журнале действий."
+
+#: src/queuehandler.c:128
+#, c-format
+msgid "%s (Modified)"
+msgstr "%s (изменён)"
+
+#: src/queuehandler.c:176
+msgid "Time:"
+msgstr "Время:"
+
+#: src/queuehandler.c:220
+msgid "Align A/V"
+msgstr "Выровнять А/В"
+
+#: src/queuehandler.c:230
+msgid "iPod 5G"
+msgstr "iPod 5G"
+
+#: src/queuehandler.c:262
+#, c-format
+msgid ""
+"%d:%d:%d:%d Crop\n"
+"%dx%d storage, %dx%d display\n"
+"%d:%d Pixel Aspect Ratio\n"
+"%s Display Aspect Ratio"
+msgstr ""
+"Обрезка %d:%d:%d:%d\n"
+"Источник %dx%d, дисплей %dx%d\n"
+"Соотношение сторон пикселей %d:%d\n"
+"Соотношение сторон дисплея %s"
+
+#: src/queuehandler.c:291
+#, c-format
+msgid "%s, Bitrate %dkbps"
+msgstr "%s, Битрейт: %dкбит/с"
+
+#: src/queuehandler.c:297
+#, c-format
+msgid "%s, Constant Quality %.4g(%s)"
+msgstr "%s, Постоянное качество %.4g(%s)"
+
+#: src/queuehandler.c:304
+#, c-format
+msgid " (Multi Pass)"
+msgstr "(Многопроходной)"
+
+#: src/queuehandler.c:336
+#, c-format
+msgid "%sPreset %s"
+msgstr "%sПредустановка %s"
+
+#: src/queuehandler.c:341
+#, c-format
+msgid "%sTune %s"
+msgstr "%sНастройка %s"
+
+#: src/queuehandler.c:346
+#, c-format
+msgid "%sProfile %s"
+msgstr "%sПрофиль %s"
+
+#: src/queuehandler.c:351
+#, c-format
+msgid "%sLevel %s"
+msgstr "%sУровень %s"
+
+#: src/queuehandler.c:368
+#, c-format
+msgid ""
+"\n"
+"Constant Framerate %s fps"
+msgstr ""
+"\n"
+"Постоянная частота кадров %s кадров в секунду"
+
+#: src/queuehandler.c:372
+#, c-format
+msgid ""
+"\n"
+"Peak Framerate %s fps (may be lower)"
+msgstr ""
+"\n"
+"Пиковая частота кадров %s кадров в секунду (может быть ниже)"
+
+#: src/queuehandler.c:377
+#, c-format
+msgid ""
+"\n"
+"Variable Framerate %s fps"
+msgstr ""
+"\n"
+"Переменная частота кадров %s кадров в секунду"
+
+#: src/queuehandler.c:545
+msgid "kbps"
+msgstr "кбит/с"
+
+#: src/queuehandler.c:679 src/queuehandler.c:704
+msgid "Pending"
+msgstr "Ожидание"
+
+#: src/queuehandler.c:691 src/queuehandler.c:1182
+msgid "Completed"
+msgstr "Завершено"
+
+#: src/queuehandler.c:695 src/queuehandler.c:1186
+msgid "Canceled"
+msgstr "Отменено"
+
+#: src/queuehandler.c:699 src/queuehandler.c:1190
+msgid "Failed"
+msgstr "Сбой"
+
+#: src/queuehandler.c:740 src/queuehandler.c:768 src/queuehandler.c:1230
+#: src/queuehandler.c:1258
+#, c-format
+msgid "%d Day %02d:%02d:%02d"
+msgstr "%d день %02d:%02d:%02d"
+
+#: src/queuehandler.c:743 src/queuehandler.c:771 src/queuehandler.c:1233
+#: src/queuehandler.c:1261
+#, c-format
+msgid "%d Days %02d:%02d:%02d"
+msgstr "%d дня %02d:%02d:%02d"
+
+#: src/queuehandler.c:784 src/queuehandler.c:1274
+msgid "B"
+msgstr "B"
+
+#: src/queuehandler.c:788 src/queuehandler.c:1278
+msgid "KB"
+msgstr "КБ"
+
+#: src/queuehandler.c:793 src/queuehandler.c:1283
+msgid "MB"
+msgstr "МБ"
+
+#: src/queuehandler.c:809 src/queuehandler.c:1299
+msgid "Not Available"
+msgstr "Недоступно"
+
+#: src/queuehandler.c:1134
+msgid "Foreign Audio Search"
+msgstr "Поиск иностранного аудио"
+
+#: src/queuehandler.c:1138
+msgid "Encode"
+msgstr "Кодирование"
+
+#: src/queuehandler.c:1142
+msgid "Encode Analysis Pass"
+msgstr "Проход анализа кодирования"
+
+#: src/queuehandler.c:1146
+msgid "Encode Final Pass"
+msgstr "Последний проход кодирования"
+
+#. Should never happen
+#: src/queuehandler.c:1151
+msgid "Error"
+msgstr "Ошибка"
+
+#: src/queuehandler.c:1155
+#, c-format
+msgid ""
+"pass %d of %d\n"
+"%s"
+msgstr ""
+"проход %d из %d\n"
+"%s"
+
+#: src/queuehandler.c:1167
+msgid "Scanning Title"
+msgstr "Сканирование заголовка"
+
+#: src/queuehandler.c:1175
+msgid "Encoding In Progress"
+msgstr "Кодирование в процессе"
+
+#. Should never happen
+#: src/queuehandler.c:1195
+msgid "Unknown"
+msgstr "Неизвестно"
+
+#: src/queuehandler.c:1383
+msgid "Export Queue"
+msgstr "Экспорт очереди"
+
+#: src/queuehandler.c:1466
+msgid "Import Queue"
+msgstr "Импорт очереди"
+
+#: src/queuehandler.c:1616
+msgid "Low Disk Space: Encoding Paused"
+msgstr "Недостаточно места на диске: кодирование приостановлено"
+
+#: src/queuehandler.c:1619
+#, c-format
+msgid ""
+"The destination filesystem is almost full: %s free.\n"
+"Destination: %s\n"
+"Encode may be incomplete if you proceed."
+msgstr ""
+"Файловая система почти заполнена: %s свободно\n"
+"\n"
+"Назначение: %s\n"
+"Кодирование может быть неполным, если продолжите."
+
+#: src/queuehandler.c:1624
+msgid "Resume, I've fixed the problem"
+msgstr "Возобновить, я исправил проблему"
+
+#: src/queuehandler.c:1625
+msgid "Resume, Don't tell me again"
+msgstr "Возобновить, не говорить мне снова"
+
+#: src/queuehandler.c:1700
+msgid "Remove Item in Progress?"
+msgstr "Удалить элемент в процессе?"
+
+#: src/queuehandler.c:1702
+msgid "Cancel and Remove"
+msgstr "Отменить и удалить"
+
+#: src/queuehandler.c:1842 src/queuehandler.c:1855
+msgid "Stop"
+msgstr "Остановить"
+
+#: src/queuehandler.c:1843 src/queuehandler.c:1856
+msgid "Stop Encoding"
+msgstr "Остановить кодирование"
+
+#: src/queuehandler.c:1868
+msgid "S_top Encoding"
+msgstr "О_становить кодирование"
+
+#: src/queuehandler.c:1886 src/queuehandler.c:1899
+msgid "Resume"
+msgstr "Возобновить"
+
+#: src/queuehandler.c:1887 src/queuehandler.c:1900
+msgid "Resume Encoding"
+msgstr "Продолжить кодирование"
+
+#: src/queuehandler.c:1911
+msgid "_Resume Encoding"
+msgstr "_Продолжить кодирование"
+
+#: src/subtitlehandler.c:107
+#, c-format
+msgid "Offset: %dms"
+msgstr "Смещение: %dмс"
+
+#: src/subtitlehandler.c:112
+msgid "Burned Into Video"
+msgstr "Записать в видео"
+
+#: src/subtitlehandler.c:113
+msgid "Passthru"
+msgstr "Транзитная передача"
+
+#: src/subtitlehandler.c:120
+msgid "Default"
+msgstr "По умолчанию"
+
+#: src/subtitlehandler.c:1235
+msgid "Add Subtitles"
+msgstr "Добавить субтитры"
+
+#: src/subtitlehandler.c:1453
+#, c-format
+msgid "Preferred Language: %s"
+msgstr "Предпочитаемый язык: %s"
+
+#: src/subtitlehandler.c:1466
+#, c-format
+msgid "Add %s subtitle track if default audio is not %s"
+msgstr "Добавить %s дорожку субтитров, если не звука по умолчанию %s"
+
+#: src/subtitlehandler.c:1471
+#, c-format
+msgid "Add subtitle track if default audio is not your preferred language"
+msgstr ""
+"Добавить дорожку субтитров, если для звука по умолчанию нет нужного языка"
+
+#: src/title-add.c:103 src/title-add.c:112
+msgid "Invalid Destination"
+msgstr "Недопустимое место назначения"
+
+#: src/title-add.c:104
+#, c-format
+msgid "“%s” is is not a valid directory."
+msgstr "«%s» не является допустимым каталогом."
+
+#: src/title-add.c:113
+#, c-format
+msgid "“%s” is not a writable directory."
+msgstr "«%s» не является каталогом, доступным для записи."
+
+#: src/title-add.c:124 src/title-add.c:134
+msgid "Overwrite File?"
+msgstr "Перезаписать файл?"
+
+#: src/title-add.c:125
+#, c-format
+msgid ""
+"The file “%s” already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Файл «%s» уже существует.\n"
+"Перезаписать его?"
+
+#: src/title-add.c:135
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"Another queued job has specified the same destination.\n"
+"Do you want to overwrite?"
+msgstr ""
+"Назначение: %s\n"
+"\n"
+"Другое задание в очереди имеет это же назначение.\n"
+"Хотите его перезаписать?"
+
+#: src/title-add.c:352
+msgid ""
+"Duplicate destination files detected. Duplicates will not be added to the "
+"queue."
+msgstr ""
+"Обнаружены повторяющиеся файлы назначения. Дубликаты не будут добавлены в "
+"очередь."
+
+#: src/title-add.c:445
+msgid "Select this title for adding to the queue.\n"
+msgstr "Отметить все названия для добавления в очередь.\n"
+
+#. Title label
+#: src/title-add.c:453
+msgid "No Title"
+msgstr "Без названия"
+
+#: src/title-add.c:463
+msgid ""
+"There is another title with the same destination file name.\n"
+"This title will not be added to the queue unless you change\n"
+"the output file name.\n"
+msgstr ""
+"Существует еще одно название с тем же именем файла назначения.\n"
+"Это название не будет добавлено в очередь, если не изменить\n"
+"имя выходного файла.\n"
+
+#: src/title-add.c:832
+msgid "OK"
+msgstr "OK"
+
+#: src/title-add.c:832
+msgid "Cannot Add Titles"
+msgstr "Не удалось добавить название"
+
+#: src/title-add.c:833
+msgid ""
+"The filenames are not unique. Please choose\n"
+"a unique destination filename for each title."
+msgstr ""
+"Имена файлов не уникальны. Выберите уникальное\n"
+"имя файла назначения для каждого названия."
+
+#: src/videohandler.c:154
+msgid "Additional advanced arguments that can be passed to the video encoder."
+msgstr ""
+"Дополнительные расширенные аргументы, которые можно передать видеокодеру."
+
+#: src/videohandler.c:227
+msgid "The full list of encoder parameters:"
+msgstr "Полный список параметров кодировщика:"
+
+#: src/videohandler.c:345
+msgid "Warning: lossless"
+msgstr "Предупреждение: без потерь"
+
+#: data/fr.handbrake.ghb.desktop.in:3
+msgid "Media Transcoder"
+msgstr "Медиа-транскодер"
+
+#: data/fr.handbrake.ghb.desktop.in:4
+msgid "Transcodes DVD, Blu-ray, and other media"
+msgstr "Перекодирует DVD, Blu-ray и другие носители"
+
+#: data/fr.handbrake.ghb.desktop.in:10
+msgid "Format Converter;Video Encoder;"
+msgstr "Конвертер форматов; видеокодер;"
