@@ -1,12 +1,41 @@
 $(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread))
 $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 
-LIBDVDREAD.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libdvdread-6.1.3.tar.bz2
-LIBDVDREAD.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdread/6.1.3/libdvdread-6.1.3.tar.bz2
-LIBDVDREAD.FETCH.sha256  = ce35454997a208cbe50e91232f0e73fb1ac3471965813a13b8730a8f18a15369
+LIBDVDREAD.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libdvdread-7.0.0.tar.bz2
+LIBDVDREAD.FETCH.url    += https://code.videolan.org/videolan/libdvdread/-/archive/7.0.0/libdvdread-7.0.0.tar.bz2
+LIBDVDREAD.FETCH.sha256  = ecb58701294d0d27c142494fbf3255278c349a54f5532e35d5dc98c5ec0dec7c
+
+LIBDVDREAD.build_dir             = build/
+LIBDVDREAD.CONFIGURE.exe         = $(MESON.exe) setup
+LIBDVDREAD.prefix                = $(call fn.ABSOLUTE,$(LIBDVDREAD.prefix/))contrib/
+LIBDVDREAD.CONFIGURE.deps        =
+LIBDVDREAD.CONFIGURE.shared      =
+LIBDVDREAD.CONFIGURE.host        =
+LIBDVDREAD.CONFIGURE.build       =
+LIBDVDREAD.CONFIGURE.static      = -Ddefault_library=static
+LIBDVDREAD.CONFIGURE.extra       = --libdir=$(call fn.ABSOLUTE,$(LIBDVDREAD.prefix/))contrib/lib/ \
+                                  -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,LIBDVDREAD.GCC,*archs *sysroot *minver ?extra)" \
+                                  -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,LIBDVDREAD.GCC,*archs *sysroot *minver ?extra.exe)" \
+                                  -Dpkg_config_path=$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/pkgconfig) \
+                                  -Dlibdvdcss=disabled
+LIBDVDREAD.CONFIGURE.env         =
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
-    LIBDVDREAD.CONFIGURE.extra = --enable-dlfcn
-endif
+     LIBDVDREAD.CONFIGURE.extra += -Ddlfcn=builtin
+ endif
 
 LIBDVDREAD.GCC.args.extra += $(LIBDVDREAD.GCC.args.O.$(LIBDVDREAD.GCC.O))
+
+ifeq (darwin,$(HOST.system))
+    LIBDVDREAD.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDVDREAD.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-darwin-gcc.meson
+endif
+
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
+    LIBDVDREAD.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDVDREAD.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-w64-mingw32.meson
+endif
+
+LIBDVDREAD.BUILD.make       = $(NINJA.exe)
+LIBDVDREAD.BUILD.extra      = -v
+LIBDVDREAD.INSTALL.make     = $(NINJA.exe)
+LIBDVDREAD.CLEAN.make       = $(NINJA.exe)
+LIBDVDREAD.UNINSTALL.make   = $(NINJA.exe)
