@@ -1,0 +1,107 @@
+{
+  "fill-specializations" : [
+    {
+      "value" : {
+        "linear-gradient" : [
+          "srgb:0.38809,0.80002,0.95685,1.00000",
+          "srgb:0.80002,0.72156,0.61570,1.00000"
+        ]
+      }
+    },
+    {
+      "appearance" : "dark",
+      "value" : "system-dark"
+    }
+  ],
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "blend-mode-specializations" : [
+            {
+              "value" : "normal"
+            },
+            {
+              "appearance" : "dark",
+              "value" : "normal"
+            },
+            {
+              "appearance" : "tinted",
+              "value" : "normal"
+            }
+          ],
+          "fill-specializations" : [
+            {
+              "value" : "none"
+            },
+            {
+              "appearance" : "tinted",
+              "value" : "none"
+            }
+          ],
+          "glass-specializations" : [
+            {
+              "value" : false
+            },
+            {
+              "appearance" : "dark",
+              "value" : false
+            },
+            {
+              "appearance" : "tinted",
+              "value" : false
+            }
+          ],
+          "hidden" : false,
+          "image-name" : "HandBrake-v2-1658×1721.png",
+          "name" : "HandBrake-v2-1658×1721",
+          "position-specializations" : [
+            {
+              "value" : {
+                "scale" : 0.54,
+                "translation-in-points" : [
+                  21,
+                  -2
+                ]
+              }
+            },
+            {
+              "idiom" : "square",
+              "value" : {
+                "scale" : 0.54,
+                "translation-in-points" : [
+                  21,
+                  -2
+                ]
+              }
+            },
+            {
+              "idiom" : "watchOS",
+              "value" : {
+                "scale" : 0.52,
+                "translation-in-points" : [
+                  21,
+                  -10
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

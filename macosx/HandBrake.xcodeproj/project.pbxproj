@@ -70,6 +70,7 @@
 		A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
 		A900E6BE1D7B1B6800CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
 		A903C5601CCE78060026B0ED /* NSWindow+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */; };
+		A910FA612E92A77200F5740A /* HandBrake.icon in Resources */ = {isa = PBXBuildFile; fileRef = A910FA602E92A77200F5740A /* HandBrake.icon */; };
 		A91119A21C7DD58B001C463C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F203B14ADBC210021BE6D /* Cocoa.framework */; };
 		A91119A31C7DD591001C463C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
 		A91119A41C7DD614001C463C /* HBSubtitlesDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F4728B1976BAA70009EC65 /* HBSubtitlesDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -551,6 +552,7 @@
 		A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTrackPreset.m; sourceTree = "<group>"; };
 		A91017B21A64440A00039BFB /* HBSubtitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitles.h; sourceTree = "<group>"; };
 		A91017B31A64440A00039BFB /* HBSubtitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitles.m; sourceTree = "<group>"; };
+		A910FA602E92A77200F5740A /* HandBrake.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = HandBrake.icon; sourceTree = "<group>"; };
 		A91485FC1F61296100374C12 /* HBFiltersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBFiltersViewController.h; sourceTree = "<group>"; };
 		A91485FD1F61296100374C12 /* HBFiltersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBFiltersViewController.m; sourceTree = "<group>"; };
 		A914BCB11BC441C700157917 /* HBPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreviewView.h; sourceTree = "<group>"; };
@@ -1557,6 +1559,7 @@
 			isa = PBXGroup;
 			children = (
 				3490BCB31614CF8D002A5AD7 /* HandBrake.icns */,
+				A910FA602E92A77200F5740A /* HandBrake.icon */,
 				A975B02020F7AF29004675CC /* Localizable.strings */,
 				273F217914ADDDA10021BE6D /* English.lproj */,
 				D86C9DD41C6D372500F06F1B /* Assets.xcassets */,
@@ -2385,6 +2388,7 @@
 				A9A96BD420CAD63000A39AFB /* Queue.xib in Resources */,
 				A9A96BE020CAD66500A39AFB /* Preferences.xib in Resources */,
 				A91AD3471FB5D9AA00AEA822 /* AddPreset.xib in Resources */,
+				A910FA612E92A77200F5740A /* HandBrake.icon in Resources */,
 				A9E1468216BC2AD800C307BC /* PlayTemplate.pdf in Resources */,
 				A9A96BAD20CAD5A200A39AFB /* MainMenu.xib in Resources */,
 				A992CA7F2C47B35C0087BF70 /* HBTitleSelectionRange.xib in Resources */,
@@ -3738,7 +3742,8 @@
 		273F205414ADBC210021BE6D /* debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = HandBrake;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -3771,7 +3776,8 @@
 		273F205514ADBC210021BE6D /* release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = HandBrake;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -5312,7 +5318,8 @@
 		A9A5CD9E1E32072F00947914 /* debug-sandbox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = HandBrake;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -5584,7 +5591,8 @@
 		A9A5CDA41E32073800947914 /* release-sandbox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = HandBrake;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
