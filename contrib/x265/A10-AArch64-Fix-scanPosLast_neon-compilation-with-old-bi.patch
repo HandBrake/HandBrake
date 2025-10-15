@@ -1,0 +1,35 @@
+From 10f529eaa162f5f15eac78489e38d95aae463462 Mon Sep 17 00:00:00 2001
+From: George Steed <george.steed@arm.com>
+Date: Tue, 29 Jul 2025 10:40:00 +0100
+Subject: [PATCH 1/4] AArch64: Fix scanPosLast_neon compilation with old
+ binutils
+
+When compiling using GNU Binutils version 2.38 (the default on Ubuntu
+22.04), the assembler does not recognise the AArch64 BFC instruction
+unless Armv8.2-A is enabled. This causes the scanPosLast_neon function
+to fail to compile. This appears to be fixed with GNU Binutils 2.42 (the
+default on Ubuntu 24.04).
+
+The BFC instruction is an alias of BFM, so rewrite it to express with a
+BFM instruction instead. This ensures that it compiles even on the older
+GNU Binutils version.
+---
+ source/common/aarch64/pixel-util.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/source/common/aarch64/pixel-util.S b/source/common/aarch64/pixel-util.S
+index e2b31e4a1..81cf17c0d 100644
+--- a/source/common/aarch64/pixel-util.S
++++ b/source/common/aarch64/pixel-util.S
+@@ -860,7 +860,7 @@ function PFX(scanPosLast_neon)
+     lsl             w13, w13, w6
+     lsl             w15, w15, w6
+     extr            w14, w14, w13, #31
+-    bfc             w15, #31, #1
++    bfm             w15, wzr, #1, #0
+     cbnz            w15, .Loop_spl_1
+ .Lpext_end:
+     strh            w14, [x2], #2
+-- 
+2.50.1 (Apple Git-155)
+
