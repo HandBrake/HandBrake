@@ -33,8 +33,6 @@ NSString * const HBQueueLowSpaceAlertNotification = @"HBQueueLowSpaceAlertNotifi
 NSString * const HBQueueDidStartNotification = @"HBQueueDidStartNotification";
 NSString * const HBQueueDidCompleteNotification = @"HBQueueDidCompleteNotification";
 
-NSString * const HBQueueNotificationCanceledKey = @"HBQueueNotificationCanceledKey";
-
 NSString * const HBQueueDidStartItemNotification = @"HBQueueDidStartItemNotification";
 NSString * const HBQueueDidCompleteItemNotification = @"HBQueueDidCompleteItemNotification";
 NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemKey";
@@ -801,9 +799,7 @@ static void powerSourceCallback(void *context)
             NSUInteger index = [self.itemsInternal indexOfObject:nextItem];
             [self removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
             [self allowSleep];
-            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteNotification
-                                                              object:self
-                                                            userInfo:@{HBQueueNotificationCanceledKey : @YES}];
+            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteNotification object:self];
         }
     }
     else

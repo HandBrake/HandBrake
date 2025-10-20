@@ -28,8 +28,6 @@ extern NSString * const HBQueueDidStartNotification;
 extern NSString * const HBQueueDidCompleteNotification;
 extern NSString * const HBQueueDidChangeStateNotification;
 
-extern NSString * const HBQueueNotificationCanceledKey;              // NSNumber
-
 extern NSString * const HBQueueDidStartItemNotification;
 extern NSString * const HBQueueDidCompleteItemNotification;
 extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueJobItem

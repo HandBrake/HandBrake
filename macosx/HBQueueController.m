@@ -86,11 +86,7 @@
         }];
 
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-            BOOL canceled = [note.userInfo[HBQueueNotificationCanceledKey] boolValue];
-            if (canceled == NO)
-            {
-                [self queueCompletedAlerts];
-            }
+            [self queueCompletedAlerts];
         }];
 
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
@@ -436,7 +432,7 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
        willPresentNotification:(UNNotification *)notification
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler API_AVAILABLE(macos(10.15))
 {
-    completionHandler(UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound);
+    completionHandler(UNNotificationPresentationOptionSound);
 }
 
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
