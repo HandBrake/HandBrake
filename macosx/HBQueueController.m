@@ -86,7 +86,11 @@
         }];
 
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-            [self queueCompletedAlerts];
+            BOOL canceled = [note.userInfo[HBQueueNotificationCanceledKey] boolValue];
+            if (canceled == NO)
+            {
+                [self queueCompletedAlerts];
+            }
         }];
 
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
