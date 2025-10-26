@@ -6709,6 +6709,17 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The queue currently has jobs which are in a Cancelled or Errored State. These will be cleared when the queue starts.  
+        ///
+        ///Do you wish to proceed?.
+        /// </summary>
+        public static string QueueViewModel_CancelErrorWillBeCleared {
+            get {
+                return ResourceManager.GetString("QueueViewModel_CancelErrorWillBeCleared", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to clear the queue?.
         /// </summary>
         public static string QueueViewModel_ClearQueueConfirmation {
