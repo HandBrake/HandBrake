@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DetelecineItem.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="IoCHelper.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -9,19 +9,22 @@
 
 namespace HandBrakeWPF.Helpers
 {
-    using Autofac;
+    using System;
+
+    using Microsoft.Extensions.DependencyInjection;
 
     public class IoCHelper
     {
-        private static IContainer container;
+        private static IServiceProvider serviceProvider;
+
         public static T Get<T>()
         {
-            return container.Resolve<T>();
+            return serviceProvider.GetService<T>();
         }
 
-        public static void Setup(IContainer autofacContainer)
+        public static void Setup(IServiceProvider provider)
         {
-            container = autofacContainer;
+            serviceProvider = provider;
         }
     }
 }
