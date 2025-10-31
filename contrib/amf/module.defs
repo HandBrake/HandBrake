@@ -2,12 +2,12 @@ $(eval $(call import.MODULE.defs,AMF,amf))
 $(eval $(call import.CONTRIB.defs,AMF))
 
 # Repacked slim tarball removes large third party binaries included upstream
-AMF.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/AMF-1.4.36-slim.tar.gz
-AMF.FETCH.sha256    = ef6db20a4b09d7394b0f63a3f996357aa050bb356fa48c2aa9d5be5b1adcd9dc
-# AMF.FETCH.url      = https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/refs/tags/v1.4.36.0.tar.gz
-# AMF.FETCH.sha256   = 4abdf1ffecbffc78bfd74a9376595d14aecfa1a419147bcaa6113cf24bb28060
-AMF.FETCH.basename = AMF-1.4.36.0.tar.gz
-AMF.EXTRACT.tarbase = AMF-1.4.36.0
+AMF.FETCH.url        = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/AMF-1.5.0-slim.tar.gz
+AMF.FETCH.sha256     = ed248d7c59d4edb82cc6a9bb8d8caef7917c7d5d1b7d398dede229e7f302fd48
+# AMF.FETCH.url      = https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/refs/tags/v1.5.0.tar.gz
+# AMF.FETCH.sha256   = bf80ee4a77a731c5a2351b4dd74f524a18806a70099ba66a8058d91aac1150b5
+AMF.FETCH.basename = AMF-1.5.0.tar.gz
+AMF.EXTRACT.tarbase = AMF-1.5.0
 
 AMF.CONFIGURE = $(TOUCH.exe) $@
 AMF.BUILD     = $(TOUCH.exe) $@
