@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AppBootstrapper.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="ServiceRegistration.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The Application Bootstrapper
+//   Service registration for dependency injection container
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,7 +12,6 @@ namespace HandBrakeWPF.Startup
     using System.Linq;
     using System.Reflection;
     using Microsoft.Extensions.DependencyInjection;
-
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging;
@@ -48,7 +47,9 @@ namespace HandBrakeWPF.Startup
             services.AddSingleton<ILogInstanceManager, LogInstanceManager>();
             services.AddSingleton<IPortService, PortService>();
             services.AddSingleton<INotificationService, NotificationService>();
-            services.AddScoped<App>();
+            
+            // WPF Application
+            services.AddSingleton<App>();
 
             // ViewModels
             Assembly assembly = typeof(ServiceRegistration).Assembly;
