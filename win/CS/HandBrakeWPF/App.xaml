@@ -1,20 +1,6 @@
 ﻿<Application x:Class="HandBrakeWPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:HandBrakeWPF.Startup"
-             ShutdownMode="OnMainWindowClose"
-             Startup="App_OnStartup">
-
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-
-                <!-- Theme is set in app.xaml.cs -->
-
-                <ResourceDictionary>
-                    <local:AppBootstrapper x:Key="bootstrapper" />
-                </ResourceDictionary>
-
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
     </Application.Resources>
 </Application>

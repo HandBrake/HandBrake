@@ -51,10 +51,27 @@ namespace HandBrakeWPF
             Application.Current.Dispatcher.UnhandledException += this.Dispatcher_UnhandledException;
             AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
             AppDomain.CurrentDomain.ProcessExit += this.CurrentDomain_ProcessExit;
-            
+
             ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(15000));
 
             SystemInfo.InitGPUInfo(); // Background Thread.
+        }
+
+        /// <summary>
+        /// Override the startup behavior to handle files dropped on the app icon.
+        /// </summary>
+        /// <param name="e">
+        /// The StartupEventArgs.
+        /// </param>
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            if (isStarted)
+            {
+                return;
+            }
+
+            Init(e);
+            base.OnStartup(e);
         }
 
         private void Init(StartupEventArgs e)
@@ -66,7 +83,7 @@ namespace HandBrakeWPF
                 Environment.Exit(-1);
                 return;
             }
-            
+
             // We don't support Windows earlier than 10.
             if (!SystemInfo.IsWindows10OrLater())
             {
@@ -178,7 +195,7 @@ namespace HandBrakeWPF
 
             // App Theme
             AppThemeMode useAppTheme = (AppThemeMode)userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
-       
+
             Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Generic.xaml", UriKind.Relative) });
             bool themed = false;
             bool loadBaseStyle = true;
@@ -249,7 +266,7 @@ namespace HandBrakeWPF
                 mvm.StartScan(new List<string> { args[0] }, 0);
             }
         }
-        
+
         private static void CheckForUpdateCheckPermission(IUserSettingService userSettingService)
         {
             if (Portable.IsPortable() && !Portable.IsUpdateCheckEnabled())
@@ -282,21 +299,21 @@ namespace HandBrakeWPF
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             ThreadHelper.OnUIThread(
-                () => 
-            {
-                if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
+                () =>
                 {
-                    GeneralApplicationException exception = new GeneralApplicationException(
-                        "A file appears to be missing.",
-                        "Try re-installing Microsoft .NET 8 Desktop Runtime",
-                        (Exception)e.ExceptionObject);
-                    this.ShowError(exception);
-                }
-                else
-                {
-                    this.ShowError(e.ExceptionObject);
-                }
-            });
+                    if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
+                    {
+                        GeneralApplicationException exception = new GeneralApplicationException(
+                            "A file appears to be missing.",
+                            "Try re-installing Microsoft .NET 8 Desktop Runtime",
+                            (Exception)e.ExceptionObject);
+                        this.ShowError(exception);
+                    }
+                    else
+                    {
+                        this.ShowError(e.ExceptionObject);
+                    }
+                });
         }
 
         /// <summary>
@@ -313,7 +330,7 @@ namespace HandBrakeWPF
         {
             if (e.Exception.GetType() == typeof(FileNotFoundException))
             {
-                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET 8 Desktop Runtime", e.Exception);
+                GeneralApplicationException exception = new("A file appears to be missing.", "Try re-installing Microsoft .NET 8 Desktop Runtime", e.Exception);
                 this.ShowError(exception);
             }
             else if (e.Exception.GetType() == typeof(GeneralApplicationException))
@@ -346,7 +363,7 @@ namespace HandBrakeWPF
                 IErrorService errorService = IoCHelper.Get<IErrorService>();
                 if (windowManager != null)
                 {
-                    ErrorViewModel errorView = new ErrorViewModel(errorService);
+                    ErrorViewModel errorView = new(errorService);
                     GeneralApplicationException applicationException = null;
                     if (exception.GetType() == typeof(GeneralApplicationException))
                     {
@@ -388,17 +405,6 @@ namespace HandBrakeWPF
             {
                 MessageBox.Show("An Unknown Error has occurred. \n\n Exception:" + exception, "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        /// <summary>
-        /// Override the startup behavior to handle files dropped on the app icon.
-        /// </summary>
-        /// <param name="e">
-        /// The StartupEventArgs.
-        /// </param>
-        private void App_OnStartup(object sender, StartupEventArgs e)
-        {
-            this.Init(e);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace HandBrakeWPF.Views
     /// </summary>
     public partial class ShellView : Window
     {
-        private INotifyIconService notifyIconService;
+        private readonly INotifyIconService notifyIconService;
 
         protected override void OnSourceInitialized(EventArgs e)
         {
@@ -63,7 +63,7 @@ namespace HandBrakeWPF.Views
 
                     notifyIconService = IoCHelper.Get<INotifyIconService>();
                     notifyIconService.Setup(new Icon(iconStream));
-                    this.notifyIconService.SetClickCallback(() => this.NotifyIconClick());
+                    this.notifyIconService.SetClickCallback(this.NotifyIconClick);
                 }
 
                 this.StateChanged += this.ShellViewStateChanged;
