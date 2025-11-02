@@ -32,7 +32,7 @@ jobs:
         nice make pkg.create.plugins.flatpak
         
     - name: Upload Package
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: HandBrake
         path: ./build/pkg/flatpak/*.flatpak

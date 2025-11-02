@@ -464,7 +464,7 @@ static void powerSourceCallback(void *context)
         return (item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateCanceled);
     }];
     [self removeItemsAtIndexes:indexes];
-    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidRemoveItemNotification object:self userInfo:@{@"indexes": indexes}];
+    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidRemoveItemNotification object:self userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
     [self save];
 }
 

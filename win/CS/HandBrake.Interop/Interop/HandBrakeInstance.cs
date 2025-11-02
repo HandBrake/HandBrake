@@ -450,10 +450,17 @@ namespace HandBrake.Interop.Interop
 
                 if (!string.IsNullOrEmpty(this.TitlesJson))
                 {
-                    this.Titles = JsonSerializer.Deserialize<JsonScanObject>(this.TitlesJson, JsonSettings.Options);
-                    if (this.Titles != null)
+                    try
                     {
-                        this.FeatureTitle = this.Titles.MainFeature;
+                        this.Titles = JsonSerializer.Deserialize<JsonScanObject>(this.TitlesJson, JsonSettings.Options);
+                        if (this.Titles != null)
+                        {
+                            this.FeatureTitle = this.Titles.MainFeature;
+                        }
+                    }
+                    catch (Exception exc)
+                    {
+                        HandBrakeUtils.SendErrorEvent(exc.ToString());
                     }
                 }
 

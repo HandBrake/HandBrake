@@ -1376,7 +1376,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.queueProcessor.Count != 0 || this.queueProcessor.IsPaused)
             {
                 this.NotifyOfPropertyChange(() => this.IsEncoding);
-                this.queueProcessor.Start();
+                this.QueueViewModel.StartQueue(); // Provides user checks.
                 return;
             }
 
@@ -1397,7 +1397,8 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.IsEncoding);
-                this.queueProcessor.Start();               
+
+                this.QueueViewModel.StartQueue(); // Provides user checks.
             }
             else
             {

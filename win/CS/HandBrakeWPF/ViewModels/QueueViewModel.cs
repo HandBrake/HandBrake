@@ -460,7 +460,17 @@ namespace HandBrakeWPF.ViewModels
                     Resources.QueueViewModel_NoPendingJobs, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            
+
+            if (this.QueueTasks.Any(a => a.Status == QueueItemStatus.Error || a.Status == QueueItemStatus.Cancelled))
+            {
+                MessageBoxResult result = this.errorService.ShowMessageBox(
+                    Resources.QueueViewModel_CancelErrorWillBeCleared, Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result != MessageBoxResult.Yes)
+                {
+                    return;
+                }
+            }
+
             // Low disk space Check
             var firstOrDefault = this.QueueTasks.FirstOrDefault(s => s.Status == QueueItemStatus.Waiting);
             if (firstOrDefault != null && !DriveUtilities.HasMinimumDiskSpace(firstOrDefault.Task.Destination,

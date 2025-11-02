@@ -185,6 +185,11 @@ namespace HandBrakeWPF.ViewModels
         {
             foreach (Subtitle subtitle in this.SourceTitlesSubset(null))
             {
+                if (subtitle.IsFakeForeignAudioScanTrack)
+                {
+                    continue;
+                }
+
                 this.Add(subtitle);
             }
         }
