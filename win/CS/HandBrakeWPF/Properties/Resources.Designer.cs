@@ -2764,7 +2764,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encoding: {0}, {1:00.00}%, Time Remaining: {2}, {3}.
+        ///   Looks up a localized string similar to {0}, {1:00.00}%, Time Remaining: {2}.
         /// </summary>
         public static string MainView_ProgressStatusWithTask {
             get {
