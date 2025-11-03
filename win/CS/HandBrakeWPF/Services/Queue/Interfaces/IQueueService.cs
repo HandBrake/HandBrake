@@ -113,6 +113,8 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// </param>
         void ExportJson(string exportPath);
 
+        void ExportJson(string exportPath, IList<QueueTask> jobs);
+
         /// <summary>
         /// Restore a JSON queue file.
         /// </summary>

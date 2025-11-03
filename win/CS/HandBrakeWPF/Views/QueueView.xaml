@@ -197,6 +197,7 @@
                             <Separator />
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="Import" Header="{x:Static Properties:Resources.QueueView_Import}" />
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="Export" Header="{x:Static Properties:Resources.QueueView_Export}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ExportSelected" Header="{x:Static Properties:Resources.QueueView_ExportSelected}" />
                             <Separator />
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="ExportCli" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
                             <Separator />

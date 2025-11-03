@@ -6286,6 +6286,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Queue (Selected).
+        /// </summary>
+        public static string QueueView_ExportSelected {
+            get {
+                return ResourceManager.GetString("QueueView_ExportSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extend Queue Info.
         /// </summary>
         public static string QueueView_ExtendedQueueDisplay {

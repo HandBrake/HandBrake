@@ -3035,4 +3035,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
 
 Do you wish to proceed?</value>
   </data>
+  <data name="QueueView_ExportSelected" xml:space="preserve">
+    <value>Export Queue (Selected)</value>
+  </data>
 </root>
