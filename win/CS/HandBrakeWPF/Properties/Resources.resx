@@ -1035,7 +1035,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Preview</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Encoding: {0}, {1:00.00}%, Time Remaining: {2}, {3}</value>
+    <value>{0}, {1:00.00}%, Time Remaining: {2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Range:</value>
