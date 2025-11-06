@@ -12,6 +12,7 @@ namespace HandBrakeWPF.Services.Scan.Model
     using System;
 
     using HandBrake.App.Core.Utilities;
+    using HandBrake.Interop.Interop;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -80,6 +81,13 @@ namespace HandBrakeWPF.Services.Scan.Model
             {
                 return EnumHelper<Enum>.GetDescription(this.SubtitleType);
             }
+        }
+
+        public string ExternalSubtitleFilePath { get; set; }
+
+        public bool CanPassthru(OutputFormat format)
+        {
+            return HandBrakeSubtitleHelpers.CheckCanPassthruSubtitle(SourceId, EnumHelper<OutputFormat>.GetShortName(format));
         }
 
         public override string ToString()

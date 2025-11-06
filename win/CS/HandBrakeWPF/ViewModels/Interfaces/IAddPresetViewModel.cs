@@ -42,6 +42,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="presetName">
         /// Optional initial preset name.
         /// </param>
-        void Setup(EncodeTask task, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours, string presetName);
+        void Setup(EncodeTask task, AudioBehaviours audioBehaviours, SubtitleBehaviourRule subtitleBehaviours, string presetName);
     }
 }

@@ -8604,5 +8604,156 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
+        
+                /// <summary>
+        ///   Looks up a localized string similar to Burn In (else Drop).
+        /// </summary>
+        public static string BurnPassthruModes_Burn {
+            get {
+                return ResourceManager.GetString("BurnPassthruModes_Burn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Export to File (Text Subtitle).
+        /// </summary>
+        public static string BurnPassthruModes_Export {
+            get {
+                return ResourceManager.GetString("BurnPassthruModes_Export", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Passthru (else try Burn in).
+        /// </summary>
+        public static string BurnPassthruModes_PassthruBurn {
+            get {
+                return ResourceManager.GetString("BurnPassthruModes_PassthruBurn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Passthru (else Drop).
+        /// </summary>
+        public static string BurnPassthruModes_PassthruDrop {
+            get {
+                return ResourceManager.GetString("BurnPassthruModes_PassthruDrop", resourceCulture);
+            }
+        }
+        
+                /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string ForcedModes_No {
+            get {
+                return ResourceManager.GetString("ForcedModes_No", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string ForcedModes_Yes {
+            get {
+                return ResourceManager.GetString("ForcedModes_Yes", resourceCulture);
+            }
+        }
+        
+                /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string IsDefaultModes_No {
+            get {
+                return ResourceManager.GetString("IsDefaultModes_No", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Yes (First).
+        /// </summary>
+        public static string IsDefaultModes_Yes {
+            get {
+                return ResourceManager.GetString("IsDefaultModes_Yes", resourceCulture);
+            }
+        }
+        
+            public static string SubtitleBehaviourModes_SecondMatching {
+            get {
+                return ResourceManager.GetString("SubtitleBehaviourModes_SecondMatching", resourceCulture);
+            }
+        }
+        
+                /// <summary>
+        ///   Looks up a localized string similar to Setup rules to automatically add subtitle tracks.
+        ///Rules are applied in priority order and will attempt to match where possible. Subtitle limitations apply..
+        /// </summary>
+        public static string SubtitleDefaultView_Info {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_Info", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Passthru track names if not overridden above..
+        /// </summary>
+        public static string SubtitleDefaultView_PassthruTrackNames {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_PassthruTrackNames", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Use source subtitle ordering. .
+        /// </summary>
+        public static string SubtitleDefaultView_SourceOrder {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_SourceOrder", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Import SRT/SSA subtitle files: .
+        /// </summary>
+        public static string SubtitleDefaultView_SubtitleImportMode {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_SubtitleImportMode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic Subtitle Selections.
+        /// </summary>
+        public static string SubtitleDefaultView_Title {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to After Rules.
+        /// </summary>
+        public static string SubtitleImportMode_AllAfter {
+            get {
+                return ResourceManager.GetString("SubtitleImportMode_AllAfter", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Before Rules.
+        /// </summary>
+        public static string SubtitleImportMode_AllBefore {
+            get {
+                return ResourceManager.GetString("SubtitleImportMode_AllBefore", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string SubtitleImportMode_None {
+            get {
+                return ResourceManager.GetString("SubtitleImportMode_None", resourceCulture);
+            }
+        }
     }
 }

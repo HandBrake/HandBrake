@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
 
@@ -426,40 +427,37 @@ namespace HandBrakeWPF.Services.Presets.Factories
             }
 
             /* Subtitle Settings */
-            preset.SubtitleTrackBehaviours = new SubtitleBehaviours();
-            preset.SubtitleTrackBehaviours.SelectedBehaviour = EnumHelper<SubtitleBehaviourModes>.GetValue(importedPreset.SubtitleTrackSelectionBehavior);
-            preset.SubtitleTrackBehaviours.SelectedBurnInBehaviour = EnumHelper<SubtitleBurnInBehaviourModes>.GetValue(importedPreset.SubtitleBurnBehavior);
-            preset.SubtitleTrackBehaviours.SubtitleTrackNamePassthru = importedPreset.SubtitleTrackNamePassthru;
-
-            preset.SubtitleTrackBehaviours.AddClosedCaptions = importedPreset.SubtitleAddCC;
-            preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack = importedPreset.SubtitleAddForeignAudioSearch;
-            if (importedPreset.SubtitleLanguageList != null)
+            if (importedPreset.SubtitleBehaviours != null)
             {
-                IList<Language> names = HandBrakeLanguagesHelper.GetLanguageListByCode(importedPreset.SubtitleLanguageList);
-                foreach (Language name in names)
+                preset.SubtitleTrackBehaviours = new SubtitleBehaviourRule();
+                preset.SubtitleTrackBehaviours.SubtitleImportMode = (SubtitleImportMode)importedPreset.SubtitleImportMode;
+                preset.SubtitleTrackBehaviours.UseSourceOrder = importedPreset.SubtitleUseSourceOrder;
+                preset.SubtitleTrackBehaviours.PassthruTrackNames = importedPreset.SubtitlePassthruTrackNames;
+                preset.SubtitleTrackBehaviours.Tracks = new BindingList<SubtitleBehaviourTrack>();
+
+                foreach (SubtitleList importedTrack in importedPreset.SubtitleBehaviours)
                 {
-                    preset.SubtitleTrackBehaviours.SelectedLanguages.Add(name);
+                    SubtitleBehaviourTrack newTrack = new SubtitleBehaviourTrack();
+                    newTrack.Language = HandBrakeLanguagesHelper.GetByCode(importedTrack.IsoLangCode);
+                    newTrack.TrackSelectionMode = (SubtitleBehaviourModes)importedTrack.TrackSelectionMode;
+                    newTrack.DefaultMode = (IsDefaultModes)importedTrack.DefaultMode;
+                    newTrack.BurnPassthruMode = (SubtitleBurnInBehaviourModes)importedTrack.BurnPassthruMode;
+                    newTrack.ForcedMode = (ForcedModes)importedTrack.ForcedMode;
+                    newTrack.TrackName = importedTrack.TrackNameOverride;
+                    newTrack.IsForeignAudioScanRule = importedTrack.IsForeignAudioScanRule;
+
+                    preset.SubtitleTrackBehaviours.Tracks.Add(newTrack);
                 }
+            }
+            else
+            {
+                // Default initialisation.
+                preset.SubtitleTrackBehaviours = new SubtitleBehaviourRule();
+                preset.SubtitleTrackBehaviours.Tracks = new BindingList<SubtitleBehaviourTrack>();
             }
 
             /* Chapter Marker Settings */
             preset.Task.IncludeChapterMarkers = importedPreset.ChapterMarkers;
-
-            /* Not Supported Yet */
-            // public int VideoColorMatrixCode { get; set; }
-            // public bool VideoQSVDecode { get; set; }
-            // public int VideoQSVAsyncDepth { get; set; }
-            // public bool SubtitleAddForeignAudioSubtitle { get; set; }
-            // public bool SubtitleBurnBDSub { get; set; }
-            // public bool SubtitleBurnDVDSub { get; set; }
-            // public bool PictureItuPAR { get; set; }
-            // public bool PictureLooseCrop { get; set; }
-            // public int PicturePARWidth { get; set; }
-            // public int PicturePARHeight { get; set; }
-            // public int PictureForceHeight { get; set; }
-            // public int PictureForceWidth { get; set; }
-            // public List<object> ChildrenArray { get; set; }
-            // public int Type { get; set; }
 
             return preset;
         }
@@ -556,18 +554,27 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.AudioList.Add(track);
             }
 
-            preset.AudioTrackNamePassthru = export.AudioTrackBehaviours.AudioTrackNamePassthru;
-            preset.AudioAutomaticNamingBehavior = EnumHelper<AudioTrackNamingBehaviour>.GetShortName(export.AudioTrackBehaviours.AudioAutomaticNamingBehavior);
+            // Subtitles Rules
+            if (export.SubtitleTrackBehaviours != null)
+            {
+                preset.SubtitleUseSourceOrder = export.SubtitleTrackBehaviours.UseSourceOrder;
+                preset.SubtitleImportMode = (int)export.SubtitleTrackBehaviours.SubtitleImportMode;
+                preset.SubtitlePassthruTrackNames = export.SubtitleTrackBehaviours.PassthruTrackNames;
+                preset.SubtitleBehaviours = new List<SubtitleList>();
+                foreach (var item in export.SubtitleTrackBehaviours.Tracks)
+                {
+                    SubtitleList subRecord = new SubtitleList();
+                    subRecord.IsoLangCode = item.LanguageCode;
+                    subRecord.TrackSelectionMode = (int)item.TrackSelectionMode;
+                    subRecord.BurnPassthruMode = (int)item.BurnPassthruMode;
+                    subRecord.DefaultMode = (int)item.DefaultMode;
+                    subRecord.ForcedMode = (int)item.ForcedMode;
+                    subRecord.TrackNameOverride = item.TrackName;
+                    subRecord.IsForeignAudioScanRule = item.IsForeignAudioScanRule;
 
-            // Subtitles
-            preset.SubtitleAddCC = export.SubtitleTrackBehaviours.AddClosedCaptions;
-            preset.SubtitleAddForeignAudioSearch = export.SubtitleTrackBehaviours.AddForeignAudioScanTrack;
-            preset.SubtitleBurnBDSub = false; // TODO not supported yet.
-            preset.SubtitleBurnDVDSub = false; // TODO not supported yet.
-            preset.SubtitleBurnBehavior = EnumHelper<SubtitleBurnInBehaviourModes>.GetShortName(export.SubtitleTrackBehaviours.SelectedBurnInBehaviour);
-            preset.SubtitleLanguageList = HandBrakeLanguagesHelper.GetLanguageCodes(export.SubtitleTrackBehaviours.SelectedLanguages);
-            preset.SubtitleTrackSelectionBehavior = EnumHelper<SubtitleBehaviourModes>.GetShortName(export.SubtitleTrackBehaviours.SelectedBehaviour);
-            preset.SubtitleTrackNamePassthru = export.SubtitleTrackBehaviours.SubtitleTrackNamePassthru;
+                    preset.SubtitleBehaviours.Add(subRecord);
+                }
+            }
 
             // Chapters
             preset.ChapterMarkers = export.Task.IncludeChapterMarkers;

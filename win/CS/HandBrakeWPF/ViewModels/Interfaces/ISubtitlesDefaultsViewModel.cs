@@ -17,13 +17,13 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface ISubtitlesDefaultsViewModel : IViewModelBase
     {
-        SubtitleBehaviours SubtitleBehaviours { get; }
+        SubtitleBehaviourRule SubtitleBehaviourRules { get; }
 
         bool IsApplied { get; }
 
         void SetupPreset(Preset preset);
 
-        void SetupPreset(SubtitleBehaviours behaviour);
+        void SetupPreset(SubtitleBehaviourRule behaviours);
 
         bool ShowWindow();
     }
