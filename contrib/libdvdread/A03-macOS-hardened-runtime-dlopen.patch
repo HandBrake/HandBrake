@@ -1,7 +1,7 @@
 diff --git a/src/dvd_input.c b/src/dvd_input.c
---- a/src/dvd_input.c	2025-09-25 21:59:39.000000000 +0200
-+++ b/src/dvd_input.c	2025-09-29 19:21:29.888738600 +0200
-@@ -479,6 +479,7 @@
+--- a/src/dvd_input.c	2025-11-09 14:26:34.000000000 +0100
++++ b/src/dvd_input.c	2025-11-09 17:44:15.972121760 +0100
+@@ -480,6 +480,7 @@
  
  #ifdef __APPLE__
    #define CSS_LIB "libdvdcss.2.dylib"
@@ -9,7 +9,7 @@ diff --git a/src/dvd_input.c b/src/dvd_input.c
  #elif defined(_WIN32)
    #define CSS_LIB "libdvdcss-2.dll"
  #elif defined(__OS2__)
-@@ -515,6 +516,13 @@
+@@ -523,6 +524,13 @@
    dvdcss_library = dlopen(CSS_LIB, RTLD_LAZY);
  #endif
  
@@ -20,6 +20,6 @@ diff --git a/src/dvd_input.c b/src/dvd_input.c
 +  }
 +#endif
 +
+   /* Locate the functions, DVD_V or DVD_A */
    if(dvdcss_library != NULL) {
- #ifdef __OS2__
- #define U_S "_"
+     /* functions should have the same template*/
