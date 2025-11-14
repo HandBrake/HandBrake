@@ -6182,15 +6182,40 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     {
         AVChapter *m;
         uint64_t duration_sum = 0;
+        uint64_t nb_chapters = 1;
+
         for( i = 0; i < ic->nb_chapters; i++ )
+        {
             if( ( m = ic->chapters[i] ) != NULL )
             {
+                // hb_chapter_t stores only the duration,
+                // so if the first chapter does not start at the
+                // beginning, we need to an additional entry
+                if (i == 0 && ic->nb_chapters > 1 && m->start != 0)
+                {
+                    hb_chapter_t *chapter = calloc(sizeof(hb_chapter_t), 1);
+                    chapter->index = nb_chapters++;
+
+                    chapter->duration = ic->chapters[0]->start * 90000 *
+                                        m->time_base.num / m->time_base.den;
+                    duration_sum     += chapter->duration;
+
+                    int seconds      = (chapter->duration + 45000) / 90000;
+                    chapter->hours   = (seconds / 3600);
+                    chapter->minutes = (seconds % 3600) / 60;
+                    chapter->seconds = (seconds % 60);
+
+                    hb_chapter_set_title(chapter, "Chapter 1");
+
+                    hb_list_add(title->list_chapter, chapter);
+                }
+
                 AVDictionaryEntry * tag;
                 hb_chapter_t      * chapter;
                 int64_t             end;
 
                 chapter = calloc(sizeof(hb_chapter_t), 1);
-                chapter->index    = i + 1;
+                chapter->index = nb_chapters++;
 
                 /* AVChapter.end is not guaranteed to be set.
                  * Calculate chapter durations based on AVChapter.start.
@@ -6259,6 +6284,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
 
                 hb_list_add( title->list_chapter, chapter );
             }
+        }
     }
 
     iconv_close(iconv_context);
