@@ -23,7 +23,12 @@ namespace HandBrakeWPF.Converters.Subtitles
             if (values.Length >= 1)
             {
                 bool sourceTrackCanBurn = values[0] is bool ? (bool)values[0] : true;
-                SubtitleType type = (SubtitleType)values[1];
+                SubtitleType type = SubtitleType.VobSub; // Assumed.
+                if (values[1] is bool)
+                {
+                    type = (SubtitleType)values[1];
+                }
+               
                 EncodeTask task = values[2] as EncodeTask;
 
                 if (task != null && OutputFormat.Mp4.Equals(task.OutputFormat) && SubtitleType.PGS.Equals(type))

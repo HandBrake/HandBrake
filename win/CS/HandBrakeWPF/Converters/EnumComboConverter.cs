@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Converters
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Model.Options;
+    using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Services.Queue.Model;
     using OutputFormat = Services.Encode.Model.Models.OutputFormat;
@@ -85,6 +86,12 @@ namespace HandBrakeWPF.Converters
                 return EnumHelper<WhenDone>.GetEnumDisplayValues(typeof(WhenDone));
             }
 
+
+            if (value is IEnumerable<SubtitleImportMode>)
+            {
+                return EnumHelper<SubtitleImportMode>.GetEnumDisplayValues(typeof(SubtitleImportMode));
+            }
+
             // Single Items
             if (targetType == typeof(Detelecine) || value.GetType() == typeof(Detelecine))
             {
@@ -141,6 +148,11 @@ namespace HandBrakeWPF.Converters
                 return EnumHelper<WhenDone>.GetDisplay((WhenDone)value);
             }
 
+            if (targetType == typeof(SubtitleImportMode) || value.GetType() == typeof(SubtitleImportMode))
+            {
+                return EnumHelper<SubtitleImportMode>.GetDisplay((SubtitleImportMode)value);
+            }
+
             return null;
         }
 
@@ -189,6 +201,11 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(WhenDone) || value.GetType() == typeof(WhenDone))
             {
                 return EnumHelper<WhenDone>.GetValue(value.ToString());
+            }
+            
+            if (targetType == typeof(SubtitleImportMode) || value.GetType() == typeof(SubtitleImportMode))
+            {
+                return EnumHelper<SubtitleImportMode>.GetValue(value.ToString());
             }
 
             return null;

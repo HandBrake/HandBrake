@@ -98,15 +98,19 @@
         "PresetName": "Name Missing",
         "Type": 1,
         "UsesPictureFilters": true,
-        "SubtitleAddCC": false,
-        "SubtitleAddForeignAudioSearch": false,
-        "SubtitleAddForeignAudioSubtitle": false,
-        "SubtitleBurnBehavior": "none",
-        "SubtitleBurnBDSub": false,
-        "SubtitleBurnDVDSub": false,
-        "SubtitleLanguageList": [
+        "SubtitleBehaviours": [
+            {
+              "IsoLangCode": "any",
+              "TrackSelectionMode": 0,
+              "DefaultMode": 0,
+              "BurnPassthruMode": 1,
+              "ForcedMode": 1,
+              "TrackNameOverride": "",
+              "IsForeignAudioScanRule": 1
+            }
         ],
-        "SubtitleTrackSelectionBehavior": "none",
+        "SubtitleUseSourceOrder": true,
+        "SubtitleImportMode": 0,
         "SubtitleTrackNamePassthru": true,
         "VideoAvgBitrate": 1800,
         "VideoColorMatrixCodeOverride": 0,
