@@ -11,7 +11,7 @@ jobs:
     name: CLI / LibHB (ARM)
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Environment Setup
       run: |
         sudo apt-get install automake autoconf build-essential libtool libtool-bin make meson nasm patch tar yasm zlib1g-dev ninja-build gzip pax
@@ -66,7 +66,7 @@ jobs:
     name: CLI / LibHB
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Cargo-C Toolchain Cache
       id: windows-cargo-c-toolchain
@@ -135,7 +135,7 @@ jobs:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Download LibHandBrake
       uses: actions/download-artifact@v6
@@ -206,7 +206,7 @@ jobs:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
        
     - name: Download LibHandBrake_ARM64
       uses: actions/download-artifact@v6
