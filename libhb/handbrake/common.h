@@ -688,6 +688,9 @@ struct hb_job_s
 #define HB_VCODEC_QSV_MASK           0x00040000
 #define HB_VCODEC_FFMPEG_MASK        0x00010000
 
+#define HB_VCODEC_QSV_AV1_MASK       (HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_VAAPI_MASK         0x00008000
+
 #define HB_VCODEC_THEORA             0x00000001
 
 #define HB_VCODEC_X264_8BIT         (0x00000002 | HB_VCODEC_X264_MASK | HB_VCODEC_H264_MASK)
@@ -740,6 +743,12 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_QSV_AV1_8BIT      (0x00000070 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_FFMPEG_QSV_AV1_10BIT     (0x00000071 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_FFMPEG_QSV_AV1           HB_VCODEC_FFMPEG_QSV_AV1_8BIT
+
+#define HB_VCODEC_FFMPEG_VAAPI_H264  (0x00000080 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_VAAPI_MASK | HB_VCODEC_H264_MASK)
+#define HB_VCODEC_FFMPEG_VAAPI_H265  (0x00000081 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_VAAPI_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_FFMPEG_VAAPI_AV1   (0x00000082 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_VAAPI_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_FFMPEG_VAAPI_VP8   (0x0000008a | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_VAAPI_MASK)
+#define HB_VCODEC_FFMPEG_VAAPI_VP9   (0x0000008b | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_VAAPI_MASK)
 
 /* define an invalid CQ value compatible with all CQ-capable codecs */
 #define HB_INVALID_VIDEO_QUALITY (-1000.)
@@ -958,6 +967,9 @@ struct hb_job_s
     int             hw_pix_fmt;
 #endif
 };
+
+inline int hb_vcodec_is_qsv_av1(int vcodec) { return HB_VCODEC_QSV_AV1_MASK == (vcodec & HB_VCODEC_QSV_AV1_MASK); }
+inline int hb_vcodec_is_vaapi(int vcodec) { return HB_VCODEC_VAAPI_MASK == (vcodec & HB_VCODEC_VAAPI_MASK); }
 
 /* Audio starts here */
 /* Audio Codecs: Update win/CS/HandBrake.Interop/Interop/HbLib/NativeConstants.cs when changing these consts */
