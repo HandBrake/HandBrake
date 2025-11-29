@@ -109,7 +109,6 @@ int hb_avcodec_vaapi_set_hwframe_ctx(AVCodecContext *ctx, int hw_device_ctxidx, 
     av_buffer_unref(&hw_frames_ref);
     return err;
 #else
-    hb_log("VAAPI n/a.");
     return -1;
 #endif
 }
