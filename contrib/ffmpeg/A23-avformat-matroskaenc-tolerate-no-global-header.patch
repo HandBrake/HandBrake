@@ -1,0 +1,16 @@
+--- a/libavformat/matroskaenc.c	2025-11-20 03:31:18.000000000 +0100
++++ b/libavformat/matroskaenc.c	2025-11-29 16:38:43.019062922 +0100
+@@ -1137,8 +1137,11 @@
+     case AV_CODEC_ID_WAVPACK:
+         return put_wv_codecpriv(dyn_cp, extradata, extradata_size);
+     case AV_CODEC_ID_H264:
+-        return ff_isom_write_avcc(dyn_cp, extradata,
+-                                  extradata_size);
++        if (extradata_size)
++            return ff_isom_write_avcc(dyn_cp, extradata, extradata_size);
++        else
++            *size_to_reserve = 10000; // allow missing global header, see https://trac.ffmpeg.org/ticket/10667
++        break;
+     case AV_CODEC_ID_HEVC:
+         return ff_isom_write_hvcc(dyn_cp, extradata,
+                                   extradata_size, 0, s);
