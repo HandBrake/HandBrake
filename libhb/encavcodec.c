@@ -21,6 +21,10 @@
 #include "handbrake/extradata.h"
 #include "handbrake/qsv_common.h"
 
+#if HB_PROJECT_FEATURE_VAAPI
+#include "handbrake/vaapi_common.h"
+#endif
+
 /*
  * The frame info struct remembers information about each frame across calls
  * to avcodec_encode_video. Since frames are uniquely identified by their
@@ -99,7 +103,7 @@ static const char * const vpx_preset_names[] =
     "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow", NULL
 };
 
-static const char * const vp9_tune_names[] = 
+static const char * const vp9_tune_names[] =
 {
     "none", "screen", "film", NULL
 };
@@ -157,6 +161,42 @@ static const char * const h265_mf_profile_name[] =
 static const char * const av1_mf_profile_name[] =
 {
     "auto", "main",  NULL
+};
+
+/// ffmpeg -h encoder=h264_vaapi
+static const char * const h264_vaapi_profile_names[] =
+{
+    "auto", "baseline", "main", "high", NULL  // default -99, constrained_baseline 578, main 77, high 100
+};
+
+/// ffmpeg -h encoder=hevc_vaapi
+static const char * const h265_vaapi_profile_names[] =
+{
+    "auto", "main", "main10", "rext", NULL  // default -99, main 1, main10 2, rext 4
+};
+
+/**
+ * synchronized with 'hb_h264_level_names' definition
+ * ffmpeg -h encoder=h264_vaapi
+ */
+static const char * const h264_vaapi_level_values[] =
+{
+    // "auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0",
+       "-99",  "10",  "10", "11",  "12",  "13",  "20",  "21",  "22",  "30",
+    // "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2", NULL, };
+       "31",  "32",  "40",  "41",  "42",  "50",  "51",  "52",  "60",  "61",  "62",  NULL
+};
+
+/**
+ * synchronized with 'hb_h265_level_names' definition
+ * ffmpeg -h encoder=hevc_vaapi
+ */
+static const char * const h265_vaapi_level_values[] =
+{
+    // "auto", "1.0", "2.0", "2.1", "3.0", "3.1", "4.0", "4.1",
+       "-99",  "30",  "60",  "63",  "90",  "93",  "120", "123",
+    // "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",  NULL
+       "150", "153", "156", "180", "183", "186",  NULL
 };
 
 
@@ -218,6 +258,8 @@ static const enum AVPixelFormat ffv1_pix_formats[] =
     AV_PIX_FMT_NONE
 };
 
+static int _oneShotEncodingLog01 = 1;
+
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     int ret = 0;
@@ -228,6 +270,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     AVRational fps;
     AVDictionary *av_opts = NULL;
     const AVRational *frame_rates = NULL;
+
+    _oneShotEncodingLog01 = 1;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data   = pv;
@@ -261,13 +305,33 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         } break;
         case AV_CODEC_ID_VP8:
         {
-            hb_log("encavcodecInit: VP8 encoder");
-            codec_name = "libvpx";
+            switch (job->vcodec) {
+#if HB_PROJECT_FEATURE_VAAPI
+                case HB_VCODEC_FFMPEG_VAAPI_VP8:
+                    hb_log("encavcodecInit: VP8 (vaapi)");
+                    codec_name = "vp8_vaapi";
+                    break;
+#endif
+                default:
+                    hb_log("encavcodecInit: VP8 (libvpx)");
+                    codec_name = "libvpx";
+                    break;
+            }
         } break;
         case AV_CODEC_ID_VP9:
         {
-            hb_log("encavcodecInit: VP9 encoder");
-            codec_name = "libvpx-vp9";
+            switch (job->vcodec) {
+#if HB_PROJECT_FEATURE_VAAPI
+                case HB_VCODEC_FFMPEG_VAAPI_VP9:
+                    hb_log("encavcodecInit: VP9 (vaapi)");
+                    codec_name = "vp9_vaapi";
+                    break;
+#endif
+                default:
+                    hb_log("encavcodecInit: VP9 (libvpx)");
+                    codec_name = "libvpx-vp9";
+                    break;
+            }
         } break;
         case AV_CODEC_ID_H264:
         {
@@ -276,6 +340,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     hb_log("encavcodecInit: H.264 (Nvidia NVENC)");
                     codec_name = "h264_nvenc";
                     break;
+#if HB_PROJECT_FEATURE_VAAPI
+                case HB_VCODEC_FFMPEG_VAAPI_H264:
+                    hb_log("encavcodecInit: H.264 (vaapi)");
+                    codec_name = "h264_vaapi";
+                    break;
+#endif
                 case HB_VCODEC_FFMPEG_VCE_H264:
                     hb_log("encavcodecInit: H.264 (AMD VCE)");
                     codec_name = "h264_amf";
@@ -298,6 +368,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     hb_log("encavcodecInit: H.265 (Nvidia NVENC)");
                     codec_name = "hevc_nvenc";
                     break;
+#if HB_PROJECT_FEATURE_VAAPI
+                case HB_VCODEC_FFMPEG_VAAPI_H265:
+                    hb_log("encavcodecInit: H.265 (vaapi)");
+                    codec_name = "hevc_vaapi";
+                    break;
+#endif
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
                     hb_log("encavcodecInit: H.265 (AMD VCE)");
@@ -479,6 +555,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "rc", "vbr", 0 );
             hb_log( "encavcodec: encoding at rc=vbr, Bitrate %d", job->vbitrate );
         }
+#if HB_PROJECT_FEATURE_VAAPI
+        else if( HB_VCODEC_IS_VAAPI(job->vcodec) )
+        {
+            char quality[7];
+            snprintf(quality, 7, "%.0f", job->vquality);
+            av_dict_set( &av_opts, "rc_mode", "VBR", 0 ); // Enable constant-quality rate control mode
+            hb_log( "encavcodec: vaapi: encoding at rc_mode=VBR, Bitrate %d", job->vbitrate );
+        }
+#endif
 
 #if HB_PROJECT_FEATURE_QSV
         if (hb_qsv_is_ffmpeg_supported_codec(job->vcodec))
@@ -608,6 +693,25 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             }
         }
 #endif
+#if HB_PROJECT_FEATURE_VAAPI
+        //Set constant quality for vaapi
+        else if( HB_VCODEC_IS_VAAPI(job->vcodec) )
+        {
+            char quality[7];
+            snprintf(quality, 7, "%.0f", job->vquality);
+            av_dict_set( &av_opts, "rc_mode", "CQP", 0 ); // Enable constant-quality rate control mode
+            if ( job->vcodec == HB_VCODEC_FFMPEG_VAAPI_H264 ||
+                 job->vcodec == HB_VCODEC_FFMPEG_VAAPI_H265 ) {
+               // h264 and hevc
+               av_dict_set( &av_opts, "qp", quality, 0 );
+               hb_log( "encavcodec: vaapi: encoding at rc_mode=CQP, qp=%.0f", job->vquality );
+            } else {
+               // VP8 and VP9
+               av_dict_set( &av_opts, "q", quality, 0 );
+               hb_log( "encavcodec: vaapi: encoding at rc_mode=CQP, q=%.0f", job->vquality );
+            }
+        }
+#endif
         else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 ||
                   job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 ||
                   job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT ||
@@ -726,7 +830,21 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             }
         }
 #endif
-        context->pix_fmt = job->output_pix_fmt;
+#if HB_PROJECT_FEATURE_VAAPI
+        if( HB_VCODEC_IS_VAAPI(job->vcodec) )
+        {
+            int err;
+            context->pix_fmt   = AV_PIX_FMT_VAAPI;
+            if((err = hb_avcodec_vaapi_set_hwframe_ctx(context, 0, 20))<0) {
+                hb_log("Failed to set the VAAPI hwframe_ctx. Error code: %s", av_err2str(err));
+                ret = 1;
+                goto done;
+            }
+        } else
+#endif
+        {
+            context->pix_fmt = job->output_pix_fmt;
+        }
     }
 
     context->sample_aspect_ratio.num = job->par.num;
@@ -876,6 +994,73 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set(&av_opts, "scenario", "archive", 0);
         }
     }
+#if HB_PROJECT_FEATURE_VAAPI
+    else if( HB_VCODEC_IS_VAAPI(job->vcodec) )
+    {
+        // FIXME: Validate whether VAAPI 'B frames are supported (works on AMD NAVI)
+        av_dict_set(&av_opts, "b_depth", "2", 0);
+
+        // Set profile and level
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if ( job->vcodec == HB_VCODEC_FFMPEG_VAAPI_H264 ) {
+                // ffmpeg -h encoder=h264_vaapi
+                // "auto", "baseline", "main", "high", NULL  // default -99, constrained_baseline 578, main 77, high 100
+                if (!strcasecmp(job->encoder_profile, "auto")) {
+                    av_dict_set(&av_opts, "profile", "-99", 0);
+                } else if (!strcasecmp(job->encoder_profile, "baseline")) {
+                    av_dict_set(&av_opts, "profile", "578", 0);
+                } else if (!strcasecmp(job->encoder_profile, "main")) {
+                    av_dict_set(&av_opts, "profile", "77", 0);
+                } else if (!strcasecmp(job->encoder_profile, "high")) {
+                    av_dict_set(&av_opts, "profile", "100", 0);
+                }
+            } else if ( job->vcodec == HB_VCODEC_FFMPEG_VAAPI_H265 ) {
+                // ffmpeg -h encoder=hevc_vaapi
+                // "auto", "main", "main10", "rext", NULL  // default -99, main 1, main10 2, rext 4
+                if (!strcasecmp(job->encoder_profile, "auto")) {
+                    av_dict_set(&av_opts, "profile", "-99", 0);
+                } else if (!strcasecmp(job->encoder_profile, "main")) {
+                    av_dict_set(&av_opts, "profile", "1", 0);
+                } else if (!strcasecmp(job->encoder_profile, "main10")) {
+                    av_dict_set(&av_opts, "profile", "2", 0);
+                } else if (!strcasecmp(job->encoder_profile, "rext")) {
+                    av_dict_set(&av_opts, "profile", "4", 0);
+                }
+            }
+        }
+
+        if (job->encoder_level != NULL && *job->encoder_level)
+        {
+            int set = 0;
+            if ( job->vcodec == HB_VCODEC_FFMPEG_VAAPI_H264 ) {
+                // ffmpeg -h encoder=h264_vaapi
+                for (int i=0; hb_h264_level_names[i] != NULL; i++) {
+                    if (!strcasecmp(job->encoder_level, hb_h264_level_names[i])) {
+                        av_dict_set(&av_opts, "level", h264_vaapi_level_values[i], 0);
+                        set = 1;
+                        break;
+                    }
+                }
+                if( 0 == set ) {
+                    av_dict_set(&av_opts, "level", "40", 0); // default 4.0
+                }
+            } else if ( job->vcodec == HB_VCODEC_FFMPEG_VAAPI_H265 ) {
+                // ffmpeg -h encoder=h265_vaapi
+                for (int i=0; hb_h265_level_names[i] != NULL; i++) {
+                    if (!strcasecmp(job->encoder_level, hb_h265_level_names[i])) {
+                        av_dict_set(&av_opts, "level", h265_vaapi_level_values[i], 0);
+                        set = 1;
+                        break;
+                    }
+                }
+                if( 0 == set ) {
+                    av_dict_set(&av_opts, "level", "120", 0); // default 4.0
+                }
+            }
+        }
+    }
+#endif
 
     if( job->pass_id == HB_PASS_ENCODE_ANALYSIS ||
         job->pass_id == HB_PASS_ENCODE_FINAL )
@@ -1228,6 +1413,9 @@ static void Encode( hb_work_object_t *w, hb_buffer_t **buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t       * in = *buf_in;
     AVFrame             frame = {{0}};
+#if HB_PROJECT_FEATURE_VAAPI
+    AVFrame             *hw_frame = NULL;
+#endif
     int                 key_frame = 0;
     int                 ret;
 
@@ -1280,14 +1468,44 @@ static void Encode( hb_work_object_t *w, hb_buffer_t **buf_in,
         frame.flags = 0;
     }
 
-    // Encode
-    ret = avcodec_send_frame(pv->context, &frame);
+#if HB_PROJECT_FEATURE_VAAPI
+    if( NULL != pv->context->hw_frames_ctx ) {
+       if (!(hw_frame = av_frame_alloc())) {
+           hb_error("encavcodec.Encode: Couldn't allocate hw_frame");
+           goto close;
+       }
+       if ((ret = av_hwframe_get_buffer(pv->context->hw_frames_ctx, hw_frame, 0)) < 0) {
+           hb_error("encavcodec.Encode: Error while allocating hw_frame data buffers: %s", av_err2str(ret));
+           goto close;
+       }
+       if( _oneShotEncodingLog01 ) {
+           hb_log("encavcodec.Encode.0: transfer frame -> hw_frame AV_PIX_FMT_VAAPI|NV12");
+           fflush(NULL);
+       }
+       hw_frame->pts = frame.pts;
+       if ((ret = av_hwframe_transfer_data(hw_frame, &frame, 0)) < 0) {
+           hb_error("encavcodec.Encode: Error while transferring frame data to hw_frame: %s.", av_err2str(ret));
+           goto close;
+       }
+       if( _oneShotEncodingLog01 ) {
+           hb_log("encavcodec.Encode.0: send hw_frame, same pts %d", (hw_frame->pts == frame.pts));
+           fflush(NULL);
+       }
+       // Encode
+       ret = avcodec_send_frame(pv->context, hw_frame);
+    } else
+#endif
+    {
+       // Encode
+       ret = avcodec_send_frame(pv->context, &frame);
+    }
+
     av_frame_unref(&frame);
 
     if (ret < 0)
     {
-        hb_log("encavcodec: avcodec_send_frame failed");
-        return;
+        hb_log("encavcodec: avcodec_send_frame failed, error code: %s",av_err2str(ret));
+        goto close;
     }
 
     // Write stats
@@ -1298,6 +1516,14 @@ static void Encode( hb_work_object_t *w, hb_buffer_t **buf_in,
     }
 
     get_packets(w, list);
+
+close:
+   _oneShotEncodingLog01 = 0;
+#if HB_PROJECT_FEATURE_VAAPI
+    if( NULL != hw_frame ) {
+       av_frame_free(&hw_frame);
+    }
+#endif
 }
 
 static void Flush( hb_work_object_t * w, hb_buffer_list_t * list )
@@ -1580,6 +1806,7 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_MF_H264:
+        case HB_VCODEC_FFMPEG_VAAPI_H264:
             level_names = hb_h264_level_names;
             level_values = hb_h264_level_values;
             break;
@@ -1596,6 +1823,7 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
         case HB_VCODEC_FFMPEG_MF_H265:
+        case HB_VCODEC_FFMPEG_VAAPI_H265:
             level_names = hb_h265_level_names;
             level_values = hb_h265_level_values;
             break;
@@ -1732,10 +1960,14 @@ const char* const* hb_av_profile_get_names(int encoder)
     {
         case HB_VCODEC_FFMPEG_NVENC_H264:
             return h264_nvenc_profile_names;
+        case HB_VCODEC_FFMPEG_VAAPI_H264:
+            return h264_vaapi_profile_names;
         case HB_VCODEC_FFMPEG_NVENC_H265:
             return h265_nvenc_profile_names;
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
             return h265_nvenc_10bit_profile_names;
+        case HB_VCODEC_FFMPEG_VAAPI_H265:
+            return h265_vaapi_profile_names;
         case HB_VCODEC_FFMPEG_MF_H264:
             return h264_mf_profile_name;
         case HB_VCODEC_FFMPEG_MF_H265:
@@ -1758,6 +1990,7 @@ const char* const* hb_av_level_get_names(int encoder)
     {
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_MF_H264:
+        case HB_VCODEC_FFMPEG_VAAPI_H264:
             return hb_h264_level_names;
 
         case HB_VCODEC_FFMPEG_VCE_H264:
@@ -1770,6 +2003,7 @@ const char* const* hb_av_level_get_names(int encoder)
         case HB_VCODEC_FFMPEG_QSV_H265:
         case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
         case HB_VCODEC_FFMPEG_MF_H265:
+        case HB_VCODEC_FFMPEG_VAAPI_H265:
             return hb_h265_level_names;
 
         case HB_VCODEC_FFMPEG_VCE_AV1:
@@ -1828,3 +2062,102 @@ const int* hb_av_get_pix_fmts(int encoder)
              return standard_pix_fmts;
      }
 }
+
+static int avcodec_test_encoder(const AVCodec *codec, enum AVPixelFormat fmt)
+{
+    int err, res=0;
+    AVDictionary * av_opts = NULL;
+    AVCodecContext * context = NULL;
+    if( NULL == codec ) {
+        return -1;
+    }
+    context = avcodec_alloc_context3(codec);
+    if( NULL == context ) {
+        res = -2;
+        goto close;
+    }
+    // setting all fields marked: 'encoding: MUST be set by user'
+    context->time_base.num = 1;
+    context->time_base.den = 25;
+    context->width = 640;
+    context->height = 480;
+    // deprecated: context->me_method = 1;
+    // setting other fields as required via testing
+    context->pix_fmt = fmt;
+
+#if HB_PROJECT_FEATURE_VAAPI
+    if( AV_PIX_FMT_VAAPI == fmt ) {
+        if((err = hb_avcodec_vaapi_set_hwframe_ctx(context, 0, 20))<0) {
+            hb_log("Failed to set the VAAPI hwframe_ctx. Error code: %s", av_err2str(err));
+            res = -4;
+            goto close;
+        }
+        av_dict_set( &av_opts, "profile", "77", 0 ); // main
+        av_dict_set(&av_opts, "b_depth", "2", 0);
+    }
+#endif
+
+    av_dict_set(&av_opts, "b", "2M", 0);
+    if (avcodec_open2(context, codec, &av_opts) < 0) {
+        res = -3;
+        goto close;
+    }
+close:
+    if(NULL!=av_opts) {
+        av_dict_free( &av_opts );
+    }
+    if(NULL!=context) {
+        avcodec_free_context(&context);
+    }
+    return res;
+}
+
+int hb_avcodec_test_encoder_available(int encoder)
+{
+    int err;
+    const AVCodec *codec;
+    enum AVPixelFormat fmt;
+    switch (encoder)
+    {
+#if HB_PROJECT_FEATURE_NVENC
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+            codec = avcodec_find_encoder_by_name("h264_nvenc");
+            fmt = AV_PIX_FMT_YUV420P;
+            break;
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+            codec = avcodec_find_encoder_by_name("hevc_nvenc");
+            fmt = AV_PIX_FMT_YUV420P;
+            break;
+#endif
+#if HB_PROJECT_FEATURE_VAAPI
+        case HB_VCODEC_FFMPEG_VAAPI_H264:
+            codec = avcodec_find_encoder_by_name("h264_vaapi");
+            fmt = AV_PIX_FMT_VAAPI;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_H265:
+            codec = avcodec_find_encoder_by_name("hevc_vaapi");
+            fmt = AV_PIX_FMT_VAAPI;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_VP8:
+            codec = avcodec_find_encoder_by_name("vp8_vaapi");
+            fmt = AV_PIX_FMT_VAAPI;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_VP9:
+            codec = avcodec_find_encoder_by_name("vp9_vaapi");
+            fmt = AV_PIX_FMT_VAAPI;
+            break;
+#endif
+        default:
+            // FIXME: Add other supported avcodec encoder!
+            codec = NULL;
+            fmt = AV_PIX_FMT_YUV420P;
+    }
+    if( NULL == codec ) {
+        hb_log("hb_avcodec_test_encoder_available encoder=0x%X: Not supported yet", encoder);
+        return 0;
+    }
+    err = avcodec_test_encoder(codec, fmt);
+    hb_log("hb_avcodec_test_encoder_available encoder=0x%X: err %d", encoder, err);
+    return 0 == err;
+}
+
