@@ -85,6 +85,12 @@ namespace HandBrake.App.Core.Utilities
             {
                 try
                 {
+                    // These are not included by the below APIs
+                    if (path.IndexOfAny(new[] { '*', '?' }) >= 0)
+                    {
+                        return true;
+                    }
+
                     string file = Path.GetFileNameWithoutExtension(path);
                     string directory = Path.GetDirectoryName(path);
 
@@ -93,7 +99,7 @@ namespace HandBrake.App.Core.Utilities
                         return true;
                     }
 
-                    if (!string.IsNullOrEmpty(file) && file.Replace("\"", string.Empty).IndexOfAny(Path.GetInvalidPathChars()) != -1)
+                    if (!string.IsNullOrEmpty(file) && file.Replace("\"", string.Empty).IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
                     {
                         return true;
                     }
