@@ -129,7 +129,7 @@ jobs:
 
   build_gui:
     name: Windows UI
-    runs-on: windows-2022
+    runs-on: windows-2025
     needs: [build_mingw]
     env:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
@@ -200,7 +200,7 @@ jobs:
         
   build_gui_arm:
     name: Windows UI ARM
-    runs-on: windows-2022
+    runs-on: windows-2025
     needs: [build_mingw_arm]
     env:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
