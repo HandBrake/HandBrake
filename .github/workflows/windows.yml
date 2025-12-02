@@ -154,11 +154,15 @@ jobs:
           [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
           cp $certificatePath win\cs\
         }
+        
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: "10.0.x"
 
     - name: Build Windows GUI
       run: |
-        $env:Path += ";C:\Program Files\Microsoft Visual Studio\18\Enterprise\MSBuild\Current\Bin"
-        msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
+        dotnet msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
     - name: Prepare Package
       run: |
@@ -225,11 +229,15 @@ jobs:
           [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
           cp $certificatePath win\cs\
         }
-
+        
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: "10.0.x"
+        
     - name: Build Windows GUI
       run: |
-        $env:Path += ";C:\Program Files\Microsoft Visual Studio\18\Enterprise\MSBuild\Current\Bin"
-        msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
+        dotnet msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
         
     - name: Prepare Package
       run: |
