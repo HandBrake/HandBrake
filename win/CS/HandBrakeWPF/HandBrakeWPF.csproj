@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <PackageId>HandBrake</PackageId>
@@ -55,12 +55,12 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Autofac" Version="8.4.0" />
+	<PackageReference Include="Autofac" Version="9.0.0" />
     <PackageReference Include="gong-wpf-dragdrop" Version="4.0.0" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-    <PackageReference Include="System.Drawing.Common" Version="9.0.10" />
-    <PackageReference Include="System.Management" Version="9.0.10" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.0" />
+    <PackageReference Include="System.Management" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
