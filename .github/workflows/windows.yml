@@ -157,7 +157,7 @@ jobs:
 
     - name: Build Windows GUI
       run: |
-        $env:Path += ";C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
+        $env:Path += ";C:\Program Files\Microsoft Visual Studio\18\Enterprise\MSBuild\Current\Bin"
         msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
     - name: Prepare Package
@@ -228,7 +228,7 @@ jobs:
 
     - name: Build Windows GUI
       run: |
-        $env:Path += ";C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
+        $env:Path += ";C:\Program Files\Microsoft Visual Studio\18\Enterprise\MSBuild\Current\Bin"
         msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
         
     - name: Prepare Package
