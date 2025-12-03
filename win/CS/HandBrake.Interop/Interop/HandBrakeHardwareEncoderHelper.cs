@@ -93,7 +93,7 @@ namespace HandBrake.Interop.Interop
                 try
                 {
                     return false; // This feature has been deprecated by Intel.
-                    return IsQsvAvailable && QsvHyperEncode > 0;
+                    // return IsQsvAvailable && QsvHyperEncode > 0;
                 }
                 catch (Exception)
                 {

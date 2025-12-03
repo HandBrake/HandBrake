@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Utilities
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Management;
     using System.Runtime.InteropServices;
@@ -176,6 +177,7 @@ namespace HandBrakeWPF.Utilities
                     catch (Exception exc)
                     {
                         // Nothing to do. Just don't display the warnings.
+                        Debug.WriteLine(exc);
                     }
                 });
         }

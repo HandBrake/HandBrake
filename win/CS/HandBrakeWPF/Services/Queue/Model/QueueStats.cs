@@ -228,8 +228,6 @@ namespace HandBrakeWPF.Services.Queue.Model
                 {
                     return Resources.QueueView_NotAvailable;
                 }
-
-                return string.Empty;
             }
         }
 

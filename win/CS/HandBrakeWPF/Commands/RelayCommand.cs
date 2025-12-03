@@ -81,7 +81,7 @@ namespace HandBrakeWPF.Commands
                             throw e.InnerException;
                         }
 
-                        throw e;
+                        throw;
                     }
                 }
             }
