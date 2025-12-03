@@ -160,10 +160,13 @@ jobs:
       with:
         dotnet-version: "10.0.x"
 
+    - name: Add NSIS to PATH
+      shell: pwsh
+      run: Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files (x86)\NSIS"
+
     - name: Build Windows GUI
       shell: pwsh
       run: |
-        Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files (x86)\NSIS"
         dotnet msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
     - name: Prepare Package
@@ -236,11 +239,14 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: "10.0.x"
-        
+
+    - name: Add NSIS to PATH
+      shell: pwsh
+      run: Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files (x86)\NSIS"
+
     - name: Build Windows GUI
       shell: pwsh
       run: |
-        Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files (x86)\NSIS"
         dotnet msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
         
     - name: Prepare Package
