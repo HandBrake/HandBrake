@@ -161,8 +161,9 @@ jobs:
         dotnet-version: "10.0.x"
 
     - name: Build Windows GUI
+      shell: pwsh
       run: |
-        $env:Path += ";C:\Program Files (x86)\NSIS"
+        Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files (x86)\NSIS"
         dotnet msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
     - name: Prepare Package
@@ -237,8 +238,9 @@ jobs:
         dotnet-version: "10.0.x"
         
     - name: Build Windows GUI
+      shell: pwsh
       run: |
-        $env:Path += ";C:\Program Files (x86)\NSIS"
+        Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files (x86)\NSIS"
         dotnet msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
         
     - name: Prepare Package
