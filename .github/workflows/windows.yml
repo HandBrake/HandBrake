@@ -162,6 +162,7 @@ jobs:
 
     - name: Build Windows GUI
       run: |
+        $env:Path += ";C:\Program Files (x86)\NSIS"
         dotnet msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
     - name: Prepare Package
@@ -237,6 +238,7 @@ jobs:
         
     - name: Build Windows GUI
       run: |
+        $env:Path += ";C:\Program Files (x86)\NSIS"
         dotnet msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
         
     - name: Prepare Package
