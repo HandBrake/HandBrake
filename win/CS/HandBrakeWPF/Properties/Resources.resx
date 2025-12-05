@@ -2041,10 +2041,10 @@ Where supported, any user presets will have been imported.</value>
     <value>Seconds</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>All Matching Selected Languages</value>
+    <value>All Matching</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>First Matching Selected Language</value>
+    <value>First Matching</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
     <value>None</value>
@@ -3037,5 +3037,57 @@ Do you wish to proceed?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Export Queue (Selected)</value>
+  </data>
+   <data name="BurnPassthruModes_Burn" xml:space="preserve">
+    <value>Burn In (else Drop)</value>
+  </data>
+  <data name="BurnPassthruModes_Export" xml:space="preserve">
+    <value>Export to File (Text Subtitle)</value>
+  </data>
+  <data name="BurnPassthruModes_PassthruBurn" xml:space="preserve">
+    <value>Passthru (else try Burn in)</value>
+  </data>
+  <data name="BurnPassthruModes_PassthruDrop" xml:space="preserve">
+    <value>Passthru (else Drop)</value>
+  </data>
+  <data name="ForcedModes_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="ForcedModes_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="IsDefaultModes_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="IsDefaultModes_Yes" xml:space="preserve">
+    <value>Yes (First)</value>
+  </data>
+  <data name="SubtitleBehaviourModes_SecondMatching" xml:space="preserve">
+    <value>Second</value>
+  </data>
+  <data name="SubtitleDefaultView_SubtitleImportMode" xml:space="preserve">
+    <value>Import SRT/SSA subtitle files: </value>
+  </data>
+  <data name="SubtitleDefaultView_Info" xml:space="preserve">
+    <value>Setup rules to automatically add subtitle tracks.
+Rules are applied in priority order and will attempt to match where possible. Subtitle limitations apply.</value>
+  </data>
+  <data name="SubtitleDefaultView_PassthruTrackNames" xml:space="preserve">
+    <value>Passthru track names if not overridden above.</value>
+  </data>
+  <data name="SubtitleDefaultView_SourceOrder" xml:space="preserve">
+    <value>Use source subtitle ordering. </value>
+  </data>
+  <data name="SubtitleDefaultView_Title" xml:space="preserve">
+    <value>Automatic Subtitle Selections</value>
+  </data>
+  <data name="SubtitleImportMode_AllBefore" xml:space="preserve">
+    <value>Before Rules</value>
+  </data>
+  <data name="SubtitleImportMode_AllAfter" xml:space="preserve">
+    <value>After Rules</value>
+  </data>
+  <data name="SubtitleImportMode_None" xml:space="preserve">
+    <value>None</value>
   </data>
 </root>

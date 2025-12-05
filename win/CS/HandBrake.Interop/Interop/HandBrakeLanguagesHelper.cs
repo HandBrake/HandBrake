@@ -88,6 +88,11 @@ namespace HandBrake.Interop.Interop
                 return AnyLanguage;
             }
 
+            if (string.IsNullOrEmpty(code))
+            {
+                return null;
+            }
+
             iso639_lang_t language = InteropUtilities.ToStructureFromPtr<iso639_lang_t>(HBFunctions.lang_for_code2(code));
             return HandBrakeUnitConversionHelpers.NativeToLanguage(language);
         }
@@ -109,7 +114,7 @@ namespace HandBrake.Interop.Interop
             List<string> iso6392Codes = new List<string>();
             foreach (var item in userLanguages)
             {
-                iso6392Codes.Add(item.Code);
+                iso6392Codes.Add(item?.Code);
             }
 
             return iso6392Codes;
