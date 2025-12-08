@@ -583,10 +583,7 @@ static int receive(hb_work_object_t *w, hb_buffer_t **out, int done)
             break;
     }
 
-    if (headerPtr->pic_type != EB_AV1_NON_REF_PICTURE)
-    {
-        buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
-    }
+    buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
 
     svt_av1_enc_release_out_buffer(&headerPtr);
 
