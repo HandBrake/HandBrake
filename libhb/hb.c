@@ -11,6 +11,7 @@
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/hbavfilter.h"
 #include "handbrake/encx264.h"
+#include "handbrake/vaapi_common.h"
 #include "libavfilter/avfilter.h"
 #include <stdio.h>
 #include <unistd.h>
@@ -387,7 +388,7 @@ void hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
     {
         single_path = hb_list_item(paths, 0);
     }
-    
+
     // Check if scanning is necessary. Only works on Single Path.
     if (single_path != NULL && h->title_set.path != NULL && !strcmp(h->title_set.path, single_path))
     {
@@ -500,12 +501,12 @@ hb_title_set_t * hb_get_title_set( hb_handle_t * h )
 hb_list_t * hb_get_title_coverarts( hb_handle_t * h, int title )
 {
     hb_title_t * sourceTitle = hb_list_item(h->title_set.list_title, title);
-    if (sourceTitle) 
+    if (sourceTitle)
     {
         hb_list_t * coverart = sourceTitle->metadata->list_coverart;
         return coverart;
     }
-    
+
     hb_list_t * emptyList = hb_list_init();
     return emptyList;
 }
@@ -2163,6 +2164,8 @@ int hb_global_init()
         return -1;
     }
 
+    hb_vaapi_init();
+
     /* HB work objects */
     hb_register(&hb_workpass);
     hb_register(&hb_muxer);
@@ -2239,6 +2242,8 @@ void hb_global_close()
         closedir( dir );
         rmdir( dirname );
     }
+
+    hb_vaapi_free();
 }
 
 /**

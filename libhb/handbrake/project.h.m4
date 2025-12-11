@@ -46,6 +46,7 @@ dnl
 <<#>>define HB_PROJECT_FEATURE_GTK               __FEATURE_gtk
 <<#>>define HB_PROJECT_FEATURE_MF                __FEATURE_mf
 <<#>>define HB_PROJECT_FEATURE_NVENC             __FEATURE_nvenc
+<<#>>define HB_PROJECT_FEATURE_VAAPI             __FEATURE_vaapi
 <<#>>define HB_PROJECT_FEATURE_NVDEC             __FEATURE_nvdec
 <<#>>define HB_PROJECT_FEATURE_QSV               __FEATURE_qsv
 <<#>>define HB_PROJECT_FEATURE_VCE               __FEATURE_vce
