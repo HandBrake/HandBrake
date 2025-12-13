@@ -1,5 +1,5 @@
 /* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[0] = "Create a new custom preset based on the currently selected settings."; ObjectID = "0di-xq-jgi"; */
-"0di-xq-jgi.ibShadowedToolTips[0]" = "Створіть новий користувацький пресет на основі поточних налаштувань.";
+"0di-xq-jgi.ibShadowedToolTips[0]" = "Створіть новий власний шаблон заснований на поточних налаштуваннях.";
 
 /* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[1] = "Delete the selected preset."; ObjectID = "0di-xq-jgi"; */
 "0di-xq-jgi.ibShadowedToolTips[1]" = "Видаліть вибраний пресет.";
@@ -35,16 +35,16 @@
 "oBC-Nh-TwB.title" = "Table View Cell";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
-"r4V-6L-SO8.title" = "пресети";
+"r4V-6L-SO8.title" = "Шаблони";
 
 /* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "ryC-EH-q4k"; */
 "ryC-EH-q4k.title" = "Перейменувати...";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Presets"; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibExternalAccessibilityDescription" = "пресети";
+"uad-bt-uKD.ibExternalAccessibilityDescription" = "Шаблони";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset."; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibShadowedToolTip" = "Пресети - це групи налаштувань кодування, призначені для певних сценаріїв. Виберіть той, який найбільше відповідає вашим намірам.\n\nПеревизначає всі налаштування кодування. Після вибору пресета налаштування можна змінити.";
+"uad-bt-uKD.ibShadowedToolTip" = "Шаблони - це групи налаштувань перетворення, призначені для певних сценаріїв. Виберіть той, який найбільше відповідає вашим намірам.\n\nПеревизначає всі налаштування перетворення. Після вибору шаблону налаштування можна змінити.";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
 "xEQ-Un-J0n.title" = "Експорт...";

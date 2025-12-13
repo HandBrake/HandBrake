@@ -55,9 +55,6 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom border color"; ObjectID = "aby-WS-tzS"; */
 "aby-WS-tzS.ibExternalAccessibilityDescription" = "사용자 정의 경계색";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Custom border color"; ObjectID = "aby-WS-tzS"; */
-"aby-WS-tzS.ibShadowedToolTip" = "사용자 정의 경계색";
-
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Color of the border added around the video"; ObjectID = "BjH-qa-mJM"; */
 "BjH-qa-mJM.ibShadowedToolTip" = "비디오 주위에 더해지는 경계의 색깔";
 

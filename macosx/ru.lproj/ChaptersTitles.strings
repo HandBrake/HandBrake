@@ -2,7 +2,7 @@
 "0iF-eL-NOC.headerCell.title" = "Index";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Export the list of chapter names to a CSV file."; ObjectID = "3SP-6e-RPS"; */
-"3SP-6e-RPS.ibShadowedToolTip" = "Экспортировать список названий глав в CSV-файл.";
+"3SP-6e-RPS.ibShadowedToolTip" = "Экспортировать список имен глав в CSV-файл.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add a chapter markers track to the video."; ObjectID = "7Xf-c0-jsr"; */
 "7Xf-c0-jsr.ibShadowedToolTip" = "Добавить дорожку с маркерами глав в видео.";
@@ -20,7 +20,7 @@
 "h0O-zg-OF9.title" = "Экспортировать главы...";
 
 /* Class = "NSTableView"; ibExternalAccessibilityDescription = "Chapter titles"; ObjectID = "InF-gR-Lia"; */
-"InF-gR-Lia.ibExternalAccessibilityDescription" = "Заголовки глав";
+"InF-gR-Lia.ibExternalAccessibilityDescription" = "Имена глав";
 
 /* Class = "NSButtonCell"; title = "Create chapter markers"; ObjectID = "lJL-wX-DVP"; */
 "lJL-wX-DVP.title" = "Создать маркеры глав";
@@ -38,19 +38,19 @@
 "PM3-Ue-0kW.title" = "Импортировать главы...";
 
 /* Class = "NSTableColumn"; headerCell.title = "Duration"; ObjectID = "QVB-Cw-DJD"; */
-"QVB-Cw-DJD.headerCell.title" = "Продолжительность";
+"QVB-Cw-DJD.headerCell.title" = "Длительность";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Import a list of chapter names from a CSV file."; ObjectID = "Ron-3B-rYg"; */
-"Ron-3B-rYg.ibShadowedToolTip" = "Импортировать список названий глав из CSV-файла.";
+"Ron-3B-rYg.ibShadowedToolTip" = "Импортировать список имен глав из CSV-файла.";
 
 /* Class = "NSTextFieldCell"; title = "Title"; ObjectID = "UjY-nz-uSt"; */
-"UjY-nz-uSt.title" = "Заголовок";
+"UjY-nz-uSt.title" = "Раздел";
 
 /* Class = "NSTextFieldCell"; title = "Duration"; ObjectID = "Vmq-zJ-NEA"; */
-"Vmq-zJ-NEA.title" = "Продолжительность";
+"Vmq-zJ-NEA.title" = "Длительность";
 
 /* Class = "NSTableColumn"; headerCell.title = "Title"; ObjectID = "Z6H-lJ-ipr"; */
-"Z6H-lJ-ipr.headerCell.title" = "Заголовок";
+"Z6H-lJ-ipr.headerCell.title" = "Имя";
 
 /* Class = "NSTextFieldCell"; title = "Timestamp"; ObjectID = "zaN-qY-tke"; */
 "zaN-qY-tke.title" = "Временная метка";

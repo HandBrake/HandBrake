@@ -57,7 +57,7 @@ HBStateFormatter -> work time format */
 "%.6g FPS" = "%.6g bilder/s";
 
 /* Audio description */
-"%@ ▸ Encoder: %@" = "%1$@ ▸ Enkodare: %2$@";
+"%@ ▸ Encoder: %@" = "%1$@ ▸ Kodare: %2$@";
 
 /* HBPicture -> short info */
 "%@Output: %dx%d" = "%1$@Utdata: %2$dx%3$d";
@@ -190,10 +190,10 @@ HBJob -> filters short description */
 "DRC: %.2f" = "DRC: %.2f";
 
 /* Video description */
-"Encoder: %@, " = "Enkodare: %@, ";
+"Encoder: %@, " = "Kodare: %@, ";
 
 /* HBStateFormatter -> work pass display name */
-"Encoding %@ " = "Enkodar %@ ";
+"Encoding %@ " = "Kodar %@ ";
 
 /* Filters description */
 "Filters:" = "Filter:";

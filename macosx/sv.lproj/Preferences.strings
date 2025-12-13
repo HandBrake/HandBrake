@@ -140,7 +140,7 @@
 "bG9-Tu-YsZ.title" = "Dvd och Bluray:";
 
 /* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
-"BHK-QU-DwS.title" = "Aktivera enkodare för VideoToolbox-hårdvara";
+"BHK-QU-DwS.title" = "Aktivera kodare för VideoToolbox-hårdvara";
 
 /* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "BKV-oH-uht"; */
 "BKV-oH-uht.title" = "GB";
@@ -152,22 +152,22 @@
 "Cge-hb-Nh8.title" = "2";
 
 /* Class = "NSTextFieldCell"; title = "Encode up to"; ObjectID = "cI9-ML-lqx"; */
-"cI9-ML-lqx.title" = "Enkoda upp till";
+"cI9-ML-lqx.title" = "Koda upp till";
 
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
-"cqp-xU-GOe.title" = "Enkodare:";
+"cqp-xU-GOe.title" = "Kodare:";
 
 /* Class = "NSMenuItem"; title = "Auto"; ObjectID = "cZP-RL-fcB"; */
 "cZP-RL-fcB.title" = "Auto";
 
 /* Class = "NSButtonCell"; title = "Also use in combination with software encoders"; ObjectID = "d9B-Vd-jMM"; */
-"d9B-Vd-jMM.title" = "Använd även i kombination med programvaruenkodare";
+"d9B-Vd-jMM.title" = "Använd även i kombination med programvarukodare";
 
 /* Class = "NSButtonCell"; title = "Pause queue when switching to battery power"; ObjectID = "dMs-sk-W4G"; */
 "dMs-sk-W4G.title" = "Pausa kö vid byte till batteriström";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed."; ObjectID = "Doh-Ja-Gh7"; */
-"Doh-Ja-Gh7.ibShadowedToolTip" = "Hårdvaruenkodare kommer att minska CPU-användning och lägre batterianvändning när kombinerad med en hårdvaruenkodare. Beroende på CPU-hastighet så kan de antingen öka eller minska enkodningshastigheten.";
+"Doh-Ja-Gh7.ibShadowedToolTip" = "Hårdvarukodare kommer att minska CPU-användning och lägre batterianvändning när kombinerad med en hårdvarukodare. Beroende på CPU-hastighet så kan de antingen öka eller minska kodningshastigheten.";
 
 /* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "f47-PN-ctH"; */
 "f47-PN-ctH.title" = "Nollställ till 'Gör ingenting' vid uppstart";
@@ -242,7 +242,7 @@
 "saX-n7-YV0.title" = "Alternativ:";
 
 /* Class = "NSButtonCell"; title = "Clear completed jobs after an encode completes"; ObjectID = "szf-YE-Wml"; */
-"szf-YE-Wml.title" = "Töm färdiga jobb efter en enkodning är färdig";
+"szf-YE-Wml.title" = "Töm färdiga jobb efter en kodning är färdig";
 
 /* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "t9b-CO-ShI"; */
 "t9b-CO-ShI.title" = "Använd ISO-datumformat (YYYY-MM-DD)";
@@ -281,7 +281,7 @@
 "wgg-7I-LBB.title" = ".mp4";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "wOW-0q-lpT"; */
-"wOW-0q-lpT.ibShadowedToolTip" = "Högre värden kan hjälpa att fullständigt använda CPUn om en enda enkodning inte kan skala till alla tillgängliga CPU-kärnor.";
+"wOW-0q-lpT.ibShadowedToolTip" = "Högre värden kan hjälpa att fullständigt använda CPUn om en enda kodning inte kan skala till alla tillgängliga CPU-kärnor.";
 
 /* Class = "NSButtonCell"; title = "Use same destination folder as source when possible"; ObjectID = "wXE-Fz-Dru"; */
 "wXE-Fz-Dru.title" = "Använd samma målmapp som källan om möjligt";

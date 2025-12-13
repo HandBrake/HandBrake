@@ -11,7 +11,7 @@
 "DTF-om-j0l.title" = "Redigera";
 
 /* Class = "NSTextFieldCell"; title = "Encoding status"; ObjectID = "eEU-Dr-Qh8"; */
-"eEU-Dr-Qh8.title" = "Enkodningsstatus";
+"eEU-Dr-Qh8.title" = "Kodningsstatus";
 
 /* Class = "NSMenuItem"; title = "Remove"; ObjectID = "egD-8R-PTJ"; */
 "egD-8R-PTJ.title" = "Ta bort";

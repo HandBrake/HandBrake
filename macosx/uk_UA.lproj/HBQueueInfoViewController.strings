@@ -11,10 +11,10 @@
 "GaR-qk-UW7.title" = "Підсумки";
 
 /* Class = "NSButtonCell"; title = "Reset"; ObjectID = "hgl-N3-x4S"; */
-"hgl-N3-x4S.title" = "Скидання";
+"hgl-N3-x4S.title" = "Скинути";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reset the job state"; ObjectID = "oq4-g0-srt"; */
-"oq4-g0-srt.ibShadowedToolTip" = "Скинути стан роботи";
+"oq4-g0-srt.ibShadowedToolTip" = "Скинути стан завдання";
 
 /* Class = "NSTextFieldCell"; title = "Statistics"; ObjectID = "S15-bh-qKU"; */
 "S15-bh-qKU.title" = "Статистика";

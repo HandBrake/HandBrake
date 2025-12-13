@@ -2,13 +2,13 @@
 "1.title" = "Внутрішня Помилка";
 
 /* Class = "NSTextFieldCell"; title = "An internal error has occurred. You can choose to continue in an unstable state, or crash."; ObjectID = "10"; */
-"10.title" = "Відбулася внутрішня помилка. Ви можете обрати між продовженням у нестабільному стані або аварійним завершенням.";
+"10.title" = "Сталася внутрішня помилка. Ви можете продовжити у нестабільному стані або аварійно завершити.";
 
 /* Class = "NSTextFieldCell"; title = "Reason contents go here."; ObjectID = "12"; */
-"12.title" = "Зміст причин сюди.";
+"12.title" = "Щоб дізнатися причину перейдіть сюди";
 
 /* Class = "NSButtonCell"; title = "Crash"; ObjectID = "14"; */
-"14.title" = "Аварія";
+"14.title" = "Стався збій";
 
 /* Class = "NSButtonCell"; title = "Continue"; ObjectID = "16"; */
 "16.title" = "Продовжити";

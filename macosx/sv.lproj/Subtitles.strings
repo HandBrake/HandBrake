@@ -2,7 +2,7 @@
 "0yM-wE-D2x.ibExternalAccessibilityDescription" = "Undertextspår";
 
 /* Class = "NSTableColumn"; headerCell.title = "Encoding"; ObjectID = "1Qg-We-ltR"; */
-"1Qg-We-ltR.headerCell.title" = "Enkodning";
+"1Qg-We-ltR.headerCell.title" = "Kodning";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "4PX-In-DpF"; */
 "4PX-In-DpF.title" = "Lägg till alla spår";

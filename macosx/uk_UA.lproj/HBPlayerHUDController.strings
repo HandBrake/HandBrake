@@ -5,10 +5,10 @@
 "6BQ-wU-p2C.title" = "Доріжки";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "End Live Preview"; ObjectID = "84p-08-fGK"; */
-"84p-08-fGK.ibExternalAccessibilityDescription" = "Завершити перегляд у реальному часі";
+"84p-08-fGK.ibExternalAccessibilityDescription" = "Завершити огляд наживо";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Exit player and return to still image previews."; ObjectID = "84p-08-fGK"; */
-"84p-08-fGK.ibShadowedToolTip" = "Вийдіть з програвача і поверніться до попереднього перегляду зображень.";
+"84p-08-fGK.ibShadowedToolTip" = "Вийдіть з програвача і поверніться до огляду зображень.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
 "CQ0-pk-SFk.ibExternalAccessibilityDescription" = "Перейти до кінця";
@@ -32,10 +32,10 @@
 "gzA-no-jdv.ibShadowedToolTip" = "Перетягніть, щоб змінити гучність.";
 
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "Timeline"; ObjectID = "lBp-JT-ehn"; */
-"lBp-JT-ehn.ibExternalAccessibilityDescription" = "Хронологія";
+"lBp-JT-ehn.ibExternalAccessibilityDescription" = "Часова доріжка";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Drag to change timeline position."; ObjectID = "lBp-JT-ehn"; */
-"lBp-JT-ehn.ibShadowedToolTip" = "Перетягніть, щоб змінити положення на часовій шкалі.";
+"lBp-JT-ehn.ibShadowedToolTip" = "Перетягніть, для зміни позиції на часовій доріжці.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Play/Pause"; ObjectID = "mLA-ei-4sK"; */
 "mLA-ei-4sK.ibExternalAccessibilityDescription" = "Відтворення/Пауза";
@@ -47,19 +47,19 @@
 "PVD-pq-1ZG.ibExternalAccessibilityDescription" = "Час, що залишився";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Time remaining."; ObjectID = "PVD-pq-1ZG"; */
-"PVD-pq-1ZG.ibShadowedToolTip" = "Залишився час.";
+"PVD-pq-1ZG.ibShadowedToolTip" = "Час, що залишився";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Current Timeline Position"; ObjectID = "uYx-2C-8et"; */
-"uYx-2C-8et.ibExternalAccessibilityDescription" = "Поточна позиція на шкалі часу";
+"uYx-2C-8et.ibExternalAccessibilityDescription" = "Поточна позиція на часовій доріжці";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Current timeline position."; ObjectID = "uYx-2C-8et"; */
-"uYx-2C-8et.ibShadowedToolTip" = "Поточна позиція на часовій шкалі.";
+"uYx-2C-8et.ibShadowedToolTip" = "Поточна позиція на часовій доріжці.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Tracks Selection"; ObjectID = "Vj1-Za-AUV"; */
 "Vj1-Za-AUV.ibExternalAccessibilityDescription" = "Вибір доріжок";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Enable or disable tracks."; ObjectID = "Vj1-Za-AUV"; */
-"Vj1-Za-AUV.ibShadowedToolTip" = "Увімкнути або вимкнути треки.";
+"Vj1-Za-AUV.ibShadowedToolTip" = "Увімкнути або вимкнути доріжки.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
 "WuP-9l-8AN.ibExternalAccessibilityDescription" = "Перейти до початку";

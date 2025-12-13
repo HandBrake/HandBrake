@@ -1,5 +1,8 @@
+/* Job statistics */
+" (%@ %% of the source file)" = " (%@ %% исходного файла)";
+
 /* Preview -> size info label */
-" Scaled To Screen" = "Масштабировано к размеру экрана";
+" Scaled To Screen" = "вписано в экран";
 
 /* No comment provided by engineer. */
 "- --:--" = "- --:--";
@@ -8,10 +11,10 @@
 "--:--" = "--:--";
 
 /* Preview -> size info label */
-"(%.0f%% actual size)" = "(%.0f%% реальный размер)";
+"(%.0f%% actual size)" = "(показано в масштабе: %.0f%%)";
 
 /* Preview -> size info label */
-"(Actual size)" = "(Реальный размер)";
+"(Actual size)" = "(показано в реальном размере)";
 
 /* Main Window -> preset modified */
 "(Modified)" = "(Изменено)";
@@ -57,13 +60,13 @@ File already exists alert -> message */
 "Action" = "Действие";
 
 /* Main Window Activity Toolbar Item */
-"Activity" = "Активность";
+"Activity" = "Журнал";
 
 /* Picture HUD -> scale button */
-"Actual Scale" = "Реальный масштаб";
+"Actual Scale" = "Реальный";
 
 /* Main Window Add Toolbar Item */
-"Add All Titles To Queue" = "Добавить все заголовки в очередь";
+"Add All Titles To Queue" = "Добавить все разделы в очередь";
 
 /* Queue undo action name */
 "Add Job To Queue" = "Добавить задание в очередь";
@@ -75,17 +78,23 @@ File already exists alert -> message */
 "Add Preset" = "Добавить пресет";
 
 /* Touch bar */
-"Add Titles To Queue" = "Добавить заголовки в очередь";
+"Add Titles To Queue" = "Добавить разделы в очередь";
 
 /* Main Window Add Toolbar Item */
-"Add Titles To Queue…" = "Добавить заголовки в очередь...";
+"Add Titles To Queue…" = "Добавить разделы в очередь...";
 
 /* Main Window Add Toolbar Item
 Touch bar */
 "Add To Queue" = "Добавить в очередь";
 
 /* Preferences Advanced Toolbar Item */
-"Advanced" = "Расширенное";
+"Advanced" = "Расширенные";
+
+/* Main Window -> Same as source destination open panel */
+"Allow" = "Разрешить";
+
+/* Preferences -> Output Name Token */
+"Angle" = "Ракурс";
 
 /* HBLanguage -> Any language */
 "Any" = "Любой";
@@ -107,6 +116,9 @@ Touch bar */
 
 /* Job statistics */
 "Average speed:" = "Средняя скорость:";
+
+/* Preferences -> Output Name Token */
+"Bit Depth" = "Разрядность";
 
 /* Copy Protection Alert -> second button
 Delete preset alert -> second button
@@ -143,16 +155,16 @@ Preferences -> Output Name Token */
 "Copy-Protected sources are not supported." = "Защищенные от копирования Исходные Файлы не поддерживаются.";
 
 /* Preferences -> Output Name Token */
-"Creation-Date" = "Дата-Создания";
+"Creation-Date" = "Дата создания";
 
 /* Preferences -> Output Name Token */
-"Creation-Time" = "Время-Создания";
+"Creation-Time" = "Время создания";
 
 /* Touch bar */
 "Current Time" = "Текущее Время";
 
 /* Add preset window -> picture setting */
-"Custom" = "Пользовательское";
+"Custom" = "Своя настройка";
 
 /* Preferences -> Output Name Token */
 "Date" = "Дата";
@@ -195,6 +207,9 @@ Queue done notification failed message */
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode working" = "Кодирование в процессе";
 
+/* Preferences -> Output Name Token */
+"Encoder" = "Кодировщик";
+
 /* No comment provided by engineer. */
 "Encoding %lu Jobs" = "Кодирование %lu Заданий";
 
@@ -210,8 +225,14 @@ Queue done notification failed message */
 /* Export presets save panel title */
 "Export presets" = "Экспортировать пресеты";
 
+/* Default name for a newly added excluded file extension */
+"extension" = "расширение";
+
 /* File already exists alert -> message */
 "File already exists." = "Файл уже существует.";
+
+/* Preferences Output File Name Toolbar Item */
+"File name" = "Имя файла";
 
 /* HBRange -> display name */
 "Frames" = "Кадры";
@@ -228,6 +249,15 @@ Queue done notification failed message */
 /* Preview -> live preview alert informative text */
 "HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake не может воспроизвести данную комбинацию формата видео/аудио/контейнера. Вы хотите открыть её во внешнем проигрывателе?";
 
+/* Main Window -> Same as source destination open panel */
+"HandBrake does not have permission to write to this folder. To allow HandBrake to write to this folder, click \"Allow\"" = "У HandBrake нет прав на запись в эту папку. Нажмите «Разрешить», чтобы дать такие права.";
+
+/* Preferences -> Output Name Token */
+"Height" = "Высота";
+
+/* Queue -> sidebar menu */
+"Hide Sidebar" = "Скрыть боковое меню";
+
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Если вы выйдете из HandBrake, ваша текущая работа будет перезагружена в вашу очередь при следующем запуске. Вы действительно хотите выйти?";
 
@@ -238,7 +268,7 @@ Queue done notification failed message */
 "Incorrect line count" = "Неверное количество строк";
 
 /* Chapters import -> invalid CSV description */
-"Invalid chapters CSV file" = "Недействительный CSV-файл с главами";
+"Invalid chapters CSV file" = "Некорректный CSV-файл с главами";
 
 /* Queue Edit Alert -> stop and edit first button
 Queue Stop Alert -> stop and remove first button */
@@ -247,6 +277,12 @@ Queue Stop Alert -> stop and remove first button */
 /* Touch bar */
 "Live Preview" = "Живой предпросмотр";
 
+/* Preferences -> Output Name Token */
+"Modification-Date" = "Дата изменения";
+
+/* Preferences -> Output Name Token */
+"Modification-Time" = "Время изменения";
+
 /* Queue undo action name */
 "Move Job in Queue" = "Переместить задание в очереди";
 
@@ -254,10 +290,10 @@ Queue Stop Alert -> stop and remove first button */
 "Move Jobs in Queue" = "Переместить задания в очереди";
 
 /* Add preset window -> My Presets */
-"My Presets" = "Мои Пресеты";
+"My Presets" = "Мои пресеты";
 
 /* Queue status */
-"No encode pending" = "Нет работ в ожидании";
+"No encode pending" = "Нет заданий в ожидании";
 
 /* Preview -> accessibility label */
 "No image" = "Нет изображения";
@@ -287,7 +323,7 @@ Queue Done Alert -> sleep first button */
 /* Main Window Open Toolbar Item
 Toolbar Open/Cancel Item
 Touch bar */
-"Open Source" = "Открыть источник";
+"Open Source" = "Открыть исходный файл";
 
 /* File already exists alert -> second button
 File already exists in queue alert -> second button */
@@ -300,11 +336,11 @@ Toolbar Pause Item */
 /* Queue -> pause/resume menu
 Toolbar Pause Item
 Touch bar */
-"Pause Encoding" = "Поставить кодирование на паузу";
+"Pause Encoding" = "Приостановить кодирование";
 
 /* Main Window Pause Toolbar Item
 Touch bar */
-"Pause/Resume Encoding" = "Поставить на паузу/продолжить кодирование";
+"Pause/Resume Encoding" = "Приостановить / продолжить кодирование";
 
 /* Job statistics */
 "Paused time:" = "Время паузы:";
@@ -317,7 +353,7 @@ Touch bar */
 
 /* Add preset window -> name alert informative text
 Rename preset window -> name alert informative text */
-"Please enter a name." = "Пожалуйста, введите название.";
+"Please enter a name." = "Пожалуйста, введите имя.";
 
 /* Copy Protection Alert -> informative text */
 "Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "Пожалуйста, примите во внимание, что HandBrake не поддерживает удаление защиты от копирования DVD-дисков. Если захотите, вы можете использовать любое другое программное обеспечения для этой функции. Это предупреждение будет показываться только один раз, но при каждом запуске HandBrake.";
@@ -325,6 +361,9 @@ Rename preset window -> name alert informative text */
 /* Queue Done Alert -> shut down second button
 Queue Done Alert -> sleep second button */
 "Preferences…" = "Настройки...";
+
+/* Preferences -> Output Name Token */
+"Preset" = "Пресет";
 
 /* Main Window Presets Toolbar Item */
 "Presets" = "Пресеты";
@@ -337,16 +376,22 @@ Preview -> window title */
 "Preview" = "Предпросмотр";
 
 /* Preview -> window title format */
-"Preview - %@ %@" = "Предпросмотр - %1$@ %2$@";
+"Preview - %@ %@" = "Предпросмотр • %1$@ %2$@";
+
+/* Preview -> accessibility label */
+"Preview Image, Size: %f x %f, Scale: %.0f%%" = "Изображение предпросмотра, размер: %1$f × %2$f, масштаб: %3$.0f%%";
 
 /* Queue Window When Done Toolbar Item */
-"Put Computer to Sleep" = "Перевести компьютер в спящий режим";
+"Put Computer to Sleep" = "Переводить компьютер в режим сна";
 
 /* Queue notification alert message */
-"Put down that cocktail…" = "Отложите в сторону этот коктейл...";
+"Put down that cocktail…" = "Отложите коктейль...";
 
 /* Preferences -> Output Name Token */
-"Quality/Bitrate" = "Качетсво/битрейт";
+"Quality Type" = "Режим качества";
+
+/* Preferences -> Output Name Token */
+"Quality/Bitrate" = "Качество / битрейт";
 
 /* Main Window Presets Toolbar Item
 Preferences Queue Toolbar Item
@@ -363,7 +408,7 @@ Queue window title */
 "Quit" = "Выход";
 
 /* Queue Window When Done Toolbar Item */
-"Quit HandBrake" = "Выйти из HandBrake";
+"Quit HandBrake" = "Завершить HandBrake";
 
 /* Touch bar */
 "Remaining Time" = "Осталось времени";
@@ -382,6 +427,9 @@ Queue window title */
 
 /* Queue undo action name */
 "Remove Jobs From Queue" = "Удалить задания из очереди";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Rescanning for editing" = "Повторное сканирование для правки";
 
 /* Queue Window Action Toolbar Item */
 "Reset All Jobs" = "Сбросить все задания";
@@ -407,7 +455,7 @@ Toolbar Pause Item */
 
 /* Picture HUD -> scale button
 Touch bar */
-"Scale To Screen" = "Масштабировать к размеру экрана";
+"Scale To Screen" = "Вписать";
 
 /* HBRange -> display name */
 "Seconds" = "Секунд";
@@ -419,7 +467,7 @@ Touch bar */
 "Select the desired external application" = "Выбрать предпочитаемое внешнее приложение";
 
 /* Titles selection sheet -> informative text */
-"Select the titles to add to the queue using the %@ preset:" = "Выберите заголовки для добавления в очередь используя пресет %@:";
+"Select the titles to add to the queue using the %@ preset:" = "Выберите разделы для добавления в очередь с использованием пресета %@:";
 
 /* Notification -> Show in Finder */
 "Show" = "Показать";
@@ -438,11 +486,14 @@ Touch bar */
 /* Main Window Presets Toolbar Item */
 "Show Queue Window" = "Показать окно очереди";
 
+/* Queue -> sidebar menu */
+"Show Sidebar" = "Показать боковое меню";
+
 /* Queue Window When Done Toolbar Item */
 "Shut Down Computer" = "Выключать компьютер";
 
 /* Job statistics */
-"Size:" = "Размеры:";
+"Size:" = "Размер:";
 
 /* Queue Alert -> cancel rip second button */
 "Skip Current Job" = "Пропустить текущее задание";
@@ -475,6 +526,9 @@ Touch bar */
 /* Queue -> Stop action
 Toolbar Start/Stop Item */
 "Stop" = "Остановить";
+
+/* Queue -> Stop action */
+"Stop action." = "Остановить операцию.";
 
 /* Queue Alert -> cancel rip third button */
 "Stop After Current Job" = "Остановить после текущего задания";
@@ -518,7 +572,7 @@ Toolbar Start/Stop Item */
 
 /* Add preset window -> name alert message
 Rename preset window -> name alert message */
-"The preset name cannot be empty." = "Название пресета не может быть пустым.";
+"The preset name cannot be empty." = "Имя пресета не может быть пустым.";
 
 /* File already exists in queue alert -> message */
 "There is already a queue item for this destination." = "Уже существует задание в очереди с таким путем назначения.";
@@ -530,7 +584,10 @@ Rename preset window -> name alert message */
 "Time" = "Время";
 
 /* Preferences -> Output Name Token */
-"Title" = "Заголовок";
+"Title" = "Раздел";
+
+/* Queue Window Details Toolbar Item */
+"Toggle details sidebar" = "Показать / скрыть боковое меню";
 
 /* HBLanguage -> Unknown language */
 "Unknown" = "Неизвестно";
@@ -543,6 +600,12 @@ Rename preset window -> name alert message */
 
 /* Queue Window When Done Toolbar Item */
 "When Done" = "При завершении";
+
+/* Preferences -> Output Name Token */
+"Width" = "Ширина";
+
+/* No comment provided by engineer. */
+"Working" = "В работе";
 
 /* Queue Alert -> cancel rip message */
 "You are currently encoding. What would you like to do?" = "В данный момент вы кодируете. Что вы хотите сделать?";
@@ -571,4 +634,7 @@ Rename preset window -> name alert message */
 /* Queue Edit Alert -> stop and edit informative text
 Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "Ваш фильм будет потерян если вы не продолжите кодирование.";
+
+/* Queue done notification message */
+"Your queue is done!" = "В очереди все готово!";
 

@@ -1,14 +1,14 @@
 /* Class = "NSTextFieldCell"; title = "Statistics"; ObjectID = "aCP-yp-iZy"; */
-"aCP-yp-iZy.title" = "统计";
+"aCP-yp-iZy.title" = "统计数据";
 
 /* Class = "NSTextFieldCell"; title = "Summary"; ObjectID = "cx1-rC-AMC"; */
-"cx1-rC-AMC.title" = "摘要";
+"cx1-rC-AMC.title" = "概览";
 
 /* Class = "NSButtonCell"; title = "Edit"; ObjectID = "erY-5X-50l"; */
 "erY-5X-50l.title" = "编辑";
 
 /* Class = "NSTextFieldCell"; title = "Summary"; ObjectID = "GaR-qk-UW7"; */
-"GaR-qk-UW7.title" = "摘要";
+"GaR-qk-UW7.title" = "概览";
 
 /* Class = "NSButtonCell"; title = "Reset"; ObjectID = "hgl-N3-x4S"; */
 "hgl-N3-x4S.title" = "重置";
@@ -17,8 +17,8 @@
 "oq4-g0-srt.ibShadowedToolTip" = "重置任务状态";
 
 /* Class = "NSTextFieldCell"; title = "Statistics"; ObjectID = "S15-bh-qKU"; */
-"S15-bh-qKU.title" = "统计";
+"S15-bh-qKU.title" = "统计数据";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Open the job in the main window for editing"; ObjectID = "Z14-gh-hWn"; */
-"Z14-gh-hWn.ibShadowedToolTip" = "在主窗口中打开任务进行编辑";
+"Z14-gh-hWn.ibShadowedToolTip" = "在主窗口中打开此任务进行编辑";
 

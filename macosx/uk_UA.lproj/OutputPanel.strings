@@ -8,7 +8,7 @@
 "12.title" = "Очистити вміст вікна";
 
 /* Class = "NSMenuItem"; title = "Copy Window Contents"; ObjectID = "24"; */
-"24.title" = "Копіювання вмісту вікна";
+"24.title" = "Скопіювати вміст вікна";
 
 /* Class = "NSMenuItem"; title = "Open Activity Log For This Session In Default Application"; ObjectID = "33"; */
 "33.title" = "Відкрити журнал активності для цього сеансу у програмі за замовчуванням";
@@ -17,5 +17,5 @@
 "35.title" = "Очистити журнал активності для цього сеансу";
 
 /* Class = "NSMenuItem"; title = "Open Activity Logs Directory In Finder"; ObjectID = "43"; */
-"43.title" = "Відкрийте каталог журналів у Finder";
+"43.title" = "Відкрити теку журналів активності у Finder";
 
