@@ -447,18 +447,6 @@ namespace HandBrakeWPF.Model.Audio
         }
 
         /// <summary>
-        /// Gets a value indicating whether IsLossless.
-        /// </summary>
-        [JsonIgnore]
-        public bool IsLossless
-        {
-            get
-            {
-                return this.IsPassthru || this.IsLossless;
-            }
-        }
-
-        /// <summary>
         /// Gets TrackReference.
         /// </summary>
         [JsonIgnore]
