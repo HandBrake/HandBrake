@@ -2,7 +2,7 @@
 "0yM-wE-D2x.ibExternalAccessibilityDescription" = "Доріжки субтитрів";
 
 /* Class = "NSTableColumn"; headerCell.title = "Encoding"; ObjectID = "1Qg-We-ltR"; */
-"1Qg-We-ltR.headerCell.title" = "Кодування";
+"1Qg-We-ltR.headerCell.title" = "Перетворення";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "4PX-In-DpF"; */
 "4PX-In-DpF.title" = "Додати всі доріжки";
@@ -17,19 +17,19 @@
 "aJi-zQ-0cg.ibShadowedToolTip" = "Додатне або від'ємне зміщення у мілісекундах (мс) для вибраної вихідної доріжки формату SRT/SSA. Не застосовується до інших форматів.";
 
 /* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "cSW-OC-qKA"; */
-"cSW-OC-qKA.title" = "Pop Up";
+"cSW-OC-qKA.title" = "Спливаючий";
 
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "dap-ee-kor"; */
-"dap-ee-kor.title" = "Item 1";
+"dap-ee-kor.title" = "Елемент 1";
 
 /* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "fAW-To-EeP"; */
-"fAW-To-EeP.title" = "Item 3";
+"fAW-To-EeP.title" = "Елемент 3";
 
 /* Class = "NSTableColumn"; headerCell.title = "Offset"; ObjectID = "Fgh-pZ-6uu"; */
 "Fgh-pZ-6uu.headerCell.title" = "Зміщення";
 
 /* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
-"fIe-Fg-ufj.headerCell.title" = "Burned In";
+"fIe-Fg-ufj.headerCell.title" = "Вшита";
 
 /* Class = "NSTableColumn"; headerCell.title = "Default"; ObjectID = "fvq-pE-sOC"; */
 "fvq-pE-sOC.headerCell.title" = "За замовчуванням";
@@ -56,7 +56,7 @@
 "hhH-c3-gD0.title" = "0";
 
 /* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "HQq-Mp-4sI"; */
-"HQq-Mp-4sI.title" = "Item 2";
+"HQq-Mp-4sI.title" = "Елемент 2";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Add new SRT/SSA subtitle to the list."; ObjectID = "HW0-PS-t0U"; */
 "HW0-PS-t0U.ibShadowedToolTip" = "Додайте нові субтитри SRT/SSA до списку.";
@@ -71,10 +71,10 @@
 "Inz-O5-B8g.ibShadowedToolTip" = "Мова вибраної вихідної доріжки у форматі SRT/SSA. Не застосовується до інших форматів.";
 
 /* Class = "NSMenuItem"; title = "Reload"; ObjectID = "jcM-HL-QJ6"; */
-"jcM-HL-QJ6.title" = "Скинути";
+"jcM-HL-QJ6.title" = "Перезавантажити";
 
 /* Class = "NSButtonCell"; title = "Reload"; ObjectID = "jG8-uo-1tv"; */
-"jG8-uo-1tv.title" = "Скинути";
+"jG8-uo-1tv.title" = "Перезавантажити";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "JLr-Qi-X0X"; */
 "JLr-Qi-X0X.title" = "Перевірка.";
@@ -95,7 +95,7 @@
 "N3S-st-yGv.headerCell.title" = "Доріжка";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "ooy-Sh-Edm"; */
-"ooy-Sh-Edm.title" = "Check";
+"ooy-Sh-Edm.title" = "Перевірити";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
 "oxg-bs-1si.title" = "Вибрати поведінку...";
@@ -104,7 +104,7 @@
 "pwm-PV-1x4.title" = "Вибрати поведінку...";
 
 /* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
-"QRj-KI-a03.title" = "Text";
+"QRj-KI-a03.title" = "Текст";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track."; ObjectID = "QsM-28-Pya"; */
 "QsM-28-Pya.ibShadowedToolTip" = "Налаштування Поведінки Вибору доріжок субтитрів. Ці налаштування впливають на те, які доріжки будуть додані до списку доріжок субтитрів, а також на параметри, що використовуються для кожної доріжки.";
@@ -119,10 +119,10 @@
 "R8a-qg-ASg.title" = "Видалити всі доріжки";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "R9w-Bn-CCt"; */
-"R9w-Bn-CCt.title" = "Check";
+"R9w-Bn-CCt.title" = "Перевірити";
 
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "Rj8-KI-k4L"; */
-"Rj8-KI-k4L.title" = "Item 1";
+"Rj8-KI-k4L.title" = "Елемент 1";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
 "S2I-Jd-Lyg.title" = "Додати всі доріжки";
@@ -137,26 +137,26 @@
 "Tf3-cP-TGw.ibShadowedToolTip" = "Мова та тип субтитрів.";
 
 /* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "ThR-Cn-Vfr"; */
-"ThR-Cn-Vfr.title" = "Item 3";
+"ThR-Cn-Vfr.title" = "Елемент 3";
 
 /* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "TJO-RZ-jgb"; */
 "TJO-RZ-jgb.title" = "Доріжки";
 
 /* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
-"vHW-fn-RSG.title" = "Pop Up";
+"vHW-fn-RSG.title" = "Спливаючий";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the subtitles tracks list using the configured Selection Behavior."; ObjectID = "Vxx-gk-9kY"; */
 "Vxx-gk-9kY.ibShadowedToolTip" = "Перезавантажити список доріжок субтитрів використовуючи налаштування з Поведінка Вибору.";
 
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "yDg-DK-z5D"; */
-"yDg-DK-z5D.title" = "Item 1";
+"yDg-DK-z5D.title" = "Елемент 1";
 
 /* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "yEC-jb-q8b"; */
-"yEC-jb-q8b.title" = "Item 3";
+"yEC-jb-q8b.title" = "Елемент 3";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Burned In"; ObjectID = "zpm-9Z-Hsq"; */
-"zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "Burned In";
+"zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "Вшита";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Burned In. Make the selected subtitles permanent by overlaying them onto the video track."; ObjectID = "zpm-9Z-Hsq"; */
-"zpm-9Z-Hsq.ibShadowedToolTip" = "Burned In. Зробіть вибрані субтитри постійними, наклавши їх на відеодоріжку.";
+"zpm-9Z-Hsq.ibShadowedToolTip" = "Вшити. Зробіть вибрані субтитри постійними, наклавши їх на відеодоріжку.";
 

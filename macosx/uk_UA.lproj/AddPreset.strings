@@ -2,25 +2,25 @@
 "5Xb-gz-QEa.title" = "Скасувати";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list."; ObjectID = "8kl-Sh-Gh7"; */
-"8kl-Sh-Gh7.ibShadowedToolTip" = "Введіть опис для нового пресета. Опис буде показуватися під час наведення курсора над списком пресетів.";
+"8kl-Sh-Gh7.ibShadowedToolTip" = "Введіть опис для нового шаблона. Опис буде показуватися під час наведення курсора над списком шаблонів.";
 
 /* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "75B-xq-Qbe"; */
-"75B-xq-Qbe.title" = "Ліміт на розширення:";
+"75B-xq-Qbe.title" = "Межа роздільної здатності:";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
 "a0j-nw-n23.title" = "Вибрати поведінку...";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "aez-2b-JXx"; */
-"aez-2b-JXx.ibShadowedToolTip" = "Поведінка визначає дорожку(-ки) і налаштування, які будуть використовуватися при виборі пресету.";
+"aez-2b-JXx.ibShadowedToolTip" = "Поведінка визначає дорожку(-ки) і налаштування, які будуть використовуватися при виборі шаблону.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a name for the new preset. This name will be displayed in the presets list."; ObjectID = "aKg-n4-OUS"; */
-"aKg-n4-OUS.ibShadowedToolTip" = "Введіть назву нового пресету. Ця назва буде відображатися в списку пресетів.";
+"aKg-n4-OUS.ibShadowedToolTip" = "Введіть назву нового шаблону. Ця назва буде відображатися в списку шаблонів.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "bma-pS-phM"; */
 "bma-pS-phM.ibShadowedToolTip" = "Розмір зображення керує тим, як розміри відео застосовуються під час вибору пресету.\n\nОпція 'Ні' використовує розміри, які вибрані на даний момент.\n\nОпція 'Користувацький' дозволяє встановити максимальну ширину і/або висоту.\n\nОпція 'Максимум вихідного файлу' використовує повні розміри кожного вихідного файлу.";
 
 /* Class = "NSWindow"; title = "New Preset"; ObjectID = "dbZ-Wo-9nG"; */
-"dbZ-Wo-9nG.title" = "Новий пресет";
+"dbZ-Wo-9nG.title" = "Новий шаблон";
 
 /* Class = "NSButtonCell"; title = "Add"; ObjectID = "Deg-rS-mRc"; */
 "Deg-rS-mRc.title" = "Додати";
@@ -29,7 +29,7 @@
 "gOg-oO-8ar.ibExternalAccessibilityDescription" = "Ширина зображення";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width."; ObjectID = "gOg-oO-8ar"; */
-"gOg-oO-8ar.ibShadowedToolTip" = "Максимальна ширина збереження відео в пікселях, дозволена пресетом. Вкажіть 0 для необмеженої ширини.";
+"gOg-oO-8ar.ibShadowedToolTip" = "Максимальна ширина контейнера відео в пікселях, дозволена шаблоном. Вкажіть 0 для необмеженої ширини.";
 
 /* Class = "NSTextFieldCell"; title = "Description:"; ObjectID = "hc8-1h-Jye"; */
 "hc8-1h-Jye.title" = "Опис:";
@@ -41,7 +41,7 @@
 "IyE-Lz-32s.title" = "Категорія:";
 
 /* Class = "NSTextFieldCell"; title = "Preset Name:"; ObjectID = "jhj-Et-ncF"; */
-"jhj-Et-ncF.title" = "Назва пресету:";
+"jhj-Et-ncF.title" = "Назва шаблону:";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
 "LPX-Rc-KLa.title" = "Вибрати поведінку...";
@@ -50,13 +50,13 @@
 "Mga-dS-8BF.ibExternalAccessibilityDescription" = "Висота зображення";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height."; ObjectID = "Mga-dS-8BF"; */
-"Mga-dS-8BF.ibShadowedToolTip" = "Максимальна висота збереження відео в пікселях, дозволена пресетом. Вкажіть 0 для необмеженої висоти.";
+"Mga-dS-8BF.ibShadowedToolTip" = "Максимальна висота контейнера відео в пікселях, дозволена шаблоном. Вкажіть 0 для необмеженої висоти.";
 
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "Nfk-ix-xIv"; */
 "Nfk-ix-xIv.title" = "x";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "nWJ-0b-fUA"; */
-"nWJ-0b-fUA.ibShadowedToolTip" = "Поведінка визначає дорожку(-ки) і налаштування, які будуть використовуватися при виборі пресету.";
+"nWJ-0b-fUA.ibShadowedToolTip" = "Поведінка визначає дорожку(-ки) і налаштування, які будуть використовуватися при виборі шаблону.";
 
 /* Class = "NSTextFieldCell"; title = "Subtitles:"; ObjectID = "OYE-GG-Vo3"; */
 "OYE-GG-Vo3.title" = "Субтитри:";
@@ -65,5 +65,5 @@
 "Sf8-HP-mhE.title" = "Нова категорія...";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Resolution Limit allows you to set a maximum width and/or height."; ObjectID = "z6B-ig-ouq"; */
-"z6B-ig-ouq.ibShadowedToolTip" = "Ліміт на розширення дозволяє встановлювати обмеження на максимальну ширину і/або висоту.";
+"z6B-ig-ouq.ibShadowedToolTip" = "Межа на роздільну здатність дозволяє встановлювати обмеження на максимальну ширину і/або висоту.";
 

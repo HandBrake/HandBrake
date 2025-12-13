@@ -68,7 +68,7 @@
 "9hH-As-JSa.ibExternalAccessibilityDescription" = "Skalad bredd";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video scaled width. This is the number of pixels wide to be encoded. Scaled width may differ from display width depending on anamorphic settings and fill settings"; ObjectID = "9hH-As-JSa"; */
-"9hH-As-JSa.ibShadowedToolTip" = "Skalad videobredd. Detta är antalet bildpunkter på bredden som ska enkodas. Skalad bredd kan skilja sig från skärmbredden beroende på anamorfiska inställningar och fyllnadsinställningar.";
+"9hH-As-JSa.ibShadowedToolTip" = "Skalad videobredd. Detta är antalet bildpunkter på bredden som ska kodas. Skalad bredd kan skilja sig från skärmbredden beroende på anamorfiska inställningar och fyllnadsinställningar.";
 
 /* Class = "NSMenuItem"; title = "480p NTSC SD"; ObjectID = "21C-Hg-mk4"; */
 "21C-Hg-mk4.title" = "480p NTSC SD";
@@ -81,9 +81,6 @@
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom border color"; ObjectID = "aby-WS-tzS"; */
 "aby-WS-tzS.ibExternalAccessibilityDescription" = "Anpassad ramfärg";
-
-/* Class = "NSTextField"; ibShadowedToolTip = "Custom border color"; ObjectID = "aby-WS-tzS"; */
-"aby-WS-tzS.ibShadowedToolTip" = "Anpassad ramfärg";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "Ag1-Tk-hCm"; */
 "Ag1-Tk-hCm.ibExternalAccessibilityDescription" = "Visningsbredd";
@@ -176,7 +173,7 @@
 "Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "Lagringshöjd";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video scaled height. This is the number of pixels tall to be encoded. Scaled height may differ from display height depending on anamorphic settings and fill settings"; ObjectID = "Hkl-7Z-J2e"; */
-"Hkl-7Z-J2e.ibShadowedToolTip" = "Skalad videohöjd. Detta är antalet bildpunkter på höjden som ska enkodas. Skalad höjd kan skilja sig från skärmbredden beroende på anamorfiska inställningar och fyllnadsinställningar.";
+"Hkl-7Z-J2e.ibShadowedToolTip" = "Skalad videohöjd. Detta är antalet bildpunkter på höjden som ska kodas. Skalad höjd kan skilja sig från skärmbredden beroende på anamorfiska inställningar och fyllnadsinställningar.";
 
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
 "hN1-S9-zl8.title" = "x";

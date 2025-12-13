@@ -179,13 +179,13 @@
 "2443.title" = "Lägg till i kö";
 
 /* Class = "NSMenuItem"; title = "Start Encoding"; ObjectID = "2444"; */
-"2444.title" = "Starta enkodning";
+"2444.title" = "Starta kodning";
 
 /* Class = "NSMenuItem"; title = "Queue"; ObjectID = "2445"; */
 "2445.title" = "Kö";
 
 /* Class = "NSMenuItem"; title = "Pause Encoding"; ObjectID = "2494"; */
-"2494.title" = "Pausa enkodning";
+"2494.title" = "Pausa kodning";
 
 /* Class = "NSMenuItem"; title = "Close Window"; ObjectID = "2508"; */
 "2508.title" = "Stäng fönster";

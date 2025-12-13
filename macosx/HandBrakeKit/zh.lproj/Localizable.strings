@@ -1,15 +1,15 @@
 /* Video description */
-" - fastdecode" = " - 快速解码";
+" - fastdecode" = " - fastdecode";
 
 /* HBStateFormatter -> work time format */
-" (%.2f fps, avg %.2f fps, ETA %@)" = "（%1$.2f fps，平均 %2$.2f fps，预计完成时间 %3$@）";
+" (%.2f fps, avg %.2f fps, ETA %@)" = "(帧率：%1$.2f，平均帧率：%2$.2f，预计剩余时间：%3$@）";
 
 /* HBStateFormatter -> work time format */
-" (%.2f fps, avg %.2f fps)" = "（%1$.2f fps，平均 %2$.2f fps)";
+" (%.2f fps, avg %.2f fps)" = "(帧率：%1$.2f，平均帧率 %2$.2f)";
 
 /* HBStateFormatter -> search time format
 HBStateFormatter -> work time format */
-" (ETA %@)" = "（预计完成时间 %@）";
+" (ETA %@)" = "(预计剩余时间 %@)";
 
 /* HBJob -> video short description framerate */
 " FPS CFR" = " FPS CFR";
@@ -18,25 +18,25 @@ HBStateFormatter -> work time format */
 " FPS PFR" = " FPS PFR";
 
 /* Title short description -> audio format */
-", %d audio tracks" = "， %d 条音轨";
+", %d audio tracks" = "，%d 条音频轨道";
 
 /* Title short description -> subtitles format */
 ", %d subtitles tracks" = "，%d 条字幕轨道";
 
 /* Title short description -> audio format */
-", 1 audio track" = "，1 条音轨";
+", 1 audio track" = "，1 条音频轨道";
 
 /* Title short description -> subtitles format */
 ", 1 subtitles track" = "，1 条字幕轨道";
 
 /* Format description */
-", Align A/V Start" = "，对齐音视频开头";
+", Align A/V Start" = "，对齐音/视频开头";
 
 /* HBPicture -> summary */
 ", Border: %d/%d/%d/%d" = "，边框：%1$d/%2$d/%3$d/%4$d";
 
 /* HBJob -> subtitles short description */
-", Burned" = "，已烧入";
+", Burned" = "，内嵌字幕";
 
 /* Format description */
 ", Chapter Markers" = "，章节标记";
@@ -45,13 +45,13 @@ HBStateFormatter -> work time format */
 ", Crop: %@ %d/%d/%d/%d" = "，裁剪：%1$@ %2$d/%3$d/%4$d/%5$d";
 
 /* Format description */
-", iPod 5G Support" = "，iPod 5G 支持";
+", iPod 5G Support" = "，iPod 5 代支持";
 
 /* Format description */
-", Web Optimized" = "，Web 优化";
+", Web Optimized" = "，网络视频优化";
 
 /* HBStateFormatter -> work pass type format */
-"(subtitle scan)" = "（字幕扫描）";
+"(subtitle scan)" = "(字幕扫描)";
 
 /* Title short description -> video format */
 "%.6g FPS" = "%.6g FPS";
@@ -75,19 +75,19 @@ HBStateFormatter -> work time format */
 "%dx%d Storage, %dx%d Display" = "%1$dx%2$d 存储，%3$dx%4$d 显示";
 
 /* HBJob -> audio short description */
-"+ %lu additional audio tracks" = "+ %lu 个额外的音轨";
+"+ %lu additional audio tracks" = "+ %lu 条额外的音频轨道";
 
 /* HBJob -> subtitles short description */
-"+ %lu additional subtitles tracks" = "+ %lu 个额外的字幕轨道";
+"+ %lu additional subtitles tracks" = "+ %lu 条额外的字幕轨道";
 
 /* HBJob -> audio short description */
-"+ 1 additional audio track" = "+ 1 个额外的音轨";
+"+ 1 additional audio track" = "+ 1 条额外的音频轨道";
 
 /* HBJob -> subtitles short description */
-"+ 1 additional subtitles track" = "+ 1 个额外的字幕轨道";
+"+ 1 additional subtitles track" = "+ 1 条额外的字幕轨道";
 
 /* Title description */
-"1 Foreign Language Search Pass - " = "1 外语搜索 Pass - ";
+"1 Foreign Language Search Pass - " = "1 个外语搜索阶段 - ";
 
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "5.1 声道";
@@ -108,10 +108,10 @@ HBStateFormatter -> work time format */
 "Automatic" = "自动";
 
 /* Video description */
-"Bitrate: %d kbps" = "比特率：%dkbps";
+"Bitrate: %d kbps" = "码率：%dkbps";
 
 /* Subtitles description */
-"Burned In" = "烧入";
+"Burned In" = "内嵌字幕";
 
 /* HBFilters -> filter display name */
 "Bwdif" = "Bwdif";
@@ -127,21 +127,21 @@ Title description */
 "Chapters" = "章节";
 
 /* Title description */
-"Chapters %d through %d" = "章节 %1$d 到 %2$d";
+"Chapters %d through %d" = "%1$d 到 %2$d 章";
 
 /* Filters description
 HBJob -> filters short description */
-"Chroma Smooth" = "色度平滑";
+"Chroma Smooth" = "色品平滑";
 
 /* Filters description
 HBJob -> filters short description */
 "Colorspace" = "色彩空间";
 
 /* HBJob -> filters short description */
-"Comb Detect" = "梳状检测";
+"Comb Detect" = "梳状纹理检测";
 
 /* Video description */
-"Constant Quality: %.2f %s" = "恒定质量：%1$.2f %2$s";
+"Constant Quality: %.2f %s" = "固定品质：%1$.2f %2$s";
 
 /* HBJob -> video short description framerate */
 "CRF" = "CRF";
@@ -152,10 +152,10 @@ HBPicture -> summary */
 
 /* Filters description
 HBJob -> filters short description */
-"Deblock" = "去块效应";
+"Deblock" = "去块过滤";
 
 /* HBFilters -> filter display name */
-"Decomb" = "去梳状纹理";
+"Decomb" = "去梳状纹理过滤";
 
 /* HBFilters -> default display name
 Subtitles description */
@@ -175,7 +175,7 @@ Subtitles description */
 
 /* Dimensions description
 HBJob -> filters short description */
-"Detelecine" = "反胶卷过带";
+"Detelecine" = "去梳状纹理过滤";
 
 /* Dimensions description */
 "Dimensions:" = "尺寸：";
@@ -187,7 +187,7 @@ HBJob -> filters short description */
 "Dolby Surround" = "Dolby Surround";
 
 /* Audio description */
-"DRC: %.2f" = "DRC：%.2f";
+"DRC: %.2f" = "动态对比压缩 (DRC)：%.2f";
 
 /* Video description */
 "Encoder: %@, " = "编码器：%@，";
@@ -196,16 +196,16 @@ HBJob -> filters short description */
 "Encoding %@ " = "正在编码 %@ ";
 
 /* Filters description */
-"Filters:" = "滤镜：";
+"Filters:" = "过滤：";
 
 /* Subtitles description */
-"Forced Only" = "仅强制";
+"Forced Only" = "仅强制字幕";
 
 /* HBSubtitles -> search pass name */
 "Foreign Audio Search" = "外语音频搜索";
 
 /* Format description */
-"Format:" = "格式:";
+"Format:" = "格式：";
 
 /* Video description */
 "Framerate: " = "帧率：";
@@ -214,14 +214,14 @@ HBJob -> filters short description */
 "Frames" = "帧";
 
 /* Title description */
-"Frames %d through %d" = "帧 %1$d 到 %2$d";
+"Frames %d through %d" = "%1$d 到 %2$d 帧";
 
 /* Audio description */
 "Gain: %.2f" = "增益：%.2f";
 
 /* Filters description
 HBJob -> filters short description */
-"Grayscale" = "灰度";
+"Grayscale" = "灰阶";
 
 /* HBFilters -> filter display name */
 "HQDN3D" = "HQDN3D";
@@ -230,25 +230,25 @@ HBJob -> filters short description */
 "Invalid Bwdif custom settings." = "Bwdif 自定义设置无效";
 
 /* HBFilters -> invalid chroma smooth custom string description */
-"Invalid chroma smooth custom settings." = "无效的色度平滑自定义设置。";
+"Invalid chroma smooth custom settings." = "无效的色品平滑自定义设置。";
 
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid colorspace custom settings." = "无效的色彩空间自定义设置。";
 
 /* HBFilters -> invalid comb detect custom string description */
-"Invalid custom comb detect settings." = "无效的自定义疏状检测设置。";
+"Invalid custom comb detect settings." = "无效的自定义梳状纹理检测设置。";
 
 /* HBFilters -> invalid detelecine custom string description */
-"Invalid custom detelecine settings." = "无效的自定义反胶卷过带设置。";
+"Invalid custom detelecine settings." = "无效的自定义去梳状纹理过滤设置。";
 
 /* HBFilters -> invalid denoise custom string description */
-"Invalid custom HQDN3D settings" = "无效的自定义 HQDN3D 设置";
+"Invalid custom HQDN3D settings" = "无效的自定义 HQDN3D 设置。";
 
 /* HBFilters -> invalid denoise custom string description */
-"Invalid custom NLMeans settings" = "无效的自定义 NLMeans 设置";
+"Invalid custom NLMeans settings" = "无效的自定义 NLMeans 设置。";
 
 /* HBFilters -> invalid deblock custom string description */
-"Invalid deblock custom settings." = "无效的去块效应自定义设置。";
+"Invalid deblock custom settings." = "无效的去块过滤自定义设置。";
 
 /* HBFilters -> invalid Decomb custom string description */
 "Invalid Decomb custom settings." = "无效的 Decomb 自定义设置。";
@@ -275,25 +275,25 @@ HBJob -> filters short description */
 "Level: %@" = "级别：%@";
 
 /* Audio description */
-"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "混音：%1$@，采样率：%2$@，比特率：%3$d kbps";
+"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "音频混缩：%1$@，采样率：%2$@，码率：%3$d kbps";
 
 /* HBAudio -> Mixdown */
 "Mono" = "单声道";
 
 /* HBAudio -> Mixdown */
-"Mono (Left Only)" = "单声道（仅左声道）";
+"Mono (Left Only)" = "单声道 (仅左声道)";
 
 /* HBAudio -> Mixdown */
-"Mono (Right Only)" = "单声道（仅右声道）";
+"Mono (Right Only)" = "单声道 (仅右声道)";
 
 /* Title description */
-"Multi Passes" = "Multi Passes";
+"Multi Passes" = "多阶段编码";
 
 /* Title description */
-"Multi Passes Turbo" = "Multi Passes Turbo";
+"Multi Passes Turbo" = "多阶段编码加速";
 
 /* HBStateFormatter -> pass display name */
-"Muxing…" = "Muxing…";
+"Muxing…" = "正在混流…";
 
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
@@ -315,22 +315,22 @@ HBFilters -> off display name */
 "Options: %@" = "选项：%@";
 
 /* HBStateFormatter -> work pass number format */
-"Pass %d %@ of %d, %.2f %%" = "步骤 %1$d %2$@ of %3$d，%4$.2f %%";
+"Pass %d %@ of %d, %.2f %%" = "阶段 %1$d %2$@，共 %3$d 个阶段，%4$.2f %%";
 
 /* HBStateFormatter -> work pass number format */
-"Pass %d of %d, %.2f %%" = "步骤 %1$d of %2$d，%3$.2f %%";
+"Pass %d of %d, %.2f %%" = "阶段 %1$d，共 %2$d 个阶段，%3$.2f %%";
 
 /* HBStateFormatter -> work first pass number format */
-"Pass 1" = "步骤 1";
+"Pass 1" = "阶段 1";
 
 /* HBStateFormatter -> pass display name */
 "Paused" = "已暂停";
 
 /* Video description */
-"Peak %@ (constant frame rate)" = "峰值 %@（恒定帧率）";
+"Peak %@ (constant frame rate)" = "峰值 %@ (固定帧率)";
 
 /* Video description */
-"Peak %@ (may be lower)" = "峰值 %@（可能更低）";
+"Peak %@ (may be lower)" = "峰值 %@ (可能更低)";
 
 /* Preset description */
 "Preset:" = "预设：";
@@ -339,7 +339,7 @@ HBFilters -> off display name */
 "Preset: %@" = "预设：%@";
 
 /* Video description */
-"Profile: %@" = "配置文件：%@";
+"Profile: %@" = "配置：%@";
 
 /* Range description */
 "Range:" = "范围：";
@@ -348,10 +348,10 @@ HBFilters -> off display name */
 "Same as source" = "与源视频相同";
 
 /* Video description */
-"Same as source (constant)" = "与源视频相同（恒定）";
+"Same as source (constant)" = "与源视频相同 (固定)";
 
 /* Video description */
-"Same as source (variable)" = "与源视频相同（可变）";
+"Same as source (variable)" = "与源视频相同 (可变)";
 
 /* HBStateFormatter -> scan pass format */
 "Scanning title %d of %d, preview %d…" = "正在扫描标题 %1$d/%2$d，预览 %3$d…";
@@ -366,16 +366,16 @@ HBFilters -> off display name */
 "Seconds" = "秒";
 
 /* Title description */
-"Seconds %d through %d" = "秒 %1$d 到 %2$d";
+"Seconds %d through %d" = "%1$d 到 %2$d 秒";
 
 /* Filters description */
 "Sharpen" = "锐化";
 
 /* Source description */
-"Source:" = "源：";
+"Source:" = "源文件：";
 
 /* HBPicture -> short info */
-"Source: %dx%d, " = "源：%1$dx%2$d，";
+"Source: %dx%d, " = "源视频：%1$dx%2$d，";
 
 /* HBAudio -> Mixdown */
 "Stereo" = "立体声";
@@ -396,10 +396,10 @@ HBFilters -> off display name */
 "The preset \"%@\" could not be imported." = "无法导入预设 “%@”。";
 
 /* Job preset -> invalid preset recovery suggestion */
-"The preset is not a valid, try to select a different one." = "该预设不是有效的，尝试选择一个不同的预设。";
+"The preset is not a valid, try to select a different one." = "预设无效，请尝试选择另一个预设。";
 
 /* Preset -> import error reason */
-"The selected preset is invalid." = "所选预设是无效的。";
+"The selected preset is invalid." = "所选预设无效。";
 
 /* Preset -> import error reason */
 "The selected preset was created with a newer version of HandBrake." = "所选的预设是用较新版本的 HandBrake 创建的。";
@@ -412,10 +412,10 @@ HBFilters -> off display name */
 
 /* Audio track title description
 Subtitles track title description */
-"Title: %@" = "标题: %@";
+"Title: %@" = "标题：%@";
 
 /* Video description */
-"Tune: " = "调优：";
+"Tune: " = "微调：";
 
 /* HBJob -> video short description encoder name
 Video description */

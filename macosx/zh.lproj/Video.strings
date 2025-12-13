@@ -5,19 +5,19 @@
 "4Hq-BG-Ulb.ibShadowedIsNilPlaceholder" = "自动";
 
 /* Class = "NSButtonCell"; title = "Constant Framerate"; ObjectID = "6Dd-IP-Pwt"; */
-"6Dd-IP-Pwt.title" = "恒定帧率";
+"6Dd-IP-Pwt.title" = "固定帧率";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings."; ObjectID = "8CM-4G-oId"; */
 "8CM-4G-oId.ibShadowedToolTip" = "视频编码器级别。设置并确保符合指定的视频压缩标准级别。覆盖所有其他设置。";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Framerate (Frames Per Second). Number of pictures displayed during each second of video."; ObjectID = "9tc-EO-QMd"; */
-"9tc-EO-QMd.ibShadowedToolTip" = "帧率（每秒帧数）。在每秒钟的视频中显示的画面数量。";
+"9tc-EO-QMd.ibShadowedToolTip" = "帧率 (每秒帧数/FPS)。每秒视频中显示的画面数量。";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
-"A3o-Zx-OfM.ibShadowedToolTip" = "平均比特率会改变质量，以确保整个视频的数据率保持相对一致。";
+"A3o-Zx-OfM.ibShadowedToolTip" = "平均码率会通过调整画质以确保视频中的数据传输速率保持相对稳定。";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
-"bnV-aE-FVh.ibShadowedToolTip" = "多次编码会在编码之前分析整个源视频。收集到的信息使得编码器能够在平均比特率模式下做出更明智的质量和数据速率决策。";
+"bnV-aE-FVh.ibShadowedToolTip" = "多阶段编码会在对源视频进行编码前对其进行整体分析。所收集的信息能让编码器在平均码率模式下就质量和数据速率做出更明智的决策。";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
@@ -32,88 +32,88 @@
 "CRz-On-Jen.ibShadowedIsNilPlaceholder" = "自动";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios."; ObjectID = "cXd-X7-OhB"; */
-"cXd-X7-OhB.ibShadowedToolTip" = "视频编码器调优。进一步调整编码器预设以针对特定场景设置优化。";
+"cXd-X7-OhB.ibShadowedToolTip" = "视频编码器微调。进一步调整编码器预设，以针对特定场景优化设置。";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Displays all internal video encoder options."; ObjectID = "dwn-bf-Ua0"; */
-"dwn-bf-Ua0.ibShadowedToolTip" = "显示所有内部视频编码器选项。";
+"dwn-bf-Ua0.ibShadowedToolTip" = "显示全部内建视频编码器选项。";
 
 /* Class = "NSButtonCell"; title = "Fast Decode"; ObjectID = "EcY-w1-bc8"; */
 "EcY-w1-bc8.title" = "快速解码";
 
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
-"F3s-qR-qeE.title" = "质量：";
+"F3s-qR-qeE.title" = "品质：";
 
 /* Class = "NSMenuItem"; title = "Same As Source"; ObjectID = "F37-pp-Zet"; */
 "F37-pp-Zet.title" = "与源视频相同";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.\n\nAdjust the slider to the right to increase compression efficiency at the expense of encoding speed, or to the left to increase encoding speed at the expense of compression efficiency."; ObjectID = "fue-2d-Bjn"; */
-"fue-2d-Bjn.ibShadowedToolTip" = "视频编码器预设。调整编码器设置以平衡压缩效率和编码速度。较慢的编码器预设可能会使用与某些设备兼容性较差的设置。\n\n将滑块向右调整可提高压缩效率，但会降低编码速度；向左调整则可提高编码速度，但会降低压缩效率。";
+"fue-2d-Bjn.ibShadowedToolTip" = "视频编码器预设。调整编码器设置以平衡压缩率和编码速度。较慢的编码器预设可能使用与某些设备兼容性较差的设置。\n\n将滑动条向右移动可提高压缩率，但会降低编码速度；向左移动则可提高编码速度，但会降低压缩率。";
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
-"fzT-im-zKN.title" = "调优：";
+"fzT-im-zKN.title" = "微调：";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
-"GPu-Ht-bKg.ibShadowedToolTip" = "恒定质量会改变比特率，以确保整个视频的视觉质量保持相对一致。\n\n将质量滑块向右调整以提高质量，或向左调整以降低质量，以正负 1-2 的小幅度递增。\n\nx264 和 x265 编码器的推荐值是 RF 18-28。更高的质量设置可能会产生非常大的文件。\n\nx264 在 RF 0 时是无损的。";
+"GPu-Ht-bKg.ibShadowedToolTip" = "固定品质模式会根据需要调整码率，以确保视频的视觉质量在整个视频中保持相对稳定。\n\n将品质滑动条向右调整可提高画质，向左调整可降低画质，每次调整幅度为正负 1 到 2 之间的微小增量。\n\n对于 x264 和 x265 编码器，推荐的值为 RF 18 至 28。更高的品质设置可能会生成体积巨大的文件。\n\nx264 在 RF 0 时是无损压缩。";
 
 /* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "Hho-GY-qOR"; */
-"Hho-GY-qOR.title" = "配置文件：";
+"Hho-GY-qOR.title" = "配置：";
 
 /* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ja7-Zr-y1P"; */
-"ja7-Zr-y1P.title" = "附加选项：";
+"ja7-Zr-y1P.title" = "额外选项：";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "kh8-d2-hSD"; */
-"kh8-d2-hSD.ibShadowedToolTip" = "视频编码器配置文件。设置并确保符合指定的视频压缩标准配置文件。覆盖所有其他设置。";
+"kh8-d2-hSD.ibShadowedToolTip" = "视频编码器配置。设置并确保符合指定的视频压缩标准配置。覆盖所有其他设置。";
 
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "视频编码器：";
 
 /* Class = "NSButtonCell"; title = "Multi-pass encoding"; ObjectID = "nPA-nO-Eik"; */
-"nPA-nO-Eik.title" = "多次编码";
+"nPA-nO-Eik.title" = "多阶段编码";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
-"olm-zg-k9Y.ibShadowedToolTip" = "Turbo first pass 会加速多次编码中的分析阶段，但会稍微牺牲一些分析的精度。";
+"olm-zg-k9Y.ibShadowedToolTip" = "分析阶段加速功能可加速处理多遍编码的分析阶段，但会对分析效果造成轻微影响。";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "预设：";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility."; ObjectID = "R00-pj-eFX"; */
-"R00-pj-eFX.ibShadowedToolTip" = "颜色范围。决定参考黑白的数值。设置为有限以最大化兼容性。";
+"R00-pj-eFX.ibShadowedToolTip" = "颜色范围。用于指定参考黑点与白点的值。设为有限可最大限度提高兼容性。";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r18-GT-7jT"; */
 "r18-GT-7jT.title" = "其他视图";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "rbo-w6-ENd"; */
-"rbo-w6-ENd.ibShadowedToolTip" = "额外的视频编码器选项。仅供高级使用。\n\n语法：option-1=foo:opt2=bar,baz";
+"rbo-w6-ENd.ibShadowedToolTip" = "额外的视频编码器选项。仅供高级用途。\n\n语法：option-1=foo:opt2=bar,baz";
 
 /* Class = "NSTextFieldCell"; title = "RF:"; ObjectID = "rRB-9F-pHn"; */
 "rRB-9F-pHn.title" = "RF：";
 
 /* Class = "NSTextFieldCell"; title = "Framerate (FPS):"; ObjectID = "SJc-tv-AMH"; */
-"SJc-tv-AMH.title" = "帧率（FPS）：";
+"SJc-tv-AMH.title" = "帧率 (FPS)：";
 
 /* Class = "NSTextFieldCell"; title = "Level:"; ObjectID = "sTM-lk-DBC"; */
 "sTM-lk-DBC.title" = "级别：";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering."; ObjectID = "stU-Fo-Avu"; */
-"stU-Fo-Avu.ibShadowedToolTip" = "快速解码使用的设置可以减少在播放编码视频时 CPU 的占用。这对那些播放视频会出现卡顿的设备很有用。";
+"stU-Fo-Avu.ibShadowedToolTip" = "快速解码选项将使用可降低编码生成的视频在播放期间的 CPU 使用率的设置。对于那些播放视频时容易卡顿的设备很有用。";
 
 /* Class = "NSMenuItem"; title = "Full"; ObjectID = "TVE-3O-C2l"; */
 "TVE-3O-C2l.title" = "完整";
 
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
-"VQe-CK-YDR.title" = "平均比特率（kbps）：";
+"VQe-CK-YDR.title" = "平均码率 (kbps)：";
 
 /* Class = "NSButtonCell"; title = "Turbo analysis pass"; ObjectID = "vSc-VB-NEv"; */
-"vSc-VB-NEv.title" = "Turbo analysis pass";
+"vSc-VB-NEv.title" = "分析阶段加速";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder. Determines video type and settings used during encoding."; ObjectID = "xwK-Yu-a1e"; */
-"xwK-Yu-a1e.ibShadowedToolTip" = "视频编码器。决定编码期间所使用的视频类型和设置。";
+"xwK-Yu-a1e.ibShadowedToolTip" = "视频编码器。决定编码过程中使用的视频类型和设置。";
 
 /* Class = "NSTextFieldCell"; title = "Color Range:"; ObjectID = "yBk-7V-j1G"; */
 "yBk-7V-j1G.title" = "颜色范围：";
 
 /* Class = "NSButtonCell"; title = "Constant Quality"; ObjectID = "ZjL-cY-O5f"; */
-"ZjL-cY-O5f.title" = "恒定质量";
+"ZjL-cY-O5f.title" = "固定品质";
 
 /* Class = "NSButtonCell"; title = "Variable Framerate"; ObjectID = "zZo-75-1WG"; */
 "zZo-75-1WG.title" = "可变帧率";

@@ -14,7 +14,7 @@
 "D7Y-wr-PDj.title" = "全部启用";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "dsG-Ho-vsT"; */
-"dsG-Ho-vsT.title" = "表视图单元格";
+"dsG-Ho-vsT.title" = "表格视图单元格";
 
 /* Class = "NSWindow"; title = "Window"; ObjectID = "F0z-JX-Cv5"; */
 "F0z-JX-Cv5.title" = "窗口";
@@ -32,10 +32,10 @@
 "jHg-nh-9NJ.title" = "取消";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "JqJ-5C-Yhw"; */
-"JqJ-5C-Yhw.title" = "校验";
+"JqJ-5C-Yhw.title" = "检测";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "k84-a6-eZ7"; */
-"k84-a6-eZ7.title" = "校验";
+"k84-a6-eZ7.title" = "检查";
 
 /* Class = "NSMenuItem"; title = "Disable All"; ObjectID = "MIb-bL-Z6i"; */
 "MIb-bL-Z6i.title" = "全部禁用";

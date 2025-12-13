@@ -26,13 +26,13 @@
 "66v-2g-DHn.title" = "Использовать только первый кодироващик для вторичного аудио";
 
 /* Class = "NSMenuItem"; title = "Off"; ObjectID = "AaG-rx-x5W"; */
-"AaG-rx-x5W.title" = "Выкл.";
+"AaG-rx-x5W.title" = "Выключено";
 
 /* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
 "AQe-Sg-Qgh.title" = "Запасной проход:";
 
 /* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "aQn-7q-tQG"; */
-"aQn-7q-tQG.title" = "Название:";
+"aQn-7q-tQG.title" = "Имя:";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Audio Track Languages"; ObjectID = "aTC-39-h6S"; */
 "aTC-39-h6S.ibExternalAccessibilityDescription" = "Языки аудио дорожек";
@@ -68,10 +68,13 @@
 "dpw-He-8eZ.title" = "Text Cell";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "DxT-bF-prJ"; */
-"DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "Авто";
+"DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "Автоматически";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "E93-Md-aWa"; */
 "E93-Md-aWa.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает DTS.  Это включает DTS в проход для выбора, когда проход выбора активен.";
+
+/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "eA6-za-Up0"; */
+"eA6-za-Up0.title" = "Opus";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fgl-Ev-ELt"; */
 "fgl-Ev-ELt.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает AC3.  Это включает AC3 в проход для выбора, когда проход выбора активен.";
@@ -84,6 +87,12 @@
 
 /* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
 "GbM-vm-RC2.title" = "Поведение выбора дорожек:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
+"GHJ-25-kZl.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает MP2. Это включает MP2 в проход для выбора, когда проход выбора активен.";
+
+/* Class = "NSMenuItem"; title = "Unnamed Tracks"; ObjectID = "gjw-kg-H3W"; */
+"gjw-kg-H3W.title" = "Дорожки без имени";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "gOm-E9-8K7"; */
 "gOm-E9-8K7.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает FLAC.  Это включает FLAC в проход для выбора, когда проход выбора активен.";
@@ -154,6 +163,9 @@
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
 "OVr-Jm-VrK.title" = "0";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "OWh-gZ-JcF"; */
+"OWh-gZ-JcF.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает Opus. Это включает Opus в проход для выбора, когда проход выбора активен.";
+
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Кодек";
 
@@ -162,6 +174,15 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibShadowedToolTip" = "Частота сэмплирования аудио к килогерцах (кГц). Рекомендуется \"Авто\".";
+
+/* Class = "NSButtonCell"; title = "Vorbis"; ObjectID = "rXl-qc-MHk"; */
+"rXl-qc-MHk.title" = "Vorbis";
+
+/* Class = "NSMenuItem"; title = "All Tracks"; ObjectID = "s0U-gp-0sK"; */
+"s0U-gp-0sK.title" = "Все дорожки";
+
+/* Class = "NSButtonCell"; title = "ALAC"; ObjectID = "S0X-gJ-f6A"; */
+"S0X-gJ-f6A.title" = "ALAC";
 
 /* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
 "s6s-EH-5CB.title" = "Авто проход:";
@@ -196,11 +217,20 @@
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Table View Cell";
 
+/* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "XmJ-lo-ciO"; */
+"XmJ-lo-ciO.title" = "Передавать «как есть»";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibExternalAccessibilityDescription" = "Усиление";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibShadowedToolTip" = "Усиление аудио в децибелах (дБ). Увеличивает или уменьшает громкость аудио.";
+
+/* Class = "NSTextFieldCell"; title = "Autonaming:"; ObjectID = "XOM-af-vzp"; */
+"XOM-af-vzp.title" = "Именовать автоматически:";
+
+/* Class = "NSButtonCell"; title = "MP2"; ObjectID = "Z8O-AS-UdA"; */
+"Z8O-AS-UdA.title" = "MP2";
 
 /* Class = "NSButtonCell"; title = "TrueHD"; ObjectID = "z9d-P3-6UP"; */
 "z9d-P3-6UP.title" = "TrueHD";
