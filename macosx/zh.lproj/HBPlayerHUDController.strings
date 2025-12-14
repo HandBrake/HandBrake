@@ -5,16 +5,16 @@
 "6BQ-wU-p2C.title" = "轨道";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "End Live Preview"; ObjectID = "84p-08-fGK"; */
-"84p-08-fGK.ibExternalAccessibilityDescription" = "停止实时预览";
+"84p-08-fGK.ibExternalAccessibilityDescription" = "结束实时预览";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Exit player and return to still image previews."; ObjectID = "84p-08-fGK"; */
-"84p-08-fGK.ibShadowedToolTip" = "退出播放器并回到静止图像预览。";
+"84p-08-fGK.ibShadowedToolTip" = "退出播放器并返回到静止图像预览。";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
-"CQ0-pk-SFk.ibExternalAccessibilityDescription" = "转到结尾";
+"CQ0-pk-SFk.ibExternalAccessibilityDescription" = "跳转到结尾";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
-"CQ0-pk-SFk.ibShadowedToolTip" = "转到结尾";
+"CQ0-pk-SFk.ibShadowedToolTip" = "跳转到结尾";
 
 /* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "dGi-LK-P1E"; */
 "dGi-LK-P1E.title" = "00:00:00";
@@ -29,19 +29,19 @@
 "gzA-no-jdv.ibExternalAccessibilityDescription" = "音量控制";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Drag to change volume."; ObjectID = "gzA-no-jdv"; */
-"gzA-no-jdv.ibShadowedToolTip" = "拖动以改变音量大小。";
+"gzA-no-jdv.ibShadowedToolTip" = "拖动以更改音量。";
 
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "Timeline"; ObjectID = "lBp-JT-ehn"; */
 "lBp-JT-ehn.ibExternalAccessibilityDescription" = "时间轴";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Drag to change timeline position."; ObjectID = "lBp-JT-ehn"; */
-"lBp-JT-ehn.ibShadowedToolTip" = "拖动以改变时间轴位置";
+"lBp-JT-ehn.ibShadowedToolTip" = "拖动以更改时间轴位置。";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Play/Pause"; ObjectID = "mLA-ei-4sK"; */
 "mLA-ei-4sK.ibExternalAccessibilityDescription" = "播放/暂停";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Toggle Play/Pause"; ObjectID = "mLA-ei-4sK"; */
-"mLA-ei-4sK.ibShadowedToolTip" = "切换 播放/暂停";
+"mLA-ei-4sK.ibShadowedToolTip" = "切换播放/暂停状态";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Time Remaining"; ObjectID = "PVD-pq-1ZG"; */
 "PVD-pq-1ZG.ibExternalAccessibilityDescription" = "剩余时间";
@@ -62,8 +62,8 @@
 "Vj1-Za-AUV.ibShadowedToolTip" = "启用或禁用轨道。";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
-"WuP-9l-8AN.ibExternalAccessibilityDescription" = "转到开头";
+"WuP-9l-8AN.ibExternalAccessibilityDescription" = "跳转到开头";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
-"WuP-9l-8AN.ibShadowedToolTip" = "转到开头";
+"WuP-9l-8AN.ibShadowedToolTip" = "跳转到开头";
 

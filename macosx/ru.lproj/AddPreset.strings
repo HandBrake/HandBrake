@@ -5,7 +5,7 @@
 "8kl-Sh-Gh7.ibShadowedToolTip" = "Введите описание для нового пресета. Описание будет показано при наведении курсора над пресетом в списке пресетов.";
 
 /* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "75B-xq-Qbe"; */
-"75B-xq-Qbe.title" = "Лимит Разрешения:";
+"75B-xq-Qbe.title" = "Предельное разрешение:";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
 "a0j-nw-n23.title" = "Поведение выбора...";
@@ -14,13 +14,13 @@
 "aez-2b-JXx.ibShadowedToolTip" = "Поведение выбора определяет дорожку (-ки) и используемые настройки при выборе пресета.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a name for the new preset. This name will be displayed in the presets list."; ObjectID = "aKg-n4-OUS"; */
-"aKg-n4-OUS.ibShadowedToolTip" = "Введите название для нового пресета. Описание будет показано в списке пресетов.";
+"aKg-n4-OUS.ibShadowedToolTip" = "Введите имя нового пресета. Оно будет отображаться в списке пресетов.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "bma-pS-phM"; */
 "bma-pS-phM.ibShadowedToolTip" = "Размер изображения управляет тем, как размеры видео применяются при выборе пресета.\n\n'Нет' использует выбранные в данный момент размеры.\n\n'Пользовательское' позволяет установить максимальную ширину и/или высоту.\n\n'Максимум исходного файла' использует полные размеры каждого исходного файла.";
 
 /* Class = "NSWindow"; title = "New Preset"; ObjectID = "dbZ-Wo-9nG"; */
-"dbZ-Wo-9nG.title" = "Новый пресет";
+"dbZ-Wo-9nG.title" = "Новая предустановка";
 
 /* Class = "NSButtonCell"; title = "Add"; ObjectID = "Deg-rS-mRc"; */
 "Deg-rS-mRc.title" = "Добавить";
@@ -29,7 +29,7 @@
 "gOg-oO-8ar.ibExternalAccessibilityDescription" = "Ширина изображения";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width."; ObjectID = "gOg-oO-8ar"; */
-"gOg-oO-8ar.ibShadowedToolTip" = "Максимальная ширина хранения в пикселях, разрешенная пресетом. Укажите 0 для неограниченной ширины.";
+"gOg-oO-8ar.ibShadowedToolTip" = "Максимальное значение фактической ширины видео, которое допускается пресетом, в пикселях. Для снятия ограничений установите 0.";
 
 /* Class = "NSTextFieldCell"; title = "Description:"; ObjectID = "hc8-1h-Jye"; */
 "hc8-1h-Jye.title" = "Описание:";
@@ -41,7 +41,7 @@
 "IyE-Lz-32s.title" = "Категория:";
 
 /* Class = "NSTextFieldCell"; title = "Preset Name:"; ObjectID = "jhj-Et-ncF"; */
-"jhj-Et-ncF.title" = "Название пресета:";
+"jhj-Et-ncF.title" = "Имя пресета:";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
 "LPX-Rc-KLa.title" = "Поведение выбора...";
@@ -50,7 +50,7 @@
 "Mga-dS-8BF.ibExternalAccessibilityDescription" = "Высота изображения";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height."; ObjectID = "Mga-dS-8BF"; */
-"Mga-dS-8BF.ibShadowedToolTip" = "Максимальная высота хранения в пикселях, разрешенная пресетом. Укажите 0 для неограниченной высоты.";
+"Mga-dS-8BF.ibShadowedToolTip" = "Максимальное значение фактической высоты видео, которое допускается пресетом, в пикселях. Для снятия ограничений установите 0.";
 
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "Nfk-ix-xIv"; */
 "Nfk-ix-xIv.title" = "х";
@@ -65,5 +65,5 @@
 "Sf8-HP-mhE.title" = "Новая категория...";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Resolution Limit allows you to set a maximum width and/or height."; ObjectID = "z6B-ig-ouq"; */
-"z6B-ig-ouq.ibShadowedToolTip" = "Лимит Разрешения позволяет вам устанавливать максимальную ширину и/или высоту.";
+"z6B-ig-ouq.ibShadowedToolTip" = "Предельные значения ширины или высоты видео. Можно выбрать стандартный формат или задать свой.";
 

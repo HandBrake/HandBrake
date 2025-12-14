@@ -23,10 +23,10 @@
 "%@ fps" = "%@ bilder/s";
 
 /* Queue status */
-"%lu encode pending" = "%lu enkodning väntar";
+"%lu encode pending" = "%lu kodning väntar";
 
 /* Queue status */
-"%lu encodes pending" = "%lu enkodningar väntar";
+"%lu encodes pending" = "%lu kodningar väntar";
 
 /* No comment provided by engineer. */
 "%lu jobs selected" = "%lu jobb valt";
@@ -129,7 +129,7 @@ Touch bar */
 "Cancel" = "Avbryt";
 
 /* Touch bar */
-"Cancel Encoding" = "Avbryt enkodning";
+"Cancel Encoding" = "Avbryt kodning";
 
 /* Toolbar Open/Cancel Item
 Touch bar */
@@ -149,7 +149,7 @@ Preferences -> Output Name Token */
 "Codec" = "Kodek";
 
 /* Queue Alert -> cancel rip first button */
-"Continue Encoding" = "Fortsätt enkodning";
+"Continue Encoding" = "Fortsätt kodning";
 
 /* Copy Protection Alert -> message */
 "Copy-Protected sources are not supported." = "Kopieringsskyddade källor stöds inte.";
@@ -192,29 +192,29 @@ File already exists in queue alert -> informative text */
 "Done" = "Färdig";
 
 /* HBQueueItemView -> Encode state accessibility label */
-"Encode canceled" = "Enkodning avbröts";
+"Encode canceled" = "Kodning avbröts";
 
 /* HBQueueItemView -> Encode state accessibility label */
-"Encode complete" = "Enkodning färdig";
+"Encode complete" = "Kodning färdig";
 
 /* HBQueueItemView -> Encode state accessibility label
 Queue done notification failed message */
-"Encode failed" = "Enkodning misslyckades";
+"Encode failed" = "Kodning misslyckades";
 
 /* HBQueueItemView -> Encode state accessibility label */
-"Encode ready" = "Enkodningen är färdig";
+"Encode ready" = "Kodningen är färdig";
 
 /* HBQueueItemView -> Encode state accessibility label */
-"Encode working" = "Enkodningen pågår";
+"Encode working" = "Kodningen pågår";
 
 /* Preferences -> Output Name Token */
-"Encoder" = "Enkodare";
+"Encoder" = "Kodare";
 
 /* No comment provided by engineer. */
-"Encoding %lu Jobs" = "Enkodar %lu jobb";
+"Encoding %lu Jobs" = "Kodar %lu jobb";
 
 /* No comment provided by engineer. */
-"Encoding Job: %@" = "Enkodar jobb: %@";
+"Encoding Job: %@" = "Kodar jobb: %@";
 
 /* Job statistics */
 "Ended at:" = "Avslutad:";
@@ -259,7 +259,7 @@ Queue done notification failed message */
 "Hide Sidebar" = "Dölj sidofält";
 
 /* Quit Alert -> informative text */
-"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Om du avslutar HandBrake kommer din aktuella enkodning att läsas in i din kö vid nästa start. Vill du avsluta ändå?";
+"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Om du avslutar HandBrake kommer din aktuella kodning att läsas in i din kö vid nästa start. Vill du avsluta ändå?";
 
 /* Import preset open panel title */
 "Import presets" = "Importera förval";
@@ -272,7 +272,7 @@ Queue done notification failed message */
 
 /* Queue Edit Alert -> stop and edit first button
 Queue Stop Alert -> stop and remove first button */
-"Keep Encoding" = "Fortsätt enkodning";
+"Keep Encoding" = "Fortsätt kodning";
 
 /* Touch bar */
 "Live Preview" = "Direkt förhandsvisning";
@@ -293,7 +293,7 @@ Queue Stop Alert -> stop and remove first button */
 "My Presets" = "Mina förval";
 
 /* Queue status */
-"No encode pending" = "Ingen enkodning väntar";
+"No encode pending" = "Ingen kodning väntar";
 
 /* Preview -> accessibility label */
 "No image" = "Ingen bild";
@@ -336,11 +336,11 @@ Toolbar Pause Item */
 /* Queue -> pause/resume menu
 Toolbar Pause Item
 Touch bar */
-"Pause Encoding" = "Pausa enkodning";
+"Pause Encoding" = "Pausa kodning";
 
 /* Main Window Pause Toolbar Item
 Touch bar */
-"Pause/Resume Encoding" = "Pausa/Återuppta enkodningen";
+"Pause/Resume Encoding" = "Pausa/Återuppta kodningen";
 
 /* Job statistics */
 "Paused time:" = "Pausad tid:";
@@ -442,7 +442,7 @@ Queue window title */
 
 /* Queue -> pause/resume men
 Toolbar Pause Item */
-"Resume Encoding" = "Återuppta enkodning";
+"Resume Encoding" = "Återuppta kodning";
 
 /* HBQueueItemView -> Reveal button accessibility label */
 "Reveal destination in Finder" = "Visa målet i Finder";
@@ -461,7 +461,7 @@ Touch bar */
 "Seconds" = "Sekunder";
 
 /* Queue Alert -> cancel rip informative text */
-"Select Continue Encoding to dismiss this dialog without making changes." = "Välj Fortsätt enkodningen för att stänga denna dialogruta utan att göra ändringar.";
+"Select Continue Encoding to dismiss this dialog without making changes." = "Välj Fortsätt kodningen för att stänga denna dialogruta utan att göra ändringar.";
 
 /* Preferences -> send to app destination open panel */
 "Select the desired external application" = "Välj önskat externt program";
@@ -511,14 +511,14 @@ Toolbar Start/Stop Item */
 /* Menu Start/Stop Item
 Queue -> start/stop menu
 Toolbar Start/Stop Item */
-"Start Encoding" = "Starta enkodning";
+"Start Encoding" = "Starta kodning";
 
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Starta kö";
 
 /* Main Window Start Toolbar Item
 Touch bar */
-"Start/Stop Encoding" = "Starta/Stoppa enkodning";
+"Start/Stop Encoding" = "Starta/Stoppa kodning";
 
 /* Job statistics */
 "Started at:" = "Startades:";
@@ -538,28 +538,28 @@ Toolbar Start/Stop Item */
 
 /* Queue -> start/stop menu
 Toolbar Start/Stop Item */
-"Stop Encoding" = "Stoppa enkodning";
+"Stop Encoding" = "Stoppa kodning";
 
 /* Queue Stop Alert -> stop and remove second button */
-"Stop Encoding and Delete" = "Stoppa enkodning och ta bort";
+"Stop Encoding and Delete" = "Stoppa kodning och ta bort";
 
 /* Queue Edit Alert -> stop and edit second button */
-"Stop Encoding and Edit" = "Stoppa enkodning och redigera";
+"Stop Encoding and Edit" = "Stoppa kodning och redigera";
 
 /* Queue Edit Alert -> stop and edit message */
-"Stop This Encode and Edit It?" = "Stoppa denna enkodning och redigera den?";
+"Stop This Encode and Edit It?" = "Stoppa denna kodning och redigera den?";
 
 /* Queue Stop Alert -> stop and remove message */
-"Stop This Encode and Remove It?" = "Stoppa denna enkodning och ta bort den?";
+"Stop This Encode and Remove It?" = "Stoppa denna kodning och ta bort den?";
 
 /* Player HUD -> subtitles menu */
 "Subtitles" = "Undertexter";
 
 /* Queue Done Alert -> shut down message */
-"The computer will shut down after encoding is done." = "Datorn kommer att stängas av efter att enkodningen är färdig.";
+"The computer will shut down after encoding is done." = "Datorn kommer att stängas av efter att kodningen är färdig.";
 
 /* Queue Done Alert -> sleep message */
-"The computer will sleep after encoding is done." = "Denna datorn kommer att försättas i sömnläge efter enkodningen är färdig.";
+"The computer will sleep after encoding is done." = "Denna datorn kommer att försättas i sömnläge efter kodningen är färdig.";
 
 /* Chapters import -> invalid CSV recovery suggestion */
 "The CSV file is not a valid chapters CSV file." = "CSV-filen är inte en giltig CSV-fil med kapitel.";
@@ -608,16 +608,16 @@ Rename preset window -> name alert message */
 "Working" = "Arbetar";
 
 /* Queue Alert -> cancel rip message */
-"You are currently encoding. What would you like to do?" = "Du enkodar för tillfället. Vad vill du göra?";
+"You are currently encoding. What would you like to do?" = "Du kodar för tillfället. Vad vill du göra?";
 
 /* Delete preset alert -> informative text */
 "You can't undo this action." = "Du kan inte ångra denna åtgärd.";
 
 /* Queue Done Alert -> shut down informative text */
-"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences." = "Du har valt att stänga av datorn efter enkodningen. Gå till HandBrake-inställningarna för att inaktivera avstängningen.";
+"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences." = "Du har valt att stänga av datorn efter kodningen. Gå till HandBrake-inställningarna för att inaktivera avstängningen.";
 
 /* Queue Done Alert -> sleep informative text */
-"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences." = "Du har valt att försätta datorn i viloläge efter enkodningen. Gå till HandBrake-inställningarna för att inaktivera viloläget.";
+"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences." = "Du har valt att försätta datorn i viloläge efter kodningen. Gå till HandBrake-inställningarna för att inaktivera viloläget.";
 
 /* Queue -> disk almost full alert informative text */
 "You need to make more space available on your destination disk." = "Du behöver frigöra mer plats på din måldisk.";
@@ -626,14 +626,14 @@ Rename preset window -> name alert message */
 "Your destination disk is almost full." = "Din måldisk är nästan full.";
 
 /* Queue done notification message */
-"Your encode %@ couldn't be completed." = "Din enkodning %@ kunde inte färdigställas.";
+"Your encode %@ couldn't be completed." = "Din kodning %@ kunde inte färdigställas.";
 
 /* Queue done notification message */
-"Your encode %@ is done!" = "Din enkodning %@ är färdig!";
+"Your encode %@ is done!" = "Din kodning %@ är färdig!";
 
 /* Queue Edit Alert -> stop and edit informative text
 Queue Stop Alert -> stop and remove informative text */
-"Your movie will be lost if you don't continue encoding." = "Din film kommer att gå förlorad om du inte fortsätter enkodningen.";
+"Your movie will be lost if you don't continue encoding." = "Din film kommer att gå förlorad om du inte fortsätter kodningen.";
 
 /* Queue done notification message */
 "Your queue is done!" = "Din kö är färdig!";

@@ -17,7 +17,7 @@
 "dsG-Ho-vsT.title" = "Table View Cell";
 
 /* Class = "NSWindow"; title = "Window"; ObjectID = "F0z-JX-Cv5"; */
-"F0z-JX-Cv5.title" = "Window";
+"F0z-JX-Cv5.title" = "Вікно";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "Fcv-FE-8Fv"; */
 "Fcv-FE-8Fv.title" = "Text Cell";
@@ -32,10 +32,10 @@
 "jHg-nh-9NJ.title" = "Скасувати";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "JqJ-5C-Yhw"; */
-"JqJ-5C-Yhw.title" = "Check";
+"JqJ-5C-Yhw.title" = "Перевірити";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "k84-a6-eZ7"; */
-"k84-a6-eZ7.title" = "Перевірка.";
+"k84-a6-eZ7.title" = "Перевірка";
 
 /* Class = "NSMenuItem"; title = "Disable All"; ObjectID = "MIb-bL-Z6i"; */
 "MIb-bL-Z6i.title" = "Вимкнути все";
@@ -50,7 +50,7 @@
 "tp1-g5-7XN.title" = "Інвертований стан";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedDisplayPattern = "%{value1}@"; ObjectID = "xTt-zi-wf0"; */
-"xTt-zi-wf0.ibShadowedDisplayPattern" = "%{value1}@";
+"xTt-zi-wf0.ibShadowedDisplayPattern" = "%{значення1}@";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "zwi-rc-q6x"; */
 "zwi-rc-q6x.title" = "Text Cell";

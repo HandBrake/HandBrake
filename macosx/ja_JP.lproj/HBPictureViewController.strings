@@ -82,9 +82,6 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom border color"; ObjectID = "aby-WS-tzS"; */
 "aby-WS-tzS.ibExternalAccessibilityDescription" = "カスタムボーダーカラー";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Custom border color"; ObjectID = "aby-WS-tzS"; */
-"aby-WS-tzS.ibShadowedToolTip" = "カスタムボーダーカラー";
-
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "Ag1-Tk-hCm"; */
 "Ag1-Tk-hCm.ibExternalAccessibilityDescription" = "表示幅";
 

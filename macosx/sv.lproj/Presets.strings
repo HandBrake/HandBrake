@@ -44,7 +44,7 @@
 "uad-bt-uKD.ibExternalAccessibilityDescription" = "Förval";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset."; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibShadowedToolTip" = "Förval är grupper av enkodarinställningar anpassade för specifika scenarior. Välj den som närmast matchar dina önskemål.\n\nÅsidosätter alla enkodarinställningar. Inställningar kan justeras ytterligare efter att ett förval valts.";
+"uad-bt-uKD.ibShadowedToolTip" = "Förval är grupper av kodarinställningar anpassade för specifika scenarior. Välj den som närmast matchar dina önskemål.\n\nÅsidosätter alla kodarinställningar. Inställningar kan justeras ytterligare efter att ett förval valts.";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
 "xEQ-Un-J0n.title" = "Exportera…";

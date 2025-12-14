@@ -5,7 +5,7 @@
 "69Q-xB-Vyq.title" = "Субтитри DVD";
 
 /* Class = "NSTextFieldCell"; title = "Burn-In Behavior:"; ObjectID = "640-NB-Uby"; */
-"640-NB-Uby.title" = "Burn-In Behavior:";
+"640-NB-Uby.title" = "Впаяти субтитри:";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Subtitles Track Languages"; ObjectID = "aTC-39-h6S"; */
 "aTC-39-h6S.ibExternalAccessibilityDescription" = "Мови доріжок субтитрів";
@@ -17,7 +17,7 @@
 "bfV-9D-6dh.title" = "Субтитри Blu-ray";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "ceZ-On-t5S"; */
-"ceZ-On-t5S.ibShadowedToolTip" = "Запишіть першу вибрану доріжку субтитрів DVD. Усі інші доріжки субтитрів DVD буде відкинуто. Використовуйте цей параметр, якщо ваше програмне забезпечення для відтворення або пристрій не підтримує субтитри DVD.\n\nМожна записати лише одну доріжку субтитрів.";
+"ceZ-On-t5S.ibShadowedToolTip" = "Зашийте першу вибрану доріжку субтитрів DVD. Усі інші доріжки субтитрів DVD буде відкинуто. Використовуйте цей параметр, якщо ваше програмне забезпечення для відтворення або пристрій не підтримує субтитри DVD.\n\nМожна вшити лише одну доріжку субтитрів.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio, then First Selected Track"; ObjectID = "d79-2j-fhc"; */
 "d79-2j-fhc.title" = "Іноземне аудіо, потім Перша вибрана доріжка";
@@ -44,10 +44,10 @@
 "kwM-lz-5lG.title" = "Поведінка при виборі субтитрів";
 
 /* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "KXY-tz-asI"; */
-"KXY-tz-asI.title" = "Назва треку Passthru";
+"KXY-tz-asI.title" = "Передавати назву доріжки";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.\n\nOnly one subtitles track can be burned in."; ObjectID = "Lsa-kB-2BP"; */
-"Lsa-kB-2BP.ibShadowedToolTip" = "Burn-In Behavior. Виберіть, які субтитри зробити постійними, наклавши їх на відеодоріжку.\n\nМожна записати лише одну доріжку субтитрів.";
+"Lsa-kB-2BP.ibShadowedToolTip" = "Вшивання субтитрів. Виберіть, які субтитри зробити постійними, наклавши їх на відеодоріжку.\n\nМожна вшити лише одну доріжку субтитрів.";
 
 /* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
 "mAT-Jp-SG1.title" = "Мови:";
@@ -74,17 +74,17 @@
 "OOC-GZ-OFA.ibShadowedToolTip" = "Пошук іноземного аудіо сканує джерело на наявність коротких послідовностей іноземного або чужорідного аудіо, які відображаються за замовчуванням.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "Px8-G6-NVX"; */
-"Px8-G6-NVX.ibShadowedToolTip" = "Записати першу вибрану доріжку субтитрів Blu-ray. Усі інші доріжки субтитрів Blu-ray буде відкинуто. Використовуйте цей параметр, якщо ваше програмне забезпечення для відтворення або пристрій не підтримує субтитри Blu-ray.\n\nМожна записати лише одну доріжку субтитрів.";
+"Px8-G6-NVX.ibShadowedToolTip" = "Зашити першу вибрану доріжку субтитрів Blu-ray. Усі інші доріжки субтитрів Blu-ray буде відкинуто. Використовуйте цей параметр, якщо ваше програмне забезпечення для відтворення або пристрій не підтримує субтитри Blu-ray.\n\nМожна вшити лише одну доріжку субтитрів.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
 "QRd-XH-6TH.title" = "Доріжка з іноземними субтитрами";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
-"qVQ-fS-w1S.title" = "Table View Cell";
+"qVQ-fS-w1S.title" = "Текстова комірка таблиці";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
-"uF5-6E-EIe.ibShadowedToolTip" = "Додайте субтитри Closed Caption як м'яку доріжку субтитрів (не записану).";
+"uF5-6E-EIe.ibShadowedToolTip" = "Додайте приховані субтитри як опціональну доріжку субтитрів (не вшиту).";
 
 /* Class = "NSButtonCell"; title = "Add Foreign Audio Search"; ObjectID = "vNY-OC-hTJ"; */
-"vNY-OC-hTJ.title" = "Add Foreign Audio Search";
+"vNY-OC-hTJ.title" = "Додати пошук іноземної аудіодоріжки";
 

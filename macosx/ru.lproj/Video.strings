@@ -1,3 +1,6 @@
+/* Class = "NSMenuItem"; title = "Limited"; ObjectID = "0jj-Au-RHD"; */
+"0jj-Au-RHD.title" = "Ограниченный";
+
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "auto"; ObjectID = "4Hq-BG-Ulb"; */
 "4Hq-BG-Ulb.ibShadowedIsNilPlaceholder" = "авто    ";
 
@@ -13,6 +16,9 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
 "A3o-Zx-OfM.ibShadowedToolTip" = "Средний битрейт меняет качество, чтобы удостоверится, что частота данных остается относительно постоянной на всем протяжении файла.";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
+"bnV-aE-FVh.ibShadowedToolTip" = "Многопроходное кодирование анализирует весь источник видео перед кодированием. Собранная информация позволяет кодировщику принимать более осмысленные решения о качестве и частоте данных в режиме среднего битрейта.";
+
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
 
@@ -26,7 +32,7 @@
 "CRz-On-Jen.ibShadowedIsNilPlaceholder" = "авто    ";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios."; ObjectID = "cXd-X7-OhB"; */
-"cXd-X7-OhB.ibShadowedToolTip" = "Настройки кодировщика видео. Детальнее настройте пресет кодировщика для оптимизации настроек под определенные сценарии.";
+"cXd-X7-OhB.ibShadowedToolTip" = "Дополнительная регулировка пресета кодировщика видео. Используется для различных ситуаций.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Displays all internal video encoder options."; ObjectID = "dwn-bf-Ua0"; */
 "dwn-bf-Ua0.ibShadowedToolTip" = "Показывать все внутренние опции кодироващика видео.";
@@ -37,8 +43,14 @@
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
 "F3s-qR-qeE.title" = "Качество:";
 
+/* Class = "NSMenuItem"; title = "Same As Source"; ObjectID = "F37-pp-Zet"; */
+"F37-pp-Zet.title" = "Как в исходном файле";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.\n\nAdjust the slider to the right to increase compression efficiency at the expense of encoding speed, or to the left to increase encoding speed at the expense of compression efficiency."; ObjectID = "fue-2d-Bjn"; */
+"fue-2d-Bjn.ibShadowedToolTip" = "Пресет видеокодировщика. Регулирует настройки кодировщика для достижения баланса между эффективностью сжатия и скоростью кодирования. Более медленные значения могут использовать настройки, которые менее совместимы с некоторыми устройствами.\n\nПереместите ползунок вправо, чтобы увеличить эффективность сжатия за счет скорости кодирования, или влево, чтобы увеличить скорость кодирования за счет эффективности сжатия.";
+
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
-"fzT-im-zKN.title" = "Настройка:";
+"fzT-im-zKN.title" = "Подстройка:";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
 "GPu-Ht-bKg.ibShadowedToolTip" = "Постоянное качество меняет битрейт, чтобы удостоверится, что визуальное качество изображения остается относительно постоянным на всем протяжении видео.\n\nПереместите ползунок правее для увеличения качества или левее для уменьшения качества, небольшими шагами в плюс или минус 1-2.\n\nРекомендованные значения для кодировщиков x264 и x265 - RF 18-28. Большие значения могут привести к чрезвычайно большому размеру файла.\n\nx264 без сжатия находится на RF 0.";
@@ -55,8 +67,17 @@
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "Кодировщик видео:";
 
+/* Class = "NSButtonCell"; title = "Multi-pass encoding"; ObjectID = "nPA-nO-Eik"; */
+"nPA-nO-Eik.title" = "Кодирование в несколько проходов";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
+"olm-zg-k9Y.ibShadowedToolTip" = "Первый турбопроход ускоряет проход анализа при кодировании в несколько проходов, но при этом немного снижает время анализа.";
+
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "Пресет:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility."; ObjectID = "R00-pj-eFX"; */
+"R00-pj-eFX.ibShadowedToolTip" = "Диапазон значений для кодирования цвета. Определяется крайними значениями для черного и белого. «Ограниченный» — от 16 до 235 (привычный для ТВ и видео). «Полный» — от 0 до 255 (редко поддерживается проигрывателями). Для максимальной совместимости устанавливайте значение «Ограниченный».";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r18-GT-7jT"; */
 "r18-GT-7jT.title" = "OtherViews";
@@ -76,11 +97,20 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering."; ObjectID = "stU-Fo-Avu"; */
 "stU-Fo-Avu.ibShadowedToolTip" = "'Быстрое декодирование' использует настройки, которые снижают нагрузку на процессор во время воспроизведения кодированного видео. Полезно для устройств, которые не могут воспроизвести видео без подергиваний.";
 
+/* Class = "NSMenuItem"; title = "Full"; ObjectID = "TVE-3O-C2l"; */
+"TVE-3O-C2l.title" = "Полный";
+
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
 "VQe-CK-YDR.title" = "Средний битрейт (кбит/с)";
 
+/* Class = "NSButtonCell"; title = "Turbo analysis pass"; ObjectID = "vSc-VB-NEv"; */
+"vSc-VB-NEv.title" = "Проход турбоанализа";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder. Determines video type and settings used during encoding."; ObjectID = "xwK-Yu-a1e"; */
 "xwK-Yu-a1e.ibShadowedToolTip" = "Кодировщик видео. Определяет тип видео и настройки, используемые во время кодирования.";
+
+/* Class = "NSTextFieldCell"; title = "Color Range:"; ObjectID = "yBk-7V-j1G"; */
+"yBk-7V-j1G.title" = "Цветовой диапазон:";
 
 /* Class = "NSButtonCell"; title = "Constant Quality"; ObjectID = "ZjL-cY-O5f"; */
 "ZjL-cY-O5f.title" = "Постоянное качество";

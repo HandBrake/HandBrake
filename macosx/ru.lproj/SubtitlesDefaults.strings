@@ -43,6 +43,9 @@
 /* Class = "NSWindow"; title = "Subtitles Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
 "kwM-lz-5lG.title" = "Поведение выбора субтитров";
 
+/* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "KXY-tz-asI"; */
+"KXY-tz-asI.title" = "Передавать «как есть»";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.\n\nOnly one subtitles track can be burned in."; ObjectID = "Lsa-kB-2BP"; */
 "Lsa-kB-2BP.ibShadowedToolTip" = "Поведение для вшитых. Выбирает, какие субтитры будут постоянными путем наложения их на видео-дорожку.\n\nТолько одна дорожка субтитров может быть вшита.";
 
@@ -62,7 +65,7 @@
 "NJl-q3-zXL.title" = "Опции:";
 
 /* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "Nks-nt-ePt"; */
-"Nks-nt-ePt.title" = "Название:";
+"Nks-nt-ePt.title" = "Имя:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
 "oiD-QI-wly.ibShadowedToolTip" = "Поведение выбора дорожек.\n\n'Нет' не будет выбирать никакую дорожку аудио по умолчанию.\n\n'Первая совпадающая с выбранными языками' добавит первую дорожку, которая совпадает с каждым из выбранных языков в исходном файле.\n\n'Все совпадающие с выбранными языками' добавит все дорожки, которые совпадают с каждым из выбранных языков в исходном файле.";

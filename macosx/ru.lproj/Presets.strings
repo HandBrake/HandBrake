@@ -8,7 +8,7 @@
 "4tC-UE-40G.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
-"cm5-Kl-dB3.title" = "Сбросить официальные пресеты";
+"cm5-Kl-dB3.title" = "Сбросить встроенные пресеты";
 
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "cUW-79-8BY"; */
 "cUW-79-8BY.title" = "Выбрать по умолчанию";
@@ -26,10 +26,10 @@
 "LQk-kD-5sj.title" = "Меню действий с пресетами";
 
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
-"LUl-ag-Iu6.title" = "Импорт...";
+"LUl-ag-Iu6.title" = "Импортировать...";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "M33-MU-aWd"; */
-"M33-MU-aWd.title" = "Экспорт...";
+"M33-MU-aWd.title" = "Экспортировать...";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
 "oBC-Nh-TwB.title" = "Table View Cell";
@@ -47,7 +47,10 @@
 "uad-bt-uKD.ibShadowedToolTip" = "Пресеты - группы настроек кодирования, созданные под определенные сценарии. Выберите тот, который больше всего подходит для ваших целей.\n\nЗаменяет все настройки кодировщика. Настройки могут быть детальнее настроены после выбора пресета.";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
-"xEQ-Un-J0n.title" = "Экспорт...";
+"xEQ-Un-J0n.title" = "Экспортировать...";
+
+/* Class = "NSMenuItem"; title = "Delete…"; ObjectID = "xtN-lj-fJP"; */
+"xtN-lj-fJP.title" = " Удалить...";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Additional Options"; ObjectID = "Ybq-Zt-sta"; */
 "Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Дополнительные опции";

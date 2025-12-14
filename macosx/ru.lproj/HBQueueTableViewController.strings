@@ -5,7 +5,7 @@
 "5Rl-P0-bhc.title" = "Table View Cell";
 
 /* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
-"c1Z-ZC-b8b.title" = "Показать путь назначения в Finder";
+"c1Z-ZC-b8b.title" = "Показать место назначения в Finder";
 
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "DTF-om-j0l"; */
 "DTF-om-j0l.title" = "Изменить";

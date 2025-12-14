@@ -10,11 +10,17 @@
 /* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
 "ksF-Ma-hB1.title" = "сек";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Show cropping settings"; ObjectID = "mV7-hU-tMt"; */
+"mV7-hU-tMt.ibShadowedToolTip" = "Настройки кадрирования.";
+
+/* Class = "NSButtonCell"; title = "Crop"; ObjectID = "NWd-Lq-c1A"; */
+"NWd-Lq-c1A.title" = "Кадр";
+
 /* Class = "NSButtonCell"; title = "Scale To Screen"; ObjectID = "STc-Po-p1X"; */
-"STc-Po-p1X.title" = "Масштабировать к размеру экрана";
+"STc-Po-p1X.title" = "Вписать";
 
 /* Class = "NSTextFieldCell"; title = "Duration:"; ObjectID = "USR-Qf-N5v"; */
-"USR-Qf-N5v.title" = "Продолжительность:";
+"USR-Qf-N5v.title" = "Длительность:";
 
 /* Class = "NSButtonCell"; title = "Live Preview"; ObjectID = "vkh-GY-5qx"; */
 "vkh-GY-5qx.title" = "Живой предпросмотр";

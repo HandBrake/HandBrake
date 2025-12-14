@@ -8,7 +8,7 @@
 "4tC-UE-40G.title" = "文本单元格";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
-"cm5-Kl-dB3.title" = "重设官方预设";
+"cm5-Kl-dB3.title" = "重置官方预设";
 
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "cUW-79-8BY"; */
 "cUW-79-8BY.title" = "设为默认";
@@ -17,13 +17,13 @@
 "D2t-YG-Frn.title" = "设为默认";
 
 /* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
-"Io0-Vm-Qez.title" = "新分类";
+"Io0-Vm-Qez.title" = "新建类别";
 
 /* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "k6z-1U-qsp"; */
 "k6z-1U-qsp.title" = "重命名…";
 
 /* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
-"LQk-kD-5sj.title" = "预设动作菜单";
+"LQk-kD-5sj.title" = "预设操作菜单";
 
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
 "LUl-ag-Iu6.title" = "导入...";
@@ -32,7 +32,7 @@
 "M33-MU-aWd.title" = "导出...";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
-"oBC-Nh-TwB.title" = "表视图单元格";
+"oBC-Nh-TwB.title" = "表格视图单元格";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
 "r4V-6L-SO8.title" = "预设";
@@ -44,7 +44,7 @@
 "uad-bt-uKD.ibExternalAccessibilityDescription" = "预设";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset."; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibShadowedToolTip" = "预设是为特定场景量身定制的一组编码设置。选择最符合您需要的一个。\n\n覆盖所有编码设置。选择预设后可以进一步调整设置。";
+"uad-bt-uKD.ibShadowedToolTip" = "预设是一组针对特定运用场景设计的编码设置。请选择最符合您意图的一项。\n\n这将覆盖所有编码设置。选择预设后，可进一步调整设置。";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
 "xEQ-Un-J0n.title" = "导出...";
@@ -53,8 +53,8 @@
 "xtN-lj-fJP.title" = "删除…";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Additional Options"; ObjectID = "Ybq-Zt-sta"; */
-"Ybq-Zt-sta.ibExternalAccessibilityDescription" = "附加选项";
+"Ybq-Zt-sta.ibExternalAccessibilityDescription" = "额外选项";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Show additional options."; ObjectID = "Ybq-Zt-sta"; */
-"Ybq-Zt-sta.ibShadowedToolTip" = "显示附加选项";
+"Ybq-Zt-sta.ibShadowedToolTip" = "显示额外选项。";
 

@@ -2,10 +2,10 @@
 "12K-c3-Z7A.ibShadowedToolTip" = "Skala förhandsvisning för att fylla skärmen.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Encode and play a preview video using current settings."; ObjectID = "16b-R9-bBU"; */
-"16b-R9-bBU.ibShadowedToolTip" = "Enkoda och spela upp en förhandsvisning av videon med aktuella inställningar.";
+"16b-R9-bBU.ibShadowedToolTip" = "Koda och spela upp en förhandsvisning av videon med aktuella inställningar.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Duration to encode in seconds."; ObjectID = "ASA-X8-16P"; */
-"ASA-X8-16P.ibShadowedToolTip" = "Längd att enkoda i sekunder.";
+"ASA-X8-16P.ibShadowedToolTip" = "Längd att koda i sekunder.";
 
 /* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
 "ksF-Ma-hB1.title" = "s";
@@ -29,7 +29,7 @@
 "wUk-SQ-GhS.ibExternalAccessibilityDescription" = "förhandsbild";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Starting point for the preview encode."; ObjectID = "wUk-SQ-GhS"; */
-"wUk-SQ-GhS.ibShadowedToolTip" = "Startpunkt för enkodning av förhandsvisning.";
+"wUk-SQ-GhS.ibShadowedToolTip" = "Startpunkt för kodning av förhandsvisning.";
 
 /* Class = "NSMenuItem"; title = "240"; ObjectID = "XYh-Ls-slf"; */
 "XYh-Ls-slf.title" = "240";

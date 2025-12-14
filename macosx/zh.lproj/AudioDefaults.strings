@@ -1,5 +1,5 @@
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
-"0kT-0J-3k2.headerCell.title" = "混音";
+"0kT-0J-3k2.headerCell.title" = "音频混缩";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
 "1XC-VS-X3g.title" = "文本单元格";
@@ -8,13 +8,13 @@
 "3o5-Gn-Vao.title" = "文本单元格";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "6lx-af-rBL"; */
-"6lx-af-rBL.ibExternalAccessibilityDescription" = "编解码器";
+"6lx-af-rBL.ibExternalAccessibilityDescription" = "编码";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "6lx-af-rBL"; */
 "6lx-af-rBL.ibShadowedToolTip" = "音频编码器。";
 
 /* Class = "NSTextFieldCell"; title = "Audio encoder settings for each selected track:"; ObjectID = "007-WM-RmC"; */
-"007-WM-RmC.title" = "为每个所选轨道设置音频编码器：";
+"007-WM-RmC.title" = "每条所选音频轨道的音频编码器设置：";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
 "7sl-o7-pUh.title" = "文本单元格";
@@ -23,13 +23,13 @@
 "8mC-Wx-myL.title" = "DTS";
 
 /* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
-"66v-2g-DHn.title" = "为次要音频仅使用首选编码器";
+"66v-2g-DHn.title" = "仅使用第一个编码器处理次要音频";
 
 /* Class = "NSMenuItem"; title = "Off"; ObjectID = "AaG-rx-x5W"; */
 "AaG-rx-x5W.title" = "关";
 
 /* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
-"AQe-Sg-Qgh.title" = "直通回退：";
+"AQe-Sg-Qgh.title" = "直通备选编码：";
 
 /* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "aQn-7q-tQG"; */
 "aQn-7q-tQG.title" = "名称：";
@@ -38,16 +38,16 @@
 "aTC-39-h6S.ibExternalAccessibilityDescription" = "音轨语言";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Select the languages to use with the Track Selection Behavior setting."; ObjectID = "aTC-39-h6S"; */
-"aTC-39-h6S.ibShadowedToolTip" = "选择要与“轨道选择行为”设置一起使用的语言。";
+"aTC-39-h6S.ibShadowedToolTip" = "选择“轨道选择行为”设置中使用的语言。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "BaY-Lo-8xn"; */
-"BaY-Lo-8xn.ibExternalAccessibilityDescription" = "DRC";
+"BaY-Lo-8xn.ibExternalAccessibilityDescription" = "动态对比压缩 (DRC)";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "BaY-Lo-8xn"; */
-"BaY-Lo-8xn.ibShadowedToolTip" = "动态范围压缩。 减小大声和安静声之间的音量差异。编码为其他格式时，仅适用于AC-3源轨道。 \n\n0：不应用 DRC。\n1：应用 DRC 提示提示压缩嵌入源轨道中。\n\n值大于 1 会进一步增加安静的音量。 通常不需要大于2.5的值，并且可能会引起音频失真。";
+"BaY-Lo-8xn.ibShadowedToolTip" = "动态范围压缩。降低响亮声音与轻柔声音之间的音量差异。仅适用于从 AC-3 格式源轨道编码为其他格式时。\n\n0：不应用动态范围压缩。\n1：根据源轨道中嵌入的压缩提示应用动态范围压缩。\n\n数值大于 1 会进一步增大安静声音的音量。数值大于 2.5 通常没有必要，而且可能会引入可感知的失真。";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports E-AC3. This permits E-AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "BK7-c4-kkk"; */
-"BK7-c4-kkk.ibShadowedToolTip" = "如果播放设备支持 E-AC3，请启用此选项。这允许在启用自动直通选择时选择 E-AC3 直通。";
+"BK7-c4-kkk.ibShadowedToolTip" = "如果您的播放设备支持 EAC-3，请启用此选项。这将允许在启用了自动直通时使用 EAC-3 直通。";
 
 /* Class = "NSButtonCell"; title = "AAC"; ObjectID = "cUX-iP-UAs"; */
 "cUX-iP-UAs.title" = "AAC";
@@ -56,13 +56,13 @@
 "DbI-6O-BzA.ibExternalAccessibilityDescription" = "增益";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "DbI-6O-BzA"; */
-"DbI-6O-BzA.ibShadowedToolTip" = "以分贝（dB）为单位进行音频增益。 增大或减小音量。";
+"DbI-6O-BzA.ibShadowedToolTip" = "音频增益，单位是分贝 (dB)。提高或降低音频音量。";
 
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "DGi-Dl-5nh"; */
-"DGi-Dl-5nh.ibExternalAccessibilityDescription" = "DRC";
+"DGi-Dl-5nh.ibExternalAccessibilityDescription" = "动态对比压缩 (DRC)";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "DGi-Dl-5nh"; */
-"DGi-Dl-5nh.ibShadowedToolTip" = "动态范围压缩。 减小大声和安静声之间的音量差异。编码为其他格式时，仅适用于AC-3源轨道。 \n\n0：不应用 DRC。\n1：应用 DRC 提示提示压缩嵌入源轨道中。\n\n值大于 1 会进一步增加安静的音量。 通常不需要大于2.5的值，并且可能会引起音频失真。";
+"DGi-Dl-5nh.ibShadowedToolTip" = "动态范围压缩。降低响亮声音与轻柔声音之间的音量差异。仅适用于从 AC-3 格式源轨道编码为其他格式时。\n\n0：不应用动态范围压缩。\n1：根据源轨道中嵌入的压缩提示应用动态范围压缩。\n\n数值大于 1 会进一步增大安静声音的音量。数值大于 2.5 通常没有必要，而且可能会引入可感知的失真。";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
 "dpw-He-8eZ.title" = "文本单元格";
@@ -71,52 +71,52 @@
 "DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "自动";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "E93-Md-aWa"; */
-"E93-Md-aWa.ibShadowedToolTip" = "如果播放设备支持 DTS，请启用此选项。这允许在启用自动直通选择时选择 DTS 直通。";
+"E93-Md-aWa.ibShadowedToolTip" = "如果您的播放设备支持 DTS，请启用此选项。这将允许在启用了自动直通时使用 DTS 直通。";
 
 /* Class = "NSButtonCell"; title = "Opus"; ObjectID = "eA6-za-Up0"; */
 "eA6-za-Up0.title" = "Opus";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fgl-Ev-ELt"; */
-"fgl-Ev-ELt.ibShadowedToolTip" = "如果播放设备支持 AC3，请启用此选项。这允许在启用自动直通选择时选择 AC3 直通。";
+"fgl-Ev-ELt.ibShadowedToolTip" = "如果您的播放设备支持 AC-3，请启用此选项。这将允许在启用了自动直通时使用 AC-3 直通。";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
 "fH9-oV-QdJ.title" = "文本单元格";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fzd-MO-xaB"; */
-"fzd-MO-xaB.ibShadowedToolTip" = "如果播放设备支持 AAC，请启用此选项。这允许在启用自动直通选择时选择 AAC 直通。";
+"fzd-MO-xaB.ibShadowedToolTip" = "如果您的播放设备支持 AAC，请启用此选项。这将允许在启用了自动直通时使用 AAC 直通。";
 
 /* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
 "GbM-vm-RC2.title" = "轨道选择行为：";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
-"GHJ-25-kZl.ibShadowedToolTip" = "如果播放设备支持 MP2，请启用此选项。这允许在启用自动直通选择时选择 MP2 直通。";
+"GHJ-25-kZl.ibShadowedToolTip" = "如果您的播放设备支持 MP2，请启用此选项。这将允许在启用了自动直通时使用 MP2 直通。";
 
 /* Class = "NSMenuItem"; title = "Unnamed Tracks"; ObjectID = "gjw-kg-H3W"; */
 "gjw-kg-H3W.title" = "未命名轨道";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "gOm-E9-8K7"; */
-"gOm-E9-8K7.ibShadowedToolTip" = "如果播放设备支持 FLAC，请启用此选项。这允许在启用自动直通选择时选择 FLAC 直通。";
+"gOm-E9-8K7.ibShadowedToolTip" = "如果您的播放设备支持 FLAC，请启用此选项。这将允许在启用了自动直通时使用 FLAC 直通。";
 
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
-"GZP-q7-SYy.title" = "所有匹配的选定语言";
+"GZP-q7-SYy.title" = "匹配所选语言的全部轨道";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Bitrate"; ObjectID = "hHP-dw-nba"; */
-"hHP-dw-nba.ibExternalAccessibilityDescription" = "比特率";
+"hHP-dw-nba.ibExternalAccessibilityDescription" = "码率";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
 "hHP-dw-nba.ibShadowedToolTip" = "音频比特率（千比特每秒/Kbps）。小的数值会减少音频质量，大的数值会使用更多的数据，或许会降低兼容性";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
-"igm-hS-rrD.ibExternalAccessibilityDescription" = "混音";
+"igm-hS-rrD.ibExternalAccessibilityDescription" = "音频混缩";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.\n\nDolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility."; ObjectID = "igm-hS-rrD"; */
-"igm-hS-rrD.ibShadowedToolTip" = "混音类型。控制多轨道音频如何混合成较少的音轨，或是否保留原音轨。\n\nDolby Surround 与 Dolby Pro Logic II 会将多轨音频转换为立体声并将额外的音轨矩阵编码，从而给适应的设备提供立体声环绕播放，同时也能保持立体声的兼容性。";
+"igm-hS-rrD.ibShadowedToolTip" = "音频混缩类型。控制多声道音频如何混缩为较少声道，亦或是保留原始声道。\n\nDolby Surround 和 Dolby Pro Logic II 会将多声道音频转换为立体声，并对额外声道进行矩阵编码，以便在兼容设备上实现环绕声重放，同时保持立体声兼容性。";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "IxI-o9-jMs"; */
-"IxI-o9-jMs.ibShadowedToolTip" = "如果播放设备支持 DTS-HD，请启用此选项。这允许在启用自动直通选择时选择 DTS-HD 直通。";
+"IxI-o9-jMs.ibShadowedToolTip" = "如果您的播放设备支持 DTS-HD，请启用此选项。这将允许在启用了自动直通时使用 DTS-HD 直通。";
 
 /* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
-"jDd-Ji-7Sm.title" = "优先匹配已选语言";
+"jDd-Ji-7Sm.title" = "匹配所选语言的第一条轨道";
 
 /* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "Jn4-1L-J1g"; */
 "Jn4-1L-J1g.title" = "取消";
@@ -128,7 +128,7 @@
 "kwM-lz-5lG.title" = "音频选择行为";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder to use when a track suitable for passthru is unavailable."; ObjectID = "LdN-Cx-ZJY"; */
-"LdN-Cx-ZJY.ibShadowedToolTip" = "音频编码器所使用的音轨不适用直通";
+"LdN-Cx-ZJY.ibShadowedToolTip" = "当没有适合直通的音频轨道时要使用的音频编码器。";
 
 /* Class = "NSButtonCell"; title = "DTS-HD"; ObjectID = "LX6-kc-5vq"; */
 "LX6-kc-5vq.title" = "DTS-HD";
@@ -149,10 +149,10 @@
 "N7h-CJ-quV.headerCell.title" = "增益";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
-"oiD-QI-wly.ibShadowedToolTip" = "轨道选择行为。\n\n默认情况下，没有人会选择任何音轨。\n\n第一个匹配的选择语言添加了与源中存在的每个选择的语言匹配的第一个音频轨道。\n\n所有匹配的选定语言都添加了匹配源中所选语言的所有音轨。";
+"oiD-QI-wly.ibShadowedToolTip" = "轨道选择行为。\n\n无：默认情况下不会选择任何音频轨道。\n\n匹配所选语言的第一条轨道：为源文件中出现的每种所选语言添加与之匹配的第一条音频轨道。\n\n匹配所选语言的全部轨道：为源文件中出现的每种所选语言添加与之匹配的全部音频轨道。";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports TrueHD. This permits TrueHD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "os0-Jl-OXF"; */
-"os0-Jl-OXF.ibShadowedToolTip" = "如果播放设备支持 TrueHD，请启用此选项。这允许在启用自动通过选择时选择 TrueHD 直通。";
+"os0-Jl-OXF.ibShadowedToolTip" = "如果您的播放设备支持 TrueHD，请启用此选项。这将允许在启用了自动直通时使用 TrueHD 直通。";
 
 /* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[0] = "Add Audio Track"; ObjectID = "otA-K4-TxM"; */
 "otA-K4-TxM.ibShadowedToolTips[0]" = "添加音轨";
@@ -164,16 +164,16 @@
 "OVr-Jm-VrK.title" = "0";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "OWh-gZ-JcF"; */
-"OWh-gZ-JcF.ibShadowedToolTip" = "如果你的播放设备支持 Opus，请启用此项。当启用自动直通时，允许选择 Opus 直通。";
+"OWh-gZ-JcF.ibShadowedToolTip" = "如果您的播放设备支持 Opus，请启用此选项。这将允许在启用了自动直通时使用 Opus 直通。";
 
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
-"pR9-d4-SNf.headerCell.title" = "编解码器";
+"pR9-d4-SNf.headerCell.title" = "编码";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibExternalAccessibilityDescription" = "采样率";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
-"r80-yv-59n.ibShadowedToolTip" = "音频采样率，单位是千赫兹（kHz）。建议使用自动。";
+"r80-yv-59n.ibShadowedToolTip" = "音频采样率，单位为千赫兹 (kHz)。推荐使用自动。";
 
 /* Class = "NSButtonCell"; title = "Vorbis"; ObjectID = "rXl-qc-MHk"; */
 "rXl-qc-MHk.title" = "Vorbis";
@@ -197,7 +197,7 @@
 "u9h-dn-wcK.title" = "E-AC3";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Only the primary audio track will be encoded with the full encoder list. All additional audio tracks will be encoded with first encoder only."; ObjectID = "uF5-6E-EIe"; */
-"uF5-6E-EIe.ibShadowedToolTip" = "只有主音轨才会用完整的编码器列表进行编码。所有其他音轨将只用第一个编码器进行编码。";
+"uF5-6E-EIe.ibShadowedToolTip" = "只有主音频轨道会使用完整的编码器列表进行编码。所有其他次要音频输出轨道仅使用第一个编码器进行编码。";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
 "uFK-z7-8Yj.title" = "文本单元格";
@@ -206,16 +206,16 @@
 "UJy-A2-Bb1.title" = "项目";
 
 /* Class = "NSTableColumn"; headerCell.title = "Bitrate"; ObjectID = "vhn-7C-4aZ"; */
-"vhn-7C-4aZ.headerCell.title" = "比特率";
+"vhn-7C-4aZ.headerCell.title" = "码率";
 
 /* Class = "NSButtonCell"; title = "AC3"; ObjectID = "VnE-3R-bUf"; */
 "VnE-3R-bUf.title" = "AC3";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
-"vUx-OV-W5T.ibShadowedToolTip" = "如果播放设备支持 MP3，请启用此选项。这允许在启用自动直通选择时选择 MP3 直通。";
+"vUx-OV-W5T.ibShadowedToolTip" = "如果您的播放设备支持 MP3，请启用此选项。这将允许在启用了自动直通时使用 MP3 直通。";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
-"XKL-2e-Dlv.title" = "表单视图单元格";
+"XKL-2e-Dlv.title" = "表格视图单元格";
 
 /* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "XmJ-lo-ciO"; */
 "XmJ-lo-ciO.title" = "直通轨道名称";
@@ -224,7 +224,7 @@
 "xnA-03-Bul.ibExternalAccessibilityDescription" = "增益";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
-"xnA-03-Bul.ibShadowedToolTip" = "以分贝（dB）为单位进行音频增益。 增大或减小音量。";
+"xnA-03-Bul.ibShadowedToolTip" = "音频增益，单位是分贝 (dB)。提高或降低音频音量。";
 
 /* Class = "NSTextFieldCell"; title = "Autonaming:"; ObjectID = "XOM-af-vzp"; */
 "XOM-af-vzp.title" = "自动命名：";
@@ -236,5 +236,5 @@
 "z9d-P3-6UP.title" = "TrueHD";
 
 /* Class = "NSTableColumn"; headerCell.title = "DRC"; ObjectID = "zX9-T9-wKy"; */
-"zX9-T9-wKy.headerCell.title" = "DRC";
+"zX9-T9-wKy.headerCell.title" = "动态对比压缩 (DRC)";
 
