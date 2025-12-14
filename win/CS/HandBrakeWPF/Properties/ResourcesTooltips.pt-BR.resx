@@ -542,10 +542,10 @@ Todos os caracteres ilegais serão removidos automaticamente do caminho.</value>
 Observe que pode haver imperfeições no layout da interface do usuário ao usar esses modos. Dependendo do idioma, pode valer a pena experimentar os dois modos para encontrar o melhor ajuste.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Direcionar um nível de qualidade específico para o áudio.
-1 é a menor qualidade e 5 a maior.
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-A taxa de bits varia de acordo com a fonte.</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>Os itens a seguir podem ser usados individualmente ou em conjunto para criar um caminho de destino

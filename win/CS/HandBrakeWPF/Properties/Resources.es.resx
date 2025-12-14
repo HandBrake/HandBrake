@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -445,7 +445,7 @@ El registro de actividad puede tener más información.</value>
     <value>Ha ocurrido un error desconocido.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>Una nueva actualización está disponible. Por favor visite el sitio web para ver las notas del lanzamiento.</value>
+    <value>¡HandBrake {0} ya está disponible! Consulta las notas de la versión en el sitio web.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>No hay actualizaciones por el momento.</value>
@@ -1035,7 +1035,7 @@ Sugerencia: El comportamiento de sobrescritura de archivos puede controlarse en 
     <value>Previsualizar</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Codificando: {0}, {1:00.00}%, Tiempo Restante: {2}, {3}</value>
+    <value>{0}, {1:00.00}%, Tiempo restante:{2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Rango:</value>
@@ -1642,7 +1642,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Codificador de vídeo:</value>
   </data>
   <data name="VideoView_ColourRange" xml:space="preserve">
-    <value>Color Range:</value>
+    <value>Rango de Color:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Velocidad de fotogramas constante</value>
@@ -2203,16 +2203,16 @@ Por favor, elija un preajuste diferente.</value>
     <value>Personalizado (sin límite)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Width &amp; Height</value>
+    <value>Ancho y Alto</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (Letterbox)</value>
+    <value>Alto (Letterbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Ninguno</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (Pillarbox)</value>
+    <value>Ancho (Pillarbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
     <value>Rellenar:</value>
@@ -2296,7 +2296,7 @@ Por favor, elija un preajuste diferente.</value>
     <value>Detener</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>El nombre que ingresaste para la categoría ya existe. Por favor, elige un nombre diferente.</value>
@@ -2454,9 +2454,8 @@ Puede cambiar su elección en cualquier momento modificando las opciones en Pref
     <value>¿Buscar actualizaciones?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>Antes de actualizar:
-- Asegúrese de que no hay codificaciones pendientes en la cola. 
-- Haga una copia de seguridad o anote los preajustes personalizados que haya creado, ya que podrían no ser totalmente compatibles con las versiones más recientes.</value>
+    <value>- Asegúrese de que no haya codificaciones pendientes en la cola.  
+- Copia de seguridad o tome una nota de los preajustes personalizados que haya creado, ya que pueden no ser totalmente compatibles con versiones más nuevas.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
     <value>(Por defecto)</value>
@@ -2838,7 +2837,7 @@ Para permitir múltiples codificaciones simultáneas, active «Aislamiento de Pr
     <value>Empezar más tarde</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>Queue will automatically start at:</value>
+    <value>La cola comenzará automáticamente en:</value>
   </data>
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
     <value>Apagando Encode ...</value>
@@ -2865,16 +2864,16 @@ Para permitir múltiples codificaciones simultáneas, active «Aislamiento de Pr
     <value>Abrir ventana de registro</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Personalizado</value>
@@ -2925,87 +2924,119 @@ Para permitir múltiples codificaciones simultáneas, active «Aislamiento de Pr
     <value>Fotogramas</value>
   </data>
   <data name="Options_RangeModeSelection" xml:space="preserve">
-    <value>Default Range Mode for Titles:</value>
+    <value>Modo de rango por defecto para Títulos:</value>
   </data>
   <data name="WhenDone_CustomAction" xml:space="preserve">
-    <value>Custom Action</value>
+    <value>Acción Personalizada</value>
   </data>
   <data name="OptionsView_CustomActionConfig" xml:space="preserve">
-    <value>'Custom Action' Configuration:</value>
+    <value>Configuración de 'Acción Personalizada':</value>
   </data>
   <data name="MainView_OpenAutonamePreferences" xml:space="preserve">
-    <value>Open Autoname Preferences</value>
+    <value>Abrir las preferencias de nombre automático</value>
   </data>
   <data name="Options_RunAction" xml:space="preserve">
-    <value>Run Script / Executable: </value>
+    <value>Ejecutar Script/Ejecutable:</value>
   </data>
   <data name="OptionsViewModel_PortableMode" xml:space="preserve">
-    <value>HandBrake is currently configured in portable mode. To update a portable install, please download the latest update from the website.</value>
+    <value>HandBrake está configurado actualmente en modo portable. Para actualizar una instalación portable, descargue la última actualización del sitio web.</value>
   </data>
   <data name="MetaData_Add" xml:space="preserve">
-    <value>Add Row</value>
+    <value>Añadir Fila</value>
   </data>
   <data name="MainView_DebugMenu" xml:space="preserve">
-    <value>Debug Menu</value>
+    <value>Menú de depuración</value>
   </data>
   <data name="MainView_DebugExportData" xml:space="preserve">
-    <value>Export debug file (JSON)</value>
+    <value>Exportar archivo de depuración (JSON)</value>
   </data>
   <data name="MainView_DebugImportData" xml:space="preserve">
-    <value>Import debug file (JSON)</value>
+    <value>Importar archivo de depuración (JSON)</value>
   </data>
   <data name="MainView_DebugQualitySweep" xml:space="preserve">
-    <value>Add to Queue - Quality Sweep</value>
+    <value>Añadir a la cola - Barrido de calidad</value>
   </data>
   <data name="LogView_ChooseLogFile" xml:space="preserve">
-    <value>Choose log file :</value>
+    <value>Elegir el archivo de registro:</value>
   </data>
   <data name="LogView_AutoScrolling" xml:space="preserve">
-    <value>Auto Scroll</value>
+    <value>Desplazamiento automático</value>
   </data>
   <data name="LogLevel_Minimised" xml:space="preserve">
-    <value>Minimised</value>
+    <value>Minimizado</value>
   </data>
   <data name="LogLevel_Standard" xml:space="preserve">
-    <value>Standard</value>
+    <value>Estándar</value>
   </data>
   <data name="LogLevel_Extended" xml:space="preserve">
-    <value>Extended</value>
+    <value>Extendido</value>
   </data>
   <data name="QueueView_CancelDelayStart" xml:space="preserve">
-    <value>Cancel Delay</value>
+    <value>Cancelar retraso</value>
   </data>
   <data name="QueueView_StartQueueNow" xml:space="preserve">
-    <value>Start Queue (Immediately)</value>
+    <value>Iniciar cola (Inmediatamente)</value>
   </data>
   <data name="AudioTrackNaming_None" xml:space="preserve">
     <value>Ninguno</value>
   </data>
   <data name="AudioTrackNaming_Unnamed" xml:space="preserve">
-    <value>Unnamed Only</value>
+    <value>Solo sin nombre</value>
   </data>
   <data name="AudioTrackNaming_All" xml:space="preserve">
-    <value>All Tracks</value>
+    <value>Todas las Pistas</value>
   </data>
   <data name="AudioDefaultsView_NamingBehaviour" xml:space="preserve">
-    <value>Track Naming Behaviour:</value>
+    <value>Comportamiento de nombre de pista:</value>
   </data>
   <data name="AudioDefaultsView_AutoNaming" xml:space="preserve">
-    <value>Autonaming:</value>
+    <value>Nombre automático:</value>
   </data>
   <data name="AudioDefaultsView_PassthruTrackNames" xml:space="preserve">
-    <value>Passthru Track Names</value>
+    <value>Nombres de las pistas de paso</value>
   </data>
   <data name="SubtitlesDefaultsView_PassthruTrackName" xml:space="preserve">
-    <value>Passthru Track Names</value>
+    <value>Nombres de las pistas de paso</value>
   </data>
   <data name="VideoColourRange_SameAsSource" xml:space="preserve">
     <value>Igual al original</value>
   </data>
   <data name="VideoColourRange_Full" xml:space="preserve">
-    <value>Full</value>
+    <value>Completo</value>
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
-    <value>Limited</value>
+    <value>Limitado</value>
+  </data>
+  <data name="DarkTheme_Modern" xml:space="preserve">
+    <value>Moderno</value>
+  </data>
+  <data name="Options_BeforeUpdating" xml:space="preserve">
+    <value>Antes de actualizar</value>
+  </data>
+  <data name="Options_UpdateNotComplete" xml:space="preserve">
+    <value>Se canceló la instalación de la actualización.</value>
+  </data>
+  <data name="AboutView_ReleaseNotes" xml:space="preserve">
+    <value>Notas de la versión</value>
+  </data>
+  <data name="Options_ReleaseNotesDesc" xml:space="preserve">
+    <value>Puede obtener información sobre los últimos cambios de HandBrake en:</value>
+  </data>
+  <data name="PresetUiType_Menu" xml:space="preserve">
+    <value>Menú</value>
+  </data>
+  <data name="PresetUiType_Overlay" xml:space="preserve">
+    <value>Cubrir</value>
+  </data>
+  <data name="OptionsView_PresetUiType" xml:space="preserve">
+    <value>Mostrar la ventana emergente predefinida de la barra de herramientas como:</value>
+  </data>
+  <data name="QueueViewModel_CancelErrorWillBeCleared" xml:space="preserve">
+    <value>La cola contiene actualmente trabajos en estado "Cancelado" o "Con Error". Estos se borrarán al iniciar la cola.
+
+¿Desea continuar?</value>
+  </data>
+  <data name="QueueView_ExportSelected" xml:space="preserve">
+    <value>Exportar Cola (Seleccionada)</value>
   </data>
 </root>

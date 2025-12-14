@@ -538,10 +538,10 @@ Any illegal path characters will be removed automatically.</value>
 Имайте предвид, че може интерфейсът да не е съвършен в тези режими. В зависимост от езика, може да е полезно да се пробват и двата режима и прецени кой е по-добрия.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Избира определено ниво за качество на аудиото.
-1 е най-ниското качество, а 5 е най-високото качество.
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-Побитовата скорост варира за различните източници.</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>The following can be used singularly, or together to build up a destination path

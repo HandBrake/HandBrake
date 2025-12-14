@@ -535,7 +535,7 @@ Any illegal path characters will be removed automatically.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
     <value>Target a specific quality level for audio.
-1 is lowest quality and 5 is highest quality.
+Higher values mean higher quality.
 
 Bitrate will vary source to source.</value>
   </data>

@@ -541,8 +541,8 @@ Alle unzulässigen Pfadzeichen werden automatisch entfernt.</value>
 Bitte beachten Sie, dass es bei der Verwendung dieser Modi zu Ungenauigkeiten im Layout der Benutzeroberfläche kommen kann. Je nach Sprache kann es sich lohnen, beide Modi auszuprobieren, um die beste Lösung zu finden.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Bestimmt eine spezifische Qualitätsstufe für Audio.
-1 ist die niedrigste Qualität und 5 ist die höchste Qualität.
+    <value>Strebt ein bestimmtes Qualitätsniveau für Audio an.
+Höhere Werte bedeuten höhere Qualität.
 
 Die Bitrate variiert von Quelle zu Quelle.</value>
   </data>
@@ -569,7 +569,7 @@ Die Bitrate variiert von Quelle zu Quelle.</value>
     <value>Durch Ändern der Anzeigegröße wird das Video gestreckt.</value>
   </data>
   <data name="Video_ColourRange" xml:space="preserve">
-    <value>Bestimmt die Werte des Referenzfarben Schwarz und Weiß.
+    <value>Bestimmt die Werte der Referenzfarben Schwarz und Weiß.
 Für maximale Kompatibilität auf "Begrenzt" setzen.</value>
   </data>
 </root>

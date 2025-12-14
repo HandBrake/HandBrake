@@ -542,10 +542,10 @@ Tutti i caratteri inaccettevule di chjassu seranu cacciati autumaticamente.</val
 Sappiate chì a dispusizione di l’interaccia pò esse imperfetta quand’ella s’impiegheghja unu di sti dui modi. Secondu à a lingua, hè ricumandatu di pruvà i dui modi per sapè quellu hè u megliu.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Sibulà un livellu specificu di qualità per l’audio.
-1 riprisenteghja una qualità bassa è 5 una qualità alta.
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-U flussu binariu cambierà d’una fonte à l’altra.</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>Sti parametri ponu esse impiegati unu à unu, o inseme per custruisce un chjassu di destinazione

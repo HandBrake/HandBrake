@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -445,7 +445,7 @@ Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
     <value>Ein unbekannter Fehler ist aufgetreten.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>Ein neues Update ist verfügbar! Bitte die Webseite auf Versionshinweise prüfen.</value>
+    <value>HandBrake {0} ist verfügbar! Bitte die Homepage auf Versionshinweise prüfen.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>Es sind momentan keine Updates verfügbar.</value>
@@ -616,7 +616,7 @@ Sollen die Kapitelnamen wirklich importiert werden?</value>
     <value>Die Dauer der Kapitel zwischen Quelle und Eingangsdatei stimmen nicht überein.</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>Ein Fehler ist beim Beenden des Einlesens aufgetreten Bitte HandBrake neu starten.
+    <value>Beim Beenden des Einlesens ist ein Fehler aufgetreten - bitte HandBrake neu starten.
  </value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
@@ -1038,7 +1038,7 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
     <value>Vorschau</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Encodierung: {0}, {1:00.00} %, verbleibende Zeit: {2}, {3}</value>
+    <value>{0}, {1:00.00}%, Verbleibende Zeit: {2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Bereich:</value>
@@ -2298,7 +2298,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Stop</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Der eingegebene Name der Kategorie existiert schon. Bitte einen anderen Namen wählen.</value>
@@ -2456,9 +2456,8 @@ Dies kann jederzeit in den Einstellungen unter General -&gt; Auf Updates prüfen
     <value>Auf Updates prüfen?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>Vor dem Aktualisieren:
-- Sicherstellen, dass keine ausstehenden Encodierungen mehr in der Warteschlange sind.
-- Eine Sicherungskopie von jeder benutzerdefinierten Voreinstellungen machen bzw. notieren, da diese nach dem Update nicht mehr komplett kompatibel sein könnten.</value>
+    <value>- Stellen Sie sicher, dass sich keine ausstehenden Kodierungen in der Warteschlange befinden.
+- Sichern Sie alle von Ihnen erstellten benutzerdefinierten Voreinstellungen oder notieren Sie sich diese, da sie möglicherweise nicht vollständig mit neueren Versionen kompatibel sind.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
     <value>(Standard)</value>
@@ -2868,16 +2867,16 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
     <value>Aktivitätsprotokoll öffnen</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Eigene</value>
@@ -2985,7 +2984,7 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
     <value>Keine</value>
   </data>
   <data name="AudioTrackNaming_Unnamed" xml:space="preserve">
-    <value>Nur Namenlose</value>
+    <value>Nur Unbenannte</value>
   </data>
   <data name="AudioTrackNaming_All" xml:space="preserve">
     <value>Alle Spuren</value>
@@ -3010,5 +3009,37 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
     <value>Begrenzt</value>
+  </data>
+  <data name="DarkTheme_Modern" xml:space="preserve">
+    <value>Modern</value>
+  </data>
+  <data name="Options_BeforeUpdating" xml:space="preserve">
+    <value>Vor dem Update</value>
+  </data>
+  <data name="Options_UpdateNotComplete" xml:space="preserve">
+    <value>Die Installation des Updates wurde abgebrochen.</value>
+  </data>
+  <data name="AboutView_ReleaseNotes" xml:space="preserve">
+    <value>Release Notes</value>
+  </data>
+  <data name="Options_ReleaseNotesDesc" xml:space="preserve">
+    <value>Die neuesten Änderungen des HandBrake-Updates finden Sie unter:</value>
+  </data>
+  <data name="PresetUiType_Menu" xml:space="preserve">
+    <value>Menü</value>
+  </data>
+  <data name="PresetUiType_Overlay" xml:space="preserve">
+    <value>Overlay</value>
+  </data>
+  <data name="OptionsView_PresetUiType" xml:space="preserve">
+    <value>Popup der Symbolleisten-Voreinstellung anzeigen als:</value>
+  </data>
+  <data name="QueueViewModel_CancelErrorWillBeCleared" xml:space="preserve">
+    <value>Die Warteschlange enthält derzeit Aufträge, die sich im Status „Abgebrochen“ oder „Fehlerhaft“ befinden. Diese werden gelöscht, wenn die Warteschlange gestartet wird. 
+
+Möchten Sie fortfahren?</value>
+  </data>
+  <data name="QueueView_ExportSelected" xml:space="preserve">
+    <value>Warteschlange exportieren (Ausgewählte)</value>
   </data>
 </root>

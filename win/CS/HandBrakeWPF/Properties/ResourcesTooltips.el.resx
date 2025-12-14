@@ -542,10 +542,10 @@ Any illegal path characters will be removed automatically.</value>
 Λάβετε υπόψη ότι ενδέχεται να υπάρχουν ατέλειες στη εμφάνιση του προγράμματος κατά τη χρήση αυτών των λειτουργιών. Ανάλογα με τη γλώσσα, ίσως αξίζει να δοκιμάσετε και τις δύο λειτουργίες για να βρείτε την καλύτερη εφαρμογή.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Στοχεύστε ένα συγκεκριμένο επίπεδο ποιότητας για τον ήχο.
-Το 1 είναι η χαμηλότερη ποιότητα και το 5 είναι η υψηλότερη ποιότητα.
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-Ο ρυθμός bit θα ποικίλλει από πηγή σε πηγή.</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>The following can be used singularly, or together to build up a destination path

@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -444,7 +444,7 @@ Het activiteitenlogboek kan nadere informatie bevatten.</value>
     <value>Er is een onbekende fout opgetreden.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>Er is een nieuwe update beschikbaar! Bezoek de website voor release-opmerkingen.</value>
+    <value>HandBrake {0} is nu beschikbaar! De release notes zijn te lezen op de website.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>Er zijn op dit moment geen nieuwe updates.</value>
@@ -1036,7 +1036,7 @@ Tip: de optie Bestanden overschrijven kan worden ingesteld bij voorkeuren.</valu
     <value>Voorbeeld</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Coderen: {0}, {1:00.00}%, Resterende tijd: {2}, {3}</value>
+    <value>{0}, {1:00.00}%, Resterende tijd: {2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Bereik:</value>
@@ -1159,7 +1159,7 @@ Tip: de optie Bestanden overschrijven kan worden ingesteld bij voorkeuren.</valu
     <value>Uitvoerbestanden automatisch een naam geven</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>Controleren op updates</value>
+    <value>Controleren</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
     <value>Voltooide wachtrij-items altijd wissen nadat een codering is voltooid</value>
@@ -1183,7 +1183,7 @@ Tip: de optie Bestanden overschrijven kan worden ingesteld bij voorkeuren.</valu
     <value>Standaardpad:</value>
   </data>
   <data name="Options_DownloadUpdates" xml:space="preserve">
-    <value>Update downloaden</value>
+    <value>Downloaden</value>
   </data>
   <data name="Options_DVD" xml:space="preserve">
     <value>DVD lezen</value>
@@ -1733,7 +1733,7 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>_Activiteitenlogboek</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>_Controleren op updates</value>
+    <value>_Controleren</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
     <value>_Afsluiten</value>
@@ -1778,7 +1778,7 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>_Gereedschap</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>Op updates controleren...</value>
+    <value>Controleren op updates…</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
     <value>Weet u zeker dat u de map met logbestanden wilt wissen?</value>
@@ -1796,7 +1796,7 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>Mededeling</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>Voorbereiden op nieuwe versie…</value>
+    <value>Update voorbereiden…</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
     <value>Een map kiezen.</value>
@@ -2295,7 +2295,7 @@ Kies een andere voorinstelling.</value>
     <value>Stoppen</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>De ingevoerde categorienaam bestaat al. Kies een andere naam.</value>
@@ -2453,9 +2453,8 @@ U kunt uw keuze op elk moment wijzigen door de opties in Voorkeuren -&gt; Algeme
     <value>Controleren op updates?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>Voor het bijwerken: 
-- Controleer of dat er geen lopende coderingen in de wachtrij staan. 
-- Maak een back-up of noteer aangepaste voorinstellingen die u eventueel hebt gemaakt, omdat deze mogelijk niet volledig compatibel zijn met nieuwere versies.</value>
+    <value>- Zorg ervoor dat er geen lopende coderingen in de wachtrij staan.
+- Maak een back-up of noteer eventuele aangepaste voorinstellingen die je hebt gemaakt, omdat deze mogelijk niet volledig compatibel zijn met nieuwere versies.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
     <value>(Standaard)</value>
@@ -2864,16 +2863,16 @@ Om meerdere gelijktijdige coderingen toe te staan, schakelt u "Procesisolatie" i
     <value>Logboekvenster openen</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Aangepast</value>
@@ -3006,5 +3005,37 @@ Om meerdere gelijktijdige coderingen toe te staan, schakelt u "Procesisolatie" i
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
     <value>Beperkt</value>
+  </data>
+  <data name="DarkTheme_Modern" xml:space="preserve">
+    <value>Modern</value>
+  </data>
+  <data name="Options_BeforeUpdating" xml:space="preserve">
+    <value>Voor het bijwerken</value>
+  </data>
+  <data name="Options_UpdateNotComplete" xml:space="preserve">
+    <value>De installatie van de update is geannuleerd.</value>
+  </data>
+  <data name="AboutView_ReleaseNotes" xml:space="preserve">
+    <value>Release Notes</value>
+  </data>
+  <data name="Options_ReleaseNotesDesc" xml:space="preserve">
+    <value>Meer informatie over de jongste wijzigingen aan HandBrake is te lezen op:</value>
+  </data>
+  <data name="PresetUiType_Menu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="PresetUiType_Overlay" xml:space="preserve">
+    <value>Overlay</value>
+  </data>
+  <data name="OptionsView_PresetUiType" xml:space="preserve">
+    <value>Popup werkbalk Voorinstellingen weergeven als:</value>
+  </data>
+  <data name="QueueViewModel_CancelErrorWillBeCleared" xml:space="preserve">
+    <value>De wachtrij bevat momenteel taken die zich in een geannuleerde of fout-status bevinden. Deze worden gewist wanneer de wachtrij begint.
+
+Wenst u verder te gaan?</value>
+  </data>
+  <data name="QueueView_ExportSelected" xml:space="preserve">
+    <value>Wachtrij exporteren (geselecteerd)</value>
   </data>
 </root>

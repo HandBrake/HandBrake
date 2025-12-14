@@ -549,7 +549,7 @@ Please note, there may be inperfections in the UI layout when using these modes.
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
     <value>Target a specific quality level for audio.
-1 is lowest quality and 5 is highest quality.
+Higher values mean higher quality.
 
 Bitrate will vary source to source.</value>
   </data>
