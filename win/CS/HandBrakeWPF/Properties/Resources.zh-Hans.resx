@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -122,45 +122,48 @@
 {0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
-    <value>减少解码器对CPU的占用。
+    <value>降低解码器的 CPU 使用率。
 
-当您的设备无法流畅播放输出时选择此选项。（例如：丢帧）</value>
+如果您的设备在播放输出文件时性能不足 (丢帧)，请选择此项。</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>警告： RF 0 表示无损！</value>
+    <value>警告：RF 0 是无损编码！</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>值为“0”表示无损，可能导致文件大小大于原始源，除非源文件也是无损的。
+    <value>数值为 0 意味着无损压缩，生成的文件大小会比原始源文件大，
+除非源文件本身也是无损的。
 
-使用x264和x265时比例是对数的，较低的值对应于较高的质量。
+x264 的画质级别比例是基于对数的，数值越小质量越高。
 
-因此，即使值的小幅减少也会导致文件大小逐渐增大。</value>
+因此，数值的微小降低会导致生成文件大小的逐步增大。</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>您可以选择使用此预设存储图像设置。有 3 种模式：
-None：图像设置不存储在预设中。加载源时，它们将保持在源分辨率的范围内。这也会影响变形、模量、裁剪等。
+    <value>您可以选择将此预设与图片设置一起保存。有 3 种模式可选：
 
-Custom：您可以选择设置最大宽度和高度。这样做时，输出视频的宽度和高度不会超过设定值。保持宽高比将自动打开。
-Source Maximum：始终在源分辨率下进行编码。</value>
+无：图像设置不会存储在预设中。加载源文件时，它们将保持不变，但会受源分辨率的限制。这同样会影响变形、模数、裁剪等设置。
+
+自定义：您可以选择设置最大宽度和高度。设置后，编码时将不会超过设置的值。保持宽高比将自动开启。
+
+源文件最大值：尽可能在源分辨率下进行编码。</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>本程序是自由软件；您可以根据自由软件基金会发布的
-GNU 通用公共许可证的条款重新发布它和/或修改它；
-该许可证的第 2 版，或（您选择）任何更高的版本。
+    <value>本程序为自由软件；您可以在自由软件基金会 (FSF) 发布的
+GNU 通用公共许可证的条款下重新分发和/或修改它；
+允许使用该许可证的第 2 版或您选择的任意更新的版本。
 
-本程序的分发是希望它能起到作用。但没有任何保证；
-甚至没有隐含的适销性或特定用途的保证。
-更多细节请参见 GNU 通用公共许可证。
+本程序本着能够为人所用的目的进行分发，但没有任何保证；
+甚至没有隐含的针对适销性或特定用途的保证。
+更多详情，请参见 GNU 通用公共许可证。
 
 您应该已经随本程序收到了一份 GNU 通用公共许可证的副本；
-如果没有，请写信给自由软件基金会，地址是
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA。</value>
+如果没有，请致信给自由软件基金会 (FSF)，地址是：Free Software 
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
-    <value>警告：自动文件命名选项未打开。请在设置中开启。</value>
+    <value>警告：自动文件命名选项没有启用。请在设置中启用此功能。</value>
   </data>
   <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
-    <value>警告：您当前没有自动选择音频和字幕轨道的设置。您可以在选项中设置默认轨道选择行为。</value>
+    <value>警告：您当前尚未设置自动音频和字幕轨道选择功能。您可以在选项中设置默认轨道选择行为。</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
     <value>内置的预设已被重置。</value>
@@ -169,19 +172,19 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
     <value>重置完成</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
-    <value>高质量 |</value>
+    <value>较高画质 |</value>
   </data>
   <data name="Video_LowQuality" xml:space="preserve">
-    <value>| 低质量</value>
+    <value>| 较低画质</value>
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
-    <value>最高质量 |</value>
+    <value>安慰剂级别画质 |</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>错误</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>在添加到队列之前，必须启用自动文件命名并在首选项中设置默认路径。</value>
+    <value>在将文件添加到队列之前，您必须在“首选项”中启用自动文件命名功能并设置默认路径。</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>警告</value>
@@ -196,22 +199,22 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
     <value>HandBrake 已在进行编码。</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>队列中有相同目标路径的任务。请为这项任务选择一个不同的路径。
+    <value>队列中有目标路径相同的任务。请为此任务选择一个不同的路径。
  
-你还可以在 "工具菜单-&gt;首选项-&gt;输出文件 "中配置自动文件命名功能。
+你还可以在“工具菜单 -&gt; 首选项 -&gt; 输出文件”中配置自动文件命名功能。
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>挂起的任务 {0}</value>
+    <value>待处理任务 {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
     <value>新的默认预设集：{0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>有新的更新可用。转到“工具”菜单 &gt; “选项”安装</value>
+    <value>有新版软件可供更新。请前往“工具菜单 -&gt; 选项”进行安装。</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>未选择预设。</value>
+    <value>没有选择预设。</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
     <value>您无法修改内置预设。请选择一个您自己的预设。</value>
@@ -226,7 +229,7 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
     <value>您无法导入与内置预设同名的预设。</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>预设 "{0}" 已经存在。您想覆盖它吗？</value>
+    <value>预设“{0}”已存在。您想要覆盖它吗？</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
     <value>预设</value>
@@ -235,36 +238,36 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
     <value>您确定要更新所选预设吗？</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>预设现在已使用您当前的设置进行更新。</value>
+    <value>此预设已使用您当前的设置进行了更新。</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>HandBrake 已确认您的内置预设已过期... 现在将更新这些预设。
-您的自定义预设尚未更新，因此您可能需要通过删除和重新添加来重新创建这些预设。
-以前的 user_presets.xml 文件已备份。</value>
+    <value>HandBrake 检测到您的内置预设已过时，程序将对这些预设进行更新。
+您的自定义预设未被更新，因此您可能需要通过删除并重新添加来重新创建这些预设。
+旧版的 user_presets.xml 文件已被备份。</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
-    <value>队列完成</value>
+    <value>队列已完成</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
-    <value>扫描取消。</value>
+    <value>扫描已取消。</value>
   </data>
   <data name="Main_ScanCompleted" xml:space="preserve">
-    <value>扫描完成</value>
+    <value>扫描已完成</value>
   </data>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
-    <value>扫描失败：</value>
+    <value>扫描已失败：</value>
   </data>
   <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
-    <value>扫描失败...有关详细信息，请参阅活动日志。</value>
+    <value>扫描已失败。详情请查看活动日志。</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>正在扫描源，请稍候…</value>
+    <value>正在扫描源文件，请稍侯…</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
     <value>正在扫描标题 {0}/{1} ({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>在开始编码之前，必须首先扫描源并设置作业。单击工具栏上的“添加源”按钮继续。</value>
+    <value>在开始编码之前，必须先扫描源文件并设置任务。请点击工具栏上的“源文件”按钮继续操作。</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
     <value>请确保您已选择自己的预设。请注意，您无法导出内置预设。</value>
@@ -273,10 +276,10 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
     <value>请选择要更新的预设。</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
-    <value>选择“源”以继续</value>
+    <value>选择“源文件”以继续</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} 等待作业</value>
+    <value>{0} 个待处理任务</value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>注意</value>
@@ -291,7 +294,7 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
     <value>准备就绪</value>
   </data>
   <data name="Updated" xml:space="preserve">
-    <value>更新</value>
+    <value>已更新</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
     <value>预设版本</value>
@@ -300,13 +303,13 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
     <value>您尝试导入的预设来自不同版本的 HandBrake。
 可能无法从此预设中导入所有值。
 
-您要继续吗？</value>
+您想要继续吗？</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
     <value>无法导入预设！</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>无法导入预设，因为它似乎已损坏或来自旧版本的 HandBrake。</value>
+    <value>无法导入预设，因为它似乎已损坏或来自旧版的 HandBrake。</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
     <value>在添加到队列之前，必须先为输出文件设置目标路径。</value>
@@ -315,16 +318,16 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
     <value>输入的目标路径包含非法字符，将不会更新。</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>预览{0}</value>
+    <value>预览 {0}</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
-    <value>预览（缩放）</value>
+    <value>预览 (已缩放)</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>输出：{0}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>您不能编码到与源文件具有相同路径和文件名的文件。请更新目标文件名，使其与源文件不匹配。</value>
+    <value>您不能将文件编码到与源文件具有相同路径和文件名的目标文件中。请更改目标文件名，使其与源文件不同。</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
     <value>您的系统阻止了 HandBrake 启动网页浏览器。</value>
@@ -337,39 +340,39 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
     <value>预设可能已损坏，或者来自不受支持的旧版 HandBrake。
-必须在当前版本中重新创建旧版本的预设。</value>
+必须在当前版本中重新创建来自旧版的预设。</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>可以传递给视频编码器的其他高级参数。</value>
+    <value>可以传递给视频编码器的额外高级参数。</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>None：只有容器不支持的轨道才会被烧入。
-Foreign Audio Track：如果可用，外语轨道将被烧入。
-First Track：第一条轨道会被烧入。
-Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧入，否则将选择第一条轨道。</value>
+    <value>无：仅在容器不支持该轨道的格式时才内嵌到视频。
+外语音频轨道：如果可用，将外语音频轨道内嵌到视频。
+第一条轨道：将第一条轨道内嵌到视频。
+外语音频轨道优先，否则第一条轨道：如果存在外语音频轨道则将其内嵌到视频，否则选择第一条轨道。</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
     <value>WebM 字幕兼容性</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>HandBrake 中的 WebM 格式仅支持内嵌字幕。
+    <value>HandBrake 仅支持内嵌字幕到 WebM 格式。
 
-您应该更改字幕选择。
+您应该更改您选择的字幕。
 
-如果继续，您未烧录的字幕将丢失。</value>
+如果您继续操作，一些字幕将会丢失。</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
-    <value>找不到有效的源或标题。</value>
+    <value>找不到有效的源文件或标题。</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>Handbrake无法编码所选源，因为没有发现有效的带有标题的源。这可能是由于以下原因之一引起的：
+    <value>HandBrake 无法对所选源文件进行编码，因为它没有找到具有可编码标题的有效源文件。这可能是由以下原因之一导致的：
 
-- 每个源的标题长度小于“首选项-&gt;高级”中“最小标题长度”的下限。
-- 源文件不是一个有效的视频文件，或者Handbrake不支持此文件格式。
-- 你可能没有该文件的读取权限，或者另外一个程序可能锁定了该文件。
-- 源可能被DRM或者类似的机制拷贝保护了。请注意，Handbrake不支持移除拷贝保护。
+- 每个源媒体的标题时长小于“首选项 -&gt; 高级”中“最小标题时长”的阈值。
+- 源媒体不是有效的视频文件，或者其格式不受 HandBrake 支持。
+- 您可能没有该文件的读取权限，或者另一个应用程序可能已锁定该文件。
+- 源文件可能有拷贝保护机制或包含数字版权管理 (DRM)。请注意，HandBrake 不支持移除拷贝保护。
 
-活动日志里可能有更多信息。</value>
+活动日志里可能包含更多信息。</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>队列{0}</value>
@@ -387,16 +390,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>您确定要删除预设：</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>编码中：Pass {0}/{1},  {2:00.00}%, 帧率: {3:000.0}, 平均帧率: {4:000.0},  剩余时间：{5},  已用时间：{6}{7}</value>
+    <value>正在编码：第 {0} 阶段，共 {1} 阶段，{2:00.00}%，帧率：{3:000.0}，平均帧率：{4:000.0}，剩余时间：{5}，已用时间：{6}{7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>预设必须有名称。请填写预设名称字段。</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>已存在具有此名称的预设。 您想覆盖它吗？</value>
+    <value>已存在同名预设。您想要覆盖它吗？</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
-    <value>必须先扫描源才能使用“源最大值”选项。</value>
+    <value>必须先扫描源文件才能使用“源文件最大值”选项。</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
     <value>必须为“自定义”选项填写自定义宽度或高度字段。</value>
@@ -411,7 +414,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>音频默认值</value>
   </data>
   <data name="AudioViewModel_AudioTracks" xml:space="preserve">
-    <value>音轨</value>
+    <value>音频轨道</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
     <value>选择行为…</value>
@@ -426,7 +429,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>章节标记名称不会保存在您的编码中。</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>以下操作 “{0}”将在{1}内发生。</value>
+    <value>以下操作“{0}”将在 {1} 秒内执行。</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
     <value>如果问题仍然存在，请尝试重新启动 HandBrake。</value>
@@ -435,34 +438,34 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>没有关于此错误的更多信息。</value>
   </data>
   <data name="ErrorViewModel_UnknownError" xml:space="preserve">
-    <value>出现未知错误。</value>
+    <value>发生未知错误。</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>有一个新的更新！请查看网站上的发行说明。</value>
+    <value>HandBrake {0} 已经推出！请查看网站的发行说明。</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
-    <value>目前没有新的更新。</value>
+    <value>目前没有新版软件可供更新。</value>
   </data>
   <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
     <value>更新已下载</value>
   </data>
   <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
-    <value>更新服务不可用。您可以尝试从 https://handbrake.fr 下载更新</value>
+    <value>更新服务不可用。您可以尝试从 https://handbrake.fr 下载新版软件。</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
-    <value>更新失败。您可以尝试从 https://handbrake.fr 下载更新</value>
+    <value>更新失败。您可以尝试从 https://handbrake.fr 下载新版软件。</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>存储大小：{0}x{1}</value>
+    <value>存储尺寸：{0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
-    <value>添加到队列中</value>
+    <value>添加到队列</value>
   </data>
   <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
-    <value>没有在等待的编码</value>
+    <value>没有待处理的编码任务</value>
   </data>
   <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
-    <value>当前没有编码作业</value>
+    <value>当前没有正在编码的任务</value>
   </data>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>队列</value>
@@ -474,7 +477,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>确认</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0} 等待作业</value>
+    <value>{0} 个待处理任务</value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>列队已暂停</value>
@@ -484,13 +487,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
 此操作不会删除任何已编码的文件。</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
-    <value>此编码目前正在进行中。如果删除它，编码将停止。您确定要继续吗？</value>
+    <value>此编码任务正在进行中。删除它将导致编码停止。您确定要继续操作吗？</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
-    <value>没有待处理的作业。</value>
+    <value>没有待处理的任务。</value>
   </data>
   <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
-    <value>是否确实要编辑此作业？它将从队列中删除并发送到主窗口。</value>
+    <value>您确定要编辑此任务吗？这将把它从队列中移除并发送到主窗口。</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
     <value>队列已就绪</value>
@@ -502,32 +505,32 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>队列已完成</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
-    <value>上次列队的作业已完成</value>
+    <value>队列中的最后一个任务已完成</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
-    <value>列队已开始</value>
+    <value>队列已启动</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>编码中：Pass {0}/{1},  {2:00.00}%, 帧率: {3:000.0}, 平均帧率: {4:000.0}, 剩余时间：{5},  已用时间：{6:d\:hh\:mm\:ss}</value>
+    <value>正在编码：第 {0} 阶段，共 {1} 阶段，{2:00.00}%，帧率：{3:000.0}，平均帧率：{4:000.0}，剩余时间：{5}，已用时间：{6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
-    <value>当前正在运行编码。退出 HandBrake 将停止此编码。
+    <value>一个编码任务正在运行中。退出 HandBrake 将会停止此编码任务。
 您确定要退出 HandBrake 吗？</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
     <value>图片预览</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>无法删除以前的预览文件。您可能仍然在媒体播放器中打开了一个预览。请关闭这个。</value>
+    <value>无法删除之前的预览文件。您可能在仍在媒体播放器中打开了该预览文件，请将其关闭。</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>在创建预览之前，必须先扫描源并设置编码。</value>
+    <value>在创建预览之前，您必须先扫描源文件并设置编码。</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
-    <value>无法找到预览文件。文件已删除或编码失败。检查活动日志以获取详细信息。</value>
+    <value>无法找到预览文件。要么文件已被删除，要么编码失败。请查看活动日志以获取详细信息。</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
-    <value>Handbrake 已经在编码视频了！ 一次只能编码一个文件。</value>
+    <value>Handbrake 已经在编码视频了！一次只能编码一个文件。</value>
   </data>
   <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
     <value>字幕默认值</value>
@@ -542,27 +545,27 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>选择行为…</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
-    <value>存档的文件：</value>
+    <value>已归档文件：</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
     <value>无法加载预设。</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake 无法加载您的预设文件。它可能来自较旧的不受支持的 HandBrake 版本或已损坏。
+    <value>HandBrake 无法加载您的预设文件。该文件可能来自旧版 HandBrake 或已损坏。
 
-您的旧预设文件已归档为：</value>
+您的旧预设文件已归档至：</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>检测到{0}个错误。检查队列窗口了解详情。</value>
+    <value>，检测到 {0} 个错误。请检查队列窗口以了解详情。</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>磁盘空间不足</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
-    <value>警告，您的磁盘空间不足。如果空间不足，HandBrake 将无法完成此编码。</value>
+    <value>警告：您的磁盘空间不足。如果空间耗尽，HandBrake 将无法完成此次编码任务。</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
-    <value>第{0}行无效。不会导入任何内容。</value>
+    <value>第 {0} 行无效。将不会导入任何内容。</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
     <value>无法导入章节文件</value>
@@ -571,10 +574,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>章节文件中的所有行必须至少有2列数据</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
-    <value>章节文件中的第一列只能包含大于零（0）的整数值</value>
+    <value>章节文件中的第一列只能包含大于零 (0) 的整数值</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
-    <value>目前不支持类型为 '{0}' 的章节文件。</value>
+    <value>目前不支持“{0}”类型的章节文件。</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
     <value>不支持的章节文件类型</value>
@@ -583,61 +586,61 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>源媒体的章节信息无效</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
-    <value>媒体源的章节数和输入文件的章节数不匹配( {0} vs {1}).
+    <value>源媒体中的章节数量与输入文件中的章节数量不匹配 ({0} 与 {1})。
 
-您依然要导入章节名吗？</value>
+您确定要导入章节名称吗？</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
-    <value>媒体源的章节数和输入文件的章节数不匹配( {0} vs {1}).
+    <value>源媒体中的章节数量与输入文件中的章节数量不匹配 ({0} 与 {1})。
 
-您依然要导入章节名吗？</value>
+您确定要导入章节名称吗？</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
-    <value>源文件和输入文件的章节数不匹配</value>
+    <value>源文件和输入文件的章节数量不匹配</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
-    <value>源媒体上各章的时长和输入文件中各章的时长相差很大。
+    <value>源媒体上所报告的章节时长与输入文件中的章节时长差异很大。
 
-本章节文件很可能是从其他源媒体生成的。
+本章节文件很可能是基于其他源媒体生成的。
 
-确实要导入章节名称吗？</value>
+您确定要导入章节名称吗？</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
     <value>源文件和输入文件的章节时长不匹配</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>尝试停止扫描时发生了错误。请重启HandBrake。</value>
+    <value>尝试停止扫描时发生了错误。请重启 HandBrake。</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake 无法将预设文件升级为新版本格式。
-您的预设文件将被存档。您需要重新创建自己的预设。</value>
+    <value>HandBrake 无法将您的预设文件升级到新版本格式。
+您的预设文件将被归档，新的预设文件已被创建。您需要重新创建自己的预设。</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
-    <value>您所更改的任何设置可能会在下次 HandBrake 启动时被重置。</value>
+    <value>您更改过的所有设置可能会在下次 HandBrake 启动时被重置。</value>
   </data>
   <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
-    <value>尝试保存您的偏好设置时出现了问题。</value>
+    <value>尝试保存您的首选项时出现了问题。</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
-    <value>警告，您的设置已被重置！</value>
+    <value>警告：您的设置已被重置！</value>
   </data>
   <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
-    <value>您的用户设置文件已损坏或不可访问。设置已经被恢复为默认。</value>
+    <value>您的用户设置文件已损坏或无法访问。设置已重置为默认值。</value>
   </data>
   <data name="UserSettings_UnableToLoad" xml:space="preserve">
-    <value>无法加载用户设置文件: {0}</value>
+    <value>无法加载用户设置文件：{0}</value>
   </data>
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
-    <value>您的用户设置文件似乎无法访问或已损坏。您可能需要删除它并让 HandBrake 生成一份新的。</value>
+    <value>您的用户设置文件似乎无法访问或已损坏。您可能需要删除该文件，让 HandBrake 可以重新生成一个新的用户设置文件。</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>您选择的输出目录不存在或者没有写入文件的权限。</value>
+    <value>您选择的输出目录不存在，或者您没有向该目录写入文件的权限。</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
     <value>创建文件夹？</value>
   </data>
   <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
-    <value>要写入的文件夹并不存在。您希望 HandBrake 创建该文件夹吗？
+    <value>您尝试写入的文件夹不存在。您想要 HandBrake 创建以下文件夹吗？
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
@@ -647,99 +650,99 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>请检查目标目录是否有效。</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>正在处理：步骤 {0}/{1}，（扫描字幕）{2:00.00}%，扫描剩余时间：{3}已用时间：{4}</value>
+    <value>正在处理：第 {0} 阶段，共 {1} 阶段，(扫描字幕) {2:00.00}%，剩余扫描时间：{3}，已用时间：{4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
-    <value>没有附加信息</value>
+    <value>没有额外信息</value>
   </data>
   <data name="WindowTitleStatus" xml:space="preserve">
-    <value>{0} - ({1}%, 已完成 {2} /{3} )</value>
+    <value>{0} - ({1}%，第 {2} 阶段，共 {3} 阶段)</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-1个编码任务</value>
+正在编码 1 个任务</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>队列已暂停。警告，您编码的驱动器磁盘空间不足。请释放一些空间，然后按开始继续。您还可以调整首选项中的最小空间级别。</value>
+    <value>队列已暂停。警告：您正在编码的目标驱动器磁盘空间不足。请释放一些空间，然后按“开始”继续。您也可以在“首选项”中调整最小空间级别。</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
-    <value>列队已暂停</value>
+    <value>队列已暂停</value>
   </data>
   <data name="QueueViewModel_QueuePaused" xml:space="preserve">
-    <value>列队已暂停</value>
+    <value>队列已暂停</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>您的目标目录的磁盘可用空间不足。
+    <value>您的目标目录所在的磁盘空间不足。
 
-您可以在首选项中配置显示警报的级别。
+您可以在首选项中配置显示警报的剩余空间级别。
 
-您确定要继续吗？</value>
+您想要要继续吗？</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>无法重置作业状态，因为它未处于错误或已完成状态</value>
+    <value>无法重置任务状态，因为它既不处于错误状态也不处于已完成状态。</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
     <value>无法恢复队列文件。</value>
   </data>
   <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
-    <value>文件可能损坏或是来自旧的不兼容版本的HandBrake</value>
+    <value>该文件可能已损坏，或者来自 HandBrake 较旧的不兼容版本。</value>
   </data>
   <data name="Queue_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake已经在编码文件中。</value>
+    <value>HandBrake 已经在编码一个文件。</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
-    <value>请停止当前编码。如果问题依然存在，请重启HandBrake。</value>
+    <value>请停止当前的编码任务。如果问题仍然存在，请重新启动 HandBrake。</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>预览 ({0}% 实际大小)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake 需要在 64 位版本的 Windows 10 或更高版本来运行。</value>
+    <value>HandBrake 需要运行在 64 位的 Windows 10 或更高版本的操作系统上。</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake 需要 Windows 10 或更高版本才能运行。版本0.9.9 (XP) 、版本0.10.5 (Vista) 、版本1.3.3 (7和8.x) 是支持这些旧操作系统的最后版本。</value>
+    <value>HandBrake 需要 Windows 10 或更高版本才能运行。0.9.9 版 (支持 XP)、0.10.5 版 (支持 Vista)、1.3.3 版 (支持 7 和 8.x) 分别是支持这些较旧操作系统的最终版本。</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>你希望继续尝试添加剩下的吗？</value>
+    <value>您想要继续尝试添加剩余内容吗？</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>这个文件‘{0}’已经存在！
-你是否想要覆盖它！
+    <value>文件“{0}”已存在。
+你想要覆盖它吗？
 
-提示：另外你可以在首选项中设置文件覆盖行为。</value>
+提示：文件覆盖行为可在首选项中进行更改。</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
-    <value>系统剪贴板目前无法使用。</value>
+    <value>系统剪贴板目前不可用。</value>
   </data>
   <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
-    <value>这可能是由于另外的应用程序正监视或锁定了剪贴板。当剪贴板解锁后您才能继续使用它。</value>
+    <value>这可能是由于另一个应用程序正在监视或锁定剪贴板以供其自身使用。在剪贴板解锁之前，您将无法使用它。</value>
   </data>
   <data name="AboutView_License" xml:space="preserve">
-    <value>许可：</value>
+    <value>许可证：</value>
   </data>
   <data name="AboutView_Version" xml:space="preserve">
     <value>版本：</value>
   </data>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
-    <value>-- 添加新分类 --</value>
+    <value>-- 添加新类别 --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
     <value>添加预设</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>分类：</value>
+    <value>类别：</value>
   </data>
   <data name="AddPresetView_Description" xml:space="preserve">
     <value>描述：</value>
   </data>
   <data name="AddPresetView_Name" xml:space="preserve">
-    <value>名字：</value>
+    <value>名称：</value>
   </data>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
     <value>尺寸：</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>轨道源选择</value>
+    <value>源轨道选择</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
     <value>允许直通：</value>
@@ -751,13 +754,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>“自动直通” 行为：</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
-    <value>比特率</value>
+    <value>码率</value>
   </data>
   <data name="AudioView_Codec" xml:space="preserve">
     <value>编码</value>
   </data>
   <data name="AudioView_DRC" xml:space="preserve">
-    <value>DRC</value>
+    <value>动态对比压缩 (DRC)</value>
   </data>
   <data name="AudioView_Gain" xml:space="preserve">
     <value>增益</value>
@@ -766,10 +769,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>隐藏</value>
   </data>
   <data name="AudioView_Mixdown" xml:space="preserve">
-    <value>混音</value>
+    <value>音频混缩</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>后备编码器：</value>
+    <value>备选编码器：</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
     <value>重新加载</value>
@@ -787,10 +790,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>轨道选择行为：</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
-    <value>额外的轨道：</value>
+    <value>额外轨道：</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>选择“Auto Passthru”作为音频编解码器时。</value>
+    <value>选择“自动直通”作为音频编解码器时。</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
     <value>章节标记</value>
@@ -829,7 +832,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>继续</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
-    <value>完成操作时</value>
+    <value>完成时操作</value>
   </data>
   <data name="ErrorView_ErrorDetails" xml:space="preserve">
     <value>错误详情：</value>
@@ -838,19 +841,19 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>自定义：</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>去块滤波：</value>
+    <value>去块过滤：</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
-    <value>Decomb</value>
+    <value>去梳状纹理</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>反交错：</value>
+    <value>去隔行扫描：</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
     <value>预设：</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>反交错预设</value>
+    <value>去隔行扫描预设</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
     <value>降噪：</value>
@@ -859,22 +862,22 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>降噪预设</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>降噪调优</value>
+    <value>降噪微调</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
-    <value>反胶卷过带：</value>
+    <value>去梳状纹理过滤：</value>
   </data>
   <data name="FiltersView_Filters" xml:space="preserve">
-    <value>滤镜</value>
+    <value>过滤</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
     <value>水平</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
-    <value>灰度</value>
+    <value>灰阶</value>
   </data>
   <data name="FiltersView_InterlaceDetection" xml:space="preserve">
-    <value>隔行扫描：</value>
+    <value>隔行扫描检测：</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
     <value>预设：</value>
@@ -889,10 +892,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>锐化预设</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>锐化调优</value>
+    <value>锐化微调</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
-    <value>调优：</value>
+    <value>微调：</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
     <value>添加</value>
@@ -934,7 +937,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>活动日志</value>
   </data>
   <data name="MainView_AddAll" xml:space="preserve">
-    <value>全部添加</value>
+    <value>添加全部</value>
   </data>
   <data name="MainView_AddCurrent" xml:space="preserve">
     <value>添加当前</value>
@@ -943,22 +946,22 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>添加选中</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
-    <value>添加到队列中</value>
+    <value>添加到队列</value>
   </data>
   <data name="MainView_AdvancedTab" xml:space="preserve">
     <value>高级</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>音视频起始对齐</value>
+    <value>对齐音/视频开头</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>角度</value>
+    <value>角度：</value>
   </data>
   <data name="MainView_AudioTab" xml:space="preserve">
     <value>音频</value>
   </data>
   <data name="MainView_AudioTrackCount" xml:space="preserve">
-    <value>音轨</value>
+    <value>音频轨道</value>
   </data>
   <data name="MainView_Browser" xml:space="preserve">
     <value>浏览</value>
@@ -979,7 +982,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>保存为：</value>
   </data>
   <data name="MainView_FiltersTab" xml:space="preserve">
-    <value>滤镜</value>
+    <value>过滤</value>
   </data>
   <data name="MainView_Format" xml:space="preserve">
     <value>格式：</value>
@@ -988,16 +991,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>帮助</value>
   </data>
   <data name="MainView_iPod5G" xml:space="preserve">
-    <value>iPod 5代 支持</value>
+    <value>iPod 5 代支持</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
     <value>元数据</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
-    <value>(修改的)</value>
+    <value>(已修改)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>开始合并：这可能需要一段时间…</value>
+    <value>正在混流：这可能需要一段时间…</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
     <value>选项</value>
@@ -1015,7 +1018,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>编辑预设</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>预设选项上下文菜单</value>
+    <value>预设选项右键菜单</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
     <value>删除预设</value>
@@ -1027,7 +1030,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>预览</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>编码中: {0}, {1:00.00}%, 剩余时间: {2}, {3}</value>
+    <value>{0}, {1:00.00}%, Time Remaining: {2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>范围：</value>
@@ -1045,7 +1048,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>保存新预设</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
-    <value>正在寻找开始时间</value>
+    <value>正在搜索起始时间</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>设置为默认</value>
@@ -1057,10 +1060,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>队列</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
-    <value>源：</value>
+    <value>源文件：</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>打开源</value>
+    <value>打开源文件</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
     <value>开始编码</value>
@@ -1075,10 +1078,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>停止编码</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>您确定要停止此编码吗？</value>
+    <value>您确定要停止此次编码任务吗？</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>请在导入字幕文件前选择一个要编码的源</value>
+    <value>请在导入字幕文件前选择一个要编码的源文件。</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
     <value>字幕</value>
@@ -1087,7 +1090,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>字幕轨道</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
-    <value>摘要</value>
+    <value>概览</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
     <value> - </value>
@@ -1102,7 +1105,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>视频</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
-    <value>网页优化</value>
+    <value>网络视频优化</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
     <value>管理预设</value>
@@ -1114,22 +1117,22 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>允许使用 DirectX 解码</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
-    <value>输入的文件格式包含无效的字符。这些字符已被移除。</value>
+    <value>输入的文件格式包含无效字符。这些字符已被移除。</value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
-    <value>每个编码完成时都发出提示音</value>
+    <value>每个编码任务完成时都播放提示声音</value>
   </data>
   <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
-    <value>队列完成时发出提示音</value>
+    <value>队列完成时播放提示声音</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>在摘要栏中显示预览。</value>
+    <value>在概览标签页中显示预览。</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
-    <value>在应用程序标题栏中显示编码进度。</value>
+    <value>在应用程序标题栏中显示编码状态。</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>清理7天前的日志文件</value>
+    <value>清除 7 天前的日志文件</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>关于 HandBrake</value>
@@ -1153,22 +1156,22 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>检查更新</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>每当编码完成时总是清除已完成的队列任务</value>
+    <value>每当编码完成后总是清除已完成的队列项目</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>清理日志历史</value>
+    <value>清除日志历史记录</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>复制编码日志文件到指定位置：</value>
+    <value>将单个码任务日志的副本放到指定位置：</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>复制编码日志文件到编码视频所在位置</value>
+    <value>将单个编码任务日志的副本放在与已编码视频相同的位置。</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
     <value>当前版本</value>
   </data>
   <data name="Options_Decoding" xml:space="preserve">
-    <value>解码中</value>
+    <value>正在解码</value>
   </data>
   <data name="Options_DefaultPath" xml:space="preserve">
     <value>默认路径：</value>
@@ -1177,13 +1180,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>下载更新</value>
   </data>
   <data name="Options_DVD" xml:space="preserve">
-    <value>DVD 读取中</value>
+    <value>正在读取 DVD</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>禁用 LibDVDNav。（将会使用 livdvdread）</value>
+    <value>禁用 LibDVDNav (将改用 livdvdread)</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
-    <value>编码中</value>
+    <value>编码</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
     <value>文件格式：</value>
@@ -1201,16 +1204,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>路径：</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>硬盘空间低时暂停队列</value>
+    <value>磁盘空间不足时暂停队列</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>最小化到系统托盘（需要重启）</value>
+    <value>最小化到系统托盘 (需要重启)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>DVD 和蓝光标题的最短时长（秒）。将跳过较短的标题：</value>
+    <value>DVD 和蓝光标题的最小时长 (单位为秒)。时长小于此值的标题将被跳过：</value>
   </data>
   <data name="Options_KeepDuplicateTitles" xml:space="preserve">
-    <value>保留蓝光源上的重复标题（需要重新启动）</value>
+    <value>保留蓝光源媒体上的重复标题 (需要重新启动)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4 文件扩展名：</value>
@@ -1231,28 +1234,28 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>在编码时防止系统进入睡眠状态</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>要扫描的预览图片数：</value>
+    <value>要扫描的预览图像数量：</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
     <value>工作优先级：</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>使用QuickSync编码器时，如果有合适的硬件，优先使用Intel QuickSync来解码视频。</value>
+    <value>使用 QuickSync 编码器时，如果有支持的硬件，优先使用 Intel QuickSync 来解码视频。</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>在不使用QuickSync编码器时也使用QuickSync解码。(例如x265)</value>
+    <value>即使未使用 QuickSync 编码器 (例如 x265)，也使用 QuickSync 解码。</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>移除常见的标点符号</value>
+    <value>移除常见标点符号</value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
     <value>用空格替换下划线</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>当应用重启时重置为“无操作”。</value>
+    <value>应用程序重启后重置为“不进行任何操作”。</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>选择缩放器：</value>
+    <value>选择缩放方式：</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
     <value>缩放</value>
@@ -1277,19 +1280,19 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
     <value>此路径仅用于视频预览功能。
-支持 VLC 和 MPC-HC。 其他播放器也可能工作，但未经验证。</value>
+支持 VLC 和 MPC-HC 播放器。其他播放器可能也能工作，但未经过验证。</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>查看日志目录</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>当完成时</value>
+    <value>完成时</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
     <value>x264/5 设置</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>固定质量模式的最小刻度：</value>
+    <value>固定画质控制细粒度：</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
     <value>变形：</value>
@@ -1298,10 +1301,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>自动</value>
   </data>
   <data name="PictureSettingsView_Bottom" xml:space="preserve">
-    <value>下</value>
+    <value>底部</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>裁剪</value>
+    <value>裁剪：</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>自定义</value>
@@ -1316,7 +1319,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>自动</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
-    <value>左</value>
+    <value>左侧</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
     <value>最终尺寸：</value>
@@ -1325,16 +1328,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>像素宽高比：</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
-    <value>右</value>
+    <value>右侧</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
     <value>大小：</value>
   </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
-    <value>上</value>
+    <value>顶部</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>缩放大小：</value>
+    <value>缩放后大小：</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>自定义</value>
@@ -1346,16 +1349,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>导入文件</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
-    <value>官方的</value>
+    <value>官方</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
     <value>选择标题：</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>添加到队列中</value>
+    <value>添加到队列</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>选中的标题将会使用 "{0}" 预设添加</value>
+    <value>选中的标题将会使用“{0}”预设添加。</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
     <value>视频选项：</value>
@@ -1367,13 +1370,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>清除全部</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>清除已完成的</value>
+    <value>清除已完成任务</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
     <value>清除队列</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>清除选中的</value>
+    <value>清除选中任务</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
     <value>删除</value>
@@ -1382,7 +1385,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>目标路径：</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
-    <value>无操作</value>
+    <value>不进行任何操作</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
     <value>编码时长：</value>
@@ -1397,7 +1400,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>导出队列</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>导出文件大小：</value>
+    <value>输出文件大小：</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
     <value>休眠</value>
@@ -1409,13 +1412,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>日志将在编码完成后可用。</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
-    <value>登出</value>
+    <value>注销</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
     <value>打开目标目录</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>打开源目录</value>
+    <value>打开源文件目录</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
     <value>选项</value>
@@ -1430,16 +1433,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>图像设置：</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
-    <value>退出HandBrake</value>
+    <value>退出 HandBrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>重试所有任务</value>
+    <value>重试全部任务</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>重试失败的</value>
+    <value>重试失败任务</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>重置选中的任务</value>
+    <value>重置选中任务</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
     <value>重置</value>
@@ -1448,7 +1451,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>关机</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>源：</value>
+    <value>源文件：</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
     <value>启动队列</value>
@@ -1463,7 +1466,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>字幕：</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>概要</value>
+    <value>概览</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
     <value>睡眠</value>
@@ -1472,10 +1475,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>视频：</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>当完成时：</value>
+    <value>完成时：</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
-    <value>添加所有剩余选中的语言</value>
+    <value>添加所有剩余的选中语言</value>
   </data>
   <data name="Shared_AddAllRemaining" xml:space="preserve">
     <value>添加所有剩余的轨道</value>
@@ -1487,13 +1490,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>轨道</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
-    <value>可用的语言：</value>
+    <value>可用语言：</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>选择语言：</value>
   </data>
   <data name="Shared_ChosenLanguages" xml:space="preserve">
-    <value>选择语言：</value>
+    <value>已选择语言：</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
     <value>配置默认行为</value>
@@ -1511,7 +1514,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>选择要扫描的文件夹</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>视需要选择一个具体的标题：</value>
+    <value>选择一个具体的标题 (可选)：</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
     <value>然后选择您想编码的视频：</value>
@@ -1520,13 +1523,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>文件</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>文件夹（批量扫描）</value>
+    <value>文件夹 (批量扫描)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
-    <value>打开DVD或蓝光驱动器</value>
+    <value>打开此 DVD 或蓝光驱动器</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>打开有一个或多个文件的文件夹。</value>
+    <value>打开包含文件的的文件夹。</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
     <value>恢复队列文件</value>
@@ -1535,10 +1538,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>以前的队列存档可用。</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>打开视频文件（S）。</value>
+    <value>打开视频文件。</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>选择源</value>
+    <value>源文件选择</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
     <value>时长：</value>
@@ -1547,19 +1550,19 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>编码预览</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
-    <value>选择预览图片</value>
+    <value>选择预览图像</value>
   </data>
   <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
     <value>使用外部播放器</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
-    <value>添加隐藏式字幕（可用时）</value>
+    <value>添加闭合字幕 (如果可用)</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>添加“外部音频扫描”</value>
+    <value>添加“外语音频扫描”</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>烧录行为：</value>
+    <value>内嵌字幕行为：</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
     <value>导入字幕</value>
@@ -1568,34 +1571,34 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>轨道选择行为：</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>添加所有剩余的隐藏式字幕</value>
+    <value>添加所有剩余的闭合字幕</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>选择新标题或源视频时自动选择和配置字幕轨道的方式。</value>
+    <value>配置在您选择新的标题或源视频时，如何自动选择和配置字幕轨道。</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
-    <value>额外的音频轨道</value>
+    <value>额外音频轨道</value>
   </data>
   <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
-    <value>额外的字幕轨道</value>
+    <value>额外字幕轨道</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>已烧录</value>
+    <value>内嵌</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
     <value>章节标记</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>去块滤波</value>
+    <value>去块过滤</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
-    <value>反胶卷过带</value>
+    <value>去梳状纹理过滤</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
     <value>显示</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
-    <value>灰度</value>
+    <value>灰阶</value>
   </data>
   <data name="SummaryView_NoAudioTracks" xml:space="preserve">
     <value>没有音频轨道</value>
@@ -1604,16 +1607,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>没有章节标记</value>
   </data>
   <data name="SummaryView_NoFilters" xml:space="preserve">
-    <value>无滤镜</value>
+    <value>没有过滤</value>
   </data>
   <data name="SummaryView_NoSource" xml:space="preserve">
-    <value>没有源</value>
+    <value>没有源文件</value>
   </data>
   <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
-    <value>没有字幕轨</value>
+    <value>没有字幕轨道</value>
   </data>
   <data name="SummaryView_NoTracks" xml:space="preserve">
-    <value>无轨道</value>
+    <value>没有轨道</value>
   </data>
   <data name="SummaryView_PreviewInfo" xml:space="preserve">
     <value>预览 {0} / {1}</value>
@@ -1622,13 +1625,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>旋转</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>存储空间</value>
+    <value>存储</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>多次编码</value>
+    <value>多阶段编码</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>平均码率(kbps)：</value>
+    <value>平均码率 (kbps)：</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
     <value>视频编码器：</value>
@@ -1640,7 +1643,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>固定帧率</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>固定质量：</value>
+    <value>固定品质：</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
     <value>编码器级别：</value>
@@ -1649,10 +1652,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>编码器预设：</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>编码器配置文件：</value>
+    <value>编码器配置：</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>编码器调优：</value>
+    <value>编码器微调：</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
     <value>高级选项：</value>
@@ -1661,7 +1664,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>快速解码</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>帧率 (FPS):</value>
+    <value>帧率 (FPS)：</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
     <value>编码器选项：</value>
@@ -1670,10 +1673,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>峰值帧率</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>质量：</value>
+    <value>品质：</value>
   </data>
   <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
-    <value>Turbo analysis pass</value>
+    <value>分析阶段加速</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>可变帧率</value>
@@ -1691,7 +1694,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>关于 HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>可以将一个文件、多个文件或文件夹拖放到此处......</value>
+    <value>或将文件或文件夹拖放到此处...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>帮助</value>
@@ -1703,19 +1706,19 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>添加轨道</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>为每个轨道设置音频编码器：</value>
+    <value>每个选定音频轨道的音频编码器设置：</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
     <value>清除</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>烧入</value>
+    <value>嵌入视频</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
     <value>默认</value>
   </data>
   <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
-    <value>仅限强制</value>
+    <value>仅强制字幕</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
     <value>关于(_A)...</value>
@@ -1730,19 +1733,19 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>退出(_E)</value>
   </data>
   <data name="MainView_ExportToFile" xml:space="preserve">
-    <value>导出到文件(_E)</value>
+    <value>导出文件(_E)</value>
   </data>
   <data name="MainView_FileMenu" xml:space="preserve">
     <value>文件(_F)</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>HandBrake 文档 (HTTPS)(_H)</value>
+    <value>_HandBrake 文档 (HTTPS)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
     <value>帮助(_H)</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>从文件导入(_I)</value>
+    <value>导入文件(_I)</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
     <value>首选项(_P)</value>
@@ -1757,7 +1760,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>重置内置预设(_R)</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>将当前设置为默认值(_S)</value>
+    <value>设置当前预设为默认值(_S)</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
     <value>显示预设面板(_H)</value>
@@ -1769,7 +1772,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>工具(_T)</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>检查更新…</value>
+    <value>正在检查更新…</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
     <value>您确定要清除日志文件目录吗？</value>
@@ -1787,7 +1790,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>注意</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>准备更新...</value>
+    <value>正在准备更新...</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
     <value>请选择一个文件夹。</value>
@@ -1802,10 +1805,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>显示</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>“添加所有”至队列</value>
+    <value>“添加全部”到队列</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>“添加选中”至队列</value>
+    <value>“添加选中”到队列</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>播放文件</value>
@@ -1814,18 +1817,18 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>应用程序工具栏</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>在工具栏中显示“添加所有至队列”</value>
+    <value>在工具栏中显示“添加全部到队列”</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>在工具栏中显示“添加选中至队列”</value>
+    <value>在工具栏中显示“添加选中到队列”</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>硬件编码支持当前禁用。如果您未用 "--no-hardware" 选项启动 HandBrake，请确保您系统中的所有显示适配器正在使用最新的驱动程序。
+    <value>硬件编码支持当前已禁用。如果您未使用“--no-hardware”选项启动 HandBrake，请确保此系统中所有显卡的驱动程序均为最新版本。
 
-这不会影响软件编码器。</value>
+这不会对影响软件编码器的工作。</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
-    <value>请更正您的字幕设置然后再继续。</value>
+    <value>请更正您的字幕设置然后继续。</value>
   </data>
   <data name="Generic_Apply" xml:space="preserve">
     <value>应用</value>
@@ -1837,23 +1840,23 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>活动</value>
   </data>
   <data name="QueueView_Import" xml:space="preserve">
-    <value>导入列队</value>
+    <value>导入队列</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>编码：Pass {0}/{1}，{2:00.00}%，帧率：{3:000.0}，平均帧率：{4:000.0}
+    <value>正在编码：第 {0} 阶段，共 {1} 个阶段，{2:00.00}%，帧率：{3:000.0}，平均帧率：{4:000.0}
 剩余时间：{5}，已用时间：{6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
-    <value>删除所选</value>
+    <value>删除选中</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>便携模式：无法创建 TMP 目录。请检查路径是否正确并允许写入。</value>
+    <value>免安装模式：无法创建 TMP 目录。请检查路径是否正确且可写入。</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>便携模式：无法创建存储目录。请检查路径是否正确并允许写入。</value>
+    <value>免安装模式：无法创建存储目录。请检查路径是否正确且可写入。</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>便携模式：无法读取 portable.ini。此文件可能存在错误。请使用 portable.ini.template 作为模版重试。</value>
+    <value>免安装模式：无法读取 portable.ini。此文件可能存在错误。请参照 portable.ini.template 模板文件改正后重新尝试。</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>替换选项：
@@ -1869,25 +1872,25 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>覆盖文件</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
-    <value>用户界面操作</value>
+    <value>用户界面行为</value>
   </data>
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
-    <value>文件覆盖操作</value>
+    <value>文件覆盖操作：</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
-    <value>编码完成</value>
+    <value>编码已完成</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>音效通知</value>
+    <value>声音通知</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
     <value>队列已完成</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>当完成时：</value>
+    <value>完成时：</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>文件名冲突操作</value>
+    <value>文件名冲突行为：</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
     <value>后缀</value>
@@ -1896,48 +1899,48 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>前缀</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>添加编号</value>
+    <value>附加编号</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
     <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>去块效应调优</value>
+    <value>去块过滤微调</value>
   </data>
   <data name="OptionsView_EncodeNotes" xml:space="preserve">
-    <value>注意：并非所有硬件编码器都有额外的首选项。该系统上所有可用和受支持的硬件编码器都可在视频选项卡的视频编码器下拉菜单中进行选择。</value>
+    <value>注意：并非所有硬件编码器都有额外的设置选项。此系统上所有可用且受支持的硬件编码器都将在视频标签页的视频编码器下拉菜单中可供选择。</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake 检测到多个未完成的队列文件。恢复这些文件将使 HandBrake 运行多个实例。 您想恢复所有未完成的工作吗？</value>
+    <value>HandBrake 检测到多个未完成的队列文件。这些文件来自多个正在运行的 HandBrake 实例。您想要恢复所有未完成的任务吗？</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake 检测到上次启动时队列中尚有未完成的项目。您想恢复这些项目吗？</value>
+    <value>HandBrake 检测到上次启动应用程序时的队列中有未完成的项目。您想要恢复这些项目吗？</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
     <value>有可恢复的队列</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>您的预设文件包含内置预设，但导入功能不支持导入内置预设。请使用“预设菜单  -&gt; 重置内置预设”来恢复标准预设。
+    <value>您的预设文件包含内置预设。导入功能不支持导入这些预设。请使用“预设菜单 -&gt; 重置内置预设”来恢复标准预设。
 
-将导入所有支持的用户预设。</value>
+所有支持的用户预设将被导入。</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>立即执行操作。（这将禁用 60 秒确认对话框）</value>
+    <value>立即执行操作。(这将禁用 60 秒确认对话框)</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>浏览</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>没有设置音频文件。请单击“浏览”以选择要播放的wav或mp3文件。</value>
+    <value>没有设置音频文件。请点击“浏览”选择一个 wav 或 mp3 文件用于播放。</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
     <value>播放</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
-    <value>导出列队（仅限命令行界面）</value>
+    <value>导出队列 (仅限命令行界面)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>使用深色主题。（需要重启软件，仅支持 Windows 10）</value>
+    <value>使用深色主题。(需要重启应用，仅限 Windows 10 系统)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>不可用</value>
@@ -1946,22 +1949,22 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>GB</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>已检测到交流电源。正在恢复编码... ({0} %)</value>
+    <value>已检测到外接主电源。开始继续编码... ({0} %)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>系统电量严重不足！（{0} %）</value>
+    <value>系统电量极低 ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>系统电量不足！（{0}%）。已暂停编码。</value>
+    <value>系统电量低 ({0}%)。编码任务已暂停。</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>目标磁盘剩余存储容量少于 {0} GB。正在暂停编码...</value>
+    <value>目标驱动器上的剩余可用空间已低于 {0} GB。正在暂停编码...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>自动匹配选择的音频</value>
+    <value>自动音频选择</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>自动匹配选择的字幕</value>
+    <value>自动字幕选择</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
     <value>系统</value>
@@ -1994,10 +1997,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>日志查看器</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
-    <value>详情：</value>
+    <value>宽高比：</value>
   </data>
   <data name="MainView_Filters" xml:space="preserve">
-    <value>滤镜：</value>
+    <value>过滤：</value>
   </data>
   <data name="MainView_Size" xml:space="preserve">
     <value>大小：</value>
@@ -2015,7 +2018,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>&lt; 返回</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>目前已暂停</value>
+    <value>当前已暂停</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
     <value>输出文件</value>
@@ -2024,7 +2027,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>章节</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>帧数</value>
+    <value>帧</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
     <value>预览</value>
@@ -2033,46 +2036,46 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>秒</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>所有匹配选中的语言</value>
+    <value>匹配所选语言的全部轨道</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>第一个匹配选中的语言</value>
+    <value>匹配所选语言的第一条轨道</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
     <value>无</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>第一个轨道</value>
+    <value>第一条选中的轨道</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>外部音频优先，否则第一个优先</value>
+    <value>外语音频优先，否则第一条轨道优先</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
-    <value>外部音轨</value>
+    <value>外语音频轨道</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
     <value>无</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>外部音频搜索</value>
+    <value>外语音频搜索</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>外部音频扫描</value>
+    <value>外语音频扫描</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>所有匹配选中的语言</value>
+    <value>匹配所选语言的全部轨道</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
-    <value>使用所有轨道作为模板</value>
+    <value>使用全部轨道作为模板</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>第一个匹配选中的语言</value>
+    <value>匹配所选语言的第一条轨道</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>使用首轨作为模板</value>
+    <value>使用第一条轨道作为模板</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
-    <value>无音频</value>
+    <value>没有音频</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
     <value>章节 {0}</value>
@@ -2093,7 +2096,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>无</value>
   </data>
   <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
-    <value>始终使用源分辨率</value>
+    <value>始终使用源文件分辨率</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
     <value>高于标准</value>
@@ -2117,63 +2120,63 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>每周</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>始终为生成的每个新名称使用默认路径。</value>
+    <value>始终为生成的每个新文件名使用默认路径。</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
-    <value>端口范围必须在5000到32767之间</value>
+    <value>端口范围必须在 5000 到 32767 之间。</value>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>当前有新版本可用！</value>
+    <value>新版本现已推出！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
-    <value>电量不足：</value>
+    <value>电量低：</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>当电量不足时，暂停任何正在运行的工作。</value>
+    <value>电池电量低时暂停所有正在运行的任务。</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
-    <value>添加所有剩余的隐藏式字幕</value>
+    <value>添加所有剩余的闭合字幕</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
-    <value>在您尝试导入的队列文件中检测到重复的任务。您是否希望覆盖现有的记录？
-这也将停止任何现有的运行任务。</value>
+    <value>在您尝试导入的队列文件中检测到重复的任务。您想要覆盖已有记录吗？
+这也将停止所有正在运行的任务。</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
-    <value>检测到的重复内容</value>
+    <value>检测到重复任务</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>启用低功耗 QuickSync 硬件（如果支持）。</value>
+    <value>启用低功耗 QuickSync 硬件 (如果支持)。</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>请选择一个任务以查看摘要信息。</value>
+    <value>请选择单一任务以查看概览信息。</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>在单独的工作进程中运行每个队列任务。</value>
+    <value>在单独的工作进程中运行每个队列中的任务</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
-    <value>Worker 的默认网络端口：</value>
+    <value>工作进程的默认网络端口：</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>您所选择的预设不能在这个系统上使用。
+    <value>您所选择的预设在本系统上不可用。
 
-这通常说明您的系统不支持使用它所需的硬件。
+这通常意味着您的系统不支持使用该硬件。
 
-请选择一个不同的预设。</value>
+请选择另一个预设。</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
     <value>进程隔离</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
-    <value>请注意，使用此功能将启动一个绑定在 127.0.0.1 上指定端口的 HTTP 服务器。</value>
+    <value>请注意，使用此功能将会在指定端口启动一个绑定到 127.0.0.1 的 HTTP 服务器。</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
-    <value>如果设定的端口正在使用中，它将找到距离定义的端口 +100 以内的第一个空闲端口。</value>
+    <value>如果指定的端口正在使用中，它将转而使用在定义端口的 +100 范围内找到的第一个空闲的端口。</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>同时编码的最大数量：</value>
+    <value>最大同时编码任务数量：</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>取消</value>
@@ -2191,19 +2194,19 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>您确定要将 HandBrake 重置为默认设置吗？</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
-    <value>自定义（不限制）</value>
+    <value>自定义 (不限制)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>宽&amp;高</value>
+    <value>宽度和高度</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>高度（上下黑边）</value>
+    <value>高度 (上下黑边)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>无</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>宽度（左右黑边）</value>
+    <value>宽度 (左右黑边)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
     <value>填充：</value>
@@ -2221,7 +2224,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>方向和裁剪：</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
-    <value>滤镜：</value>
+    <value>过滤：</value>
   </data>
   <data name="SummaryView_Default" xml:space="preserve">
     <value>默认</value>
@@ -2251,7 +2254,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>自定义</value>
   </data>
   <data name="PictureSettingsView_MaxSize" xml:space="preserve">
-    <value>最大大小：</value>
+    <value>最大尺寸：</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>分辨率限制：</value>
@@ -2266,7 +2269,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>导出所选预设</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>从文件导入预设</value>
+    <value>导入预设文件</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
     <value>预设信息：</value>
@@ -2275,25 +2278,25 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>内置预设不可修改。</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>将所选预设设置为默认值</value>
+    <value>设置所选预设为默认值</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
     <value>删除预设</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
-    <value>（此系统不支持）</value>
+    <value>(此系统不支持)</value>
   </data>
   <data name="QueueView_Stop" xml:space="preserve">
     <value>停止</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>您输入的分类名称已经存在。请选择一个不同的名称。</value>
+    <value>您输入的类别名称已存在，请选择一个不同的名称。</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>分类名称是空的。请提供一个名称。</value>
+    <value>类别名称为空。请提供一个名称。</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
     <value>输入名称：</value>
@@ -2305,16 +2308,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>导出所有用户预设</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>显示磁盘空间不足警报的级别。</value>
+    <value>显示磁盘空间不足警报的剩余空间级别：</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
     <value>注意：这是并发任务的上限。由于硬件限制，在编码过程中，实际的并发任务数量可能会减少。此设置仅在下一批队列或应用程序重启后生效。</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
-    <value>（不可用）</value>
+    <value>(不可用)</value>
   </data>
   <data name="AddPresetView_IsDefault" xml:space="preserve">
-    <value>是默认：</value>
+    <value>是否默认：</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>否</value>
@@ -2329,22 +2332,22 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>显示裁剪调整控制。</value>
   </data>
   <data name="DarkTheme_dark" xml:space="preserve">
-    <value>使用深色</value>
+    <value>使用深色主题</value>
   </data>
   <data name="DarkTheme_light" xml:space="preserve">
-    <value>使用浅色</value>
+    <value>使用浅色主题</value>
   </data>
   <data name="DarkTheme_system" xml:space="preserve">
-    <value>匹配系统设置</value>
+    <value>匹配系统主题</value>
   </data>
   <data name="OptionsView_DarkThemeMode" xml:space="preserve">
     <value>主题：</value>
   </data>
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
-    <value>（需要重新启动）</value>
+    <value>(需要重新启动)</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>色度平滑</value>
+    <value>色品平滑：</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
     <value>色彩空间：</value>
@@ -2356,7 +2359,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>打开预览</value>
   </data>
   <data name="SummaryView_SourcePreview" xml:space="preserve">
-    <value>源预览：</value>
+    <value>源文件预览：</value>
   </data>
   <data name="QueueView_JobStatus" xml:space="preserve">
     <value>任务状态：</value>
@@ -2368,28 +2371,28 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>完成</value>
   </data>
   <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
-    <value>无效的设置。检查日志以了解详情。</value>
+    <value>无效设置。详情请检查日志。</value>
   </data>
   <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
-    <value>无效的输入。检查日志以了解详情。</value>
+    <value>无效输入。详情请检查日志。</value>
   </data>
   <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
-    <value>状态未知。检查日志以了解详情。</value>
+    <value>状态未知。详情请检查日志。</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>尝试读取源代码时检测到错误。</value>
+    <value>尝试读取源文件时检测到错误。</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
-    <value>未知故障。检查日志以了解详情。</value>
+    <value>未知失败。详情请检查日志。</value>
   </data>
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
-    <value>Worker 崩溃了。检查日志以了解详情。</value>
+    <value>工作进程已崩溃。详情请检查日志。</value>
   </data>
   <data name="Startup_HbDllMissing" xml:space="preserve">
-    <value>缺少 “hb.dll” 文件。请重新安装。</value>
+    <value>缺少“hb.dll”文件。请重新安装应用程序。</value>
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
-    <value>警告。请注意，这是一个 HandBrake 的 "安全模式" 版本，不包括对硬件编码器的支持。如果您想使用硬件编码器支持，请从网站上下载一个非 "安全模式" 的版本。</value>
+    <value>警告：请注意，这是 HandBrake 的“安全模式”构建版本，不包含对硬件编码器的支持。如果您想要使用硬件编码器支持，请从网站下载非“安全模式”的构建版本。</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
     <value>黑色</value>
@@ -2404,22 +2407,22 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>RGB 值：</value>
   </data>
   <data name="SummaryView_Padded" xml:space="preserve">
-    <value>（内边距）</value>
+    <value>(含边距)</value>
   </data>
   <data name="FiltersView_Flip" xml:space="preserve">
     <value>翻转：</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>源尺寸</value>
+    <value>源文件尺寸：</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
-    <value>存储大小：{0}x{1} 显示大小：{2}x{3} 宽高比：{4}</value>
+    <value>存储尺寸：{0}x{1}  显示尺寸：{2}x{3}  宽高比：{4}</value>
   </data>
   <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
-    <value>在文件浏览器对话框中检测到一个错误。
+    <value>在文件浏览器对话框中检测到错误。
 
-- 请注意，长的文件路径不被完全支持。请保持文件路径短于255个字符。
-- 本窗口最后使用的目录已被重置，以防止在你下次尝试扫描文件时出现错误。</value>
+- 请注意，长文件路径没有得到完全支持。请将文件路径控制在 255 个字符以内。
+- 此窗口上次使用的目录已重置，以防止您下次尝试扫描文件时出现错误。</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
     <value>最大高度：</value>
@@ -2431,38 +2434,37 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>宽高比：{0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>保留常见元数据</value>
+    <value>保留源文件常用元数据</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
-    <value>默认的自动名称路径是无效的。{0} 不能在 {1} 前面</value>
+    <value>默认的自动名称路径无效。{0} 不能在 {1} 前面</value>
   </data>
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
     <value>您想让 HandBrake 自动检查更新吗？
 
-您可以在 首选项 -&gt; 常规 -&gt; 检查更新 中更改设置。</value>
+您可以在“首选项 -&gt; 常规 -&gt; 检查更新“中更改设置。</value>
   </data>
   <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
     <value>检查更新？</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>在更新之前：
-- 确保队列中没有待处理的编码。
-- 备份或记下你所创建的任何自定义预设，因为它们可能与较新的版本不完全兼容。</value>
+    <value>- 确保队列中没有待处理的编码任务。
+- 备份或记下您创建的所有自定义预设，因为它们可能与新版本不完全兼容。</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
-    <value>（默认）</value>
+    <value>(默认)</value>
   </data>
   <data name="PresetDisplayMode_Category" xml:space="preserve">
-    <value>按分类</value>
+    <value>类别</value>
   </data>
   <data name="PresetDisplayMode_Flat" xml:space="preserve">
-    <value>平铺</value>
+    <value>扁平</value>
   </data>
   <data name="PresetDisplayMode_Partial" xml:space="preserve">
-    <value>部分平铺</value>
+    <value>部分扁平</value>
   </data>
   <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
-    <value>选择预设在菜单中的显示方式。</value>
+    <value>选择预设在菜单中的显示方式：</value>
   </data>
   <data name="QueueView_SelectedPresets" xml:space="preserve">
     <value>预设：</value>
@@ -2483,34 +2485,34 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>移到顶部</value>
   </data>
   <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
-    <value>输出比特率：</value>
+    <value>输出码率：</value>
   </data>
   <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
     <value>平均编码速度：</value>
   </data>
   <data name="QueueViewModel_DifferenceText" xml:space="preserve">
-    <value>的源文件</value>
+    <value> (源文件)</value>
   </data>
   <data name="QueueViewModel_NotAvailable" xml:space="preserve">
     <value>不可用</value>
   </data>
   <data name="QueueView_SourceLength" xml:space="preserve">
-    <value>源长度：</value>
+    <value>源文件长度：</value>
   </data>
   <data name="Options_Reset" xml:space="preserve">
     <value>重置</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
-    <value>您确定您想重置所有的内置预设吗？</value>
+    <value>您确定要重置所有内置预设吗？</value>
   </data>
   <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
-    <value>将所有内置预设重置为 HandBrake 的默认值。</value>
+    <value>重置所有内置预设为 HandBrake 的默认值。</value>
   </data>
   <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
-    <value>（用户预设不会被重置）</value>
+    <value>(用户预设不会被重置)</value>
   </data>
   <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
-    <value>将所有 HandBrake 设置重置为默认值：</value>
+    <value>重置所有 HandBrake 设置为默认值：</value>
   </data>
   <data name="Options_BuiltInPresets" xml:space="preserve">
     <value>内置预设</value>
@@ -2522,59 +2524,59 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>浮动树状视图</value>
   </data>
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
-    <value>请确保您在 Windows 中设置了适当的文件关联，以便用支持的视频播放器打开此文件。</value>
+    <value>请确保在 Windows 中正确设置了文件关联，以便系统能用支持的视频播放器打开此文件</value>
   </data>
   <data name="QueueViewModel_ImportFail" xml:space="preserve">
     <value>无法读取队列文件</value>
   </data>
   <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
-    <value>该文件可能被损坏或来自 HandBrake 的早期版本。
-只有当前版本的队列文件才被支持。</value>
+    <value>该文件可能已损坏或来自 HandBrake 的早期版本。
+仅支持当前版本的队列文件。</value>
   </data>
   <data name="Notifications_EncodeDone" xml:space="preserve">
-    <value>HandBrake 编码已完成！</value>
+    <value>HandBrake 编码任务已完成！</value>
   </data>
   <data name="Notifications_QueueDone" xml:space="preserve">
     <value>HandBrake 队列已完成！</value>
   </data>
   <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
-    <value>这也将禁用 "完成时" 标签上的显示窗口任务栏通知选项。如果你想重新激活这个功能，请重新启用这些选项。</value>
+    <value>这也将禁用 "完成时" 标签页上的“显示 Windows 任务栏通知”选项。如果您想重新激活此功能，请重新启用这些选项。</value>
   </data>
   <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
     <value>从 Windows 通知控制面板中移除 HandBrake。</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
-    <value>已解除安裝</value>
+    <value>已卸载</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
     <value>通知设置已移除。</value>
   </data>
   <data name="OptionsView_UninstallToast" xml:space="preserve">
-    <value>清理 &amp; 卸载</value>
+    <value>清理和卸载</value>
   </data>
   <data name="OptionsView_WindowsNotification" xml:space="preserve">
-    <value>向 Windows 任务栏发送通知。</value>
+    <value>发送通知到 Windows 任务栏。</value>
   </data>
   <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
     <value>Windows 通知</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
-    <value>{0} 个任务已完成。{1}正在处理 {2} 个任务，还有 {3} 个待处理。</value>
+    <value>已完成 {0} 个任务。{1}正在处理 {2} 个任务，还有 {3} 个待处理任务。</value>
   </data>
   <data name="MainView_AutonameRegenerate" xml:space="preserve">
-    <value>重新生成（自动命名）</value>
+    <value>重新生成 (自动命名)</value>
   </data>
   <data name="MainView_OpenDirectory" xml:space="preserve">
     <value>打开此目录</value>
   </data>
   <data name="Shared_CollapseAll" xml:space="preserve">
-    <value>全部收起</value>
+    <value>全部折叠</value>
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
     <value>全部展开</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
-    <value>从右向左显示模式</value>
+    <value>从右向左显示模式：</value>
   </data>
   <data name="RightToLeft_Off" xml:space="preserve">
     <value>关闭</value>
@@ -2592,21 +2594,21 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>通过 Github 下载</value>
   </data>
   <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
-    <value>下载开发渠道版本 (HTTPS)</value>
+    <value>下载开发构建版本 (HTTPS)</value>
   </data>
   <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
-    <value>启用 QuickSync Deep Link 超级编码器</value>
+    <value>启用 QuickSync Deep Link 超级编码</value>
   </data>
   <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
-    <value>如果支持的话，优先使用多个媒体引擎来加速一个编码任务。禁用此选项会把多个平行编码任务平均分配到各媒体引擎。</value>
+    <value>在支持的情况下，优先使用多个媒体引擎来加速单个编码任务。禁用此选项会把多个并发编码任务平均分配到所有媒体引擎。</value>
   </data>
   <data name="MainView_OpenHandBrake" xml:space="preserve">
     <value>打开 HandBrake</value>
   </data>
   <data name="Startup_UnableToStartInfo" xml:space="preserve">
-    <value>硬件编码支持已被禁用，因为这是启动问题的一个常见原因。
+    <value>硬件编码支持已被禁用，因为这是导致启动问题的常见原因。
 - 请尝试重新启动 HandBrake。
-- 如果问题仍然存在，可能是过旧的显卡驱动（板载或独立）导致的问题。
+- 如果问题仍然存在，可能是过时的显卡驱动程序 (集成显卡或独立显卡) 导致了该问题。
 
 硬件编码支持可以在首选项中重新启用。</value>
   </data>
@@ -2614,7 +2616,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>HandBrake 无法启动。</value>
   </data>
   <data name="OptionsView_ResetSafeMode" xml:space="preserve">
-    <value>重启至安全模式</value>
+    <value>重置安全模式</value>
   </data>
   <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
     <value>请重新启动 HandBrake。</value>
@@ -2626,10 +2628,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>导出完毕！</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
-    <value>你必须先扫描一个来源并设置一个初始目标目录</value>
+    <value>您必须先扫描一个源文件，并设置一个初始的目标目录。</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
-    <value>只有当文件已经存在于磁盘上时。</value>
+    <value>只有当文件已存在于磁盘上时。</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>信息</value>
@@ -2637,7 +2639,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
     <value>没有添加字幕轨道。
 
-这可能是由于你所选择的文件格式的限制。请参阅我们的字幕帮助文档以了解更多信息。</value>
+这可能是由于您选择的文件容器存在限制。请查看我们的字幕帮助文档以获取更多信息。</value>
   </data>
   <data name="DarkTheme_None" xml:space="preserve">
     <value>无</value>
@@ -2649,7 +2651,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>自动</value>
   </data>
   <data name="CropMode_Loose" xml:space="preserve">
-    <value>保守的</value>
+    <value>保守</value>
   </data>
   <data name="CropMode_None" xml:space="preserve">
     <value>无</value>
@@ -2658,16 +2660,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>自定义</value>
   </data>
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
-    <value>当使用 NVEnc 编码器且硬件可以使用时，优先使用 Nvidia NVDec 来解码视频。</value>
+    <value>在使用 NVEnc 编码器且硬件可用的情况下，优先使用 Nvidia NVDec 来解码视频。</value>
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>硬件支持</value>
   </data>
   <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
-    <value>此系统不能播放此文件。
+    <value>系统无法播放此文件。
 
-请注意特定的编解码器如 AV1 或者 HEVA 需要来自 Microsoft Store 的 Microsoft AV1 或者 HEVC 编解码器插件。
-或者，勾选下面的“使用外部播放器”复选框。</value>
+请注意，某些编解码器 (如 AV1 或 HEVC) 需要从 Microsoft Store 安装 Microsoft AV1 或 HEVC 编解码器插件才能播放。
+作为备选方案，您也可以选中下面的“使用外部播放器”复选框。</value>
   </data>
   <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
     <value>关闭播放器</value>
@@ -2679,10 +2681,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>视频预览</value>
   </data>
   <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
-    <value>这个WebM容器不可以使用自带的预览。必须使用一个外部播放器。</value>
+    <value>WebM 容器不支持内置预览。必须使用外部播放器。</value>
   </data>
   <data name="StaticPreview_EncodingPreview" xml:space="preserve">
-    <value>编码预览...</value>
+    <value>正在编码预览...</value>
   </data>
   <data name="StaticPreview_Previews" xml:space="preserve">
     <value>预览：</value>
@@ -2694,13 +2696,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>重置</value>
   </data>
   <data name="OptionsView_IsoDateFormat" xml:space="preserve">
-    <value>使用ISO日期格式(YYYY-MM-DD)而不是系统默认格式。</value>
+    <value>使用 ISO 日期格式 (YYYY-MM-DD) 代替系统日期格式。</value>
   </data>
   <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
-    <value>{1}个中的{0}个已完成，{2:00.00}%，帧率 {3:000.0}，平均帧率 {4:000.0}，预计完成时间：{5}</value>
+    <value>第 {0} 阶段，共 {1} 个阶段，{2:00.00}%，帧率：{3:000.0}，平均帧率：{4:000.0}，预计剩余时间：{5}</value>
   </data>
   <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
-    <value>扫描字幕 {0:00.00}%，预计完成时间：{1}</value>
+    <value>正在扫描字幕 {0:00.00}%，预计剩余时间：{1}</value>
   </data>
   <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
     <value>展开队列信息</value>
@@ -2709,7 +2711,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>折叠队列信息</value>
   </data>
   <data name="QueueStats_ShortOutputStats" xml:space="preserve">
-    <value>输出：{0}，平均帧率{1}</value>
+    <value>输出：{0}，平均帧率：{1}</value>
   </data>
   <data name="PresetPane_Desc" xml:space="preserve">
     <value>预设描述：</value>
@@ -2722,33 +2724,33 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   </data>
   <data name="TaskTrayStatusManyTitle" xml:space="preserve">
     <value>{0}
-编码{1}个任务</value>
+正在编码 {1} 个任务</value>
   </data>
   <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
-    <value>无法编码一个预览。程序正在编码另外一个文件。
+    <value>无法编码预览。应用程序当前正在编码另一个文件。
 
-要允许多个同时编码任务，在工具菜单-&gt;首选项-&gt;高级-&gt;进程隔离-&gt;“用一个独立的进程运行每个队列任务”处打开“进程隔离”。</value>
+若要允许同时进行多个编码，请在“工具 菜单 -&gt; 首选项 -&gt; 高级 -&gt; 进程隔离”中打开“进程隔离”，然后勾选“在单独的工作进程中运行每个队列中的任务”。</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>质量</value>
+    <value>品质</value>
   </data>
   <data name="AudioView_Source" xml:space="preserve">
-    <value>源</value>
+    <value>源文件</value>
   </data>
   <data name="AboutView_Documentation" xml:space="preserve">
     <value>文档：</value>
   </data>
   <data name="AboutView_GithubTracker" xml:space="preserve">
-    <value>Github Issue跟踪器：</value>
+    <value>Github 问题跟踪网站：</value>
   </data>
   <data name="AboutView_Website" xml:space="preserve">
     <value>网站：</value>
   </data>
   <data name="MainView_PresetClone" xml:space="preserve">
-    <value>复制预设</value>
+    <value>创建预设副本</value>
   </data>
   <data name="PresetPane_MoveDown" xml:space="preserve">
-    <value>向下移动</value>
+    <value>下移</value>
   </data>
   <data name="PresetPane_MoveToBottom" xml:space="preserve">
     <value>移至底部</value>
@@ -2757,49 +2759,49 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>移至顶部</value>
   </data>
   <data name="PresetPane_MoveUp" xml:space="preserve">
-    <value>向上移动</value>
+    <value>上移</value>
   </data>
   <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
     <value>当前有任务正在运行。你想要完成当前任务后再停止队列吗？</value>
   </data>
   <data name="Options_AddExt" xml:space="preserve">
-    <value>添加扩展</value>
+    <value>添加扩展名</value>
   </data>
   <data name="Options_ExcludeExtensions" xml:space="preserve">
-    <value>不包含文件扩展名：</value>
+    <value>排除这些文件扩展名：</value>
   </data>
   <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
-    <value>扫描文件夹时将忽略以下文件扩展名。该列表不区分大小写。输入时可以不包含"."。</value>
+    <value>扫描文件夹时将忽略以下文件扩展名。此列表不区分大小写。输入时可以不包含"."。</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
-    <value>该文件扩展名已存在于列表中。</value>
+    <value>此文件扩展名已在列表中。</value>
   </data>
   <data name="Options_FileHandling" xml:space="preserve">
-    <value>文件处理中（正在扫描）</value>
+    <value>文件处理 (扫描)</value>
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
-    <value>使用文件夹扫描模式时扫描所有层级的目录。</value>
+    <value>使用文件夹扫描模式时递归扫描目录。</value>
   </data>
   <data name="AudioView_AudioQuality" xml:space="preserve">
-    <value>音频轨道质量</value>
+    <value>音频轨道音质</value>
   </data>
   <data name="AudioView_AudioTrackName" xml:space="preserve">
     <value>音频轨道名称</value>
   </data>
   <data name="AudioView_BitrateSelection" xml:space="preserve">
-    <value>音频轨道比特率</value>
+    <value>音频轨道码率</value>
   </data>
   <data name="AudioView_DeleteTrack" xml:space="preserve">
     <value>删除此音频轨道</value>
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
-    <value>音频编码器质量模式</value>
+    <value>音频编码器音质模式</value>
   </data>
   <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
     <value>使用高级队列视图</value>
   </data>
   <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
-    <value>使用简易队列视图</value>
+    <value>使用简单队列视图</value>
   </data>
   <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
     <value>仅无损编码。</value>
@@ -2811,7 +2813,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>显示经典菜单</value>
   </data>
   <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
-    <value>（警告：检测到不支持的驱动程序！ - 建议更新）</value>
+    <value>(警告：检测到不支持的驱动程序！ - 建议更新)</value>
   </data>
   <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
     <value>范围限制：</value>
@@ -2823,13 +2825,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>启用范围限制</value>
   </data>
   <data name="AddToQueue_RangeLimitError" xml:space="preserve">
-    <value>由于超出所选范围的限制，某些标题无法添加到队列中。</value>
+    <value>由于超出所选的范围限制，部分标题无法添加到队列。</value>
   </data>
   <data name="QueueView_StartAtTime" xml:space="preserve">
-    <value>稍后开始</value>
+    <value>稍后启动</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>队列将自动开始于：</value>
+    <value>队列将在此时间自动启动：</value>
   </data>
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
     <value>正在关闭编码...</value>
@@ -2847,7 +2849,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>在此系统上不可用。</value>
   </data>
   <data name="MainView_ScanningStatus" xml:space="preserve">
-    <value>请稍后 ...</value>
+    <value>请稍侯 ...</value>
   </data>
   <data name="MainView_Cancel" xml:space="preserve">
     <value>取消</value>
@@ -2856,16 +2858,16 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>打开日志窗口</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>自定义</value>
@@ -2904,7 +2906,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>关闭</value>
   </data>
   <data name="Options_MaxTitleScanDuration" xml:space="preserve">
-    <value>DVD 和蓝光片段的最长时长（秒）。将跳过较短的片段：</value>
+    <value>DVD 和蓝光标题的最大时长 (单位为秒)。时长大于此值的字幕将被跳过：</value>
   </data>
   <data name="DefaultRangeMode_Chapters" xml:space="preserve">
     <value>章节</value>
@@ -2913,7 +2915,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>秒</value>
   </data>
   <data name="DefaultRangeMode_Frames" xml:space="preserve">
-    <value>帧数</value>
+    <value>帧</value>
   </data>
   <data name="Options_RangeModeSelection" xml:space="preserve">
     <value>标题的默认范围模式：</value>
@@ -2931,7 +2933,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>运行脚本 / 可执行文件：</value>
   </data>
   <data name="OptionsViewModel_PortableMode" xml:space="preserve">
-    <value>HandBrake 当前以便携模式运行。如需更新便携版安装，请从官方网站下载最新版本进行更新。</value>
+    <value>HandBrake 当前已配置为免安装模式。要更新免安装模式的软件，请从网站下载最新版本的软件包。</value>
   </data>
   <data name="MetaData_Add" xml:space="preserve">
     <value>添加行</value>
@@ -2940,13 +2942,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>调试菜单</value>
   </data>
   <data name="MainView_DebugExportData" xml:space="preserve">
-    <value>导出调试文件（JSON）</value>
+    <value>导出调试文件 (JSON)</value>
   </data>
   <data name="MainView_DebugImportData" xml:space="preserve">
-    <value>导入调试文件（JSON）</value>
+    <value>导入调试文件 (JSON)</value>
   </data>
   <data name="MainView_DebugQualitySweep" xml:space="preserve">
-    <value>添加到队列 - 质量扫描</value>
+    <value>添加到队列 - 品质扫描</value>
   </data>
   <data name="LogView_ChooseLogFile" xml:space="preserve">
     <value>选择日志文件：</value>
@@ -2955,19 +2957,19 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>自动滚动</value>
   </data>
   <data name="LogLevel_Minimised" xml:space="preserve">
-    <value>最小化</value>
+    <value>最低限度</value>
   </data>
   <data name="LogLevel_Standard" xml:space="preserve">
     <value>标准</value>
   </data>
   <data name="LogLevel_Extended" xml:space="preserve">
-    <value>扩展</value>
+    <value>详尽</value>
   </data>
   <data name="QueueView_CancelDelayStart" xml:space="preserve">
     <value>取消延迟</value>
   </data>
   <data name="QueueView_StartQueueNow" xml:space="preserve">
-    <value>开始队列（立即）</value>
+    <value>启动队列 (立即)</value>
   </data>
   <data name="AudioTrackNaming_None" xml:space="preserve">
     <value>无</value>
@@ -2997,6 +2999,38 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>完整</value>
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
-    <value>限制</value>
+    <value>受限</value>
+  </data>
+  <data name="DarkTheme_Modern" xml:space="preserve">
+    <value>现代</value>
+  </data>
+  <data name="Options_BeforeUpdating" xml:space="preserve">
+    <value>更新之前</value>
+  </data>
+  <data name="Options_UpdateNotComplete" xml:space="preserve">
+    <value>更新安装已取消。</value>
+  </data>
+  <data name="AboutView_ReleaseNotes" xml:space="preserve">
+    <value>发行说明</value>
+  </data>
+  <data name="Options_ReleaseNotesDesc" xml:space="preserve">
+    <value>您可以在以下网址了解 HandBrake 的最新变化：</value>
+  </data>
+  <data name="PresetUiType_Menu" xml:space="preserve">
+    <value>菜单</value>
+  </data>
+  <data name="PresetUiType_Overlay" xml:space="preserve">
+    <value>叠加</value>
+  </data>
+  <data name="OptionsView_PresetUiType" xml:space="preserve">
+    <value>工具栏预设弹窗显示为：</value>
+  </data>
+  <data name="QueueViewModel_CancelErrorWillBeCleared" xml:space="preserve">
+    <value>当前队列中有处于已取消或出错状态的任务。队列启动时这些任务将被清除。 
+
+您想要继续吗？</value>
+  </data>
+  <data name="QueueView_ExportSelected" xml:space="preserve">
+    <value>Export Queue (Selected)</value>
   </data>
 </root>

@@ -571,6 +571,6 @@ Le débit variera d'une source à une autre.</value>
     <value>Changer la dimension d'affichage va déformer la vidéo</value>
   </data>
   <data name="Video_ColourRange" xml:space="preserve">
-    <value>Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility.</value>
+    <value>Plage de couleurs. Détermine les valeurs du noir et du blanc de référence. Réglez sur "limité" pour maximiser la compatibilité.</value>
   </data>
 </root>

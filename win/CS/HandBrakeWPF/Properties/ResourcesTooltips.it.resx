@@ -540,10 +540,10 @@ Ogni carattere non valido per la destinazione sarà automaticamente eliminato.</
 Usando una di queste modalità, potrebbero esserci dei problemi nella visualizzazione dell'interfaccia. A secoda della lingua, potrebbe essere necessario provare quale delle due funziona meglio.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Imposta un livello di qualità specifico per l'audio.
-1 è la qualità più bassa mentre 5 è quella più alta.
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-Il Bitrate cambierà da sorgente a sorgente.</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>Le seguenti possono essere usate singolarmente o contemporaneamente per formare un percorso di destinazione.

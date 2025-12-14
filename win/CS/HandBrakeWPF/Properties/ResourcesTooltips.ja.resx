@@ -542,10 +542,10 @@ HB_EXIT_CODE
 これらを使うとUIレイアウトがおかしくなる可能性には留意してください。言語により、両方を試して合うものを探すのが好ましいです。</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>オーディオのターゲット品質レベルを設定します。
-1が最も低品質で5が高品質です。
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-ビットレートはソースに依存します。</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>次のものは出力先パスを決める際に一つまたは複数使用できます。

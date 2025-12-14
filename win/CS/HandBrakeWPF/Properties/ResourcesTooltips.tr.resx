@@ -220,8 +220,8 @@ Piksel en boy oranı 1:1 değilse gerçek ekran boyutları farklılık gösterir
   <data name="Video_AvgBitrate" xml:space="preserve">
     <value>Ortalama bit hızı ayarlaması.
 
-Anlık bit hızı, herhangi bir zamanda çok daha yüksek veya daha düşük olabilir.
-Ancak uzun bir süre boyunca ortalama, burada ayarlanan değer olacaktır. 
+Anlık bit hızı, zaman zaman çok daha yüksek veya daha düşük olabilir.
+Ancak, uzun bir süre boyunca ortalama bit hızı, burada ayarlanan değer olarak belirlenir. 
 Gerek görürseniz anlık bit hızını sınırlamak için X264'ün VBV-Arabellek boyutu ve VBV-Max hızı ayarlarına bakın.</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
@@ -270,7 +270,7 @@ Ayarlamalar sonucu daha kaliteli veya daha küçük boyutlu dosyalar kodlanacakt
 Kodlama hızından ödün vererek sıkıştırma verimliliğini artırmak için kaydırıcıyı sağa ya da sıkıştırma verimliliğinden ödün vererek kodlama hızını arttırmak için kaydırıcıyı sola ayarlayın.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
-    <value>Belirtilen profile uygunluğu ayarlar ve sağlar.
+    <value>Belirtilen profile uygunluğu sağlar ve ayarlar.
 
 Diğer tüm ayarları geçersiz kılar.</value>
   </data>
@@ -296,8 +296,8 @@ Bu kodlayıcılar kayıpsız bir moda sahip değildir.</value>
   <data name="Video_MultiPass" xml:space="preserve">
     <value>Çok Geçişli Kodlama Gerçekleştirin.
 
-'Bit Hızı' seçeneği ön koşuldur. Analiz geçişleri sırasında video
-hakkında istatistikler toplanır. Daha sonra son geçişte, bu istatistikler
+'Bit Hızı' seçeneği ön koşuldur. İnceleme aşaması sırasında video
+hakkında istatistikler toplanır. Daha sonra son aşamada, bu istatistikler
 bit hızı tahsis kararları vermek için kullanılır.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
@@ -309,7 +309,7 @@ VFR bazı oynatıcılarla uyumlu değil.</value>
     <value>HandBrake mevcut sıra görevini tamamladığında veya kodlama bittiğinde burada belirtilen işlemi gerçekleştirecek.</value>
   </data>
   <data name="MainView_Browse" xml:space="preserve">
-    <value>Kodunuz için yeni bir hedef yolu ve dosya adı seçmek üzere göz atın.</value>
+    <value>Kodlamanız için yeni bir hedef yolu ve dosya adı seçmek üzere göz atın.</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
     <value>Kodlanacak video açısı. Sadece çok açılı DVD ve Blu-ray için geçerlidir.</value>
@@ -331,7 +331,7 @@ Tüm kodlama ayarlarını geçersiz kılar. Bir ön ayar seçildikten sonra ayar
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
     <value>Bazı Kaynaklar birden fazla video klip veya bir Başlık koleksiyonu içerebilir. Blu-ray ve DVD Kaynaklarında genellikle birden fazla Başlık bulunur.
 
-Kodlamak istediğiniz bir başlığı biliyorsanız, buraya girebilirsiniz ve HandBrake kaynak dosyadaki tüm başlıklar yerine yalnızca o başlığı tarayacaktır. Aksi takdirde, alanı boş bırakın.</value>
+Kodlamak istediğiniz bir başlığı biliyorsanız, buraya girebilirsiniz ve HandBrake kaynak dosyadaki tüm başlıkları inceleme yerine yalnızca o başlığı inceleyecektir. Aksi takdirde, alanı boş bırakın.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Özel  Gürültü Giderme Parametreleri.
@@ -427,7 +427,7 @@ Lapsharp sözdizimi: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-streng
 Lapsharp varsayılan: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>Keskinleştirme: Özellikle kenarların ayrıntı görünümünü artırır. Aşırı güçlü Keskinleştirme ayarları, yapaylıklar "haleler" oluşturarak ve gürültüyü artırarak, sıkıştırma verimliliğini azaltabilecek şekilde resim kalitesine zarar verebilir.
+    <value>Keskinleştirme: Özellikle kenarlardaki ayrıntı görünümünü artırır. Aşırı güçlü Keskinleştirme ayarları, yapaylıklar "haleler" oluşturarak ve gürültüyü artırarak, sıkıştırma verimliliğini azaltabilecek şekilde resim kalitesine zarar verebilir.
 
 Keskinleştirme: Genel amaçlı bir keskinleştirme maskeleme filtresidir. Bulanıklaştırma ile netleşir, ardından bulanık resim ile orijinal arasındaki farkı hesaplar.
 
@@ -452,7 +452,7 @@ Lapsharp'ın Animasyon Ayarı: Anime ve çizgi film gibi hücre animasyonu için
 Lapsharp'ın Hareketli Ayarı: 1-/4-/8-/16-bit 2 boyutlu oyunlar için yararlıdır. Hareketli, dikey ve yatay kenarları çapraz kenarlardan daha fazla geliştiren 4 komşulu bir Laplacian çekirdeği kullanır.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>Boş kareler ekleyerek veya kareler bırakarak tüm ses ve video akışlarının başlangıç zaman damgalarını hizalar. MP4 düzenleme listelerine uymayan bozuk oynatıcılar için ses/video senkronizasyonunu iyileştirebilir.</value>
+    <value>Boş kareler ekleyerek veya kareler çıkararak, tüm ses ve video akışlarının başlangıç zaman damgalarını hizalar. MP4 düzenleme listelerine uymayan bozuk oynatıcılar için ses/video senkronizasyonunu iyileştirebilir.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Ön ayarları kontrol etme seçenekleri.</value>
@@ -477,11 +477,11 @@ Devre dışı bırakıldığında, doldurulursa ana penceredeki hedef kutusundak
     <value>Bu alan, "0xFF0000" gibi RGB değerlerini veya "kırmızı" gibi renk adlarını kabul edebilir. Adlandırılmış renklerin tam listesi için dolgu filtresi belgelerine bakın. </value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Altyazıları video akışına göm.
+    <value>Altyazıları video akışına yazdır
 
-Not: Kaynak altyazı parçası formatı çıktı dosyası türünde desteklenmiyorsa otomatik olarak bu seçilecektir.
+Not: Kaynak altyazı parçası biçimi çıktı dosya türünde desteklenmiyorsa bu otomatik olarak seçilecektir. 
 
-Örneğin, PGS altyazıları MP4'te desteklenme, otomatik olarak bu seçiliri ve altyazılar video dosyasına gömülür.</value>
+Örneğin, PGS altyazıları MP4'te desteklenmez, otomatik olarak bu seçilir ve altyazılar video dosyasına gömülür.</value>
   </data>
   <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
     <value>Sabit: Ön ayarlar düz bir liste olarak görüntülenir.
@@ -542,16 +542,16 @@ Herhangi geçersiz bir yol karakteri otomatik olarak kaldırılacaktır.</value>
 Bu modları kullanırken Kullanıcı Arayüzü düzeninde kusurlar olabileceğini lütfen unutmayın. Dile bağlı olarak, en uygun olanı bulmak için her iki modu da denemeye değer olabilir.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Ses için belirli bir kalite düzeyini hedefleyin.
-1 en düşük kalite ve 5 en yüksek kalitedir.
+    <value>Ses için belirli bir kalite seviyesi hedefleyin.
+Daha yüksek değerler daha yüksek kalite anlamına gelir. 
 
-Bit hızı kaynaktan kaynağa değişecektir.</value>
+Bit hızı kaynaktan kaynağa değişir.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
-    <value>Aşağıdakiler, bir hedef yol oluşturmak için tek başına veya birlikte kullanılabilir
+    <value>Aşağıdaki değerleri, bir hedef yol oluşturmak için tek tek veya birlikte kullanılabilir.
 
-{source_path} - Kaynak yolla aynı klasörde (mümkünse)
-{source_folder_name} – Tam yol olmadan, kaynak dosyanın bulunduğu dizinin adı.
+{source_path} - Kaynak ile aynı klasörde (Mümkünse)
+{source_folder_name} - Kaynak dosyanın bulunduğu dizinin adı, tam yol belirtilmeden
 {source} - Kaynak dosyanın adı.</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
@@ -570,6 +570,6 @@ Bit hızı kaynaktan kaynağa değişecektir.</value>
     <value>Ekran ebatlarını değiştirmek videoyu ebadını uzatacaktır.</value>
   </data>
   <data name="Video_ColourRange" xml:space="preserve">
-    <value>Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility.</value>
+    <value>Renk Aralığı. Referans siyah ve beyazın değerlerini belirler. Uyumluluğu en üst düzeye çıkarmak için sınırlı olarak ayarlayın.</value>
   </data>
 </root>

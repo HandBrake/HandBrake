@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -446,7 +446,7 @@ Lisätietoa voi löytyä toimintalokista.</value>
     <value>Sattui tuntematon virhe.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>Uusi päivitys on saatavilla! Katso julkaisutiedot verkkosivustolta.</value>
+    <value>Nyt on saatavilla HandBrake {0}! Lue sivustolta  julkaisutiedot.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>Uusia päivityksiä ei juuri nyt ole.</value>
@@ -1038,7 +1038,7 @@ Vihje: Tiedoston korvaamista voi hallita asetuksista.</value>
     <value>Esikatselu</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Koodataan: {0}, {1:00.00} %, aikaa jäljellä: {2}, {3}</value>
+    <value>{0}, {1:00.00}%, Time Remaining: {2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Alue:</value>
@@ -2298,7 +2298,7 @@ Valitse toinen esiasetus.</value>
     <value>Pysäytä</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Annettu luokan nimi on jo olemassa. Valitse toinen nimi.</value>
@@ -2456,9 +2456,8 @@ Valinnan voi muuttaa milloin vain kohdasta Asetukset → Yleisasetukset → Etsi
     <value>Etsitäänkö päivityksiä?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>Ennen päivittämistä:
-– Varmista, ettei jonossa ole odottavia koodauksia.
-– Varmuuskopioi tai tee muistiinpanot mahdollisista mukautetuista esiasetuksista, koska ne eivät välttämättä sovi yhteen uudempien versioiden kanssa.</value>
+    <value>– Varmista, ettei jonossa on odottavia koodauksia.
+– Varmuuskopioi tai muuten talleta mukauttamasi esiasetukset, koska ne eivät välttämättä sovi täysin yhteen uudempien versioiden kanssa.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
     <value>(Oletus)</value>
@@ -2867,16 +2866,16 @@ Usean rinnakkaisen koodauksen voi ottaa käyttöön asetuksella ”Prosessien er
     <value>Avaa loki-ikkuna</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Mukautettu</value>
@@ -3009,5 +3008,37 @@ Usean rinnakkaisen koodauksen voi ottaa käyttöön asetuksella ”Prosessien er
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
     <value>Rajoitettu</value>
+  </data>
+  <data name="DarkTheme_Modern" xml:space="preserve">
+    <value>Nykyaikainen</value>
+  </data>
+  <data name="Options_BeforeUpdating" xml:space="preserve">
+    <value>Ennen päivittämistä</value>
+  </data>
+  <data name="Options_UpdateNotComplete" xml:space="preserve">
+    <value>Päivitysasennus peruttiin.</value>
+  </data>
+  <data name="AboutView_ReleaseNotes" xml:space="preserve">
+    <value>Julkaisutiedot</value>
+  </data>
+  <data name="Options_ReleaseNotesDesc" xml:space="preserve">
+    <value>HandBraken viimeisimmistä muutoksista löytää lisätietoa:</value>
+  </data>
+  <data name="PresetUiType_Menu" xml:space="preserve">
+    <value>valikkona</value>
+  </data>
+  <data name="PresetUiType_Overlay" xml:space="preserve">
+    <value>peittokuvana</value>
+  </data>
+  <data name="OptionsView_PresetUiType" xml:space="preserve">
+    <value>Näytä työkalurivin esiasetusten ponnahdusvalikko:</value>
+  </data>
+  <data name="QueueViewModel_CancelErrorWillBeCleared" xml:space="preserve">
+    <value>Jonossa on töitä, joiden tilana on ”peruttu” tai ”virhe”. Nämä poistetaan jonon käynnistyessä.
+
+Haluatko jatkaa?</value>
+  </data>
+  <data name="QueueView_ExportSelected" xml:space="preserve">
+    <value>Export Queue (Selected)</value>
   </data>
 </root>

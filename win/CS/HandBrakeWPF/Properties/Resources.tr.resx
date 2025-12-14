@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -130,7 +130,7 @@ Cihazınız çıktıyı oynatırken zorlanıyorsa bunu ayarlayın. (Yani, kare a
     <value>Uyarı: RF 0 Kayıpsızdır!</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>0 değeri kayıpsız anlamına gelir ve kaynak da kayıpsız olmadığı sürece dosya boyutu,
+    <value>0 değeri kayıpsız anlamına gelir. Kaynak, kayıpsız olmadığı sürece çıktı dosyasının boyutu,
 orijinal kaynaktan daha büyük bir dosya boyutuna neden olur.
 
 x264 ve x265'in ölçeği logaritmiktir ve daha düşük değerler daha yüksek kaliteye karşılık gelir. 
@@ -246,7 +246,7 @@ bulentbt5@gmail.com</value>
     <value>Ön ayar, şu anki geçerli ayarlarınızla güncellendi.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>HandBrake yerleşik ön ayarlarınızın güncel olmadığını belirledi... Bu ön ayar şimdi güncellenecek.
+    <value>HandBrake yerleşik ön ayarlarınızın güncel olmadığını algıladı... Bu ön ayar şimdi güncellenecek.
 Özel ön ayarlarınız güncellenmedi, bu yüzden silip yeniden ekleyerek bunları yeniden oluşturmanız gerekebilir. 
 Önceki user_presets.xml dosyası yedeklendi.</value>
   </data>
@@ -394,7 +394,7 @@ Etkinlik günlüğünde daha fazla bilgi bulabilirsiniz.</value>
     <value>Ön ayarı silmek istediğinizden emin misiniz? </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Kodlanıyor: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Ort FPS: {4:000.0},  Kalan Süre: {5},  Geçen: {6} {7}</value>
+    <value>Kodlanıyor: Aşama{0} / {1},  {2:00.00}%, FPS: {3:000.0},  Ort FPS: {4:000.0},  Kalan Süre: {5},  Geçen Geçen: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>Bir Ön Ayarın bir Adı olmalı. Lütfen Ön Ayar Adı alanını doldurun.</value>
@@ -433,7 +433,7 @@ Etkinlik günlüğünde daha fazla bilgi bulabilirsiniz.</value>
     <value>Bölüm işaretleyici isimleri kodlamanıza kaydedilmeyecektir.</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>Aşağıdaki '{0}' eylemini {1} saniye içinde gerçekleşecektir.</value>
+    <value>'{0}' eylemi{1} saniye içinde gerçekleşecektir.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
     <value>Eğer sorun devam ederse HandBreak'i yeninden başlatmayı deneyin.</value>
@@ -445,7 +445,7 @@ Etkinlik günlüğünde daha fazla bilgi bulabilirsiniz.</value>
     <value>Bilinmeyen bir Hata oluştu.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>Harika! Yeni Bir Güncelleme Var! Sürüm notları için web sitesini kontrol edebilirsiniz.</value>
+    <value>HandBrake{0}hazır! Sürüm notları için lütfen web sitesini kontrol edin.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>Şimdilik yeni bir güncelleme yok.</value>
@@ -515,7 +515,7 @@ Bu işlem, kodlanmış hiç bir dosyayı silmeyecektir.</value>
     <value>Sıra Başlatıldı</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>Kodlanıyor: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Ort FPS: {4:000.0},  Kalan Süre: {5},  Geçen Süre: {6:d\:hh\:mm\:ss}</value>
+    <value>Kodlanıyor: Aşama {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Ort FPS: {4:000.0},  Kalan Süre: {5},  Geçen Süre: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
     <value>Bir Kodlama şu anda çalışıyor. HandBrake'den çıkmak bu kodlamayı durduracaktır.
@@ -534,7 +534,7 @@ HandBrake'den çıkmak istediğinize emin misiniz?</value>
     <value>Önizleme dosyası bulunamadı. Dosya silindi ya da kodlama başarısız oldu. Ayrıntılar için etkinlik günlüğünü kontrol edin.</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake zaten bir video kodluyor! Aynı anda sadece bir dosya kodlanabilir.</value>
+    <value>HandBrake halihazırda zaten bir video kodluyor! Aynı anda sadece bir dosya kodlanabilir.</value>
   </data>
   <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
     <value>Altyazı Varsayılanları</value>
@@ -655,7 +655,7 @@ Bölüm adlarını içe aktarmak istediğinizden emin misiniz?</value>
     <value>Lütfen geçerli bir hedef dizininin olduğunu kontrol edin.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>İşleme Geçişi {0} / {1}, (Altyazı Taraması)  {2:00.00}%, Kalan Tarama Süresi: {3},  Geçen: {4}</value>
+    <value>İşleme Aşaması {0} / {1}, (Altyazı İnceleme)  {2:00.00}%, Kalan İnceleme Süresi: {3},  Geçen Süre: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
     <value>Ek Bilgi Yok</value>
@@ -936,7 +936,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Günlük Dizinini Aç</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
-    <value>Tarama Günlüğü</value>
+    <value>İnceleme Günlüğü</value>
   </data>
   <data name="MainView_ActivityLog" xml:space="preserve">
     <value>Etkinlik Günlüğü</value>
@@ -1035,7 +1035,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Ön İzleme</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Kodlanıyor: {0}, {1:00.00}%, Kalan Süre: {2}, {3}</value>
+    <value>{0}, {1:00.00}%, Kalan Süre: {2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Aralık</value>
@@ -1239,7 +1239,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Kodlama sırasında sistemin uyku moduna geçmesini önle</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Taranacak resim önizlemelerinin sayısı:</value>
+    <value>İnceleme için ön izleme resim sayısı:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
     <value>İş Önceliği Seviyesi:</value>
@@ -1510,13 +1510,13 @@ VLC ve MPC-HC desteklenmektedir. Diğer oynatıcılar da çalışabilir ancak do
     <value>Tekrar yükle</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>Taranacak Diski Seçin</value>
+    <value>İncelenecek Diski Seçin</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>Taranacak Dosyayı Seçin</value>
+    <value>İncelenecek Dosyayı Seçin</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>Taranacak Klasörü Seçin</value>
+    <value>İncelenecek Klasörü Seçin</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
     <value>İsteğe bağlı olarak belirli bir başlık seçin:</value>
@@ -1528,7 +1528,7 @@ VLC ve MPC-HC desteklenmektedir. Diğer oynatıcılar da çalışabilir ancak do
     <value>Dosya</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>Klasör (Toplu Tarama)</value>
+    <value>Klasör (Toplu İnceleme)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
     <value>Bu DVD veya Bluray Sürücüsünü aç</value>
@@ -1642,7 +1642,7 @@ VLC ve MPC-HC desteklenmektedir. Diğer oynatıcılar da çalışabilir ancak do
     <value>Video Kodlayıcı:</value>
   </data>
   <data name="VideoView_ColourRange" xml:space="preserve">
-    <value>Color Range:</value>
+    <value>Renk Aralığı</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Sabit Kare Hızı</value>
@@ -1848,8 +1848,8 @@ Bu, herhangi bir yazılım kodlayıcısını etkilemez.</value>
     <value>Sırayı İçe Aktar</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Kodlanıyor: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Ort FPS: {4:000.0},
-Kalan Süre: {5},  Geçen: {6} {7}</value>
+    <value>Kodlanıyor: Aşama {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Ort. FPS: {4:000.0},
+Kalan Süre: {5},  Geçen Süre: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>Seçileni Sil</value>
@@ -2065,7 +2065,7 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
     <value>Yabancı Ses Bul</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>Yabancı Ses Taraması</value>
+    <value>Yabancı Ses İncelemesi</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
     <value>Eşleşen Tüm Seçilen Diller</value>
@@ -2295,7 +2295,7 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Durdur</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Girdiğiniz kategori adı zaten mevcut. Lütfen farklı bir isim seçin.</value>
@@ -2424,10 +2424,10 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Kaydetme Boyutu: {0}x{1}     Görüntü Boyutu: {2}x{3}      Görüntü Oranı: {4}</value>
   </data>
   <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
-    <value>Dosya Tarama İletişim Kutusunda bir hata algılandı. 
+    <value>Dosya İnceleme İletişim Kutusunda bir hata algılandı. 
 
-- Lütfen uzun dosya yollarının tam olarak desteklenmediğini unutmayın. Lütfen dosya yollarını 255 karakterden kısa tutun. 
-- Bu pencere için en son kullanılan dizin, bir dahaki sefere dosya taramayı denediğinizde hataları önlemek için sıfırlandı.</value>
+- Lütfen uzun dosya yollarının tam olarak desteklenmediğini unutmayın. Dosya yollarını 255 karakterden kısa tutun. 
+- Bu pencere için en son kullanılan dizin, bir dahaki sefere dosya İncelemeyi denediğinizde hataları önlemek için sıfırlandı.</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
     <value>Max Yükseklik:</value>
@@ -2453,9 +2453,8 @@ Tercihler -&gt; Genel -&gt; Güncellemeleri Kontrol Et bölümündeki seçenekle
     <value>Güncellemeler kontrol edilsin mi?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>Güncellemeden Önce:
-- Kuyrukta bekleyen kodlama olmadığından emin olun. 
-- Daha yeni sürümlerle tam uyumlu olmayabileceğinden, oluşturduğunuz özel ön ayarları yedekleyin veya not alın.</value>
+    <value>- Sırada bekleyen kodlama olmadığından emin olun. 
+- Oluşturduğunuz özel ön ayarları yedekleyin veya not edin. Çünkü bunlar yeni sürümlerle tam uyumlu olmayabilir.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
     <value>(Varsayılan)</value>
@@ -2634,7 +2633,7 @@ Donanım kodlama desteği tercihlerde yeniden etkinleştirilebilir.</value>
     <value>Dışa Aktarma Bitti!</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
-    <value>Önce bir kaynağı taramanız ve bir başlangıç hedef dizini ayarlamanız gerekir</value>
+    <value>Önce bir kaynağı İncelemeniz ve bir başlangıç hedef dizini ayarlamanız gerekiyor.</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
     <value>Yalnızca dosya zaten diskte mevcut olduğunda.</value>
@@ -2708,7 +2707,7 @@ Alternatif olarak, aşağıdaki "Harici Oynatıcı Kullan" onay kutusunu işaret
     <value>Geçiş {0} / {1}, {2:00.00}%, {3:000.0} fps, ortalama {4:000.0} fps, TAHMİNİ: {5}</value>
   </data>
   <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
-    <value>Altyazı Taraması {0:00.00}%, TAHMİNİ: {1}</value>
+    <value>Altyazı İncelemesi {0:00.00}%, TAHMİNİ SÜRE: {1}</value>
   </data>
   <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
     <value>Kuyruk Bilgilerini Genişlet</value>
@@ -2777,16 +2776,16 @@ Birden fazla eşzamanlı kodlamaya izin vermek için, Araçlar Menüsü -&gt; Te
     <value>Dosya Uzantılarını Hariç Tut:</value>
   </data>
   <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
-    <value>Bir klasör taranırken aşağıdaki dosya uzantıları göz ardı edilecektir. Liste büyük/küçük harfe duyarlı değildir. "." gerekli değildir.</value>
+    <value>Bir klasör incelenirken aşağıdaki dosya uzantıları göz ardı edilecektir. Liste büyük/küçük harfe duyarlı değildir. "." gerekli değildir.</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
     <value>Bu dosya uzantısı listede zaten var.</value>
   </data>
   <data name="Options_FileHandling" xml:space="preserve">
-    <value>Dosya İşleme (Tarama)</value>
+    <value>Dosya İşleme (İnceleme)</value>
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
-    <value>Klasör tarama modunu kullanırken dizinleri yinelemeli olarak tarayın.</value>
+    <value>Klasör İnceleme modunu kullanırken dizinleri yinelemeli olarak incele.</value>
   </data>
   <data name="AudioView_AudioQuality" xml:space="preserve">
     <value>Ses Parçası Kalitesi</value>
@@ -2864,16 +2863,16 @@ Birden fazla eşzamanlı kodlamaya izin vermek için, Araçlar Menüsü -&gt; Te
     <value>Günlük Penceresini Aç</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Özel</value>
@@ -3002,9 +3001,41 @@ Birden fazla eşzamanlı kodlamaya izin vermek için, Araçlar Menüsü -&gt; Te
     <value>Kaynakla Aynı</value>
   </data>
   <data name="VideoColourRange_Full" xml:space="preserve">
-    <value>Full</value>
+    <value>Tam</value>
   </data>
   <data name="VideoColourRange_Limited" xml:space="preserve">
-    <value>Limited</value>
+    <value>Sınırlı</value>
+  </data>
+  <data name="DarkTheme_Modern" xml:space="preserve">
+    <value>Modern</value>
+  </data>
+  <data name="Options_BeforeUpdating" xml:space="preserve">
+    <value>Güncellemeden Önce</value>
+  </data>
+  <data name="Options_UpdateNotComplete" xml:space="preserve">
+    <value>Güncelleme kurulumu iptal edildi.</value>
+  </data>
+  <data name="AboutView_ReleaseNotes" xml:space="preserve">
+    <value>Sürüm Notları</value>
+  </data>
+  <data name="Options_ReleaseNotesDesc" xml:space="preserve">
+    <value>HandBrake'teki son değişiklikler hakkında bilgi edinmek için:</value>
+  </data>
+  <data name="PresetUiType_Menu" xml:space="preserve">
+    <value>Menü</value>
+  </data>
+  <data name="PresetUiType_Overlay" xml:space="preserve">
+    <value>Kapla</value>
+  </data>
+  <data name="OptionsView_PresetUiType" xml:space="preserve">
+    <value>Araç çubuğu ön ayar açılır penceresini şu şekilde görüntüle:</value>
+  </data>
+  <data name="QueueViewModel_CancelErrorWillBeCleared" xml:space="preserve">
+    <value>Kuyrukta şu anda İptal Edilmiş veya Hatalı Durumda olan görevler var. Bunlar, görev kuyruğu başladığında temizlenecek.
+ 
+Devam etmek istiyor musunuz?</value>
+  </data>
+  <data name="QueueView_ExportSelected" xml:space="preserve">
+    <value>Dışa Aktarma Kuyruğu (Seçili)</value>
   </data>
 </root>
