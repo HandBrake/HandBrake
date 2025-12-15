@@ -6,14 +6,15 @@
 # Translators:
 # Ilya Ilyushenok <ilya4795@gmail.com>, 2024
 # Victor, 2025
+# Nomis101 <Nomis101@web.de>, 2025
 # VictorR2007 <victorr2007@yandex.ru>, 2025
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 20250818-git-c7466a55e\n"
+"Project-Id-Version: ghb 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 09:50+0100\n"
+"POT-Creation-Date: 2025-12-15 17:30+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: VictorR2007 <victorr2007@yandex.ru>, 2025\n"
 "Language-Team: Russian (https://app.transifex.com/HandBrakeProject/teams/92423/ru/)\n"
@@ -410,9 +411,9 @@ msgid "Edit"
 msgstr "Изменить"
 
 #: src/ui/ghb.ui:456 src/ui/ghb.ui:2999 src/ui/ghb.ui:3123 src/ui/ghb.ui:3264
-#: src/ui/ghb.ui:3661 src/hb-backend.c:4408 src/hb-backend.c:4415
-#: src/hb-backend.c:4439 src/hb-backend.c:4447 src/hb-backend.c:4475
-#: src/hb-backend.c:4484 src/hb-backend.c:4511 src/hb-backend.c:4536
+#: src/ui/ghb.ui:3661 src/hb-backend.c:4418 src/hb-backend.c:4425
+#: src/hb-backend.c:4449 src/hb-backend.c:4457 src/hb-backend.c:4485
+#: src/hb-backend.c:4494 src/hb-backend.c:4521 src/hb-backend.c:4546
 msgid "Preset:"
 msgstr "Предустановка:"
 
@@ -548,7 +549,7 @@ msgstr "<b>Источник:</b>"
 #: src/ui/ghb.ui:1498 src/hb-backend.c:54 src/hb-backend.c:66
 #: src/hb-backend.c:78 src/hb-backend.c:91 src/hb-backend.c:129
 #: src/hb-backend.c:229 src/hb-backend.c:274 src/hb-backend.c:285
-#: src/hb-backend.c:312 src/hb-backend.c:397 src/hb-backend.c:2853
+#: src/hb-backend.c:312 src/hb-backend.c:397 src/hb-backend.c:2863
 #: src/subtitlehandler.c:1439
 msgid "None"
 msgstr "Нет"
@@ -1039,7 +1040,7 @@ msgstr ""
 "Если в источнике существует «блочность», этот фильтр может помочь в ее очистке."
 
 #: src/ui/ghb.ui:3061 src/ui/ghb.ui:3141 src/ui/ghb.ui:3203 src/ui/ghb.ui:3281
-#: src/ui/ghb.ui:3720 src/hb-backend.c:4512 src/hb-backend.c:4537
+#: src/ui/ghb.ui:3720 src/hb-backend.c:4522 src/hb-backend.c:4547
 msgid "Tune:"
 msgstr "Настройки:"
 
@@ -1143,7 +1144,7 @@ msgstr "Цветовое пространство:"
 msgid "Translate the colorspace of the source."
 msgstr "Перенести цветовое пространство источника."
 
-#: src/ui/ghb.ui:3351 src/hb-backend.c:4981
+#: src/ui/ghb.ui:3351 src/hb-backend.c:4991
 msgid "Grayscale"
 msgstr "Чёрно-белое"
 
@@ -2012,9 +2013,9 @@ msgid "Add Multiple Titles"
 msgstr "Добавить несколько заголовков"
 
 #: src/ui/ghb.ui:5434 src/ui/ghb.ui:6193 src/ui/ghb.ui:6283 src/ui/ghb.ui:6623
-#: src/ui/ghb.ui:6895 src/hb-backend.c:4580 src/hb-backend.c:4630
-#: src/hb-backend.c:4647 src/hb-backend.c:4664 src/hb-backend.c:4721
-#: src/hb-backend.c:4774 src/presets.c:2161 src/presets.c:2543
+#: src/ui/ghb.ui:6895 src/hb-backend.c:4590 src/hb-backend.c:4640
+#: src/hb-backend.c:4657 src/hb-backend.c:4674 src/hb-backend.c:4731
+#: src/hb-backend.c:4784 src/presets.c:2161 src/presets.c:2543
 #: src/presets.c:2768 src/title-add.c:124 src/title-add.c:134
 msgid "Cancel"
 msgstr "Отмена"
@@ -2863,8 +2864,8 @@ msgstr "Соотношение сторон пикселей"
 msgid "Display Aspect Ratio"
 msgstr "Соотношение сторон экрана"
 
-#: src/callbacks.c:2806 src/hb-backend.c:2305 src/hb-backend.c:2426
-#: src/hb-backend.c:2438
+#: src/callbacks.c:2806 src/hb-backend.c:2315 src/hb-backend.c:2436
+#: src/hb-backend.c:2448
 msgid "No Title Found"
 msgstr "Название не найдено"
 
@@ -3122,7 +3123,7 @@ msgstr "Год"
 msgid "Immortal"
 msgstr "Вечно"
 
-#: src/hb-backend.c:193 src/hb-backend.c:4965
+#: src/hb-backend.c:193 src/hb-backend.c:4975
 msgid "Decomb"
 msgstr "Устранение гребенки"
 
@@ -3166,8 +3167,8 @@ msgstr "180°"
 msgid "270°"
 msgstr "270°"
 
-#: src/hb-backend.c:255 src/hb-backend.c:1565 src/hb-backend.c:1625
-#: src/hb-backend.c:1704
+#: src/hb-backend.c:255 src/hb-backend.c:1575 src/hb-backend.c:1635
+#: src/hb-backend.c:1714
 msgid "Same as source"
 msgstr "Как в источнике"
 
@@ -3355,84 +3356,84 @@ msgstr "Всегда"
 msgid "Use System Language"
 msgstr "Использовать системный язык"
 
-#: src/hb-backend.c:1718
+#: src/hb-backend.c:1728
 msgid "(NTSC Film)"
 msgstr "(Фильм NTSC)"
 
-#: src/hb-backend.c:1722
+#: src/hb-backend.c:1732
 msgid "(PAL Film/Video)"
 msgstr "(Фильм/видео PAL)"
 
-#: src/hb-backend.c:1726
+#: src/hb-backend.c:1736
 msgid "(NTSC Video)"
 msgstr "(Видео NTSC)"
 
-#: src/hb-backend.c:2294
+#: src/hb-backend.c:2304
 #, c-format
 msgid "%s - (%05d.MPLS)"
 msgstr "%s - (%05d.MPLS)"
 
-#: src/hb-backend.c:2445
+#: src/hb-backend.c:2455
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
 msgstr "%3d - %02d час %02d мин %02d сек - %s"
 
-#: src/hb-backend.c:2464
+#: src/hb-backend.c:2474
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 msgstr "%3d - %02d час %02d мин %02d сек - (%05d.MPLS)"
 
-#: src/hb-backend.c:2470
+#: src/hb-backend.c:2480
 #, c-format
 msgid "%3d - (%05d.MPLS)"
 msgstr "%3d - (%05d.MPLS)"
 
-#: src/hb-backend.c:2476
+#: src/hb-backend.c:2486
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
 msgstr "%3d - %02d час %02d мин %02d сек"
 
-#: src/hb-backend.c:2509
+#: src/hb-backend.c:2519
 msgid "No Titles"
 msgstr "Без названия"
 
 #. No audio. set some default
-#: src/hb-backend.c:2781
+#: src/hb-backend.c:2791
 msgid "No Audio"
 msgstr "Нет звука"
 
-#: src/hb-backend.c:4406 src/hb-backend.c:4414
+#: src/hb-backend.c:4416 src/hb-backend.c:4424
 msgid "Invalid Detelecine Settings"
 msgstr "Неверны настройки  детелесина"
 
-#: src/hb-backend.c:4409 src/hb-backend.c:4440 src/hb-backend.c:4476
-#: src/hb-backend.c:4513 src/hb-backend.c:4538
+#: src/hb-backend.c:4419 src/hb-backend.c:4450 src/hb-backend.c:4486
+#: src/hb-backend.c:4523 src/hb-backend.c:4548
 msgid "Custom:"
 msgstr "Другое:"
 
-#: src/hb-backend.c:4437 src/hb-backend.c:4445
+#: src/hb-backend.c:4447 src/hb-backend.c:4455
 msgid "Invalid Comb Detect Settings"
 msgstr "Недопустимые настройки обнаружения гребёнки"
 
-#: src/hb-backend.c:4472 src/hb-backend.c:4481
+#: src/hb-backend.c:4482 src/hb-backend.c:4491
 msgid "Invalid Deinterlace Settings"
 msgstr "Неверны настройки  детелесина"
 
-#: src/hb-backend.c:4474 src/hb-backend.c:4483 src/hb-backend.c:4510
-#: src/hb-backend.c:4535
+#: src/hb-backend.c:4484 src/hb-backend.c:4493 src/hb-backend.c:4520
+#: src/hb-backend.c:4545
 msgid "Filter:"
 msgstr "Фильтр:"
 
-#: src/hb-backend.c:4508
+#: src/hb-backend.c:4518
 msgid "Invalid Denoise Settings"
 msgstr "Неверные настройки шумоподавления"
 
-#: src/hb-backend.c:4533
+#: src/hb-backend.c:4543
 msgid "Invalid Sharpen Settings"
 msgstr "Неверные настройки резкости"
 
 #. mp4/theora combination is not supported.
-#: src/hb-backend.c:4562
+#: src/hb-backend.c:4572
 msgid ""
 "Theora is not supported in the MP4 container.\n"
 "\n"
@@ -3445,7 +3446,7 @@ msgstr ""
 "Если продолжите, для вас будет выбран ffmpeg."
 
 #. webm only supports vp8, vp9 and av1.
-#: src/hb-backend.c:4571
+#: src/hb-backend.c:4581
 msgid ""
 "Only VP8, VP9 and AV1 is supported in the WebM container.\n"
 "\n"
@@ -3457,25 +3458,25 @@ msgstr ""
 "Вам следует выбрать другой видеокодек или контейнер.\n"
 "Если вы продолжите, для вас будет выбран один из них."
 
-#: src/hb-backend.c:4579 src/hb-backend.c:4630 src/hb-backend.c:4647
-#: src/hb-backend.c:4664 src/hb-backend.c:4721 src/hb-backend.c:4774
+#: src/hb-backend.c:4589 src/hb-backend.c:4640 src/hb-backend.c:4657
+#: src/hb-backend.c:4674 src/hb-backend.c:4731 src/hb-backend.c:4784
 msgid "Continue"
 msgstr "Продолжить"
 
-#: src/hb-backend.c:4580
+#: src/hb-backend.c:4590
 msgid "Invalid Video Codec"
 msgstr "Неверный видеокодек"
 
 #. No valid title, stop right there
-#: src/hb-backend.c:4603 src/hb-backend.c:4689
+#: src/hb-backend.c:4613 src/hb-backend.c:4699
 msgid "No title found.\n"
 msgstr "Название не найдено.\n"
 
-#: src/hb-backend.c:4630 src/hb-backend.c:4647
+#: src/hb-backend.c:4640 src/hb-backend.c:4657
 msgid "Invalid Subtitle Selection"
 msgstr "Неверный выбор субтитров"
 
-#: src/hb-backend.c:4631
+#: src/hb-backend.c:4641
 msgid ""
 "Only one subtitle may be burned into the video.\n"
 "\n"
@@ -3487,7 +3488,7 @@ msgstr ""
 "Вы должны изменить настройки субтитров.\n"
 "Если продолжите, некоторые субтитры будут потеряны."
 
-#: src/hb-backend.c:4648
+#: src/hb-backend.c:4658
 msgid ""
 "WebM in HandBrake only supports burned subtitles.\n"
 "\n"
@@ -3499,11 +3500,11 @@ msgstr ""
 "Вам следует изменить выбор субтитров.\n"
 "Если вы продолжите, некоторые субтитры будут потеряны."
 
-#: src/hb-backend.c:4664
+#: src/hb-backend.c:4674
 msgid "Subtitle File Not Found"
 msgstr "Файл с субтитрами не найден"
 
-#: src/hb-backend.c:4665
+#: src/hb-backend.c:4675
 msgid ""
 "SRT file does not exist or not a regular file.\n"
 "\n"
@@ -3515,11 +3516,11 @@ msgstr ""
 "Вам следует выбрать правильный файл.\n"
 "Если продолжите, эти субтитры будут игнорироваться."
 
-#: src/hb-backend.c:4721 src/hb-backend.c:4774
+#: src/hb-backend.c:4731 src/hb-backend.c:4784
 msgid "Invalid Audio Selection"
 msgstr "Неверный выбор звука"
 
-#: src/hb-backend.c:4722
+#: src/hb-backend.c:4732
 msgid ""
 "The source does not support Pass-Thru.\n"
 "\n"
@@ -3531,7 +3532,7 @@ msgstr ""
 "Вы должны выбрать другой звуковой кодек.\n"
 "Если вы продолжите, один из них будет выбран для вас."
 
-#: src/hb-backend.c:4775
+#: src/hb-backend.c:4785
 #, c-format
 msgid ""
 "%s is not supported in the %s container.\n"
@@ -3544,51 +3545,51 @@ msgstr ""
 "Вам следует выбрать другой кодировщик звука.\n"
 "Если продолжите, один будет выбран для вас."
 
-#: src/hb-backend.c:4957
+#: src/hb-backend.c:4967
 msgid "Comb Detect"
 msgstr "Обнаружение гребенки"
 
-#: src/hb-backend.c:4959
+#: src/hb-backend.c:4969
 msgid "Detelecine"
 msgstr "Детелесин"
 
-#: src/hb-backend.c:4961
+#: src/hb-backend.c:4971
 msgid "Deinterlace (Yadif)"
 msgstr "Деинтерлейсинг(Yadif)"
 
-#: src/hb-backend.c:4963
+#: src/hb-backend.c:4973
 msgid "Deinterlace (Bwdif)"
 msgstr "Деинтерлейсинг (Bwdif)"
 
-#: src/hb-backend.c:4967
+#: src/hb-backend.c:4977
 msgid "Deblock"
 msgstr "Подавление блоков"
 
-#: src/hb-backend.c:4969
+#: src/hb-backend.c:4979
 msgid "Denoise (NLMeans)"
 msgstr "Шумоподавление (NLMeans)"
 
-#: src/hb-backend.c:4971
+#: src/hb-backend.c:4981
 msgid "Denoise (HQDN3D)"
 msgstr "Шумоподавление (HQDN3D)"
 
-#: src/hb-backend.c:4973
+#: src/hb-backend.c:4983
 msgid "Chroma Smooth"
 msgstr "Сглаживания цветности"
 
-#: src/hb-backend.c:4975
+#: src/hb-backend.c:4985
 msgid "Sharpen (Unsharp)"
 msgstr "Резкость (Нерезкость)"
 
-#: src/hb-backend.c:4977
+#: src/hb-backend.c:4987
 msgid "Rotate"
 msgstr "Вращение"
 
-#: src/hb-backend.c:4979
+#: src/hb-backend.c:4989
 msgid "Sharpen (lapsharp)"
 msgstr "Резкость (lapsharp)"
 
-#: src/hb-backend.c:4983
+#: src/hb-backend.c:4993
 msgid "Colorspace"
 msgstr "Цветовое пространство"
 
@@ -3634,12 +3635,12 @@ msgstr "Зарядное устройство было отсоединено."
 msgid "Power Saver mode has been activated."
 msgstr "Активирован режим энергосбережения."
 
-#: src/notifications.c:150
+#: src/notifications.c:151
 #, c-format
 msgid "%s free space remaining."
 msgstr "Осталось %s свободного места."
 
-#: src/notifications.c:156 src/queuehandler.c:1171
+#: src/notifications.c:158 src/queuehandler.c:1171
 msgid "Encoding Paused"
 msgstr "Кодирование приостановлено"
 
