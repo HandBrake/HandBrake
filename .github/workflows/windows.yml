@@ -138,7 +138,7 @@ jobs:
     - uses: actions/checkout@v6
 
     - name: Download LibHandBrake
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
        name: LibHandBrake
        path: win/CS/HandBrakeWPF/bin/publish
@@ -218,7 +218,7 @@ jobs:
     - uses: actions/checkout@v6
        
     - name: Download LibHandBrake_ARM64
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
        name: LibHandBrake_ARM64
        path: win/CS/HandBrakeWPF/bin/publish
