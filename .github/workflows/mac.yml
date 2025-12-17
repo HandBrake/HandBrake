@@ -18,14 +18,14 @@ jobs:
 
     - name: Toolchain Cache
       id: mac-toolchain
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/mac-toolchain
         key: ${{ runner.os }}-${{ runner.arch }}-toolchain-${{ hashFiles('**/scripts/mac-toolchain-build') }}
 
     - name: Cargo-C Toolchain Cache
       id: mac-cargo-c-toolchain
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: |
           ~/.cargo/bin/cargo-capi
