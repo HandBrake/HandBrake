@@ -51,13 +51,13 @@ jobs:
         
 
     - name: Upload HandBrakeCLI
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: HandBrakeCLI_ARM64
         path: ./build/HandBrakeCLI.exe
 
     - name: Upload LibHB
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: LibHandBrake_ARM64
         path: ./build/libhb/hb_a64.dll
@@ -116,13 +116,13 @@ jobs:
         make pkg.create.zip
 
     - name: Upload HandBrakeCLI
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: HandBrakeCLI
         path: ./build/HandBrakeCLI.exe
 
     - name: Upload LibHB
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: LibHandBrake
         path: ./build/libhb/hb.dll
@@ -196,13 +196,13 @@ jobs:
       shell: cmd
               
     - name: Upload HandBrake Installer
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: HandBrake-Win_GUI-x64
         path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake*.exe
 
     - name: Upload HandBrake ZIP
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: HandBrake-Win_GUI-x64-Zip
         path: win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
@@ -276,13 +276,13 @@ jobs:
       shell: cmd
               
     - name: Upload HandBrake Installer
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: HandBrake-Win_GUI-ARM64
         path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake*.exe
 
     - name: Upload HandBrake ZIP
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: HandBrake-Win_GUI-ARM64-Zip
         path: win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
