@@ -6,7 +6,7 @@ LIBOPUS.FETCH.url    += https://gitlab.xiph.org/xiph/opus/-/archive/v1.6/opus-v1
 LIBOPUS.FETCH.sha256  = 0ce7179c6a2b1d41122f23c09101e3f159ad39ba885212e09d772c6882fbe574
 
 LIBOPUS.CONFIGURE.shared = --enable-shared=no
-LIBOPUS.CONFIGURE.extra = --disable-doc --disable-extra-programs--enable-qext --enable-opus-custom-api
+LIBOPUS.CONFIGURE.extra = --disable-doc --disable-extra-programs --enable-qext --enable-opus-custom-api
 
 LIBOPUS.GCC.args.extra += $(LIBOPUS.GCC.args.O.$(LIBOPUS.GCC.O))
 
