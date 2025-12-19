@@ -1,0 +1,124 @@
+diff -ruN ffmpeg-8.0.1/libavcodec/libopusdec.c ffmpeg-8.0.1-patched/libavcodec/libopusdec.c
+--- ffmpeg-8.0.1/libavcodec/libopusdec.c	2025-11-20 03:31:18.000000000 +0100
++++ ffmpeg-8.0.1-patched/libavcodec/libopusdec.c	2025-12-18 22:19:52.387149174 +0100
+@@ -62,7 +62,7 @@
+         channels = 2;
+     }
+ 
+-    avc->sample_rate    = 48000;
++    avc->sample_rate    = 96000;
+     avc->sample_fmt     = avc->request_sample_fmt == AV_SAMPLE_FMT_FLT ?
+                           AV_SAMPLE_FMT_FLT : AV_SAMPLE_FMT_S16;
+     av_channel_layout_uninit(&avc->ch_layout);
+diff -ruN ffmpeg-8.0.1/libavcodec/libopusenc.c ffmpeg-8.0.1-patched/libavcodec/libopusenc.c
+--- ffmpeg-8.0.1/libavcodec/libopusenc.c	2025-11-20 03:31:18.000000000 +0100
++++ ffmpeg-8.0.1-patched/libavcodec/libopusenc.c	2025-12-18 22:19:52.397949174 +0100
+@@ -97,7 +97,7 @@
+     bytestream_put_buffer(&p, "OpusHead", 8);
+     bytestream_put_byte(&p, 1); /* Version */
+     bytestream_put_byte(&p, channels);
+-    bytestream_put_le16(&p, avctx->initial_padding * 48000 / avctx->sample_rate); /* Lookahead samples at 48kHz */
++    bytestream_put_le16(&p, avctx->initial_padding * 96000 / avctx->sample_rate); /* Lookahead samples at 96kHz */
+     bytestream_put_le32(&p, avctx->sample_rate); /* Original sample rate */
+     bytestream_put_le16(&p, 0); /* Gain of 0dB is recommended. */
+ 
+@@ -267,7 +267,7 @@
+     int coupled_stream_count, header_size, frame_size;
+     int mapping_family;
+ 
+-    frame_size = opus->opts.frame_duration * 48000 / 1000;
++    frame_size = opus->opts.frame_duration * 96000 / 1000;
+     switch (frame_size) {
+     case 120:
+     case 240:
+@@ -289,7 +289,7 @@
+     case 5760:
+ #endif
+         opus->opts.packet_size =
+-        avctx->frame_size      = frame_size * avctx->sample_rate / 48000;
++        avctx->frame_size      = frame_size * avctx->sample_rate / 96000;
+         break;
+     default:
+         av_log(avctx, AV_LOG_ERROR, "Invalid frame duration: %g.\n"
+@@ -577,7 +577,7 @@
+ };
+ 
+ static const int libopus_sample_rates[] = {
+-    48000, 24000, 16000, 12000, 8000, 0,
++    96000, 48000, 24000, 16000, 12000, 8000, 0,
+ };
+ 
+ const FFCodec ff_libopus_encoder = {
+diff -ruN ffmpeg-8.0.1/libavcodec/opus/dec.c ffmpeg-8.0.1-patched/libavcodec/opus/dec.c
+--- ffmpeg-8.0.1/libavcodec/opus/dec.c	2025-11-20 03:31:18.000000000 +0100
++++ ffmpeg-8.0.1-patched/libavcodec/opus/dec.c	2025-12-18 22:19:52.397949174 +0100
+@@ -684,7 +684,7 @@
+     int ret;
+ 
+     avctx->sample_fmt  = AV_SAMPLE_FMT_FLTP;
+-    avctx->sample_rate = 48000;
++    avctx->sample_rate = 96000;
+ 
+     c->fdsp = avpriv_float_dsp_alloc(0);
+     if (!c->fdsp)
+diff -ruN ffmpeg-8.0.1/libavcodec/opus/enc.c ffmpeg-8.0.1-patched/libavcodec/opus/enc.c
+--- ffmpeg-8.0.1/libavcodec/opus/enc.c	2025-11-20 03:31:18.000000000 +0100
++++ ffmpeg-8.0.1-patched/libavcodec/opus/enc.c	2025-12-18 22:19:52.397949174 +0100
+@@ -649,7 +649,7 @@
+ 
+     if (!avctx->bit_rate) {
+         int coupled = ff_opus_default_coupled_streams[s->channels - 1];
+-        avctx->bit_rate = coupled*(96000) + (s->channels - coupled*2)*(48000);
++        avctx->bit_rate = coupled*(96000) + (s->channels - coupled*2)*(96000);
+     } else if (avctx->bit_rate < 6000 || avctx->bit_rate > 255000 * s->channels) {
+         int64_t clipped_rate = av_clip(avctx->bit_rate, 6000, 255000 * s->channels);
+         av_log(avctx, AV_LOG_ERROR, "Unsupported bitrate %"PRId64" kbps, clipping to %"PRId64" kbps\n",
+@@ -746,7 +746,7 @@
+     FF_CODEC_ENCODE_CB(opus_encode_frame),
+     .close          = opus_encode_end,
+     .caps_internal  = FF_CODEC_CAP_INIT_CLEANUP,
+-    CODEC_SAMPLERATES(48000),
++    CODEC_SAMPLERATES(96000),
+     CODEC_CH_LAYOUTS(AV_CHANNEL_LAYOUT_MONO, AV_CHANNEL_LAYOUT_STEREO),
+     CODEC_SAMPLEFMTS(AV_SAMPLE_FMT_FLTP),
+ };
+diff -ruN ffmpeg-8.0.1/libavcodec/opus/parser.c ffmpeg-8.0.1-patched/libavcodec/opus/parser.c
+--- ffmpeg-8.0.1/libavcodec/opus/parser.c	2025-11-20 03:31:18.000000000 +0100
++++ ffmpeg-8.0.1-patched/libavcodec/opus/parser.c	2025-12-18 22:19:52.397949174 +0100
+@@ -174,7 +174,7 @@
+     ParseContext *pc    = &s->pc;
+     int next, header_len = 0;
+ 
+-    avctx->sample_rate = 48000;
++    avctx->sample_rate = 96000;
+ 
+     if (avctx->extradata && !s->extradata_parsed) {
+         if (ff_opus_parse_extradata(avctx, &s->ctx) < 0) {
+diff -ruN ffmpeg-8.0.1/libavformat/oggenc.c ffmpeg-8.0.1-patched/libavformat/oggenc.c
+--- ffmpeg-8.0.1/libavformat/oggenc.c	2025-11-20 03:31:18.000000000 +0100
++++ ffmpeg-8.0.1-patched/libavformat/oggenc.c	2025-12-18 21:55:40.455879200 +0100
+@@ -487,7 +487,7 @@
+         if (st->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
+             if (st->codecpar->codec_id == AV_CODEC_ID_OPUS)
+                 /* Opus requires a fixed 48kHz clock */
+-                avpriv_set_pts_info(st, 64, 1, 48000);
++                avpriv_set_pts_info(st, 64, 1, 96000);
+             else
+                 avpriv_set_pts_info(st, 64, 1, st->codecpar->sample_rate);
+         }
+diff -ruN ffmpeg-8.0.1/libavformat/oggparseopus.c ffmpeg-8.0.1-patched/libavformat/oggparseopus.c
+--- ffmpeg-8.0.1/libavformat/oggparseopus.c	2025-11-20 03:31:18.000000000 +0100
++++ ffmpeg-8.0.1-patched/libavformat/oggparseopus.c	2025-12-18 22:19:52.397949174 +0100
+@@ -71,10 +71,10 @@
+ 
+     memcpy(st->codecpar->extradata, packet, os->psize);
+ 
+-    st->codecpar->sample_rate = 48000;
++    st->codecpar->sample_rate = 96000;
+     st->codecpar->seek_preroll = av_rescale(OPUS_SEEK_PREROLL_MS,
+                                             st->codecpar->sample_rate, 1000);
+-    avpriv_set_pts_info(st, 64, 1, 48000);
++    avpriv_set_pts_info(st, 64, 1, 96000);
+ 
+     priv->need_comments = 1;
+ 
