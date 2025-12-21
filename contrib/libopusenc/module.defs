@@ -1,0 +1,12 @@
+$(eval $(call import.MODULE.defs,LIBOPUSENC,libopusenc))
+$(eval $(call import.CONTRIB.defs,LIBOPUSENC))
+
+LIBOPUSENC.FETCH.url     = https://gitlab.xiph.org/xiph/libopusenc/-/archive/v0.3/libopusenc-v0.3.tar.gz
+LIBOPUSENC.FETCH.sha256  = e4258441c1b5917656d8d9eba838499b55d09d7095ac4cf4fbc6c1afe03060d8
+
+LIBOPUSENC.CONFIGURE.shared = --enable-shared=no
+LIBOPUSENC.CONFIGURE.extra  = --disable-doc --disable-examples
+
+LIBOPUSENC.GCC.args.extra += $(LIBOPUSENC.GCC.args.O.$(LIBOPUSENC.GCC.O))
+
+LIBOPUSENC.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;

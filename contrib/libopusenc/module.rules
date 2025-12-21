@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,LIBOPUSENC))
+$(eval $(call import.CONTRIB.rules,LIBOPUSENC))
