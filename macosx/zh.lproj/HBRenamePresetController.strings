@@ -11,7 +11,7 @@
 "NQn-fS-Rbd.title" = "未命名";
 
 /* Class = "NSTextFieldCell"; title = "New preset name:"; ObjectID = "Pe0-gr-Yv4"; */
-"Pe0-gr-Yv4.title" = "新的预设名称：";
+"Pe0-gr-Yv4.title" = "新建预设名称：";
 
 /* Class = "NSButtonCell"; title = "Rename"; ObjectID = "Z9M-dc-5Ml"; */
 "Z9M-dc-5Ml.title" = "重命名";

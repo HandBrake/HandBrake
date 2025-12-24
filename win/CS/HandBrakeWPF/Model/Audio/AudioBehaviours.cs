@@ -13,7 +13,6 @@ namespace HandBrakeWPF.Model.Audio
     using System.ComponentModel;
     using System.Linq;
 
-    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
@@ -45,9 +44,13 @@ namespace HandBrakeWPF.Model.Audio
         {
             this.SelectedBehaviour = behaviours.SelectedBehaviour;
             this.SelectedTrackDefaultBehaviour = behaviours.SelectedTrackDefaultBehaviour;
-            this.SelectedLanguages = new BindingList<Language>(behaviours.selectedLanguages.ToList());
+            this.SelectedLanguages = behaviours.selectedLanguages != null
+                ? new BindingList<Language>(behaviours.selectedLanguages.ToList())
+                : new BindingList<Language>();
             this.BehaviourTracks = behaviours.BehaviourTracks;
-            this.AllowedPassthruOptions = new BindingList<HBAudioEncoder>(behaviours.AllowedPassthruOptions);
+            this.AllowedPassthruOptions = behaviours.AllowedPassthruOptions != null
+                ? new BindingList<HBAudioEncoder>(behaviours.AllowedPassthruOptions)
+                : new BindingList<HBAudioEncoder>();
             this.AudioFallbackEncoder = behaviours.AudioFallbackEncoder;
             this.AudioTrackNamePassthru = behaviours.AudioTrackNamePassthru;
             this.AudioAutomaticNamingBehavior = behaviours.AudioAutomaticNamingBehavior;

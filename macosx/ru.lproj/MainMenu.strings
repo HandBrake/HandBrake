@@ -1,5 +1,5 @@
 /* Class = "NSMenu"; title = "Services"; ObjectID = "0te-ai-fgD"; */
-"0te-ai-fgD.title" = "Сервисы:";
+"0te-ai-fgD.title" = "Службы";
 
 /* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "1GQ-n3-jfY"; */
 "1GQ-n3-jfY.title" = "Переименовать...";
@@ -23,25 +23,25 @@
 "57.title" = "HandBrake";
 
 /* Class = "NSMenuItem"; title = "About HandBrake"; ObjectID = "58"; */
-"58.title" = "О HandBrake";
+"58.title" = "О приложении HandBrake";
 
 /* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "136"; */
-"136.title" = "Выйти из HandBrake";
+"136.title" = "Завершить HandBrake";
 
 /* Class = "NSMenuItem"; title = "Hide HandBrake"; ObjectID = "971"; */
 "971.title" = "Скрыть HandBrake";
 
 /* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "973"; */
-"973.title" = "Скрыть другие";
+"973.title" = "Скрыть остальные";
 
 /* Class = "NSMenuItem"; title = "Window"; ObjectID = "1189"; */
 "1189.title" = "Окно";
 
 /* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "1190"; */
-"1190.title" = "Все на передний план";
+"1190.title" = "Все окна — на передний план";
 
 /* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "1191"; */
-"1191.title" = "Минимизировать";
+"1191.title" = "Убрать в Dock";
 
 /* Class = "NSMenu"; title = "Window"; ObjectID = "1192"; */
 "1192.title" = "Окно";
@@ -56,16 +56,16 @@
 "1209.title" = "Файл";
 
 /* Class = "NSMenu"; title = "Help"; ObjectID = "1429"; */
-"1429.title" = "Помощь";
+"1429.title" = "Справка";
 
 /* Class = "NSMenuItem"; title = "Help"; ObjectID = "1431"; */
-"1431.title" = "Помощь";
+"1431.title" = "Справка";
 
 /* Class = "NSMenuItem"; title = "HandBrake Website"; ObjectID = "1432"; */
 "1432.title" = "Веб-сайт HandBrake";
 
 /* Class = "NSMenuItem"; title = "Online Community Forums"; ObjectID = "1433"; */
-"1433.title" = "Онлайн-форум сообщества";
+"1433.title" = "Форум сообщества";
 
 /* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "1445"; */
 "1445.title" = "Настройки...";
@@ -74,7 +74,7 @@
 "1795.title" = "Изменить";
 
 /* Class = "NSMenu"; title = "Edit"; ObjectID = "1796"; */
-"1796.title" = "Изменить";
+"1796.title" = "Правка";
 
 /* Class = "NSMenuItem"; title = "Delete"; ObjectID = "1797"; */
 "1797.title" = "Удалить";
@@ -89,10 +89,10 @@
 "1801.title" = "Повторить действие";
 
 /* Class = "NSMenuItem"; title = "Find"; ObjectID = "1802"; */
-"1802.title" = "Найти";
+"1802.title" = "Поиск";
 
 /* Class = "NSMenu"; title = "Find"; ObjectID = "1803"; */
-"1803.title" = "Найти";
+"1803.title" = "Поиск";
 
 /* Class = "NSMenuItem"; title = "Jump to Selection"; ObjectID = "1804"; */
 "1804.title" = "Перейти к выбранному";
@@ -101,25 +101,25 @@
 "1805.title" = "Найти...";
 
 /* Class = "NSMenuItem"; title = "Find Next"; ObjectID = "1806"; */
-"1806.title" = "Найти следующее";
+"1806.title" = "Найти далее";
 
 /* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "1807"; */
-"1807.title" = "Найти предыдущее";
+"1807.title" = "Найти ранее";
 
 /* Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "1808"; */
-"1808.title" = "Использовать выбранное для поиска";
+"1808.title" = "Найти выбранное";
 
 /* Class = "NSMenuItem"; title = "Spelling"; ObjectID = "1810"; */
-"1810.title" = "Правописание";
+"1810.title" = "Правописание и грамматика";
 
 /* Class = "NSMenu"; title = "Spelling"; ObjectID = "1811"; */
-"1811.title" = "Правописание";
+"1811.title" = "Правописание и грамматика";
 
 /* Class = "NSMenuItem"; title = "Spelling…"; ObjectID = "1812"; */
 "1812.title" = "Правописание...";
 
 /* Class = "NSMenuItem"; title = "Check Spelling"; ObjectID = "1813"; */
-"1813.title" = "Проверка правописания";
+"1813.title" = "Проверить правописание";
 
 /* Class = "NSMenuItem"; title = "Check Spelling as You Type"; ObjectID = "1814"; */
 "1814.title" = "Проверять правописание во время печати";
@@ -128,25 +128,25 @@
 "1815.title" = "Вырезать";
 
 /* Class = "NSMenuItem"; title = "Copy"; ObjectID = "1816"; */
-"1816.title" = "Копировать";
+"1816.title" = "Скопировать";
 
 /* Class = "NSMenuItem"; title = "Speech"; ObjectID = "1817"; */
-"1817.title" = "Речь";
+"1817.title" = "Проговаривание текста";
 
 /* Class = "NSMenu"; title = "Speech"; ObjectID = "1818"; */
-"1818.title" = "Речь";
+"1818.title" = "Проговаривание текста";
 
 /* Class = "NSMenuItem"; title = "Stop Speaking"; ObjectID = "1819"; */
 "1819.title" = "Остановить";
 
 /* Class = "NSMenuItem"; title = "Start Speaking"; ObjectID = "1820"; */
-"1820.title" = "Начать говорить";
+"1820.title" = "Начать";
 
 /* Class = "NSMenuItem"; title = "Paste"; ObjectID = "1821"; */
 "1821.title" = "Вставить";
 
 /* Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "1822"; */
-"1822.title" = "Вставить с сочетанием стиля";
+"1822.title" = "Вставить и согласовать стиль";
 
 /* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1884"; */
 "1884.title" = "Пресеты";
@@ -158,22 +158,22 @@
 "1949.title" = "Пресеты";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "1950"; */
-"1950.title" = "Сбросить официальные пресеты";
+"1950.title" = "Сбросить встроенные пресеты";
 
 /* Class = "NSMenuItem"; title = "New Preset…"; ObjectID = "1955"; */
 "1955.title" = "Новый пресет...";
 
 /* Class = "NSMenuItem"; title = "Online Documentation"; ObjectID = "1985"; */
-"1985.title" = "Онлайн-документация";
+"1985.title" = "Справка HandBrake";
 
 /* Class = "NSMenuItem"; title = "Activity"; ObjectID = "2295"; */
-"2295.title" = "Активность";
+"2295.title" = "Журнал";
 
 /* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "2368"; */
 "2368.title" = "HandBrake";
 
 /* Class = "NSMenuItem"; title = "Select Default"; ObjectID = "2421"; */
-"2421.title" = "Выбрать По Умолчанию";
+"2421.title" = "Выбрать пресет по умолчанию";
 
 /* Class = "NSMenuItem"; title = "Add To Queue"; ObjectID = "2443"; */
 "2443.title" = "Добавить в очередь";
@@ -185,7 +185,7 @@
 "2445.title" = "Очередь";
 
 /* Class = "NSMenuItem"; title = "Pause Encoding"; ObjectID = "2494"; */
-"2494.title" = "Поставить кодирование на паузу";
+"2494.title" = "Приостановить кодирование";
 
 /* Class = "NSMenuItem"; title = "Close Window"; ObjectID = "2508"; */
 "2508.title" = "Закрыть окно";
@@ -197,16 +197,16 @@
 "5157.title" = "Предпросмотр";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "5188"; */
-"5188.title" = "Экспорт...";
+"5188.title" = "Экспортировать...";
 
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "5192"; */
-"5192.title" = "Импорт...";
+"5192.title" = "Импортировать...";
 
 /* Class = "NSMenuItem"; title = "Show All"; ObjectID = "5280"; */
-"5280.title" = "Показать всё";
+"5280.title" = "Показать все";
 
 /* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "5897"; */
-"5897.title" = "Добавить заголовки в очередь...";
+"5897.title" = "Добавить разделы в очередь...";
 
 /* Class = "NSMenuItem"; title = "Audio"; ObjectID = "brQ-mu-8JM"; */
 "brQ-mu-8JM.title" = "Аудио";
@@ -216,6 +216,9 @@
 
 /* Class = "NSMenuItem"; title = "Subtitles"; ObjectID = "Csx-2S-iUe"; */
 "Csx-2S-iUe.title" = "Субтитры";
+
+/* Class = "NSMenuItem"; title = "Actual Size"; ObjectID = "dhI-xk-VkB"; */
+"dhI-xk-VkB.title" = "Реальный размер";
 
 /* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "fNa-z2-K1i"; */
 "fNa-z2-K1i.title" = "Открыть недавние";
@@ -231,6 +234,9 @@
 
 /* Class = "NSMenuItem"; title = "Video"; ObjectID = "Jef-U4-eQT"; */
 "Jef-U4-eQT.title" = "Видео";
+
+/* Class = "NSMenuItem"; title = "Show Sidebar"; ObjectID = "khp-X3-3Ws"; */
+"khp-X3-3Ws.title" = "Показать боковое меню";
 
 /* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "KKV-n0-Fmr"; */
 "KKV-n0-Fmr.title" = "Настроить панель инструментов...";
@@ -248,7 +254,7 @@
 "ndG-Ig-Yol.title" = "Вид";
 
 /* Class = "NSMenuItem"; title = "Add All Titles To Queue"; ObjectID = "oYh-V7-kbx"; */
-"oYh-V7-kbx.title" = "Добавить все заголовки в очередь";
+"oYh-V7-kbx.title" = "Добавить все разделы в очередь";
 
 /* Class = "NSMenuItem"; title = "Dimension"; ObjectID = "shS-hb-XSI"; */
 "shS-hb-XSI.title" = "Размеры";
@@ -256,15 +262,24 @@
 /* Class = "NSMenu"; title = "Open Recent"; ObjectID = "ukX-HN-SXk"; */
 "ukX-HN-SXk.title" = "Открыть недавние";
 
+/* Class = "NSMenuItem"; title = "Switch to Next Title"; ObjectID = "viv-aA-SoB"; */
+"viv-aA-SoB.title" = "Следующий раздел";
+
 /* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "Vka-FP-wZE"; */
-"Vka-FP-wZE.title" = "Показать путь назначения в Finder";
+"Vka-FP-wZE.title" = "Показать место назначения в Finder";
 
 /* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "wPw-Uj-Gxi"; */
 "wPw-Uj-Gxi.title" = "Очистить меню";
 
 /* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "wvb-60-cWL"; */
-"wvb-60-cWL.title" = "Новая категория...";
+"wvb-60-cWL.title" = "Новая категория пресетов...";
 
 /* Class = "NSMenuItem"; title = "Services"; ObjectID = "XcG-Aw-Gdb"; */
-"XcG-Aw-Gdb.title" = "Сервисы:";
+"XcG-Aw-Gdb.title" = "Службы";
+
+/* Class = "NSMenuItem"; title = "Scale to Screen"; ObjectID = "xXN-Ui-Jyv"; */
+"xXN-Ui-Jyv.title" = "Вписать в экран";
+
+/* Class = "NSMenuItem"; title = "Switch to Previous Title"; ObjectID = "zgj-Iv-4xJ"; */
+"zgj-Iv-4xJ.title" = "Предыдущий раздел";
 

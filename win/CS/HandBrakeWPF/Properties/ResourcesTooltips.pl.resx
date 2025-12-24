@@ -545,10 +545,10 @@ Wszelkie niedozwolone znaki ścieżki zostaną automatycznie usunięte.</value>
 Należy pamiętać, że podczas korzystania z tych trybów w układzie interfejsu użytkownika mogą występować niedoskonałości. W zależności od języka warto wypróbować oba tryby, aby znaleźć najlepsze dopasowanie.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Ustaw określony poziom jakości dźwięku.
-1 to najniższa jakość, a 5 to najwyższa jakość.
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-Bitrate będzie się różnić od źródła do źródła.</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>Następujące elementy mogą być używane pojedynczo lub razem, aby utworzyć ścieżkę docelową

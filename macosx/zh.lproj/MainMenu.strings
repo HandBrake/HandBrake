@@ -5,13 +5,13 @@
 "1GQ-n3-jfY.title" = "重命名…";
 
 /* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "4VH-Mt-RSo"; */
-"4VH-Mt-RSo.title" = "在访达打开来源";
+"4VH-Mt-RSo.title" = "在访达中打开源文件";
 
 /* Class = "NSMenuItem"; title = "Filters"; ObjectID = "6rE-SM-AGi"; */
-"6rE-SM-AGi.title" = "滤镜";
+"6rE-SM-AGi.title" = "过滤";
 
 /* Class = "NSMenuItem"; title = "Summary"; ObjectID = "9ie-b7-RaS"; */
-"9ie-b7-RaS.title" = "摘要";
+"9ie-b7-RaS.title" = "概览";
 
 /* Class = "NSMenu"; title = "MainMenu"; ObjectID = "29"; */
 "29.title" = "主菜单";
@@ -38,7 +38,7 @@
 "1189.title" = "窗口";
 
 /* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "1190"; */
-"1190.title" = "前置所有";
+"1190.title" = "全部前置";
 
 /* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "1191"; */
 "1191.title" = "最小化";
@@ -47,7 +47,7 @@
 "1192.title" = "窗口";
 
 /* Class = "NSMenuItem"; title = "Open Source…"; ObjectID = "1198"; */
-"1198.title" = "打开源…";
+"1198.title" = "打开源文件…";
 
 /* Class = "NSMenuItem"; title = "File"; ObjectID = "1200"; */
 "1200.title" = "文件";
@@ -68,7 +68,7 @@
 "1433.title" = "在线社区论坛";
 
 /* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "1445"; */
-"1445.title" = "偏好设置…";
+"1445.title" = "首选项…";
 
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "1795"; */
 "1795.title" = "编辑";
@@ -80,7 +80,7 @@
 "1797.title" = "删除";
 
 /* Class = "NSMenuItem"; title = "Select All"; ObjectID = "1798"; */
-"1798.title" = "全选";
+"1798.title" = "选择全部";
 
 /* Class = "NSMenuItem"; title = "Undo"; ObjectID = "1799"; */
 "1799.title" = "撤消";
@@ -95,7 +95,7 @@
 "1803.title" = "查找";
 
 /* Class = "NSMenuItem"; title = "Jump to Selection"; ObjectID = "1804"; */
-"1804.title" = "跳至所选";
+"1804.title" = "跳转到所选";
 
 /* Class = "NSMenuItem"; title = "Find…"; ObjectID = "1805"; */
 "1805.title" = "查找...";
@@ -107,16 +107,16 @@
 "1807.title" = "查找上一个";
 
 /* Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "1808"; */
-"1808.title" = "选择查找到的结果";
+"1808.title" = "查找选择内容";
 
 /* Class = "NSMenuItem"; title = "Spelling"; ObjectID = "1810"; */
-"1810.title" = "拼写";
+"1810.title" = "拼写检查";
 
 /* Class = "NSMenu"; title = "Spelling"; ObjectID = "1811"; */
-"1811.title" = "拼写";
+"1811.title" = "拼写检查";
 
 /* Class = "NSMenuItem"; title = "Spelling…"; ObjectID = "1812"; */
-"1812.title" = "拼写...";
+"1812.title" = "拼写检查...";
 
 /* Class = "NSMenuItem"; title = "Check Spelling"; ObjectID = "1813"; */
 "1813.title" = "拼写检查";
@@ -131,10 +131,10 @@
 "1816.title" = "复制";
 
 /* Class = "NSMenuItem"; title = "Speech"; ObjectID = "1817"; */
-"1817.title" = "听写";
+"1817.title" = "语音";
 
 /* Class = "NSMenu"; title = "Speech"; ObjectID = "1818"; */
-"1818.title" = "听写";
+"1818.title" = "语音";
 
 /* Class = "NSMenuItem"; title = "Stop Speaking"; ObjectID = "1819"; */
 "1819.title" = "停止讲话";
@@ -158,7 +158,7 @@
 "1949.title" = "预设";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "1950"; */
-"1950.title" = "重设官方预设";
+"1950.title" = "重置官方预设";
 
 /* Class = "NSMenuItem"; title = "New Preset…"; ObjectID = "1955"; */
 "1955.title" = "新的预设...";
@@ -173,7 +173,7 @@
 "2368.title" = "HandBrake";
 
 /* Class = "NSMenuItem"; title = "Select Default"; ObjectID = "2421"; */
-"2421.title" = "选择默认的";
+"2421.title" = "选择默认";
 
 /* Class = "NSMenuItem"; title = "Add To Queue"; ObjectID = "2443"; */
 "2443.title" = "添加到队列";
@@ -203,7 +203,7 @@
 "5192.title" = "导入...";
 
 /* Class = "NSMenuItem"; title = "Show All"; ObjectID = "5280"; */
-"5280.title" = "全部显示";
+"5280.title" = "显示全部";
 
 /* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "5897"; */
 "5897.title" = "添加标题到队列...";
@@ -218,7 +218,7 @@
 "Csx-2S-iUe.title" = "字幕";
 
 /* Class = "NSMenuItem"; title = "Actual Size"; ObjectID = "dhI-xk-VkB"; */
-"dhI-xk-VkB.title" = "实际大小";
+"dhI-xk-VkB.title" = "实际尺寸";
 
 /* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "fNa-z2-K1i"; */
 "fNa-z2-K1i.title" = "最近打开";
@@ -260,25 +260,25 @@
 "shS-hb-XSI.title" = "尺寸";
 
 /* Class = "NSMenu"; title = "Open Recent"; ObjectID = "ukX-HN-SXk"; */
-"ukX-HN-SXk.title" = "最近打开";
+"ukX-HN-SXk.title" = "打开最近";
 
 /* Class = "NSMenuItem"; title = "Switch to Next Title"; ObjectID = "viv-aA-SoB"; */
 "viv-aA-SoB.title" = "切换到下一个标题";
 
 /* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "Vka-FP-wZE"; */
-"Vka-FP-wZE.title" = "在访达打开目标位置";
+"Vka-FP-wZE.title" = "在访达中显示目标位置";
 
 /* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "wPw-Uj-Gxi"; */
-"wPw-Uj-Gxi.title" = "清空菜单";
+"wPw-Uj-Gxi.title" = "清除菜单";
 
 /* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "wvb-60-cWL"; */
-"wvb-60-cWL.title" = "新分类...";
+"wvb-60-cWL.title" = "新建类别...";
 
 /* Class = "NSMenuItem"; title = "Services"; ObjectID = "XcG-Aw-Gdb"; */
 "XcG-Aw-Gdb.title" = "服务";
 
 /* Class = "NSMenuItem"; title = "Scale to Screen"; ObjectID = "xXN-Ui-Jyv"; */
-"xXN-Ui-Jyv.title" = "缩放到屏幕大小";
+"xXN-Ui-Jyv.title" = "缩放到屏幕尺寸";
 
 /* Class = "NSMenuItem"; title = "Switch to Previous Title"; ObjectID = "zgj-Iv-4xJ"; */
 "zgj-Iv-4xJ.title" = "切换到上一个标题";

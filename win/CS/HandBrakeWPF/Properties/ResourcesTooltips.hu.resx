@@ -543,10 +543,10 @@ Az illegális elérési út karakterei automatikusan eltávolításra kerülnek.
 Felhívjuk figyelmét, hogy a felhasználói felület elrendezésében hiányosságok lehetnek ezen módok használatakor. A nyelvtől függően érdemes lehet mindkét módot kipróbálni, hogy megtalálja a legmegfelelőbbet.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Adott hangminőségi szint megcélzása.
-Az 1 a legrosszabb minőségű, az 5 pedig a legjobb minőségű.
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-A bitráta forrásonként változik.</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>A következők használhatók külön-külön vagy együtt a célútvonal felépítéséhez

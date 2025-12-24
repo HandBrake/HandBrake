@@ -263,7 +263,7 @@ int hb_vt_get_best_pix_fmt(int encoder, const char *profile)
         case HB_VCODEC_VT_H265:
             return AV_PIX_FMT_NV12;
         case HB_VCODEC_VT_H265_10BIT:
-            if (!strcasecmp(profile, "main422-10"))
+            if (profile != NULL && !strcasecmp(profile, "main422-10"))
             {
                 return AV_PIX_FMT_P210;
             }

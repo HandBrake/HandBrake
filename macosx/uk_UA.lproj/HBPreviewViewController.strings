@@ -1,14 +1,14 @@
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Previous Preview Image"; ObjectID = "1o6-MG-Jbu"; */
-"1o6-MG-Jbu.ibExternalAccessibilityDescription" = "Попередній перегляд зображення";
+"1o6-MG-Jbu.ibExternalAccessibilityDescription" = "Попереднє зображення огляду";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Previous Preview Image"; ObjectID = "1o6-MG-Jbu"; */
-"1o6-MG-Jbu.ibShadowedToolTip" = "Попередній перегляд зображення";
+"1o6-MG-Jbu.ibShadowedToolTip" = "Попереднє зображення огляду";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Next Preview Image"; ObjectID = "5po-M6-Hqa"; */
-"5po-M6-Hqa.ibExternalAccessibilityDescription" = "Наступне попереднє зображення";
+"5po-M6-Hqa.ibExternalAccessibilityDescription" = "Наступне зображення огляду";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Next Preview Image"; ObjectID = "5po-M6-Hqa"; */
-"5po-M6-Hqa.ibShadowedToolTip" = "Наступне попереднє зображення";
+"5po-M6-Hqa.ibShadowedToolTip" = "Наступне зображення огляду";
 
 /* Class = "NSButtonCell"; title = "‹"; ObjectID = "EWx-of-C7c"; */
 "EWx-of-C7c.title" = "‹";

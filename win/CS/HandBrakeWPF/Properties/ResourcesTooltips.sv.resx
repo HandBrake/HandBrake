@@ -152,13 +152,13 @@ HQDN3D är ett adaptivt lågpassfilter, snabbare än NLMeans men mindre effektiv
     <value>Containerformat. Video, ljud och andra spår kombineras till en enda fil av denna typ. Påverkar kompatibiliteten.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
-    <value>Optimera MP4 för progressive hämtning. After enkodningen är färdig kommer datat att organiseras om och skrivas om för att tillåta omedelbar uppspelning över ett nätverk, utan att behöva hämta ner hela filen.</value>
+    <value>Optimera MP4 för progressive hämtning. After kodningen är färdig kommer datat att organiseras om och skrivas om för att tillåta omedelbar uppspelning över ett nätverk, utan att behöva hämta ner hela filen.</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>Omfångsval av källa. Alla kapitel väljs och hela källan enkodas som standard.</value>
+    <value>Omfångsval av källa. Alla kapitel väljs och hela källan kodas som standard.</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>Titel eller videoklipp att enkoda.
+    <value>Titel eller videoklipp att koda.
 Blu-ray och dvd-källor har ofta flera titlar, den längsta av dessa är oftast själva filmen</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
@@ -230,7 +230,7 @@ vbv-bufsize och vbv-maxrate.</value>
     <value>Aktiverar utdata med konstant bildfrekvens.</value>
   </data>
   <data name="Video_Encoders" xml:space="preserve">
-    <value>Tillgängliga videoenkodare.</value>
+    <value>Tillgängliga videokodare.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
     <value>Justera inställningar för att optimera för vanliga scenarior.
@@ -240,12 +240,12 @@ defekter för utdatafilen.  Ändringar kommer att verkställas efter
 förvalet men innan alla andra parametrar.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
-    <value>Ytterligare enkodningsinställningar.
+    <value>Ytterligare kodningsinställningar.
 
-Kolonseparerad lista med enkoderalternativ.</value>
+Kolonseparerad lista med koderalternativ.</value>
   </data>
   <data name="Video_FastDecode" xml:space="preserve">
-    <value>Minska dekodarens CPU-användning.
+    <value>Minska avkodarens CPU-användning.
 
 Ställ in denna om din enhet kämpar med att spela upp utdata (förlorade bildrutor).</value>
   </data>
@@ -263,15 +263,15 @@ Ställ in denna om din enhet kämpar med att spela upp utdata (förlorade bildru
     <value>Aktiverar utdata med variabel bildfrekvens med högsta frekvensen bestämd av inställningen bildfrekvens.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Justera enkoderinställningar för att öka komprimeringseffektiviteten mot enkodningshastighet.
+    <value>Justera koderinställningar för att öka komprimeringseffektiviteten mot kodningshastighet.
 
-Detta fastställer dina standardinställningar för enkodaren.
+Detta fastställer dina standardinställningar för kodaren.
 Sträng för Justeringar, profiler, nivåer och avancerade alternativ kommer att tillåmpas för detta.
 Du bör oftast ställa in detta alternativ till det långsammaste som du orkar eftersom
 långsamma inställningar resulterar i bättre kvalitet eller mindre filer.
 
 Justera draglisten till höger för att öka komprimeringseffektiviteten på bekostnad av
-enkodningshastighet, eller till höger för att öka enkodningshastigheten på bekostnad
+kodningshastighet, eller till höger för att öka kodningshastigheten på bekostnad
 av komprimeringseffektiviten.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
@@ -279,8 +279,8 @@ av komprimeringseffektiviten.</value>
   </data>
   <data name="Video_Quality" xml:space="preserve">
     <value>Ställer in önskad kvalitetsfaktor.
-Enkodaren siktar på en viss kvalitet.
-Skalan som används av varje videoenkodare är annorlunda.
+Kodaren siktar på en viss kvalitet.
+Skalan som används av varje videokodare är annorlunda.
 
 Skalan för x264 är logaritmisk och lägre värden motsvarar högre kvalitet.
 Därför kan små minskningar i värdet ge progressivt större ökningar i den
@@ -290,13 +290,13 @@ var förlustfri.
 Föreslagna värden är: 18 till 20 för källor med standarddefinition (SD) och 20 till 23 för hög definition (HD).
 
 Skalan för FFMpeg och Theora är mer linjär.
-Dessa enkodare har inte ett förlustfritt läge.</value>
+Dessa kodare har inte ett förlustfritt läge.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>Använd inställningar som snabbar på saker under analyspasset för en flerpassenkodning.</value>
+    <value>Använd inställningar som snabbar på saker under analyspasset för en flerpasskodning.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Genomföra en flerpassenkodning.
+    <value>Genomföra en flerpasskodning.
 
 Alternativet 'Bitfrekvens' är en nödvändig förutsättning. Under analys-
 passen kommer statistik om videon att samlas in. Därefter i det slutgiltiga 
@@ -309,13 +309,13 @@ för bitfrekvensen.</value>
 VFR är inte kompatibel med vissa uppspelare.</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
-    <value>När HandBrake har färdigställt den aktuella kön eller enkodning så kommer denna åtgärd att genomföras.</value>
+    <value>När HandBrake har färdigställt den aktuella kön eller kodning så kommer denna åtgärd att genomföras.</value>
   </data>
   <data name="MainView_Browse" xml:space="preserve">
-    <value>Bläddra för att välja en ny målsökväg och filnamn för din enkodning.</value>
+    <value>Bläddra för att välja en ny målsökväg och filnamn för din kodning.</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Videovinkel att enkoda. Endast tillämpningsbar på flervinkliga dvd och Blu-ray.</value>
+    <value>Videovinkel att koda. Endast tillämpningsbar på flervinkliga dvd och Blu-ray.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
     <value>Lägg till nytt förval.</value>
@@ -324,9 +324,9 @@ VFR är inte kompatibel med vissa uppspelare.</value>
     <value>Ytterligare förvalsalternativ.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Förval är grupper av enkodarinställningar anpassade för specifika scenarior. Välj den som närmast matchar dina önskemål.
+    <value>Förval är grupper av kodarinställningar anpassade för specifika scenarior. Välj den som närmast matchar dina önskemål.
 
-Åsidosätter alla enkodarinställningar. Inställningar kan justeras ytterligare efter att ett förval valts.</value>
+Åsidosätter alla kodarinställningar. Inställningar kan justeras ytterligare efter att ett förval valts.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
     <value>Ta bort valt förval.</value>
@@ -334,7 +334,7 @@ VFR är inte kompatibel med vissa uppspelare.</value>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
     <value>Vissa källor kan innehålla fler än ett videoklipp, eller en samling titlar. Blu-ray och dvd-källor har ofta flera titlar.
 
-Om du vet den specifika titeln som du önskar att enkoda så kan du ange den här och HandBrake kommer att läsa in endast den istället för varenda titel i källfilen. Lämna detta fält tomt om du inte vet.</value>
+Om du vet den specifika titeln som du önskar att koda så kan du ange den här och HandBrake kommer att läsa in endast den istället för varenda titel i källfilen. Lämna detta fält tomt om du inte vet.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Anpassade parametrar för Denoise.
@@ -535,7 +535,7 @@ Det rekommenderas att utdatafilen valideras innan du genomför åtgärder på de
 {width} - Lagringsbredd för utdata
 {height} - Lagringshöjd för utdata
 {codec} - Visa videoformatet.
-{encoder} - Visa kortformaterad nyckel för använd enkodare.
+{encoder} - Visa kortformaterad nyckel för använd kodare.
 
 Alla ogiltiga sökvägstecken kommer att tas bort automatiskt.</value>
   </data>
@@ -545,10 +545,10 @@ Alla ogiltiga sökvägstecken kommer att tas bort automatiskt.</value>
 Observera att det kan finnas synliga felaktigheter i gränssnittet när dessa lägen används. Beroende på språket så kan det vara värt att prova båda lägena för att hitta den som passar bäst.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Sikta på en specifik kvalitetsnivå för ljud.
-1 är lägsta kvalitet och 5 är högsta kvalitet.
+    <value>Ställ in en specifik kvalitetsnivå för ljudet.
+Högre värden innebär högre kvalitet.
 
-Bitfrekvensen kan skilja sig mellan källa till källa.</value>
+Bitfrekvensen varierar beroende på källan.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>Följande kan användas som en eller flera parametrar för att bygga upp en målsökväg

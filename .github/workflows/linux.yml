@@ -11,11 +11,11 @@ jobs:
     name: Build on Ubuntu
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Cargo-C Toolchain Cache
       id: linux-cargo-c-toolchain
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: |
           ~/.cargo/bin/cargo-capi

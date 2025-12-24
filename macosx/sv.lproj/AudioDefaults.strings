@@ -11,10 +11,10 @@
 "6lx-af-rBL.ibExternalAccessibilityDescription" = "Kodek";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "6lx-af-rBL"; */
-"6lx-af-rBL.ibShadowedToolTip" = "Ljudenkodare.";
+"6lx-af-rBL.ibShadowedToolTip" = "Ljudkodare.";
 
 /* Class = "NSTextFieldCell"; title = "Audio encoder settings for each selected track:"; ObjectID = "007-WM-RmC"; */
-"007-WM-RmC.title" = "Inställningar för ljudenkodare för varje valt spår:";
+"007-WM-RmC.title" = "Inställningar för ljudkodare för varje valt spår:";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
 "7sl-o7-pUh.title" = "Textcell";
@@ -23,7 +23,7 @@
 "8mC-Wx-myL.title" = "DTS";
 
 /* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
-"66v-2g-DHn.title" = "Använd endast första enkodaren för sekundärt ljud";
+"66v-2g-DHn.title" = "Använd endast första kodaren för sekundärt ljud";
 
 /* Class = "NSMenuItem"; title = "Off"; ObjectID = "AaG-rx-x5W"; */
 "AaG-rx-x5W.title" = "Av";
@@ -31,8 +31,8 @@
 /* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
 "AQe-Sg-Qgh.title" = "Reserv för genomströmning:";
 
-/* Class = "NSTextFieldCell"; title = "Track name:"; ObjectID = "aQn-7q-tQG"; */
-"aQn-7q-tQG.title" = "Spårnamn:";
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "aQn-7q-tQG"; */
+"aQn-7q-tQG.title" = "Namn:";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Audio Track Languages"; ObjectID = "aTC-39-h6S"; */
 "aTC-39-h6S.ibExternalAccessibilityDescription" = "Språk för ljudspår";
@@ -44,7 +44,7 @@
 "BaY-Lo-8xn.ibExternalAccessibilityDescription" = "DRC";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "BaY-Lo-8xn"; */
-"BaY-Lo-8xn.ibShadowedToolTip" = "Dynamic Range Compression. Minskar volymskillnaden mellan höga och tysta ljud. Gäller endast för AC-3-källspår vid enkodning till andra format.\n\n0: Tillämpa inte DRC.\n1: Tillämpa DRC enligt komprimeringstipsen inbäddade i källspåret.\n\nVärden större än 1 ökar ytterligare volymen för tysta ljud. Värden större än 2.5 är oftast inte nödvändiga och kan skapa ljudförvrängningar.";
+"BaY-Lo-8xn.ibShadowedToolTip" = "Dynamic Range Compression. Minskar volymskillnaden mellan höga och tysta ljud. Gäller endast för AC-3-källspår vid kodning till andra format.\n\n0: Tillämpa inte DRC.\n1: Tillämpa DRC enligt komprimeringstipsen inbäddade i källspåret.\n\nVärden större än 1 ökar ytterligare volymen för tysta ljud. Värden större än 2.5 är oftast inte nödvändiga och kan skapa ljudförvrängningar.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports E-AC3. This permits E-AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "BK7-c4-kkk"; */
 "BK7-c4-kkk.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för E-AC3. Detta tillåter att E-AC3-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
@@ -62,7 +62,7 @@
 "DGi-Dl-5nh.ibExternalAccessibilityDescription" = "DRC";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "DGi-Dl-5nh"; */
-"DGi-Dl-5nh.ibShadowedToolTip" = "Dynamic Range Compression. Minskar volymskillnaden mellan höga och tysta ljud. Gäller endast för AC-3-källspår vid enkodning till andra format.\n\n0: Tillämpa inte DRC.\n1: Tillämpa DRC enligt komprimeringstipsen inbäddade i källspåret.\n\nVärden större än 1 ökar ytterligare volymen för tysta ljud. Värden större än 2.5 är oftast inte nödvändiga och kan skapa ljudförvrängningar.";
+"DGi-Dl-5nh.ibShadowedToolTip" = "Dynamic Range Compression. Minskar volymskillnaden mellan höga och tysta ljud. Gäller endast för AC-3-källspår vid kodning till andra format.\n\n0: Tillämpa inte DRC.\n1: Tillämpa DRC enligt komprimeringstipsen inbäddade i källspåret.\n\nVärden större än 1 ökar ytterligare volymen för tysta ljud. Värden större än 2.5 är oftast inte nödvändiga och kan skapa ljudförvrängningar.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
 "dpw-He-8eZ.title" = "Textcell";
@@ -110,7 +110,7 @@
 "igm-hS-rrD.ibExternalAccessibilityDescription" = "Mixa om";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.\n\nDolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility."; ObjectID = "igm-hS-rrD"; */
-"igm-hS-rrD.ibShadowedToolTip" = "Typ av ommixning. Styr hur flerkanalsljud mixas ner till mindre antal kanaler eller huruvida originalkanalerna ska behållas.\n\nDolby Surround och Dolby Pro Logic II konvertera flerkanalsljud till stereo och matrisenkodar ytterligare kanaler för surround-reproduktion på kompatibla ljudenheter, men också beställer stereokompatibilitet.";
+"igm-hS-rrD.ibShadowedToolTip" = "Typ av ommixning. Styr hur flerkanalsljud mixas ner till mindre antal kanaler eller huruvida originalkanalerna ska behållas.\n\nDolby Surround och Dolby Pro Logic II konvertera flerkanalsljud till stereo och matriskodar ytterligare kanaler för surround-reproduktion på kompatibla ljudenheter, men också beställer stereokompatibilitet.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "IxI-o9-jMs"; */
 "IxI-o9-jMs.ibShadowedToolTip" = "Aktivera detta om din uppspelningsenhet har stöd för DTS-HD. Detta tillåter att DTS-HD-genomströmning kan väljas när valet automatisk genomströmning är aktiverat.";
@@ -128,7 +128,7 @@
 "kwM-lz-5lG.title" = "Beteende för ljudval";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder to use when a track suitable for passthru is unavailable."; ObjectID = "LdN-Cx-ZJY"; */
-"LdN-Cx-ZJY.ibShadowedToolTip" = "Ljudenkodare att använda när ett spår inte hittas som är lämpligt för genomströmning.";
+"LdN-Cx-ZJY.ibShadowedToolTip" = "Ljudkodare att använda när ett spår inte hittas som är lämpligt för genomströmning.";
 
 /* Class = "NSButtonCell"; title = "DTS-HD"; ObjectID = "LX6-kc-5vq"; */
 "LX6-kc-5vq.title" = "DTS-HD";
@@ -197,7 +197,7 @@
 "u9h-dn-wcK.title" = "E-AC3";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Only the primary audio track will be encoded with the full encoder list. All additional audio tracks will be encoded with first encoder only."; ObjectID = "uF5-6E-EIe"; */
-"uF5-6E-EIe.ibShadowedToolTip" = "Endast det primära ljudspåret kommer att enkodas med den fullständiga enkodarlistan. Alla ytterligare ljudspår kommer att enkodas endast med första enkodaren.";
+"uF5-6E-EIe.ibShadowedToolTip" = "Endast det primära ljudspåret kommer att kodas med den fullständiga kodarlistan. Alla ytterligare ljudspår kommer att kodas endast med första kodaren.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
 "uFK-z7-8Yj.title" = "Textcell";
@@ -217,8 +217,8 @@
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Tabellvycell";
 
-/* Class = "NSButtonCell"; title = "Passthru name"; ObjectID = "XmJ-lo-ciO"; */
-"XmJ-lo-ciO.title" = "Passthru-namn";
+/* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "XmJ-lo-ciO"; */
+"XmJ-lo-ciO.title" = "Passthru-spårnamn";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibExternalAccessibilityDescription" = "Gain";

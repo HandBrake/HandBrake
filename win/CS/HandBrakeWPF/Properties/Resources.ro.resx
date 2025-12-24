@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -269,7 +269,7 @@ La fișierul user_presets.xml anterior a fost făcut un backup (o copie de rezer
     <value>Se scanează titlul {0} din {1} ({2}%) </value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>Mai întâi, trebuie să scanezi o sursă și să configurezi sarcina înainte de a începe o codare. Fă clic pe butonul „Sursă” din bara de instrumente ca să continui.</value>
+    <value>Mai întâi, trebuie să scanezi o sursă și să configurezi sarcina înainte de a începe o codare. Fă clic pe butonul „Sursă” din bara de instrumente (din bara de unelte) ca să continui.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
     <value>Asigură-te că ai selectat una dintre propriile presetări. Reține că nu poți exporta presetări încorporate.</value>
@@ -322,7 +322,7 @@ Vrei să continui?</value>
     <value>Previzualizare {0}</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
-    <value>Previzualizare (Scalată)</value>
+    <value>Previzualizare (scalată)</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Ieșire: {0}</value>
@@ -442,7 +442,7 @@ Jurnalul de activități poate conține informații suplimentare.</value>
     <value>A apărut o eroare necunoscută.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>O nouă actualizare este disponibilă! Te rugăm să verifici site-ul web pentru notele de lansare.</value>
+    <value>HandBrake {0} este acum disponibil! Te rugăm să verifici site-ul web pentru notele de lansare.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>Nu există actualizări noi în acest moment.</value>
@@ -824,7 +824,7 @@ Sugestie: Comportamentul de suprascriere a fișierelor poate fi controlat în pr
     <value>Exportă numele</value>
   </data>
   <data name="ChapterView_ImportNames" xml:space="preserve">
-    <value>Importă nume</value>
+    <value>Importă numele</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
     <value>Resetează numele capitolelor</value>
@@ -1034,7 +1034,7 @@ Sugestie: Comportamentul de suprascriere a fișierelor poate fi controlat în pr
     <value>Previzualizare</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Se codează (Se codifică): {0}, {1:00.00}%, Timpul rămas: {2}, {3}</value>
+    <value>{0},  {1:00,00}%, Timp rămas: {2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Interval:</value>
@@ -1157,7 +1157,7 @@ Sugestie: Comportamentul de suprascriere a fișierelor poate fi controlat în pr
     <value>Denumește în mod automat fișierele de ieșire</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>Verifică pentru actualizări</value>
+    <value>Verifică actualizările</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
     <value>Șterge întotdeauna elementele finalizate din coadă după finalizarea unei codări</value>
@@ -1350,7 +1350,7 @@ VLC și MPC-HC sunt acceptate. Alte playere pot funcționa, dar nu sunt validate
     <value>Exportă în fișierul</value>
   </data>
   <data name="Preset_Import" xml:space="preserve">
-    <value>Importă din fișierul</value>
+    <value>Importă dintr-un fișier</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
     <value>Oficial</value>
@@ -1527,7 +1527,7 @@ VLC și MPC-HC sunt acceptate. Alte playere pot funcționa, dar nu sunt validate
     <value>Fișier</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>Folder/Dosar (Scanare în masă)</value>
+    <value>Folder (Dosar) (Scanare în masă)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
     <value>Deschide acest DVD sau disc Bluray</value>
@@ -1587,7 +1587,7 @@ VLC și MPC-HC sunt acceptate. Alte playere pot funcționa, dar nu sunt validate
     <value>Piste de subtitrări suplimentare</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>Inscripționat</value>
+    <value>Inscripționate</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
     <value>Marcatori pentru capitole</value>
@@ -1716,7 +1716,7 @@ VLC și MPC-HC sunt acceptate. Alte playere pot funcționa, dar nu sunt validate
     <value>Golește</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Inscripționează-l</value>
+    <value>Inscripționează-le</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
     <value>Implicit</value>
@@ -1731,7 +1731,7 @@ VLC și MPC-HC sunt acceptate. Alte playere pot funcționa, dar nu sunt validate
     <value>Jurnalul de _activități</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>Verifi_că pentru actualizări</value>
+    <value>Verifi_că actualizările</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
     <value>I_eșire</value>
@@ -1749,7 +1749,7 @@ VLC și MPC-HC sunt acceptate. Alte playere pot funcționa, dar nu sunt validate
     <value>_Ajutor</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>_Importă din fișier</value>
+    <value>_Importă dintr-un fișier</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
     <value>_Preferințe</value>
@@ -1764,7 +1764,7 @@ VLC și MPC-HC sunt acceptate. Alte playere pot funcționa, dar nu sunt validate
     <value>_Resetează presetările încorporate</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>_Setează actualul/actuala ca implicit(ă)</value>
+    <value>_Setează fișierul actual ca unul implicit</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
     <value>Afișea_ză panoul de presetări</value>
@@ -1776,7 +1776,7 @@ VLC și MPC-HC sunt acceptate. Alte playere pot funcționa, dar nu sunt validate
     <value>_Unelte</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>Se verifică pentru actualizări ...</value>
+    <value>Se verifică actualizările ...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
     <value>Ești sigur(ă) că vrei să ștergi directorul fișierului de jurnal?</value>
@@ -1818,13 +1818,13 @@ VLC și MPC-HC sunt acceptate. Alte playere pot funcționa, dar nu sunt validate
     <value>Redă fișierul</value>
   </data>
   <data name="Options_ApplicationToolbar" xml:space="preserve">
-    <value>Bara de unelte a aplicației</value>
+    <value>Bara de unelte (Bara de instrumente) a aplicației</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>Afișează „Adaugă totul în coadă” în bara de instrumente</value>
+    <value>Afișează „Adaugă totul în coadă” în bara de instrumente (în bara de unelte)</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>Afișează „Adaugă selecția în coadă” în bara de instrumente</value>
+    <value>Afișează „Adaugă selecția în coadă” în bara de instrumente  (în bara de unelte)</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
     <value>Suportul pentru codarea hardware este dezactivat în prezent. Dacă nu ai pornit HandBrake cu opțiunea „--no-hardware”, te rugăm să te asiguri că folosești drivere actualizate pentru toate adaptoarele grafice din acest sistem.
@@ -2016,7 +2016,7 @@ Acolo unde se acceptă, orice presetări ale utilizatorului vor fi importate.</v
     <value>General</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>Fă clic pe „Verifică dacă există actualizări” pentru a verifica dacă există versiuni noi</value>
+    <value>Fă clic pe „Verifică actualizările” pentru a verifica dacă există versiuni noi</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
     <value>&lt; Înapoi</value>
@@ -2273,7 +2273,7 @@ Te rugăm să alegi o altă presetare.</value>
     <value>Exportă presetarea selectată</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>Importă presetarea (presetările) din fișier</value>
+    <value>Importă presetarea (presetările) dintr-un fișier</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
     <value>Informații despre presetare:</value>
@@ -2294,7 +2294,7 @@ Te rugăm să alegi o altă presetare.</value>
     <value>Oprește</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Numele categoriei introdus există deja. Te rugăm să alegi un alt nume.</value>
@@ -2312,7 +2312,7 @@ Te rugăm să alegi o altă presetare.</value>
     <value>Exportă toate presetările utilizatorului</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Nivelul la care apar alertele de spațiu insuficient pe disc:</value>
+    <value>Nivelul la care apar alertele legate de spațiu redus de pe disc:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
     <value>Notă: Aceasta este limita superioară a sarcinilor simultane. Pot intra în vigoare limitări hardware care reduc numărul real de sarcini simultane în timpul codificării. Setarea va avea efect numai la următorul lot de coadă sau la repornirea aplicației.</value>
@@ -2446,15 +2446,14 @@ Te rugăm să alegi o altă presetare.</value>
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
     <value>Vrei să-i permiți aplicației HandBrake să verifice automat actualizările?
 
-Îți poți schimba alegerea oricând, modificând opțiunile din Preferințe -&gt; General -&gt; Verifică pentru actualizări</value>
+Îți poți schimba alegerea oricând, modificând opțiunile din Preferințe -&gt; General -&gt; Verifică actualizările</value>
   </data>
   <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
-    <value>Verifici pentru actualizări?</value>
+    <value>Verifici actualizările?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>Înainte de actualizare:
-- Asigură-te că nu există codări în așteptare puse în coadă.
-- Fă o copie de rezervă (un backup) sau notează toate presetările personalizate pe care le-ai creat, deoarece este posibil să nu fie complet compatibile cu versiunile mai noi.</value>
+    <value>- Asigură-te că nu există codări în așteptare în coadă.
+- Fă o copie de rezervă (un backup) sau notează fiecare presetare personalizată pe care ai creat-o pentru că este posibil ca acestea să nu fie perfect compatibile cu versiunile mai noi.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
     <value>(Implicit)</value>
@@ -2865,16 +2864,16 @@ Pentru a permite mai multe codări simultane, activează „Izolarea proceselor�
     <value>Deschide fereastra jurnalului</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Personalizat</value>
@@ -3010,5 +3009,35 @@ Pentru a permite mai multe codări simultane, activează „Izolarea proceselor�
   </data>
   <data name="DarkTheme_Modern" xml:space="preserve">
     <value>Modern</value>
+  </data>
+  <data name="Options_BeforeUpdating" xml:space="preserve">
+    <value>Înainte de actualizare</value>
+  </data>
+  <data name="Options_UpdateNotComplete" xml:space="preserve">
+    <value>Instalarea actualizării a fost anulată.</value>
+  </data>
+  <data name="AboutView_ReleaseNotes" xml:space="preserve">
+    <value>Notele de lansare</value>
+  </data>
+  <data name="Options_ReleaseNotesDesc" xml:space="preserve">
+    <value>Poți afla mai multe detalii despre cele mai recente modificări în HandBrake la adresa:</value>
+  </data>
+  <data name="PresetUiType_Menu" xml:space="preserve">
+    <value>Meniu</value>
+  </data>
+  <data name="PresetUiType_Overlay" xml:space="preserve">
+    <value>Suprapunere</value>
+  </data>
+  <data name="OptionsView_PresetUiType" xml:space="preserve">
+    <value>Afișează fereastra pop-up cu presetări a barei de unelte ca:</value>
+  </data>
+  <data name="QueueViewModel_CancelErrorWillBeCleared" xml:space="preserve">
+    <value>Coada are sarcini care sunt în stadiul de Anulate sau Cu erori. Acestea vor fi șterse atunci când pornește coada.
+
+
+Dorești să continui?</value>
+  </data>
+  <data name="QueueView_ExportSelected" xml:space="preserve">
+    <value>Exportă coada (selectată)</value>
   </data>
 </root>

@@ -163,13 +163,13 @@ HQDN3D on mukautuva matalapäästäsuodatin, joka on NLMeansiä nopeampi mutta h
 Bluray- ja DVD-lähteissä on usein useampia nimikkeitä, joista varsinainen elokuva on tyypillisesti pisin.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>Anamorfia mahdollistaa mielivaltaiset toistotalletusmitat mutta säästää alkuperäisen kuvasuhteen.
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+”Ei mitään” poistaa anamorfian käytöstä. Videon talletus- ja näyttömitat ovat samat. Tästä on hyötyä vain yhteensopivuussyistä tiettyjen vanhojen laitteiden kanssa.
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+”Automaattinen” maksimoi talletustarkkuuden mutta säästää alkuperäisen näyttökuvasuhteen. Suositeltu asetus.
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+”Mukautettu” mahdollistaa kaikkien parametrien säätämisen. Avuksi korjattaessa virheellistä lähdekuvasuhdetta tai ammattilaisille, jotka jälkituotannossa vaativat täsmäsäätöä.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Rajaa automaattisesti mustat reunat videon laidoilta.</value>
@@ -261,15 +261,15 @@ Ohittaa kaikki muut asetukset.</value>
     <value>Ottaa käyttöön vaihtelevan kuvanopeuden tulosteen, jonka huippunopeuden määrittää kuvanopeusasetus.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
+    <value>Säätää koodausasetuksia tasapainottaakseen suorituskykyä ja koodausnopeutta.
 
-This establishes your default encoder settings.
-Tunes, profiles, levels and advanced option string will be applied to this.
-You should generally set this option to the slowest you can bear since slower
-settings will result in better quality or smaller files.
+Tämä asettaa koodauksen oletusasetukset.
+Säädöt, profiilit, tasot ja lisävalintajonot mukautuvat tähän arvoon.
+Yleisesti tulisi valita hitain asetus, jota siedät, koska hitaammat asetukset yleensä
+tuottavat parempaa laatua tai pienempiä tiedostoja.
 
-Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,
-or to the left to increase encoding speed at the expense of compression efficiency.</value>
+Lisää pakkaustehokkuutta koodausnopeuden kustannuksella vetämällä liukusäädintä oikealle,
+tai vedä vasemmalle nopeuttaaksesi koodausta pakkaustehokkuuden kustannuksella.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Asettaa ja varmistaa yhteensopivuuden annetun profiilin kanssa.
@@ -544,8 +544,8 @@ Kaikki laittomat polkumerkit poistetaan automaattisesti.</value>
 Huomaa, että käyttöliittymäasettelussa voi olla virheitä näitä tapoja käytettäessä. Kielittäin voi kokeilla kumpaakin tapaa parhaan löytämiseksi.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Tavoittele tiettyä äänen laatutasoa.
-1 on heikoin ja 5 paras laatu.
+    <value>Tavoittele äänelle määrätasoa.
+Suuremmat arvot tarkoittavat parempaa laatua.
 
 Bittinopeus vaihtelee lähteittäin.</value>
   </data>
@@ -564,15 +564,15 @@ Bittinopeus vaihtelee lähteittäin.</value>
     <value>Viiva (-), piste (.) ja pilkku (,)</value>
   </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
-    <value>Use highest resolution permitted by above settings</value>
+    <value>Käytä suurinta yllä olevien asetusten sallimaa tarkkuutta</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>If not enabled, scaled dimensions will be limited to source dimensions.</value>
+    <value>Ellei ole käytössä, mittojen skaalaus rajoittuu lähteen mittoihin.</value>
   </data>
   <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
-    <value>Changing the displays size will stretch the video</value>
+    <value>Näytön koon muuttaminen venyttää videota</value>
   </data>
   <data name="Video_ColourRange" xml:space="preserve">
-    <value>Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility.</value>
+    <value>Väriala. Määrittää mustan ja valkoisen viitearvot. Yhteensopivuuden maksimoimiseksi aseta arvo ”rajoitettu”.</value>
   </data>
 </root>

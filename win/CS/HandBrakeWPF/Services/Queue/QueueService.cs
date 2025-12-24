@@ -252,6 +252,18 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
+        public void ExportJson(string exportPath, IList<QueueTask> jobs)
+        {
+            string json = JsonSerializer.Serialize(jobs, JsonSettings.Options);
+
+            using (var strm = new StreamWriter(exportPath, false))
+            {
+                strm.Write(json);
+                strm.Close();
+                strm.Dispose();
+            }
+        }
+
         public void ImportJson(string path)
         {
             using (StreamReader reader = new StreamReader(path))

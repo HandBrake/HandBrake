@@ -537,10 +537,10 @@ HB_EXIT_CODE
 이러한 모드를 사용할 때 UI 레이아웃이 불완전할 수 있습니다. 언어에 따라 가장 적합한 것을 찾기 위해 두 모드를 모두 시도해 볼 가치가 있습니다.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>오디오의 특정 품질 수준을 목표로 합니다.
-1은 최저 품질, 5는 최고 품질입니다.
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-비트전송률은 소스마다 다릅니다.</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>다음은 단독으로 사용하거나, 함께 사용하여 대상 경로를 만들어 낼 수 있습니다.

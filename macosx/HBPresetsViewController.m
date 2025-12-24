@@ -127,6 +127,8 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
         self.actionsControl.borderShape = NSControlBorderShapeCapsule;
         self.actionsPopUp.borderShape   = NSControlBorderShapeCapsule;
+
+        self.actionsPopUp.menu.itemArray.firstObject.image = [NSImage imageWithSystemSymbolName:@"ellipsis" accessibilityDescription:nil];
     }
 #endif
 

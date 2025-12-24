@@ -118,215 +118,219 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>去块滤波减少了由低质量视频压缩引起的块效应。</value>
+    <value>去块过滤可减少低画质视频压缩产生的块状伪影。</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>选择 Decomb 滤镜或反交错滤镜选项。
+    <value>选择使用去梳状纹理 (decomb) 还是去隔行扫描 (deinterlace) 过滤。
 
-Decomb 滤镜选择性的对出现交错扫描的单个帧进行去交错处理。
-这将保持非交错帧的质量。
+去梳状纹理过滤会选择性地对表现出隔行扫描特征的帧进行去隔行扫描处理。
+这可以保持非隔行扫描帧的画质。
 
-传统的反交错滤镜会对所有帧进行去交错处理。
-非交错的帧将遭受一些质量下降。</value>
+经典去隔行扫描过滤会应用于所有帧。
+非隔行扫描帧将遭受一定的画质劣化。</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
-    <value>降噪可以减少或消除图像的噪点。这可以提高压缩效率，以较小的文件创建更高质量的视频。
-过强的降噪设置可能会由于丢弃细节而损坏图像质量。
+    <value>降噪可减少或消除噪点和颗粒感，有助于提高压缩率，生成画质更高，体积更小的视频。
+过度的降噪设置可能会丢弃细节，从而对画质造成损害。
 
-NLMEans 是一种高质量的降噪滤镜，速度快。在质量比速度更重要的地方使用。
+NLMeans 是一套重视画质的降噪过滤算法，但会牺牲速度。请在质量比速度更重要的场合使用。
 
-HQDN3D 是一种自适应的低通滤镜，比 NLMEans 更快，但在保持细节方面效果较差。</value>
+HQDN3D 是一套自适应低通过滤算法，它比 NLMeans 更快，但细节保留能力不及前者。</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
-    <value>反交错消除经过胶卷过带处理产生的梳状横纹，胶卷过带是将胶片帧率转换为电视帧率的过程。</value>
+    <value>去梳状纹理过滤能够消除在电影胶片转录视频信号 (telecine) 时因为两者的帧率差异而产生的梳状伪影。</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>灰度消除了视频的颜色分量。通常被称为黑白视频。</value>
+    <value>灰阶模式将去除视频中的色彩分量。生成的视频通常被称为黑白视频。</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>目标路径，包括目录和文件名。这就是将创建新视频的位置以及它的名称。</value>
+    <value>目标路径，包括目录和文件名。您的新视频将以此文件名被创建到此位置。</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
-    <value>添加一个特殊的 MP4 标记，允许在大约 2006 年的老式 iPod 5 代设备上播放。其他设置可能会影响兼容性。</value>
+    <value>添加一个特殊的 MP4 标记，以便在 2006 年前后上市的第五代老款 iPod 设备上播放。其他设置可能会影响此兼容性。</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
-    <value>容器格式。视频，音频和其他轨道组合成这种类型的单个文件。 影响兼容性。</value>
+    <value>容器格式。视频、音频和其他轨道被混流为这种类型的单个文件。对兼容性有影响。</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
-    <value>优化 MP4 以进行渐进式下载。编码之后，数据被重新组织和重写，以允许在网络上即时回放，而不需要下载整个文件。</value>
+    <value>优化 MP4 以实现渐进式下载。编码完成后，数据会被重新组织和重写，以便在网络中无需下载整个文件即可立即播放。</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>源范围选择。 默认情况下，会选择所有章节并对整个源进行编码。</value>
+    <value>源文件范围选择。默认情况下将选中所有章节，整个源文件都将被编码。</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>要编码的标题或视频剪辑。
-蓝光和DVD源通常有多个标题，通常时间最长的是正片。</value>
+    <value>要编码的标题或视频片段。
+蓝光和 DVD 源媒体通常包含多个标题，其中时长最长的通常是正片。</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic（变形缩放）：允许在播放时保留原始宽高比的同时，使用任意的存储尺寸。
+    <value>变形：允许使用任意的存储尺寸，并在播放时保持原始宽高比。
 
-None（无）：禁用变形缩放。视频的存储尺寸和显示尺寸将完全相同。仅适用于与某些旧设备的兼容性。
+无：禁用变形功能。视频的存储尺寸和显示尺寸将完全相同。仅用于兼容某些老旧设备。
 
-Automatic（自动）：在保留原始显示宽高比的同时，最大化存储分辨率。推荐使用。
+自动：在保留原始显示宽高比的同时，最大化存储分辨率。推荐使用。
 
-Custom（自定义）：允许手动设置所有参数。适用于纠正源文件的显示宽高比错误，或需要后期制作中高级控制的专业人士。</value>
+自定义：允许手动设置所有参数。适用于纠正源文件的显示宽高比错误，或在后期制作中需要高级控制的专业人士。</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
-    <value>自动裁切视频周围的黑边。</value>
+    <value>自动裁剪视频周围的黑边。</value>
   </data>
   <data name="PictureSettingsView_CropBottom" xml:space="preserve">
-    <value>从底部裁剪该视频。</value>
+    <value>裁剪视频的底部。</value>
   </data>
   <data name="PictureSettingsView_CropLeft" xml:space="preserve">
-    <value>从左侧裁剪该视频。</value>
+    <value>裁剪视频的左侧。</value>
   </data>
   <data name="PictureSettingsView_CropRight" xml:space="preserve">
-    <value>从右侧裁剪该视频。</value>
+    <value>裁剪视频的右侧。</value>
   </data>
   <data name="PictureSettingsView_CropTop" xml:space="preserve">
-    <value>从顶部裁剪该视频。</value>
+    <value>裁剪视频的顶部。</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>这是视频将会被保存的高度。
-如果像素宽高比不为1:1则实际显示尺寸将有不同。</value>
+    <value>视频将会按照此高度进行保存。
+像素宽高比不为 1:1 时，实际显示尺寸将与此不同。</value>
   </data>
   <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
-    <value>手动裁剪该视频。</value>
+    <value>手动裁剪视频。</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>将存储尺寸与此值的倍数对齐。
+    <value>将存储尺寸调整为此值的倍数。
 
-只有与某些设备兼容时才需要此设置。
-除非遇到兼容性问题，否则应使用2。</value>
+此设置仅在与某些设备兼容时才需要。
+除非您遇到兼容性问题，否则应使用 2。</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>定义像素的形状。
-1:1 的比例定义正方形像素。其他值定义矩形形状。
-播放时将缩放图像以达到指定的效果。</value>
+    <value>像素宽高比定义了像素的形状。
+宽高比为 1:1 时像素为正方形。其他比例下的像素为矩形。
+播放器将缩放画面以实现指定的宽高比。</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>这是视频将会被保存的宽度。
-如果像素宽高比不为1:1则实际显示尺寸将有不同。</value>
+    <value>视频将会按照此宽度进行保存。
+像素宽高比不为 1:1 时，实际显示尺寸将与此不同。</value>
   </data>
   <data name="QueueView_DeleteJob" xml:space="preserve">
-    <value>从队列中删除该任务。</value>
+    <value>从队列中删除此任务。</value>
   </data>
   <data name="QueueView_ResetJobStatus" xml:space="preserve">
-    <value>将任务状态重置为等待。</value>
+    <value>重置任务状态为等待。</value>
   </data>
   <data name="QueueView_SendJobBack" xml:space="preserve">
-    <value>把任务发送回主界面以编辑。</value>
+    <value>将此任务发送回主界面进行编辑。</value>
   </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
-    <value>设置平均比特率。
+    <value>设置平均码率。
 
-瞬时比特率在任何时间点都可以更高或更低。
-但是长时间内的平均值将是此处设定的值。
-如果您需要限制瞬时比特率，请查看 x264 的 vbv-bufsize 和 vbv-maxrate 设置。</value>
+任意时间点的瞬时码率可能远高于或低于平均码率，
+但长时间内的平均值将符合此处设定的值。
+如果您想限制瞬时码率，请参考 x264 的 vbv-bufsize 和 vbv-maxrate 设置。</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
-    <value>启用恒定帧速率输出。</value>
+    <value>启用固定帧率输出。</value>
   </data>
   <data name="Video_Encoders" xml:space="preserve">
     <value>可用的视频编码器。</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
-    <value>调整设置以优化常见方案。
+    <value>针对常见使用场景优化微调设置。
 
-这可以提高特定源特性或设置输出文件特性的效率。
-更改将在预设之后但在所有其他参数之前应用。</value>
+可以针对某些源文件或设置的输出文件的编码特性改善处理效率，
+这些更改将在预设之后和其他参数之前被应用。</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
-    <value>附加编码器设置。
+    <value>额外编码器设置。
 
 编码器选项列表以冒号分隔。</value>
   </data>
   <data name="Video_FastDecode" xml:space="preserve">
-    <value>减少解码器对 CPU 的占用。
+    <value>降低解码器的 CPU 使用率。
 
-当您的设备无法流畅播放输出时选择此选项（例如： 丢帧）。</value>
+如果您的设备在播放输出文件时性能不足 (丢帧)，请选择此项。</value>
   </data>
   <data name="Video_Framerate" xml:space="preserve">
     <value>输出帧率。
 
-建议使用“与源视频相同”。如果源视频的帧速率可变，“与源视频相同”将保留它。</value>
+推荐选择“与源视频相同”。如果您的源视频具有可变帧率，
+此选项将保持帧率与源视频一致。</value>
   </data>
   <data name="Video_Level" xml:space="preserve">
-    <value>设置并确保符合指定的级别。
+    <value>设置并确保遵守指定的级别。
 
-覆盖所有其他设置。</value>
+会覆盖所有其他设置。</value>
   </data>
   <data name="Video_PeakFramerate" xml:space="preserve">
-    <value>启用可变帧速率输出，峰值速率由帧速率设置决定。</value>
+    <value>启用可变帧率输出，峰值帧率由帧率设置决定。</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>调整编码器设置，以在压缩效率和编码速度之间进行权衡。
+    <value>调整编码器设置，在压缩率和编码速度之间进行权衡。
 
-此设置将作为您的默认编码器配置。
-调优、配置文件、级别和高级选项字符串将应用到此设置中。
-通常建议将此选项设置为您可以接受的最慢速度，因为较慢的设置会带来更高质量或更小的文件大小。
+这将确定您的默认编码器设置。
+微调、配置、级别和额外选项字符串将应用到此设置。
+您通常应将此选项设置为您能忍受的最慢速度，
+因为较慢的设置会带来更好的质量或更小的文件。
 
-将滑块向右调整可提高压缩效率，但会降低编码速度；向左调整则可提高编码速度，但会降低压缩效率。</value>
+滑动条向右移动可提高压缩率，但会降低编码速度；
+向左移动则可提高编码速度，但会降低压缩率。</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
-    <value>设置并确保符合指定的配置文件。
+    <value>设置并确保遵守指定的配置。
 
-覆盖所有其他设置。</value>
+会覆盖所有其他设置。</value>
   </data>
   <data name="Video_Quality" xml:space="preserve">
-    <value>设置所需的品质因子。
-编码器以固定的质量为目标。
-每个视频编码器使用的比例是不同的。
+    <value>设置想要的画质因素
+编码器会根据指定的画质级别进行编码。
+每种视频编码器所使用的画质级别比例彼此不同。
 
-x264 的比例是对数的，较低的值对应于较高的质量。
-因此，即使值的小幅下降也会导致文件大小逐渐增大。
-值为“0”表示无损，并且将导致文件大小大于原始源，除非源文件也是无损的。
-建议值为：标准清晰度源为 18 至 20，高清源为 20 至 23。
+x264 的画质级别比例是基于对数的，数值越小质量越高。
+因此，数值的微小降低会导致生成文件大小的逐步增大。
+数值为 0 意味着无损压缩，生成的文件大小会比原始源文件大，
+除非源文件本身也是无损的。
+建议值：标清源视频为 18 至 20，高清源视频为 20 至 23。
 
-FFMpeg 和 Theora 的比例更加线性。
+FFMpeg 和 Theora 的画质级别比例更接近线性。
 这些编码器没有无损模式。</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>在多次编码的分析阶段中，使用能够加速处理的设置。</value>
+    <value>在多阶段编码的分析阶段使用能够提高处理速度的设置。</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>进行多次编码。
+    <value>执行多阶段编码。
 
-“比特率”选项是前提条件。在分析阶段，收集有关视频的统计信息。
-然后在最后一次传递中，使用这些统计数据来进行比特率分配决策。</value>
+必须设置“码率”选项。首先在分析阶段收集视频的统计数据。
+然后在最终编码阶段利用这些统计数据来决定码率的分配。</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
-    <value>允许可变帧率输出。
+    <value>启用可变帧率输出。
 
-某些播放器不兼容可变帧率。</value>
+VFR 与某些播放器不兼容。</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
-    <value>当 HandBrake 完成当前队列或编码时，它将执行此操作。</value>
+    <value>当 HandBrake 完成当前队列或编码后，它将执行此操作。</value>
   </data>
   <data name="MainView_Browse" xml:space="preserve">
-    <value>浏览来为编码文件选择一个新的目标路径和文件名称。</value>
+    <value>浏览以选择您编码任务的新目标路径和文件名。</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>要编码的视频角度。仅适用于多角度DVD和蓝光。</value>
+    <value>要编码的视频角度。仅适用于多角度 DVD 和蓝光。</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
     <value>添加新预设。</value>
   </data>
   <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
-    <value>添加额外的预设选项。</value>
+    <value>额外预设选项。</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>预设是针对特定场景定制的一组编码设置。选择最符合您意图的一个。
+    <value>预设是一组针对特定运用场景设计的编码设置。请选择最符合您意图的一项。
 
-覆盖所有编码设置。在选择预置后，可以进一步调整设置。</value>
+这将覆盖所有编码设置。选择预设后，可进一步调整设置。</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
     <value>移除选中的预设。</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>一些源可能包含一个以上的视频剪辑，或一个标题的集合。蓝光和 DVD 资源通常有多个 Titles。
+    <value>有些源媒体可能包含不止一个视频片段，或是一系列标题。蓝光和 DVD 源媒体通常有多个标题。
 
-如果你知道你想编码的具体标题，你可以在这里输入，HandBrake 将只扫描该标题，而不是源文件中的每个标题。否则，请将该字段留空。</value>
+如果您知道想要编码的具体标题，可以在此处输入，HandBrake 将仅扫描该标题，而非源文件中的所有标题。否则，请留空此字段。</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>自定义降噪参数。
@@ -340,117 +344,117 @@ HQDN3D 语法：y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c
 HQDN3D 默认值：y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>降噪滤镜预设。 设置滤镜的强度。</value>
+    <value>降噪过滤预设。设置过滤强度。</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>降噪调优。进一步调整降噪预设以优化特定场景的设置。
+    <value>降噪微调。进一步调整降噪预设以优化特定场景的设置。
  
 - None：使用默认预设设置。
  
-- Film：优化设置以用于大多数真人类型电影。
+- Film：针对大多数真人类型电影优化。
  
 - Grain：只处理颜色通道。有助于减少或消除颜色噪点。
 
-- High Motion：通过避免对色彩通道进行时间处理来减少高运动场景中的颜色模糊。适用于体育和动作视频。
+- High Motion：通过避免对色彩通道进行时间处理来减少高运动场景中的帧间处理。适用于体育和动作视频。
 
-- Animation：适用于CEL动画，如动画和卡通。
+- Animation：适用于赛璐璐风格动画，如日式动画和欧美卡通。
 
-- Tape：对于低细节模拟磁带源非常有用，例如VHS。其中Film不会产生理想的结果。
+- Tape：适用于低细节的模拟录像带源视频，例如 VHS。Film 对于这些视频不会产生理想的结果。
 
-- Sprite：适用于1-/4-/8-/16-bit的2D游戏。Sprite 不是为高清视频设计的。</value>
+- Sprite：适用于 1、2、4、8、16 位风格的 2D 游戏。Sprite 不适用于处理高清视频。</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>反交错可以去除图像中的锯齿。
+    <value>去隔行扫描可消除画面中的梳状纹理伪影。
 
-Bwdif和Yadif是两个常见且快速的反交错工具。
+Bwdif 和 Yadif 是两种常见且快速的去隔行扫描过滤器。
 
-Decomb在多个插值算法间切换以获取更快的速度和更好的质量。</value>
+Decomb 支持在多种插值算法之间切换以权衡速度和画质。</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>自定义反交错参数。
+    <value>自定义去隔行扫描参数。
 
-Bwdif和Yadif句法：mode=m:oarity=p
+Bwdif 和 Yadif 语法：mode=m:oarity=p
 
-Bwdif和Yadif默认：mode=3
+Bwdif 和 Yadif 默认值：mode=3
 
-Decomb句法：mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+Decomb 语法：mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
 
-Decomb默认：mode=7</value>
+Decomb 默认值：mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>反交错滤镜预设。
+    <value>去隔行扫描滤镜预设。
 
-Default 在速度和质量上都很好地平衡。
+Default 兼顾了速度和质量的平衡性。
 
 Skip Spatial Check 让 Yadif 跳过纠正某些可避免的拉丝，以获得轻微的速度提升。
 
-EEDI2 为 Decomb 使用更慢、更高质量的插值算法。对于最难处理的来源很有用。
+EEDI2 使用了速度更慢但画质更高的插值算法来进行 Decomb。适用于处理那些最为棘手的视频。
 
-Bob 运动物体边缘有锯齿，另外画面有闪烁、抖动感，文字、较细线条部分能明显感觉出来。</value>
+Bob 试图更好地保留动态效果，为此在感知分辨率方面稍有牺牲。</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
-    <value>水平翻转（镜像）图像。</value>
+    <value>沿水平轴翻转 (镜像) 图像。</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
-    <value>隔行扫描检测，当启用时，允许解交错滤镜仅处理逐行扫描的帧。</value>
+    <value>启用“隔行扫描检测”功能后，去隔行扫描过滤将仅处理具有隔行扫描特征的视频帧。</value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
-    <value>自定义交错扫描检测参数。
+    <value>自定义隔行扫描检测参数。
  
- 语法: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ 语法：mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
  
- 默认值: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+ 默认值：mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
   </data>
   <data name="FilterView_Rotate" xml:space="preserve">
-    <value>将图像顺时针旋转90度。</value>
+    <value>顺时针旋转图像 90 度。</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>所选源范围的持续时间（小时：分钟：秒）</value>
+    <value>所选源媒体范围的时长 (时:分:秒)</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>保持宽高比，保持源视频的显示比例。 禁用此功能可能会导致图片拉伸或压缩。</value>
+    <value>保持宽高比，保持源视频的显示比例。 禁用此功能可能会导致图像被拉伸或挤压。</value>
   </data>
   <data name="FilterView_CustomSharpenParams" xml:space="preserve">
     <value>自定义锐化参数。
 
-Unsharp 语法: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+Unsharp 语法：y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
 
-Unsharp 默认值: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+Unsharp 默认值：y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
 
-Lapsharp 语法: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+Lapsharp 语法：y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
 
-Lapsharp 默认值: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+Lapsharp 默认值：y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>锐化增强图像中某一部的位细节，尤其是轮廓。过强的锐化设置可能会产生振铃效应和更多的噪点从而损害图像质量降低压缩效率。
+    <value>锐化增强图像的细节呈现效果，尤其是在色块边缘。过度的锐化设置可能会产生振铃效应和更多的噪点从而损害图像质量并降低压缩率。
 
-Unsharp 是一种通用的反锐化掩模滤镜。它通过将原图像进行模糊预处理，然后计算模糊图片和原始图像之间的差异来锐化。
+Unsharp 是一种通用的反锐化蒙版滤镜。它通过将原图像进行模糊预处理，然后计算模糊图片和原始图像之间的差异来实施锐化。
 
-Lapsharp 使用近似拉普拉斯边缘滤镜的卷积核锐化，有时比反锐化掩模产生更高质量的效果。</value>
+Lapsharp 使用近似拉普拉斯边缘过滤的卷积核实施锐化，有时能得到比反锐化蒙版画质更好的效果。</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
-    <value>锐化滤镜预设。 设置滤镜的强度。</value>
+    <value>锐化滤镜预设。设置过滤强度。</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>锐化调优。进一步调整锐化预设以优化特定场景的设置。
+    <value>锐化微调。进一步调整锐化预设，以针对特定使用场景优化设置。
 
-None 使用默认预设设置。
+None 使用默认的预设设置。
 
-Unsharp 预设可用 Ultrafine, Fine, Medium, Coarse, 或 Very Coarse 等优化方案对锐化进行调整。根据输出图像的分辨率和细节的精细度来选择。
+Unsharp 预设可以使用 Ultrafine、Fine、Medium、Coarse 或 Very Coarse 等微调方案。请根据输出图像的分辨率和要增强的细节精细程度来选择。
 
-Lapsharp 预设 Film 优化设置以用于大多数实时动作内容。Film 使用各向同性拉普拉斯内核来锐化所有边缘，并且亮度（亮度）信息比色度（颜色）信息更尖锐。
+Lapsharp 的 Film 预设针对大多数真人动作内容进行优化。Film 模式采用各向同性的拉普拉斯卷积核来均匀锐化所有边缘，并且光度 (亮度) 信息比色度 (颜色) 信息更为锐利。
 
-Lapsharp 预设 Grain 优化类似 Film，但使用高斯各向同性拉普拉斯算子来减少对噪点和纹理的影响。
+Lapsharp 的 Grain 预设类似 Film，但使用高斯各向同性拉普拉斯卷积核来减少对噪点和纹理的影响。
 
-Lapsharp 预设 Animation 优化适用于动画和卡通片等CEL动画。Animation与Film相同，但整体强度降低，以避免产生伪影。
+Lapsharp 的 Animation 预设针对日式动画和欧美卡通等赛璐璐风格动画进行优化。Animation 与 Film 使用了相同的算法，但降低了整体过滤强度以避免产生伪影。
 
-Lapsharp 预设 Sprite 优化适用于 1-/4-/8-/16-bit 2D游戏。Sprite使用4邻域拉普拉斯算子内核，比边缘检测算子更能增强垂直和水平边缘。</value>
+Lapsharp 的 Sprite 预设针对 1、4、8、16 位风格的 2D游戏画面进行优化。Sprite 使用 4 邻域拉普拉斯卷积核，它对垂直和水平边缘的增强效果比斜线边缘的增强效果更强。</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>通过插入空白帧或删除帧来对齐所有音频和视频流的初始时间戳。可以改善MP4音画不同步的问题。</value>
+    <value>通过插入空白帧或丢弃帧来对齐所有音频和视频流的起点时间戳。 在使用不遵守 MP4 编辑列表的播放器时可以改善音频/视频同步。</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>预设控制选项。</value>
+    <value>用于控制预设的选项。</value>
   </data>
   <data name="MainView_EndPoint" xml:space="preserve">
     <value>此范围的终点。</value>
@@ -460,40 +464,40 @@ Lapsharp 预设 Sprite 优化适用于 1-/4-/8-/16-bit 2D游戏。Sprite使用4�
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>启用时，自动名称系统将始终使用默认路径。
-禁用时，如果已填充，它将使用主窗口上“目标”框中的路径，否则将使用默认路径。</value>
+禁用时，使用主窗口“目标”输入框中的路径 (如已填写)，否则将使用默认路径。</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>色彩空间滤镜：</value>
+    <value>色彩空间过滤。</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>色度平滑滤镜</value>
+    <value>色品平滑过滤</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
-    <value>这个字段可以接受 RGB 值，如："0xFF0000" 或颜色名称，如 "red"。关于命名颜色的完整列表，请参见 padding filter 文档。</value>
+    <value>此字段可接受 RGB 值，例如：“0xFF0000”或颜色名称，例如“red”。具名颜色的完整列表可参考 padding filter 文档。</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>将字幕烧入到视频流中。
+    <value>将字幕内嵌到视频流中。
 
-注意，如果输出文件类型中不支持源字幕轨道格式，这将被自动选择。
+请注意，如果输出文件类型不支持源字幕轨道格式，将自动选择此项。
 
-例如，MP4 中不支持 PGS 字幕。</value>
+例如，MP4 格式不支持 PGS 字幕。</value>
   </data>
   <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
-    <value>扁平 - 预置显示为一个平坦的列表。
-部分扁平 - 最后 8 个用户的预设被显示为扁平的列表，然后所有预设被显示在分类列表中。
-分类 - 所有预设都显示在每个分类的子菜单下。</value>
+    <value>扁平 - 预设以扁平列表形式显示。
+部分扁平 - 最近使用的 8 个用户预设以扁平列表形式显示，其余预设则以类别列表形式显示。
+类别 - 所有预设都显示在以类别区分的子菜单下。</value>
   </data>
   <data name="AudioView_AudioDefaults" xml:space="preserve">
-    <value>设置行为，决定此标签在选择新的音源或标题时如何自动添加音轨。</value>
+    <value>设置在选择新的源文件或标题时，此标签页自动添加音频轨道的行为。</value>
   </data>
   <data name="BehavioursReload" xml:space="preserve">
     <value>根据配置的行为刷新下面的列表。</value>
   </data>
   <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
-    <value>设置行为，决定此标签在选择新来源或标题时如何自动添加字幕轨道。</value>
+    <value>设置在选择新的源文件或标题时，此标签页自动添加字幕轨道的行为。</value>
   </data>
   <data name="OptionsView_SendFileToArguments" xml:space="preserve">
-    <value>以下环境变量总是被设置：
+    <value>总是设置以下环境变量：
 HB_SOURCE
 HB_DESTINATION
 HB_EXIT_CODE
@@ -503,76 +507,54 @@ HB_EXIT_CODE
 2 : 输入参数错误
 3 : 初始化失败 
 4 : 未知错误
-5 : 读取源文件错误。
+5 : 读取源文件时出错。
 
-请注意，错误代码是尽力而为，不一定准确。
-建议在对输出文件进行操作之前对其进行验证。</value>
+请注意，错误代码是程序在非理想条件下返回的结果，不一定准确。
+建议在对输出文件进行操作之前验证其内容。</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>输出文件的格式。除了任何支持的文件系统字符外，你可以使用任何一个占位符，当你改变标题或扫描源或更新某些设置时，这些占位符将被替换。
+    <value>输出文件的格式。除了任意受支持的文件系统字符外，您还可以使用任意占位符，当您更改标题、扫描源或更新某些设置时，这些占位符将被替换为实际内容。
 
-
-
-
-{source} - 源文件的名称。
-
-{title} - 整数值。这是代表光盘标题的编号。
-
-{chapters} - 所选章节的范围。
-
-{creation-date} - 源文件的创建日期（如果有的话）。
-
-{creation-time} - 源文件创建的时间（如果有的话）。
-
-{modification-date} - 源文件最后被修改的日期（如果有的话）。
-
-{modification-time} - 源文件最后被修改的时间（如果有的话）。
-
-{date} - 今天的日期。在添加到队列时设置。
-
-{time} - 今天的之间。在添加到队列时设置。
-
-{quality_bitrate} - RF/CQ数值，或比特率
-
-{quality_type} - 根据视频标签上选择的质量模式，输出 "kbps "或 "Q"。
-
-{preset} - 所选预设的名称。
-
-{encode_bit_depth} - 整数值，即8、10或12
-
-{width} - 输出存储的宽度
-
-{height} - 输出存储的高度
-
+{source} - 源文件名。
+{title} - 整数值。代表光盘标题编号。
+{chapters} - 选择的章节范围。
+{creation-date} - 源文件创建日期 (如果可用)。
+{creation-time} - 源文件创建时间 (如果可用)。
+{modification-date} - 源文件最后修改日期 (如果可用)。
+{modification-time} - 源文件最后修改时间 (如果可用)。
+{date} - 今日日期。在添加到队列时设定。
+{time} - 今日时间。在添加到队列时设定。
+{quality_bitrate} - RF/CQ 数值或码率。
+{quality_type} - 根据视频标签页上选择的画质模式打印“kbps”或“Q”。
+{preset} - 选择的预设名称。
+{encode_bit_depth} - 整数值。例如 8、10 或 12。
+{width} - 输出存储宽度。
+{height} - 输出存储高度。
 {codec} - 显示视频格式。
+{encoder} - 显示所用编码器的简短格式键。
 
-{encoder} - 显示所使用的编码器的简短格式键。
-
-
-
-
-任何非法的路径字符将被自动删除。</value>
+任何非法的路径字符都将被自动移除。</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
-    <value>对于从右到左的语言，你可以启用以下模式之一。“仅文字”会以右到左的方式渲染文字。“整个用户界面”将会以从右到左的方式渲染所有界面。
+    <value>对于从右向左书写的语言，您可以启用两种模式中的一种。“仅文本”模式仅按照从右向左的样式显示文本。“整个用户界面”模式将按照从右向左样式显示所有控件。
 
-请注意，使用这些模式的时候，用户界面的布局可能会出现问题。对于不同的语言，建议测试两种模式以确定最合适的模式。</value>
+请注意，在使用这些模式时，用户界面布局可能会存在不完善之处。根据所使用的语言，您可能需要尝试两种模式以找到效果最好的方案。</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>选择音频的质量。
-1是最低质量，5是最高质量。
+    <value>选择音频的目标音质级别。
+数值越高，音质越好。
 
-对于不同的源，比特率有可能会不同。</value>
+码率根据不同的源媒体会有不同。</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
-    <value>以下参数可以单独使用，也可以共同使用，以构建目标文件的路径
+    <value>以下各项可以单独使用，也可以组合使用以构建目标路径。
 
-{source_path} - 和源文件相同文件夹（假如可用）
-{source_folder_name} – 和源文件相同的文件夹名称，不包含完整路径。
-{source} - 源文件名称。</value>
+{source_path} - 与源路径位于同一文件夹 (如果可能)
+{source_folder_name} - 源文件所在的目录名，不含完整路径。
+{source} - 源文件名。</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
-    <value>启动位于https://handbrake.fr/docs的文档网站</value>
+    <value>打开网址为 https://handbrake.fr/docs 的文档网站</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>破折号 (-)、句号 (.) 和逗号 (,)</value>
@@ -581,12 +563,12 @@ HB_EXIT_CODE
     <value>使用上述设置允许的最高分辨率</value>
   </data>
   <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
-    <value>若未启用，缩放后的尺寸将不会超过原始尺寸。</value>
+    <value>如果不启用此项，缩放后的尺寸将被限制在源文件尺寸以内。</value>
   </data>
   <data name="PictureSettingsView_AutomaticKeepAR" xml:space="preserve">
     <value>更改显示尺寸会拉伸视频画面</value>
   </data>
   <data name="Video_ColourRange" xml:space="preserve">
-    <value>颜色范围。决定参考黑白的数值。设置为有限以最大化兼容性。</value>
+    <value>颜色范围。用于指定参考黑点与白点的值。设为有限可最大限度提高兼容性。</value>
   </data>
 </root>

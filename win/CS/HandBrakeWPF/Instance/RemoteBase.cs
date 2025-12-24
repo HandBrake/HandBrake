@@ -61,7 +61,6 @@ namespace HandBrakeWPF.Instance
             get
             {
                 throw new NotImplementedException("This method is not implemented yet");
-                return 0;
             }
         }
 

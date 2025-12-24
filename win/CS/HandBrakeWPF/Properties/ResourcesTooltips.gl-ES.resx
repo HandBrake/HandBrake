@@ -523,10 +523,10 @@ Calquera carácter de camiño ilegal suprimirase automaticamente.</value>
 Por favor, ten en conta que pode haber imperfeccións na distribución da UI ao usar estes modos. Dependendo da lingua, pode valer a pena probar os dous modos para atopar a mellor opción.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Destinar un nivel de calidade específico para o son.
-1 é a calidade máis baixa e 5 é a calidade máis alta.
+    <value>Establece un nivel de calidade específico para o son.
+Valores máis altos significan maior calidade.
 
-A taxa de bits variará de fonte a fonte.</value>
+A taxa de bits variará segundo a fonte.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>O seguinte pode usarse individualmente ou xunto para construír un camiño de destino
@@ -551,6 +551,6 @@ A taxa de bits variará de fonte a fonte.</value>
     <value>Cambiar o tamaño da pantalla estirará o vídeo</value>
   </data>
   <data name="Video_ColourRange" xml:space="preserve">
-    <value>Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility.</value>
+    <value>Rango de cor. Determina os valores de referencia do negro e do branco. Axústao a limitado para maximizar a compatibilidade.</value>
   </data>
 </root>

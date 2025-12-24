@@ -542,10 +542,10 @@ Onartzen ez diren bide-karaktere guztiak automatikoki kenduko dira.</value>
 Kontuan izan, modu hauek erabiltzean UI diseinuan akatsak egon daitezkeela. Hizkuntzaren arabera, egokia izan daiteke bi moduak probatzea aukera onena aurkitzeko.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Aukeratu audioaren kalitate maila zehatz bat.
-1 kalitate baxuena da eta 5 kalitate gorena.
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-Bit-tasa iturburu batetik bestera aldatu egiten da.</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>Honako hauek bakarka edo batera erabil daitezke helmugako bide bat eraikitzeko

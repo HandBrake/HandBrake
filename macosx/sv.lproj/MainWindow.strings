@@ -29,19 +29,19 @@
 "1539.ibShadowedToolTip" = "Källans filnamn.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Title, or video clip, to encode. The longest title is selected by default.\n\nBlu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature."; ObjectID = "1541"; */
-"1541.ibShadowedToolTip" = "Titel eller videoklipp att enkoda. Den längsta titeln väljs som standard.\n\nBlu-ray och dvd-källor har oftast flera titlar och den längsta är oftast den som är den huvudsakliga filmen.";
+"1541.ibShadowedToolTip" = "Titel eller videoklipp att koda. Den längsta titeln väljs som standard.\n\nBlu-ray och dvd-källor har oftast flera titlar och den längsta är oftast den som är den huvudsakliga filmen.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "1545"; */
 "1545.ibExternalAccessibilityDescription" = "Första kapitlet";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "1545"; */
-"1545.ibShadowedToolTip" = "Första kapitlet att enkoda.";
+"1545.ibShadowedToolTip" = "Första kapitlet att koda.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "End Chapter"; ObjectID = "1548"; */
 "1548.ibExternalAccessibilityDescription" = "Sista kapitlet";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "1548"; */
-"1548.ibShadowedToolTip" = "Sista kapitlet att enkoda.";
+"1548.ibShadowedToolTip" = "Sista kapitlet att koda.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Duration"; ObjectID = "1554"; */
 "1554.ibExternalAccessibilityDescription" = "Speltid";
@@ -59,13 +59,13 @@
 "1562.ibExternalAccessibilityDescription" = "Bläddra målet";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Browse to select a new destination path for your encode."; ObjectID = "1562"; */
-"1562.ibShadowedToolTip" = "Bläddra för att välja en ny målsökväg för din enkodning.";
+"1562.ibShadowedToolTip" = "Bläddra för att välja en ny målsökväg för din kodning.";
 
 /* Class = "NSTabViewItem"; label = "Chapters"; ObjectID = "1989"; */
 "1989.label" = "Kapitel";
 
 /* Class = "NSTextFieldCell"; title = "Encoding Job 1: Test.mp4"; ObjectID = "4846"; */
-"4846.title" = "Enkodar jobb 1: Test.mp4";
+"4846.title" = "Kodar jobb 1: Test.mp4";
 
 /* Class = "NSTextFieldCell"; title = "Source:"; ObjectID = "4905"; */
 "4905.title" = "Källa:";
@@ -89,7 +89,7 @@
 "4923.title" = "Förval:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video angle to encode. Only applicable to multi-angle DVD and Blu-ray."; ObjectID = "5181"; */
-"5181.ibShadowedToolTip" = "Videovinkel att enkoda. Gäller endast för dvd och Blu-ray med flera vinklar.";
+"5181.ibShadowedToolTip" = "Videovinkel att koda. Gäller endast för dvd och Blu-ray med flera vinklar.";
 
 /* Class = "NSTextFieldCell"; title = "Angle:"; ObjectID = "5185"; */
 "5185.title" = "Vinkel:";
@@ -101,13 +101,13 @@
 "5491.ibExternalAccessibilityDescription" = "Starttid i sekunder";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "First second to encode."; ObjectID = "5491"; */
-"5491.ibShadowedToolTip" = "Första sekunden att enkoda.";
+"5491.ibShadowedToolTip" = "Första sekunden att koda.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in seconds"; ObjectID = "5493"; */
 "5493.ibExternalAccessibilityDescription" = "Sluttid i sekunder";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "5493"; */
-"5493.ibShadowedToolTip" = "Sista sekunden att enkoda.";
+"5493.ibShadowedToolTip" = "Sista sekunden att koda.";
 
 /* Class = "NSTextFieldCell"; title = "–"; ObjectID = "5506"; */
 "5506.title" = "–";
@@ -116,22 +116,22 @@
 "5513.ibExternalAccessibilityDescription" = "Omfångsval";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "5513"; */
-"5513.ibShadowedToolTip" = "Val av källomfång. Alla kapitel kommer som standard att väljas och hela källan enkodas.";
+"5513.ibShadowedToolTip" = "Val av källomfång. Alla kapitel kommer som standard att väljas och hela källan kodas.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "5521"; */
 "5521.ibExternalAccessibilityDescription" = "Starttid i bildrutor";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "First frame to encode."; ObjectID = "5521"; */
-"5521.ibShadowedToolTip" = "Första bildrutan att enkoda.";
+"5521.ibShadowedToolTip" = "Första bildrutan att koda.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "5523"; */
 "5523.ibExternalAccessibilityDescription" = "Sluttid i bildrutor";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "5523"; */
-"5523.ibShadowedToolTip" = "Sista bildrutan att enkoda.";
+"5523.ibShadowedToolTip" = "Sista bildrutan att koda.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the encoding settings for the currently selected preset. Modifications will be discarded."; ObjectID = "AhR-pK-Oz4"; */
-"AhR-pK-Oz4.ibShadowedToolTip" = "Läs om enkodningsinställningarna för det valda förvalet. Ändringar kommer att förkastas.";
+"AhR-pK-Oz4.ibShadowedToolTip" = "Läs om kodningsinställningarna för det valda förvalet. Ändringar kommer att förkastas.";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "aID-g7-zTF"; */
 "aID-g7-zTF.ibShadowedIsNilPlaceholder" = "";

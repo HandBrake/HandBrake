@@ -545,9 +545,9 @@ Orice caractere ilegale ale căii vor fi eliminate automat.</value>
 Te rugăm să reții că pot exista imperfecțiuni în aspectul interfeței utilizator atunci când folosește aceste moduri. În funcție de limbă, ar putea merita să încerci ambele moduri pentru a o găsi cea mai potrivită.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Vizează un anumit nivel de calitate pentru audio.
+    <value>Vizează un anumit nivel de calitate pentru sunet.
 
-1 reprezintă cea mai scăzută calitate, iar 5 reprezintă cea mai înaltă calitate.
+Valorile mai mari înseamnă o calitate superioară.
 
 Rata de biți va varia de la o sursă la alta.</value>
   </data>

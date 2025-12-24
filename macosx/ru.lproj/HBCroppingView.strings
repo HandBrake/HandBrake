@@ -2,34 +2,37 @@
 "6Gj-ZU-E1E.ibExternalAccessibilityDescription" = "Кадрирование снизу";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels."; ObjectID = "6Gj-ZU-E1E"; */
-"6Gj-ZU-E1E.ibShadowedToolTip" = "Обрезка по нижней грани в пикселях.";
+"6Gj-ZU-E1E.ibShadowedToolTip" = "Отступ снизу в пикселях.";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
 "8e5-zI-IBg.ibExternalAccessibilityDescription" = "Кадрирование сверху";
+
+/* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "8Vn-fL-hvM"; */
+"8Vn-fL-hvM.title" = "Осторожно";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
 "Cp5-xz-x1h.ibExternalAccessibilityDescription" = "Кадрирование сверху";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "Cp5-xz-x1h"; */
-"Cp5-xz-x1h.ibShadowedToolTip" = "Обрезка по верхней грани в пикселях.";
+"Cp5-xz-x1h.ibShadowedToolTip" = "Отступ сверху в пикселях.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "cWv-q0-EN9"; */
-"cWv-q0-EN9.ibShadowedToolTip" = "Поворачивает изображение шагами по 90 градусов.";
+"cWv-q0-EN9.ibShadowedToolTip" = "Повернуть изображение по часовой стрелке на угол кратный 90°";
 
 /* Class = "NSMenuItem"; title = "Custom"; ObjectID = "dD5-og-dxx"; */
-"dD5-og-dxx.title" = "Пользовательское";
+"dD5-og-dxx.title" = "Своя настройка";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "php-p6-Nz6"; */
 "php-p6-Nz6.ibExternalAccessibilityDescription" = "Кадрирование справа";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels."; ObjectID = "php-p6-Nz6"; */
-"php-p6-Nz6.ibShadowedToolTip" = "Обрезка по правой грани в пикселях.";
+"php-p6-Nz6.ibShadowedToolTip" = "Отступ справа в пикселях.";
 
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "Pqk-fS-pyy"; */
 "Pqk-fS-pyy.title" = "Нет";
 
 /* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "sUG-Cw-nQU"; */
-"sUG-Cw-nQU.title" = "Авто";
+"sUG-Cw-nQU.title" = "Автоматически";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "sWf-fq-lvl"; */
 "sWf-fq-lvl.ibExternalAccessibilityDescription" = "Кадрирование снизу";
@@ -38,7 +41,7 @@
 "Td7-sa-0TV.ibExternalAccessibilityDescription" = "Кадрирование слева";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels."; ObjectID = "Td7-sa-0TV"; */
-"Td7-sa-0TV.ibShadowedToolTip" = "Обрезка по левой грани в пикселях.";
+"Td7-sa-0TV.ibShadowedToolTip" = "Отступ слева в пикселях.";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "y7P-yk-q46"; */
 "y7P-yk-q46.ibExternalAccessibilityDescription" = "Кадрирование справа";

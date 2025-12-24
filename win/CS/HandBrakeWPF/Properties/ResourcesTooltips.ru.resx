@@ -537,10 +537,10 @@ HB_EXIT_CODE
 Обратите внимание, что при использовании этих режимов возможны неточности в компоновке пользовательского интерфейса. В зависимости от языка, возможно, стоит попробовать оба режима, чтобы найти наиболее подходящий.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Устанавливает определённый уровень качества для аудио.
-1 - самое низкое качество, 5 - самое высокое качество.
+    <value>Target a specific quality level for audio.
+Higher values mean higher quality.
 
-Битрейт зависит от источника.</value>
+Bitrate will vary source to source.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>Следующие параметры можно использовать по отдельности или вместе для создания пути назначения

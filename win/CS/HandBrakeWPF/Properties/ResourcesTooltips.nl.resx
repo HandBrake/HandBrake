@@ -544,10 +544,10 @@ Alle illegale tekens in het pad worden automatisch verwijderd.</value>
 Let op: er kunnen onvolkomenheden zijn in de UI-indeling bij het gebruik van deze modi. Afhankelijk van de taal is het misschien de moeite waard om beide modi te proberen om de beste te vinden.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Richt op een specifiek kwaliteitsniveau voor audio.
-1 is van de laagste kwaliteit en 5 is van de hoogste kwaliteit.
+    <value>Stel een specifiek kwaliteitsniveau in voor audio.
+Hogere waarden betekenen een hogere kwaliteit.
 
-Bitsnelheid varieert van bron tot bron.</value>
+De bitsnelheid zal per bronbestand verschillen.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
     <value>Het volgende kan afzonderlijk worden gebruikt, of samen om een doelpad op te bouwen

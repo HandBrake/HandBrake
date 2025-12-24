@@ -2,22 +2,22 @@
 "6Gj-ZU-E1E.ibExternalAccessibilityDescription" = "裁剪底部";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels."; ObjectID = "6Gj-ZU-E1E"; */
-"6Gj-ZU-E1E.ibShadowedToolTip" = "底部边缘的裁切量，以像素为单位。";
+"6Gj-ZU-E1E.ibShadowedToolTip" = "底部边缘的裁剪量，单位为像素。";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
 "8e5-zI-IBg.ibExternalAccessibilityDescription" = "裁剪顶部";
 
 /* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "8Vn-fL-hvM"; */
-"8Vn-fL-hvM.title" = "保守的";
+"8Vn-fL-hvM.title" = "保守";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
 "Cp5-xz-x1h.ibExternalAccessibilityDescription" = "裁剪顶部";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "Cp5-xz-x1h"; */
-"Cp5-xz-x1h.ibShadowedToolTip" = "顶部部边缘的裁剪量，以像素为单位。";
+"Cp5-xz-x1h.ibShadowedToolTip" = "顶部边缘的裁剪量，单位为像素。";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "cWv-q0-EN9"; */
-"cWv-q0-EN9.ibShadowedToolTip" = "将画面顺时针旋转 90 度。";
+"cWv-q0-EN9.ibShadowedToolTip" = "顺时针旋转画面 90 度。";
 
 /* Class = "NSMenuItem"; title = "Custom"; ObjectID = "dD5-og-dxx"; */
 "dD5-og-dxx.title" = "自定义";
@@ -26,7 +26,7 @@
 "php-p6-Nz6.ibExternalAccessibilityDescription" = "裁剪右侧";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels."; ObjectID = "php-p6-Nz6"; */
-"php-p6-Nz6.ibShadowedToolTip" = "右侧边缘的裁剪量，以像素为单位。";
+"php-p6-Nz6.ibShadowedToolTip" = "右侧边缘的裁剪量，单位为像素。";
 
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "Pqk-fS-pyy"; */
 "Pqk-fS-pyy.title" = "无";
@@ -41,7 +41,7 @@
 "Td7-sa-0TV.ibExternalAccessibilityDescription" = "裁剪左侧";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels."; ObjectID = "Td7-sa-0TV"; */
-"Td7-sa-0TV.ibShadowedToolTip" = "左侧边缘的裁剪量，以像素为单位。";
+"Td7-sa-0TV.ibShadowedToolTip" = "左侧边缘的裁剪量，单位为像素。";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "y7P-yk-q46"; */
 "y7P-yk-q46.ibExternalAccessibilityDescription" = "裁剪右侧";

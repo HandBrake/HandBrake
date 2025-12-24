@@ -2782,7 +2782,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encoding: {0}, {1:00.00}%, Time Remaining: {2}, {3}.
+        ///   Looks up a localized string similar to {0}, {1:00.00}%, Time Remaining: {2}.
         /// </summary>
         public static string MainView_ProgressStatusWithTask {
             get {
@@ -6282,6 +6282,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_ExportCLI {
             get {
                 return ResourceManager.GetString("QueueView_ExportCLI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Queue (Selected).
+        /// </summary>
+        public static string QueueView_ExportSelected {
+            get {
+                return ResourceManager.GetString("QueueView_ExportSelected", resourceCulture);
             }
         }
         

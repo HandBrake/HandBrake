@@ -565,6 +565,22 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void ExportSelected()
+        {
+            SaveFileDialog dialog = new SaveFileDialog
+                                    {
+                                        Filter = "Json (*.json)|*.json",
+                                        OverwritePrompt = true,
+                                        DefaultExt = ".json",
+                                        AddExtension = true
+                                    };
+
+            if (dialog.ShowDialog() == true)
+            {
+                this.queueProcessor.ExportJson(dialog.FileName, this.SelectedItems.ToList());
+            }
+        }
+
         public void Import()
         {
             OpenFileDialog dialog = new OpenFileDialog { Filter = "Json (*.json)|*.json", CheckFileExists = true };

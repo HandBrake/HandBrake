@@ -1,5 +1,5 @@
 /* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "eBw-qE-Hyb"; */
-"eBw-qE-Hyb.title" = "Название:";
+"eBw-qE-Hyb.title" = "Имя:";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Track name"; ObjectID = "FpM-Jx-vLD"; */
 "FpM-Jx-vLD.ibExternalAccessibilityDescription" = "Имя дорожки";

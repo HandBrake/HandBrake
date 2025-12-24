@@ -166,7 +166,17 @@
             item.label = label;
             item.paletteLabel = label;
             item.menu = menu;
-            [item HB_setSymbol:@"ellipsis.circle" configuration:nil fallbackImage:@"NSActionTemplate"];
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 160000
+            if (@available(macOS 26, *))
+            {
+                [item HB_setSymbol:@"ellipsis" configuration:nil fallbackImage:@"NSActionTemplate"];
+                item.showsIndicator = NO;
+            }
+            else
+#endif
+            {
+                [item HB_setSymbol:@"ellipsis.circle" configuration:nil fallbackImage:@"NSActionTemplate"];
+            }
             return item;
         }
         else

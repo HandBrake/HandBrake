@@ -7,11 +7,17 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "First second to encode."; ObjectID = "5mE-y0-UqZ"; */
 "5mE-y0-UqZ.ibShadowedToolTip" = "Первая секунда для кодирования.";
 
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "6gI-bi-QlH"; */
+"6gI-bi-QlH.title" = "В";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in seconds"; ObjectID = "7ug-HX-q9j"; */
 "7ug-HX-q9j.ibExternalAccessibilityDescription" = "Конечное время в секундах";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "7ug-HX-q9j"; */
 "7ug-HX-q9j.ibShadowedToolTip" = "Последняя секунда для кодирования.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "9A3-Zn-guz"; */
+"9A3-Zn-guz.title" = "Обрезать с конца";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "aeA-ul-8yt"; */
 "aeA-ul-8yt.ibExternalAccessibilityDescription" = "Конечное время в кадрах";
@@ -25,11 +31,17 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "aM2-P8-m4w"; */
 "aM2-P8-m4w.ibShadowedToolTip" = "Выбор промежутка исходного файла. По умолчанию выбираются все главы и кодируется весь исходный файл.";
 
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "eap-Rn-0qW"; */
+"eap-Rn-0qW.title" = "В";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "eoO-dc-hc3"; */
 "eoO-dc-hc3.ibExternalAccessibilityDescription" = "Начальная глава";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "eoO-dc-hc3"; */
 "eoO-dc-hc3.ibShadowedToolTip" = "Первая глава для кодирования.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "gKJ-mm-7Zy"; */
+"gKJ-mm-7Zy.title" = "Обрезать с конца";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "guU-KE-TeY"; */
 "guU-KE-TeY.ibExternalAccessibilityDescription" = "Начальное время в кадрах";
@@ -42,4 +54,10 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "OHn-dK-gFi"; */
 "OHn-dK-gFi.ibShadowedToolTip" = "Последняя глава для кодирования.";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "tOX-Dr-TiC"; */
+"tOX-Dr-TiC.title" = "Обрезать с конца";
+
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "YpG-jj-qV2"; */
+"YpG-jj-qV2.title" = "В";
 

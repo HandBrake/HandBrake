@@ -125,8 +125,9 @@ namespace HandBrakeWPF.Services.Queue.Model
                 }
                 else if (e.IsSearching)
                 {
-                    this.JobStatus = string.Format(Resources.MainView_ProgressStatusWithTask, Resources.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, null);
+                    this.JobStatus = string.Format(Resources.MainView_ProgressStatusWithTask, Resources.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft);
                     this.ProgressValue = e.PercentComplete;
+                    this.JobStatusShort = this.JobStatus = string.Format(Resources.MainView_ProgressStatusWithTask, Resources.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft);
                 }
                 else
                 {

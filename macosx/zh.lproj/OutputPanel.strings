@@ -11,11 +11,11 @@
 "24.title" = "复制窗口内容";
 
 /* Class = "NSMenuItem"; title = "Open Activity Log For This Session In Default Application"; ObjectID = "33"; */
-"33.title" = "在默认应用程序中打开此会话的活动日志";
+"33.title" = "在默认应用程序中打开此次会话的活动日志";
 
 /* Class = "NSMenuItem"; title = "Clear Activity Log For This Session"; ObjectID = "35"; */
-"35.title" = "打开此会话的活动日志";
+"35.title" = "清除此次会话的活动日志";
 
 /* Class = "NSMenuItem"; title = "Open Activity Logs Directory In Finder"; ObjectID = "43"; */
-"43.title" = "在访达打开活动日志目录";
+"43.title" = "在访达中打开活动日志目录";
 

@@ -1,14 +1,14 @@
 /* Class = "NSTabViewItem"; label = "Filters"; ObjectID = "0UB-bG-kwS"; */
-"0UB-bG-kwS.label" = "滤镜";
+"0UB-bG-kwS.label" = "过滤";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Save New Preset…"; ObjectID = "2vD-zN-YMe"; */
 "2vD-zN-YMe.ibShadowedToolTip" = "保存新的预设…";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
-"3w9-Iu-3u2.ibShadowedToolTip" = "标题扫描。";
+"3w9-Iu-3u2.ibShadowedToolTip" = "要扫描的标题。";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Recursively scan and open the content of every sub-folder."; ObjectID = "5hE-Ri-tcZ"; */
-"5hE-Ri-tcZ.ibShadowedToolTip" = "逐个扫描并打开每个子文件夹的内容。";
+"5hE-Ri-tcZ.ibShadowedToolTip" = "递归地扫描并打开每个子文件夹的内容。";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "6E4-AG-PEh"; */
 "6E4-AG-PEh.title" = "0";
@@ -29,7 +29,7 @@
 "1539.ibShadowedToolTip" = "源文件名。";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Title, or video clip, to encode. The longest title is selected by default.\n\nBlu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature."; ObjectID = "1541"; */
-"1541.ibShadowedToolTip" = "标题或视频片段进行编码。默认选中最长的标题。\n\n蓝光和 DVD 来源通常具有多个标题，其中最长的通常是主要部分。";
+"1541.ibShadowedToolTip" = "要编码的标题或视频片段。默认选中时长最长的标题。\n\n蓝光和 DVD 源媒体通常包含多个标题，其中时长最长的通常是正片。";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "1545"; */
 "1545.ibExternalAccessibilityDescription" = "开始章节";
@@ -47,28 +47,28 @@
 "1554.ibExternalAccessibilityDescription" = "时长";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Duration of the selected source range in Hours:Minutes:Seconds."; ObjectID = "1554"; */
-"1554.ibShadowedToolTip" = "所选源范围的总时间，以时:分:秒格式显示。";
+"1554.ibShadowedToolTip" = "所选源媒体范围的总时长，格式为：时:分:秒。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Output filename"; ObjectID = "1561"; */
 "1561.ibExternalAccessibilityDescription" = "输出文件名";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "File name. This is what your new video will be named."; ObjectID = "1561"; */
-"1561.ibShadowedToolTip" = "文件名。这就是您新视频的名字。";
+"1561.ibShadowedToolTip" = "文件名。也就是新视频的文件名。";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Browse Destination"; ObjectID = "1562"; */
-"1562.ibExternalAccessibilityDescription" = "浏览目标";
+"1562.ibExternalAccessibilityDescription" = "浏览目标位置";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Browse to select a new destination path for your encode."; ObjectID = "1562"; */
-"1562.ibShadowedToolTip" = "浏览来为编码文件选择一个新的目标路径。";
+"1562.ibShadowedToolTip" = "浏览以选择您编码任务的新目标路径和文件名。";
 
 /* Class = "NSTabViewItem"; label = "Chapters"; ObjectID = "1989"; */
 "1989.label" = "章节";
 
 /* Class = "NSTextFieldCell"; title = "Encoding Job 1: Test.mp4"; ObjectID = "4846"; */
-"4846.title" = "编码任务 1：Test.mp4";
+"4846.title" = "正在编码任务 1：Test.mp4";
 
 /* Class = "NSTextFieldCell"; title = "Source:"; ObjectID = "4905"; */
-"4905.title" = "源：";
+"4905.title" = "源文件：";
 
 /* Class = "NSTextFieldCell"; title = "Title:"; ObjectID = "4907"; */
 "4907.title" = "标题：";
@@ -89,7 +89,7 @@
 "4923.title" = "预设：";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video angle to encode. Only applicable to multi-angle DVD and Blu-ray."; ObjectID = "5181"; */
-"5181.ibShadowedToolTip" = "视频角度进行编码。仅适用于含有多角度 DVD 和蓝光光盘。";
+"5181.ibShadowedToolTip" = "要编码的视频角度。仅适用于多角度 DVD 和蓝光。";
 
 /* Class = "NSTextFieldCell"; title = "Angle:"; ObjectID = "5185"; */
 "5185.title" = "角度：";
@@ -98,16 +98,16 @@
 "5194.label" = "字幕";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in seconds"; ObjectID = "5491"; */
-"5491.ibExternalAccessibilityDescription" = "开始时间（秒）";
+"5491.ibExternalAccessibilityDescription" = "开始时间 (秒)";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "First second to encode."; ObjectID = "5491"; */
-"5491.ibShadowedToolTip" = "需要编码的初始秒数。";
+"5491.ibShadowedToolTip" = "要编码的第一秒的位置。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in seconds"; ObjectID = "5493"; */
-"5493.ibExternalAccessibilityDescription" = "结束时间（秒）";
+"5493.ibExternalAccessibilityDescription" = "结束时间 (秒)";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "5493"; */
-"5493.ibShadowedToolTip" = "需要编码的最后秒数。";
+"5493.ibShadowedToolTip" = "要编码的最后一秒的位置。";
 
 /* Class = "NSTextFieldCell"; title = "–"; ObjectID = "5506"; */
 "5506.title" = "–";
@@ -116,28 +116,28 @@
 "5513.ibExternalAccessibilityDescription" = "范围选择";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "5513"; */
-"5513.ibShadowedToolTip" = "源范围选择。默认情况下将选择所有章节，并对整个源进行编码。";
+"5513.ibShadowedToolTip" = "源文件范围选择。默认情况下将选中所有章节，整个源文件都将被编码。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "5521"; */
-"5521.ibExternalAccessibilityDescription" = "开始时间（以帧为单位）";
+"5521.ibExternalAccessibilityDescription" = "开始时间 (帧)";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "First frame to encode."; ObjectID = "5521"; */
-"5521.ibShadowedToolTip" = "需要编码的初始帧";
+"5521.ibShadowedToolTip" = "要编码的第一帧。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "5523"; */
-"5523.ibExternalAccessibilityDescription" = "需要编码的最后帧";
+"5523.ibExternalAccessibilityDescription" = "结束时间 (帧)";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "5523"; */
-"5523.ibShadowedToolTip" = "结束时间（以帧为单位）";
+"5523.ibShadowedToolTip" = "要编码的最后一帧。";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the encoding settings for the currently selected preset. Modifications will be discarded."; ObjectID = "AhR-pK-Oz4"; */
-"AhR-pK-Oz4.ibShadowedToolTip" = "重新加载当前所选预设的编码设置。修改将被还原。";
+"AhR-pK-Oz4.ibShadowedToolTip" = "重新加载当前所选预设的编码设置。对其进行的更改将被丢弃。";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "aID-g7-zTF"; */
 "aID-g7-zTF.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSTabViewItem"; label = "Summary"; ObjectID = "BA0-eg-2Ka"; */
-"BA0-eg-2Ka.label" = "摘要";
+"BA0-eg-2Ka.label" = "概览";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Preset selection"; ObjectID = "bWH-Lp-mKY"; */
 "bWH-Lp-mKY.ibExternalAccessibilityDescription" = "预设选择";
@@ -149,7 +149,7 @@
 "d0E-xw-bxh.title" = "盒子";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Scan only the specified title instead of all titles."; ObjectID = "DN4-48-aOI"; */
-"DN4-48-aOI.ibShadowedToolTip" = "仅扫描指定的标题，而不扫描所有标题。";
+"DN4-48-aOI.ibShadowedToolTip" = "仅扫描指定的标题，而非所有标题。";
 
 /* Class = "NSTabViewItem"; label = "Dimensions"; ObjectID = "eij-Sn-QmJ"; */
 "eij-Sn-QmJ.label" = "尺寸";
@@ -173,7 +173,7 @@
 "KUR-YZ-Da8.title" = "进度";
 
 /* Class = "NSMenuItem"; title = "Selected Preset"; ObjectID = "OYP-3T-FnA"; */
-"OYP-3T-FnA.title" = "选择预设";
+"OYP-3T-FnA.title" = "选中的预设";
 
 /* Class = "NSPathControl"; ibExternalAccessibilityDescription = "Destination folder path"; ObjectID = "PJi-21-hie"; */
 "PJi-21-hie.ibExternalAccessibilityDescription" = "目标文件夹路径";

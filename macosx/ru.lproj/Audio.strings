@@ -47,7 +47,7 @@
 "HKE-hO-jOm.title" = "Text Cell";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "hlm-8l-ATk"; */
-"hlm-8l-ATk.ibShadowedIsNilPlaceholder" = "Авто";
+"hlm-8l-ATk.ibShadowedIsNilPlaceholder" = "Автоматически";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "HM0-a4-pm5"; */
 "HM0-a4-pm5.title" = "Добавить все дорожки";

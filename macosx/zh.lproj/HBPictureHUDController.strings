@@ -1,11 +1,11 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Scale preview to fill the display."; ObjectID = "12K-c3-Z7A"; */
-"12K-c3-Z7A.ibShadowedToolTip" = "缩放预览到填充填充整个屏幕";
+"12K-c3-Z7A.ibShadowedToolTip" = "缩放预览以填充整个屏幕";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Encode and play a preview video using current settings."; ObjectID = "16b-R9-bBU"; */
-"16b-R9-bBU.ibShadowedToolTip" = "使用当前设置播放和编码一段预览视频";
+"16b-R9-bBU.ibShadowedToolTip" = "使用当前设置编码并播放预览视频。";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Duration to encode in seconds."; ObjectID = "ASA-X8-16P"; */
-"ASA-X8-16P.ibShadowedToolTip" = "编码持续时间，以秒为单位。";
+"ASA-X8-16P.ibShadowedToolTip" = "编码持续时间，单位为秒。";
 
 /* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
 "ksF-Ma-hB1.title" = "秒";
@@ -26,7 +26,7 @@
 "vkh-GY-5qx.title" = "实时预览";
 
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "preview image"; ObjectID = "wUk-SQ-GhS"; */
-"wUk-SQ-GhS.ibExternalAccessibilityDescription" = "预览图";
+"wUk-SQ-GhS.ibExternalAccessibilityDescription" = "预览图像";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Starting point for the preview encode."; ObjectID = "wUk-SQ-GhS"; */
 "wUk-SQ-GhS.ibShadowedToolTip" = "预览编码的开头。";

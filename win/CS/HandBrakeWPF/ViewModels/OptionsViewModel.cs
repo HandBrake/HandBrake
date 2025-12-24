@@ -1754,6 +1754,7 @@ namespace HandBrakeWPF.ViewModels
                     catch (Exception exc)
                     {
                         // Nothing to do. Just don't display the warnings.
+                        Debug.WriteLine(exc);
                     }
                 });
         }

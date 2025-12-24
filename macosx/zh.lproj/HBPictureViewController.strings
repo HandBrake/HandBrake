@@ -1,20 +1,20 @@
 /* Class = "NSButtonCell"; title = "Allow Upscaling"; ObjectID = "0kU-Uy-P4P"; */
-"0kU-Uy-P4P.title" = "允许向上缩放";
+"0kU-Uy-P4P.title" = "允许放大";
 
 /* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "1AB-bM-qTs"; */
-"1AB-bM-qTs.title" = "显示大小：";
+"1AB-bM-qTs.title" = "显示尺寸：";
 
 /* Class = "NSMenuItem"; title = "Off"; ObjectID = "1O3-th-4M5"; */
 "1O3-th-4M5.title" = "关";
 
 /* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "1Pn-6x-bhx"; */
-"1Pn-6x-bhx.title" = "保守的";
+"1Pn-6x-bhx.title" = "保守";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
 "1Z0-JT-vst.ibExternalAccessibilityDescription" = "裁剪底部";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels"; ObjectID = "1Z0-JT-vst"; */
-"1Z0-JT-vst.ibShadowedToolTip" = "底部边缘的裁剪量，以像素为单位";
+"1Z0-JT-vst.ibShadowedToolTip" = "底部边缘的裁剪量，单位为像素。";
 
 /* Class = "NSMenuItem"; title = "2160p 4K Ultra HD"; ObjectID = "1Zm-mM-8Tb"; */
 "1Zm-mM-8Tb.title" = "2160p 4K 超高清";
@@ -23,7 +23,7 @@
 "1zy-53-Bvd.title" = "180°";
 
 /* Class = "NSMenuItem"; title = "1440p 2.5K Quad HD"; ObjectID = "2ax-HE-Amt"; */
-"2ax-HE-Amt.title" = "1440p 2.5K Quad HD";
+"2ax-HE-Amt.title" = "1440p 2.5K 四倍高清";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "2fq-yE-LSA"; */
 "2fq-yE-LSA.ibShadowedIsNilPlaceholder" = "0";
@@ -47,10 +47,10 @@
 "5Vi-N9-9kM.title" = "宽高比：";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "6Jp-gt-DbX"; */
-"6Jp-gt-DbX.ibExternalAccessibilityDescription" = "上内边距";
+"6Jp-gt-DbX.ibExternalAccessibilityDescription" = "上边距";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Top edge border amount in pixels"; ObjectID = "6Jp-gt-DbX"; */
-"6Jp-gt-DbX.ibShadowedToolTip" = "顶部边缘的边框量，单位是像素。";
+"6Jp-gt-DbX.ibShadowedToolTip" = "顶部边缘的边框厚度，单位为像素。";
 
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "6Qy-ik-hiE"; */
 "6Qy-ik-hiE.title" = "无";
@@ -62,13 +62,13 @@
 "8vS-Mw-bny.title" = "变形：";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "09f-sT-7la"; */
-"09f-sT-7la.ibExternalAccessibilityDescription" = "上内边距";
+"09f-sT-7la.ibExternalAccessibilityDescription" = "上边距";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Scaled Width"; ObjectID = "9hH-As-JSa"; */
-"9hH-As-JSa.ibExternalAccessibilityDescription" = "缩放宽度";
+"9hH-As-JSa.ibExternalAccessibilityDescription" = "缩放后宽度";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video scaled width. This is the number of pixels wide to be encoded. Scaled width may differ from display width depending on anamorphic settings and fill settings"; ObjectID = "9hH-As-JSa"; */
-"9hH-As-JSa.ibShadowedToolTip" = "视频缩放的宽度。这是要被编码的像素宽度。缩放后的宽度可能与显示宽度不同，这取决于变形设置和填充设置";
+"9hH-As-JSa.ibShadowedToolTip" = "视频缩放后的宽度。这是要编码的像素宽度。缩放后宽度可能因变形设置和填充设置而与显示宽度不同。";
 
 /* Class = "NSMenuItem"; title = "480p NTSC SD"; ObjectID = "21C-Hg-mk4"; */
 "21C-Hg-mk4.title" = "480p NTSC 标清";
@@ -77,22 +77,19 @@
 "41c-48-2XJ.ibExternalAccessibilityDescription" = "裁剪顶部";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels"; ObjectID = "41c-48-2XJ"; */
-"41c-48-2XJ.ibShadowedToolTip" = "顶部边缘的裁剪量，以像素为单位";
+"41c-48-2XJ.ibShadowedToolTip" = "顶部边缘的裁剪量，单位为像素。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom border color"; ObjectID = "aby-WS-tzS"; */
 "aby-WS-tzS.ibExternalAccessibilityDescription" = "自定义边框颜色";
-
-/* Class = "NSTextField"; ibShadowedToolTip = "Custom border color"; ObjectID = "aby-WS-tzS"; */
-"aby-WS-tzS.ibShadowedToolTip" = "自定义边框颜色";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "Ag1-Tk-hCm"; */
 "Ag1-Tk-hCm.ibExternalAccessibilityDescription" = "显示宽度";
 
 /* Class = "NSTextFieldCell"; title = "Resolution & Scaling"; ObjectID = "aVx-b3-2AK"; */
-"aVx-b3-2AK.title" = "分辨率 & 缩放";
+"aVx-b3-2AK.title" = "分辨率与缩放";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Color of the border added around the video"; ObjectID = "BjH-qa-mJM"; */
-"BjH-qa-mJM.ibShadowedToolTip" = "在视频周围添加的边框颜色";
+"BjH-qa-mJM.ibShadowedToolTip" = "视频周围添加的边框颜色";
 
 /* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "byr-LI-ap5"; */
 "byr-LI-ap5.title" = "0 x 0";
@@ -104,10 +101,10 @@
 "c9F-IW-Rln.title" = "0 x 0";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "ck0-Gu-lGg"; */
-"ck0-Gu-lGg.ibExternalAccessibilityDescription" = "右内边距";
+"ck0-Gu-lGg.ibExternalAccessibilityDescription" = "右边距";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Right edge border amount in pixels"; ObjectID = "ck0-Gu-lGg"; */
-"ck0-Gu-lGg.ibShadowedToolTip" = "右侧边缘的边框量，以像素为单位";
+"ck0-Gu-lGg.ibShadowedToolTip" = "右侧边缘的边框厚度，单位为像素。";
 
 /* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "d0T-QG-WXU"; */
 "d0T-QG-WXU.title" = "分辨率限制：";
@@ -149,7 +146,7 @@
 "fau-iA-M1E.title" = "无";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments"; ObjectID = "ffe-SL-kPm"; */
-"ffe-SL-kPm.ibShadowedToolTip" = "以 90 度为单位顺时针旋转画面。";
+"ffe-SL-kPm.ibShadowedToolTip" = "顺时针旋转画面，每次旋转 90 度。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum height"; ObjectID = "FGm-oJ-FVW"; */
 "FGm-oJ-FVW.ibExternalAccessibilityDescription" = "最大高度";
@@ -176,7 +173,7 @@
 "Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "存储高度";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video scaled height. This is the number of pixels tall to be encoded. Scaled height may differ from display height depending on anamorphic settings and fill settings"; ObjectID = "Hkl-7Z-J2e"; */
-"Hkl-7Z-J2e.ibShadowedToolTip" = "视频缩放的高度。这是要被编码的像素高度。缩放后的高度可能与显示高度不同，这取决于变形设置和填充设置";
+"Hkl-7Z-J2e.ibShadowedToolTip" = "视频缩放后的高度。这是要编码的像素高度。缩放后高度可能因变形设置和填充设置而与显示高度不同。";
 
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
 "hN1-S9-zl8.title" = "x";
@@ -191,7 +188,7 @@
 "iuc-JG-bhU.ibExternalAccessibilityDescription" = "存储宽度";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad left"; ObjectID = "iZc-Ks-efB"; */
-"iZc-Ks-efB.ibExternalAccessibilityDescription" = "左内边距";
+"iZc-Ks-efB.ibExternalAccessibilityDescription" = "左边距";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "jru-UG-Rf6"; */
 "jru-UG-Rf6.ibExternalAccessibilityDescription" = "显示宽度";
@@ -212,13 +209,13 @@
 "krD-da-wuz.ibShadowedIsNilPlaceholder" = "0";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad left"; ObjectID = "l2V-GK-BgU"; */
-"l2V-GK-BgU.ibExternalAccessibilityDescription" = "左内边距";
+"l2V-GK-BgU.ibExternalAccessibilityDescription" = "左边距";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Left edge border amount in pixels"; ObjectID = "l2V-GK-BgU"; */
-"l2V-GK-BgU.ibShadowedToolTip" = "左侧边缘的边框量，以像素为单位";
+"l2V-GK-BgU.ibShadowedToolTip" = "右侧边缘的边框厚度，单位为像素。";
 
 /* Class = "NSTextFieldCell"; title = "Scaled Size:"; ObjectID = "L7V-2e-qf9"; */
-"L7V-2e-qf9.title" = "缩放大小：";
+"L7V-2e-qf9.title" = "缩放后大小：";
 
 /* Class = "NSTextFieldCell"; title = "1:1"; ObjectID = "lIt-eN-Uyd"; */
 "lIt-eN-Uyd.title" = "1:1";
@@ -230,13 +227,13 @@
 "LTu-ic-Ty9.ibExternalAccessibilityDescription" = "裁剪左侧";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels"; ObjectID = "LTu-ic-Ty9"; */
-"LTu-ic-Ty9.ibShadowedToolTip" = "左侧边缘的裁剪量，以像素为单位";
+"LTu-ic-Ty9.ibShadowedToolTip" = "左侧边缘的裁剪量，单位为像素。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Numerator"; ObjectID = "LWv-Y9-b0S"; */
-"LWv-Y9-b0S.ibExternalAccessibilityDescription" = "像素宽高比的数值";
+"LWv-Y9-b0S.ibExternalAccessibilityDescription" = "像素宽高比分子";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Pixel aspect defines the shape of the pixels.\n\nA 1:1 ratio defines a square pixel. Other values define rectangulars shapers.\nPlayers will scale the image in order to achieve the specified aspect."; ObjectID = "LWv-Y9-b0S"; */
-"LWv-Y9-b0S.ibShadowedToolTip" = "像素的宽高比定义了像素的形状。\n\nA 1:1 的比例定义了一个正方形像素。其他值定义了矩形的形状。\n播放器将缩放图像，以实现指定的长宽比。";
+"LWv-Y9-b0S.ibShadowedToolTip" = "像素宽高比定义了像素的形状。\n\n宽高比为 1:1 时像素为正方形。其他比例下的像素为矩形。\n播放器将缩放画面以实现指定的宽高比。";
 
 /* Class = "NSTextFieldCell"; title = "Aspect Ratio:"; ObjectID = "Lz1-Cx-d30"; */
 "Lz1-Cx-d30.title" = "宽高比：";
@@ -245,13 +242,13 @@
 "Mke-9L-LvB.ibExternalAccessibilityDescription" = "裁剪顶部";
 
 /* Class = "NSMenuItem"; title = "Width & Height"; ObjectID = "N5d-nG-TZV"; */
-"N5d-nG-TZV.title" = "宽 & 高";
+"N5d-nG-TZV.title" = "宽度和高度";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Denominator"; ObjectID = "nQe-Vq-Og2"; */
 "nQe-Vq-Og2.ibExternalAccessibilityDescription" = "像素宽高比分母";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Pixel aspect defines the shape of the pixels.\n\nA 1:1 ratio defines a square pixel. Other values define rectangulars shapers.\nPlayers will scale the image in order to achieve the specified aspect."; ObjectID = "nQe-Vq-Og2"; */
-"nQe-Vq-Og2.ibShadowedToolTip" = "像素的宽高比定义了像素的形状。\n\nA 1:1 的比例定义了一个正方形像素。其他值定义了矩形的形状。\n播放器将缩放图像，以实现指定的长宽比。";
+"nQe-Vq-Og2.ibShadowedToolTip" = "像素宽高比定义了像素的形状。\n\n宽高比为 1:1 时像素为正方形。其他比例下的像素为矩形。\n播放器将缩放画面以实现指定的宽高比。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum width"; ObjectID = "NRy-vc-8qX"; */
 "NRy-vc-8qX.ibExternalAccessibilityDescription" = "最大宽度";
@@ -269,7 +266,7 @@
 "owa-gb-koC.title" = "自定义";
 
 /* Class = "NSMenuItem"; title = "Height (Letterbox)"; ObjectID = "p7U-Ee-kt4"; */
-"p7U-Ee-kt4.title" = "高度（上下黑边）";
+"p7U-Ee-kt4.title" = "高度 (上下黑边)";
 
 /* Class = "NSMenuItem"; title = "Dark Gray"; ObjectID = "pWs-NL-FVO"; */
 "pWs-NL-FVO.title" = "深灰色";
@@ -287,7 +284,7 @@
 "r9l-cH-pFW.ibExternalAccessibilityDescription" = "裁剪左侧";
 
 /* Class = "NSButton"; ibShadowedToolTip = "If not enabled, scaled dimensions will be limited to source dimensions"; ObjectID = "ROS-UT-TiG"; */
-"ROS-UT-TiG.ibShadowedToolTip" = "如果不启用，缩放的尺寸将被限制在源尺寸内";
+"ROS-UT-TiG.ibShadowedToolTip" = "如果不启用此项，缩放后的尺寸将被限制在源文件尺寸以内。";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sg1-tR-fnw"; */
 "sg1-tR-fnw.ibShadowedIsNilPlaceholder" = "0";
@@ -302,16 +299,16 @@
 "sut-JO-hwX.ibShadowedIsNilPlaceholder" = "0";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Changing the displays size will stretch the video"; ObjectID = "tHu-FW-tzx"; */
-"tHu-FW-tzx.ibShadowedToolTip" = "改变显示的大小将拉伸视频";
+"tHu-FW-tzx.ibShadowedToolTip" = "更改显示尺寸会拉伸视频画面";
 
 /* Class = "NSMenuItem"; title = "270°"; ObjectID = "tIU-4H-3Xm"; */
 "tIU-4H-3Xm.title" = "270°";
 
 /* Class = "NSTextFieldCell"; title = "Source Dimensions"; ObjectID = "Trk-C5-Npx"; */
-"Trk-C5-Npx.title" = "源尺寸";
+"Trk-C5-Npx.title" = "源文件尺寸";
 
 /* Class = "NSTextFieldCell"; title = "Orientation & Cropping"; ObjectID = "u2U-SJ-szy"; */
-"u2U-SJ-szy.title" = "方向 & 裁剪";
+"u2U-SJ-szy.title" = "方向与裁剪";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "uoH-Hv-lNp"; */
 "uoH-Hv-lNp.ibExternalAccessibilityDescription" = "右内边距";
@@ -335,7 +332,7 @@
 "vfx-ON-9ys.ibShadowedToolTip" = "如何应用裁剪设置";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Add a border around the video"; ObjectID = "vKr-fn-Ujh"; */
-"vKr-fn-Ujh.ibShadowedToolTip" = "在视频周围添加边框";
+"vKr-fn-Ujh.ibShadowedToolTip" = "添加一个边框到视频周围";
 
 /* Class = "NSMenuItem"; title = "4320p 8K Ultra HD"; ObjectID = "Vrx-BH-ry2"; */
 "Vrx-BH-ry2.title" = "4320p 8K 超高清";
@@ -344,25 +341,25 @@
 "vzz-ej-1nx.title" = "自定义";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.\n\nAutomatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.\n\nNone disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.\n\nCustom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production."; ObjectID = "w1f-3S-up0"; */
-"w1f-3S-up0.ibShadowedToolTip" = "变形功能允许任意的存储尺寸，同时在播放时保留原始的长宽比。\n\n自动最大限度地提高存储分辨率，同时保留原始显示的长宽比。推荐使用。\n\n无：禁用变形功能。视频存储尺寸和显示尺寸将是相同的。只有在与某些传统设备兼容时才有用。\n\n自定义：允许手动设置所有参数。对于纠正不正确的源显示尺寸和在后期制作中需要高级控制的专业人员来说是有用的。";
+"w1f-3S-up0.ibShadowedToolTip" = "变形：允许使用任意的存储尺寸，并在播放时保持原始宽高比。\n\n无：禁用变形功能。视频的存储尺寸和显示尺寸将完全相同。仅用于兼容某些老旧设备。\n\n自动：在保留原始显示宽高比的同时，最大化存储分辨率。推荐使用。\n\n自定义：允许手动设置所有参数。适用于纠正源文件的显示宽高比错误，或在后期制作中需要高级控制的专业人士。";
 
 /* Class = "NSMenuItem"; title = "Width (Pillarbox)"; ObjectID = "W5p-nd-4WK"; */
-"W5p-nd-4WK.title" = "宽度（左右黑边）";
+"W5p-nd-4WK.title" = "宽度 (左右黑边)";
 
 /* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "WBD-tH-x3h"; */
-"WBD-tH-x3h.title" = "显示大小：";
+"WBD-tH-x3h.title" = "显示尺寸：";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "WfM-tx-rC5"; */
-"WfM-tx-rC5.ibExternalAccessibilityDescription" = "下内边距";
+"WfM-tx-rC5.ibExternalAccessibilityDescription" = "下边距";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge border amount in pixels"; ObjectID = "WfM-tx-rC5"; */
-"WfM-tx-rC5.ibShadowedToolTip" = "底部边缘的边框量，单位是像素。";
+"WfM-tx-rC5.ibShadowedToolTip" = "底部边缘的边框厚度，单位为像素。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "wsq-TS-cC6"; */
 "wsq-TS-cC6.ibExternalAccessibilityDescription" = "裁剪右侧";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels"; ObjectID = "wsq-TS-cC6"; */
-"wsq-TS-cC6.ibShadowedToolTip" = "右侧边缘的裁剪量，以像素为单位";
+"wsq-TS-cC6.ibShadowedToolTip" = "右侧边缘的裁剪量，单位为像素。";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "x0H-9t-WiF"; */
 "x0H-9t-WiF.ibShadowedIsNilPlaceholder" = "0";
@@ -371,7 +368,7 @@
 "Xao-1P-xPT.title" = "720p 高清";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Flips (mirrors) the picture on the horizontal axis"; ObjectID = "xNB-9k-4uD"; */
-"xNB-9k-4uD.ibShadowedToolTip" = "在水平轴上翻转（镜像）画面";
+"xNB-9k-4uD.ibShadowedToolTip" = "沿水平轴翻转 (镜像) 图像。";
 
 /* Class = "NSMenuItem"; title = "Custom"; ObjectID = "Xun-U2-N6F"; */
 "Xun-U2-N6F.title" = "自定义";
@@ -389,7 +386,7 @@
 "ZTy-fJ-cDa.title" = "0 x 0";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "zVm-0W-Jxg"; */
-"zVm-0W-Jxg.ibExternalAccessibilityDescription" = "下内边距";
+"zVm-0W-Jxg.ibExternalAccessibilityDescription" = "下边距";
 
 /* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "ZZ9-XW-Uib"; */
 "ZZ9-XW-Uib.title" = "存储大小：";

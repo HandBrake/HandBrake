@@ -2,10 +2,10 @@
 "5AR-we-iHC.title" = "移除所有任务";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "5Rl-P0-bhc"; */
-"5Rl-P0-bhc.title" = "表视图单元格";
+"5Rl-P0-bhc.title" = "表格视图单元格";
 
 /* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
-"c1Z-ZC-b8b.title" = "在访达打开目标位置";
+"c1Z-ZC-b8b.title" = "在访达中显示目标位置";
 
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "DTF-om-j0l"; */
 "DTF-om-j0l.title" = "编辑";
@@ -29,14 +29,14 @@
 "NN5-Yq-Cth.title" = "移到顶部";
 
 /* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "Pps-jm-zcd"; */
-"Pps-jm-zcd.title" = "在访达打开来源";
+"Pps-jm-zcd.title" = "在访达中显示源文件";
 
 /* Class = "NSMenuItem"; title = "Reset"; ObjectID = "xMs-43-lL0"; */
 "xMs-43-lL0.title" = "重置";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "xSd-Hl-5Qk"; */
-"xSd-Hl-5Qk.title" = "表视图单元格";
+"xSd-Hl-5Qk.title" = "表格视图单元格";
 
 /* Class = "NSMenuItem"; title = "Show Activity Log in Finder"; ObjectID = "zA7-r8-i4L"; */
-"zA7-r8-i4L.title" = "在访达打开活动日志";
+"zA7-r8-i4L.title" = "在访达中显示活动日志";
 

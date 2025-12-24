@@ -1211,12 +1211,15 @@ skip_preview:
             title->color_transfer = hb_get_color_transfer(title->color_transfer);
             title->color_matrix   = hb_get_color_matrix(title->color_matrix, vid_info.geometry);
         }
-        else if (title->dovi.dv_profile == 5 ||
-                 (title->dovi.dv_profile == 10 && title->dovi.dv_bl_signal_compatibility_id == 0))
+        else if ((title->dovi.dv_profile == 5 ||
+                 (title->dovi.dv_profile == 10 && title->dovi.dv_bl_signal_compatibility_id == 0)) &&
+                 (title->color_prim == HB_COLR_PRI_UNDEF     ||
+                  title->color_transfer == HB_COLR_TRA_UNDEF ||
+                  title->color_matrix   == HB_COLR_MAT_UNDEF))
         {
-            title->color_prim     = HB_COLR_PRI_UNDEF;
-            title->color_transfer = HB_COLR_TRA_UNDEF;
-            title->color_matrix   = HB_COLR_MAT_UNDEF;
+            title->color_prim     = HB_COLR_PRI_BT2020;
+            title->color_transfer = HB_COLR_TRA_SMPTEST2084;
+            title->color_matrix   = HB_COLR_MAT_IPT_C2;
         }
         else
         {
