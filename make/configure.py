@@ -1440,6 +1440,10 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-nvdec', dest="enable_nvdec", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvdec', dest="enable_nvdec", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
+    h = 'VAAPI video encoder/decoder' if vaapi_supported else argparse.SUPPRESS
+    grp.add_argument( '--enable-vaapi', dest="enable_vaapi", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-vaapi', dest="enable_vaapi", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
+
     h = 'Intel QSV video encoder/decoder' if qsv_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-qsv', dest="enable_qsv", default=IfHost(True, "x86_64-w64-mingw32*", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -1737,6 +1741,7 @@ try:
     nvenc_supported = host_tuple.match( '*-*-linux*', 'x86_64-w64-mingw32*' )
     vce_supported   = host_tuple.match( '*-*-linux*', 'x86_64-w64-mingw32*' )
     mf_supported    = host_tuple.match( 'aarch64-w64-mingw32*' )
+    vaapi_supported = host_tuple.match( '*-*-linux*', '*-*-freebsd*' )
 
     # create CLI and parse
     cli = createCLI( cross )
@@ -1781,6 +1786,7 @@ try:
     options.enable_qsv        = options.enable_qsv if qsv_supported else False
     options.enable_vce        = options.enable_vce if vce_supported else False
     options.enable_gtk        = options.enable_gtk if gtk_supported else False
+    options.enable_vaapi      = options.enable_vaapi if vaapi_supported else False
 
     #####################################
     ## Additional library and tool checks
@@ -2091,6 +2097,7 @@ int main()
     doc.add( 'FEATURE.mf',         int( options.enable_mf ))
     doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
     doc.add( 'FEATURE.nvdec',      int( options.enable_nvdec ))
+    doc.add( 'FEATURE.vaapi',      int( options.enable_vaapi ))
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
@@ -2218,6 +2225,7 @@ int main()
     print(f'Enable MediaFound.: {options.enable_mf}' + ('' if mf_supported else note_unsupported))
     print(f'Enable NVENC:       {options.enable_nvenc}' + ('' if nvenc_supported else note_unsupported))
     print(f'Enable NVDEC:       {options.enable_nvdec}' + ('' if nvenc_supported else note_unsupported))
+    print(f'Enable VAAPI:       {options.enable_vaapi}' + ('' if vaapi_supported else note_unsupported))
     print(f'Enable QSV:         {options.enable_qsv}' + ('' if qsv_supported else note_unsupported))
     print(f'Enable VCE:         {options.enable_vce}' + ('' if vce_supported else note_unsupported))
     print(f'Enable libdovi:     {options.enable_libdovi}')
