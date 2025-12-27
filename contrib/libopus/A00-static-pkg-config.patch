@@ -1,6 +1,6 @@
-diff -ur opus-1.5.1.orig/configure.ac opus-1.5.1/configure.ac
---- opus-1.5.1.orig/configure.ac	2024-03-04 18:09:13.000000000 +0100
-+++ opus-1.5.1/configure.ac	2024-04-02 18:05:44.754597300 +0200
+diff -ur opus-1.6.orig/configure.ac opus-1.6/configure.ac
+--- opus-1.6.orig/configure.ac	2024-03-04 18:09:13.000000000 +0100
++++ opus-1.6/configure.ac	2024-04-02 18:05:44.754597300 +0200
 @@ -962,6 +962,13 @@
         AC_DEFINE([DISABLE_UPDATE_DRAFT], [1], [Disable bitstream fixes from RFC 8251])
  ])
@@ -24,11 +24,12 @@ diff -ur opus-1.5.1.orig/configure.ac opus-1.5.1/configure.ac
  
  AC_CONFIG_FILES([
      Makefile
-diff -ur opus-1.5.1.orig/opus.pc.in opus-1.5.1/opus.pc.in
---- opus-1.5.1.orig/opus.pc.in	2024-01-12 20:55:26.000000000 +0100
-+++ opus-1.5.1/opus.pc.in	2024-04-02 18:07:59.951941700 +0200
+diff -ur opus-1.6.orig/opus.pc.in opus-1.6/opus.pc.in
+--- opus-1.6.orig/opus.pc.in	2024-01-12 20:55:26.000000000 +0100
++++ opus-1.6/opus.pc.in	2024-04-02 18:07:59.951941700 +0200
 @@ -11,6 +11,6 @@
- Version: @VERSION@
+-Version: @VERSION@
++Version: 1.6
  Requires:
  Conflicts:
 -Libs: -L${libdir} -lopus
