@@ -79,10 +79,6 @@ ifneq (,$(filter $(HOST.system),darwin))
     MODULES += contrib/bin2c
 endif
 
-ifneq (,$(filter $(HOST.machine),arm64 aarch64))
-    MODULES += contrib/sse2neon
-endif
-
 ifneq (,$(filter $(HOST.system),cygwin mingw))
 ifneq ($(HAS.iconv),1)
     MODULES += contrib/libiconv

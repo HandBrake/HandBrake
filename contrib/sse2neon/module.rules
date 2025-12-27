@@ -1,2 +1,0 @@
-$(eval $(call import.MODULE.rules,SSE2NEON))
-$(eval $(call import.CONTRIB.rules,SSE2NEON))
