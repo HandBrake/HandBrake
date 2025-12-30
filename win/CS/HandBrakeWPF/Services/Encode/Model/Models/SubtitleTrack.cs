@@ -9,9 +9,6 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    using System;
-    using System.Text.Json.Serialization;
-
     using HandBrake.Interop.Interop.Interfaces.Model;
 
     using HandBrakeWPF.Services.Scan.Model;
@@ -82,7 +79,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.SubtitleType = subtitle.SubtitleType;
             this.SourceTrack = subtitle.SourceTrack;
             this.Name = subtitle.Name;
-            this.TrackNamingCallback = subtitle.TrackNamingCallback;
         }
 
         #endregion
@@ -188,13 +184,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                     this.Forced = false;
                 }
 
-                if (TrackNamingCallback != null)
+                if (this.sourceTrack != null)
                 {
-                    bool passthruName = TrackNamingCallback();
-                    if (passthruName)
-                    {
-                        this.SetTrackNamePassthru();
-                    }
+                    this.Name = !string.IsNullOrEmpty(this.sourceTrack.Name) ? this.sourceTrack.Name : string.Empty;
                 }
             }
         }
@@ -322,17 +314,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 return this.SrtFileName != "-" && this.SrtFileName != null;
             }
         }
-
-        public void SetTrackNamePassthru()
-        {
-            if (this.SourceTrack != null)
-            {
-                this.Name = this.SourceTrack.Name;
-            }
-        }
-
-        [JsonIgnore]
-        public Func<bool> TrackNamingCallback { get; set; }
 
         public override string ToString()
         {
