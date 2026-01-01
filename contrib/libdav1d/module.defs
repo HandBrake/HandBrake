@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBDAV1D,libdav1d))
 $(eval $(call import.CONTRIB.defs,LIBDAV1D))
 
-LIBDAV1D.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/dav1d-1.5.2.tar.bz2
-LIBDAV1D.FETCH.url    += https://code.videolan.org/videolan/dav1d/-/archive/1.5.2/dav1d-1.5.2.tar.bz2
-LIBDAV1D.FETCH.sha256  = c748a3214cf02a6d23bc179a0e8caea9d6ece1e46314ef21f5508ca6b5de6262
+LIBDAV1D.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/dav1d-1.5.3.tar.bz2
+LIBDAV1D.FETCH.url    += https://code.videolan.org/videolan/dav1d/-/archive/1.5.3/dav1d-1.5.3.tar.bz2
+LIBDAV1D.FETCH.sha256  = e099f53253f6c247580c554d53a13f1040638f2066edc3c740e4c2f15174ce22
 
 LIBDAV1D.build_dir        = build/
 LIBDAV1D.CONFIGURE.exe    = $(MESON.exe) setup
