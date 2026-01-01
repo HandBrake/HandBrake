@@ -2130,7 +2130,7 @@ Quan sigui possible, s'importaran les configuracions predefinides de l'usuari.</
     <value>Hi ha una nova versió disponible!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Drets d'autor © 2003-2024 The HandBrake Team</value>
+    <value>Drets d'autor © 2003-2026 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Nivell de bateria baix:</value>
