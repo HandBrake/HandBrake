@@ -22,6 +22,7 @@
 #include "libavutil/mastering_display_metadata.h"
 #include "libavutil/ambient_viewing_environment.h"
 #include "libavutil/dovi_meta.h"
+#include "libavutil/hwcontext.h"
 #include "libswscale/swscale.h"
 #include "libswresample/swresample.h"
 #include "handbrake/common.h"
@@ -74,5 +75,8 @@ const int* hb_av_get_pix_fmts(int encoder);
 int hb_av_can_use_zscale(enum AVPixelFormat pix_fmt,
                          int in_width, int in_height,
                          int out_width, int out_height);
+
+int hb_avcodec_test_encoder_available(int encoder);
+int hb_avcodec_test_encoder(const AVCodec *codec, enum AVPixelFormat fmt);
 
 #endif // HANDBRAKE_FFMPEG_H

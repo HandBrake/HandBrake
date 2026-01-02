@@ -9,6 +9,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
+#include "handbrake/vaapi_common.h"
 #include "libavutil/cpu.h"
 
 static int get_frame_type(int type)
@@ -838,3 +839,106 @@ int hb_av_can_use_zscale(enum AVPixelFormat pix_fmt,
 
     return 0;
 }
+
+int hb_avcodec_test_encoder_available(int encoder)
+{
+    int err;
+    enum AVPixelFormat fmt = AV_PIX_FMT_YUV420P;
+    const char *codec_name;
+    const AVCodec *codec;
+    switch (encoder)
+    {
+#if HB_PROJECT_FEATURE_NVENC
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+            codec_name = "h264_nvenc";
+            fmt = AV_PIX_FMT_YUV420P;
+            break;
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+            codec_name = "hevc_nvenc";
+            fmt = AV_PIX_FMT_YUV420P;
+            break;
+#endif
+#if HB_PROJECT_FEATURE_VAAPI
+        case HB_VCODEC_FFMPEG_VAAPI_H264:
+            codec_name = "h264_vaapi";
+            fmt = AV_PIX_FMT_VAAPI;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_H265:
+            codec_name = "hevc_vaapi";
+            fmt = AV_PIX_FMT_VAAPI;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_AV1:
+            codec_name = "av1_vaapi";
+            fmt = AV_PIX_FMT_VAAPI;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_VP8:
+            codec_name = "vp8_vaapi";
+            fmt = AV_PIX_FMT_VAAPI;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_VP9:
+            codec_name = "vp9_vaapi";
+            fmt = AV_PIX_FMT_VAAPI;
+            break;
+#endif
+        default:
+            // FIXME: Add other supported avcodec encoder!
+            hb_log("hb_avcodec_test_encoder_available encoder=0x%X: Not supported yet", encoder);
+            return 0;
+    }
+    codec = avcodec_find_encoder_by_name(codec_name);
+    if( NULL == codec ) {
+        hb_log("hb_avcodec_test_encoder_available encoder=0x%X, codec=%s: Not available", encoder, codec_name);
+        return 0;
+    }
+    err = hb_avcodec_test_encoder(codec, fmt);
+    hb_log("hb_avcodec_test_encoder_available encoder=0x%X, codec=%s: err %d", encoder, codec_name, err);
+    return 0 == err;
+}
+
+int hb_avcodec_test_encoder(const AVCodec *codec, enum AVPixelFormat fmt)
+{
+    int err, res=0;
+    AVDictionary * av_opts = NULL;
+    AVCodecContext * context = NULL;
+    if( NULL == codec ) {
+        return -1;
+    }
+    context = avcodec_alloc_context3(codec);
+    if( NULL == context ) {
+        res = -2;
+        goto close;
+    }
+    // setting all fields marked: 'encoding: MUST be set by user'
+    context->time_base.num = 1;
+    context->time_base.den = 25;
+    context->width = 640;
+    context->height = 480;
+    // deprecated: context->me_method = 1;
+    // setting other fields as required via testing
+    context->pix_fmt = fmt;
+
+#if HB_PROJECT_FEATURE_VAAPI
+    if( AV_PIX_FMT_VAAPI == fmt ) {
+        if((err = hb_vaapi_avcodec_set_hwframe_ctx(context, 0, 20))<0) {
+            hb_log("Failed to set the VAAPI hwframe_ctx. Error code: %s", av_err2str(err));
+            res = -4;
+            goto close;
+        }
+    }
+#endif
+
+    av_dict_set(&av_opts, "b", "2M", 0);
+    if (avcodec_open2(context, codec, &av_opts) < 0) {
+        res = -3;
+        goto close;
+    }
+close:
+    if(NULL!=av_opts) {
+        av_dict_free( &av_opts );
+    }
+    if(NULL!=context) {
+        avcodec_free_context(&context);
+    }
+    return res;
+}
+
