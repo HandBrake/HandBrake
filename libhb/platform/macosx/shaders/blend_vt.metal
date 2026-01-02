@@ -1,6 +1,6 @@
 /* blend_vt.metal
 
-   Copyright (c) 2003-2025 HandBrake Team
+   Copyright (c) 2003-2026 HandBrake Team
 
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.

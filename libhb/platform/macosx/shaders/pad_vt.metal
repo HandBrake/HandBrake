@@ -1,6 +1,6 @@
 /* pad.metal
 
-   Copyright (c) 2003-2025 HandBrake Team
+   Copyright (c) 2003-2026 HandBrake Team
 
    port of FFmpeg pad.cl.
 
