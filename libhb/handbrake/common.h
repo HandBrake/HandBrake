@@ -467,6 +467,7 @@ int hb_str_ends_with(const char *base, const char *str);
  */
 
 void hb_common_global_init(int);
+void hb_common_global_close(int);
 
 int              hb_video_framerate_get_from_name(const char *name);
 const char*      hb_video_framerate_get_name(int framerate);
@@ -533,6 +534,8 @@ const char* const* hb_video_encoder_get_tunes   (int encoder);
 const char* const* hb_video_encoder_get_profiles(int encoder);
 const char* const* hb_video_encoder_get_levels  (int encoder);
 const int*         hb_video_encoder_get_pix_fmts(int encoder, const char *profile);
+int                hb_video_encoder_is_vaapi(int encoder);
+
 
 void  hb_audio_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 float hb_audio_quality_get_best(uint32_t codec, float quality);
@@ -688,6 +691,9 @@ struct hb_job_s
 #define HB_VCODEC_QSV_MASK           0x00040000
 #define HB_VCODEC_FFMPEG_MASK        0x00010000
 
+#define HB_VCODEC_QSV_AV1_MASK       (HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_VAAPI_MASK         0x00008000
+
 #define HB_VCODEC_THEORA             0x00000001
 
 #define HB_VCODEC_X264_8BIT         (0x00000002 | HB_VCODEC_X264_MASK | HB_VCODEC_H264_MASK)
@@ -740,6 +746,12 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_QSV_AV1_8BIT      (0x00000070 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_FFMPEG_QSV_AV1_10BIT     (0x00000071 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_FFMPEG_QSV_AV1           HB_VCODEC_FFMPEG_QSV_AV1_8BIT
+
+#define HB_VCODEC_FFMPEG_VAAPI_H264  (0x00000080 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_VAAPI_MASK | HB_VCODEC_H264_MASK)
+#define HB_VCODEC_FFMPEG_VAAPI_H265  (0x00000081 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_VAAPI_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_FFMPEG_VAAPI_AV1   (0x00000082 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_VAAPI_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_FFMPEG_VAAPI_VP8   (0x0000008a | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_VAAPI_MASK)
+#define HB_VCODEC_FFMPEG_VAAPI_VP9   (0x0000008b | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_VAAPI_MASK)
 
 /* define an invalid CQ value compatible with all CQ-capable codecs */
 #define HB_INVALID_VIDEO_QUALITY (-1000.)

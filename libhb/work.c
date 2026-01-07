@@ -321,6 +321,28 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             w->codec_param = AV_CODEC_ID_AV1;
             break;
 #endif
+#if HB_PROJECT_FEATURE_VAAPI
+        case HB_VCODEC_FFMPEG_VAAPI_H264:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_H264;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_H265:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_HEVC;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_AV1:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_AV1;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_VP8:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_VP8;
+            break;
+        case HB_VCODEC_FFMPEG_VAAPI_VP9:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_VP9;
+            break;
+#endif
 #ifdef __APPLE__
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:

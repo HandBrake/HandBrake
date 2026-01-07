@@ -22,6 +22,10 @@ TEST.pkgconfig_libs = libass libavformat libavfilter libavcodec libavutil libswr
 
 TEST.pkgconfig_libs += $(foreach m,$(MODULES.NAMES),$($m.OSL.libs))
 
+ifeq (1,$(FEATURE.vaapi))
+    TEST.GCC.l += X11 va va-drm va-x11
+endif
+
 ifeq (1,$(FEATURE.flatpak))
     TEST.pkgconfig_libs += glib-2.0
 endif
