@@ -1538,15 +1538,15 @@ static OSStatus hb_vt_init_session(hb_work_object_t *w, hb_job_t *job, hb_work_p
 
 static void hb_vt_set_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
 {
-    CFDictionaryRef extentions = CMFormatDescriptionGetExtensions(format);
-    if (!extentions)
+    CFDictionaryRef extensions = CMFormatDescriptionGetExtensions(format);
+    if (!extensions)
     {
         hb_log("VTCompressionSession: Format Description Extensions error");
     }
     else
     {
         CFStringRef key = CMVideoFormatDescriptionGetCodecType(format) == kCMVideoCodecType_H264 ? CFSTR("avcC") : CFSTR("hvcC");
-        CFDictionaryRef atoms = CFDictionaryGetValue(extentions, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
+        CFDictionaryRef atoms = CFDictionaryGetValue(extensions, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
         if (atoms)
         {
             CFDataRef magicCookie = CFDictionaryGetValue(atoms, key);
