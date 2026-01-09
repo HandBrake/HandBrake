@@ -170,9 +170,29 @@ static const int hb_ffv1_level_values[] =
     -1,  1,  3,  0
 };
 
+static const char * const hb_mpeg2_profile_names[] =
+{
+    "auto", "simple", "main", "snr", "ss", "high", "422", NULL,
+};
+
+static const char * const hb_mpeg2_level_names[] =
+{
+    "auto", "low", "main", "high", "high1440", NULL,
+};
+
+static const int hb_mpeg2_level_values[] =
+{
+    8, 10,  8,  4, 6, 8
+};
+
 static const enum AVPixelFormat standard_pix_fmts[] =
 {
     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_422_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV422P, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat standard_10bit_pix_fmts[] =
@@ -874,6 +894,25 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         if (!av_dict_get(av_opts, "scenario", NULL, 0))
         {
             av_dict_set(&av_opts, "scenario", "archive", 0);
+        }
+    }
+    else if (job->vcodec == HB_VCODEC_FFMPEG_MPEG2)
+    {
+        context->profile = AV_PROFILE_MPEG2_MAIN;
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if (!strcasecmp(job->encoder_profile, "simple"))
+                context->profile = AV_PROFILE_MPEG2_SIMPLE;
+            else if (!strcasecmp(job->encoder_profile, "main"))
+                 context->profile = AV_PROFILE_MPEG2_MAIN;
+            else if (!strcasecmp(job->encoder_profile, "snr"))
+                context->profile = AV_PROFILE_MPEG2_SNR_SCALABLE;
+            else if (!strcasecmp(job->encoder_profile, "ss"))
+                context->profile = AV_PROFILE_MPEG2_SS;
+            else if (!strcasecmp(job->encoder_profile, "high"))
+                context->profile = AV_PROFILE_MPEG2_HIGH;
+            else if (!strcasecmp(job->encoder_profile, "422"))
+                context->profile = AV_PROFILE_MPEG2_422;
         }
     }
 
@@ -1616,6 +1655,11 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
                 encoder_level = "3";
             }
             break;
+
+        case HB_VCODEC_FFMPEG_MPEG2:
+            level_names = hb_mpeg2_level_names;
+            level_values = hb_mpeg2_level_values;
+            break;
     }
 
     context->level = AV_FIELD_UNKNOWN;
@@ -1731,6 +1775,8 @@ const char* const* hb_av_profile_get_names(int encoder)
         case HB_VCODEC_FFMPEG_QSV_H265:
         case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
             return h265_qsv_profile_name;
+        case HB_VCODEC_FFMPEG_MPEG2:
+            return hb_mpeg2_profile_names;
          default:
              return empty_names;
      }
@@ -1767,12 +1813,15 @@ const char* const* hb_av_level_get_names(int encoder)
         case HB_VCODEC_FFMPEG_FFV1:
             return hb_ffv1_level_names;
 
+        case HB_VCODEC_FFMPEG_MPEG2:
+            return hb_mpeg2_level_names;
+
          default:
              return empty_names;
      }
 }
 
-const int* hb_av_get_pix_fmts(int encoder)
+const int* hb_av_get_pix_fmts(int encoder, const char *profile)
 {
     switch (encoder)
     {
@@ -1807,6 +1856,18 @@ const int* hb_av_get_pix_fmts(int encoder)
         case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
         case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
             return qsv_10bit_pix_formats;
+
+        case HB_VCODEC_FFMPEG_MPEG2:
+        {
+            if (profile && !strcasecmp(profile, "422"))
+            {
+                return standard_422_pix_fmts;
+            }
+            else
+            {
+                return standard_pix_fmts;
+            }
+        }
 
          default:
              return standard_pix_fmts;
