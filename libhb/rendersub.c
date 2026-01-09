@@ -836,7 +836,7 @@ static void ssa_work_init(hb_filter_private_t *pv, const hb_data_t *sub_data)
         break;
     //use video csp
     case YCBCR_UNKNOWN://cannot parse
-    case YCBCR_NONE:   //explicitely requested no override
+    case YCBCR_NONE:   //explicitly requested no override
     default:
         pv->rgb2yuv_fn = hb_get_rgb2yuv_function(pv->input.color_matrix);
         break;
