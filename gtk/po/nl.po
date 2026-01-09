@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025 HandBrake Team
+# Copyright (C) 2026 HandBrake Team
 # This file is distributed under the same license as the ghb package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
@@ -10,9 +10,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 20250818-git-c7466a55e\n"
+"Project-Id-Version: ghb 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 09:50+0100\n"
+"POT-Creation-Date: 2025-12-15 17:30+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>, 2025\n"
 "Language-Team: Dutch (https://app.transifex.com/HandBrakeProject/teams/92423/nl/)\n"
@@ -410,9 +410,9 @@ msgid "Edit"
 msgstr "Bewerken"
 
 #: src/ui/ghb.ui:456 src/ui/ghb.ui:2999 src/ui/ghb.ui:3123 src/ui/ghb.ui:3264
-#: src/ui/ghb.ui:3661 src/hb-backend.c:4408 src/hb-backend.c:4415
-#: src/hb-backend.c:4439 src/hb-backend.c:4447 src/hb-backend.c:4475
-#: src/hb-backend.c:4484 src/hb-backend.c:4511 src/hb-backend.c:4536
+#: src/ui/ghb.ui:3661 src/hb-backend.c:4418 src/hb-backend.c:4425
+#: src/hb-backend.c:4449 src/hb-backend.c:4457 src/hb-backend.c:4485
+#: src/hb-backend.c:4494 src/hb-backend.c:4521 src/hb-backend.c:4546
 msgid "Preset:"
 msgstr "Voorinstelling:"
 
@@ -548,7 +548,7 @@ msgstr "<b>Bron:</b>"
 #: src/ui/ghb.ui:1498 src/hb-backend.c:54 src/hb-backend.c:66
 #: src/hb-backend.c:78 src/hb-backend.c:91 src/hb-backend.c:129
 #: src/hb-backend.c:229 src/hb-backend.c:274 src/hb-backend.c:285
-#: src/hb-backend.c:312 src/hb-backend.c:397 src/hb-backend.c:2853
+#: src/hb-backend.c:312 src/hb-backend.c:397 src/hb-backend.c:2863
 #: src/subtitlehandler.c:1439
 msgid "None"
 msgstr "Geen"
@@ -1047,7 +1047,7 @@ msgstr ""
 "Als de bron 'blokkig' is, kan deze filter het helpen opschonen."
 
 #: src/ui/ghb.ui:3061 src/ui/ghb.ui:3141 src/ui/ghb.ui:3203 src/ui/ghb.ui:3281
-#: src/ui/ghb.ui:3720 src/hb-backend.c:4512 src/hb-backend.c:4537
+#: src/ui/ghb.ui:3720 src/hb-backend.c:4522 src/hb-backend.c:4547
 msgid "Tune:"
 msgstr "Regelen:"
 
@@ -1151,7 +1151,7 @@ msgstr "Kleurruimte:"
 msgid "Translate the colorspace of the source."
 msgstr "Vertaal de kleurenruimte van de bron."
 
-#: src/ui/ghb.ui:3351 src/hb-backend.c:4981
+#: src/ui/ghb.ui:3351 src/hb-backend.c:4991
 msgid "Grayscale"
 msgstr "Grijswaarden"
 
@@ -2019,9 +2019,9 @@ msgid "Add Multiple Titles"
 msgstr "Meerdere titels toevoegen"
 
 #: src/ui/ghb.ui:5434 src/ui/ghb.ui:6193 src/ui/ghb.ui:6283 src/ui/ghb.ui:6623
-#: src/ui/ghb.ui:6895 src/hb-backend.c:4580 src/hb-backend.c:4630
-#: src/hb-backend.c:4647 src/hb-backend.c:4664 src/hb-backend.c:4721
-#: src/hb-backend.c:4774 src/presets.c:2161 src/presets.c:2543
+#: src/ui/ghb.ui:6895 src/hb-backend.c:4590 src/hb-backend.c:4640
+#: src/hb-backend.c:4657 src/hb-backend.c:4674 src/hb-backend.c:4731
+#: src/hb-backend.c:4784 src/presets.c:2161 src/presets.c:2543
 #: src/presets.c:2768 src/title-add.c:124 src/title-add.c:134
 msgid "Cancel"
 msgstr "Annuleer"
@@ -2862,8 +2862,8 @@ msgstr "Pixelverhouding"
 msgid "Display Aspect Ratio"
 msgstr "Beeldverhouding"
 
-#: src/callbacks.c:2806 src/hb-backend.c:2305 src/hb-backend.c:2426
-#: src/hb-backend.c:2438
+#: src/callbacks.c:2806 src/hb-backend.c:2315 src/hb-backend.c:2436
+#: src/hb-backend.c:2448
 msgid "No Title Found"
 msgstr "Geen titel gevonden"
 
@@ -3116,7 +3116,7 @@ msgstr "Jaar"
 msgid "Immortal"
 msgstr "Onsterfelijk"
 
-#: src/hb-backend.c:193 src/hb-backend.c:4965
+#: src/hb-backend.c:193 src/hb-backend.c:4975
 msgid "Decomb"
 msgstr "Decomb"
 
@@ -3160,8 +3160,8 @@ msgstr "180°"
 msgid "270°"
 msgstr "270°"
 
-#: src/hb-backend.c:255 src/hb-backend.c:1565 src/hb-backend.c:1625
-#: src/hb-backend.c:1704
+#: src/hb-backend.c:255 src/hb-backend.c:1575 src/hb-backend.c:1635
+#: src/hb-backend.c:1714
 msgid "Same as source"
 msgstr "Zelfde als bron"
 
@@ -3349,84 +3349,84 @@ msgstr "Altijd"
 msgid "Use System Language"
 msgstr "Systeemtaal gebruiken"
 
-#: src/hb-backend.c:1718
+#: src/hb-backend.c:1728
 msgid "(NTSC Film)"
 msgstr "(NTSC Film)"
 
-#: src/hb-backend.c:1722
+#: src/hb-backend.c:1732
 msgid "(PAL Film/Video)"
 msgstr "(PAL Film/Video)"
 
-#: src/hb-backend.c:1726
+#: src/hb-backend.c:1736
 msgid "(NTSC Video)"
 msgstr "(NTSC Video)"
 
-#: src/hb-backend.c:2294
+#: src/hb-backend.c:2304
 #, c-format
 msgid "%s - (%05d.MPLS)"
 msgstr "%s - (%05d.MPLS)"
 
-#: src/hb-backend.c:2445
+#: src/hb-backend.c:2455
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
 msgstr "%3d - %02du%02dm%02ds - %s"
 
-#: src/hb-backend.c:2464
+#: src/hb-backend.c:2474
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 msgstr "%3d - %02du%02dm%02ds - (%05d.MPLS)"
 
-#: src/hb-backend.c:2470
+#: src/hb-backend.c:2480
 #, c-format
 msgid "%3d - (%05d.MPLS)"
 msgstr "%3d - (%05d.MPLS)"
 
-#: src/hb-backend.c:2476
+#: src/hb-backend.c:2486
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
 msgstr "%3d - %02du%02dm%02ds"
 
-#: src/hb-backend.c:2509
+#: src/hb-backend.c:2519
 msgid "No Titles"
 msgstr "Geen titels"
 
 #. No audio. set some default
-#: src/hb-backend.c:2781
+#: src/hb-backend.c:2791
 msgid "No Audio"
 msgstr "Geen audio"
 
-#: src/hb-backend.c:4406 src/hb-backend.c:4414
+#: src/hb-backend.c:4416 src/hb-backend.c:4424
 msgid "Invalid Detelecine Settings"
 msgstr "Ongeldige Detelecine-instellingen"
 
-#: src/hb-backend.c:4409 src/hb-backend.c:4440 src/hb-backend.c:4476
-#: src/hb-backend.c:4513 src/hb-backend.c:4538
+#: src/hb-backend.c:4419 src/hb-backend.c:4450 src/hb-backend.c:4486
+#: src/hb-backend.c:4523 src/hb-backend.c:4548
 msgid "Custom:"
 msgstr "Aangepast:"
 
-#: src/hb-backend.c:4437 src/hb-backend.c:4445
+#: src/hb-backend.c:4447 src/hb-backend.c:4455
 msgid "Invalid Comb Detect Settings"
 msgstr "Ongeldige Comb Detect-instellingen"
 
-#: src/hb-backend.c:4472 src/hb-backend.c:4481
+#: src/hb-backend.c:4482 src/hb-backend.c:4491
 msgid "Invalid Deinterlace Settings"
 msgstr "Ongeldige deïnterlace-instellingen"
 
-#: src/hb-backend.c:4474 src/hb-backend.c:4483 src/hb-backend.c:4510
-#: src/hb-backend.c:4535
+#: src/hb-backend.c:4484 src/hb-backend.c:4493 src/hb-backend.c:4520
+#: src/hb-backend.c:4545
 msgid "Filter:"
 msgstr "Filter:"
 
-#: src/hb-backend.c:4508
+#: src/hb-backend.c:4518
 msgid "Invalid Denoise Settings"
 msgstr "Ongeldige Denoise-instellingen"
 
-#: src/hb-backend.c:4533
+#: src/hb-backend.c:4543
 msgid "Invalid Sharpen Settings"
 msgstr "Ongeldige Sharpen-instellingen"
 
 #. mp4/theora combination is not supported.
-#: src/hb-backend.c:4562
+#: src/hb-backend.c:4572
 msgid ""
 "Theora is not supported in the MP4 container.\n"
 "\n"
@@ -3439,7 +3439,7 @@ msgstr ""
 "Als u doorgaat zal FFMPEG gekozen worden."
 
 #. webm only supports vp8, vp9 and av1.
-#: src/hb-backend.c:4571
+#: src/hb-backend.c:4581
 msgid ""
 "Only VP8, VP9 and AV1 is supported in the WebM container.\n"
 "\n"
@@ -3451,25 +3451,25 @@ msgstr ""
 "Kies een andere videocodec of container.\n"
 "Als je doorgaat, wordt er een voor je gekozen."
 
-#: src/hb-backend.c:4579 src/hb-backend.c:4630 src/hb-backend.c:4647
-#: src/hb-backend.c:4664 src/hb-backend.c:4721 src/hb-backend.c:4774
+#: src/hb-backend.c:4589 src/hb-backend.c:4640 src/hb-backend.c:4657
+#: src/hb-backend.c:4674 src/hb-backend.c:4731 src/hb-backend.c:4784
 msgid "Continue"
 msgstr "Doorgaan"
 
-#: src/hb-backend.c:4580
+#: src/hb-backend.c:4590
 msgid "Invalid Video Codec"
 msgstr "Ongeldige video-codec"
 
 #. No valid title, stop right there
-#: src/hb-backend.c:4603 src/hb-backend.c:4689
+#: src/hb-backend.c:4613 src/hb-backend.c:4699
 msgid "No title found.\n"
 msgstr "Geen titel gevonden.\n"
 
-#: src/hb-backend.c:4630 src/hb-backend.c:4647
+#: src/hb-backend.c:4640 src/hb-backend.c:4657
 msgid "Invalid Subtitle Selection"
 msgstr "Ongeldige ondertitelselectie"
 
-#: src/hb-backend.c:4631
+#: src/hb-backend.c:4641
 msgid ""
 "Only one subtitle may be burned into the video.\n"
 "\n"
@@ -3481,7 +3481,7 @@ msgstr ""
 "Pas de ondertitel-selecties aan.\n"
 "Als u doorgaat zullen sommige ondertitels verloren gaan."
 
-#: src/hb-backend.c:4648
+#: src/hb-backend.c:4658
 msgid ""
 "WebM in HandBrake only supports burned subtitles.\n"
 "\n"
@@ -3493,11 +3493,11 @@ msgstr ""
 "Pas de ondertitel-selecties aan.\n"
 "Als u doorgaat zullen sommige ondertitels verloren gaan."
 
-#: src/hb-backend.c:4664
+#: src/hb-backend.c:4674
 msgid "Subtitle File Not Found"
 msgstr "Ondertitelbestand niet gevonden"
 
-#: src/hb-backend.c:4665
+#: src/hb-backend.c:4675
 msgid ""
 "SRT file does not exist or not a regular file.\n"
 "\n"
@@ -3509,11 +3509,11 @@ msgstr ""
 "Kies een geldig bestand.\n"
 "Als u doorgaat zal deze ondertitel genegeerd worden."
 
-#: src/hb-backend.c:4721 src/hb-backend.c:4774
+#: src/hb-backend.c:4731 src/hb-backend.c:4784
 msgid "Invalid Audio Selection"
 msgstr "Ongeldige audioselectie"
 
-#: src/hb-backend.c:4722
+#: src/hb-backend.c:4732
 msgid ""
 "The source does not support Pass-Thru.\n"
 "\n"
@@ -3525,7 +3525,7 @@ msgstr ""
 "Kies een andere audio-codec.\n"
 "Als u doorgaat zal er automatisch één gekozen worden."
 
-#: src/hb-backend.c:4775
+#: src/hb-backend.c:4785
 #, c-format
 msgid ""
 "%s is not supported in the %s container.\n"
@@ -3538,51 +3538,51 @@ msgstr ""
 "Kies een andere audio-codec.\n"
 "Als u doorgaat zal er automatisch één gekozen worden."
 
-#: src/hb-backend.c:4957
+#: src/hb-backend.c:4967
 msgid "Comb Detect"
 msgstr "Comb Detect"
 
-#: src/hb-backend.c:4959
+#: src/hb-backend.c:4969
 msgid "Detelecine"
 msgstr "Detelecine"
 
-#: src/hb-backend.c:4961
+#: src/hb-backend.c:4971
 msgid "Deinterlace (Yadif)"
 msgstr "Deinterlace (Yadif)"
 
-#: src/hb-backend.c:4963
+#: src/hb-backend.c:4973
 msgid "Deinterlace (Bwdif)"
 msgstr "Deinterlace (Bwdif)"
 
-#: src/hb-backend.c:4967
+#: src/hb-backend.c:4977
 msgid "Deblock"
 msgstr "Deblock"
 
-#: src/hb-backend.c:4969
+#: src/hb-backend.c:4979
 msgid "Denoise (NLMeans)"
 msgstr "Denoise (NLMeans)"
 
-#: src/hb-backend.c:4971
+#: src/hb-backend.c:4981
 msgid "Denoise (HQDN3D)"
 msgstr "Denoise (HQDN3D)"
 
-#: src/hb-backend.c:4973
+#: src/hb-backend.c:4983
 msgid "Chroma Smooth"
 msgstr "Chroma Smooth"
 
-#: src/hb-backend.c:4975
+#: src/hb-backend.c:4985
 msgid "Sharpen (Unsharp)"
 msgstr "Sharpen (Unsharp)"
 
-#: src/hb-backend.c:4977
+#: src/hb-backend.c:4987
 msgid "Rotate"
 msgstr "Roteren"
 
-#: src/hb-backend.c:4979
+#: src/hb-backend.c:4989
 msgid "Sharpen (lapsharp)"
 msgstr "Sharpen (lapsharp)"
 
-#: src/hb-backend.c:4983
+#: src/hb-backend.c:4993
 msgid "Colorspace"
 msgstr "Kleurruimte"
 
@@ -3624,12 +3624,12 @@ msgstr "Lader is losgekoppeld."
 msgid "Power Saver mode has been activated."
 msgstr "Batterijbesparing is geactiveerd."
 
-#: src/notifications.c:150
+#: src/notifications.c:151
 #, c-format
 msgid "%s free space remaining."
 msgstr "%s vrije time resterend."
 
-#: src/notifications.c:156 src/queuehandler.c:1171
+#: src/notifications.c:158 src/queuehandler.c:1171
 msgid "Encoding Paused"
 msgstr "Encoderen gepauzeerd"
 

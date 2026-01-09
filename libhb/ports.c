@@ -1,6 +1,6 @@
 /* ports.c
 
-   Copyright (c) 2003-2025 HandBrake Team
+   Copyright (c) 2003-2026 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -189,7 +189,7 @@ void hb_snooze( int delay )
 }
 
 /************************************************************************
- * Get information about the operaring system
+ * Get information about the operating system
  ************************************************************************/
 static void init_system_info();
 struct
@@ -1609,7 +1609,7 @@ static int try_adapter(const char * name, const char * dir,
 static int open_adapter(const char * name, const uint dri_render_node)
 {
     int fd;
-    // If dri_render_node is unknown enumerate across the predifined range of renders
+    // If dri_render_node is unknown enumerate across the predefined range of renders
     if (dri_render_node == 0)
     {
         fd = try_adapter(name, DRI_PATH, DRI_NODE_RENDER,

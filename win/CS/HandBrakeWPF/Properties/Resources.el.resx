@@ -2155,7 +2155,7 @@ You can drag/drop or enter the text above.</value>
     <value>Μια νέα έκδοση του HandBrake είναι διαθέσιμη!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2026 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Χαμηλό επίπεδο μπαταρίας:</value>

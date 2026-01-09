@@ -1300,8 +1300,8 @@ Resets the queue job to pending and ready to run again.</property>
     <property name="title" translatable="yes">About HandBrake</property>
     <property name="modal">1</property>
     <property name="program-name">HandBrake</property>
-    <property name="copyright" translatable="yes">Copyright © 2008-2024 John Stebbins
-Copyright © 2004-2024, HandBrake Devs</property>
+    <property name="copyright" translatable="yes">Copyright © 2008-2026 John Stebbins
+Copyright © 2004-2026, HandBrake Devs</property>
     <property name="comments" translatable="yes">Multithreaded video transcoder</property>
     <property name="website">https://handbrake.fr</property>
     <property name="website-label">https://handbrake.fr</property>

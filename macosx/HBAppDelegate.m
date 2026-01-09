@@ -180,6 +180,7 @@
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     [self.presetsManager savePresets];
+    [self cleanPreviews];
 
     [NSUserDefaults.standardUserDefaults setBool:_queueController.window.isVisible forKey:@"QueueWindowIsOpen"];
     [NSUserDefaults.standardUserDefaults setBool:_outputPanel.window.isVisible forKey:@"OutputPanelIsOpen"];

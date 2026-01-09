@@ -1,6 +1,6 @@
 /* qsv_common.c
  *
- * Copyright (c) 2003-2025 HandBrake Team
+ * Copyright (c) 2003-2026 HandBrake Team
  * This file is part of the HandBrake source code.
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License v2.
@@ -659,7 +659,7 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
  * Check the actual availability of QSV implementations on the system
  * and collect GPU adapters capabilities.
  *
- * @returns encoder codec mask supported by QSV implemenation,
+ * @returns encoder codec mask supported by QSV implementation,
  *      0 if QSV is not available, -1 if HB_PROJECT_FEATURE_QSV is not enabled
  */
 int hb_qsv_available()

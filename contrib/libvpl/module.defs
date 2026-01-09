@@ -1,11 +1,11 @@
 $(eval $(call import.MODULE.defs,LIBVPL,libvpl))
 $(eval $(call import.CONTRIB.defs,LIBVPL))
 
-LIBVPL.FETCH.url       = https://github.com/intel/libvpl/archive/refs/tags/v2.15.0.tar.gz
-LIBVPL.FETCH.url      += https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libvpl-2.15.0.tar.gz
-LIBVPL.FETCH.sha256    = 7218c3b8206b123204c3827ce0cf7c008d5c693c1f58ab461958d05fe6f847b3
-LIBVPL.FETCH.basename  = libvpl-2.15.0.tar.gz
-LIBVPL.EXTRACT.tarbase = libvpl-2.15.0
+LIBVPL.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libvpl-2.16.0.tar.gz
+LIBVPL.FETCH.url      += https://github.com/intel/libvpl/archive/refs/tags/v2.16.0.tar.gz
+LIBVPL.FETCH.sha256    = d60931937426130ddad9f1975c010543f0da99e67edb1c6070656b7947f633b6
+LIBVPL.FETCH.basename  = libvpl-2.16.0.tar.gz
+LIBVPL.EXTRACT.tarbase = libvpl-2.16.0
 
 LIBVPL.build_dir             = build
 LIBVPL.CONFIGURE.exe         = cmake
