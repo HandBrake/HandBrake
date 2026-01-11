@@ -82,9 +82,12 @@ fi
 echo "Username: ${USERNAME}"
 echo "TeamID: ${TEAMID}"
 
-echo -n "Password: "
-read -s PASSWORD
-echo
+if [[ -z "${PASSWORD:-}" ]]; then
+    echo -n "Password: "
+    read -s PASSWORD
+    echo
+fi
+
 if [[ "${PASSWORD}" == "" ]]; then
     exit_with_error 1 "${SELF_NAME}: password not specified" true
 fi
