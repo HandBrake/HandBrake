@@ -2050,6 +2050,7 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
         case HB_VCODEC_FFMPEG_MF_AV1:
+        case HB_VCODEC_FFMPEG_MPEG2:
             return hb_av_profile_get_names(encoder);
 
         case HB_VCODEC_SVT_AV1:
@@ -2162,7 +2163,7 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
 {
     if (encoder & HB_VCODEC_FFMPEG_MASK)
     {
-        return hb_av_get_pix_fmts(encoder);
+        return hb_av_get_pix_fmts(encoder, profile);
     }
 
     switch (encoder)
