@@ -27,7 +27,7 @@ static const char * const hb_vce_h264_level_names[] =
     "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2",  NULL,
 };
 
-static const char * const hb_vce_av1_preset_names[] = { "speed", "balanced", "quality" "high quality", NULL, };
+static const char * const hb_vce_av1_preset_names[] = { "speed", "balanced", "quality", "high quality", NULL, };
 
 static const char * const hb_vce_av1_level_names[] =
 {
