@@ -63,14 +63,14 @@ while getopts ":h" OPT; do
 done
 shift $((${OPTIND} - 1))
 
-USERNAME="${1:-}"
-if [[ "${USERNAME}" == "" ]]; then
+USERNAME="${1:-${USERNAME:-}}"
+if [[ -z "${USERNAME}" ]]; then
     exit_with_error 1 "${SELF_NAME}: username not specified" true
 fi
 shift 1
 
-TEAMID="${1:-}"
-if [[ "${TEAMID}" == "" ]]; then
+TEAMID="${1:-${TEAMID:-}}"
+if [[ -z "${TEAMID}" ]]; then
     exit_with_error 1 "${SELF_NAME}: TeamID not specified" true
 fi
 shift 1
