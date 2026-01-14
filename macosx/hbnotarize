@@ -88,7 +88,7 @@ if [[ -z "${PASSWORD:-}" ]]; then
     echo
 fi
 
-if [[ "${PASSWORD}" == "" ]]; then
+if [[ -z "${PASSWORD}" ]]; then
     exit_with_error 1 "${SELF_NAME}: password not specified" true
 fi
 
