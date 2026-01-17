@@ -19,7 +19,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <summary>
         /// Gets the subtitle behaviours.
         /// </summary>
-        SubtitleBehaviours SubtitleBehaviours { get; }
+        SubtitleBehaviourRule SubtitleBehaviours { get; }
 
         /// <summary>
         /// Import Subtitle files. Used for Drag/drop support which is handled by the MainViewModel.
