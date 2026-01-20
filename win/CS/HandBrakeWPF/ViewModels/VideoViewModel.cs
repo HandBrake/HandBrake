@@ -41,7 +41,8 @@ namespace HandBrakeWPF.ViewModels
 
     public class VideoViewModel : ViewModelBase, IVideoViewModel
     {
-        private const string SameAsSource = "Same as source";
+        private static readonly string SameAsSource = Resources.VideoView_SameAsSource;
+
         private readonly IUserSettingService userSettingService;
 
         private bool displayOptimiseOptions;
@@ -303,7 +304,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (this.Task.Framerate == null)
                 {
-                    return "Same as source";
+                    return SameAsSource;
                 }
 
                 return this.Task.Framerate.Value.ToString(CultureInfo.InvariantCulture);
@@ -311,7 +312,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                if (value == "Same as source" || value == null)
+                if (value == SameAsSource || value == null)
                 {
                     this.Task.Framerate = null;
                     this.ShowPeakFramerate = false;
