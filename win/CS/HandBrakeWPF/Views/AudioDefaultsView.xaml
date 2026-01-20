@@ -8,6 +8,7 @@
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
+             xmlns:options="clr-namespace:HandBrakeWPF.Converters.Options"
              d:DesignHeight="500"
              d:DesignWidth="800"
              ResizeMode="NoResize"
@@ -26,6 +27,7 @@
         <Audio:AudioRateTypeForDefaultsConverter x:Key="audioRateTypeForDefaultsConverter" />
         <Audio:AudioRateTypeConverter x:Key="audioRateTypeConverter" />
         <Audio:AudioControlVisibilityConverter x:Key="audioControlVisibilityConverter" />
+        <options:AudioTrackNamingConverter x:Key="audioTrackNamingConverter" />
     </Window.Resources>
 
 
@@ -167,7 +169,7 @@
                 <CheckBox Content="{x:Static Properties:Resources.AudioDefaultsView_PassthruTrackNames}" IsChecked="{Binding AudioBehaviours.AudioTrackNamePassthru}" Margin="10,0,0,0" /> 
                 <StackPanel Orientation="Horizontal" Margin="10,5,0,0">
                     <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_AutoNaming}" />
-                    <ComboBox ItemsSource="{Binding TrackNamingBehaviours}" SelectedItem="{Binding AudioBehaviours.AudioAutomaticNamingBehavior}"
+                    <ComboBox ItemsSource="{Binding TrackNamingBehaviours, Converter={StaticResource audioTrackNamingConverter}}" SelectedItem="{Binding AudioBehaviours.AudioAutomaticNamingBehavior, Converter={StaticResource audioTrackNamingConverter}}"
                               Margin="5,0,0,0"/>
                 </StackPanel>
 
