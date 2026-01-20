@@ -27,7 +27,7 @@
         <Audio:AudioRateTypeForDefaultsConverter x:Key="audioRateTypeForDefaultsConverter" />
         <Audio:AudioRateTypeConverter x:Key="audioRateTypeConverter" />
         <Audio:AudioControlVisibilityConverter x:Key="audioControlVisibilityConverter" />
-        <options:AudioTrackNamingConverter x:Key="audioTrackNamingConverter" />
+        <Audio:AudioTrackNamingConverter x:Key="audioTrackNamingConverter" />
     </Window.Resources>
 
 
