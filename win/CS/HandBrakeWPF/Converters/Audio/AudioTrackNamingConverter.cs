@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Options
+namespace HandBrakeWPF.Converters.Audio
 {
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Audio;
