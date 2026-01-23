@@ -184,7 +184,15 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
-    if (job->encoder_tune != NULL && strstr("ssim", job->encoder_tune) != NULL)
+    if (job->encoder_tune != NULL && strstr("ms-ssim", job->encoder_tune) != NULL)
+    {
+        param->tune = 4;
+    }
+    else if (job->encoder_tune != NULL && strstr("iq", job->encoder_tune) != NULL)
+    {
+        param->tune = 3;
+    }
+    else if (job->encoder_tune != NULL && strstr("ssim", job->encoder_tune) != NULL)
     {
         param->tune = 2;
     }
