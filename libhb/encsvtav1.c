@@ -214,7 +214,6 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         param->fast_decode = 0;
     }
 
-    param->intra_period_length = ((double)job->orig_vrate.num / job->orig_vrate.den + 0.5) * 10;
     // VFR isn't supported, the rate control will ignore
     // the frames timestamps and use the values below
     param->frame_rate_numerator = job->orig_vrate.num;
