@@ -27,6 +27,8 @@ void encsvtClose(hb_work_object_t *);
 #define FRAME_INFO_SIZE 2048
 #define FRAME_INFO_MASK (FRAME_INFO_SIZE - 1)
 
+#define MAX_QP_VALUE 63
+
 hb_work_object_t hb_encsvtav1 =
 {
     WORK_ENCSVTAV1,
@@ -124,7 +126,8 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
     }
     else
     {
-        param->qp                = job->vquality;
+        param->qp                         = fmin(job->vquality, MAX_QP_VALUE); // truncated 
+        param->extended_crf_qindex_offset = (job->vquality - param->qp) * 4;
         param->rate_control_mode = SVT_AV1_RC_MODE_CQP_OR_CRF;
         param->force_key_frames = 1;
     }
