@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # mac-toolchain-build - download and build common macOS toolchain components
 #
-# Copyright 2024 Bradley Sepos
+# Copyright 2026 Bradley Sepos
 # Released under the MIT License. See LICENSE for details.
 # https://github.com/bradleysepos/mac-toolchain-build
 
@@ -162,7 +162,7 @@ function mac_toolchain_build {
     CMAKE_VER="4.0.3"
     LIBTOOL_VER="2.5.4"
     MESON_VER="1.8.2"
-    NASM_VER="2.16.03"
+    NASM_VER="3.01"
     NINJA_VER="1.13.1"
     OPENSSL_VER="3.5.1"
     PKGCONFIG_VER="0.29.2"
@@ -204,7 +204,7 @@ function mac_toolchain_build {
     CMAKE_SHA256="8d3537b7b7732660ea247398f166be892fe6131d63cc291944b45b91279f3ffb"
     LIBTOOL_SHA256="da8ebb2ce4dcf46b90098daf962cffa68f4b4f62ea60f798d0ef12929ede6adf"
     MESON_SHA256="6b878fb0f6f0318cbd54e13539f89a1a8305791668e8e93ffd59d82722888dac"
-    NASM_SHA256="bef3de159bcd61adf98bb7cc87ee9046e944644ad76b7633f18ab063edb29e57"
+    NASM_SHA256="7a7b1ff3b0eef3247862f2fbe4ca605ccef770545d7af7979eba84a9d045c0b1"
     NINJA_SHA256="f0055ad0369bf2e372955ba55128d000cfcc21777057806015b45e4accbebf23"
     OPENSSL_SHA256="24e3a8a1e832e29255b55d06fcc473b9f56e60555b504bf4422ca64a0d0c1426"
     PKGCONFIG_SHA256="6fc69c01688c9458a57eb9a1664c9aba372ccda420a02bf4429fe610e7e7d591"
@@ -213,7 +213,7 @@ function mac_toolchain_build {
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP SUDO TOTAL
     NAME="mac-toolchain-build"
-    VERSION="2.13.0"
+    VERSION="2.14.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
