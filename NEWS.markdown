@@ -10,6 +10,64 @@ Download available from Microsoft:
 - [For x64 (AMD or Intel CPUs)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe)
 - [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-arm64.exe)
 
+## HandBrake 1.11.0
+
+### All platforms
+
+#### General
+
+- Properly handle the case in which the first chapter timestamp is not zero
+
+#### Video
+
+- Allowed muxing FFV1 in the MP4 container
+- Added MPEG-2 profile and level selection
+- Improved AV1 in MP4 seeking on Apple software
+- Dolby Vision profile 5 video is now tagged with a proper color tag
+
+#### Audio
+
+- Added support for custom channels order (#7265)
+
+#### Build system
+
+- Updated mingw-w64-build to version 10.1.0.
+- Updated mac-toolchain-build script to version 2.14.0
+
+#### Third-party libraries
+
+- Updated libraries
+  - AMF 1.5.0 (AMD VCN video encoding)
+  - FFmpeg 8.0.1 (decoding and filters)
+  - HarfBuzz 12.2.0 (subtitles)
+  - Jansson 2.14.1 (JSON architecture)
+  - libbluray 1.4.0 (Blu-ray decoding)
+  - libdav1d 1.5.3 (AV1 decoding)
+  - libdvdnav 7.0.0 (DVD decoding)
+  - libdvdread 7.0.1 (DVD decoding)
+  - libjpeg-turbo 3.1.3 (preview image compression)
+  - liblzma (xz) 5.8.2 (LZMA video decoding, e.g. TIFF)
+  - libopus 1.6.1 (Opus audio encoding)
+  - libvpx 1.15.2 (VP8/VP9 video encoding)
+  - oneVPL 2.16.0 (Intel QSV video encoding/decoding)
+  - SVT-AV1 4.0.0 (AV1 video encoding)
+
+### Linux
+
+- Added a UI language preference
+- Improved display of file sizes
+- Fixed the disk space checks
+- Fixed a crash that could happen when a preset category contains the ' character
+
+### Mac
+
+- Updated UI on macOS 26
+- Notifications sound is now played back when HandBrake is in the foreground
+- File name labels in queue as now truncated in the middle, same behaviour as the Finder
+
+### Windows
+
+
 ## HandBrake 1.10.2
 
 ### All platforms
