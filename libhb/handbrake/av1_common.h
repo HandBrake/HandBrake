@@ -31,7 +31,7 @@ static const char * const hb_av1_svt_preset_names[] =
 
 static const char * const hb_av1_svt_tune_names[] =
 {
-    "vq", "psnr", "ssim", "fastdecode", NULL
+    "vq", "psnr", "ssim", "iq", "ms-ssim", "fastdecode", NULL
 };
 
 static const char * const hb_av1_svt_profile_names[] =

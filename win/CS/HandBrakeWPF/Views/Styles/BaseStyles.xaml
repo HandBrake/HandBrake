@@ -55,7 +55,7 @@
                         <BulletDecorator.Bullet>
                             <Grid Width="18" Height="18" >
                                 <Ellipse x:Name="Border"  
-                                         Fill="{StaticResource Ui.Background}"
+                                         Fill="{StaticResource Ui.BackgroundLight}"
                                          StrokeThickness="1"
                                          Stroke="{StaticResource Ui.ContrastLight}" />
                                 <Ellipse x:Name="CheckMark"
@@ -131,7 +131,7 @@
                 <ControlTemplate TargetType="CheckBox">
                     <BulletDecorator Background="Transparent">
                         <BulletDecorator.Bullet>
-                            <Border x:Name="Border"  Width="18" Height="18" Background="{StaticResource Ui.Background}"
+                            <Border x:Name="Border"  Width="18" Height="18" Background="{StaticResource Ui.BackgroundLight}"
                                     BorderThickness="1" BorderBrush="{StaticResource Ui.ContrastLight}">
                                 <Grid>
                                     <Grid Background="{TemplateBinding Foreground}" Margin="1" Visibility="Collapsed" Name="nullBlock"/>

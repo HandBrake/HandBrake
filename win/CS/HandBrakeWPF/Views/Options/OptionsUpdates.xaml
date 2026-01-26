@@ -42,7 +42,7 @@
 
             <!-- Version -->
             <TextBlock Grid.Column="0" Margin="0,0,0,0" Text="{x:Static Properties:Resources.Options_Version}" />
-            <TextBox Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Bottom" Text="{Binding Version, Mode=OneWay}" BorderThickness="0" x:Name="versionTextBox" MouseDoubleClick="VersionTextBox_OnMouseDoubleClick" />
+            <TextBox Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Bottom" IsReadOnly="True" Text="{Binding Version, Mode=OneWay}" BorderThickness="0" x:Name="versionTextBox" MouseDoubleClick="VersionTextBox_OnMouseDoubleClick" />
         </Grid>
 
         <TextBlock Text="{x:Static Properties:Resources.Options_Updates}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>

@@ -4,6 +4,7 @@
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:themes="clr-namespace:HandBrakeWPF.Themes"
              x:Name="sourcePanel">
 
     <UserControl.Resources>
@@ -18,7 +19,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid VerticalAlignment="Stretch" Grid.Column="0" Width="300" Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+        <Grid VerticalAlignment="Stretch" Grid.Column="0" Width="300" Background="{StaticResource Ui.Background}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -212,7 +213,11 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Column="1" Background="Black" Opacity="0.75" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid Grid.Column="1"
+              Background="Black"
+              Opacity="{Binding Source={x:Static themes:ThemeLoader.ThemeOpacity}}"
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch">
             <Border BorderThickness="4" CornerRadius="4" BorderBrush="{StaticResource Ui.Light}" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock Text="{x:Static Properties:Resources.SourceSelection_DropFileHere}" TextWrapping="WrapWithOverflow" Foreground="White" 
                            Margin="100,150,100,150"  FontSize="22"   />

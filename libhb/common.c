@@ -1668,12 +1668,18 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
-        case HB_VCODEC_SVT_AV1:
-        case HB_VCODEC_SVT_AV1_10BIT:
             *direction   = 1;
             *granularity = 1.;
             *low         = 0.;
             *high        = 63.;
+            break;
+
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+            *direction   = 1;
+            *granularity = 0.25;
+            *low         = 0.;
+            *high        = 70.;
             break;
 
         case HB_VCODEC_VT_H264:

@@ -1510,7 +1510,7 @@ static int apply_vp9_10bit_preset(AVDictionary ** av_opts, const char * preset)
 
 static int apply_ffv1_preset(AVCodecContext *context, AVDictionary **av_opts, const char *preset)
 {
-    if (!strcasecmp(preset, "preservation"))
+    if (preset != NULL && !strcasecmp(preset, "preservation"))
     {
         context->gop_size = 1;
         context->level = 3;

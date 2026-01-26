@@ -1,5 +1,6 @@
 ﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:themes="clr-namespace:HandBrakeWPF.Themes"
              x:Class="HandBrakeWPF.Controls.AlertPanel">
 
     <UserControl.Resources>
@@ -11,7 +12,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" ZIndex="-1" Background="Black" Opacity="0.75" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <StackPanel Grid.Row="0" ZIndex="-1" Background="Black" Opacity="{Binding Source={x:Static themes:ThemeLoader.ThemeOpacity}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
         <Border VerticalAlignment="Center" Grid.Row="0" Width="620" CornerRadius="4" BorderBrush="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Background="{DynamicResource Ui.Light}" BorderThickness="1">
             <Grid VerticalAlignment="Center" ZIndex="100" HorizontalAlignment="Stretch" Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">

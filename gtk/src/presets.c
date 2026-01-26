@@ -1400,6 +1400,7 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                     char * preset_path;
                     char * detail_action;
 
+                    g_string_replace(preset_str, "'", "\\'", 0);
                     preset_path = g_string_free(preset_str, FALSE);
                     if (preset_enabled)
                         detail_action = g_strdup_printf("app.preset-select('%s')", preset_path);

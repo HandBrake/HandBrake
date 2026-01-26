@@ -14,6 +14,8 @@
     <SolidColorBrush x:Key="Ui.Blue" Color="#00579f" />
     <SolidColorBrush x:Key="Ui.BlueBright" Color="#006cc5" />
     <SolidColorBrush x:Key="Ui.Background" />
+    <SolidColorBrush x:Key="Ui.BackgroundLight" />
+    <SolidColorBrush x:Key="Ui.BackgroundDark" />
     <SolidColorBrush x:Key="ButtonGlyphBrush" Color="#444"/>
 
     <!-- TextBlock -->

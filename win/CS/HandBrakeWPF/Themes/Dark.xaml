@@ -23,7 +23,10 @@
     <SolidColorBrush x:Key="Ui.Blue" Color="#00579f" />
     <SolidColorBrush x:Key="Ui.BlueBright" Color="#006cc5" />
 
-    <SolidColorBrush x:Key="Ui.Background" Color="#C0C0C0" />
+    <SolidColorBrush x:Key="Ui.Background" Color="#464646" />
+    <SolidColorBrush x:Key="Ui.BackgroundLight" Color="#C0C0C0" />
+    <SolidColorBrush x:Key="Ui.BackgroundDark" Color="Black" />
+
 
     <!-- General -->
     <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#252525" />
