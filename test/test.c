@@ -1367,6 +1367,8 @@ static void ShowHelp(void)
 "                           only, default: 1)\n"
 "       --min-duration      Set the minimum title duration (in seconds).\n"
 "                           Shorter titles will be ignored (default: 10).\n"
+"       --max-duration      Set the maximum title duration (in seconds).\n"
+"                           Longer titles will be ignored.\n"
 "       --scan              Scan selected title only.\n"
 "       --main-feature      Detect and select the main feature title.\n"
 "       --keep-duplicate-titles\n"
