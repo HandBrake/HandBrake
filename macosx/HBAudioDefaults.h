@@ -50,6 +50,7 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackAutomaticNamingBehavior) {
 @property(nonatomic, readwrite) BOOL allowTrueHDPassthru;
 @property(nonatomic, readwrite) BOOL allowALACPassthru;
 @property(nonatomic, readwrite) BOOL allowFLACPassthru;
+@property(nonatomic, readwrite) BOOL allowPCMPassthru;
 
 @property(nonatomic, readwrite) int encoderFallback;
 @property(nonatomic, readwrite) BOOL secondaryEncoderMode;

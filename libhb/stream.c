@@ -4293,6 +4293,7 @@ static int do_probe(hb_stream_t *stream, hb_pes_stream_t *pes, hb_buffer_t *buf)
                 { "h263"     , AV_CODEC_ID_H263       },
                 { "mjpeg"    , AV_CODEC_ID_MJPEG      },
                 { "vc1"      , AV_CODEC_ID_VC1        },
+                { "pcm"      , AV_CODEC_ID_PCM_S16BE  },
                 { 0 },
             };
             for( i = 0; fmt_id_type[i].name; i++ )
@@ -5593,6 +5594,25 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 
         case AV_CODEC_ID_MP3:
             audio->config.in.codec = HB_ACODEC_MP3;
+            break;
+
+        case AV_CODEC_ID_PCM_S16BE:
+        case AV_CODEC_ID_PCM_S16LE:
+        case AV_CODEC_ID_PCM_S24BE:
+        case AV_CODEC_ID_PCM_S24LE:
+        case AV_CODEC_ID_PCM_S32BE:
+        case AV_CODEC_ID_PCM_S32LE:
+        case AV_CODEC_ID_PCM_U16BE:
+        case AV_CODEC_ID_PCM_U16LE:
+        case AV_CODEC_ID_PCM_U24BE:
+        case AV_CODEC_ID_PCM_U24LE:
+        case AV_CODEC_ID_PCM_U32BE:
+        case AV_CODEC_ID_PCM_U32LE:
+        case AV_CODEC_ID_PCM_F32BE:
+        case AV_CODEC_ID_PCM_F32LE:
+        case AV_CODEC_ID_PCM_F64BE:
+        case AV_CODEC_ID_PCM_F64LE:
+            audio->config.in.codec = HB_ACODEC_PCM;
             break;
 
         case AV_CODEC_ID_VORBIS:

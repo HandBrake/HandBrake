@@ -661,6 +661,22 @@ static int avformatInit( hb_mux_object_t * m )
             case HB_ACODEC_MP2:
                 track->st->codecpar->codec_id = AV_CODEC_ID_MP2;
                 break;
+            case HB_ACODEC_PCM:
+                if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
+                {
+                    track->st->codecpar->codec_id = audio->config.in.codec_param;
+                }
+                else
+                {
+                    track->st->codecpar->codec_id = AV_CODEC_ID_PCM_S16LE;
+                }
+                break;
+            case HB_ACODEC_FFPCM16:
+                track->st->codecpar->codec_id = AV_CODEC_ID_PCM_S16LE;
+                break;
+            case HB_ACODEC_FFPCM24:
+                track->st->codecpar->codec_id = AV_CODEC_ID_PCM_S24LE;
+                break;
             case HB_ACODEC_LAME:
             case HB_ACODEC_MP3:
                 track->st->codecpar->codec_id = AV_CODEC_ID_MP3;

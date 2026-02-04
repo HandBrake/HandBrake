@@ -107,6 +107,8 @@ enum
     HB_GID_ACODEC_VORBIS_PASS,
     HB_GID_ACODEC_OPUS,
     HB_GID_ACODEC_OPUS_PASS,
+    HB_GID_ACODEC_PCM,
+    HB_GID_ACODEC_PCM_PASS,
     HB_GID_MUX_MKV,
     HB_GID_MUX_MP4,
     HB_GID_MUX_WEBM,
@@ -460,6 +462,9 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "ALAC 16-bit",        "alac16",     "ALAC 16-bit (libavcodec)",    HB_ACODEC_FFALAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_ALAC,       },
     { { "ALAC 24-bit",        "alac24",     "ALAC 24-bit (libavcodec)",    HB_ACODEC_FFALAC24,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_ALAC,       },
     { { "ALAC Passthru",      "copy:alac",  "ALAC Passthru",               HB_ACODEC_ALAC_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_ALAC_PASS,  },
+    { { "PCM 16-bit",         "pcm16",      "PCM 16-bit (libavcodec)",     HB_ACODEC_FFPCM16,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_PCM,        },
+    { { "PCM 24-bit",         "pcm24",      "PCM 24-bit (libavcodec)",     HB_ACODEC_FFPCM24,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_PCM,        },
+    { { "PCM Passthru",       "copy:pcm",   "PCM Passthru",                HB_ACODEC_PCM_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_PCM_PASS,   },
     { { "Auto Passthru",      "copy",       "Auto Passthru",               HB_ACODEC_AUTO_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_AUTO_PASS,  },
 };
 int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_audio_encoders[0]);
@@ -510,6 +515,8 @@ static int hb_audio_encoder_is_enabled(int encoder)
         // the following encoders are always enabled
         case HB_ACODEC_LAME:
         case HB_ACODEC_VORBIS:
+        case HB_ACODEC_FFPCM16:
+        case HB_ACODEC_FFPCM24:
         case HB_ACODEC_NONE:
             return 1;
 
