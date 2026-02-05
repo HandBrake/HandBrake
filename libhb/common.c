@@ -1175,6 +1175,8 @@ int hb_audio_bitrate_get_default(uint32_t codec, int samplerate, int mixdown)
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_FFTRUEHD:
+        case HB_ACODEC_FFPCM16:
+        case HB_ACODEC_FFPCM24:
             goto fail;
 
         // 96, 224, 640 Kbps
@@ -1365,6 +1367,8 @@ void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_FFTRUEHD:
+        case HB_ACODEC_FFPCM16:
+        case HB_ACODEC_FFPCM24:
             *low = *high = -1;
             return;
 
@@ -2598,6 +2602,8 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
         case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
+        case HB_ACODEC_FFPCM16:
+        case HB_ACODEC_FFPCM24:
         case HB_ACODEC_OPUS:
         case HB_ACODEC_CA_AAC:
         case HB_ACODEC_CA_HAAC:
