@@ -520,6 +520,10 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
                 case HB_ACODEC_OPUS_PASS:
                     ghb_dict_set_bool(settings, "AudioAllowOPUSPass", 1);
                     break;
+                case HB_ACODEC_PCM:
+                case HB_ACODEC_PCM_PASS:
+                    ghb_dict_set_bool(settings, "AudioAllowPCMPass", 1);
+                    break;
             }
         }
     }
@@ -1795,6 +1799,10 @@ GhbValue* ghb_create_copy_mask(GhbValue *settings)
     if (ghb_dict_get_bool(settings, "AudioAllowOPUSPass"))
     {
         ghb_array_append(copy_mask, ghb_string_value_new("copy:opus"));
+    }
+    if (ghb_dict_get_bool(settings, "AudioAllowPCMPass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:pcm"));
     }
     return copy_mask;
 }

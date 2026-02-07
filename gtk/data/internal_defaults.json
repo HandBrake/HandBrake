@@ -15,6 +15,7 @@
         "AudioAllowTRUEHDPass": false,
         "AudioAllowVORBISPass": false,
         "AudioAllowOPUSPass": false,
+        "AudioAllowPCMPass": false,
         "AudioBitrate": "192",
         "AudioEncoder": "copy:ac3",
         "AudioTrack": 0,

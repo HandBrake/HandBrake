@@ -3738,6 +3738,8 @@ static void import_audio_0_0_0(hb_value_t *preset)
         hb_value_array_append(copy, hb_value_string("copy:flac"));
     if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowTRUEHDPass")))
         hb_value_array_append(copy, hb_value_string("copy:truehd"));
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowPCMPass")))
+        hb_value_array_append(copy, hb_value_string("copy:pcm"));
 }
 
 static void import_video_0_0_0(hb_value_t *preset)

@@ -5271,6 +5271,21 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                         </layout>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowPCMPass">
+                        <property name="label" translatable="yes">PCM</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports PCM.
+This permits PCM passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">6</property>
+                        </layout>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>

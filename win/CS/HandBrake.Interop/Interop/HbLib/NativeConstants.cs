@@ -25,12 +25,16 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_ACODEC_FFFLAC_24 = 0x00200000;
         public const uint HB_ACODEC_FFEAC3 = 0x01000000;
         public const uint HB_ACODEC_FFTRUEHD = 0x02000000;
+        public const uint HB_ACODEC_VORBIS = 0x00000400;
         public const uint HB_ACODEC_OPUS = 0x04000000;
         public const uint HB_ACODEC_MP2 = 0x08000000;
+        public const uint HB_ACODEC_PCM = 0x10000000;
+        public const uint HB_ACODEC_FFPCM16 = 0x00000002;
+        public const uint HB_ACODEC_FFPCM24 = 0x00000004;
         public const uint HB_ACODEC_PASS_FLAG = 0x40000000;
-        public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_AC3 | HB_ACODEC_DCA | HB_ACODEC_DCA_HD | HB_ACODEC_FFAAC | HB_ACODEC_FFEAC3 | HB_ACODEC_FFALAC | HB_ACODEC_FFFLAC | HB_ACODEC_MP2 | HB_ACODEC_MP3 | HB_ACODEC_FFTRUEHD | HB_ACODEC_OPUS);
+        public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_AC3 | HB_ACODEC_DCA | HB_ACODEC_DCA_HD | HB_ACODEC_FFAAC | HB_ACODEC_FFEAC3 | HB_ACODEC_FFALAC | HB_ACODEC_FFFLAC | HB_ACODEC_MP2 | HB_ACODEC_MP3 | HB_ACODEC_FFTRUEHD | HB_ACODEC_VORBIS | HB_ACODEC_OPUS | HB_ACODEC_PCM);
 
-        public const uint HB_ACODEC_MASK = 0x0FFFFF81;
+        public const uint HB_ACODEC_MASK = 0x1FFFFF87;
         public const uint HB_ACODEC_AUTO_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_PASS_MASK);
         public const uint HB_ACODEC_ANY = (HB_ACODEC_PASS_FLAG | HB_ACODEC_MASK);
         public const uint HB_ACODEC_AAC_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_FFAAC);
@@ -43,7 +47,9 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_ACODEC_MP3_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_MP3);
         public const uint HB_ACODEC_TRUEHD_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_FFTRUEHD);
         public const uint HB_ACODEC_MP2_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_MP2);
+        public const uint HB_ACODEC_VORBIS_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_VORBIS);
         public const uint HB_ACODEC_OPUS_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_OPUS);
+        public const uint HB_ACODEC_PCM_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_PCM);
 
         // Video Encoders
         public const uint HB_VCODEC_AV1_MASK  = 0x40000000;

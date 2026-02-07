@@ -633,6 +633,14 @@ static int avformatInit( hb_mux_object_t * m )
         {
             track->st->time_base.num = 1;
             track->st->time_base.den = audio->config.out.samplerate;
+            // PCM in MP4 requires frame_size = 1 (one sample per packet)
+            // to satisfy QuickTime's ASBD mBytesPerPacket requirements
+            if ((audio->config.out.codec & HB_ACODEC_MASK) == HB_ACODEC_FFPCM16 ||
+                (audio->config.out.codec & HB_ACODEC_MASK) == HB_ACODEC_FFPCM24 ||
+                (audio->config.out.codec & HB_ACODEC_MASK) == HB_ACODEC_PCM)
+            {
+                track->st->codecpar->frame_size = 1;
+            }
         }
         else
         {
@@ -660,6 +668,24 @@ static int avformatInit( hb_mux_object_t * m )
                 break;
             case HB_ACODEC_MP2:
                 track->st->codecpar->codec_id = AV_CODEC_ID_MP2;
+                break;
+            case HB_ACODEC_PCM:
+                if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
+                {
+                    track->st->codecpar->codec_id = audio->config.in.codec_param;
+                }
+                else
+                {
+                    track->st->codecpar->codec_id = AV_CODEC_ID_PCM_S16LE;
+                }
+                break;
+            case HB_ACODEC_FFPCM16:
+                track->st->codecpar->codec_id = AV_CODEC_ID_PCM_S16LE;
+                track->st->codecpar->bits_per_coded_sample = 16;
+                break;
+            case HB_ACODEC_FFPCM24:
+                track->st->codecpar->codec_id = AV_CODEC_ID_PCM_S24LE;
+                track->st->codecpar->bits_per_coded_sample = 24;
                 break;
             case HB_ACODEC_LAME:
             case HB_ACODEC_MP3:

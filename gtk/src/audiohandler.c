@@ -344,6 +344,10 @@ int ghb_get_copy_mask(GhbValue *settings)
     {
         mask |= HB_ACODEC_OPUS_PASS;
     }
+    if (ghb_dict_get_bool(settings, "AudioAllowPCMPass"))
+    {
+        mask |= HB_ACODEC_PCM_PASS;
+    }
     return mask;
 }
 

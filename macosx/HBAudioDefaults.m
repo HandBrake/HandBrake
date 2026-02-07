@@ -172,6 +172,15 @@
     _allowFLACPassthru = allowFLACPassthru;
 }
 
+- (void)setAllowPCMPassthru:(BOOL)allowPCMPassthru
+{
+    if (allowPCMPassthru != _allowPCMPassthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowPCMPassthru:_allowPCMPassthru];
+    }
+    _allowPCMPassthru = allowPCMPassthru;
+}
+
 - (void)setEncoderFallback:(int)encoderFallback
 {
     if (encoderFallback != _encoderFallback)
@@ -267,6 +276,7 @@
     self.allowVorbisPassthru = NO;
     self.allowOpusPassthru   = NO;
     self.allowTrueHDPassthru = NO;
+    self.allowPCMPassthru    = NO;
 
     // then, enable allowed passthru encoders
     for (NSString *copyMask in preset[@"AudioCopyMask"])
@@ -311,6 +321,9 @@
                     break;
                 case HB_ACODEC_TRUEHD_PASS:
                     self.allowTrueHDPassthru = YES;
+                    break;
+                case HB_ACODEC_PCM_PASS:
+                    self.allowPCMPassthru = YES;
                     break;
                 default:
                     break;
@@ -455,6 +468,10 @@
     {
         [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_FLAC_PASS))];
     }
+    if (self.allowPCMPassthru)
+    {
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_PCM_PASS))];
+    }
     preset[@"AudioCopyMask"] = [copyMask copy];
 
     preset[@"AudioEncoderFallback"] = @(hb_audio_encoder_get_short_name(self.encoderFallback));
@@ -558,6 +575,7 @@
         copy->_allowOpusPassthru = _allowOpusPassthru;
         copy->_allowTrueHDPassthru = _allowTrueHDPassthru;
         copy->_allowFLACPassthru = _allowFLACPassthru;
+        copy->_allowPCMPassthru = _allowPCMPassthru;
 
         copy->_encoderFallback = _encoderFallback;
         copy->_container = _container;
@@ -596,6 +614,7 @@
     encodeBool(_allowOpusPassthru);
     encodeBool(_allowTrueHDPassthru);
     encodeBool(_allowFLACPassthru);
+    encodeBool(_allowPCMPassthru);
 
     encodeInt(_encoderFallback);
     encodeInt(_container);
@@ -628,6 +647,7 @@
     decodeBool(_allowOpusPassthru);
     decodeBool(_allowTrueHDPassthru);
     decodeBool(_allowFLACPassthru);
+    decodeBool(_allowPCMPassthru);
 
     decodeInt(_encoderFallback); if (_encoderFallback < 0) { goto fail; }
     decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
