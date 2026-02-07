@@ -134,7 +134,7 @@
             <ItemsControl x:Name="StreamsItemsControl" ItemsSource="{Binding PassthruEncoders}" Margin="10,5,0,0" HorizontalAlignment="Left">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="6" Columns="2" IsItemsHost="true" />
+                        <UniformGrid Rows="7" Columns="2" IsItemsHost="true" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
