@@ -184,7 +184,8 @@ int hb_vce_av1_available()
 
 int hb_map_vce_preset_name(int vcodec, const char *preset)
 {
-    if (vcodec == HB_VCODEC_FFMPEG_VCE_AV1)
+    if (vcodec == HB_VCODEC_FFMPEG_VCE_AV1 ||
+        vcodec == HB_VCODEC_FFMPEG_VCE_AV1_10BIT)
     {
         if (strcmp(preset, "high quality") == 0) {
             return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_HIGH_QUALITY;
