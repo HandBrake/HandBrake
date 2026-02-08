@@ -588,7 +588,7 @@
     self = [super init];
 
     decodeInteger(_sourceTrackIdx); if (_sourceTrackIdx < 0) { goto fail; }
-    decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
+    decodeContainerOrFail(_container);
 
     decodeInt(_encoder); if (_encoder < 0) { goto fail; }
     decodeInt(_mixdown); if (_mixdown < 0) { goto fail; }

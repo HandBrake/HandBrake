@@ -862,20 +862,25 @@ struct hb_job_s
      *     mux:  output file format
      *     file: file path
      */
-#define HB_MUX_MASK      0xFF0001
+#define HB_MUX_MASK      0xFF1001
 #define HB_MUX_INVALID   0x000000
 #define HB_MUX_MP4V2     0x010000
 #define HB_MUX_AV_MP4    0x020000
 #define HB_MUX_MASK_MP4  0x030000
+#define HB_MUX_AV_MOV    0x001000
+#define HB_MUX_MASK_MOV  0x001000
 #define HB_MUX_LIBMKV    0x100000
 #define HB_MUX_AV_MKV    0x200000
 #define HB_MUX_AV_WEBM   0x400000
 #define HB_MUX_MASK_MKV  0x300000
-#define HB_MUX_MASK_AV   0x620000
 #define HB_MUX_MASK_WEBM 0x400000
+#define HB_MUX_MASK_AV   0x621000
+
+#define HB_MUX_MASK_ISOBFF_FAMILY (HB_MUX_MASK_MP4 | HB_MUX_MASK_MOV)
 
 /* default muxer for each container */
 #define HB_MUX_MP4       HB_MUX_AV_MP4
+#define HB_MUX_MOV       HB_MUX_AV_MOV
 #define HB_MUX_MKV       HB_MUX_AV_MKV
 #define HB_MUX_WEBM      HB_MUX_AV_WEBM
 

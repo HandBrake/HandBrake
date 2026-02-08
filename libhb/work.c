@@ -477,6 +477,7 @@ void hb_display_job_info(hb_job_t *job)
     switch (job->mux)
     {
         case HB_MUX_AV_MP4:
+        case HB_MUX_AV_MOV:
             if (job->optimize)
                 hb_log("     + optimized for HTTP streaming (fast start)");
             if (job->ipod_atom)
@@ -1056,7 +1057,7 @@ static int sanitize_subtitles( hb_job_t * job )
         else if (subtitle->format        == TEXTSUB &&
                  subtitle->config.codec  == HB_SCODEC_PASS)
         {
-            if (job->mux == HB_MUX_AV_MP4)
+            if (job->mux == HB_MUX_AV_MP4 || job->mux == HB_MUX_AV_MOV)
             {
                 subtitle->config.codec = HB_SCODEC_TX3G;
             }

@@ -508,14 +508,14 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeBool(_stream);
 
 #ifdef __SANDBOX_ENABLED__
-        decodeObject(_fileURLBookmark, NSData)
-        decodeObject(_destinationFolderURLBookmark, NSData)
+        decodeObject(_fileURLBookmark, NSData);
+        decodeObject(_destinationFolderURLBookmark, NSData);
 #endif
         decodeObjectOrFail(_fileURL, NSURL);
         decodeObject(_destinationFolderURL, NSURL);
         decodeObject(_destinationFileName, NSString);
 
-        decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
+        decodeContainerOrFail(_container);
         decodeInt(_angle); if (_angle < 0) { goto fail; }
         decodeBool(_optimize);
         decodeBool(_mp4iPodCompatible);
