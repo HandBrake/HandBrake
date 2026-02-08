@@ -36,9 +36,9 @@ void hb_dynamic_hdr10_plus_to_itu_t_t35(const AVDynamicHDRPlus *s, uint8_t **buf
         const AVHDRPlusColorTransformParams *params = &s->params[w];
 
         hb_bitstream_put_bits(&bs, params->window_upper_left_corner_x.num, 16);
-        hb_bitstream_put_bits(&bs, params->window_upper_left_corner_x.num, 16);
-        hb_bitstream_put_bits(&bs, params->window_upper_left_corner_x.num, 16);
-        hb_bitstream_put_bits(&bs, params->window_upper_left_corner_x.num, 16);
+        hb_bitstream_put_bits(&bs, params->window_upper_left_corner_y.num, 16);
+        hb_bitstream_put_bits(&bs, params->window_lower_right_corner_x.num, 16);
+        hb_bitstream_put_bits(&bs, params->window_lower_right_corner_y.num, 16);
 
         hb_bitstream_put_bits(&bs, params->center_of_ellipse_x, 16);
         hb_bitstream_put_bits(&bs, params->center_of_ellipse_y, 16);

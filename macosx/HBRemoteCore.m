@@ -78,7 +78,7 @@
 
     _proxy = [_connection remoteObjectProxyWithErrorHandler:^(NSError * _Nonnull error) {
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self forwardError:@"XPC: Service did report an error\n"];
+            [weakSelf forwardError:@"XPC: Service did report an error\n"];
             [HBUtilities writeErrorToActivityLog:error];
         });
     }];
