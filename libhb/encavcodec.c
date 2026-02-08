@@ -185,6 +185,11 @@ static const int hb_mpeg2_level_values[] =
     8, 10,  8,  4, 6, 8
 };
 
+static const char * const hb_prores_profile_names[] =
+{
+    "auto", "proxy", "lt", "standard", "hq", "4444", "4444xq", NULL
+};
+
 static const enum AVPixelFormat standard_pix_fmts[] =
 {
     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
@@ -198,6 +203,16 @@ static const enum AVPixelFormat standard_422_pix_fmts[] =
 static const enum AVPixelFormat standard_10bit_pix_fmts[] =
 {
     AV_PIX_FMT_YUV420P10, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_422_10bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV422P10, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_444_10bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV444P10, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat qsv_pix_formats[] =
@@ -363,6 +378,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 case HB_VCODEC_FFMPEG_FFV1:
                     hb_log("encavcodecInit: FFV1 (libavcodec)");
                     codec_name = "ffv1";
+                    break;
+            }
+        }break;
+        case AV_CODEC_ID_PRORES:
+        {
+            switch (job->vcodec) {
+                case HB_VCODEC_FFMPEG_PRORES:
+                    hb_log("encavcodecInit: ProRes (libavcodec)");
+                    codec_name = "prores";
                     break;
             }
         }break;
@@ -913,6 +937,24 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 context->profile = AV_PROFILE_MPEG2_HIGH;
             else if (!strcasecmp(job->encoder_profile, "422"))
                 context->profile = AV_PROFILE_MPEG2_422;
+        }
+    }
+    else if (job->vcodec == HB_VCODEC_FFMPEG_PRORES)
+    {
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if (!strcasecmp(job->encoder_profile, "proxy"))
+                context->profile = AV_PROFILE_PRORES_PROXY;
+            else if (!strcasecmp(job->encoder_profile, "lt"))
+                 context->profile = AV_PROFILE_PRORES_LT;
+            else if (!strcasecmp(job->encoder_profile, "standard"))
+                context->profile = AV_PROFILE_PRORES_STANDARD;
+            else if (!strcasecmp(job->encoder_profile, "hq"))
+                context->profile = AV_PROFILE_PRORES_HQ;
+            else if (!strcasecmp(job->encoder_profile, "4444"))
+                context->profile = AV_PROFILE_PRORES_4444;
+            else if (!strcasecmp(job->encoder_profile, "4444xq"))
+                context->profile = AV_PROFILE_PRORES_XQ;
         }
     }
 
@@ -1777,6 +1819,8 @@ const char* const* hb_av_profile_get_names(int encoder)
             return h265_qsv_profile_name;
         case HB_VCODEC_FFMPEG_MPEG2:
             return hb_mpeg2_profile_names;
+        case HB_VCODEC_FFMPEG_PRORES:
+            return hb_prores_profile_names;
          default:
              return empty_names;
      }
@@ -1866,6 +1910,18 @@ const int* hb_av_get_pix_fmts(int encoder, const char *profile)
             else
             {
                 return standard_pix_fmts;
+            }
+        }
+
+        case HB_VCODEC_FFMPEG_PRORES:
+        {
+            if (profile && (!strcasecmp(profile, "4444") || !strcasecmp(profile, "4444xq")))
+            {
+                return standard_444_10bit_pix_fmts;
+            }
+            else
+            {
+                return standard_422_10bit_pix_fmts;
             }
         }
 

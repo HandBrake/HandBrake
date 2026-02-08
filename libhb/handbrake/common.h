@@ -741,6 +741,8 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_QSV_AV1_10BIT     (0x00000071 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_FFMPEG_QSV_AV1           HB_VCODEC_FFMPEG_QSV_AV1_8BIT
 
+#define HB_VCODEC_FFMPEG_PRORES     (0x00000100 | HB_VCODEC_FFMPEG_MASK)
+
 /* define an invalid CQ value compatible with all CQ-capable codecs */
 #define HB_INVALID_VIDEO_QUALITY (-1000.)
 
