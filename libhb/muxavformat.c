@@ -492,6 +492,37 @@ static int avformatInit( hb_mux_object_t * m )
             track->st->codecpar->codec_id = AV_CODEC_ID_FFV1;
             break;
 
+        case HB_VCODEC_FFMPEG_PRORES:
+            track->st->codecpar->codec_id = AV_CODEC_ID_PRORES;
+            if (job->encoder_profile != NULL && *job->encoder_profile)
+            {
+                if (!strcasecmp(job->encoder_profile, "proxy"))
+                {
+                    track->st->codecpar->codec_tag = MKTAG('a', 'p', 'c', 'o');
+                }
+                else if (!strcasecmp(job->encoder_profile, "lt"))
+                {
+                    track->st->codecpar->codec_tag = MKTAG('a', 'p', 'c', 's');
+                }
+                else if (!strcasecmp(job->encoder_profile, "standard"))
+                {
+                    track->st->codecpar->codec_tag = MKTAG('a', 'p', 'c', 'n');
+                }
+                else if (!strcasecmp(job->encoder_profile, "hq"))
+                {
+                    track->st->codecpar->codec_tag = MKTAG('a', 'p', 'c', 'h');
+                }
+                else if (!strcasecmp(job->encoder_profile, "4444"))
+                {
+                    track->st->codecpar->codec_tag = MKTAG('a', 'p', '4', 'h');
+                }
+                else if (!strcasecmp(job->encoder_profile, "4444xq"))
+                {
+                    track->st->codecpar->codec_tag = MKTAG('a', 'p', '4', 'x');
+                }
+            }
+            break;
+
         default:
             hb_error("muxavformat: Unknown video codec: %x", job->vcodec);
             goto error;
