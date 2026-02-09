@@ -214,6 +214,17 @@ hb_vt_h265_levels[] =
     { "auto", { CFSTR("HEVC_Main_AutoLevel"), CFSTR("HEVC_Main10_AutoLevel"), CFSTR("HEVC_Main42210_AutoLevel") } }
 };
 
+enum
+{
+    HB_VT_PRORES_PROFILE_PROXY = 0,
+    HB_VT_PRORES_PROFILE_LT,
+    HB_VT_PRORES_PROFILE_STANDARD,
+    HB_VT_PRORES_PROFILE_HQ,
+    HB_VT_PRORES_PROFILE_4444,
+    HB_VT_PRORES_PROFILE_4444XQ,
+    HB_VT_PRORES_PROFILE_NB,
+};
+
 static void hb_vt_save_frame_info(hb_work_private_t *pv, hb_buffer_t *in)
 {
     int i = pv->frameno_in & FRAME_INFO_MASK;
@@ -247,11 +258,11 @@ static void hb_vt_check_result(OSStatus err, CFStringRef propertyKey)
                                              kCFStringEncodingUTF8);
         if (haveStr)
         {
-            hb_log("VTSessionSetProperty: %s failed (%d)", valBuf, err);
+            hb_deep_log(2, "VTSessionSetProperty: %s failed (%d)", valBuf, err);
         }
         else
         {
-            hb_log("VTSessionSetProperty: failed (%d)", err);
+            hb_deep_log(2, "VTSessionSetProperty: failed (%d)", err);
         }
     }
 }
@@ -383,6 +394,40 @@ static CFDataRef hb_vt_ambient_viewing_enviroment_xlat(hb_ambient_viewing_enviro
     return data;
 }
 
+static CMVideoCodecType hb_vt_encoder_xlat(int vcodec, int profile)
+{
+    switch (vcodec)
+    {
+        case HB_VCODEC_VT_H264:
+            return kCMVideoCodecType_H264;
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            return kCMVideoCodecType_HEVC;
+        case HB_VCODEC_VT_PRORES:
+            switch (profile)
+            {
+                case HB_VT_PRORES_PROFILE_PROXY:
+                    return kCMVideoCodecType_AppleProRes422Proxy;
+                case HB_VT_PRORES_PROFILE_LT:
+                    return kCMVideoCodecType_AppleProRes422LT;
+                case HB_VT_PRORES_PROFILE_STANDARD:
+                    return kCMVideoCodecType_AppleProRes422;
+                case HB_VT_PRORES_PROFILE_HQ:
+                    return kCMVideoCodecType_AppleProRes422HQ;
+                case HB_VT_PRORES_PROFILE_4444:
+                    return kCMVideoCodecType_AppleProRes4444;
+                case HB_VT_PRORES_PROFILE_4444XQ:
+                    return kCMVideoCodecType_AppleProRes4444XQ;
+                default:
+                    return kCMVideoCodecType_AppleProRes422;
+            }
+        default:
+            hb_log("encvt_Init: unknown codec");
+    }
+
+    return 0;
+}
+
 static OSType hb_vt_encoder_pixel_format_xlat(int vcodec, int profile, int color_range)
 {
     int pix_fmt = AV_PIX_FMT_NV12;
@@ -403,6 +448,9 @@ static OSType hb_vt_encoder_pixel_format_xlat(int vcodec, int profile, int color
                     pix_fmt = hb_vt_get_best_pix_fmt(vcodec, "main422-10");
                     break;
             }
+            break;
+        case HB_VCODEC_VT_PRORES:
+            pix_fmt = hb_vt_get_best_pix_fmt(vcodec, "auto");
             break;
         default:
             hb_log("encvt_Init: unknown codec");
@@ -429,10 +477,6 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
 {
     // Set global default values.
     hb_vt_param_default(&pv->settings);
-
-    pv->settings.codec       = job->vcodec == HB_VCODEC_VT_H264 ? kCMVideoCodecType_H264 : kCMVideoCodecType_HEVC;
-    pv->settings.inputPixFmt = hb_cv_get_pixel_format(job->output_pix_fmt, job->color_range);
-    pv->settings.timescale   = 90000;
 
     // Set the preset
     if (job->encoder_preset != NULL && *job->encoder_preset != '\0')
@@ -497,6 +541,33 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
                 return -1;
             }
         }
+        else if (job->vcodec == HB_VCODEC_VT_PRORES)
+        {
+            if (!strcasecmp(job->encoder_profile, "proxy"))
+            {
+                pv->settings.profile = HB_VT_PRORES_PROFILE_PROXY;
+            }
+            else if (!strcasecmp(job->encoder_profile, "lt"))
+            {
+                pv->settings.profile = HB_VT_PRORES_PROFILE_LT;
+            }
+            else if (!strcasecmp(job->encoder_profile, "standard"))
+            {
+                pv->settings.profile = HB_VT_PRORES_PROFILE_STANDARD;
+            }
+            else if (!strcasecmp(job->encoder_profile, "hq"))
+            {
+                pv->settings.profile = HB_VT_PRORES_PROFILE_HQ;
+            }
+            else if (!strcasecmp(job->encoder_profile, "4444"))
+            {
+                pv->settings.profile = HB_VT_PRORES_PROFILE_4444;
+            }
+            else if (!strcasecmp(job->encoder_profile, "4444xq"))
+            {
+                pv->settings.profile = HB_VT_PRORES_PROFILE_4444XQ;
+            }
+        }
     }
     else
     {
@@ -512,8 +583,15 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
         {
             pv->settings.profile = HB_VT_H265_PROFILE_MAIN_10;
         }
+        else if (job->vcodec == HB_VCODEC_VT_PRORES)
+        {
+            pv->settings.profile = HB_VT_PRORES_PROFILE_STANDARD;
+        }
     }
 
+    pv->settings.timescale     = 90000;
+    pv->settings.codec         = hb_vt_encoder_xlat(job->vcodec, pv->settings.profile);
+    pv->settings.inputPixFmt   = hb_cv_get_pixel_format(job->output_pix_fmt, job->color_range);
     pv->settings.encoderPixFmt = hb_vt_encoder_pixel_format_xlat(job->vcodec, pv->settings.profile, job->color_range);
 
     if (job->encoder_level != NULL && *job->encoder_level != '\0' && job->vcodec == HB_VCODEC_VT_H264)
@@ -1093,7 +1171,10 @@ static OSStatus hb_vt_init_session(hb_work_object_t *w, hb_job_t *job, hb_work_p
                                                                              &kCFTypeDictionaryKeyCallBacks,
                                                                              &kCFTypeDictionaryValueCallBacks);
 
-    CFDictionaryAddValue(encoderSpecifications, kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder, kCFBooleanTrue);
+    if (pv->settings.codec == kCMVideoCodecType_H264 || pv->settings.codec == kCMVideoCodecType_HEVC)
+    {
+        CFDictionaryAddValue(encoderSpecifications, kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder, kCFBooleanTrue);
+    }
 
     if (pv->settings.registryID > 0)
     {
@@ -1514,15 +1595,10 @@ static OSStatus hb_vt_init_session(hb_work_object_t *w, hb_job_t *job, hb_work_p
     }
 
     CFBooleanRef allowFrameReordering;
-    err = VTSessionCopyProperty(pv->session,
-                                kVTCompressionPropertyKey_AllowFrameReordering,
-                                kCFAllocatorDefault,
-                                &allowFrameReordering);
-    if (err != noErr)
-    {
-        hb_log("VTSessionCopyProperty: kVTCompressionPropertyKey_AllowFrameReordering failed");
-    }
-    else
+    if (VTSessionCopyProperty(pv->session,
+                              kVTCompressionPropertyKey_AllowFrameReordering,
+                              kCFAllocatorDefault,
+                              &allowFrameReordering) == noErr)
     {
         if (CFBooleanGetValue(allowFrameReordering))
         {

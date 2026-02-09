@@ -493,6 +493,7 @@ static int avformatInit( hb_mux_object_t * m )
             break;
 
         case HB_VCODEC_FFMPEG_PRORES:
+        case HB_VCODEC_VT_PRORES:
             track->st->codecpar->codec_id = AV_CODEC_ID_PRORES;
             if (job->encoder_profile != NULL && *job->encoder_profile)
             {

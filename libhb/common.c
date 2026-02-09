@@ -323,6 +323,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "VP9",                         "VP9",              "VP9 (libvpx)",                   HB_VCODEC_FFMPEG_VP9,        HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
     { { "VP9 10-bit",                  "VP9_10bit",        "VP9 10-bit (libvpx)",            HB_VCODEC_FFMPEG_VP9_10BIT,  HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
     { { "ProRes",                      "prores",           "ProRes (libavcodec)",            HB_VCODEC_FFMPEG_PRORES,                      HB_MUX_MASK_MOV|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_PRORES,     },
+    { { "ProRes (VideoToolbox)",       "vt_prores",        "ProRes (VideoToolbox)",          HB_VCODEC_VT_PRORES,                          HB_MUX_MASK_MOV|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_PRORES,     },
     { { "Theora",                      "theora",           "Theora (libtheora)",             HB_VCODEC_THEORA,                                             HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_THEORA,     },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
@@ -366,6 +367,7 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
             case HB_VCODEC_VT_H264:
             case HB_VCODEC_VT_H265:
             case HB_VCODEC_VT_H265_10BIT:
+            case HB_VCODEC_VT_PRORES:
                 return hb_vt_is_encoder_available(encoder);
 #endif
 
@@ -1721,6 +1723,7 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
 
         case HB_VCODEC_FFMPEG_FFV1:
         case HB_VCODEC_FFMPEG_PRORES:
+        case HB_VCODEC_VT_PRORES:
             *direction   = 0;
             *granularity = 1;
             *low         = 0;
@@ -1809,6 +1812,7 @@ int hb_video_bitrate_is_supported(uint32_t codec)
     {
         case HB_VCODEC_FFMPEG_FFV1:
         case HB_VCODEC_FFMPEG_PRORES:
+        case HB_VCODEC_VT_PRORES:
             return 0;
 
         default:
@@ -2074,6 +2078,7 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
+        case HB_VCODEC_VT_PRORES:
             return hb_vt_profile_get_names(encoder);
 #endif
         case HB_VCODEC_FFMPEG_NVENC_H264:
