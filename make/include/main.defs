@@ -55,6 +55,8 @@ MODULES += contrib/ffmpeg
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libbluray
+MODULES += contrib/vulkan
+MODULES += contrib/libplacebo
 
 ifeq (1,$(FEATURE.qsv))
 ifeq (,$(filter $(HOST.system),freebsd))
