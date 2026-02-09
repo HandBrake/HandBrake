@@ -105,6 +105,8 @@ int hb_vt_is_encoder_available(int encoder)
             });
             return vt_h265_10bit_available;
         }
+        case HB_VCODEC_VT_PRORES:
+            return 1;
     }
     return 0;
 }
@@ -232,6 +234,12 @@ static const char * const vt_h265_level_names[] =
     "auto",  NULL,
 };
 
+static const char * const vt_prores_profile_name[] =
+{
+    "auto", "proxy", "lt", "standard", "hq", "4444", "4444xq", NULL
+};
+
+
 static const enum AVPixelFormat vt_h26x_pix_fmts[] =
 {
     AV_PIX_FMT_P410, AV_PIX_FMT_NV24, AV_PIX_FMT_P210, AV_PIX_FMT_NV16, AV_PIX_FMT_P010, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
@@ -299,6 +307,8 @@ const char* const* hb_vt_profile_get_names(int encoder)
                 return vt_h265_10_profile_name;
             }
         }
+        case HB_VCODEC_VT_PRORES:
+            return vt_prores_profile_name;
     }
     return NULL;
 }
@@ -527,6 +537,7 @@ static const int vt_encoders[] =
     HB_VCODEC_VT_H264,
     HB_VCODEC_VT_H265,
     HB_VCODEC_VT_H265_10BIT,
+    HB_VCODEC_VT_PRORES,
     HB_VCODEC_INVALID
 };
 
