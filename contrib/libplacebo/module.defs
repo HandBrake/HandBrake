@@ -16,7 +16,9 @@ LIBPLACEBO.CONFIGURE.host =
 LIBPLACEBO.CONFIGURE.build =
 LIBPLACEBO.CONFIGURE.static = -Ddefault_library=static
 LIBPLACEBO.CONFIGURE.extra = --libdir=$(call fn.ABSOLUTE,$(LIBPLACEBO.prefix/))contrib/lib/ \
-                                -Dvulkan=enabled -Dopengl=disabled -Ddemos=false
+                                -Dvulkan=enabled -Dopengl=disabled -Ddemos=false \
+                                -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,LIBPLACEBO.GCC,*archs *sysroot *minver ?extra)" \
+                                -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,LIBPLACEBO.GCC,*archs *sysroot *minver ?extra.exe)"
 LIBPLACEBO.CONFIGURE.env =
 
 LIBPLACEBO.BUILD.make = $(NINJA.exe)

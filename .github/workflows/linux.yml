@@ -27,7 +27,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install autoconf automake build-essential libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev libturbojpeg0-dev libssl-dev
-        sudo apt-get install libogg-dev libopus-dev libsamplerate-dev libspeex-dev libtheora-dev libtool libtool-bin libvorbis-dev libx264-dev libxml2-dev libvpx-dev make nasm ninja-build meson patch tar zlib1g-dev appstream
+        sudo apt-get install libogg-dev libopus-dev libsamplerate-dev libspeex-dev libtheora-dev libtool libtool-bin libvorbis-dev libx264-dev libxml2-dev libvpx-dev make nasm ninja-build meson patch tar zlib1g-dev appstream python3-jinja2
         sudo apt-get install gettext libglib2.0-dev libgtk-4-dev
         sudo apt-get install libva-dev libdrm-dev llvm clang
 

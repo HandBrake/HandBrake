@@ -12,11 +12,14 @@ VULKAN.BUILD = $(TOUCH.exe) $@
 
 define VULKAN.INSTALL
     $(MKDIR.exe) -p $(CONTRIB.build/)include/vulkan
+    $(MKDIR.exe) -p $(CONTRIB.build/)include/vk_video
     $(CP.exe) -R $(VULKAN.EXTRACT.dir/)include/vulkan/* $(CONTRIB.build/)include/vulkan/
+    $(CP.exe) -R $(VULKAN.EXTRACT.dir/)include/vk_video/* $(CONTRIB.build/)include/vk_video/
     $(TOUCH.exe) $@
 endef
 
 define VULKAN.UNINSTALL
     $(RM.exe) -rf $(CONTRIB.build/)include/vulkan
+    $(RM.exe) -rf $(CONTRIB.build/)include/vk_video
     $(RM.exe) -f $(VULKAN.INSTALL.target)
 endef
