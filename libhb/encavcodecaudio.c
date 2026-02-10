@@ -161,6 +161,23 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             }
             break;
 
+        case HB_ACODEC_FFPCM16:
+        case HB_ACODEC_FFPCM24:
+            switch (audio->config.out.codec)
+            {
+                case HB_ACODEC_FFPCM24:
+                    codec_name          = "pcm_s24le";
+                    sample_fmt          = AV_SAMPLE_FMT_S32;
+                    bits_per_raw_sample = 24;
+                    break;
+                default:
+                    codec_name          = "pcm_s16le";
+                    sample_fmt          = AV_SAMPLE_FMT_S16;
+                    bits_per_raw_sample = 16;
+                    break;
+            }
+            break;
+
         case HB_ACODEC_FFTRUEHD:
             codec_id = AV_CODEC_ID_TRUEHD;
             break;
@@ -271,7 +288,14 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     pv->context           = context;
     audio->config.out.samples_per_frame =
     pv->samples_per_frame = context->frame_size;
-    pv->input_samples     = context->frame_size * context->ch_layout.nb_channels;
+    // PCM encoders report frame_size = 0, meaning they accept any size
+    // Use a default frame size for these encoders
+    if (pv->samples_per_frame == 0)
+    {
+        audio->config.out.samples_per_frame =
+        pv->samples_per_frame = 1024;
+    }
+    pv->input_samples     = pv->samples_per_frame * context->ch_layout.nb_channels;
     pv->input_buf         = malloc(pv->input_samples * sizeof(float));
     // Some encoders in libav (e.g. fdk-aac) fail if the output buffer
     // size is not some minimum value.  8K seems to be enough :(

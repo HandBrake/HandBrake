@@ -423,6 +423,10 @@
     {
         job->acodec_copy_mask |= HB_ACODEC_FLAC_PASS;
     }
+    if (audioDefaults.allowPCMPassthru)
+    {
+        job->acodec_copy_mask |= HB_ACODEC_PCM_PASS;
+    }
 
     job->acodec_fallback = audioDefaults.encoderFallback;
 

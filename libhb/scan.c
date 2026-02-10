@@ -1622,6 +1622,24 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_audio_t * audio
                 case AV_CODEC_ID_VORBIS:
                     codec_name = "Vorbis";
                     break;
+                case AV_CODEC_ID_PCM_S16BE:
+                case AV_CODEC_ID_PCM_S16LE:
+                case AV_CODEC_ID_PCM_S24BE:
+                case AV_CODEC_ID_PCM_S24LE:
+                case AV_CODEC_ID_PCM_S32BE:
+                case AV_CODEC_ID_PCM_S32LE:
+                case AV_CODEC_ID_PCM_U16BE:
+                case AV_CODEC_ID_PCM_U16LE:
+                case AV_CODEC_ID_PCM_U24BE:
+                case AV_CODEC_ID_PCM_U24LE:
+                case AV_CODEC_ID_PCM_U32BE:
+                case AV_CODEC_ID_PCM_U32LE:
+                case AV_CODEC_ID_PCM_F32BE:
+                case AV_CODEC_ID_PCM_F32LE:
+                case AV_CODEC_ID_PCM_F64BE:
+                case AV_CODEC_ID_PCM_F64LE:
+                    codec_name = "PCM";
+                    break;
                 default:
                     codec_name = codec->name;
                     break;
@@ -1666,8 +1684,11 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_audio_t * audio
                 case HB_ACODEC_MP3:
                     codec_name = "MP3";
                     break;
-                case AV_CODEC_ID_VORBIS:
+                case HB_ACODEC_VORBIS:
                     codec_name = "Vorbis";
+                    break;
+                case HB_ACODEC_PCM:
+                    codec_name = "PCM";
                     break;
                 default:
                     codec_name = "Unknown (libav)";

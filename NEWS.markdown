@@ -20,13 +20,14 @@ Download available from Microsoft:
 
 #### Video
 
-- Allowed muxing FFV1 in the MP4 container
 - Added MPEG-2 profile and level selection
+- Allowed muxing FFV1 in the MP4 container
 - Improved AV1 in MP4 seeking on Apple software
 - Dolby Vision profile 5 video is now tagged with a proper color tag
 
 #### Audio
 
+- Added PCM encoding and passthru
 - Added support for custom channels order (#7265)
 
 #### Build system
@@ -50,18 +51,17 @@ Download available from Microsoft:
   - libopus 1.6.1 (Opus audio encoding)
   - libvpx 1.15.2 (VP8/VP9 video encoding)
   - oneVPL 2.16.0 (Intel QSV video encoding/decoding)
-  - SVT-AV1 4.0.0 (AV1 video encoding)
+  - SVT-AV1 4.0.1 (AV1 video encoding)
 
 ### Linux
 
-- Added a UI language preference
+- Added preference option to select the UI language
 - Improved display of file sizes
 - Fixed the disk space checks
 - Fixed a crash that could happen when a preset category contains the ' character
 
 ### Mac
 
-- Updated UI on macOS 26
 - Notifications sound is now played back when HandBrake is in the foreground
 - File name labels in queue as now truncated in the middle, same behaviour as the Finder
 
