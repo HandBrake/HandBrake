@@ -20,6 +20,7 @@ static const char * const hb_vce_h264_profile_names[] = { "auto", "baseline", "m
 static const char * const hb_vce_h265_profile_names[] = { "auto", "main", NULL, };
 static const char * const hb_vce_h265_10bit_profile_names[] = { "auto", "main10", NULL, };
 static const char * const hb_vce_av1_profile_names[]  = { "auto", "main", NULL, };
+static const char * const hb_vce_av1_10bit_profile_names[] = { "auto", "main10", NULL, };
 
 static const char * const hb_vce_h264_level_names[] =
 {
