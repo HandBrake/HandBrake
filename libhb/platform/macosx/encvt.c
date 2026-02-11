@@ -1007,11 +1007,11 @@ static void hb_vt_set_frametype(CMSampleBufferRef sampleBuffer, hb_buffer_t *buf
     buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
 
     CFArrayRef attachmentsArray = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, 0);
-    if (CFArrayGetCount(attachmentsArray))
+    if (attachmentsArray != NULL && CFArrayGetCount(attachmentsArray))
     {
         CFDictionaryRef dict = CFArrayGetValueAtIndex(attachmentsArray, 0);
         CFBooleanRef notSync;
-        if (CFDictionaryGetValueIfPresent(dict, kCMSampleAttachmentKey_NotSync,(const void **) &notSync))
+        if (dict != NULL && CFDictionaryGetValueIfPresent(dict, kCMSampleAttachmentKey_NotSync,(const void **) &notSync))
         {
             Boolean notSyncValue = CFBooleanGetValue(notSync);
             if (notSyncValue)
