@@ -6098,10 +6098,25 @@ int hb_subtitle_can_pass( int source, int mux )
             } break;
 
         case HB_MUX_AV_MP4:
-        case HB_MUX_AV_MOV:
             switch( source )
             {
                 case VOBSUB:
+                case SSASUB:
+                case UTF8SUB:
+                case TX3GSUB:
+                case CC608SUB:
+                case CC708SUB:
+                case IMPORTSRT:
+                case IMPORTSSA:
+                    return 1;
+
+                default:
+                    return 0;
+            } break;
+
+        case HB_MUX_AV_MOV:
+            switch( source )
+            {
                 case SSASUB:
                 case UTF8SUB:
                 case TX3GSUB:
