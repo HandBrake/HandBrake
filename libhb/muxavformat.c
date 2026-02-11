@@ -1014,6 +1014,7 @@ static int avformatInit( hb_mux_object_t * m )
                     subtitle->config.external_filename == NULL)
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
+                    track->st->codecpar->codec_tag = MKTAG('t','x','3','g');
                 }
                 else
                 {
@@ -1031,6 +1032,7 @@ static int avformatInit( hb_mux_object_t * m )
                     subtitle->config.external_filename == NULL)
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
+                    track->st->codecpar->codec_tag = MKTAG('t','x','3','g');
                 }
                 else
                 {
