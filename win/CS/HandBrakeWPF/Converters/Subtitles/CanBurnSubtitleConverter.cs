@@ -31,6 +31,11 @@ namespace HandBrakeWPF.Converters.Subtitles
                     return false;
                 }
 
+                if (task != null && OutputFormat.Mov.Equals(task.OutputFormat) && SubtitleType.PGS.Equals(type))
+                {
+                    return false;
+                }
+
                 return sourceTrackCanBurn;
             }
 

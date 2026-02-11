@@ -406,6 +406,11 @@ namespace HandBrakeWPF.ViewModels
                 this.AudioEncoderFallback = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
             }
 
+            if (outputFormat == OutputFormat.Mov && this.AudioEncoderFallback != null && !this.AudioEncoderFallback.SupportsMOV)
+            {
+                this.AudioEncoderFallback = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
+            }
+
             if (outputFormat == OutputFormat.WebM && this.AudioEncoderFallback != null && !this.AudioEncoderFallback.SupportsWebM)
             {
                 this.AudioEncoderFallback = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Vorbis);
@@ -414,6 +419,14 @@ namespace HandBrakeWPF.ViewModels
             if (outputFormat == OutputFormat.Mp4)
             {
                 foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => !track.Encoder.SupportsMP4))
+                {
+                    track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
+                }
+            }
+
+            if (outputFormat == OutputFormat.Mov)
+            {
+                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => !track.Encoder.SupportsMOV))
                 {
                     track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
                 }

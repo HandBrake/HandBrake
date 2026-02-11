@@ -649,6 +649,7 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
         switch( job->mux )
         {
             case HB_MUX_AV_MP4:
+            case HB_MUX_AV_MOV:
             case HB_MUX_AV_MKV:
             case HB_MUX_AV_WEBM:
                 mux->m = hb_mux_avformat_init( job );

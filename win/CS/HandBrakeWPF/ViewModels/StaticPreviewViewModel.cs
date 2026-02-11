@@ -490,6 +490,9 @@ namespace HandBrakeWPF.ViewModels
                     case OutputFormat.Mp4:
                         formatExtension = "m4v";
                         break;
+                    case OutputFormat.Mov:
+                        formatExtension = "mov";
+                        break;
                     case OutputFormat.Mkv:
                     default:
                         formatExtension = "mkv";

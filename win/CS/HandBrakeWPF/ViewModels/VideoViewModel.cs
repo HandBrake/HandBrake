@@ -834,6 +834,11 @@ namespace HandBrakeWPF.ViewModels
                 this.SelectedVideoEncoder = HandBrakeEncoderHelpers.VideoEncoders.First(s => s.IsX264);
             }
 
+            if (this.SelectedVideoEncoder != null && this.Task.OutputFormat == OutputFormat.Mov && !this.SelectedVideoEncoder.SupportsMOV)
+            {
+                this.SelectedVideoEncoder = HandBrakeEncoderHelpers.VideoEncoders.First(s => s.IsX264);
+            }
+
             if (this.SelectedVideoEncoder != null && this.Task.OutputFormat == OutputFormat.WebM && !this.SelectedVideoEncoder.SupportsWebM)
             {
                 this.SelectedVideoEncoder = HandBrakeEncoderHelpers.VideoEncoders.First(s => s.IsVP9);

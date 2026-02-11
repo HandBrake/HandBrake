@@ -179,6 +179,17 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
+            if (format == OutputFormat.Mov)
+            {
+                foreach (AudioTrack track in this.Task.AudioTracks)
+                {
+                    if (!track.Encoder.SupportsMOV)
+                    {
+                        track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
+                    }
+                }
+            }
+
             if (format == OutputFormat.WebM)
             {
                 foreach (AudioTrack track in this.Task.AudioTracks)

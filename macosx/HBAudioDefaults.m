@@ -650,7 +650,7 @@
     decodeBool(_allowPCMPassthru);
 
     decodeInt(_encoderFallback); if (_encoderFallback < 0) { goto fail; }
-    decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
+    decodeContainerOrFail(_container);
     decodeBool(_secondaryEncoderMode);
 
     decodeBool(_passthruName);

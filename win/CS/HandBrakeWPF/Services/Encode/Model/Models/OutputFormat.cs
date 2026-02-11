@@ -20,6 +20,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         [ShortName("av_mp4")]
         Mp4 = 0,
 
+        [DisplayName("MOV")]
+        [ShortName("av_mov")]
+        Mov,
+
         [DisplayName("MKV")]
         [ShortName("av_mkv")]
         Mkv,

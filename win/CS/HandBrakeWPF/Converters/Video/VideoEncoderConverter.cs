@@ -73,6 +73,11 @@ namespace HandBrakeWPF.Converters.Video
                         returnEncoders.Remove(encoder);
                     }
 
+                    if (task.OutputFormat == OutputFormat.Mov && !encoder.SupportsMOV)
+                    {
+                        returnEncoders.Remove(encoder);
+                    }
+
                     if (task.OutputFormat == OutputFormat.Mkv && !encoder.SupportsMKV)
                     {
                         returnEncoders.Remove(encoder);

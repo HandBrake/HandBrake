@@ -449,7 +449,7 @@
     decodeDouble(_gain);
     decodeDouble(_drc);
 
-    decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
+    decodeContainerOrFail(_container);
 
     [self validateFallbackEncoder];
 

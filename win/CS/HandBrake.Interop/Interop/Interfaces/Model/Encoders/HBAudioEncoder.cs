@@ -97,6 +97,14 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
             }
         }
 
+        public bool SupportsMOV
+        {
+            get
+            {
+                return (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MOV) > 0 || this.CompatibleContainers == -1;
+            }
+        }
+
         public bool SupportsWebM
         {
             get
