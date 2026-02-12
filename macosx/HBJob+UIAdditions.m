@@ -40,7 +40,7 @@ static HBMixdownTransformer    *mixdownTransformer;
 
 - (BOOL)mp4OptionsEnabled
 {
-    return ((self.container & HB_MUX_MASK_MP4) != 0);
+    return ((self.container & HB_MUX_MASK_MP4 || self.container & HB_MUX_MASK_MOV) != 0);
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingMp4OptionsEnabled
@@ -80,6 +80,10 @@ static HBMixdownTransformer    *mixdownTransformer;
         if (container->format & HB_MUX_MASK_MP4)
         {
             title = @"MP4";
+        }
+        else if (container->format & HB_MUX_MASK_MOV)
+        {
+            title = @"MOV";
         }
         else if (container->format & HB_MUX_MASK_MKV)
         {
@@ -226,6 +230,10 @@ static HBMixdownTransformer    *mixdownTransformer;
     if (self.container & HB_MUX_MASK_MP4)
     {
         containerName = @"MP4";
+    }
+    else if (self.container & HB_MUX_MASK_MOV)
+    {
+        containerName = @"MOV";
     }
     else if (self.container & HB_MUX_MASK_MKV)
     {
@@ -1058,6 +1066,10 @@ static HBMixdownTransformer    *mixdownTransformer;
     {
         return @"MP4";
     }
+    if (container & HB_MUX_MASK_MOV)
+    {
+        return @"MOV";
+    }
     else if (container & HB_MUX_MASK_MKV)
     {
         return @"MKV";
@@ -1090,6 +1102,10 @@ static HBMixdownTransformer    *mixdownTransformer;
     if ([value isEqualToString:@"MP4"])
     {
         return @(HB_MUX_AV_MP4);
+    }
+    if ([value isEqualToString:@"MOV"])
+    {
+        return @(HB_MUX_AV_MOV);
     }
     else if ([value isEqualToString:@"MKV"])
     {

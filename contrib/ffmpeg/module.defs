@@ -43,6 +43,7 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=flac \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \
+    --enable-encoder=prores \
     --enable-encoder=libmp3lame \
     --enable-encoder=movtext \
     --enable-encoder=subrip \

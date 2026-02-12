@@ -202,6 +202,10 @@ namespace HandBrakeWPF.Helpers
                         break;
                 }
             }
+            else if (task.OutputFormat == OutputFormat.Mov)
+            {
+                destinationFilename += ".mov";
+            }
             else if (task.OutputFormat == OutputFormat.Mkv)
             {
                 destinationFilename += ".mkv";

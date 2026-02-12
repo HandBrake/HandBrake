@@ -326,6 +326,7 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
+        case HB_VCODEC_VT_PRORES:
             w = hb_get_work(h, WORK_ENCVT);
             break;
 #endif
@@ -350,6 +351,10 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
         case HB_VCODEC_FFMPEG_FFV1:
            w = hb_get_work(h, WORK_ENCAVCODEC);
            w->codec_param = AV_CODEC_ID_FFV1;
+            break;
+        case HB_VCODEC_FFMPEG_PRORES:
+           w = hb_get_work(h, WORK_ENCAVCODEC);
+           w->codec_param = AV_CODEC_ID_PRORES;
             break;
         default:
             hb_error("Unknown video codec (0x%x)", vcodec );
@@ -478,6 +483,7 @@ void hb_display_job_info(hb_job_t *job)
     switch (job->mux)
     {
         case HB_MUX_AV_MP4:
+        case HB_MUX_AV_MOV:
             if (job->optimize)
                 hb_log("     + optimized for HTTP streaming (fast start)");
             if (job->ipod_atom)
@@ -1057,7 +1063,7 @@ static int sanitize_subtitles( hb_job_t * job )
         else if (subtitle->format        == TEXTSUB &&
                  subtitle->config.codec  == HB_SCODEC_PASS)
         {
-            if (job->mux == HB_MUX_AV_MP4)
+            if (job->mux == HB_MUX_AV_MP4 || job->mux == HB_MUX_AV_MOV)
             {
                 subtitle->config.codec = HB_SCODEC_TX3G;
             }

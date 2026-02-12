@@ -140,6 +140,9 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public bool SupportsMP4 => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MP4) == NativeConstants.HB_MUX_MASK_MP4
                                    || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_MP4) == NativeConstants.HB_MUX_AV_MP4;
 
+        public bool SupportsMOV => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MOV) == NativeConstants.HB_MUX_MASK_MOV
+                                   || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_MOV) == NativeConstants.HB_MUX_AV_MOV;
+
         public bool SupportsMKV => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MKV) == NativeConstants.HB_MUX_MASK_MKV
                                    || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_MKV) == NativeConstants.HB_MUX_AV_MKV;
 

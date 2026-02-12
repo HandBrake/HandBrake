@@ -1,0 +1,30 @@
+From 16f6b39dd663c8e1d1e2afa3ccf0a3f1147369a7 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Wed, 11 Feb 2026 17:36:50 +0100
+Subject: [PATCH] movenc: set the chapters track language to the same as the
+ first track
+
+Apple requires the language of the chapters track and the reference track to match,
+usually the video track is the first and is set to und, and that worked for MP4 files,
+but QTFF uses a different language list and the chapter track language was never converted.
+
+Now it's set to the first track language to improve compatibility in all cases.
+---
+ libavformat/movenc.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index e60483ebb4..5e80fa57d6 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -7477,6 +7477,7 @@ static int mov_create_chapter_track(AVFormatContext *s, int tracknum)
+     track->tag = MKTAG('t','e','x','t');
+     track->timescale = mov->movie_timescale;
+     track->par = avcodec_parameters_alloc();
++    track->language = mov->tracks[0].language;
+     if (!track->par)
+         return AVERROR(ENOMEM);
+     track->par->codec_type = AVMEDIA_TYPE_SUBTITLE;
+--
+2.50.1 (Apple Git-155)
+
