@@ -16,10 +16,12 @@ Download available from Microsoft:
 
 #### General
 
+- Added encoding to MOV container format
 - Properly handle the case in which the first chapter timestamp is not zero
 
 #### Video
 
+- Added Prores encoder
 - Added MPEG-2 profile and level selection
 - Allowed muxing FFV1 in the MP4 container
 - Improved AV1 in MP4 seeking on Apple software
