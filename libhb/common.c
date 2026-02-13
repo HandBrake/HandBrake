@@ -2824,6 +2824,8 @@ int hb_mixdown_get_default(uint32_t codec, hb_channel_layout_t *ch_layout)
         case HB_ACODEC_FFAAC:
         case HB_ACODEC_FDK_AAC:
         case HB_ACODEC_FDK_HAAC:
+        case HB_ACODEC_FFPCM16:
+        case HB_ACODEC_FFPCM24:
             mixdown = HB_AMIXDOWN_7POINT1;
             break;
 
