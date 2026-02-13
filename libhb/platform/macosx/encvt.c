@@ -1612,6 +1612,17 @@ static OSStatus hb_vt_init_session(hb_work_object_t *w, hb_job_t *job, hb_work_p
     return err;
 }
 
+static int hb_vt_needs_cookie(int vcodec)
+{
+    switch (vcodec)
+    {
+        case HB_VCODEC_VT_PRORES:
+            return 0;
+        default:
+            return 1;
+    }
+}
+
 static void hb_vt_set_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
 {
     CFDictionaryRef extensions = CMFormatDescriptionGetExtensions(format);
@@ -1823,12 +1834,15 @@ int encvt_init(hb_work_object_t *w, hb_job_t *job)
 
     if (job->pass_id != HB_PASS_ENCODE_FINAL)
     {
-        err = hb_vt_create_cookie(w, job, pv);
-        if (err != noErr)
+        if (hb_vt_needs_cookie(job->vcodec))
         {
-            hb_log("VTCompressionSession: Magic Cookie Error err=%"PRId64"", (int64_t)err);
-            *job->die = 1;
-            return -1;
+            err = hb_vt_create_cookie(w, job, pv);
+            if (err != noErr)
+            {
+                hb_log("VTCompressionSession: Magic Cookie Error err=%"PRId64"", (int64_t)err);
+                *job->die = 1;
+                return -1;
+            }
         }
 
         // Read the actual level and tier and set
