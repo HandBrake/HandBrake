@@ -1,0 +1,50 @@
+From 1543d3e9cba1a30ce8bf8c3180c268520bed5841 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Thu, 12 Feb 2026 18:17:19 +0100
+Subject: [PATCH] movenc: use version 2 audio descriptor for > 2 channels and
+ for pcm
+
+As described in QuickTime File Format documentation
+---
+ libavformat/movenc.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index 5e80fa57d6..d956bd5b56 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -990,6 +990,15 @@ static int mov_write_chan_tag(AVFormatContext *s, AVIOContext *pb, MOVTrack *tra
+     if (track->multichannel_as_mono)
+         return 0;
+
++    // Custom channels layout is not handled properly for these formats
++    // unset it for now, it will fallback to the layout stored in the extradata
++    // TODO: find the reason
++    if (track->par->codec_id == AV_CODEC_ID_AAC ||
++        track->par->codec_id == AV_CODEC_ID_ALAC)
++    {
++        return 0;
++    }
++
+     ret = ff_mov_get_channel_layout_tag(track->par, &layout_tag,
+                                         &bitmap, &channel_desc);
+
+@@ -1350,11 +1359,13 @@ static int mov_write_audio_tag(AVFormatContext *s, AVIOContext *pb, MOVMuxContex
+     int64_t pos = avio_tell(pb);
+     int version = 0;
+     uint32_t tag = track->tag;
++    int lpcm_flags = 0;
+     int ret = 0;
+
+     if (track->mode == MODE_MOV) {
+-        if (track->timescale > UINT16_MAX || !track->par->ch_layout.nb_channels) {
+-            if (mov_get_lpcm_flags(track->par->codec_id))
++        lpcm_flags = mov_get_lpcm_flags(track->par->codec_id);
++        if (track->timescale > UINT16_MAX || track->par->ch_layout.nb_channels > 2 || lpcm_flags) {
++            if (lpcm_flags)
+                 tag = AV_RL32("lpcm");
+             version = 2;
+         } else if (track->audio_vbr || mov_pcm_le_gt16(track->par->codec_id) ||
+--
+2.50.1 (Apple Git-155)
+
