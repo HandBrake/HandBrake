@@ -5121,8 +5121,8 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             break;
 
 #if defined(__APPLE__)
-        case HB_FILTER_PRE_VT:
-            filter = &hb_filter_prefilter_vt;
+        case HB_FILTER_ADAPTER_VT:
+            filter = &hb_filter_adapter_vt;
             break;
 
         case HB_FILTER_COMB_DETECT_VT:

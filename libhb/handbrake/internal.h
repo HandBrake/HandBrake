@@ -462,7 +462,7 @@ extern hb_filter_object_t hb_filter_colorspace;
 extern hb_filter_object_t hb_filter_format;
 
 #if defined(__APPLE__)
-extern hb_filter_object_t hb_filter_prefilter_vt;
+extern hb_filter_object_t hb_filter_adapter_vt;
 extern hb_filter_object_t hb_filter_comb_detect_vt;
 extern hb_filter_object_t hb_filter_yadif_vt;
 extern hb_filter_object_t hb_filter_bwdif_vt;

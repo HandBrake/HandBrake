@@ -1,4 +1,4 @@
-/* prefilter_vt.c
+/* adapter_vt.c
 
    Copyright (c) 2003-2026 HandBrake Team
    This file is part of the HandBrake source code
@@ -34,12 +34,12 @@ struct hb_filter_private_s
     int done;
 };
 
-static int prefilter_vt_init(hb_filter_object_t *filter, hb_filter_init_t *init)
+static int adapter_vt_init(hb_filter_object_t *filter, hb_filter_init_t *init)
 {
     filter->private_data = calloc(sizeof(struct hb_filter_private_s), 1);
     if (filter->private_data == NULL)
     {
-        hb_error("prefilter_vt: calloc failed");
+        hb_error("adapter_vt: calloc failed");
         return -1;
     }
     hb_filter_private_t *pv = filter->private_data;
@@ -86,7 +86,7 @@ static void close_filters(hb_filter_private_t *pv)
     hb_list_close(&pv->list_filter);
 }
 
-static void prefilter_vt_close(hb_filter_object_t *filter)
+static void adapter_vt_close(hb_filter_object_t *filter)
 {
     hb_filter_private_t *pv = filter->private_data;
 
@@ -204,44 +204,11 @@ static int update_filters(hb_filter_private_t *pv)
 
         hb_filter_object_t *filter;
 
-        // Rotate
-        if (pv->rotation != HB_ROTATION_0)
+        if (pv->rotation == HB_ROTATION_90 ||
+            pv->rotation == HB_ROTATION_270)
         {
-            filter = hb_filter_init(HB_FILTER_ROTATE_VT);
-            filter->settings = hb_dict_init();
-
-            switch (pv->rotation)
-            {
-                case HB_ROTATION_90:
-                    hb_dict_set(filter->settings, "angle", hb_value_string("270"));
-                    hb_log("prefilter_vt: auto-rotating video 90 degrees");
-                    break;
-                case HB_ROTATION_180:
-                    hb_dict_set(filter->settings, "angle", hb_value_string("180"));
-                    hb_log("prefilter_vt: auto-rotating video 180 degrees");
-                    break;
-                case HB_ROTATION_270:
-                    hb_dict_set(filter->settings, "angle", hb_value_string("90"));
-                    hb_log("prefilter_vt: auto-rotating video 270 degrees");
-                    break;
-                default:
-                    hb_log("prefilter_vt: reinit_video_filters: unknown rotation, failed");
-            }
-
-            if (pv->rotation == HB_ROTATION_90 ||
-                pv->rotation == HB_ROTATION_270)
-            {
-                init.geometry.width  = pv->input.geometry.height;
-                init.geometry.height = pv->input.geometry.width;
-            }
-
-            hb_list_add(list_filter, filter);
-            if (filter->init != NULL && filter->init(filter, &init))
-            {
-                hb_error("prefilter_vt: failure to initialize filter '%s'", filter->name);
-                hb_list_rem(list_filter, filter);
-                hb_filter_close(&filter);
-            }
+            init.geometry.width  = pv->input.geometry.height;
+            init.geometry.height = pv->input.geometry.width;
         }
 
         // Crop Scale & Format
@@ -253,13 +220,13 @@ static int update_filters(hb_filter_private_t *pv)
             filter = hb_filter_init(HB_FILTER_CROP_SCALE_VT);
             filter->settings = hb_dict_init();
 
-            hb_dict_set_int(filter->settings, "width",  pv->output.geometry.width);
-            hb_dict_set_int(filter->settings, "height", pv->output.geometry.height);
+            hb_dict_set_int(filter->settings, "width",  init.geometry.width);
+            hb_dict_set_int(filter->settings, "height", init.geometry.height);
 
             if (pv->output.geometry.width  != pv->input.geometry.width  ||
                 pv->output.geometry.height != pv->input.geometry.height)
             {
-                hb_log("prefilter_vt: auto-scaling video from %d x %d",
+                hb_log("adapter_vt: scaling video from %d x %d",
                        pv->input.geometry.width,
                        pv->input.geometry.height);
             }
@@ -267,31 +234,65 @@ static int update_filters(hb_filter_private_t *pv)
             if (pv->output.pix_fmt != pv->input.pix_fmt)
             {
                 hb_dict_set_int(filter->settings, "format", pv->output.pix_fmt);
-                hb_log("prefilter_vt: converting video pixel format from %s", av_get_pix_fmt_name(pv->input.pix_fmt));
+                hb_log("adapter_vt: converting video pixel format from %s", av_get_pix_fmt_name(pv->input.pix_fmt));
             }
 
             if (pv->output.color_range != pv->input.color_range)
             {
                 hb_dict_set_int(filter->settings, "color-range", pv->output.color_range);
-                hb_log("prefilter_vt: converting color range from %s", av_color_range_name(pv->input.color_range));
+                hb_log("adapter_vt: converting color range from %s", av_color_range_name(pv->input.color_range));
             }
 
             hb_list_add(list_filter, filter);
             if (filter->init != NULL && filter->init(filter, &init))
             {
-                hb_error("prefilter_vt: failure to initialize filter '%s'", filter->name);
+                hb_error("adapter_vt: failure to initialize filter '%s'", filter->name);
                 hb_list_rem(list_filter, filter);
                 hb_filter_close(&filter);
             }
         }
 
+        // Rotate
+        if (pv->rotation != HB_ROTATION_0)
+        {
+            filter = hb_filter_init(HB_FILTER_ROTATE_VT);
+            filter->settings = hb_dict_init();
+
+            switch (pv->rotation)
+            {
+                case HB_ROTATION_90:
+                    hb_dict_set(filter->settings, "angle", hb_value_string("270"));
+                    hb_log("adapter_vt: auto-rotating video 90 degrees");
+                    break;
+                case HB_ROTATION_180:
+                    hb_dict_set(filter->settings, "angle", hb_value_string("180"));
+                    hb_log("adapter_vt: auto-rotating video 180 degrees");
+                    break;
+                case HB_ROTATION_270:
+                    hb_dict_set(filter->settings, "angle", hb_value_string("90"));
+                    hb_log("adapter_vt: auto-rotating video 270 degrees");
+                    break;
+                default:
+                    hb_log("adapter_vt: reinit_video_filters: unknown rotation, failed");
+            }
+
+            hb_list_add(list_filter, filter);
+            if (filter->init != NULL && filter->init(filter, &init))
+            {
+                hb_error("adapter_vt: failure to initialize filter '%s'", filter->name);
+                hb_list_rem(list_filter, filter);
+                hb_filter_close(&filter);
+            }
+        }
+
+
         for (int ii = 0; ii < hb_list_count(list_filter);)
         {
             filter = hb_list_item(list_filter, ii);
             filter->done = &pv->done;
-            if (filter->post_init != NULL && filter->post_init(filter, pv->input.job))
+            if (filter->post_init != NULL && filter->post_init(filter, NULL))
             {
-                hb_log("prefilter_vt: failure to initialise filter '%s'", filter->name );
+                hb_log("adapter_vt: failure to initialise filter '%s'", filter->name);
                 hb_list_rem(list_filter, filter);
                 hb_filter_close(&filter);
                 continue;
@@ -317,19 +318,19 @@ static int update_filters(hb_filter_private_t *pv)
         pv->fifo_last   = fifo_last;
         pv->list_filter = list_filter;
 
-        pv->resample.width        = init.geometry.width;
-        pv->resample.height       = init.geometry.height;
-        pv->resample.color_range  = init.color_range;
-        pv->resample.rotation     = pv->rotation;
-        pv->resample.pix_fmt      = init.pix_fmt;
+        pv->resample.width       = pv->input.geometry.width;
+        pv->resample.height      = pv->input.geometry.height;
+        pv->resample.color_range = pv->input.color_range;
+        pv->resample.rotation    = pv->rotation;
+        pv->resample.pix_fmt     = pv->input.pix_fmt;
     }
 
     return 0;
 }
 
-static int prefilter_vt_work(hb_filter_object_t *filter,
-                             hb_buffer_t **buf_in,
-                             hb_buffer_t **buf_out)
+static int adapter_vt_work(hb_filter_object_t *filter,
+                           hb_buffer_t **buf_in,
+                           hb_buffer_t **buf_out)
 {
     hb_filter_private_t *pv = filter->private_data;
     hb_buffer_t *in = *buf_in;
@@ -357,16 +358,16 @@ static int prefilter_vt_work(hb_filter_object_t *filter,
     return HB_FILTER_OK;
 }
 
-static const char prefilter_vt_template[] = "rotation=^(0|1|2|3)";
+static const char adapter_vt_template[] = "rotation=^(0|1|2|3)";
 
-hb_filter_object_t hb_filter_prefilter_vt =
+hb_filter_object_t hb_filter_adapter_vt =
 {
-    .id                = HB_FILTER_PRE_VT,
+    .id                = HB_FILTER_ADAPTER_VT,
     .enforce_order     = 1,
-    .name              = "Prefilter (VideoToolbox)",
+    .name              = "Adapter (VideoToolbox)",
     .settings          = NULL,
-    .init              = prefilter_vt_init,
-    .work              = prefilter_vt_work,
-    .close             = prefilter_vt_close,
-    .settings_template = prefilter_vt_template,
+    .init              = adapter_vt_init,
+    .work              = adapter_vt_work,
+    .close             = adapter_vt_close,
+    .settings_template = adapter_vt_template,
 };
