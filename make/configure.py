@@ -1428,6 +1428,10 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host_tuple.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
+    h = 'FFmpeg ProRes video encoder' if (host_tuple.match( '*-*-darwin*' )) else argparse.SUPPRESS
+    grp.add_argument( '--enable-ffmpeg-prores', dest="enable_ffmpeg_prores", default=not host_tuple.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-ffmpeg-prores', dest="enable_ffmpeg_prores", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
+
     h = 'MediaFoundation video encoder' if mf_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-mf', dest="enable_mf", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-mf', dest="enable_mf", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -1770,6 +1774,9 @@ try:
     # Require FFmpeg AAC on Linux and Windows
     options.enable_ffmpeg_aac = IfHost(options.enable_ffmpeg_aac, '*-*-darwin*',
                                        none=True).value
+    # Require FFmpeg ProRes on Linux and Windows
+    options.enable_ffmpeg_prores = IfHost(options.enable_ffmpeg_prores, '*-*-darwin*',
+                                       none=True).value
     # NUMA is linux only and only needed with x265
     options.enable_numa       = (IfHost(options.enable_numa, '*-*-linux*',
                                         none=False).value
@@ -2086,6 +2093,7 @@ int main()
     doc.add( 'FEATURE.asm',        int( 0 ))
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
+    doc.add( 'FEATURE.ffmpeg_prores', int( options.enable_ffmpeg_prores ))
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
     doc.add( 'FEATURE.gtk',        int( options.enable_gtk ))
     doc.add( 'FEATURE.mf',         int( options.enable_mf ))
@@ -2215,6 +2223,7 @@ int main()
     print(f'Sandbox:            {options.enable_sandbox}' + ('' if host_tuple.system == 'darwin' else note_unsupported))
     print(f'Enable FDK-AAC:     {options.enable_fdk_aac}')
     print(f'Enable FFmpeg AAC:  {options.enable_ffmpeg_aac}' + ('' if host_tuple.system == 'darwin' else note_required))
+    print(f'Enable FFmpeg ProRes:  {options.enable_ffmpeg_prores}' + ('' if host_tuple.system == 'darwin' else note_required))
     print(f'Enable MediaFound.: {options.enable_mf}' + ('' if mf_supported else note_unsupported))
     print(f'Enable NVENC:       {options.enable_nvenc}' + ('' if nvenc_supported else note_unsupported))
     print(f'Enable NVDEC:       {options.enable_nvdec}' + ('' if nvenc_supported else note_unsupported))

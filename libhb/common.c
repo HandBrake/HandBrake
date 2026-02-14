@@ -286,6 +286,8 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "MPEG-4 (FFmpeg)",             "ffmpeg4",          NULL,                             HB_VCODEC_FFMPEG_MPEG4,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_VCODEC_MPEG4,  },
     { { "MPEG-2 (FFmpeg)",             "ffmpeg2",          NULL,                             HB_VCODEC_FFMPEG_MPEG2,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_VCODEC_MPEG2,  },
     { { "VP3 (Theora)",                "libtheora",        NULL,                             HB_VCODEC_THEORA,                            HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_VCODEC_THEORA, },
+    // generic names
+    { { "ProRes",                      "prores",           NULL,                             0,                           HB_MUX_MASK_MOV|HB_MUX_MASK_MKV, }, NULL, 0, 0, HB_GID_VCODEC_PRORES, },
     // actual encoders
     { { "AV1 (SVT)",                   "svt_av1",          "AV1 (SVT)",                      HB_VCODEC_SVT_AV1,           HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
     { { "AV1 10-bit (SVT)",            "svt_av1_10bit",    "AV1 10-bit (SVT)",               HB_VCODEC_SVT_AV1_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
@@ -322,7 +324,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "VP8",                         "VP8",              "VP8 (libvpx)",                   HB_VCODEC_FFMPEG_VP8,                        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP8,        },
     { { "VP9",                         "VP9",              "VP9 (libvpx)",                   HB_VCODEC_FFMPEG_VP9,        HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
     { { "VP9 10-bit",                  "VP9_10bit",        "VP9 10-bit (libvpx)",            HB_VCODEC_FFMPEG_VP9_10BIT,  HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
-    { { "ProRes",                      "prores",           "ProRes (libavcodec)",            HB_VCODEC_FFMPEG_PRORES,                      HB_MUX_MASK_MOV|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_PRORES,     },
+    { { "ProRes",                      "ff_prores",        "ProRes (libavcodec)",            HB_VCODEC_FFMPEG_PRORES,                      HB_MUX_MASK_MOV|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_PRORES,     },
     { { "ProRes (VideoToolbox)",       "vt_prores",        "ProRes (VideoToolbox)",          HB_VCODEC_VT_PRORES,                          HB_MUX_MASK_MOV|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_PRORES,     },
     { { "Theora",                      "theora",           "Theora (libtheora)",             HB_VCODEC_THEORA,                                             HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_THEORA,     },
 };
@@ -397,7 +399,9 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
         case HB_VCODEC_SVT_AV1:
         case HB_VCODEC_SVT_AV1_10BIT:
         case HB_VCODEC_FFMPEG_FFV1:
+#if HB_PROJECT_FEATURE_FFMPEG_PRORES
         case HB_VCODEC_FFMPEG_PRORES:
+#endif
             return 1;
 
 #if HB_PROJECT_FEATURE_X265
@@ -757,6 +761,12 @@ void hb_common_global_init(int disable_hardware)
                     hb_video_encoders[i].item.codec = hb_video_encoders[j].item.codec;
                     break;
                 }
+            }
+            if (hb_video_encoders[i].gid == HB_GID_VCODEC_PRORES)
+            {
+                // Mark as deprecated because it's the only way
+                // to remove it from the encoders list at the moment
+                hb_video_encoders[i].deprecated = 1;
             }
         }
     }
