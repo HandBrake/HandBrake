@@ -521,6 +521,10 @@ static int avformatInit( hb_mux_object_t * m )
                 {
                     track->st->codecpar->codec_tag = MKTAG('a', 'p', '4', 'x');
                 }
+                else
+                {
+                    track->st->codecpar->codec_tag = MKTAG('a', 'p', 'c', 'n');
+                }
             }
             break;
 
@@ -598,7 +602,7 @@ static int avformatInit( hb_mux_object_t * m )
 
     if (job->passthru_dynamic_hdr_metadata & HB_HDR_DYNAMIC_METADATA_DOVI)
     {
-        if (job->dovi.dv_profile == 5 && (job->mux & HB_MUX_MASK_ISOBFF_FAMILY))
+        if (job->dovi.dv_profile == 5 && job->mux == HB_MUX_AV_MP4)
         {
             if (track->st->codecpar->codec_id == AV_CODEC_ID_HEVC)
             {
@@ -1132,7 +1136,7 @@ static int avformatInit( hb_mux_object_t * m )
 
     // Enable bitexact to avoid having
     // libavf putting an "Encoded by" metadata
-    if (job->mux == HB_MUX_AV_MP4)
+    if (job->mux & HB_MUX_MASK_ISOBFF_FAMILY)
     {
         m->oc->flags |= AVFMT_FLAG_BITEXACT;
     }

@@ -567,6 +567,10 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
             {
                 pv->settings.profile = HB_VT_PRORES_PROFILE_4444XQ;
             }
+            else
+            {
+                pv->settings.profile = HB_VT_PRORES_PROFILE_STANDARD;
+            }
         }
     }
     else
