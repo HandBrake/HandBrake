@@ -5,10 +5,10 @@
 
 Before updating HandBrake, please make sure there are no pending encodes in the queue, and be sure to make a backup of any custom presets and app preferences you have, as they may not be compatible with newer versions.
 
-Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)
+Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0/runtime)
 Download available from Microsoft:
-- [For x64 (AMD or Intel CPUs)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe)
-- [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-arm64.exe)
+- [For x64 (AMD or Intel CPUs)](https://aka.ms/dotnet/10.0/windowsdesktop-runtime-win-x64.exe)
+- [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/10.0/windowsdesktop-runtime-win-arm64.exe)
 
 ## HandBrake 1.11.0
 
@@ -68,6 +68,10 @@ Download available from Microsoft:
 - File name labels in queue as now truncated in the middle, same behaviour as the Finder
 
 ### Windows
+
+- The UI now requires Microsoft .NET Desktop Runtime 10.0.x. .NET 8 is no longer required. 
+- Support for Intel HyperEncode has been removed as the feature is deprecated upstream.
+- Minor miscellaneous fixes.
 
 
 ## HandBrake 1.10.2
