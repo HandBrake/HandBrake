@@ -40,4 +40,3 @@ body:
           required: true
         - label: Our [Translation Guidelines](https://github.com/HandBrake/HandBrake/blob/master/TRANSLATION.markdown)
           required: true
-        

@@ -48,7 +48,6 @@ jobs:
         make pkg.create.zip
         cd libhb
         mv hb.dll hb_a64.dll
-        
 
     - name: Upload HandBrakeCLI
       uses: actions/upload-artifact@v6
@@ -142,7 +141,7 @@ jobs:
       with:
        name: LibHandBrake
        path: win/CS/HandBrakeWPF/bin/publish
-      
+
     - name: Import the Signing Cert
       run: |
         $ErrorView = "NormalView"
@@ -154,7 +153,7 @@ jobs:
           [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
           cp $certificatePath win\cs\
         }
-        
+
     - name: Setup .NET 10
       uses: actions/setup-dotnet@v5
       with:
@@ -194,7 +193,7 @@ jobs:
         cd ../../../../
         dir
       shell: cmd
-              
+
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v6
       with:
@@ -206,7 +205,7 @@ jobs:
       with:
         name: HandBrake-Win_GUI-x64-Zip
         path: win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
-        
+
   build_gui_arm:
     name: Windows UI ARM
     runs-on: windows-2022
@@ -216,7 +215,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
-       
+
     - name: Download LibHandBrake_ARM64
       uses: actions/download-artifact@v7
       with:
@@ -234,7 +233,7 @@ jobs:
           [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
           cp $certificatePath win\cs\
         }
-        
+
     - name: Setup .NET 10
       uses: actions/setup-dotnet@v5
       with:
@@ -248,7 +247,7 @@ jobs:
       shell: pwsh
       run: |
         dotnet msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
-        
+
     - name: Prepare Package
       run: |
         echo "Setting up context"
@@ -274,7 +273,7 @@ jobs:
         cd ../../../../
         dir
       shell: cmd
-              
+
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v6
       with:
