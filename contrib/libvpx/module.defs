@@ -17,6 +17,7 @@ LIBVPX.CONFIGURE.extra =     \
     --disable-vp9-decoder       \
     --enable-vp9-highbitdepth   \
     --disable-examples          \
+    --disable-tools             \
     --disable-docs              \
     --disable-unit-tests
 
