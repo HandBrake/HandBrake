@@ -4591,7 +4591,27 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
     if (anamorphic_mode != -1)
     {
-        hb_dict_set(preset, "PicturePAR", hb_value_int(anamorphic_mode));
+        const char *mode;
+        switch (anamorphic_mode)
+        {
+            case HB_ANAMORPHIC_NONE:
+                mode = "off";
+                break;
+            case HB_ANAMORPHIC_STRICT:
+                mode = "strict";
+                break;
+            case HB_ANAMORPHIC_LOOSE:
+                mode = "loose";
+                break;
+            case HB_ANAMORPHIC_CUSTOM:
+                mode = "custom";
+                break;
+            case HB_ANAMORPHIC_AUTO:
+            default:
+                mode = "auto";
+                break;
+        }
+        hb_dict_set(preset, "PicturePAR", hb_value_string(mode));
     }
     if (keep_display_aspect != -1)
     {
