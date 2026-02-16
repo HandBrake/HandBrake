@@ -17,7 +17,7 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Picture
     public enum Anamorphic
     {
         [DisplayName("None")]
-        [ShortName("none")]
+        [ShortName("off")]
         None = 0,
         [DisplayName("Automatic")]
         [ShortName("auto")]
