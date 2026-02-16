@@ -22,6 +22,7 @@ Download available from Microsoft:
 #### Video
 
 - Added Prores encoder
+- Added AMD VCN AV1 10-bit encoder
 - Added MPEG-2 profile and level selection
 - Allowed muxing FFV1 in the MP4 container
 - Improved AV1 in MP4 seeking on Apple software
@@ -54,6 +55,7 @@ Download available from Microsoft:
   - libvpx 1.15.2 (VP8/VP9 video encoding)
   - oneVPL 2.16.0 (Intel QSV video encoding/decoding)
   - SVT-AV1 4.0.1 (AV1 video encoding)
+  - x265 r13309 (H.265/HEVC video encoding)
 
 ### Linux
 
@@ -66,12 +68,13 @@ Download available from Microsoft:
 
 - Notifications sound is now played back when HandBrake is in the foreground
 - File name labels in queue as now truncated in the middle, same behaviour as the Finder
+- Minor miscellaneous fixes
 
 ### Windows
 
-- The UI now requires Microsoft .NET Desktop Runtime 10.0.x. .NET 8 is no longer required. 
-- Support for Intel HyperEncode has been removed as the feature is deprecated upstream.
-- Minor miscellaneous fixes.
+- The UI now requires Microsoft .NET Desktop Runtime 10.0.x. .NET 8 is no longer required.
+- Support for Intel HyperEncode has been removed as the feature is deprecated upstream
+- Minor miscellaneous fixes
 
 
 ## HandBrake 1.10.2
