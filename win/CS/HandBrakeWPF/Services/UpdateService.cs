@@ -194,7 +194,6 @@ namespace HandBrakeWPF.Services
         /// <returns>True if the file is valid, false otherwise.</returns>
         public bool VerifyDownload(string signature, string updateFile, bool useLargerKey)
         {
-            // Sanity Checks
             if (!File.Exists(updateFile))
             {
                 return false;
@@ -209,15 +208,18 @@ namespace HandBrakeWPF.Services
             // For now, we'll have the ability to fall-back to the old key if there is a problem. 
             // This ability will be removed later.
             string publicKey = GetPulicKey(useLargerKey ? "HandBrakeWPF.public.4096.key" : "HandBrakeWPF.public.key");
+            if (string.IsNullOrEmpty(publicKey))
+            {
+                return false;
+            }
 
-            // Verify the file against the Signature. 
             try
             {
                 byte[] file = File.ReadAllBytes(updateFile);
-                using (RSACryptoServiceProvider verifyProvider = new RSACryptoServiceProvider(4096))
+                using (RSA rsa = RSA.Create())
                 {
-                    verifyProvider.FromXmlString(publicKey);
-                    return verifyProvider.VerifyData(file, "SHA256", Convert.FromBase64String(signature));
+                    rsa.FromXmlString(publicKey);
+                    return rsa.VerifyData(file, Convert.FromBase64String(signature), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
                 }
             }
             catch (Exception e)
