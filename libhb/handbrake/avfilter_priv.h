@@ -25,6 +25,8 @@ struct hb_filter_private_s
     hb_value_t          * avfilters;
     hb_filter_init_t      input;
     hb_filter_init_t      output;
+
+    int                   delay;
 };
 
 int  hb_avfilter_null_work( hb_filter_object_t * filter,
