@@ -187,19 +187,19 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
-    if (job->encoder_tune != NULL && strstr("ms-ssim", job->encoder_tune) != NULL)
+    if (job->encoder_tune != NULL && strstr(job->encoder_tune, "ms-ssim") != NULL)
     {
         param->tune = 4;
     }
-    else if (job->encoder_tune != NULL && strstr("iq", job->encoder_tune) != NULL)
+    else if (job->encoder_tune != NULL && strstr(job->encoder_tune, "iq") != NULL)
     {
         param->tune = 3;
     }
-    else if (job->encoder_tune != NULL && strstr("ssim", job->encoder_tune) != NULL)
+    else if (job->encoder_tune != NULL && strstr(job->encoder_tune, "ssim") != NULL)
     {
         param->tune = 2;
     }
-    else if (job->encoder_tune != NULL && strstr("psnr", job->encoder_tune) != NULL)
+    else if (job->encoder_tune != NULL && strstr(job->encoder_tune, "psnr") != NULL)
     {
         param->tune = 1;
     }
@@ -208,7 +208,7 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         param->tune = 0;
     }
 
-    if (job->encoder_tune != NULL && strstr("fastdecode", job->encoder_tune) != NULL)
+    if (job->encoder_tune != NULL && strstr(job->encoder_tune, "fastdecode") != NULL)
     {
         param->fast_decode = 1;
     }
