@@ -616,9 +616,10 @@ static HBMixdownTransformer    *mixdownTransformer;
     {
         if (audioTrack.isEnabled)
         {
+            const char *encoder_name = hb_audio_encoder_get_name(audioTrack.encoder);
             NSMutableString *detailString = [NSMutableString stringWithFormat:HBKitLocalizedString(@"%@ ▸ Encoder: %@", @"Audio description"),
-                                      self.audio.sourceTracks[audioTrack.sourceTrackIdx].displayName,
-                                      @(hb_audio_encoder_get_name(audioTrack.encoder))];
+                                             self.audio.sourceTracks[audioTrack.sourceTrackIdx].displayName,
+                                             encoder_name ? @(encoder_name) : HBKitLocalizedString(@"Unknown", @"HBJob -> video short description encoder name")];
 
             if ((audioTrack.encoder & HB_ACODEC_PASS_FLAG) == 0)
             {
