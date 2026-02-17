@@ -3008,6 +3008,15 @@ static void und_to_any(hb_value_array_t * list)
     }
 }
 
+static void import_pic_par_settings_69_0_0(hb_value_t *preset)
+{
+    const char *pic_par = hb_dict_get_string(preset, "PicturePAR");
+    if (pic_par == NULL || !strcasecmp(pic_par, "none"))
+    {
+        hb_dict_set(preset, "PicturePAR", hb_value_string("off"));
+    }
+}
+
 static void import_track_names_preset_settings_64_0_0(hb_value_t *preset)
 {
     hb_dict_set_string(preset, "AudioAutomaticNamingBehavior", "unnamed");
@@ -3809,9 +3818,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_69_0_0(hb_value_t *preset)
+{
+    import_pic_par_settings_69_0_0(preset);
+}
+
 static void import_64_0_0(hb_value_t *preset)
 {
     import_track_names_preset_settings_64_0_0(preset);
+
+    import_69_0_0(preset);
 }
 
 static void import_63_0_0(hb_value_t *preset)
@@ -4073,6 +4089,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 64, 0, 0) <= 0)
         {
             import_64_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 69, 0, 0) <= 0)
+        {
+            import_69_0_0(preset);
             result = 1;
         }
 
