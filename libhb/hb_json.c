@@ -938,6 +938,11 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         {
             hb_dict_set_string(audio_dict, "Name", audio->config.out.name);
         }
+        if (audio->config.out.avfilter != NULL)
+        {
+            hb_dict_set_string(audio_dict, "Avfilter",
+                               audio->config.out.avfilter);
+        }
 
         hb_value_array_append(audio_list, audio_dict);
     }
@@ -1609,10 +1614,11 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             hb_value_t *acodec = NULL, *samplerate = NULL, *mixdown = NULL;
             hb_value_t *dither = NULL;
             const char *name = NULL;
+            const char *avfilter = NULL;
 
             hb_audio_config_init(&audio);
             result = json_unpack_ex(audio_dict, &error, 0,
-                "{s:i, s?s, s?o, s?F, s?F, s?o, s?b, s?o, s?o, s?i, s?F, s?F}",
+                "{s:i, s?s, s?o, s?F, s?F, s?o, s?b, s?o, s?o, s?i, s?F, s?F, s?s}",
                 "Track",                unpack_i(&audio.index),
                 "Name",                 unpack_s(&name),
                 "Encoder",              unpack_o(&acodec),
@@ -1624,7 +1630,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 "Samplerate",           unpack_o(&samplerate),
                 "Bitrate",              unpack_i(&audio.out.bitrate),
                 "Quality",              unpack_f(&audio.out.quality),
-                "CompressionLevel",     unpack_f(&audio.out.compression_level));
+                "CompressionLevel",     unpack_f(&audio.out.compression_level),
+                "Avfilter",             unpack_s(&avfilter));
             if (result < 0)
             {
                 hb_error("hb_dict_to_job: failed to find audio settings: %s",
@@ -1684,6 +1691,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             if (name != NULL)
             {
                 audio.out.name = name;
+            }
+            if (avfilter != NULL)
+            {
+                audio.out.avfilter = avfilter;
             }
             if (audio.index >= 0)
             {

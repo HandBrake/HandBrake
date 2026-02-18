@@ -814,6 +814,12 @@ void hb_display_job_info(hb_job_t *job)
                     hb_log("     + compression level: %.2f",
                            audio->config.out.compression_level);
                 }
+                if (audio->config.out.avfilter != NULL &&
+                    audio->config.out.avfilter[0] != '\0')
+                {
+                    hb_log("     + avfilter: %s",
+                           audio->config.out.avfilter);
+                }
             }
         }
     }
@@ -1997,6 +2003,26 @@ static void do_job(hb_job_t *job)
             /*
             * Audio Encoder Thread
             */
+            /*
+            * Audio AVFilter Thread (if configured)
+            */
+            hb_fifo_t * encoder_fifo_in = audio->priv.fifo_sync;
+            if (audio->config.out.avfilter != NULL &&
+                audio->config.out.avfilter[0] != '\0' &&
+                !(audio->config.out.codec & HB_ACODEC_PASS_FLAG))
+            {
+                audio->priv.fifo_af = hb_fifo_init(FIFO_SMALL, FIFO_SMALL_WAKE);
+                w = hb_get_work(job->h, WORK_AUDIO_AVFILTER);
+                w->fifo_in  = audio->priv.fifo_sync;
+                w->fifo_out = audio->priv.fifo_af;
+                w->audio    = audio;
+                hb_list_add(job->list_work, w);
+                encoder_fifo_in = audio->priv.fifo_af;
+            }
+
+            /*
+            * Audio Encoder Thread
+            */
             w = hb_audio_encoder( job->h, audio->config.out.codec);
             if (w == NULL)
             {
@@ -2007,7 +2033,7 @@ static void do_job(hb_job_t *job)
                 goto cleanup;
             }
             w->init_delay = &audio->priv.init_delay;
-            w->fifo_in    = audio->priv.fifo_sync;
+            w->fifo_in    = encoder_fifo_in;
             w->fifo_out   = audio->priv.fifo_out;
             w->extradata  = &audio->priv.extradata;
             w->audio      = audio;

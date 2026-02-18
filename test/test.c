@@ -221,6 +221,25 @@ static int      audio_name_passthru = -1;
 static char *   audio_autonaming_behaviour = NULL;
 static int      sub_name_passthru   = -1;
 
+/* Named video filter shortcuts */
+static char *   bm3d                = NULL;
+static char *   deband              = NULL;
+static char *   eq                  = NULL;
+
+/* Named audio filter shortcuts (per-track arrays) */
+static char **  af_acompressor      = NULL;
+static char **  af_adeclick         = NULL;
+static char **  af_adeclip          = NULL;
+static char **  af_afftdn           = NULL;
+static char **  af_agate            = NULL;
+static char **  af_alimiter         = NULL;
+static char **  af_anlmdn           = NULL;
+static char **  af_crossfeed        = NULL;
+static char **  af_dialoguenhance   = NULL;
+static char **  af_loudnorm         = NULL;
+static char **  af_stereowiden      = NULL;
+static char **  af_surround         = NULL;
+
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
 static volatile int die = 0;
@@ -666,6 +685,22 @@ cleanup:
     free(unsharp_tune);
     free(lapsharp);
     free(lapsharp_tune);
+    free(bm3d);
+    free(deband);
+    free(eq);
+    hb_str_vfree(af_acompressor);
+    hb_str_vfree(af_adeclick);
+    hb_str_vfree(af_adeclip);
+    hb_str_vfree(af_afftdn);
+    hb_str_vfree(af_agate);
+    hb_str_vfree(af_alimiter);
+    hb_str_vfree(af_anlmdn);
+    hb_str_vfree(af_crossfeed);
+    hb_str_vfree(af_dialoguenhance);
+    hb_str_vfree(af_loudnorm);
+    hb_str_vfree(af_stereowiden);
+    hb_str_vfree(af_surround);
+
     free(preset_export_name);
     free(preset_export_desc);
     free(preset_export_file);
@@ -1005,7 +1040,6 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
                 die = 1;
                 return -1;
             }
-
 
             hb_add_json(h, json_job);
             free(json_job);
@@ -1892,6 +1926,54 @@ static void ShowHelp(void)
 "   -g, --grayscale         Grayscale encoding\n"
 "   --no-grayscale          Disable preset 'grayscale'\n"
 "\n"
+"   --bm3d[=preset]         BM3D advanced denoising (default/medium/strong)\n"
+"                           Or custom avfilter params.\n"
+"   --deband[=string]       Remove banding artifacts (common in anime,\n"
+"                           gradients, dark scenes). Default: 1thr=0.02:\n"
+"                           2thr=0.02:3thr=0.02:4thr=0.02:range=16:blur=1\n"
+"                           Or custom FFmpeg deband params.\n"
+"   --eq[=preset]           Video equalizer: brightness, contrast,\n"
+"                           saturation, gamma. Presets: brighten/darken/\n"
+"                           vivid. Default: brighten.\n"
+"                           Or custom FFmpeg eq params, e.g.:\n"
+"                           --eq=brightness=0.06:contrast=1.1:saturation=1.2\n"
+"\n"
+"   --acompressor[=string]  Dynamic range compression. Reduces loud/quiet\n"
+"                           variation.\n"
+"                           Default: threshold=0.125:ratio=2:attack=20:\n"
+"                                    release=250:mix=1\n"
+"   --adeclick[=string]     Click/pop removal. Interpolates over detected\n"
+"                           impulsive noise (vinyl rips, bad recordings).\n"
+"                           Default: w=55:o=75:a=2:t=2:b=2\n"
+"   --adeclip[=string]      Declipping. Repairs clipped audio samples.\n"
+"                           Default: w=55:o=75:a=8:t=10\n"
+"   --afftdn[=string]       FFT-based audio denoiser. Removes hiss/hum.\n"
+"                           Default: nr=12:nf=-50\n"
+"   --agate[=string]        Noise gate. Silences audio below threshold.\n"
+"                           Default: threshold=0.125:ratio=2:attack=20:\n"
+"                                    release=250\n"
+"   --alimiter[=string]     Audio limiter. Prevents clipping.\n"
+"                           Default: limit=1:attack=5:release=50:\n"
+"                                    level=enabled\n"
+"   --anlmdn[=string]       Non-local means audio denoiser.\n"
+"                           Default: s=0.00001:p=2:r=6\n"
+"   --crossfeed[=string]    Headphone crossfeed. Makes stereo more natural\n"
+"                           on headphones.\n"
+"                           Default: strength=0.2:range=0.5:slope=0.5\n"
+"   --dialoguenhance[=str]  Dialog enhancement. Improves speech clarity.\n"
+"                           Default: original=1:enhance=1:voice=2\n"
+"   --loudnorm[=string]     EBU R128 loudness normalization. Levels volume\n"
+"                           across the file to a target loudness.\n"
+"                           Default: I=-24.0:TP=-2.0:LRA=7.0\n"
+"   --stereowiden[=string]  Stereo image widening. Enhances stereo effect\n"
+"                           by delaying left into right and vice versa.\n"
+"                           Non-stereo sources are downmixed to stereo.\n"
+"                           Default: delay=20:feedback=0.3:crossfeed=0.3:\n"
+"                           drymix=0.8\n"
+"   --surround[=string]     Surround upmix. Upmixes stereo to 5.1.\n"
+"                           Requires a multichannel encoder (e.g. eac3).\n"
+"                           Default: chl_in=stereo:chl_out=5.1\n"
+"\n"
 "\n"
 "Subtitles Options ------------------------------------------------------------\n"
 "\n"
@@ -2276,6 +2358,22 @@ static int ParseOptions( int argc, char ** argv )
     #define HDR_DYNAMIC_METADATA          334
     #define AUDIO_AUTONAMING_BEHAVIOUR    335
     #define COLOR_RANGE                   336
+    #define FILTER_BM3D                   337
+    #define FILTER_DEBAND                 338
+    #define FILTER_EQ                     339
+    #define FILTER_ACOMPRESSOR            340
+    #define FILTER_ALIMITER               341
+    #define FILTER_ADECLICK               342
+    #define FILTER_ADECLIP                343
+    #define FILTER_AFFTDN                 344
+    #define FILTER_AGATE                  345
+    #define FILTER_ANLMDN                 346
+    #define FILTER_CROSSFEED              347
+    #define FILTER_DIALOGUENHANCE         348
+    #define FILTER_LOUDNORM               349
+    #define FILTER_STEREOWIDEN            350
+    #define FILTER_SURROUND               351
+
 
     for( ;; )
     {
@@ -2411,6 +2509,22 @@ static int ParseOptions( int argc, char ** argv )
             { "no-pad",      no_argument,       &pad_disable,    1 },
             { "colorspace",    required_argument, NULL,    FILTER_COLORSPACE},
             { "no-colorspace", no_argument,       &colorspace_disable, 1 },
+
+            { "bm3d",           optional_argument, NULL, FILTER_BM3D },
+            { "deband",         optional_argument, NULL, FILTER_DEBAND },
+            { "eq",             optional_argument, NULL, FILTER_EQ },
+            { "acompressor",    optional_argument, NULL, FILTER_ACOMPRESSOR },
+            { "adeclick",       optional_argument, NULL, FILTER_ADECLICK },
+            { "adeclip",        optional_argument, NULL, FILTER_ADECLIP },
+            { "afftdn",         optional_argument, NULL, FILTER_AFFTDN },
+            { "agate",          optional_argument, NULL, FILTER_AGATE },
+            { "alimiter",       optional_argument, NULL, FILTER_ALIMITER },
+            { "anlmdn",         optional_argument, NULL, FILTER_ANLMDN },
+            { "crossfeed",      optional_argument, NULL, FILTER_CROSSFEED },
+            { "dialoguenhance", optional_argument, NULL, FILTER_DIALOGUENHANCE },
+            { "loudnorm",       optional_argument, NULL, FILTER_LOUDNORM },
+            { "stereowiden",    optional_argument, NULL, FILTER_STEREOWIDEN },
+            { "surround",       optional_argument, NULL, FILTER_SURROUND },
 
             // mapping of legacy option names for backwards compatibility
             { "qsv-preset",           required_argument, NULL, ENCODER_PRESET,       },
@@ -3337,6 +3451,87 @@ static int ParseOptions( int argc, char ** argv )
                     audio_autonaming_behaviour = strdup(AUDIO_AUTONAMING_BEHAVIOUR_DEFAULT_PRESET);
                 }
                 break;
+            case FILTER_BM3D:
+                free(bm3d);
+                if (optarg != NULL)
+                {
+                    bm3d = strdup(optarg);
+                }
+                else
+                {
+                    bm3d = strdup("default");
+                }
+                break;
+            case FILTER_DEBAND:
+                free(deband);
+                if (optarg != NULL)
+                {
+                    deband = strdup(optarg);
+                }
+                else
+                {
+                    deband = strdup("default");
+                }
+                break;
+            case FILTER_EQ:
+                free(eq);
+                if (optarg != NULL)
+                {
+                    eq = strdup(optarg);
+                }
+                else
+                {
+                    eq = strdup("brighten");
+                }
+                break;
+            case FILTER_ACOMPRESSOR:
+                hb_str_vfree(af_acompressor);
+                af_acompressor = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_ADECLICK:
+                hb_str_vfree(af_adeclick);
+                af_adeclick = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_ADECLIP:
+                hb_str_vfree(af_adeclip);
+                af_adeclip = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_AFFTDN:
+                hb_str_vfree(af_afftdn);
+                af_afftdn = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_AGATE:
+                hb_str_vfree(af_agate);
+                af_agate = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_ALIMITER:
+                hb_str_vfree(af_alimiter);
+                af_alimiter = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_ANLMDN:
+                hb_str_vfree(af_anlmdn);
+                af_anlmdn = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_CROSSFEED:
+                hb_str_vfree(af_crossfeed);
+                af_crossfeed = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_DIALOGUENHANCE:
+                hb_str_vfree(af_dialoguenhance);
+                af_dialoguenhance = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_LOUDNORM:
+                hb_str_vfree(af_loudnorm);
+                af_loudnorm = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_STEREOWIDEN:
+                hb_str_vfree(af_stereowiden);
+                af_stereowiden = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_SURROUND:
+                hb_str_vfree(af_surround);
+                af_surround = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
             case ':':
                 fprintf( stderr, "missing parameter (%s)\n", argv[cur_optind] );
                 return -1;
@@ -4075,7 +4270,19 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         audio_gain                != NULL ||
         aqualities                != NULL ||
         acompressions             != NULL ||
-        anames                    != NULL))
+        anames                    != NULL ||
+        af_acompressor            != NULL ||
+        af_adeclick               != NULL ||
+        af_adeclip                != NULL ||
+        af_afftdn                 != NULL ||
+        af_agate                  != NULL ||
+        af_alimiter               != NULL ||
+        af_anlmdn                 != NULL ||
+        af_crossfeed              != NULL ||
+        af_dialoguenhance         != NULL ||
+        af_loudnorm               != NULL ||
+        af_stereowiden            != NULL ||
+        af_surround               != NULL))
     {
         // No explicit audio tracks, but track settings modified.
         // Modify the presets audio settings.
@@ -4089,17 +4296,24 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             hb_dict_set(preset, "AudioList", list);
         }
         int list_len = hb_value_array_len(list);
-        int count = MAX(hb_str_vlen(mixdowns),
-                    MAX(hb_str_vlen(dynamic_range_compression),
-                    MAX(hb_str_vlen(audio_gain),
-                    MAX(hb_str_vlen(audio_dither),
-                    MAX(hb_str_vlen(normalize_mix_level),
-                    MAX(hb_str_vlen(arates),
-                    MAX(hb_str_vlen(abitrates),
-                    MAX(hb_str_vlen(aqualities),
-                    MAX(hb_str_vlen(acompressions),
-                    MAX(hb_str_vlen(acodecs),
-                        hb_str_vlen(anames)))))))))));
+        int count = 0;
+        {
+            char ** audio_arrays[] = {
+                mixdowns, dynamic_range_compression, audio_gain,
+                audio_dither, normalize_mix_level, arates, abitrates,
+                aqualities, acompressions, acodecs, anames,
+                af_acompressor, af_adeclick,
+                af_adeclip, af_afftdn, af_agate, af_alimiter,
+                af_anlmdn, af_crossfeed, af_dialoguenhance,
+                af_loudnorm, af_stereowiden, af_surround, NULL
+            };
+            for (int aa = 0; audio_arrays[aa] != NULL; aa++)
+            {
+                int len = hb_str_vlen(audio_arrays[aa]);
+                if (len > count)
+                    count = len;
+            }
+        }
 
         if (list_len < count)
         {
@@ -4372,6 +4586,80 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     audio_dict = hb_value_array_get(list, ii);
                     hb_dict_set(audio_dict, "AudioTrackName",
                                         hb_value_string(anames[ii]));
+                }
+            }
+        }
+
+        // Build per-track audio avfilter strings from named filters
+        {
+            int count = hb_value_array_len(list);
+            for (ii = 0; ii < count; ii++)
+            {
+                char * af_chain = NULL;
+
+                // Helper macro to append a named audio filter for track ii
+                #define APPEND_AF(arr, filter_name, default_str) \
+                    if (arr != NULL && ii < hb_str_vlen(arr) && \
+                        arr[ii] != NULL && arr[ii][0] != '\0') \
+                    { \
+                        char * val_alloc = NULL; \
+                        const char * val; \
+                        if (!strcmp(arr[ii], "default")) \
+                            val = default_str; \
+                        else if (strncmp(arr[ii], filter_name, \
+                                         strlen(filter_name)) == 0) \
+                            val = arr[ii]; \
+                        else \
+                        { \
+                            val_alloc = hb_strdup_printf("%s=%s", \
+                                            filter_name, arr[ii]); \
+                            val = val_alloc; \
+                        } \
+                        if (af_chain == NULL) \
+                            af_chain = strdup(val); \
+                        else \
+                        { \
+                            char * tmp = hb_strdup_printf("%s,%s", \
+                                                           af_chain, val); \
+                            free(af_chain); \
+                            af_chain = tmp; \
+                        } \
+                        free(val_alloc); \
+                    }
+
+                APPEND_AF(af_acompressor, "acompressor",
+                    "acompressor=threshold=0.125:ratio=2:attack=20:release=250:mix=1")
+                APPEND_AF(af_adeclick, "adeclick",
+                    "adeclick=w=55:o=75:a=2:t=2:b=2")
+                APPEND_AF(af_adeclip, "adeclip",
+                    "adeclip=w=55:o=75:a=8:t=10")
+                APPEND_AF(af_afftdn, "afftdn",
+                    "afftdn=nr=12:nf=-50")
+                APPEND_AF(af_agate, "agate",
+                    "agate=threshold=0.125:ratio=2:attack=20:release=250")
+                APPEND_AF(af_alimiter, "alimiter",
+                    "alimiter=limit=1:attack=5:release=50:level=enabled")
+                APPEND_AF(af_anlmdn, "anlmdn",
+                    "anlmdn=s=0.00001:p=2:r=6")
+                APPEND_AF(af_crossfeed, "aformat=channel_layouts=stereo,crossfeed",
+                    "aformat=channel_layouts=stereo,crossfeed=strength=0.2:range=0.5:slope=0.5")
+                APPEND_AF(af_dialoguenhance, "aformat=channel_layouts=stereo,dialoguenhance",
+                    "aformat=channel_layouts=stereo,dialoguenhance=original=1:enhance=1:voice=2")
+                APPEND_AF(af_loudnorm, "loudnorm",
+                    "loudnorm=I=-24.0:TP=-2.0:LRA=7.0")
+                APPEND_AF(af_stereowiden, "aformat=channel_layouts=stereo,stereowiden",
+                    "aformat=channel_layouts=stereo,stereowiden=delay=20:feedback=0.3:crossfeed=0.3:drymix=0.8")
+                APPEND_AF(af_surround, "surround",
+                    "surround=chl_in=stereo:chl_out=5.1")
+
+                #undef APPEND_AF
+
+                if (af_chain != NULL)
+                {
+                    audio_dict = hb_value_array_get(list, ii);
+                    hb_dict_set(audio_dict, "Avfilter",
+                                hb_value_string(af_chain));
+                    free(af_chain);
                 }
             }
         }
@@ -4897,6 +5185,90 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
     }
 
+    // Named video filter shortcuts
+    if (bm3d != NULL)
+    {
+        char * bm3d_alloc = NULL;
+        const char * bm3d_str;
+        if (!strcmp(bm3d, "default"))
+            bm3d_str = "bm3d=sigma=1";
+        else if (!strcmp(bm3d, "medium"))
+            bm3d_str = "bm3d=sigma=3";
+        else if (!strcmp(bm3d, "strong"))
+            bm3d_str = "bm3d=sigma=6";
+        else if (strncmp(bm3d, "bm3d", 4) == 0)
+            bm3d_str = bm3d;
+        else
+        {
+            bm3d_alloc = hb_strdup_printf("bm3d=%s", bm3d);
+            bm3d_str = bm3d_alloc;
+        }
+        hb_dict_set(preset, "VideoAvfilter",
+                    hb_value_string(bm3d_str));
+        free(bm3d_alloc);
+    }
+    if (deband != NULL)
+    {
+        char * db_alloc = NULL;
+        const char * db_str;
+        if (!strcmp(deband, "default"))
+            db_str = "deband=1thr=0.02:2thr=0.02:3thr=0.02:4thr=0.02:range=16:blur=1";
+        else if (strncmp(deband, "deband", 6) == 0)
+            db_str = deband;
+        else
+        {
+            db_alloc = hb_strdup_printf("deband=%s", deband);
+            db_str = db_alloc;
+        }
+        const char * existing = hb_value_get_string(
+                                hb_dict_get(preset, "VideoAvfilter"));
+        if (existing != NULL && existing[0] != '\0')
+        {
+            char * combined = hb_strdup_printf("%s,%s", existing, db_str);
+            hb_dict_set(preset, "VideoAvfilter",
+                        hb_value_string(combined));
+            free(combined);
+        }
+        else
+        {
+            hb_dict_set(preset, "VideoAvfilter",
+                        hb_value_string(db_str));
+        }
+        free(db_alloc);
+    }
+    if (eq != NULL)
+    {
+        char * eq_alloc = NULL;
+        const char * eq_str;
+        if (!strcmp(eq, "brighten"))
+            eq_str = "eq=brightness=0.06:contrast=1.08:saturation=1.05:gamma=0.95";
+        else if (!strcmp(eq, "darken"))
+            eq_str = "eq=brightness=-0.06:contrast=1.06:saturation=1.00:gamma=1.05";
+        else if (!strcmp(eq, "vivid"))
+            eq_str = "eq=contrast=1.25:saturation=1.35:brightness=0.03:gamma=0.92";
+        else if (strncmp(eq, "eq", 2) == 0)
+            eq_str = eq;
+        else
+        {
+            eq_alloc = hb_strdup_printf("eq=%s", eq);
+            eq_str = eq_alloc;
+        }
+        const char * existing = hb_value_get_string(
+                                    hb_dict_get(preset, "VideoAvfilter"));
+        if (existing != NULL && existing[0] != '\0')
+        {
+            char * combined = hb_strdup_printf("%s,%s", existing, eq_str);
+            hb_dict_set(preset, "VideoAvfilter",
+                        hb_value_string(combined));
+            free(combined);
+        }
+        else
+        {
+            hb_dict_set(preset, "VideoAvfilter",
+                        hb_value_string(eq_str));
+        }
+        free(eq_alloc);
+    }
     return preset;
 }
 
