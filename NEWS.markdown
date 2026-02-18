@@ -52,7 +52,7 @@ Download available from Microsoft:
   - libjpeg-turbo 3.1.3 (preview image compression)
   - liblzma (xz) 5.8.2 (LZMA video decoding, e.g. TIFF)
   - libopus 1.6.1 (Opus audio encoding)
-  - libvpx 1.15.2 (VP8/VP9 video encoding)
+  - libvpx 1.16.0 (VP8/VP9 video encoding)
   - oneVPL 2.16.0 (Intel QSV video encoding/decoding)
   - SVT-AV1 4.0.1 (AV1 video encoding)
   - x265 r13309 (H.265/HEVC video encoding)
