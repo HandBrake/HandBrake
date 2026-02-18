@@ -1062,6 +1062,7 @@ struct hb_audio_config_s
             HB_AMIXDOWN_LEFT,
             HB_AMIXDOWN_RIGHT,
             HB_AMIXDOWN_STEREO,
+            HB_AMIXDOWN_3POINT0,
             HB_AMIXDOWN_DOLBY,
             HB_AMIXDOWN_DOLBYPLII,
             HB_AMIXDOWN_5POINT1,
@@ -1081,6 +1082,7 @@ struct hb_audio_config_s
         int      normalize_mix_level; /* mix level normalization (boolean) */
         int      dither_method; /* dither algorithm */
         const char * name; /* Output track name */
+        const char * avfilter; /* Audio avfilter string */
     } out;
 
     /* Input */
@@ -1133,6 +1135,7 @@ struct hb_audio_s
         hb_fifo_t * fifo_in;   /* AC3/MPEG/LPCM ES */
         hb_fifo_t * fifo_raw;  /* Raw audio */
         hb_fifo_t * fifo_sync; /* Resampled, synced raw audio */
+        hb_fifo_t * fifo_af;   /* Audio avfilter output */
         hb_fifo_t * fifo_out;  /* MP3/AAC/Vorbis ES */
 
         hb_mux_data_t * mux_data;
@@ -1551,6 +1554,7 @@ extern hb_work_object_t hb_muxer;
 extern hb_work_object_t hb_encca_aac;
 extern hb_work_object_t hb_encca_haac;
 extern hb_work_object_t hb_encavcodeca;
+extern hb_work_object_t hb_audio_avfilter_work;
 extern hb_work_object_t hb_reader;
 
 #define HB_FILTER_OK      0

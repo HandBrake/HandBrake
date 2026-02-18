@@ -911,6 +911,14 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                 }
             }
 
+            // Copy audio avfilter setting if present
+            const char *avfilter = hb_dict_get_string(
+                                       encoder_dict, "Avfilter");
+            if (avfilter != NULL && avfilter[0] != '\0')
+            {
+                hb_dict_set_string(audio_dict, "Avfilter", avfilter);
+            }
+
             // Sanitize the settings before adding to the audio list
             hb_sanitize_audio_settings(title, audio_dict);
 
@@ -1886,6 +1894,19 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         {
             hb_value_free(&filter_settings);
         }
+    }
+
+    // Video AVFilter passthrough
+    const char * video_avfilter = hb_value_get_string(
+                                  hb_dict_get(preset, "VideoAvfilter"));
+    if (video_avfilter != NULL && video_avfilter[0] != '\0')
+    {
+        filter_dict = hb_dict_init();
+        hb_dict_set(filter_dict, "ID",
+                    hb_value_int(HB_FILTER_AVFILTER));
+        hb_dict_set(filter_dict, "Settings",
+                    hb_value_string(video_avfilter));
+        hb_add_filter2(filter_list, filter_dict);
     }
 
     hb_value_t *fr_value = hb_dict_get(preset, "VideoFramerate");
