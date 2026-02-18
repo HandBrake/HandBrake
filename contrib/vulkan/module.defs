@@ -1,0 +1,25 @@
+$(eval $(call import.MODULE.defs,VULKAN,vulkan))
+$(eval $(call import.CONTRIB.defs,VULKAN))
+
+VULKAN.FETCH.url = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/vulkan-v1.4.337.tar.gz
+VULKAN.FETCH.url += https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.4.337.tar.gz
+VULKAN.FETCH.sha256 = 13845b9dc873758cdc1f2be6219f7fc99afea0a2c80586043b5bb435b99e590b
+VULKAN.FETCH.basename = Vulkan-Headers-1.4.337.tar.gz
+VULKAN.EXTRACT.tarbase = Vulkan-Headers-1.4.337
+
+VULKAN.CONFIGURE = $(TOUCH.exe) $@
+VULKAN.BUILD = $(TOUCH.exe) $@
+
+define VULKAN.INSTALL
+    $(MKDIR.exe) -p $(CONTRIB.build/)include/vulkan
+    $(MKDIR.exe) -p $(CONTRIB.build/)include/vk_video
+    $(CP.exe) -R $(VULKAN.EXTRACT.dir/)include/vulkan/* $(CONTRIB.build/)include/vulkan/
+    $(CP.exe) -R $(VULKAN.EXTRACT.dir/)include/vk_video/* $(CONTRIB.build/)include/vk_video/
+    $(TOUCH.exe) $@
+endef
+
+define VULKAN.UNINSTALL
+    $(RM.exe) -rf $(CONTRIB.build/)include/vulkan
+    $(RM.exe) -rf $(CONTRIB.build/)include/vk_video
+    $(RM.exe) -f $(VULKAN.INSTALL.target)
+endef
