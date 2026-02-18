@@ -109,7 +109,7 @@
             item.controlRepresentation = NSToolbarItemGroupControlRepresentationCollapsed;
             item.label = label;
             item.paletteLabel = label;
-            item.toolTip = NSLocalizedString(@"Select an action to run when when the queue is done",
+            item.toolTip = NSLocalizedString(@"Select an action to run when the queue is done",
                                              @"Queue Window When Done Toolbar Item");
 
             [item bind:@"selectedIndex"
