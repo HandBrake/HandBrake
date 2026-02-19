@@ -109,6 +109,8 @@
             item.controlRepresentation = NSToolbarItemGroupControlRepresentationCollapsed;
             item.label = label;
             item.paletteLabel = label;
+            item.toolTip = NSLocalizedString(@"Select an action to run when the queue is done",
+                                             @"Queue Window When Done Toolbar Item");
 
             [item bind:@"selectedIndex"
               toObject:NSUserDefaultsController.sharedUserDefaultsController
@@ -165,6 +167,7 @@
             NSMenuToolbarItem *item = [[NSMenuToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
             item.label = label;
             item.paletteLabel = label;
+            item.toolTip = NSLocalizedString(@"Perform tasks with the selected items", @"Queue Window Action Toolbar Item");
             item.menu = menu;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 160000
             if (@available(macOS 26, *))

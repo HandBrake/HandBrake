@@ -1,5 +1,5 @@
 version: 2
-updates:  
+updates:
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"

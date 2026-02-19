@@ -7,6 +7,7 @@
 #import "HBAVPlayer.h"
 
 @import AVFoundation;
+@import VideoToolbox;
 @import HandBrakeKit;
 
 static void *HBAVPlayerRateContext = &HBAVPlayerRateContext;
@@ -53,6 +54,12 @@ typedef void (^HBPlayableObserver)(void);
 
     if (self)
     {
+        if (@available(macOS 11.0, *))
+        {
+            // The VP9 decoder is not loaded by default
+            VTRegisterSupplementalVideoDecoderIfAvailable(kCMVideoCodecType_VP9);
+        }
+
         _movie = [AVAsset assetWithURL:url];;
         _player = [[AVPlayer alloc] init];
         _layer = [CALayer layer];

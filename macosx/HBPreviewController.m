@@ -232,7 +232,8 @@
         else
         {
             // Get the optimal view size for the image
-            NSSize windowSize = [self.previewView optimalViewSizeForImageSize:self.generator.imageSize
+            NSSize windowSize = [self.previewView optimalViewSizeForImageSize:NSMakeSize(self.generator.imageSize.width  + 64,
+                                                                                         self.generator.imageSize.height + 64)
                                                                       minSize:NSMakeSize(MIN_WIDTH, MIN_HEIGHT)
                                                                   scaleFactor:self.window.backingScaleFactor];
 

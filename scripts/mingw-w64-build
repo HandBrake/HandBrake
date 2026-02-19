@@ -119,13 +119,13 @@ function mingw-w64-build {  # mingw-w64-build [args] $TARGET_PARAM $TARGET_DIR
     local CONFIG_VER BINUTILS_VER MINGW_W64_VER GMP_VER MPFR_VER MPC_VER ISL_VER GCC_VER GDB_VER VERSIONS
     CONFIG_VER="a2287c3"  # config.guess 2025-07-10
     BINUTILS_VER="2.45.1"
-    MINGW_W64_VER="11.0.1"
+    MINGW_W64_VER="13.0.0"
     GMP_VER="6.3.0"
-    MPFR_VER="4.2.1"
+    MPFR_VER="4.2.2"
     MPC_VER="1.3.1"
-    ISL_VER="0.26"
-    GCC_VER="13.4.0"
-    GDB_VER="14.0.91"
+    ISL_VER="0.27"
+    GCC_VER="15.2.0"
+    GDB_VER="17.1"
 
     # filenames
     local CONFIG_PKG BINUTILS_PKG MINGW_W64_PKG GMP_PKG MPFR_PKG MPC_PKG ISL_PKG GCC_PKG GDB_PKG PKGS
@@ -150,20 +150,19 @@ function mingw-w64-build {  # mingw-w64-build [args] $TARGET_PARAM $TARGET_DIR
     MPC_URLS=("https://ftp.gnu.org/gnu/mpc/mpc-${MPC_VER}.tar.gz" "${ARCHIVE_URL}/${MPC_PKG}")
     ISL_URLS=("https://libisl.sourceforge.io/isl-${ISL_VER}.tar.bz2" "${ARCHIVE_URL}/${ISL_PKG}")
     GCC_URLS=("https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.gz" "${ARCHIVE_URL}/${GCC_PKG}")
-    #GDB_URLS=("https://ftp.gnu.org/gnu/gdb/gdb-${GDB_VER}.tar.gz" "${ARCHIVE_URL}/${GDB_PKG}")
-    GDB_URLS=("https://sourceware.org/pub/gdb/snapshots/branch/gdb-${GDB_VER}.tar.gz" "${ARCHIVE_URL}/${GDB_PKG}")
+    GDB_URLS=("https://ftp.gnu.org/gnu/gdb/gdb-${GDB_VER}.tar.gz" "${ARCHIVE_URL}/${GDB_PKG}")
 
     # checksums
     local CONFIG_SHA256 BINUTILS_SHA256 MINGW_W64_SHA256 GMP_SHA256 MPFR_SHA256 MPC_SHA256 ISL_SHA256 GCC_SHA256 GDB_SHA256 CHECKSUMS
     CONFIG_SHA256="956112656d32800df67a21ca6a45f7004f7d3653f660880a1c39649bca24b9b7"
     BINUTILS_SHA256="860daddec9085cb4011279136fc8ad29eb533e9446d7524af7f517dd18f00224"
-    MINGW_W64_SHA256="3f66bce069ee8bed7439a1a13da7cb91a5e67ea6170f21317ac7f5794625ee10"
+    MINGW_W64_SHA256="5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf"
     GMP_SHA256="ac28211a7cfb609bae2e2c8d6058d66c8fe96434f740cf6fe2e47b000d1c20cb"
-    MPFR_SHA256="116715552bd966c85b417c424db1bbdf639f53836eb361549d1f8d6ded5cb4c6"
+    MPFR_SHA256="826cbb24610bd193f36fde172233fb8c009f3f5c2ad99f644d0dea2e16a20e42"
     MPC_SHA256="ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8"
-    ISL_SHA256="5eac8664e9d67be6bd0bee5085d6840b8baf738c06814df47eaf4166d9776436"
-    GCC_SHA256="bf0baf3e570c9c74c17c8201f0196c6924b4bd98c90e69d6b2ac0cd823f33bbc"
-    GDB_SHA256="985261949c3dd03f3e689584539fc8e01b16fecb91a7eb7cae7396c74a5b5ca8"
+    ISL_SHA256="626335529331f7c89fec493de929e2e92fb3d8cc860fc7af554e0518ee0029ee"
+    GCC_SHA256="7294d65cc1a0558cb815af0ca8c7763d86f7a31199794ede3f630c0d1b0a5723"
+    GDB_SHA256="2b93c4c9726a4b8cfe771036e155377405dfa41c483d90945481319c5663c120"
 
     # arrays of default components
     NAMES=("${CONFIG_NAME}" "${BINUTILS_NAME}" "${MINGW_W64_NAME}" "${GMP_NAME}" "${MPFR_NAME}" "${MPC_NAME}" "${ISL_NAME}" "${GCC_NAME}")
@@ -175,7 +174,7 @@ function mingw-w64-build {  # mingw-w64-build [args] $TARGET_PARAM $TARGET_DIR
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="10.1.0"
+    VERSION="11.0.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -198,8 +197,8 @@ where:
         number of concurrent build jobs to run
         default: 0 (automatic)
   --msvcrt
-        msvc runtime version (msvcrt or ucrt)
-        default: msvcrt
+        msvc runtime version (ucrt or msvcrt)
+        default: ucrt
   --disable-gdb
         disable building GDB debugger
 targets:
@@ -209,15 +208,16 @@ targets:
   x86_64
   x86_64.clean
   x86_64.distclean
+  download
   pkgclean
-default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${GCC_VER}"
+default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-ucrt-gcc-${GCC_VER}"
 
     # args
     local FORCE JOBS LIST DISABLE_GDB OPTIND OPTSPEC OPTARRAY
     FORCE=false
     JOBS=0
     LIST=false
-    MSVCRT="msvcrt"
+    MSVCRT="ucrt"
     DISABLE_GDB=false
     OPTIND=1
     OPTSPEC=":-:hlvfj:"
@@ -298,8 +298,8 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${
                             return 1
                         fi
                         MSVCRT="${!OPTIND}"
-                        if [[ "${MSVCRT}" != "msvcrt" ]] && [[ "${MSVCRT}" != "ucrt" ]]; then
-                            echo "Option --${OPTARG} value must be msvcrt or ucrt" >&2
+                        if [[ "${MSVCRT}" != "ucrt" ]] && [[ "${MSVCRT}" != "msvcrt" ]]; then
+                            echo "Option --${OPTARG} value must be ucrt or msvcrt" >&2
                             echo -e "${HELP}"
                             return 1
                         fi
@@ -308,8 +308,8 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${
                     msvcrt=*)
                         # MSVC runtime
                         MSVCRT="${OPTARG#*=}"
-                        if [[ "${MSVCRT}" != "msvcrt" ]] && [[ "${MSVCRT}" != "ucrt" ]]; then
-                            echo "Option --${OPTARG} value must be msvcrt or ucrt" >&2
+                        if [[ "${MSVCRT}" != "ucrt" ]] && [[ "${MSVCRT}" != "msvcrt" ]]; then
+                            echo "Option --${OPTARG} value must be ucrt or msvcrt" >&2
                             echo -e "${HELP}"
                             return 1
                         fi
@@ -393,7 +393,7 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${
     [[ "${JOBS}" -eq 0 ]] && JOBS="${CPU_COUNT}"
 
     # begin output
-    echo "${NAME} ${VERSION} (${JOBS} job$([[ ${JOBS} -gt 1 ]] && echo 's'))"
+    echo -n "${NAME} ${VERSION}"
 
     # list components
     if [[ "${LIST}" == true ]]; then
@@ -407,26 +407,15 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${
         IFS=$'\n'
         COMPONENTS=($(sort <<< "${COMPONENTS_TEMP[*]}"))
         IFS="${OIFS}"
+        echo ""
         echo "Components:"
         for I in "${!COMPONENTS[@]}"; do
             echo "  ${COMPONENTS[$I]}"
         done
         return 0
-    fi
-
-    # dependencies
-    local DEPS
-    DEPS=("bison" "bzip2" "curl" "flex" "g++" "gcc" "gunzip" "m4" "make" "pax" "shasum|sha256sum")
-    check_dependencies "${DEPS[@]}" || return 1
-
-    # sha256 binary
-    local SHA256
-    if hash shasum >/dev/null 2>&1; then
-        SHA256="shasum -a 256"
-    elif hash sha256sum >/dev/null 2>&1; then
-        SHA256="sha256sum"
     else
-        return 1
+        # print job count when actually building
+        echo " (${JOBS} job$([[ ${JOBS} -gt 1 ]] && echo 's'))"
     fi
 
     # target args
@@ -451,6 +440,10 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${
             TARGET="${TARGET_x86_64}"
             PREFIX="${PREFIX_x86_64}"
             ;;
+        download)
+            TARGET="download"
+            PREFIX="download"
+            ;;
         pkgclean)
             TARGET="pkgclean"
             PREFIX="pkgclean"
@@ -463,6 +456,25 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${
     fi
     if [[ "${TARGET_DIR:-}" == "" ]]; then
         TARGET_DIR="${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-${MSVCRT}-gcc-${GCC_VER}"
+    fi
+
+    # dependencies
+    local DEPS
+    if [[ "${TARGET_PARAM}" == "download" ]]; then
+        DEPS=("curl" "shasum|sha256sum")
+    else
+        DEPS=("bison" "bzip2" "curl" "flex" "g++" "gcc" "gunzip" "m4" "make" "pax" "shasum|sha256sum")
+    fi
+    check_dependencies "${DEPS[@]}" || return 1
+
+    # sha256 binary
+    local SHA256
+    if hash shasum >/dev/null 2>&1; then
+        SHA256="shasum -a 256"
+    elif hash sha256sum >/dev/null 2>&1; then
+        SHA256="sha256sum"
+    else
+        return 1
     fi
 
     # create target directory
@@ -506,28 +518,31 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${
     esac
 
     # remove non-reusable directories
-    local CLEAN_INDEX CLEAN_TOTAL
-    CLEAN_INDEX=0
-    CLEAN_TOTAL=2
-    if [[ "${FORCE}" == true ]]; then
+    if [[ "${TARGET_PARAM}" != "download" ]]; then
+        local CLEAN_INDEX CLEAN_TOTAL
+        CLEAN_INDEX=0
+        CLEAN_TOTAL=2
+        if [[ "${FORCE}" == true ]]; then
+            CLEAN_INDEX=$((CLEAN_INDEX+1))
+            CLEAN_TOTAL=$((CLEAN_TOTAL+1))
+            printf "Cleaning    [%02i/%02i] dist " "${CLEAN_INDEX}" "${CLEAN_TOTAL}"
+            rm -rf "${MINGW_W64_DIR}"
+            echo ""
+        elif [[ -e "${MINGW_W64_DIR}" ]]; then
+            # prefix dir should not exist
+            echo "unable to create directory (exists): ${MINGW_W64_DIR}" >&2
+            echo "remove with: ${SELF_NAME} ${TARGET_PARAM%%.*}.distclean${2:+ $2}" >&2
+            return 1
+        fi
         CLEAN_INDEX=$((CLEAN_INDEX+1))
-        CLEAN_TOTAL=$((CLEAN_TOTAL+1))
-        printf "Cleaning    [%02i/%02i] dist " "${CLEAN_INDEX}" "${CLEAN_TOTAL}"
-        rm -rf "${MINGW_W64_DIR}"
+        printf "Cleaning    [%02i/%02i] source " "${CLEAN_INDEX}" "${CLEAN_TOTAL}"
+        rm -rf "${SOURCE_DIR}"
+        CLEAN_INDEX=$((CLEAN_INDEX+1))
         echo ""
-    elif [[ -e "${MINGW_W64_DIR}" ]]; then
-        # prefix dir should not exist
-        echo "unable to create directory (exists): ${MINGW_W64_DIR}" >&2
-        echo "remove with: ${SELF_NAME} ${TARGET_PARAM%%.*}.distclean${2:+ $2}" >&2
-        return 1
+        printf "Cleaning    [%02i/%02i] build " "${CLEAN_INDEX}" "${CLEAN_TOTAL}"
+        rm -rf "${BUILD_DIR}"
+        echo ""
     fi
-    CLEAN_INDEX=$((CLEAN_INDEX+1))
-    printf "Cleaning    [%02i/%02i] source " "${CLEAN_INDEX}" "${CLEAN_TOTAL}"
-    rm -rf "${SOURCE_DIR}"
-    CLEAN_INDEX=$((CLEAN_INDEX+1))
-    echo ""
-    printf "Cleaning    [%02i/%02i] build " "${CLEAN_INDEX}" "${CLEAN_TOTAL}"
-    rm -rf "${BUILD_DIR}"
 
     # verify/fetch
     mkdir -p "${PKG_DIR}"
@@ -538,15 +553,22 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${
     local DOWNLOAD_VERBOSE I URLS_IREF URLS CHECKSUM
     DOWNLOAD_VERBOSE=false
     for I in "${!PKGS[@]}"; do
-        echo ""
-        printf "Downloading [%02i/%02i] %s " "$((I+1))" "${#PKGS[@]}" "${NAMES[I]} ${VERSIONS[I]}"
+        if [[ "${I}" -gt 0 ]]; then echo ""; fi
         URLS_IREF="${URLS_VARNAMES[I]}[@]"
         URLS="${!URLS_IREF}"
-        CHECKSUM=$(${SHA256} "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
-        if [[ "${CHECKSUM}" != "${CHECKSUMS[I]}" ]] >/dev/null 2>&1; then
-            download_url "${DOWNLOAD_VERBOSE}" "${PKG_DIR}/${PKGS[I]}" ${URLS[@]} || return 1
+        CHECKSUM=""
+        if [[ -e "${PKG_DIR}/${PKGS[I]}" ]]; then
+            printf "Verifying   [%02i/%02i] %s " "$((I+1))" "${#PKGS[@]}" "${NAMES[I]} ${VERSIONS[I]}"
+            CHECKSUM=$(${SHA256} "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
+            if [[ "${CHECKSUM}" != "${CHECKSUMS[I]}" ]]; then
+                echo ""
+            fi
         fi
-        CHECKSUM=$(${SHA256} "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
+        if [[ "${CHECKSUM}" != "${CHECKSUMS[I]}" ]] >/dev/null 2>&1; then
+            printf "Downloading [%02i/%02i] %s " "$((I+1))" "${#PKGS[@]}" "${NAMES[I]} ${VERSIONS[I]}"
+            download_url "${DOWNLOAD_VERBOSE}" "${PKG_DIR}/${PKGS[I]}" ${URLS[@]} || return 1
+            CHECKSUM=$(${SHA256} "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
+        fi
         if [[ "${CHECKSUM}" != "${CHECKSUMS[I]}" ]]; then
             echo "checksum mismatch for package: ${PKG_DIR}/${PKGS[I]}" >&2
             echo "expected: ${CHECKSUMS[I]}" >&2
@@ -554,6 +576,10 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${
             return 1
         fi
     done
+    if [[ "${TARGET_PARAM}" == "download" ]]; then
+        echo ""
+        return 0
+    fi
 
     # extract
     mkdir -p "${SOURCE_DIR}"
@@ -780,9 +806,8 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-msvcrt-gcc-${
     echo "  (e.g., .bashrc or .bash_profile) to make persistent across sessions:"
     echo "    export PATH=\"${MINGW_W64_DIR}/bin:\${PATH}\""
     echo "Complete."
-    return 0
-
     set +o pipefail
+    return 0
 }
 
 trap die_gracefully EXIT INT TERM

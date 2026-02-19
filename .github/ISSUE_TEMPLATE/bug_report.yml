@@ -10,7 +10,7 @@ body:
     id: what-happened
     attributes:
       label: Problem Description
-      description: Please describe your problem in as much detail as possible. Include any steps necessary to reproduce the problem. You can also include screenshots if desired. 
+      description: Please describe your problem in as much detail as possible. Include any steps necessary to reproduce the problem. You can also include screenshots if desired.
     validations:
       required: true
   - type: textarea

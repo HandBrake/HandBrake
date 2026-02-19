@@ -17,7 +17,15 @@
         if (glassView)
         {
             glassView.cornerRadius = 20;
-            glassView.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
+            glassView.style = NSGlassEffectViewStyleRegular;
+            if (frame.size.width < 200)
+            {
+                // Add a tint color to work around the wrong decisions of the glass view,
+                // for some reasons it decides to draw a clear glass if the background
+                // is mostly white, making everything unreadable
+                glassView.tintColor = [NSColor colorWithWhite:0 alpha:0.4];
+            }
+            glassView.appearance = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
         }
         self = (HBHUDView *)glassView;
     }

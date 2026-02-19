@@ -19,16 +19,16 @@ jobs:
 
     - name: Setup Toolchain
       run: |
-        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/llvm-mingw-20250319-msvcrt-ubuntu-20.04-x86_64.tar.xz
-        SHA=$(sha1sum llvm-mingw-20250319-msvcrt-ubuntu-20.04-x86_64.tar.xz)
-        EXPECTED="3a9b127c62220c7bf4beec1638d5608d350dc452  llvm-mingw-20250319-msvcrt-ubuntu-20.04-x86_64.tar.xz"
+        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz
+        SHA=$(sha1sum llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz)
+        EXPECTED="a80747aeaeb2714da2482f1359dab5aa8587fff9  llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz"
         if [ "$SHA" == "$EXPECTED" ];
         then
             echo "Toolchain Verified. Extracting ..."
             mkdir toolchains
-            mv llvm-mingw-20250319-msvcrt-ubuntu-20.04-x86_64.tar.xz toolchains
+            mv llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz toolchains
             cd toolchains
-            tar xvf llvm-mingw-20250319-msvcrt-ubuntu-20.04-x86_64.tar.xz
+            tar xvf llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz
         else
             echo "Toolchain Verification FAILED. Exiting!"
             return -1
@@ -41,14 +41,13 @@ jobs:
 
     - name: Build CLI and LibHB
       run: |
-        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/llvm-mingw-20250319-msvcrt-ubuntu-20.04-x86_64/bin:${PATH}"
+        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64/bin:${PATH}"
         export PATH=/usr/bin:$PATH
         ./configure --cross=aarch64-w64-mingw32 --enable-mf --launch-jobs=0 --launch
         cd build
         make pkg.create.zip
         cd libhb
         mv hb.dll hb_a64.dll
-        
 
     - name: Upload HandBrakeCLI
       uses: actions/upload-artifact@v6
@@ -85,17 +84,17 @@ jobs:
 
     - name: Setup Toolchain
       run: |
-        wget https://github.com/bradleysepos/mingw-w64-build/releases/download/10.0.0/mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz
-        SHA=$(sha1sum mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz)
-        EXPECTED="f7250d140a72bdfdda2d4cd01d84e9a3938132b1  mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz"
+        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64.tar.gz
+        SHA=$(sha1sum mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64.tar.gz)
+        EXPECTED="ac2b0b2a58f6c07c9456420ca50da5b597f4fe19  mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64.tar.gz"
         if [ "$SHA" == "$EXPECTED" ];
         then
             echo "Toolchain Verified. Extracting ..."
             mkdir toolchains
-            mv mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz toolchains
+            mv mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64.tar.gz toolchains
             cd toolchains
-            tar xvf mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz
-            cd mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64/mingw-w64-x86_64/
+            tar xvf mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64.tar.gz
+            cd mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64/mingw-w64-x86_64/
             pwd
         else
             echo "Toolchain Verification FAILED. Exiting!"
@@ -109,7 +108,7 @@ jobs:
 
     - name: Build CLI and LibHB
       run: |
-        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
+        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
         export PATH=/usr/bin:$PATH
         ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --launch-jobs=0 --launch
         cd build
@@ -142,7 +141,7 @@ jobs:
       with:
        name: LibHandBrake
        path: win/CS/HandBrakeWPF/bin/publish
-      
+
     - name: Import the Signing Cert
       run: |
         $ErrorView = "NormalView"
@@ -154,7 +153,7 @@ jobs:
           [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
           cp $certificatePath win\cs\
         }
-        
+
     - name: Setup .NET 10
       uses: actions/setup-dotnet@v5
       with:
@@ -194,7 +193,7 @@ jobs:
         cd ../../../../
         dir
       shell: cmd
-              
+
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v6
       with:
@@ -206,7 +205,7 @@ jobs:
       with:
         name: HandBrake-Win_GUI-x64-Zip
         path: win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
-        
+
   build_gui_arm:
     name: Windows UI ARM
     runs-on: windows-2022
@@ -216,7 +215,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
-       
+
     - name: Download LibHandBrake_ARM64
       uses: actions/download-artifact@v7
       with:
@@ -234,7 +233,7 @@ jobs:
           [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
           cp $certificatePath win\cs\
         }
-        
+
     - name: Setup .NET 10
       uses: actions/setup-dotnet@v5
       with:
@@ -248,7 +247,7 @@ jobs:
       shell: pwsh
       run: |
         dotnet msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
-        
+
     - name: Prepare Package
       run: |
         echo "Setting up context"
@@ -274,7 +273,7 @@ jobs:
         cd ../../../../
         dir
       shell: cmd
-              
+
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v6
       with:

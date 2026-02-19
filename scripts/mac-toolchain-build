@@ -77,16 +77,6 @@ function download_url {  # download_url $VERBOSE $FILE $URLS
     fi
     FAILED=()
     for I in "${!URLS[@]}"; do
-        if ! curl --head -Lf --connect-timeout 30 "${URLS[I]}" >/dev/null 2>&1; then
-            FAILED+=("${URLS[I]}")
-            if [[ "$(( ${I} + 1 ))" -lt "${#URLS[@]}" ]]; then
-                continue
-            else
-                echo "unable to download from urls: ${FAILED[@]}" >&2
-                echo "unable to download to file: ${FILE}" >&2
-                return 1
-            fi
-        fi
         if ! touch "${FILE}" >/dev/null 2>&1; then
             echo "unable to create path: ${FILE}" >&2
             return 1
@@ -123,7 +113,6 @@ function die_gracefully {
     trap - EXIT INT
     trap ":" INT  # prevent recursion due to spamming ctrl-c
     echo ""
-    echo "logs and temporary files may exist at ${TMPDIR%/}/mac-toolchain-build-*" >&2
     trap - TERM && kill -- -$$
 }
 
@@ -158,13 +147,13 @@ function mac_toolchain_build {
     local M4_VER AUTOCONF_VER AUTOMAKE_VER CMAKE_VER LIBTOOL_VER MESON_VER NASM_VER NINJA_VER OPENSSL_VER PKGCONFIG_VER VERSIONS
     M4_VER="1.4.20"
     AUTOCONF_VER="2.72"
-    AUTOMAKE_VER="1.18"
-    CMAKE_VER="4.0.3"
+    AUTOMAKE_VER="1.18.1"
+    CMAKE_VER="4.2.3"
     LIBTOOL_VER="2.5.4"
-    MESON_VER="1.8.2"
+    MESON_VER="1.10.1"
     NASM_VER="3.01"
     NINJA_VER="1.13.1"
-    OPENSSL_VER="3.5.1"
+    OPENSSL_VER="3.5.5"
     PKGCONFIG_VER="0.29.2"
     VERSIONS=("${M4_VER}" "${AUTOCONF_VER}" "${AUTOMAKE_VER}" "${CMAKE_VER}" "${LIBTOOL_VER}" "${MESON_VER}" "${NASM_VER}" "${NINJA_VER}" "${OPENSSL_VER}" "${PKGCONFIG_VER}")
 
@@ -178,7 +167,7 @@ function mac_toolchain_build {
     MESON_PKG="meson-${MESON_VER}.tar.gz"
     NASM_PKG="nasm-${NASM_VER}.tar.bz2"
     NINJA_PKG="ninja-${NINJA_VER}.tar.gz"
-    OPENSSL_PKG="openssl-openssl-${OPENSSL_VER}.tar.gz"
+    OPENSSL_PKG="openssl-${OPENSSL_VER}.tar.gz"
     PKGCONFIG_PKG="pkg-config-${PKGCONFIG_VER}.tar.gz"
     PKGS=("${M4_PKG}" "${AUTOCONF_PKG}" "${AUTOMAKE_PKG}" "${CMAKE_PKG}" "${LIBTOOL_PKG}" "${MESON_PKG}" "${NASM_PKG}" "${NINJA_PKG}" "${OPENSSL_PKG}" "${PKGCONFIG_PKG}")
 
@@ -189,10 +178,10 @@ function mac_toolchain_build {
     AUTOMAKE_URLS=("https://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VER}.tar.gz")
     CMAKE_URLS=("https://cmake.org/files/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz")
     LIBTOOL_URLS=("https://ftp.gnu.org/gnu/libtool/libtool-${LIBTOOL_VER}.tar.gz")
-    MESON_URLS=("https://github.com/mesonbuild/meson/archive/${MESON_VER}.tar.gz")
+    MESON_URLS=("https://github.com/mesonbuild/meson/releases/download/${MESON_VER}/meson-${MESON_VER}.tar.gz")
     NASM_URLS=("https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2")
     NINJA_URLS=("https://github.com/ninja-build/ninja/archive/v${NINJA_VER}.tar.gz")
-    OPENSSL_URLS=("https://github.com/openssl/openssl/archive/openssl-${OPENSSL_VER}.tar.gz")
+    OPENSSL_URLS=("https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VER}/openssl-${OPENSSL_VER}.tar.gz")
     PKGCONFIG_URLS=("https://pkg-config.freedesktop.org/releases/pkg-config-${PKGCONFIG_VER}.tar.gz")
     URLS_VARNAMES=('M4_URLS' 'AUTOCONF_URLS' 'AUTOMAKE_URLS' 'CMAKE_URLS' 'LIBTOOL_URLS' 'MESON_URLS' 'NASM_URLS' 'NINJA_URLS' 'OPENSSL_URLS' 'PKGCONFIG_URLS')
 
@@ -200,20 +189,20 @@ function mac_toolchain_build {
     local M4_SHA256 AUTOCONF_SHA256 AUTOMAKE_SHA256 CMAKE_SHA256 LIBTOOL_SHA256 MESON_SHA256 NASM_SHA256 NINJA_SHA256 OPENSSL_SHA256 PKGCONFIG_SHA256 CHECKSUMS
     M4_SHA256="ac6989ee5d2aed81739780630cc2ce097e2a6546feb96a4a54db37d46a1452e4"
     AUTOCONF_SHA256="afb181a76e1ee72832f6581c0eddf8df032b83e2e0239ef79ebedc4467d92d6e"
-    AUTOMAKE_SHA256="af6043a5d4b3beef0c48161f4a6936259321cd101a34c1ab0768328515626c8a"
-    CMAKE_SHA256="8d3537b7b7732660ea247398f166be892fe6131d63cc291944b45b91279f3ffb"
+    AUTOMAKE_SHA256="63e585246d0fc8772dffdee0724f2f988146d1a3f1c756a3dc5cfbefa3c01915"
+    CMAKE_SHA256="7efaccde8c5a6b2968bad6ce0fe60e19b6e10701a12fce948c2bf79bac8a11e9"
     LIBTOOL_SHA256="da8ebb2ce4dcf46b90098daf962cffa68f4b4f62ea60f798d0ef12929ede6adf"
-    MESON_SHA256="6b878fb0f6f0318cbd54e13539f89a1a8305791668e8e93ffd59d82722888dac"
+    MESON_SHA256="c42296f12db316a4515b9375a5df330f2e751ccdd4f608430d41d7d6210e4317"
     NASM_SHA256="7a7b1ff3b0eef3247862f2fbe4ca605ccef770545d7af7979eba84a9d045c0b1"
     NINJA_SHA256="f0055ad0369bf2e372955ba55128d000cfcc21777057806015b45e4accbebf23"
-    OPENSSL_SHA256="24e3a8a1e832e29255b55d06fcc473b9f56e60555b504bf4422ca64a0d0c1426"
+    OPENSSL_SHA256="b28c91532a8b65a1f983b4c28b7488174e4a01008e29ce8e69bd789f28bc2a89"
     PKGCONFIG_SHA256="6fc69c01688c9458a57eb9a1664c9aba372ccda420a02bf4429fe610e7e7d591"
     CHECKSUMS=("${M4_SHA256}" "${AUTOCONF_SHA256}" "${AUTOMAKE_SHA256}" "${CMAKE_SHA256}" "${LIBTOOL_SHA256}" "${MESON_SHA256}" "${NASM_SHA256}" "${NINJA_SHA256}" "${OPENSSL_SHA256}" "${PKGCONFIG_SHA256}")
 
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP SUDO TOTAL
     NAME="mac-toolchain-build"
-    VERSION="2.14.0"
+    VERSION="2.15.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -375,6 +364,9 @@ default install-dir: /usr/local"
     CPU_COUNT="${CPU_COUNT:-1}"
     [[ "${JOBS}" -eq 0 ]] && JOBS="${CPU_COUNT}"
 
+    # begin output
+    echo -n "${NAME} ${VERSION}"
+
     # list components
     if [[ "${LIST}" == true ]]; then
         local COMPONENTS COMPONENTS_TEMP
@@ -386,16 +378,16 @@ default install-dir: /usr/local"
         IFS=$'\n'
         COMPONENTS=($(sort <<< "${COMPONENTS_TEMP[*]}"))
         IFS="${OIFS}"
-        echo "${NAME} ${VERSION}"
+        echo ""
         echo "Components:"
         for I in "${!COMPONENTS[@]}"; do
             echo "  ${COMPONENTS[$I]}"
         done
         return 0
+    else
+        # print job count when actually building
+        echo " (${JOBS} job$([[ ${JOBS} -gt 1 ]] && echo 's'))"
     fi
-
-    # begin output
-    echo "${NAME} ${VERSION} (${JOBS} job$([[ ${JOBS} -gt 1 ]] && echo 's'))"
 
     # mac only
     if [[ "${SYS_NAME}" != "darwin" ]]; then
@@ -407,6 +399,12 @@ default install-dir: /usr/local"
     local DEPS
     DEPS=("curl" "python3" "sed" "shasum|sha256sum")
     check_dependencies "${DEPS[@]}" || return 1
+
+    # work around macos stub for python executable
+    if ! python3 --version >/dev/null 2>&1; then
+        echo "Python 3 required" >&2
+        return 1
+    fi
 
     # sha256 binary
     local SHA256
@@ -687,8 +685,8 @@ default install-dir: /usr/local"
         echo "    export PATH=\"${PREFIX}/bin:\${PATH}\""
     fi
     echo "Complete."
-
     set +o pipefail
+    return 0
 }
 
 trap die_gracefully EXIT INT TERM
@@ -701,7 +699,9 @@ wait "${PID}" || CODE=$?
 trap - EXIT INT TERM
 
 if [[ "${CODE}" -ne 0 ]]; then
-    echo -n "error: subprocess returned non-zero error code (${CODE})" >&2
-    die_gracefully
+    echo ""
+    echo "error: subprocess returned non-zero error code (${CODE})" >&2
+    echo "logs and temporary files may exist at ${TMPDIR%/}/mac-toolchain-build-*" >&2
+    exit 1
 fi
 exit 0

@@ -3,8 +3,8 @@ name: IssueBot
 on:
   issues:
     types: [opened]
-    
-permissions: 
+
+permissions:
    issues: write
 
 jobs:
@@ -15,15 +15,15 @@ jobs:
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         issue-message: |-
-            Hello, 
+            Hello,
 
             Welcome to the HandBrake repository.
-                        
+
             >[!WARNING]
             >Please be cautious of any non-members suggesting that you download a "DLL" or any other files from 3rd party websites.
             >These are likely malicious!
             >Members of the HandBrake team can be identified by the "(Member)" label in the top right of any response from them.
-            
+
             >[!TIP]
             > For HandBrake documentation, please see https://handbrake.fr/docs
 

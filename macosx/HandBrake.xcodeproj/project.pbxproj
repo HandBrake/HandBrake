@@ -246,7 +246,7 @@
 		A9736F051C7DA5FE008F1D18 /* HandBrakeKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A9736F041C7DA5FE008F1D18 /* HandBrakeKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9736F0C1C7DA5FE008F1D18 /* HandBrakeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; };
 		A9736F171C7DA5FE008F1D18 /* HandBrakeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; };
-		A9736F181C7DA5FE008F1D18 /* HandBrakeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9736F181C7DA5FE008F1D18 /* HandBrakeKit.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A973E109216E74AC00D498EC /* HBImageUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A9CE0A931F57EC4600724577 /* HBImageUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A975B02220F7AF29004675CC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A975B02020F7AF29004675CC /* Localizable.strings */; };
 		A97D8DCF24DBD3C000B16AF5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2D11C7DABDA0068F46F /* libz.tbd */; };
@@ -414,6 +414,34 @@
 			remoteGlobalIDString = A9736F011C7DA5FE008F1D18;
 			remoteInfo = HandBrakeKit;
 		};
+		A98CA6E82F430A6E00FDB5A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9736F011C7DA5FE008F1D18;
+			remoteInfo = HandBrakeKit;
+		};
+		A98CA6EA2F430A7300FDB5A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9736F011C7DA5FE008F1D18;
+			remoteInfo = HandBrakeKit;
+		};
+		A98CA6EC2F430A7600FDB5A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9736F011C7DA5FE008F1D18;
+			remoteInfo = HandBrakeKit;
+		};
+		A98CA6EE2F430A7800FDB5A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9736F011C7DA5FE008F1D18;
+			remoteInfo = HandBrakeKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -426,14 +454,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		273F20CA14ADC86C0021BE6D /* CopyFiles */ = {
+		273F20CA14ADC86C0021BE6D /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A9736F181C7DA5FE008F1D18 /* HandBrakeKit.framework in CopyFiles */,
+				A9736F181C7DA5FE008F1D18 /* HandBrakeKit.framework in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A939855522315630001DCAEB /* Copy Files */ = {
@@ -1423,7 +1452,6 @@
 		271BA4C714B1236D00BC1D2C /* Static Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				A9E34AD4297871FE00C5DD82 /* libdovi.a */,
 				1CDCF0C1241F28D400FB62C6 /* libturbojpeg.a */,
 				1C280BF320BD58DD00D5ECC2 /* libspeex.a */,
 				1CBC683320BE014800A26CC2 /* liblzma.a */,
@@ -1604,6 +1632,7 @@
 			children = (
 				277EFE9217ED799E001D4A6A /* libfdk-aac.a */,
 				22CC9E74191EBEA500C69D81 /* libx265.a */,
+				A9E34AD4297871FE00C5DD82 /* libdovi.a */,
 			);
 			name = "Static Libraries (optional)";
 			sourceTree = "<group>";
@@ -2152,7 +2181,7 @@
 				273F203514ADBC200021BE6D /* Sources */,
 				273F203614ADBC200021BE6D /* Frameworks */,
 				273F203714ADBC200021BE6D /* Resources */,
-				273F20CA14ADC86C0021BE6D /* CopyFiles */,
+				273F20CA14ADC86C0021BE6D /* Copy Files */,
 				A939855522315630001DCAEB /* Copy Files */,
 			);
 			buildRules = (
@@ -2183,6 +2212,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A98CA6EB2F430A7300FDB5A7 /* PBXTargetDependency */,
 			);
 			name = HandBrakeXPCService2;
 			productName = HandBrakeXPCService;
@@ -2200,6 +2230,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A98CA6ED2F430A7600FDB5A7 /* PBXTargetDependency */,
 			);
 			name = HandBrakeXPCService3;
 			productName = HandBrakeXPCService;
@@ -2217,6 +2248,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A98CA6EF2F430A7800FDB5A7 /* PBXTargetDependency */,
 			);
 			name = HandBrakeXPCService4;
 			productName = HandBrakeXPCService;
@@ -2234,6 +2266,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A98CA6E92F430A6E00FDB5A7 /* PBXTargetDependency */,
 			);
 			name = HandBrakeXPCService;
 			productName = HandBrakeXPCService;
@@ -2284,8 +2317,9 @@
 		273F1FE014AD9DA40021BE6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = HB;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2620;
 				ORGANIZATIONNAME = HandBrake;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
@@ -2731,6 +2765,26 @@
 			isa = PBXTargetDependency;
 			target = A9736F011C7DA5FE008F1D18 /* HandBrakeKit */;
 			targetProxy = A9736F0D1C7DA5FE008F1D18 /* PBXContainerItemProxy */;
+		};
+		A98CA6E92F430A6E00FDB5A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9736F011C7DA5FE008F1D18 /* HandBrakeKit */;
+			targetProxy = A98CA6E82F430A6E00FDB5A7 /* PBXContainerItemProxy */;
+		};
+		A98CA6EB2F430A7300FDB5A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9736F011C7DA5FE008F1D18 /* HandBrakeKit */;
+			targetProxy = A98CA6EA2F430A7300FDB5A7 /* PBXContainerItemProxy */;
+		};
+		A98CA6ED2F430A7600FDB5A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9736F011C7DA5FE008F1D18 /* HandBrakeKit */;
+			targetProxy = A98CA6EC2F430A7600FDB5A7 /* PBXContainerItemProxy */;
+		};
+		A98CA6EF2F430A7800FDB5A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9736F011C7DA5FE008F1D18 /* HandBrakeKit */;
+			targetProxy = A98CA6EE2F430A7800FDB5A7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -5634,7 +5688,7 @@
 				A9A5CD9F1E32073800947914 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 		273F200714ADAE950021BE6D /* Build configuration list for PBXNativeTarget "HandBrakeCLI" */ = {
 			isa = XCConfigurationList;
@@ -5645,7 +5699,7 @@
 				A9A5CDA11E32073800947914 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 		273F205314ADBC210021BE6D /* Build configuration list for PBXNativeTarget "HandBrake" */ = {
 			isa = XCConfigurationList;
@@ -5656,7 +5710,7 @@
 				A9A5CDA41E32073800947914 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 		273F217114ADD2170021BE6D /* Build configuration list for PBXLegacyTarget "external" */ = {
 			isa = XCConfigurationList;
@@ -5667,7 +5721,7 @@
 				A9A5CDA01E32073800947914 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 		A93341BF243E1583003A82C2 /* Build configuration list for PBXNativeTarget "HandBrakeXPCService2" */ = {
 			isa = XCConfigurationList;
@@ -5678,7 +5732,7 @@
 				A93341C3243E1583003A82C2 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 		A93341D0243E158B003A82C2 /* Build configuration list for PBXNativeTarget "HandBrakeXPCService3" */ = {
 			isa = XCConfigurationList;
@@ -5689,7 +5743,7 @@
 				A93341D4243E158B003A82C2 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 		A93341E1243E158E003A82C2 /* Build configuration list for PBXNativeTarget "HandBrakeXPCService4" */ = {
 			isa = XCConfigurationList;
@@ -5700,7 +5754,7 @@
 				A93341E5243E158E003A82C2 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 		A964D3A522FDE8EE00DFCAEA /* Build configuration list for PBXNativeTarget "HandBrakeXPCService" */ = {
 			isa = XCConfigurationList;
@@ -5711,7 +5765,7 @@
 				A964D3A422FDE8EE00DFCAEA /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 		A96A4F81217A4C2B00755E35 /* Build configuration list for PBXAggregateTarget "FakeTarget" */ = {
 			isa = XCConfigurationList;
@@ -5722,7 +5776,7 @@
 				A96A4F80217A4C2B00755E35 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 		A9736F1D1C7DA5FE008F1D18 /* Build configuration list for PBXNativeTarget "HandBrakeKit" */ = {
 			isa = XCConfigurationList;
@@ -5733,7 +5787,7 @@
 				A9A5CDA21E32073800947914 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 		A9736F1E1C7DA5FE008F1D18 /* Build configuration list for PBXNativeTarget "HandBrakeKitTests" */ = {
 			isa = XCConfigurationList;
@@ -5744,7 +5798,7 @@
 				A9A5CDA31E32073800947914 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = release;
+			defaultConfigurationName = "release-sandbox";
 		};
 /* End XCConfigurationList section */
 
@@ -5754,7 +5808,7 @@
 			repositoryURL = "https://github.com/HandBrake/Sparkle";
 			requirement = {
 				kind = exactVersion;
-				version = "2.7.1-handbrake";
+				version = "2.8.1-handbrake";
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
