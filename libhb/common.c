@@ -982,12 +982,13 @@ int hb_audio_samplerate_is_supported(int samplerate, uint32_t codec)
             switch (samplerate)
             {
                 // Opus only supports samplerates 8kHz, 12kHz, 16kHz,
-                // 24kHz, 48kHz
+                // 24kHz, 48kHz, 96kHz
                 case 8000:
                 case 12000:
                 case 16000:
                 case 24000:
                 case 48000:
+				case 96000:
                     return 1;
                 default:
                     return 0;
