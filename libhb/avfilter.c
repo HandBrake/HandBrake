@@ -63,6 +63,8 @@ static int avfilter_init( hb_filter_object_t * filter, hb_filter_init_t * init )
 
     hb_buffer_list_clear(&pv->list);
 
+    pv->delay = filter->output_immediately == 0;
+
     return 0;
 
 fail:
@@ -101,6 +103,8 @@ static int avfilter_post_init( hb_filter_object_t * filter, hb_job_t * job )
     hb_avfilter_graph_update_init(pv->graph, &pv->output);
 
     hb_buffer_list_clear(&pv->list);
+
+    pv->delay = filter->output_immediately == 0;
 
     return 0;
 
@@ -244,13 +248,23 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t ** buf_in
     }
     // Delay one frame so we can set the stop time of the output buffer
     hb_buffer_list_clear(&list);
-    while (hb_buffer_list_count(&pv->list) > 1)
+    while (hb_buffer_list_count(&pv->list) > pv->delay)
     {
         buf  = hb_buffer_list_rem_head(&pv->list);
-        next = hb_buffer_list_head(&pv->list);
 
-        buf->s.stop = next->s.start;
-        buf->s.duration = buf->s.stop - buf->s.start;
+        // Delay one frame so we can set the stop time of the output buffer
+        if (pv->delay)
+        {
+            next = hb_buffer_list_head(&pv->list);
+
+            buf->s.stop = next->s.start;
+            buf->s.duration = buf->s.stop - buf->s.start;
+        }
+        else
+        {
+            buf->s.stop = buf->s.start + buf->s.duration;
+        }
+
         hb_buffer_list_append(&list, buf);
     }
 
