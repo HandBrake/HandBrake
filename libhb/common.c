@@ -260,6 +260,7 @@ hb_mixdown_internal_t hb_audio_mixdowns[]  =
     { { "Mono (Left Only)",   "left_only",  HB_AMIXDOWN_LEFT,      }, NULL, 1, },
     { { "Mono (Right Only)",  "right_only", HB_AMIXDOWN_RIGHT,     }, NULL, 1, },
     { { "Stereo",             "stereo",     HB_AMIXDOWN_STEREO,    }, NULL, 1, },
+    { { "3.0 Channels",       "3point0",    HB_AMIXDOWN_3POINT0,   }, NULL, 1, },
     { { "Dolby Surround",     "dpl1",       HB_AMIXDOWN_DOLBY,     }, NULL, 1, },
     { { "Dolby Pro Logic II", "dpl2",       HB_AMIXDOWN_DOLBYPLII, }, NULL, 1, },
     { { "5.1 Channels",       "5point1",    HB_AMIXDOWN_5POINT1,   }, NULL, 1, },
@@ -2629,6 +2630,9 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
     switch (codec)
     {
         case HB_ACODEC_VORBIS:
+            return (mixdown <= HB_AMIXDOWN_7POINT1 &&
+                    mixdown != HB_AMIXDOWN_3POINT0);
+
         case HB_ACODEC_FFALAC:
         case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
@@ -2637,16 +2641,24 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
         case HB_ACODEC_FFPCM24:
         case HB_ACODEC_OPUS:
         case HB_ACODEC_CA_AAC:
-        case HB_ACODEC_CA_HAAC:
         case HB_ACODEC_FFAAC:
             return (mixdown <= HB_AMIXDOWN_7POINT1);
 
+        case HB_ACODEC_CA_HAAC:
+            return (mixdown <= HB_AMIXDOWN_7POINT1 &&
+                    mixdown != HB_AMIXDOWN_3POINT0);
+
         case HB_ACODEC_LAME:
-            return (mixdown <= HB_AMIXDOWN_DOLBYPLII);
+            return (mixdown <= HB_AMIXDOWN_DOLBYPLII &&
+                    mixdown != HB_AMIXDOWN_3POINT0);
 
         case HB_ACODEC_FDK_AAC:
-        case HB_ACODEC_FDK_HAAC:
             return ((mixdown <= HB_AMIXDOWN_5POINT1) ||
+                    (mixdown == HB_AMIXDOWN_7POINT1));
+
+        case HB_ACODEC_FDK_HAAC:
+            return ((mixdown <= HB_AMIXDOWN_5POINT1 &&
+                     mixdown != HB_AMIXDOWN_3POINT0) ||
                     (mixdown == HB_AMIXDOWN_7POINT1));
 
         default:
@@ -2683,6 +2695,10 @@ int hb_mixdown_has_remix_support(int mixdown, hb_channel_layout_t *ch_layout)
                     av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_6POINT0) == AV_CH_LAYOUT_6POINT0 ||
                     av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_HEXAGONAL) == AV_CH_LAYOUT_HEXAGONAL);
 
+        // stereo + front center
+        case HB_AMIXDOWN_3POINT0:
+            return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_SURROUND) == AV_CH_LAYOUT_SURROUND);
+            
         // stereo + either of front center, side or back left/right, back center
         case HB_AMIXDOWN_5POINT1:
             return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
@@ -2749,6 +2765,9 @@ int hb_mixdown_get_discrete_channel_count(int amixdown)
         case HB_AMIXDOWN_5POINT1:
             return 6;
 
+        case HB_AMIXDOWN_3POINT0:
+            return 3;
+            
         case HB_AMIXDOWN_MONO:
         case HB_AMIXDOWN_LEFT:
         case HB_AMIXDOWN_RIGHT:
