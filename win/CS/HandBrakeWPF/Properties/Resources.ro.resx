@@ -2133,7 +2133,7 @@ Acolo unde se acceptă, orice presetări ale utilizatorului vor fi importate.</v
     <value>Este disponibilă o nouă versiune!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Drepturi de autor (C) 2003-2024 Echipa HandBrake</value>
+    <value>Drepturi de autor (C) 2003-2026 Echipa HandBrake</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Nivel scăzut al bateriei:</value>
@@ -3039,5 +3039,8 @@ Dorești să continui?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Exportă coada (selectată)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Aceeași ca sursa</value>
   </data>
 </root>

@@ -2134,7 +2134,7 @@ Alla andra användarförval som stöds har importerats.</value>
     <value>En ny version finns tillgänglig!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2026 HandBrake-teamet</value>
+    <value>Copyright © 2003-2026 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Låg batterinivå:</value>
@@ -3037,5 +3037,8 @@ Vill du fortsätta?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Exportera kö (markerade)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Samma som källa</value>
   </data>
 </root>

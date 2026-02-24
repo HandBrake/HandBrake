@@ -1030,7 +1030,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
     <value>预览</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>{0}, {1:00.00}%, Time Remaining: {2}</value>
+    <value>{0}, {1:00.00}%, 剩余时间：{2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>范围：</value>
@@ -3031,6 +3031,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
 您想要继续吗？</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
-    <value>Export Queue (Selected)</value>
+    <value>导出队列（已选项目）</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>与源视频相同</value>
   </data>
 </root>

@@ -2104,10 +2104,10 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
     <value>Toujours utiliser la résolution de la vidéo source</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>Plus élévé que la normale</value>
+    <value>Plus élevé que la normale</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>Moins élévé que la normale</value>
+    <value>Moins élevé que la normale</value>
   </data>
   <data name="ProcessPriority_High" xml:space="preserve">
     <value>Élevé</value>
@@ -3038,5 +3038,8 @@ Souhaitez-vous continuer ?
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Exporter la file d'attente (titres sélectionnés uniquement)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Identique à la source</value>
   </data>
 </root>

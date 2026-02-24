@@ -438,7 +438,7 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
     <value>Un sbagliu scunnisciutu hè accadutu.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>HandBrake {0} is now Available! Please check the website for release notes.</value>
+    <value>HandBrake {0} hè dispunibule avà. Ci vole à cunsultà u situ web per fighjà e note di versione.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>À st’ora, ùn ci hè alcunu rinnovu recente.</value>
@@ -1030,7 +1030,7 @@ Indiziu : Ciò ch’ella ci vole à fà in casu di rimpiazzamentu di schedariu p
     <value>Fighjulata</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>{0}, {1:00.00}%, Time Remaining: {2}</value>
+    <value>{0}, {1:00.00}%, Tempu rimanente : {2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Intervallu :</value>
@@ -2129,7 +2129,7 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
     <value>Una nova versione hè dispunibule !</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Diritti di copia (C) 2003-2024 The HandBrake Team</value>
+    <value>Diritti d’autore (C) 2003-2026 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Livellu di batteria debule :</value>
@@ -2448,8 +2448,8 @@ Pudete cambià a vostra scelta à ogni mumentu cambiendu l’ozzioni in Preferen
     <value>Circà e nove versioni ?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>- Make sure there are no pending encodes in the queue. 
-- Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions.</value>
+    <value>- Assicuratevi ch’ella ùn ci sia micca cudificazione in attesa in a fila d’attesa.
+- Arregistrate o pigliate nota di tutta prerigatura persunalizata chì voi averiate creata perchè si puderia qu’ella ùn fussi micca accettata da e nove versioni.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
     <value>(Predefinitu)</value>
@@ -3005,32 +3005,35 @@ Per permette parechje cudificazioni simultanee, attivate st’ozzione in u listi
     <value>Mudernu</value>
   </data>
   <data name="Options_BeforeUpdating" xml:space="preserve">
-    <value>Before Updating</value>
+    <value>Nanzu di mette à livellu</value>
   </data>
   <data name="Options_UpdateNotComplete" xml:space="preserve">
-    <value>The update install was cancelled. </value>
+    <value>L’installazione di a messa à livellu hè stata abbandunata.</value>
   </data>
   <data name="AboutView_ReleaseNotes" xml:space="preserve">
-    <value>Release Notes</value>
+    <value>Annutazioni di versione</value>
   </data>
   <data name="Options_ReleaseNotesDesc" xml:space="preserve">
-    <value>You can find out about the latest changes to HandBrake at:</value>
+    <value>Si pò infurmassi apprupositu di l’ultimi cambiamenti d’HandBrake nant’à :</value>
   </data>
   <data name="PresetUiType_Menu" xml:space="preserve">
-    <value>Menu</value>
+    <value>Listinu</value>
   </data>
   <data name="PresetUiType_Overlay" xml:space="preserve">
-    <value>Overlay</value>
+    <value>Accavalcatura</value>
   </data>
   <data name="OptionsView_PresetUiType" xml:space="preserve">
-    <value>Display toolbar preset popup as:</value>
+    <value>Affissà u finestrinu di barra d’attrezzi di prerigatura cum’è :</value>
   </data>
   <data name="QueueViewModel_CancelErrorWillBeCleared" xml:space="preserve">
-    <value>The queue currently has jobs which are in a Cancelled or Errored State. These will be cleared when the queue starts.  
+    <value>Attualmente a fila d’attesa cuntene travagli chì sò in i stati Abbandunatu o Sbagliatu. Seranu squassati quandu a fila d’attesa principeghja.
 
-Do you wish to proceed?</value>
+Vulete cuntinuà ?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
-    <value>Export Queue (Selected)</value>
+    <value>Espurtà a fila d’attesa (selezziunata)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Listessa chì a fonte</value>
   </data>
 </root>

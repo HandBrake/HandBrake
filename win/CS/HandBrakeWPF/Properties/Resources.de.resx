@@ -801,7 +801,7 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
     <value>Für zusätzliche Spuren:</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>Wenn  „Auto Passthru“ als der Audiocodec ausgewählt ist.</value>
+    <value>Wenn „Auto Passthru“ als der Audiocodec ausgewählt ist.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
     <value>Kapitelmarkierungen</value>
@@ -3041,5 +3041,8 @@ Möchten Sie fortfahren?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Warteschlange exportieren (Ausgewählte)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Wie Quelle</value>
   </data>
 </root>

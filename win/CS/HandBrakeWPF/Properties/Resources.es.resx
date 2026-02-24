@@ -3039,4 +3039,7 @@ Para permitir múltiples codificaciones simultáneas, active «Aislamiento de Pr
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Exportar Cola (Seleccionada)</value>
   </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Igual al original</value>
+  </data>
 </root>

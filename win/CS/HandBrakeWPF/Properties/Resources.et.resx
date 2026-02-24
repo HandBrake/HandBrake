@@ -2134,7 +2134,7 @@ Where supported, any user presets will have been imported.</value>
     <value>Saadaval on uus versioon!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Autoriõigused (C) 2003-2024 HandBrake meeskond</value>
+    <value>Copyright (C) 2003-2026 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>adal akutase:</value>
@@ -3037,5 +3037,8 @@ Do you wish to proceed?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Export Queue (Selected)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Sama kui allikas</value>
   </data>
 </root>

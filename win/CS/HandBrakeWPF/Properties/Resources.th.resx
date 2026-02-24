@@ -3035,4 +3035,7 @@ Do you wish to proceed?</value>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Export Queue (Selected)</value>
   </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>เหมือนกับไฟล์ต้นทาง</value>
+  </data>
 </root>

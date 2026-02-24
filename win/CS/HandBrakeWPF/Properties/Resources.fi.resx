@@ -1038,7 +1038,7 @@ Vihje: Tiedoston korvaamista voi hallita asetuksista.</value>
     <value>Esikatselu</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>{0}, {1:00.00}%, Time Remaining: {2}</value>
+    <value>{0}, {1:00.00} %, aikaa jäljellä: {2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Alue:</value>
@@ -2137,7 +2137,7 @@ Sikäli kuin mahdollista, on tuotu käyttäjän esiasetukset.</value>
     <value>Saatavilla on uusi versio!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Tekijänoikeudet © 2003–2004 HandBrake-työryhmä</value>
+    <value>Tekijänoikeudet © 2003–2026 HandBraken työryhmä</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Akkutehon ollessa vähissä:</value>
@@ -3039,6 +3039,9 @@ Usean rinnakkaisen koodauksen voi ottaa käyttöön asetuksella ”Prosessien er
 Haluatko jatkaa?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
-    <value>Export Queue (Selected)</value>
+    <value>Vie jono (valitut)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Sama kuin lähteessä</value>
   </data>
 </root>

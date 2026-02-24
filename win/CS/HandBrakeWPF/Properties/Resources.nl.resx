@@ -1445,7 +1445,7 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>Alle taken opnieuw proberen</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>Mislukte opnieuw proberen</value>
+    <value>Opnieuw proberen is mislukt</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
     <value>Geselecteerde taken herstellen</value>
@@ -1520,10 +1520,10 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>Map kiezen om te scannen</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>Optioneel een specifieke titel kiezen:</value>
+    <value>Kies optioneel een specifieke titel:</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>Vervolgens de video('s) kiezen die u wilt coderen: </value>
+    <value>Kies vervolgens de te coderen video('s) :</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
     <value>Bestand</value>
@@ -1700,7 +1700,7 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>Over HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Of een bestand, een verzameling bestanden of een map hierheen slepen...</value>
+    <value>of sleep een bestand, een verzameling bestanden of een map hierheen...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Help</value>
@@ -2134,7 +2134,7 @@ Waar ondersteund, worden alle gebruikersvoorinstellingen geïmporteerd.</value>
     <value>Er is een nieuwe versie beschikbaar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Auteursrecht (C) 2003-2024 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2026 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Laag accuniveau:</value>
@@ -3037,5 +3037,8 @@ Wenst u verder te gaan?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Wachtrij exporteren (geselecteerd)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Zelfde als bron</value>
   </data>
 </root>

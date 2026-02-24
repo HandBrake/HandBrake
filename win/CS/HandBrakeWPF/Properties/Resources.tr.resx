@@ -2134,7 +2134,7 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
     <value>Yeni bir sürümü var!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Telif hakkı (C) 2003-2024 HandBrake Ekibine aittir.</value>
+    <value>Telif hakkı (C) 2003-2026 HandBrake Ekibine aittir.</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Düşük pil seviyesi:</value>
@@ -3037,5 +3037,8 @@ Devam etmek istiyor musunuz?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Dışa Aktarma Kuyruğu (Seçili)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Kaynakla Aynı</value>
   </data>
 </root>

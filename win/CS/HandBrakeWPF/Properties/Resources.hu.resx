@@ -2134,7 +2134,7 @@ Ahol támogatott, a rendszer importálja a felhasználói készleteket.</value>
     <value>Új verzió érhető el!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Szerzői jog (C) 2003-2024 A HandBrake csapat</value>
+    <value>Copyright (C) 2003-2026 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Alacsony akkumulátor töltöttségi szint:</value>
@@ -3037,5 +3037,8 @@ Do you wish to proceed?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Export Queue (Selected)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Ugyanaz, mint a forrás</value>
   </data>
 </root>

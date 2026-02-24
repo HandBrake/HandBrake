@@ -3025,4 +3025,7 @@ Desexas continuar?</value>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>xportar cola (seleccionada)</value>
   </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Igual que a orixe</value>
+  </data>
 </root>

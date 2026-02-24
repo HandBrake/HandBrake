@@ -2135,7 +2135,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Доступна новая версия!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Авторское право (C) 2003-2024 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2026 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Низкий уровень батареи:</value>
@@ -3037,5 +3037,8 @@ Do you wish to proceed?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Export Queue (Selected)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Как в источнике</value>
   </data>
 </root>

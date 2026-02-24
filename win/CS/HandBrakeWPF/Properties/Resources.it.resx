@@ -443,7 +443,7 @@ Il Resoconto delle Attività potrebbe fornire ulteriori informazioni.</value>
     <value>Si è verificato un Errore Sconosciuto.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>HandBrake {0} is now Available! Please check the website for release notes.</value>
+    <value>HandBrake {0} è ora disponibile! Si prega di controllare il sito web per le note di rilascio.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>Non ci sono nuovi aggiornamenti in questo momento.</value>
@@ -1035,7 +1035,7 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Anteprima</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>{0}, {1:00.00}%, Time Remaining: {2}</value>
+    <value>{0}, {1:00.00}%, Tempo rimanente: {2}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Intervallo:</value>
@@ -1633,34 +1633,34 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>spazio</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Codifica In Più Passaggi</value>
+    <value>Codifica in più passaggi</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Bitrate Medio (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Codificatore Video:</value>
+    <value>Codificatore video:</value>
   </data>
   <data name="VideoView_ColourRange" xml:space="preserve">
     <value>Intervallo colori:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
-    <value>Frequenza Fotogrammi Costante</value>
+    <value>Freq. fotogrammi costante</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
     <value>Qualità Costante:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>Livello Codificatore:</value>
+    <value>Livello codificatore:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
     <value>Preimpostazione codificatore:</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>Profilo Encoder:</value>
+    <value>Profilo codificatore:</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>Regolazione Codificatore:</value>
+    <value>Regolazione codificatore:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
     <value>Opzioni avanzate:</value>
@@ -1669,13 +1669,13 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Decodifica Veloce</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>Frequenza Fotogrammi (FPS):</value>
+    <value>Freq. fotogrammi (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Opzioni Codificatore:</value>
+    <value>Opzioni codificatore:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>Framerate di Picco:</value>
+    <value>Picco freq. fotogrammi</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Qualità:</value>
@@ -1684,7 +1684,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Passaggio di analisi turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>Frequenza Fotogrammi Variabile</value>
+    <value>Freq. fotogrammi variabile</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
     <value>Video:</value>
@@ -2214,7 +2214,7 @@ Scegliere una preimpostazione differente.</value>
     <value>Larghezza (Pillarbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Riempi:</value>
+    <value>Riempimento:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
     <value>Colore:</value>
@@ -2453,8 +2453,8 @@ Puoi cambiare la tua scelta in qualsiasi momento andando in Preferenze -&gt; Gen
     <value>Cercare aggiornamenti?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>- Make sure there are no pending encodes in the queue. 
-- Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions.</value>
+    <value>- Assicurati che non ci siano codifiche in sospeso nella coda.
+- Esegui il backup o prendi nota di eventuali preimpostazioni personalizzate che hai creato in quanto potrebbero non essere completamente compatibili con le versioni più recenti.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
     <value>(Predefinito)</value>
@@ -3010,32 +3010,35 @@ Per permettere più codifiche simultanee, attivare "Isolamento del Processo" nel
     <value>Moderno</value>
   </data>
   <data name="Options_BeforeUpdating" xml:space="preserve">
-    <value>Before Updating</value>
+    <value>Prima di aggiornare</value>
   </data>
   <data name="Options_UpdateNotComplete" xml:space="preserve">
-    <value>The update install was cancelled. </value>
+    <value>L'installazione dell'aggiornamento è stata annullata.</value>
   </data>
   <data name="AboutView_ReleaseNotes" xml:space="preserve">
-    <value>Release Notes</value>
+    <value>Note di rilascio</value>
   </data>
   <data name="Options_ReleaseNotesDesc" xml:space="preserve">
-    <value>You can find out about the latest changes to HandBrake at:</value>
+    <value>Puoi scoprire le ultime modifiche a HandBrake su:</value>
   </data>
   <data name="PresetUiType_Menu" xml:space="preserve">
     <value>Menu</value>
   </data>
   <data name="PresetUiType_Overlay" xml:space="preserve">
-    <value>Overlay</value>
+    <value>Fluttuante</value>
   </data>
   <data name="OptionsView_PresetUiType" xml:space="preserve">
-    <value>Display toolbar preset popup as:</value>
+    <value>Visualizza il popup preimpostato della barra degli strumenti come:</value>
   </data>
   <data name="QueueViewModel_CancelErrorWillBeCleared" xml:space="preserve">
-    <value>The queue currently has jobs which are in a Cancelled or Errored State. These will be cleared when the queue starts.  
+    <value>La coda attualmente ha lavori che sono in uno stato Annullato o Errore. Questi saranno cancellati all'avvio della coda.
 
-Do you wish to proceed?</value>
+Vuoi procedere?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
-    <value>Export Queue (Selected)</value>
+    <value>Esporta coda (selezionati)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Uguale alla sorgente</value>
   </data>
 </root>

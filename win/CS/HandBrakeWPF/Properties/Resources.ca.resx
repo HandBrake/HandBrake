@@ -2130,7 +2130,7 @@ Quan sigui possible, s'importaran les configuracions predefinides de l'usuari.</
     <value>Hi ha una nova versió disponible!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Drets d'autor © 2003-2026 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2026 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Nivell de bateria baix:</value>
@@ -3033,5 +3033,8 @@ Do you wish to proceed?</value>
   </data>
   <data name="QueueView_ExportSelected" xml:space="preserve">
     <value>Export Queue (Selected)</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Igual que l'origen</value>
   </data>
 </root>
