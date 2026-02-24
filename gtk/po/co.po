@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Patriccollu di Santa Maria è Sichè <Patrick.Santa-Maria@laposte.net>, 2025
+# Patriccollu di Santa Maria è Sichè <Patrick.Santa-Maria@laposte.net>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-15 17:30+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Patriccollu di Santa Maria è Sichè <Patrick.Santa-Maria@laposte.net>, 2025\n"
+"Last-Translator: Patriccollu di Santa Maria è Sichè <Patrick.Santa-Maria@laposte.net>, 2026\n"
 "Language-Team: Corsican (https://app.transifex.com/HandBrakeProject/teams/92423/co/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2247,10 +2247,11 @@ msgstr "Espertu"
 #: src/ui/ghb.ui:5933
 msgid "Select the language to use for the HandBrake user interface."
 msgstr ""
+"Selezziunà a lingua à impiegà per l’interfaccia utilizatore d’HandBrake."
 
 #: src/ui/ghb.ui:5936
 msgid "Display Language:"
-msgstr ""
+msgstr "Lingua d’affissera :"
 
 #: src/ui/ghb.ui:5956
 msgid "Set a custom directory for Handbrake temporary files"
@@ -2881,7 +2882,7 @@ msgstr "Video nova"
 
 #: src/callbacks.c:3803
 msgid "Settings Changed"
-msgstr ""
+msgstr "Parametri cambiati"
 
 #: src/callbacks.c:3804
 msgid "You must restart HandBrake now."
@@ -3356,7 +3357,7 @@ msgstr "Sempre"
 
 #: src/hb-backend.c:425
 msgid "Use System Language"
-msgstr ""
+msgstr "Impiegà a lingua di u sistema"
 
 #: src/hb-backend.c:1728
 msgid "(NTSC Film)"
@@ -3636,7 +3637,7 @@ msgstr "U modu d’ecunumia d’energia hè statu attivatu."
 #: src/notifications.c:151
 #, c-format
 msgid "%s free space remaining."
-msgstr ""
+msgstr "%s di spaziu liberu rimanente."
 
 #: src/notifications.c:158 src/queuehandler.c:1171
 msgid "Encoding Paused"
@@ -3950,6 +3951,9 @@ msgid ""
 "Destination: %s\n"
 "Encode may be incomplete if you proceed."
 msgstr ""
+"U sistema di schedarii di destinazione hè guasi pienu : %s liberu.\n"
+"Destinazione : %s\n"
+"A cudificazione puderia esse incumpleta s’è vo cuntinuate."
 
 #: src/queuehandler.c:1624
 msgid "Resume, I've fixed the problem"

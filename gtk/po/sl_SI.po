@@ -5,8 +5,8 @@
 # 
 # Translators:
 # Arnold Marko <arnold.marko@gmail.com>, 2024
-# Gorzy Gorup <gorupgorazd@gmail.com>, 2025
 # Martin Srebotnjak <miles@filmsi.net>, 2025
+# Gorzy Gorup <gorupgorazd@gmail.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-15 17:30+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Martin Srebotnjak <miles@filmsi.net>, 2025\n"
+"Last-Translator: Gorzy Gorup <gorupgorazd@gmail.com>, 2026\n"
 "Language-Team: Slovenian (Slovenia) (https://app.transifex.com/HandBrakeProject/teams/92423/sl_SI/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

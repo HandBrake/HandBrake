@@ -5,9 +5,8 @@
 # 
 # Translators:
 # Vincenzo Reale <vinx.reale@gmail.com>, 2025
-# Damiano Galassi <galad87@icloud.com>, 2025
-# Nomis101 <Nomis101@web.de>, 2025
-# Francesco Saltori, 2025
+# Francesco Saltori, 2026
+# Damiano Galassi <galad87@icloud.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -16,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-15 17:30+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Francesco Saltori, 2025\n"
+"Last-Translator: Damiano Galassi <galad87@icloud.com>, 2026\n"
 "Language-Team: Italian (https://app.transifex.com/HandBrakeProject/teams/92423/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1221,13 +1220,15 @@ msgstr ""
 
 #: src/ui/ghb.ui:3470
 msgid "Color Range:"
-msgstr ""
+msgstr "Intervallo colori:"
 
 #: src/ui/ghb.ui:3481
 msgid ""
 "Color Range. Determines the values of the reference black and white. Set to "
 "limited to maximize compatibility."
 msgstr ""
+"Intervallo colori. Determina i valori del bianco e nero di riferimento. "
+"Imposta su \"limitato\" per massimizzare la compatibilità."
 
 #: src/ui/ghb.ui:3501
 msgid "Constant Quality:"
@@ -1349,6 +1350,16 @@ msgid ""
 "Adjust the slider to the right to increase compression efficiency at the expense of encoding speed,\n"
 "or to the left to increase encoding speed at the expense of compression efficiency."
 msgstr ""
+"Modifica le opzioni del codificatore per migliorare l'efficienza della compressione a scapito della velocità di codifica.\n"
+"\n"
+"Questa opzione definisce le opzioni predefinite del codificatore.\n"
+"Regolazioni, profili, livelli e altre opzioni saranno applicate su questa base.\n"
+"In genere questa opzione andrebbe regolata sulla più lenta possibile in quanto le impostazioni\n"
+"più lente risulteranno in una migliore qualità o in file più piccoli.\n"
+"\n"
+"Regola il cursore a destra per aumentare l'efficienza di compressione a scapito della velocità di codifica,\n"
+"\n"
+"O a sinistra per aumentare la velocità di codifica a scapito dell'efficienza della compressione."
 
 #: src/ui/ghb.ui:3693
 msgid "Encoder Preset"
@@ -1440,7 +1451,7 @@ msgstr "Audio"
 
 #: src/ui/ghb.ui:3887
 msgid "Add audio tracks to the list"
-msgstr ""
+msgstr "Aggiunge le tracce audio all'elenco"
 
 #: src/ui/ghb.ui:3899
 msgid "Show audio default selection options"
@@ -1456,7 +1467,7 @@ msgstr "Ricarica tutte le impostazioni audio predefinite"
 
 #: src/ui/ghb.ui:3951
 msgid "Remove the selected audio track"
-msgstr ""
+msgstr "Rimuovi la traccia audio selezionata"
 
 #: src/ui/ghb.ui:3965 src/ui/ghb.ui:4119 src/ui/ghb.ui:4765 src/ui/ghb.ui:5041
 msgid "Remove"
@@ -1464,7 +1475,7 @@ msgstr "Rimuovi"
 
 #: src/ui/ghb.ui:3974
 msgid "Remove all audio tracks"
-msgstr ""
+msgstr "Rimuovi tutte le tracce audio"
 
 #: src/ui/ghb.ui:3988 src/ui/ghb.ui:4142
 msgid "Clear"
@@ -1480,7 +1491,7 @@ msgstr "Tracce"
 
 #: src/ui/ghb.ui:4041
 msgid "Add subtitle tracks to the list"
-msgstr ""
+msgstr "Aggiungi le tracce sottotitoli all'elenco"
 
 #: src/ui/ghb.ui:4053
 msgid "Show subtitle default selection options"
@@ -1492,11 +1503,11 @@ msgstr "Ricarica tutte le impostazioni sottotitoli predefinite"
 
 #: src/ui/ghb.ui:4105
 msgid "Remove the selected subtitle track"
-msgstr ""
+msgstr "Rimuovi la traccia sottotitoli selezionata"
 
 #: src/ui/ghb.ui:4128
 msgid "Remove all subtitle tracks"
-msgstr ""
+msgstr "Rimuovi tutte le tracce sottotitoli"
 
 #: src/ui/ghb.ui:4178
 msgid "Chapters"
@@ -1667,11 +1678,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:4848 src/ui/ghb.ui:5298
 msgid "Passthru track names"
-msgstr ""
+msgstr "Mantieni i nome delle tracce"
 
 #: src/ui/ghb.ui:4850
 msgid "Preserve the source track names"
-msgstr ""
+msgstr "Mantieni i nomi delle tracce d'origine"
 
 #: src/ui/ghb.ui:4861
 msgid "Burn-In Behavior*:"
@@ -1907,15 +1918,15 @@ msgstr ""
 
 #: src/ui/ghb.ui:5300
 msgid "Preserve the source track names."
-msgstr ""
+msgstr "Mantieni i nomi delle tracce di origine."
 
 #: src/ui/ghb.ui:5314
 msgid "Autonaming:"
-msgstr ""
+msgstr "Denominazione automatica:"
 
 #: src/ui/ghb.ui:5320
 msgid "Set the automatic naming behaviour."
-msgstr ""
+msgstr "Imposta il comportamento di denominazione automatica."
 
 #: src/ui/ghb.ui:5336
 msgid "Audio encoder settings for each selected track:"
@@ -2196,7 +2207,7 @@ msgstr "Mostra una notifica quando ciascun elemento viene completato"
 
 #: src/ui/ghb.ui:5897
 msgid "Send file to:"
-msgstr ""
+msgstr "Invia documento a:"
 
 #: src/ui/ghb.ui:5920
 msgid "Advanced"
@@ -2205,10 +2216,11 @@ msgstr "Avanzate"
 #: src/ui/ghb.ui:5933
 msgid "Select the language to use for the HandBrake user interface."
 msgstr ""
+"Seleziona la lingua da utilizzare per l'interfaccia utente di HandBrake."
 
 #: src/ui/ghb.ui:5936
 msgid "Display Language:"
-msgstr ""
+msgstr "Lingua interfaccia:"
 
 #: src/ui/ghb.ui:5956
 msgid "Set a custom directory for Handbrake temporary files"
@@ -2451,7 +2463,7 @@ msgstr "Importa file"
 
 #: src/ui/ghb.ui:6827
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
-msgstr ""
+msgstr "Regola la compensazione in millisecondi tra i timestamp video e SRT"
 
 #: src/ui/ghb.ui:6844 src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"
@@ -2833,7 +2845,7 @@ msgstr "Nuovo video"
 
 #: src/callbacks.c:3803
 msgid "Settings Changed"
-msgstr ""
+msgstr "Impostazioni modificate"
 
 #: src/callbacks.c:3804
 msgid "You must restart HandBrake now."
@@ -3004,7 +3016,7 @@ msgstr "Elemento della coda completato"
 
 #: src/hb-backend.c:55
 msgid "Unnamed"
-msgstr ""
+msgstr "Senza nome"
 
 #: src/hb-backend.c:56 src/hb-backend.c:399
 msgid "All"
@@ -3130,11 +3142,11 @@ msgstr "Uguale alla sorgente"
 
 #: src/hb-backend.c:256
 msgid "Limited"
-msgstr ""
+msgstr "Limitato"
 
 #: src/hb-backend.c:257
 msgid "Full"
-msgstr ""
+msgstr "Completo"
 
 #: src/hb-backend.c:267
 msgid "4320p 8K Ultra HD"
@@ -3310,7 +3322,7 @@ msgstr "Sempre"
 
 #: src/hb-backend.c:425
 msgid "Use System Language"
-msgstr ""
+msgstr "Usa la lingua del sistema"
 
 #: src/hb-backend.c:1728
 msgid "(NTSC Film)"
@@ -3592,7 +3604,7 @@ msgstr "La modalità di risparmio energetico è stata attivata."
 #: src/notifications.c:151
 #, c-format
 msgid "%s free space remaining."
-msgstr ""
+msgstr "%s spazio libero rimanente."
 
 #: src/notifications.c:158 src/queuehandler.c:1171
 msgid "Encoding Paused"
@@ -3906,6 +3918,9 @@ msgid ""
 "Destination: %s\n"
 "Encode may be incomplete if you proceed."
 msgstr ""
+"Il file system di destinazione è quasi pieno: %s liberi.\n"
+"Destinazione: %s\n"
+"Se procedi, la codifica potrebbe essere incompleta.."
 
 #: src/queuehandler.c:1624
 msgid "Resume, I've fixed the problem"
