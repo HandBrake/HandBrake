@@ -235,6 +235,9 @@ HBJob -> filters short description */
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid colorspace custom settings." = "Parametri persunalizati di spaziu culorimetricu inaccettevule.";
 
+/* HBPicture -> invalid pad custom string description */
+"Invalid custom border color." = "Culore persunalizatu di u bordu inaccettevule.";
+
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "Parametri persunalizati di pettinera inaccettevule.";
 

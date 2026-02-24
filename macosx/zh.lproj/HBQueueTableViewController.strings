@@ -2,7 +2,7 @@
 "5AR-we-iHC.title" = "移除所有任务";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "5Rl-P0-bhc"; */
-"5Rl-P0-bhc.title" = "表格视图单元格";
+"5Rl-P0-bhc.title" = "Table View Cell";
 
 /* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
 "c1Z-ZC-b8b.title" = "在访达中显示目标位置";
@@ -23,7 +23,7 @@
 "HwR-LP-IK8.title" = "移到底部";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "K6c-HW-um8"; */
-"K6c-HW-um8.title" = "文本单元格";
+"K6c-HW-um8.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Move to Top"; ObjectID = "NN5-Yq-Cth"; */
 "NN5-Yq-Cth.title" = "移到顶部";
@@ -35,7 +35,7 @@
 "xMs-43-lL0.title" = "重置";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "xSd-Hl-5Qk"; */
-"xSd-Hl-5Qk.title" = "表格视图单元格";
+"xSd-Hl-5Qk.title" = "Table View Cell";
 
 /* Class = "NSMenuItem"; title = "Show Activity Log in Finder"; ObjectID = "zA7-r8-i4L"; */
 "zA7-r8-i4L.title" = "在访达中显示活动日志";

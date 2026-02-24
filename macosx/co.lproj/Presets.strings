@@ -5,7 +5,7 @@
 "0di-xq-jgi.ibShadowedToolTips[1]" = "Squassà a prerigatura selezziunata.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "4tC-UE-40G"; */
-"4tC-UE-40G.title" = "Cellula di testu";
+"4tC-UE-40G.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
 "cm5-Kl-dB3.title" = "Reinizià e prerigature ufficiale";
@@ -32,7 +32,7 @@
 "M33-MU-aWd.title" = "Espurtà…";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
-"oBC-Nh-TwB.title" = "Cellula di vista di tavula";
+"oBC-Nh-TwB.title" = "Table View Cell";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
 "r4V-6L-SO8.title" = "Prerigature";

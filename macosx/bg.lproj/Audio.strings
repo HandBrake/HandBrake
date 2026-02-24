@@ -14,13 +14,13 @@
 "6iN-2G-JDF.ibShadowedToolTip" = "Език и тип на аудиото.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "6Iz-D8-zzz"; */
-"6Iz-D8-zzz.title" = "Текстова клетка";
+"6Iz-D8-zzz.title" = "Text Cell";
 
 /* Class = "NSTableColumn"; headerCell.title = "Track"; ObjectID = "7sz-4X-5jA"; */
 "7sz-4X-5jA.headerCell.title" = "Пътечка";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "aaP-HB-s4f"; */
-"aaP-HB-s4f.title" = "Текстова клетка";
+"aaP-HB-s4f.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "AMA-Ul-v2f"; */
 "AMA-Ul-v2f.title" = "Добави всички пътечки";
@@ -35,7 +35,7 @@
 "eAS-E5-fip.headerCell.title" = "КДО";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "eFn-1M-3hk"; */
-"eFn-1M-3hk.title" = "Текстова клетка";
+"eFn-1M-3hk.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "fqs-Q8-hNY"; */
 "fqs-Q8-hNY.title" = "Премахни всички пътечки";
@@ -44,7 +44,7 @@
 "gtC-MM-esd.ibShadowedToolTip" = "Усилване на аудиото в децибели (dB). Увеличава или намаля звука на аудиото.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "HKE-hO-jOm"; */
-"HKE-hO-jOm.title" = "Текстова клетка";
+"HKE-hO-jOm.title" = "Text Cell";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "hlm-8l-ATk"; */
 "hlm-8l-ATk.ibShadowedIsNilPlaceholder" = "Автоматично";
@@ -59,10 +59,10 @@
 "jub-Uq-qYL.headerCell.title" = "Честота на дискретизация";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "kmi-ru-dRe"; */
-"kmi-ru-dRe.title" = "Текстова клетка";
+"kmi-ru-dRe.title" = "Text Cell";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "l8E-uG-8fo"; */
-"l8E-uG-8fo.title" = "Текстова клетка";
+"l8E-uG-8fo.title" = "Text Cell";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "LLW-KN-65P"; */
 "LLW-KN-65P.ibExternalAccessibilityDescription" = "Смесване";
@@ -74,7 +74,7 @@
 "lnO-sZ-6xv.headerCell.title" = "Кодек";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "MZ7-W1-uGl"; */
-"MZ7-W1-uGl.title" = "Текстова клетка";
+"MZ7-W1-uGl.title" = "Text Cell";
 
 /* Class = "NSSliderCell"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "nII-CW-aWc"; */
 "nII-CW-aWc.ibExternalAccessibilityDescription" = "КДО";
@@ -122,7 +122,7 @@
 "tYY-w7-ZIq.ibShadowedToolTip" = "Аудио енкодер.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "U4U-1b-rQF"; */
-"U4U-1b-rQF.title" = "Текстова клетка";
+"U4U-1b-rQF.title" = "Text Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track."; ObjectID = "vFP-nq-IQg"; */
 "vFP-nq-IQg.ibShadowedToolTip" = "Конфигуриране на поведението на избрани аудио пътечки. Тези настройки влияят на това кои пътечки да бъдат добавени в списъка с аудио пътечки и на използваните настройки за всяка пътечка.";

@@ -74,7 +74,7 @@
 "QRd-XH-6TH.title" = "Пътечка за субтитри за чуждо аудио";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
-"qVQ-fS-w1S.title" = "Клетка от табличен изглед";
+"qVQ-fS-w1S.title" = "Table View Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
 "uF5-6E-EIe.ibShadowedToolTip" = "Добави субтитри със затворени надписи като невградени субтитри.";

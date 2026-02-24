@@ -8,10 +8,10 @@
 "7Xf-c0-jsr.ibShadowedToolTip" = "Добави пътечка с маркери на глави към видеото.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "All-Bz-NLv"; */
-"All-Bz-NLv.title" = "Текстова клетка";
+"All-Bz-NLv.title" = "Text Cell";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "FyM-2X-9xs"; */
-"FyM-2X-9xs.title" = "Текстова клетка";
+"FyM-2X-9xs.title" = "Text Cell";
 
 /* Class = "NSTextFieldCell"; title = "1"; ObjectID = "G9p-Cg-wyC"; */
 "G9p-Cg-wyC.title" = "1";
@@ -29,10 +29,10 @@
 "NlF-th-Cg9.headerCell.title" = "Начало";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "ozt-ED-g1M"; */
-"ozt-ED-g1M.title" = "Текстова клетка";
+"ozt-ED-g1M.title" = "Text Cell";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "pAo-XM-bvP"; */
-"pAo-XM-bvP.title" = "Текстова клетка";
+"pAo-XM-bvP.title" = "Text Cell";
 
 /* Class = "NSButtonCell"; title = "Import Chapters…"; ObjectID = "PM3-Ue-0kW"; */
 "PM3-Ue-0kW.title" = "Импортиране на глави...";

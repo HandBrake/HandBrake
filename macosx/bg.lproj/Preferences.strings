@@ -161,7 +161,7 @@
 "JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "Няма";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "kCF-8e-gXS"; */
-"kCF-8e-gXS.title" = "Клетка от табличен изглед";
+"kCF-8e-gXS.title" = "Table View Cell";
 
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "секунди";
@@ -170,7 +170,7 @@
 "Ktg-Bh-1Pt.title" = "Формат:";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "l9y-MS-HnS"; */
-"l9y-MS-HnS.title" = "Текстова клетка";
+"l9y-MS-HnS.title" = "Text Cell";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "ODf-uW-BrD"; */
 "ODf-uW-BrD.title" = "Паузирай опашката, ако дисковото пространство е под:";

@@ -235,6 +235,9 @@ HBJob -> filters short description */
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid colorspace custom settings." = "Некорректные параметры цветового пространства.";
 
+/* HBPicture -> invalid pad custom string description */
+"Invalid custom border color." = "Некорректное значение для своего цвета полос.";
+
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "Недействительные пользовательские параметры обнаружения \"гребенки\".";
 

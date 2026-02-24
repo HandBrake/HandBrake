@@ -80,7 +80,7 @@
 "QRd-XH-6TH.title" = "Traccia di sottutitulu audio straniera";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
-"qVQ-fS-w1S.title" = "Cellula di vista di tavula";
+"qVQ-fS-w1S.title" = "Table View Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
 "uF5-6E-EIe.ibShadowedToolTip" = "Aghjunghje sottutituli di legende chjose (CC) cum’è una traccia di sottutituli incavalcati (micca intarsiati).";

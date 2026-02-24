@@ -2,10 +2,10 @@
 "0kT-0J-3k2.headerCell.title" = "Смесване";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
-"1XC-VS-X3g.title" = "Текстова клетка";
+"1XC-VS-X3g.title" = "Text Cell";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "3o5-Gn-Vao"; */
-"3o5-Gn-Vao.title" = "Текстова клетка";
+"3o5-Gn-Vao.title" = "Text Cell";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "6lx-af-rBL"; */
 "6lx-af-rBL.ibExternalAccessibilityDescription" = "Кодек";
@@ -17,7 +17,7 @@
 "007-WM-RmC.title" = "Настройки за аудио енкодера за всяка избрана пътечка";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
-"7sl-o7-pUh.title" = "Текстова клетка";
+"7sl-o7-pUh.title" = "Text Cell";
 
 /* Class = "NSButtonCell"; title = "DTS"; ObjectID = "8mC-Wx-myL"; */
 "8mC-Wx-myL.title" = "DTS";
@@ -65,7 +65,7 @@
 "DGi-Dl-5nh.ibShadowedToolTip" = "Компресия на динамичен обхват. Намалява разликата в звука между шумни и тихи звуци. Прилага се само при пътечки източници AC-3, когато се кодират в друг формат.\n\n0: Не се прилага КДО.\n1: КДО се прилага според подсказки за компресия, налични в пътечката източник.\n\nСтойности над 1 още повече увеличават звука на тихите звуци. Стойности над 2.5 обикновено не са нужни и може да причинят доловимо изкривяване на звука.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
-"dpw-He-8eZ.title" = "Текстова клетка";
+"dpw-He-8eZ.title" = "Text Cell";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "DxT-bF-prJ"; */
 "DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "Автоматично";
@@ -80,7 +80,7 @@
 "fgl-Ev-ELt.ibShadowedToolTip" = "Изберете това, ако устройството поддържа AC3. Това позволява подаване на AC3 да бъде избрано, когато автоматичното подаване е включено.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
-"fH9-oV-QdJ.title" = "Текстова клетка";
+"fH9-oV-QdJ.title" = "Text Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fzd-MO-xaB"; */
 "fzd-MO-xaB.ibShadowedToolTip" = "Изберете това, ако устройството поддържа AAC. Това позволява подаване на AAC да бъде избрано, когато автоматичното подаване е включено.";
@@ -200,7 +200,7 @@
 "uF5-6E-EIe.ibShadowedToolTip" = "Само основната аудио пътечка ще бъде кодирана с пълния списък с енкодери. Всички допълнителни аудио пътечки ще бъдат кодирани само с първия енкодер.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
-"uFK-z7-8Yj.title" = "Текстова клетка";
+"uFK-z7-8Yj.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Item"; ObjectID = "UJy-A2-Bb1"; */
 "UJy-A2-Bb1.title" = "Елемент";
@@ -215,7 +215,7 @@
 "vUx-OV-W5T.ibShadowedToolTip" = "Изберете това, ако устройството поддържа MP3. Това позволява подаване на MP3 да бъде избрано, когато автоматичното подаване е включено.";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
-"XKL-2e-Dlv.title" = "Клетка от табличен изглед";
+"XKL-2e-Dlv.title" = "Table View Cell";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibExternalAccessibilityDescription" = "Усилване";

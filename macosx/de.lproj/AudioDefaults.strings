@@ -1,6 +1,9 @@
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
 "0kT-0J-3k2.headerCell.title" = "Abmischung";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports ALAC. This permits ALAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "1mq-gM-6vW"; */
+"1mq-gM-6vW.ibShadowedToolTip" = "Aktivieren Sie diese Option, wenn Ihr Abspielgerät ALAC unterstützt. Dadurch kann ALAC-Passthru ausgewählt werden, wenn die automatische Passthru-Auswahl aktiviert ist.";
+
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
 "1XC-VS-X3g.title" = "Text Cell";
 
@@ -105,6 +108,9 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
 "hHP-dw-nba.ibShadowedToolTip" = "Audiobitrate in Kilobits pro Sekunde (kbps). Kleinere Werte reduzieren die Audioqualität. Größere Werte ergeben größere Dateien und sind evtl. weniger kompatibel.";
+
+/* Class = "NSButtonCell"; title = "PCM"; ObjectID = "HyS-Lz-BJz"; */
+"HyS-Lz-BJz.title" = "PCM";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
 "igm-hS-rrD.ibExternalAccessibilityDescription" = "Abmischung";
@@ -213,6 +219,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
 "vUx-OV-W5T.ibShadowedToolTip" = "Dies aktivieren, wenn das Abspielgerät MP3 unterstützt. Dies erlaubt das Durchschleifen von MP3, wenn das automatische Durchschleifen aktiviert ist.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports PCM. This permits PCM passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "xIT-uq-7c7"; */
+"xIT-uq-7c7.ibShadowedToolTip" = "Dies aktivieren, wenn das Abspielgerät PCM unterstützt. Dies erlaubt das Durchschleifen von PCM, wenn das automatische Durchschleifen aktiviert ist.";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Table View Cell";

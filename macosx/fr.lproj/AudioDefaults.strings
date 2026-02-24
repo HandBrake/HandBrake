@@ -1,11 +1,14 @@
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
 "0kT-0J-3k2.headerCell.title" = "Mixage";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports ALAC. This permits ALAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "1mq-gM-6vW"; */
+"1mq-gM-6vW.ibShadowedToolTip" = "Activez-le si l'appareil de lecture supporte le format ALAC. Cela permet de copier la piste ALAC lorsque la copie de la piste audio est sélectionnée.";
+
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
-"1XC-VS-X3g.title" = "Cellule de texte";
+"1XC-VS-X3g.title" = "Text Cell";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "3o5-Gn-Vao"; */
-"3o5-Gn-Vao.title" = "Cellule de texte";
+"3o5-Gn-Vao.title" = "Text Cell";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "6lx-af-rBL"; */
 "6lx-af-rBL.ibExternalAccessibilityDescription" = "Codec";
@@ -17,7 +20,7 @@
 "007-WM-RmC.title" = "Réglages de l'encodeur audio pour chaque piste sélectionnée :";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
-"7sl-o7-pUh.title" = "Cellule de texte";
+"7sl-o7-pUh.title" = "Text Cell";
 
 /* Class = "NSButtonCell"; title = "DTS"; ObjectID = "8mC-Wx-myL"; */
 "8mC-Wx-myL.title" = "DTS";
@@ -65,7 +68,7 @@
 "DGi-Dl-5nh.ibShadowedToolTip" = "Compression de la Plage Dynamique (alias DRC). Réduit la différence de volume entre les sons forts et calmes. S'applique uniquement aux sources AC-3, lorsqu'elles sont encodées vers un autre format.\n\n0 : Ne pas appliquer de DRC.\n1 : Appliquer une DRC selon les éventuels indices présents dans la piste source.\n\nUne valeur supérieure à 1 augmente le volume des sons calmes. Une valeur supérieure à 2.5 n'est pas recommandée car elle peut introduire une distorsion audible.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
-"dpw-He-8eZ.title" = "Cellule de texte";
+"dpw-He-8eZ.title" = "Text Cell";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "DxT-bF-prJ"; */
 "DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "Auto";
@@ -80,7 +83,7 @@
 "fgl-Ev-ELt.ibShadowedToolTip" = "Activez-le si l'appareil de lecture supporte le AC3. Cela permet de copier la piste AC3 lorsque la copie de la piste audio est sélectionnée.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
-"fH9-oV-QdJ.title" = "Cellule de texte";
+"fH9-oV-QdJ.title" = "Text Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fzd-MO-xaB"; */
 "fzd-MO-xaB.ibShadowedToolTip" = "Activez-le si l'appareil de lecture supporte l'AAC. Cela permet de copier la piste AAC lorsque la copie de la piste audio est sélectionnée.";
@@ -105,6 +108,9 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
 "hHP-dw-nba.ibShadowedToolTip" = "Le débit audio est en kilobits par seconde (kbps). Une valeur faible réduit la qualité audio. Une valeur élevée utilise plus de données et peut être moins compatible.";
+
+/* Class = "NSButtonCell"; title = "PCM"; ObjectID = "HyS-Lz-BJz"; */
+"HyS-Lz-BJz.title" = "PCM";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
 "igm-hS-rrD.ibExternalAccessibilityDescription" = "Mixage";
@@ -200,7 +206,7 @@
 "uF5-6E-EIe.ibShadowedToolTip" = "Seule la piste audio principale sera codée avec la liste complète des encodeurs. Toutes les pistes audio seront encodées avec le premier encodeur uniquement.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
-"uFK-z7-8Yj.title" = "Cellule de texte";
+"uFK-z7-8Yj.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Item"; ObjectID = "UJy-A2-Bb1"; */
 "UJy-A2-Bb1.title" = "Élément";
@@ -214,8 +220,11 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
 "vUx-OV-W5T.ibShadowedToolTip" = "Activez-le si l'appareil de lecture supporte le MP3. Cela permet de copier la piste MP3 lorsque la copie de la piste audio est sélectionnée.";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports PCM. This permits PCM passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "xIT-uq-7c7"; */
+"xIT-uq-7c7.ibShadowedToolTip" = "Activez-le si l'appareil de lecture supporte le PCM. Cela permet de copier la piste PCM lorsque la copie de la piste audio est sélectionnée.";
+
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
-"XKL-2e-Dlv.title" = "Cellule Vue Table";
+"XKL-2e-Dlv.title" = "Table View Cell";
 
 /* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "XmJ-lo-ciO"; */
 "XmJ-lo-ciO.title" = "En cas d'échec du renommage de la piste";

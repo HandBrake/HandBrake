@@ -1,11 +1,14 @@
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
 "0kT-0J-3k2.headerCell.title" = "音频混缩";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports ALAC. This permits ALAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "1mq-gM-6vW"; */
+"1mq-gM-6vW.ibShadowedToolTip" = "如果您的播放设备支持 ALAC，请启用此选项。这将在启用了自动透传选择时允许选择 ALAC 透传。";
+
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
-"1XC-VS-X3g.title" = "文本单元格";
+"1XC-VS-X3g.title" = "Text Cell";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "3o5-Gn-Vao"; */
-"3o5-Gn-Vao.title" = "文本单元格";
+"3o5-Gn-Vao.title" = "Text Cell";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "6lx-af-rBL"; */
 "6lx-af-rBL.ibExternalAccessibilityDescription" = "编码";
@@ -17,7 +20,7 @@
 "007-WM-RmC.title" = "每条所选音频轨道的音频编码器设置：";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
-"7sl-o7-pUh.title" = "文本单元格";
+"7sl-o7-pUh.title" = "Text Cell";
 
 /* Class = "NSButtonCell"; title = "DTS"; ObjectID = "8mC-Wx-myL"; */
 "8mC-Wx-myL.title" = "DTS";
@@ -65,7 +68,7 @@
 "DGi-Dl-5nh.ibShadowedToolTip" = "动态范围压缩。降低响亮声音与轻柔声音之间的音量差异。仅适用于从 AC-3 格式源轨道编码为其他格式时。\n\n0：不应用动态范围压缩。\n1：根据源轨道中嵌入的压缩提示应用动态范围压缩。\n\n数值大于 1 会进一步增大安静声音的音量。数值大于 2.5 通常没有必要，而且可能会引入可感知的失真。";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
-"dpw-He-8eZ.title" = "文本单元格";
+"dpw-He-8eZ.title" = "Text Cell";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "DxT-bF-prJ"; */
 "DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "自动";
@@ -80,7 +83,7 @@
 "fgl-Ev-ELt.ibShadowedToolTip" = "如果您的播放设备支持 AC-3，请启用此选项。这将允许在启用了自动直通时使用 AC-3 直通。";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
-"fH9-oV-QdJ.title" = "文本单元格";
+"fH9-oV-QdJ.title" = "Text Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fzd-MO-xaB"; */
 "fzd-MO-xaB.ibShadowedToolTip" = "如果您的播放设备支持 AAC，请启用此选项。这将允许在启用了自动直通时使用 AAC 直通。";
@@ -105,6 +108,9 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
 "hHP-dw-nba.ibShadowedToolTip" = "音频比特率（千比特每秒/Kbps）。小的数值会减少音频质量，大的数值会使用更多的数据，或许会降低兼容性";
+
+/* Class = "NSButtonCell"; title = "PCM"; ObjectID = "HyS-Lz-BJz"; */
+"HyS-Lz-BJz.title" = "PCM";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
 "igm-hS-rrD.ibExternalAccessibilityDescription" = "音频混缩";
@@ -200,7 +206,7 @@
 "uF5-6E-EIe.ibShadowedToolTip" = "只有主音频轨道会使用完整的编码器列表进行编码。所有其他次要音频输出轨道仅使用第一个编码器进行编码。";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
-"uFK-z7-8Yj.title" = "文本单元格";
+"uFK-z7-8Yj.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Item"; ObjectID = "UJy-A2-Bb1"; */
 "UJy-A2-Bb1.title" = "项目";
@@ -214,8 +220,11 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
 "vUx-OV-W5T.ibShadowedToolTip" = "如果您的播放设备支持 MP3，请启用此选项。这将允许在启用了自动直通时使用 MP3 直通。";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports PCM. This permits PCM passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "xIT-uq-7c7"; */
+"xIT-uq-7c7.ibShadowedToolTip" = "如果您的播放设备支持 PCM，请启用此选项。这将在启用了自动透传选择时允许选择 PCM 透传。";
+
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
-"XKL-2e-Dlv.title" = "表格视图单元格";
+"XKL-2e-Dlv.title" = "Table View Cell";
 
 /* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "XmJ-lo-ciO"; */
 "XmJ-lo-ciO.title" = "直通轨道名称";

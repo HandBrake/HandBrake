@@ -80,7 +80,7 @@
 "QRd-XH-6TH.title" = "外语音频字幕轨道";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
-"qVQ-fS-w1S.title" = "表格视图单元格";
+"qVQ-fS-w1S.title" = "Table View Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
 "uF5-6E-EIe.ibShadowedToolTip" = "添加“隐藏式字幕”作为软字幕轨道（非烧入）。";

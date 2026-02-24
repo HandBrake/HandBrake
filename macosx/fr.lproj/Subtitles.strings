@@ -44,7 +44,7 @@
 "gHY-6m-ASb.title" = "Choix 2";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "gYk-0C-2tR"; */
-"gYk-0C-2tR.title" = "Cellule de texte";
+"gYk-0C-2tR.title" = "Text Cell";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Forced subtitles only"; ObjectID = "HC5-ql-Vcr"; */
 "HC5-ql-Vcr.ibExternalAccessibilityDescription" = "Sous-titres forcés uniquement";

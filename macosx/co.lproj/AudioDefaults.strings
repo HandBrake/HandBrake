@@ -1,11 +1,14 @@
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
 "0kT-0J-3k2.headerCell.title" = "Mischiera";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports ALAC. This permits ALAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "1mq-gM-6vW"; */
+"1mq-gM-6vW.ibShadowedToolTip" = "Attivà st’ozzione s’è u vostru apparechju di ripruduzzione accetta u furmatu ALAC. Què permette di selezziunà a ricopia ALAC quandu l’ozzione di ricopia autumatica hè attivata.";
+
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
-"1XC-VS-X3g.title" = "Cellula di testu";
+"1XC-VS-X3g.title" = "Text Cell";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "3o5-Gn-Vao"; */
-"3o5-Gn-Vao.title" = "Cellula di testu";
+"3o5-Gn-Vao.title" = "Text Cell";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "6lx-af-rBL"; */
 "6lx-af-rBL.ibExternalAccessibilityDescription" = "Cudecu";
@@ -17,7 +20,7 @@
 "007-WM-RmC.title" = "Parametri di u cudificatore audio per ogni traccia selezziunata :";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
-"7sl-o7-pUh.title" = "Cellula di testu";
+"7sl-o7-pUh.title" = "Text Cell";
 
 /* Class = "NSButtonCell"; title = "DTS"; ObjectID = "8mC-Wx-myL"; */
 "8mC-Wx-myL.title" = "DTS";
@@ -65,7 +68,7 @@
 "DGi-Dl-5nh.ibShadowedToolTip" = "Cumpressione di l’intervallu dinamicu (DRC). Riduce a sfarenza di vulume trà i soni forti è muderati. S’appieca solu à e traccie AC-3 quandu a cudificazione hè fatta ver di un altru furmatu.\n\n0 : Ùn appiecà micca a cumpressione DRC.\n1 : Appiecà DRC secondu à e sugestioni di cumpressione incurpurate in a traccia di fonte.\n\nI valori superiore à 1 aumentanu u vulume di i soni muderati. I valori superiore à 2,5 ùn sò micca ricumandati perchè ponu cagiunà una disturzione chì si sente.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
-"dpw-He-8eZ.title" = "Cellula di testu";
+"dpw-He-8eZ.title" = "Text Cell";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "DxT-bF-prJ"; */
 "DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "Autumaticu";
@@ -80,7 +83,7 @@
 "fgl-Ev-ELt.ibShadowedToolTip" = "Attivà st’ozzione s’è u vostru apparechju di ripruduzzione accetta u furmatu AC3. Què permette di selezziunà a ricopia AC3 quandu l’ozzione di ricopia autumatica hè attivata.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
-"fH9-oV-QdJ.title" = "Cellula di testu";
+"fH9-oV-QdJ.title" = "Text Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fzd-MO-xaB"; */
 "fzd-MO-xaB.ibShadowedToolTip" = "Attivà st’ozzione s’è u vostru apparechju di ripruduzzione accetta u furmatu AAC. Què permette di selezziunà a ricopia AAC quandu l’ozzione di ricopia autumatica hè attivata.";
@@ -105,6 +108,9 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
 "hHP-dw-nba.ibShadowedToolTip" = "Flussu binariu audio in chilobit à a seconda (kbps). I chjuchi valori riducenu a qualità di l’audio. I valori maiò impieganu più di dati è ponu esse menu cumpatibile.";
+
+/* Class = "NSButtonCell"; title = "PCM"; ObjectID = "HyS-Lz-BJz"; */
+"HyS-Lz-BJz.title" = "PCM";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
 "igm-hS-rrD.ibExternalAccessibilityDescription" = "Mischiera";
@@ -200,7 +206,7 @@
 "uF5-6E-EIe.ibShadowedToolTip" = "Solu a traccia audio principale sera cudificata cù a lista sana di i cudificatori. Tutte e traccie audio addiziunale seranu cudificate solu cù u primu cudificatore.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
-"uFK-z7-8Yj.title" = "Cellula di testu";
+"uFK-z7-8Yj.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Item"; ObjectID = "UJy-A2-Bb1"; */
 "UJy-A2-Bb1.title" = "Elementu";
@@ -214,8 +220,11 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
 "vUx-OV-W5T.ibShadowedToolTip" = "Attivà st’ozzione s’è u vostru apparechju di ripruduzzione accetta u furmatu MP3. Què permette di selezziunà a ricopia MP3 quandu l’ozzione di ricopia autumatica hè attivata.";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports PCM. This permits PCM passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "xIT-uq-7c7"; */
+"xIT-uq-7c7.ibShadowedToolTip" = "Attivà st’ozzione s’è u vostru apparechju di ripruduzzione accetta u furmatu PCM. Què permette di selezziunà a ricopia PCM quandu l’ozzione di ricopia autumatica hè attivata.";
+
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
-"XKL-2e-Dlv.title" = "Cellula di vista di tavula";
+"XKL-2e-Dlv.title" = "Table View Cell";
 
 /* Class = "NSButtonCell"; title = "Passthru track name"; ObjectID = "XmJ-lo-ciO"; */
 "XmJ-lo-ciO.title" = "Nome di a traccia di passeghju";

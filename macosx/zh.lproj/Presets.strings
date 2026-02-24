@@ -5,7 +5,7 @@
 "0di-xq-jgi.ibShadowedToolTips[1]" = "删除所选预设。";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "4tC-UE-40G"; */
-"4tC-UE-40G.title" = "文本单元格";
+"4tC-UE-40G.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
 "cm5-Kl-dB3.title" = "重置官方预设";
@@ -32,7 +32,7 @@
 "M33-MU-aWd.title" = "导出...";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
-"oBC-Nh-TwB.title" = "表格视图单元格";
+"oBC-Nh-TwB.title" = "Table View Cell";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
 "r4V-6L-SO8.title" = "预设";

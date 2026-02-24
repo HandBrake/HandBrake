@@ -1,6 +1,9 @@
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
 "0kT-0J-3k2.headerCell.title" = "Missaggio";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports ALAC. This permits ALAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "1mq-gM-6vW"; */
+"1mq-gM-6vW.ibShadowedToolTip" = "Abilita questa opzione se il tuo dispositivo di riproduzione supporta ALAC. Ciò consente di utilizzare il passthru ALAC quando è abilitata la selezione automatica passthru.";
+
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
 "1XC-VS-X3g.title" = "Text Cell";
 
@@ -105,6 +108,9 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
 "hHP-dw-nba.ibShadowedToolTip" = "Frequenza dati audio in kilobit al secondo (kbps). Valori inferiori riducono la qualità audio. Valori superiori usano più dati e potrebbero essere meno compatibili.";
+
+/* Class = "NSButtonCell"; title = "PCM"; ObjectID = "HyS-Lz-BJz"; */
+"HyS-Lz-BJz.title" = "PCM";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
 "igm-hS-rrD.ibExternalAccessibilityDescription" = "Missaggio";
@@ -213,6 +219,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
 "vUx-OV-W5T.ibShadowedToolTip" = "Abilita questa opzione se il tuo dispositivo di riproduzione supporta MP3. Ciò consente di utilizzare il passthru MP3 quando è abilitata la selezione automatica passthru.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports PCM. This permits PCM passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "xIT-uq-7c7"; */
+"xIT-uq-7c7.ibShadowedToolTip" = "Abilita questa opzione se il tuo dispositivo di riproduzione supporta PCM. Ciò consente di utilizzare il passthru PCM quando è abilitata la selezione automatica passthru.";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Table View Cell";

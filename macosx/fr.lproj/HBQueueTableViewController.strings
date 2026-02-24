@@ -2,7 +2,7 @@
 "5AR-we-iHC.title" = "Supprimer toutes les tâches";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "5Rl-P0-bhc"; */
-"5Rl-P0-bhc.title" = "Cellule Vue Table";
+"5Rl-P0-bhc.title" = "Table View Cell";
 
 /* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
 "c1Z-ZC-b8b.title" = "Afficher la destination dans le Finder";
@@ -23,7 +23,7 @@
 "HwR-LP-IK8.title" = "Déplacer vers le bas";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "K6c-HW-um8"; */
-"K6c-HW-um8.title" = "Cellule de texte";
+"K6c-HW-um8.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Move to Top"; ObjectID = "NN5-Yq-Cth"; */
 "NN5-Yq-Cth.title" = "Déplacer vers le haut";

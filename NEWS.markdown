@@ -63,18 +63,21 @@ Download available from Microsoft:
 - Improved display of file sizes
 - Fixed the disk space checks
 - Fixed a crash that could happen when a preset category contains the ' character
+- Updated existing and maintained locales
 
 ### Mac
 
 - Notifications sound is now played back when HandBrake is in the foreground
 - File name labels in queue as now truncated in the middle, same behaviour as the Finder
 - Minor miscellaneous fixes
+- Updated existing and maintained locales
 
 ### Windows
 
 - The UI now requires Microsoft .NET Desktop Runtime 10.0.x. .NET 8 is no longer required.
 - Support for Intel HyperEncode has been removed as the feature is deprecated upstream
 - Minor miscellaneous fixes
+- Updated existing and maintained locales
 
 
 ## HandBrake 1.10.2

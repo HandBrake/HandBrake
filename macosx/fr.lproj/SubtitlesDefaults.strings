@@ -80,7 +80,7 @@
 "QRd-XH-6TH.title" = "Piste de sous-titres audio étrangers";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
-"qVQ-fS-w1S.title" = "Vue des cellules du tableau";
+"qVQ-fS-w1S.title" = "Table View Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
 "uF5-6E-EIe.ibShadowedToolTip" = "Ajoutez des sous-titres codés en tant que piste de sous-titres souples (non intégrés).";

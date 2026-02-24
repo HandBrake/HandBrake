@@ -2,7 +2,7 @@
 "5AR-we-iHC.title" = "Премахни всички задачи";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "5Rl-P0-bhc"; */
-"5Rl-P0-bhc.title" = "Клетка от табличен изглед";
+"5Rl-P0-bhc.title" = "Table View Cell";
 
 /* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
 "c1Z-ZC-b8b.title" = "Покажи изходната директория във Finder";
@@ -23,7 +23,7 @@
 "HwR-LP-IK8.title" = "Премести отдолу";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "K6c-HW-um8"; */
-"K6c-HW-um8.title" = "Текстова клетка";
+"K6c-HW-um8.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Move to Top"; ObjectID = "NN5-Yq-Cth"; */
 "NN5-Yq-Cth.title" = "Премести отгоре";
@@ -35,7 +35,7 @@
 "xMs-43-lL0.title" = "Възстановяване";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "xSd-Hl-5Qk"; */
-"xSd-Hl-5Qk.title" = "Клетка от табличен изглед";
+"xSd-Hl-5Qk.title" = "Table View Cell";
 
 /* Class = "NSMenuItem"; title = "Show Activity Log in Finder"; ObjectID = "zA7-r8-i4L"; */
 "zA7-r8-i4L.title" = "Покажи дневника на активностите във Finder";

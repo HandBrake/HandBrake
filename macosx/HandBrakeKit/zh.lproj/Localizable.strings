@@ -235,6 +235,9 @@ HBJob -> filters short description */
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid colorspace custom settings." = "无效的色彩空间自定义设置。";
 
+/* HBPicture -> invalid pad custom string description */
+"Invalid custom border color." = "无效的自定义边框颜色。";
+
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "无效的自定义梳状纹理检测设置。";
 

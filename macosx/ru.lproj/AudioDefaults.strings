@@ -1,6 +1,9 @@
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
 "0kT-0J-3k2.headerCell.title" = "Микширование";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports ALAC. This permits ALAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "1mq-gM-6vW"; */
+"1mq-gM-6vW.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает ALAC. Это позволит выбрать сквозную передачу ALAC, если включена автоматическая передача.";
+
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
 "1XC-VS-X3g.title" = "Text Cell";
 
@@ -47,7 +50,7 @@
 "BaY-Lo-8xn.ibShadowedToolTip" = "DRC (Сжатие Динамического Диапазона). Уменьшает объем данных о разнице между громкими и тихими звуками. Применимо только к аудио-источникам AC-3 при кодировании в другие форматы.\n\n0. Не использовать DRC\n1. Использовать DRC согласно встроенным подсказкам в исходной дорожке.\n\nЗначения выше 1 могут увеличить громкости тихих звуков. В значениях выше 2.5 обычно не необходимости, так как они могут привести к появлению звуковых искажений.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports E-AC3. This permits E-AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "BK7-c4-kkk"; */
-"BK7-c4-kkk.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает E-AC3.  Это включает E-AC3 в проход для выбора, когда проход выбора активен.";
+"BK7-c4-kkk.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает E-AC3. Это позволит выбрать сквозную передачу E-AC3, если включена автоматическая передача.";
 
 /* Class = "NSButtonCell"; title = "AAC"; ObjectID = "cUX-iP-UAs"; */
 "cUX-iP-UAs.title" = "AAC";
@@ -71,31 +74,31 @@
 "DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "Автоматически";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "E93-Md-aWa"; */
-"E93-Md-aWa.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает DTS.  Это включает DTS в проход для выбора, когда проход выбора активен.";
+"E93-Md-aWa.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает DTS. Это позволит выбрать сквозную передачу DTS, если включена автоматическая передача.";
 
 /* Class = "NSButtonCell"; title = "Opus"; ObjectID = "eA6-za-Up0"; */
 "eA6-za-Up0.title" = "Opus";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fgl-Ev-ELt"; */
-"fgl-Ev-ELt.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает AC3.  Это включает AC3 в проход для выбора, когда проход выбора активен.";
+"fgl-Ev-ELt.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает AC3. Это позволит выбрать сквозную передачу AC3, если включена автоматическая передача.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
 "fH9-oV-QdJ.title" = "Text Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fzd-MO-xaB"; */
-"fzd-MO-xaB.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает AAC.  Это включает AAC в проход для выбора, когда проход выбора активен.";
+"fzd-MO-xaB.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает AAC. Это позволит выбрать сквозную передачу AAC, если включена автоматическая передача.";
 
 /* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
 "GbM-vm-RC2.title" = "Поведение выбора дорожек:";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
-"GHJ-25-kZl.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает MP2. Это включает MP2 в проход для выбора, когда проход выбора активен.";
+"GHJ-25-kZl.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает MP2. Это позволит выбрать сквозную передачу MP2, если включена автоматическая передача.";
 
 /* Class = "NSMenuItem"; title = "Unnamed Tracks"; ObjectID = "gjw-kg-H3W"; */
 "gjw-kg-H3W.title" = "Дорожки без имени";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "gOm-E9-8K7"; */
-"gOm-E9-8K7.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает FLAC.  Это включает FLAC в проход для выбора, когда проход выбора активен.";
+"gOm-E9-8K7.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает FLAC. Это позволит выбрать сквозную передачу FLAC, если включена автоматическая передача.";
 
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
 "GZP-q7-SYy.title" = "Все совпадающие с выбранными языками";
@@ -106,6 +109,9 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
 "hHP-dw-nba.ibShadowedToolTip" = "Битрейт аудио в килобитах в секунду (кбит/с). Меньшие значения ухудшают качество аудио. Большие значения занимают больше места и могут быть менее совместимы.";
 
+/* Class = "NSButtonCell"; title = "PCM"; ObjectID = "HyS-Lz-BJz"; */
+"HyS-Lz-BJz.title" = "PCM";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
 "igm-hS-rrD.ibExternalAccessibilityDescription" = "Микширование";
 
@@ -113,7 +119,7 @@
 "igm-hS-rrD.ibShadowedToolTip" = "Тип микширования. Определяет микшируется ли многоканальное аудио в меньшее число каналов или оригинальные каналы сохраняется.\n\nDolby Surround и Dolby Pro Logic II конвертируются многоканальное аудио в стерео и матрично кодируют дополнительные каналы для воспроизведения объемного звучания на поддерживаемом оборудовании, сохраняя при этом совместимости со стерео.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "IxI-o9-jMs"; */
-"IxI-o9-jMs.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает DTS-HD.  Это включает DTS-HD в проход для выбора, когда проход выбора активен.";
+"IxI-o9-jMs.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает DTS-HD. Это позволит выбрать сквозную передачу DTS-HD, если включена автоматическая передача.";
 
 /* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
 "jDd-Ji-7Sm.title" = "Первая совпадающая с выбранными языками";
@@ -152,7 +158,7 @@
 "oiD-QI-wly.ibShadowedToolTip" = "Поведение выбора дорожек.\n\n'Нет' не будет выбирать никакую дорожку аудио по умолчанию.\n\n'Первая совпадающая с выбранным языком' добавит первую дорожку, которая совпадает с каждым из выбранных языков в исходном файле.\n\n'Все совпадающие с выбранным языком' добавит все дорожки, которые совпадают с каждым из выбранных языков в исходном файле.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports TrueHD. This permits TrueHD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "os0-Jl-OXF"; */
-"os0-Jl-OXF.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает TrueHD.  Это включает TrueHD в проход для выбора, когда проход выбора активен.";
+"os0-Jl-OXF.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает TrueHD. Это позволит выбрать сквозную передачу TrueHD, если включена автоматическая передача.";
 
 /* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[0] = "Add Audio Track"; ObjectID = "otA-K4-TxM"; */
 "otA-K4-TxM.ibShadowedToolTips[0]" = "Добавить аудио-дорожку";
@@ -164,7 +170,7 @@
 "OVr-Jm-VrK.title" = "0";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "OWh-gZ-JcF"; */
-"OWh-gZ-JcF.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает Opus. Это включает Opus в проход для выбора, когда проход выбора активен.";
+"OWh-gZ-JcF.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает Opus. Это позволит выбрать сквозную передачу Opus, если включена автоматическая передача.";
 
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Кодек";
@@ -212,7 +218,10 @@
 "VnE-3R-bUf.title" = "AC3";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
-"vUx-OV-W5T.ibShadowedToolTip" = "Включите это если ваше устройство поддерживает MP3. Это включает MP3 в проход для выбора, когда проход выбора активен.";
+"vUx-OV-W5T.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает MP3. Это позволит выбрать сквозную передачу MP3, если включена автоматическая передача.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports PCM. This permits PCM passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "xIT-uq-7c7"; */
+"xIT-uq-7c7.ibShadowedToolTip" = "Включите эту опцию, если ваше устройство воспроизведения поддерживает PCM. Это позволит выбрать сквозную передачу PCM, если включена автоматическая передача.";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Table View Cell";

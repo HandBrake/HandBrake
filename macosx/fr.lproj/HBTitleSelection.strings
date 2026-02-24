@@ -14,13 +14,13 @@
 "D7Y-wr-PDj.title" = "Tout activer";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "dsG-Ho-vsT"; */
-"dsG-Ho-vsT.title" = "Vue des cellules du tableau";
+"dsG-Ho-vsT.title" = "Table View Cell";
 
 /* Class = "NSWindow"; title = "Window"; ObjectID = "F0z-JX-Cv5"; */
 "F0z-JX-Cv5.title" = "Fenêtre";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "Fcv-FE-8Fv"; */
-"Fcv-FE-8Fv.title" = "Cellule de texte";
+"Fcv-FE-8Fv.title" = "Text Cell";
 
 /* Class = "NSTableColumn"; headerCell.title = "Name"; ObjectID = "FQY-Ye-g0f"; */
 "FQY-Ye-g0f.headerCell.title" = "Nom";
@@ -53,5 +53,5 @@
 "xTt-zi-wf0.ibShadowedDisplayPattern" = "%{value1}@";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "zwi-rc-q6x"; */
-"zwi-rc-q6x.title" = "Cellule de texte";
+"zwi-rc-q6x.title" = "Text Cell";
 

@@ -235,6 +235,9 @@ HBJob -> filters short description */
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid colorspace custom settings." = "Réglage personnalisé d'espace de couleur non valide.";
 
+/* HBPicture -> invalid pad custom string description */
+"Invalid custom border color." = "Couleur de bordure personnalisée invalide";
+
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "Réglage personnalisé de détection du peigne invalide.";
 

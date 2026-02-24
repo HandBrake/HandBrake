@@ -77,7 +77,7 @@
 "QWu-rv-zfM.title" = "Preset:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility."; ObjectID = "R00-pj-eFX"; */
-"R00-pj-eFX.ibShadowedToolTip" = "Intervallo colori. Determina i valori del bianco e nero di riferimento. Impostare su \"limitato\" per massimizzare la compatibilità.";
+"R00-pj-eFX.ibShadowedToolTip" = "Intervallo colori. Determina i valori del bianco e nero di riferimento. Imposta su \"limitato\" per massimizzare la compatibilità.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r18-GT-7jT"; */
 "r18-GT-7jT.title" = "OtherViews";

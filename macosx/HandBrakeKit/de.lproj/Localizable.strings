@@ -235,6 +235,9 @@ HBJob -> filters short description */
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid colorspace custom settings." = "Ungültige benutzerdefinierte Farbraum-Einstellungen.";
 
+/* HBPicture -> invalid pad custom string description */
+"Invalid custom border color." = "Ungültige benutzerdefinierte Randfarbe.";
+
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "Ungültige benutzerdefinierte Comb Detect-Einstellungen.";
 

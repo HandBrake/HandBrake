@@ -41,7 +41,7 @@
 "gHY-6m-ASb.title" = "Елемент 2";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "gYk-0C-2tR"; */
-"gYk-0C-2tR.title" = "Текстова клетка";
+"gYk-0C-2tR.title" = "Text Cell";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Forced subtitles only"; ObjectID = "HC5-ql-Vcr"; */
 "HC5-ql-Vcr.ibExternalAccessibilityDescription" = "Само принудителни субтитри";

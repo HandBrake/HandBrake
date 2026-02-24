@@ -8,13 +8,13 @@
 "a6r-ky-REh.headerCell.title" = "Продължителност";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "dsG-Ho-vsT"; */
-"dsG-Ho-vsT.title" = "Клетка от табличен изглед";
+"dsG-Ho-vsT.title" = "Table View Cell";
 
 /* Class = "NSWindow"; title = "Window"; ObjectID = "F0z-JX-Cv5"; */
 "F0z-JX-Cv5.title" = "Прозорец";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "Fcv-FE-8Fv"; */
-"Fcv-FE-8Fv.title" = "Текстова клетка";
+"Fcv-FE-8Fv.title" = "Text Cell";
 
 /* Class = "NSTableColumn"; headerCell.title = "Name"; ObjectID = "FQY-Ye-g0f"; */
 "FQY-Ye-g0f.headerCell.title" = "Име";
@@ -38,5 +38,5 @@
 "xTt-zi-wf0.ibShadowedDisplayPattern" = "%{value1}@";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "zwi-rc-q6x"; */
-"zwi-rc-q6x.title" = "Текстова клетка";
+"zwi-rc-q6x.title" = "Text Cell";
 

@@ -14,13 +14,13 @@
 "6iN-2G-JDF.ibShadowedToolTip" = "Lingua è furmatu audio.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "6Iz-D8-zzz"; */
-"6Iz-D8-zzz.title" = "Cellula di testu";
+"6Iz-D8-zzz.title" = "Text Cell";
 
 /* Class = "NSTableColumn"; headerCell.title = "Track"; ObjectID = "7sz-4X-5jA"; */
 "7sz-4X-5jA.headerCell.title" = "Traccia";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "aaP-HB-s4f"; */
-"aaP-HB-s4f.title" = "Cellula di testu";
+"aaP-HB-s4f.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "AMA-Ul-v2f"; */
 "AMA-Ul-v2f.title" = "Aghjunghje tutte e traccie";
@@ -35,7 +35,7 @@
 "eAS-E5-fip.headerCell.title" = "DRC";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "eFn-1M-3hk"; */
-"eFn-1M-3hk.title" = "Cellula di testu";
+"eFn-1M-3hk.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "fqs-Q8-hNY"; */
 "fqs-Q8-hNY.title" = "Caccià tutte e traccie";
@@ -44,7 +44,7 @@
 "gtC-MM-esd.ibShadowedToolTip" = "Guadagnu audio in decibel (dB). Aumenteghja o diminuisce u vulume audio.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "HKE-hO-jOm"; */
-"HKE-hO-jOm.title" = "Cellula di testu";
+"HKE-hO-jOm.title" = "Text Cell";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "hlm-8l-ATk"; */
 "hlm-8l-ATk.ibShadowedIsNilPlaceholder" = "Autumaticu";
@@ -59,10 +59,10 @@
 "jub-Uq-qYL.headerCell.title" = "Frequenza di campiunariu";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "kmi-ru-dRe"; */
-"kmi-ru-dRe.title" = "Cellula di testu";
+"kmi-ru-dRe.title" = "Text Cell";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "l8E-uG-8fo"; */
-"l8E-uG-8fo.title" = "Cellula di testu";
+"l8E-uG-8fo.title" = "Text Cell";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "LLW-KN-65P"; */
 "LLW-KN-65P.ibExternalAccessibilityDescription" = "Mischiera";
@@ -74,7 +74,7 @@
 "lnO-sZ-6xv.headerCell.title" = "Cudecu";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "MZ7-W1-uGl"; */
-"MZ7-W1-uGl.title" = "Cellula di testu";
+"MZ7-W1-uGl.title" = "Text Cell";
 
 /* Class = "NSSliderCell"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "nII-CW-aWc"; */
 "nII-CW-aWc.ibExternalAccessibilityDescription" = "DRC";
@@ -122,7 +122,7 @@
 "tYY-w7-ZIq.ibShadowedToolTip" = "Cudificatore audio.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "U4U-1b-rQF"; */
-"U4U-1b-rQF.title" = "Cellula di testu";
+"U4U-1b-rQF.title" = "Text Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track."; ObjectID = "vFP-nq-IQg"; */
 "vFP-nq-IQg.ibShadowedToolTip" = "Cunfigureghja u cumpurtamentu di selezzione di e traccie audio. Sti parametri affettanu a scelta di e traccie chì seranu aghjunte à a lista di e traccie audio, ma dinù i parametri impiegati per ogni traccia.";
