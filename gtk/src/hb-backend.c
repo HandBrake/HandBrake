@@ -440,7 +440,7 @@ static options_map_t d_ui_language_opts[] =
     {"Русский (Russian)",                         "ru",     15},
     {"slovenščina (Slovenian)",                   "sl_SI",  16},
     {"Svenska (Swedish)",                         "sv",     17},
-    {"简体中文 (Simplified Chinese)",               "zh_CN"  18},
+    {"简体中文 (Simplified Chinese)",               "zh_CN",  18},
     
 //  {"Hrvatski (Croatian)",             "hr_HR",  8},
 //  {"čeština (Czech)",                 "cs_CZ",  9},
