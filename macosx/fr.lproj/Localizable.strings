@@ -170,7 +170,7 @@ Preferences -> Output Name Token */
 "Date" = "Date";
 
 /* Delete preset alert -> first button */
-"Delete Preset" = "Effacer le préréglage";
+"Delete Preset" = "Supprimer le préréglage";
 
 /* Delete preset alert -> first button */
 "Delete Presets" = "Supprimer les préréglages";
@@ -308,7 +308,7 @@ Queue Stop Alert -> stop and remove first button */
 "No Valid Source Found" = "Aucune source valide trouvée";
 
 /* Add preset window -> picture setting */
-"None" = "Aucune";
+"None" = "Aucun";
 
 /* Queue Done Alert -> shut down first button
 Queue Done Alert -> sleep first button */
@@ -347,6 +347,9 @@ Touch bar */
 
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "Fréquence de pointe (VFR)";
+
+/* Queue Window Action Toolbar Item */
+"Perform tasks with the selected items" = "Exécuter les tâches sur les objets sélectionnés";
 
 /* Touch bar */
 "Play/Pause" = "Lecture/Pause";
@@ -460,6 +463,9 @@ Touch bar */
 /* HBRange -> display name */
 "Seconds" = "Secondes";
 
+/* Queue Window When Done Toolbar Item */
+"Select an action to run when the queue is done" = "Sélectionnez une action à effectuer lorsque la file d'attente est complétée";
+
 /* Queue Alert -> cancel rip informative text */
 "Select Continue Encoding to dismiss this dialog without making changes." = "Choisissez de Continuer l'encodage pour fermer cette fenêtre sans effectuer de changement.";
 
@@ -511,7 +517,7 @@ Toolbar Start/Stop Item */
 /* Menu Start/Stop Item
 Queue -> start/stop menu
 Toolbar Start/Stop Item */
-"Start Encoding" = "Démarrage l'encodage";
+"Start Encoding" = "Démarrer l'encodage";
 
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Démarrer la file d'attente";

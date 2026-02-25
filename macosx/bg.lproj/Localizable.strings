@@ -342,6 +342,9 @@ Preview -> window title */
 /* Preview -> window title format */
 "Preview - %@ %@" = "Визуализация - %1$@ %2$@";
 
+/* Preview -> accessibility label */
+"Preview Image, Size: %f x %f, Scale: %.0f%%" = "Изображение за визуализация, размери: %1$fx%2$f, мащаб: %3$.0f%%";
+
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "Заспиване на компютъра";
 
@@ -406,7 +409,7 @@ Toolbar Pause Item */
 "Run time:" = "Врем за изпълнение:";
 
 /* Export presets panel prompt */
-"Save" = "Запази";
+"Save" = "Запазване";
 
 /* Picture HUD -> scale button
 Touch bar */

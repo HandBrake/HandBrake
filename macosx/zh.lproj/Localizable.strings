@@ -348,6 +348,9 @@ Touch bar */
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "峰值帧率 (VFR)";
 
+/* Queue Window Action Toolbar Item */
+"Perform tasks with the selected items" = "使用选择的项目执行任务";
+
 /* Touch bar */
 "Play/Pause" = "播放/暂停";
 
@@ -460,6 +463,9 @@ Touch bar */
 /* HBRange -> display name */
 "Seconds" = "秒";
 
+/* Queue Window When Done Toolbar Item */
+"Select an action to run when the queue is done" = "选择队列完成后要运行的操作";
+
 /* Queue Alert -> cancel rip informative text */
 "Select Continue Encoding to dismiss this dialog without making changes." = "选择“继续编码”以关闭此对话框而不进行更改。";
 
@@ -493,7 +499,7 @@ Touch bar */
 "Shut Down Computer" = "关闭电脑";
 
 /* Job statistics */
-"Size:" = "大小：";
+"Size:" = "尺寸：";
 
 /* Queue Alert -> cancel rip second button */
 "Skip Current Job" = "跳过当前任务";

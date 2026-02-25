@@ -308,7 +308,7 @@ Queue Stop Alert -> stop and remove first button */
 "No Valid Source Found" = "Ùn si pò truvà nisuna fonte";
 
 /* Add preset window -> picture setting */
-"None" = "Nisunu";
+"None" = "Nisuna";
 
 /* Queue Done Alert -> shut down first button
 Queue Done Alert -> sleep first button */
@@ -347,6 +347,9 @@ Touch bar */
 
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "Frequenza di fiure di cresta (VFR)";
+
+/* Queue Window Action Toolbar Item */
+"Perform tasks with the selected items" = "Effettuà e tacche cù l’elementi selezziunati";
 
 /* Touch bar */
 "Play/Pause" = "Lettura / Pausa";
@@ -459,6 +462,9 @@ Touch bar */
 
 /* HBRange -> display name */
 "Seconds" = "Seconde";
+
+/* Queue Window When Done Toolbar Item */
+"Select an action to run when the queue is done" = "Selezziunà un’azzione à fà quandu a fila d’attesa hè compia";
 
 /* Queue Alert -> cancel rip informative text */
 "Select Continue Encoding to dismiss this dialog without making changes." = "Selezziunate « Cuntinuà a cudificazione » per righjittà stu dialogu senza fà nisunu cambiamentu.";

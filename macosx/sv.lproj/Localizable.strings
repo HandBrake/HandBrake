@@ -348,6 +348,9 @@ Touch bar */
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "Högsta bildfrekvens (VFR)";
 
+/* Queue Window Action Toolbar Item */
+"Perform tasks with the selected items" = "Genomför uppgifter med de valda objekten";
+
 /* Touch bar */
 "Play/Pause" = "Spela upp/Paus";
 
@@ -459,6 +462,9 @@ Touch bar */
 
 /* HBRange -> display name */
 "Seconds" = "Sekunder";
+
+/* Queue Window When Done Toolbar Item */
+"Select an action to run when the queue is done" = "Välj en åtgärd som ska utföras när kön är klar";
 
 /* Queue Alert -> cancel rip informative text */
 "Select Continue Encoding to dismiss this dialog without making changes." = "Välj Fortsätt kodningen för att stänga denna dialogruta utan att göra ändringar.";

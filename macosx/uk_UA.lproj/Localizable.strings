@@ -348,6 +348,9 @@ Touch bar */
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "Пікова частота кадрів (VFR)";
 
+/* Queue Window Action Toolbar Item */
+"Perform tasks with the selected items" = "Виконати завдання з обраними елементами";
+
 /* Touch bar */
 "Play/Pause" = "Відтворення/Пауза";
 
@@ -417,7 +420,7 @@ Queue window title */
 "Remove All Jobs" = "Видалити всі завдання";
 
 /* Queue Window Action Toolbar Item */
-"Remove Completed Jobs" = "Видалити завершені завдання";
+"Remove Completed Jobs" = "Прибрати завершені завдання";
 
 /* HBQueueItemView -> Remove button accessibility label */
 "Remove job" = "Видалити завдання";
@@ -459,6 +462,9 @@ Touch bar */
 
 /* HBRange -> display name */
 "Seconds" = "Секунди";
+
+/* Queue Window When Done Toolbar Item */
+"Select an action to run when the queue is done" = "Виберіть дію, яку потрібно виконати після завершення черги";
 
 /* Queue Alert -> cancel rip informative text */
 "Select Continue Encoding to dismiss this dialog without making changes." = "Виберіть Продовжити кодування, щоб закрити це діалогове вікно без внесення змін.";
@@ -584,7 +590,7 @@ Rename preset window -> name alert message */
 "Time" = "Час";
 
 /* Preferences -> Output Name Token */
-"Title" = "Заголовок";
+"Title" = "Назва";
 
 /* Queue Window Details Toolbar Item */
 "Toggle details sidebar" = "Переключити бічну панель деталей";

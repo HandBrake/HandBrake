@@ -308,7 +308,7 @@ Queue Stop Alert -> stop and remove first button */
 "No Valid Source Found" = "Не найдено действительного исходного файла";
 
 /* Add preset window -> picture setting */
-"None" = "Ничего";
+"None" = "Нет";
 
 /* Queue Done Alert -> shut down first button
 Queue Done Alert -> sleep first button */
@@ -347,6 +347,9 @@ Touch bar */
 
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "Наивысшая частота кадров (VFR)";
+
+/* Queue Window Action Toolbar Item */
+"Perform tasks with the selected items" = "Выполнить задания для выбранных элементов ";
 
 /* Touch bar */
 "Play/Pause" = "Воспроизвести/пауза";
@@ -459,6 +462,9 @@ Touch bar */
 
 /* HBRange -> display name */
 "Seconds" = "Секунд";
+
+/* Queue Window When Done Toolbar Item */
+"Select an action to run when the queue is done" = "Выберите действие по завершении очереди заданий";
 
 /* Queue Alert -> cancel rip informative text */
 "Select Continue Encoding to dismiss this dialog without making changes." = "Выберите 'Продолжить кодирование', чтобы закрыть это диалоговое окно без применения изменений.";
@@ -584,7 +590,7 @@ Rename preset window -> name alert message */
 "Time" = "Время";
 
 /* Preferences -> Output Name Token */
-"Title" = "Раздел";
+"Title" = "Имя";
 
 /* Queue Window Details Toolbar Item */
 "Toggle details sidebar" = "Показать / скрыть боковое меню";
