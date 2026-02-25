@@ -512,7 +512,7 @@ Touch bar */
 
 /* Main Window Start Toolbar Item
 Toolbar Start/Stop Item */
-"Start" = "Inizio";
+"Start" = "Avvia";
 
 /* Menu Start/Stop Item
 Queue -> start/stop menu
