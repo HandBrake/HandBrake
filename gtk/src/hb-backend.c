@@ -445,7 +445,7 @@ static options_map_t d_ui_language_opts[] =
 //  {"Hrvatski (Croatian)",             "hr_HR",  8},
 //  {"čeština (Czech)",                 "cs_CZ",  9},
 //  {"Dansk (Danish)",                  "da_DK", 10},
-//  {"English",                         "en_US", 12},
+    {"English",                         "en",    19},
 //  {"ქართული (Georgian)",              "ka_GE", 15},
 //  {"עברית (Hebrew)",                  "he_IL", 17},
 //  {"Norsk (Norwegian)",               "no_NO", 21},
