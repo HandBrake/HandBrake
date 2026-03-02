@@ -35,8 +35,8 @@ Download available from Microsoft:
 
 #### Build system
 
-- Updated mingw-w64-build to version 10.1.0.
-- Updated mac-toolchain-build script to version 2.14.0
+- Updated mingw-w64-build to version 11.0.0.
+- Updated mac-toolchain-build script to version 2.15.0
 
 #### Third-party libraries
 
@@ -74,7 +74,7 @@ Download available from Microsoft:
 
 ### Windows
 
-- The UI now requires Microsoft .NET Desktop Runtime 10.0.x. .NET 8 is no longer required.
+- The UI now requires Microsoft .NET Desktop Runtime 10.0.x. .NET 8 is no longer required
 - Support for Intel HyperEncode has been removed as the feature is deprecated upstream
 - Minor miscellaneous fixes
 - Updated existing and maintained locales
