@@ -767,7 +767,6 @@ ghb_application_activate (GApplication *app)
         // This accepts short locale codes (e.g. "fr", "de", "pt_BR")
         // that match the .po filenames in gtk/po/.
         g_setenv("LANGUAGE", ui_language, TRUE);
-        setlocale(LC_ALL, "");
     }
 
     self->builder = create_builder_or_die(BUILDER_NAME);
