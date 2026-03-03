@@ -221,6 +221,11 @@ static int      audio_name_passthru = -1;
 static char *   audio_autonaming_behaviour = NULL;
 static int      sub_name_passthru   = -1;
 
+/* Named video filter shortcuts */
+static char *   bm3d                = NULL;
+static char *   deband              = NULL;
+static char *   eq                  = NULL;
+
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
 static volatile int die = 0;
@@ -666,6 +671,9 @@ cleanup:
     free(unsharp_tune);
     free(lapsharp);
     free(lapsharp_tune);
+    free(bm3d);
+    free(deband);
+    free(eq);
     free(preset_export_name);
     free(preset_export_desc);
     free(preset_export_file);
@@ -1892,6 +1900,18 @@ static void ShowHelp(void)
 "   -g, --grayscale         Grayscale encoding\n"
 "   --no-grayscale          Disable preset 'grayscale'\n"
 "\n"
+"   --bm3d[=preset]         BM3D advanced denoising (default/medium/strong)\n"
+"                           Or custom avfilter params.\n"
+"   --deband[=string]       Remove banding artifacts (common in anime,\n"
+"                           gradients, dark scenes). Default: 1thr=0.02:\n"
+"                           2thr=0.02:3thr=0.02:4thr=0.02:range=16:blur=1\n"
+"                           Or custom FFmpeg deband params.\n"
+"   --eq[=preset]           Video equalizer: brightness, contrast,\n"
+"                           saturation, gamma. Presets: brighten/darken/\n"
+"                           vivid. Default: brighten.\n"
+"                           Or custom FFmpeg eq params, e.g.:\n"
+"                           --eq=brightness=0.06:contrast=1.1:saturation=1.2\n"
+"\n"
 "\n"
 "Subtitles Options ------------------------------------------------------------\n"
 "\n"
@@ -2276,6 +2296,9 @@ static int ParseOptions( int argc, char ** argv )
     #define HDR_DYNAMIC_METADATA          334
     #define AUDIO_AUTONAMING_BEHAVIOUR    335
     #define COLOR_RANGE                   336
+    #define FILTER_BM3D                   337
+    #define FILTER_DEBAND                 338
+    #define FILTER_EQ                     339
 
     for( ;; )
     {
@@ -2411,6 +2434,10 @@ static int ParseOptions( int argc, char ** argv )
             { "no-pad",      no_argument,       &pad_disable,    1 },
             { "colorspace",    required_argument, NULL,    FILTER_COLORSPACE},
             { "no-colorspace", no_argument,       &colorspace_disable, 1 },
+
+            { "bm3d",           optional_argument, NULL, FILTER_BM3D },
+            { "deband",         optional_argument, NULL, FILTER_DEBAND },
+            { "eq",             optional_argument, NULL, FILTER_EQ },
 
             // mapping of legacy option names for backwards compatibility
             { "qsv-preset",           required_argument, NULL, ENCODER_PRESET,       },
@@ -3335,6 +3362,39 @@ static int ParseOptions( int argc, char ** argv )
                 else
                 {
                     audio_autonaming_behaviour = strdup(AUDIO_AUTONAMING_BEHAVIOUR_DEFAULT_PRESET);
+                }
+                break;
+            case FILTER_BM3D:
+                free(bm3d);
+                if (optarg != NULL)
+                {
+                    bm3d = strdup(optarg);
+                }
+                else
+                {
+                    bm3d = strdup("default");
+                }
+                break;
+            case FILTER_DEBAND:
+                free(deband);
+                if (optarg != NULL)
+                {
+                    deband = strdup(optarg);
+                }
+                else
+                {
+                    deband = strdup("default");
+                }
+                break;
+            case FILTER_EQ:
+                free(eq);
+                if (optarg != NULL)
+                {
+                    eq = strdup(optarg);
+                }
+                else
+                {
+                    eq = strdup("brighten");
                 }
                 break;
             case ':':
@@ -4897,6 +4957,90 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
     }
 
+    // Named video filter shortcuts
+    if (bm3d != NULL)
+    {
+        char * bm3d_alloc = NULL;
+        const char * bm3d_str;
+        if (!strcmp(bm3d, "default"))
+            bm3d_str = "bm3d=sigma=1";
+        else if (!strcmp(bm3d, "medium"))
+            bm3d_str = "bm3d=sigma=3";
+        else if (!strcmp(bm3d, "strong"))
+            bm3d_str = "bm3d=sigma=6";
+        else if (strncmp(bm3d, "bm3d", 4) == 0)
+            bm3d_str = bm3d;
+        else
+        {
+            bm3d_alloc = hb_strdup_printf("bm3d=%s", bm3d);
+            bm3d_str = bm3d_alloc;
+        }
+        hb_dict_set(preset, "VideoAvfilter",
+                    hb_value_string(bm3d_str));
+        free(bm3d_alloc);
+    }
+    if (deband != NULL)
+    {
+        char * db_alloc = NULL;
+        const char * db_str;
+        if (!strcmp(deband, "default"))
+            db_str = "deband=1thr=0.02:2thr=0.02:3thr=0.02:4thr=0.02:range=16:blur=1";
+        else if (strncmp(deband, "deband", 6) == 0)
+            db_str = deband;
+        else
+        {
+            db_alloc = hb_strdup_printf("deband=%s", deband);
+            db_str = db_alloc;
+        }
+        const char * existing = hb_value_get_string(
+                                hb_dict_get(preset, "VideoAvfilter"));
+        if (existing != NULL && existing[0] != '\0')
+        {
+            char * combined = hb_strdup_printf("%s,%s", existing, db_str);
+            hb_dict_set(preset, "VideoAvfilter",
+                        hb_value_string(combined));
+            free(combined);
+        }
+        else
+        {
+            hb_dict_set(preset, "VideoAvfilter",
+                        hb_value_string(db_str));
+        }
+        free(db_alloc);
+    }
+    if (eq != NULL)
+    {
+        char * eq_alloc = NULL;
+        const char * eq_str;
+        if (!strcmp(eq, "brighten"))
+            eq_str = "eq=brightness=0.06:contrast=1.08:saturation=1.05:gamma=0.95";
+        else if (!strcmp(eq, "darken"))
+            eq_str = "eq=brightness=-0.06:contrast=1.06:saturation=1.00:gamma=1.05";
+        else if (!strcmp(eq, "vivid"))
+            eq_str = "eq=contrast=1.25:saturation=1.35:brightness=0.03:gamma=0.92";
+        else if (strncmp(eq, "eq", 2) == 0)
+            eq_str = eq;
+        else
+        {
+            eq_alloc = hb_strdup_printf("eq=%s", eq);
+            eq_str = eq_alloc;
+        }
+        const char * existing = hb_value_get_string(
+                                    hb_dict_get(preset, "VideoAvfilter"));
+        if (existing != NULL && existing[0] != '\0')
+        {
+            char * combined = hb_strdup_printf("%s,%s", existing, eq_str);
+            hb_dict_set(preset, "VideoAvfilter",
+                        hb_value_string(combined));
+            free(combined);
+        }
+        else
+        {
+            hb_dict_set(preset, "VideoAvfilter",
+                        hb_value_string(eq_str));
+        }
+        free(eq_alloc);
+    }
     return preset;
 }
 
