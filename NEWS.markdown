@@ -17,6 +17,18 @@ Download available from Microsoft:
 #### General
 
 - Added encoding to MOV container format
+- Added AV1 VCN 2160p 4K preset
+  - For AMD 9000 series GPU hardware and newer
+  - Output dimensions may be incorrect on AMD 7000 series GPU hardware; this is unfixable in software
+- Added Production ProRes presets
+  - MOV container
+  - Any resolution video using standard, HQ, and LT encoder presets
+  - 2160p, 1080p, and 540p resolution proxy presets
+  - 24-bit PCM multi-channel audio with pass through support
+- Added Preservation FFV1 FLAC and PCM presets
+  - Same as Preservation FFV1 with single-codec audio
+- Updated Preservation FFV1 preset to pass through all supported audio codecs
+  - Adds Apple Lossless, PCM, and Vorbis to pass through list
 - Properly handle the case in which the first chapter timestamp is not zero
 
 #### Video
@@ -35,8 +47,8 @@ Download available from Microsoft:
 
 #### Build system
 
-- Updated mingw-w64-build to version 10.1.0.
-- Updated mac-toolchain-build script to version 2.14.0
+- Updated mingw-w64-build to version 11.0.0.
+- Updated mac-toolchain-build script to version 2.15.0
 
 #### Third-party libraries
 
@@ -74,7 +86,7 @@ Download available from Microsoft:
 
 ### Windows
 
-- The UI now requires Microsoft .NET Desktop Runtime 10.0.x. .NET 8 is no longer required.
+- The UI now requires Microsoft .NET Desktop Runtime 10.0.x. .NET 8 is no longer required
 - Support for Intel HyperEncode has been removed as the feature is deprecated upstream
 - Minor miscellaneous fixes
 - Updated existing and maintained locales
