@@ -10845,7 +10845,10 @@
                         "copy:mp2",
                         "copy:mp3",
                         "copy:flac",
-                        "copy:opus"
+                        "copy:opus",
+                        "copy:vorbis",
+                        "copy:alac",
+                        "copy:pcm"
                     ],
                     "AudioEncoderFallback": "flac24",
                     "AudioLanguageList": [
