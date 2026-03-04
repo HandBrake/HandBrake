@@ -548,10 +548,11 @@ hb_container_t *hb_containers_first_item = NULL;
 hb_container_t *hb_containers_last_item  = NULL;
 hb_container_internal_t hb_containers[]  =
 {
-    // legacy muxers, back to HB 0.9.4 whenever possible (disabled)
+    // generic muxers for convenience and compatibility
     { { "M4V file",            "m4v",     NULL,                     "m4v",  0,              }, NULL, 0, HB_GID_MUX_MP4,  },
     { { "MP4 file",            "mp4",     NULL,                     "mp4",  0,              }, NULL, 0, HB_GID_MUX_MP4,  },
     { { "MKV file",            "mkv",     NULL,                     "mkv",  0,              }, NULL, 0, HB_GID_MUX_MKV,  },
+    { { "MOV file",            "mov",     NULL,                     "mov",  0,              }, NULL, 0, HB_GID_MUX_MOV,  },
     // actual muxers
     { { "MPEG-4 (avformat)",   "av_mp4",  "MPEG-4 (libavformat)",   "mp4",  HB_MUX_AV_MP4,  }, NULL, 1, HB_GID_MUX_MP4,  },
     { { "MPEG-4 (mp4v2)",      "mp4v2",   "MPEG-4 (libmp4v2)",      "mp4",  HB_MUX_MP4V2,   }, NULL, 1, HB_GID_MUX_MP4,  },
