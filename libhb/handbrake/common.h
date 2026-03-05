@@ -1609,6 +1609,8 @@ struct hb_filter_object_s
     hb_fifo_t           * fifo_in;
     hb_fifo_t           * fifo_out;
 
+    int                   output_immediately;
+
     hb_subtitle_t       * subtitle;
 
     hb_filter_private_t * private_data;
@@ -1632,6 +1634,7 @@ enum
     HB_FILTER_INVALID = 0,
     HB_FILTER_FIRST = 1,
 
+    HB_FILTER_ADAPTER,
     HB_FILTER_ADAPTER_VT,
     // First, filters that may change the framerate (drop or dup frames)
     HB_FILTER_DETELECINE,
