@@ -33,7 +33,7 @@ Download available from Microsoft:
 
 #### Video
 
-- Added Prores encoder
+- Added ProRes encoder
 - Added AMD VCN AV1 10-bit encoder
 - Added MPEG-2 profile and level selection
 - Allowed muxing FFV1 in the MP4 container
@@ -71,7 +71,9 @@ Download available from Microsoft:
 
 ### Linux
 
-- Added preference option to select the UI language
+- Uses GtkFileLauncher to open files in sandboxed apps
+- Added buttons to cycle through previews on summary page
+- Added an option to change the UI display language
 - Improved display of file sizes
 - Fixed the disk space checks
 - Fixed a crash that could happen when a preset category contains the ' character
