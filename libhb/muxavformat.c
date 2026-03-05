@@ -492,6 +492,11 @@ static int avformatInit( hb_mux_object_t * m )
             track->st->codecpar->codec_id = AV_CODEC_ID_FFV1;
             break;
 
+        case HB_VCODEC_FFMPEG_DNXHR:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
+            track->st->codecpar->codec_id = AV_CODEC_ID_DNXHD;
+            break;
+
         case HB_VCODEC_FFMPEG_PRORES:
         case HB_VCODEC_VT_PRORES:
             track->st->codecpar->codec_id = AV_CODEC_ID_PRORES;

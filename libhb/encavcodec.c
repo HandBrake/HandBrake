@@ -191,6 +191,16 @@ static const char * const hb_prores_profile_names[] =
     "auto", "proxy", "lt", "standard", "hq", "4444", "4444xq", NULL
 };
 
+static const char * const hb_dnxhr_profile_names[] =
+{
+    "auto", "lb", "sq", "hq", NULL
+};
+
+static const char * const hb_dnxhr_10bit_profile_names[] =
+{
+    "auto", "hqx", "444", NULL
+};
+
 static const enum AVPixelFormat standard_pix_fmts[] =
 {
     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
@@ -389,6 +399,19 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 case HB_VCODEC_FFMPEG_PRORES:
                     hb_log("encavcodecInit: ProRes (libavcodec)");
                     codec_name = "prores";
+                    break;
+            }
+        }break;
+        case AV_CODEC_ID_DNXHD:
+        {
+            switch (job->vcodec) {
+                case HB_VCODEC_FFMPEG_DNXHR:
+                    hb_log("encavcodecInit: DNxHR (libavcodec)");
+                    codec_name = "dnxhd";
+                    break;
+                case HB_VCODEC_FFMPEG_DNXHR_10BIT:
+                    hb_log("encavcodecInit: DNxHR 10-bit (libavcodec)");
+                    codec_name = "dnxhd";
                     break;
             }
         }break;
@@ -734,6 +757,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set(&av_opts, "rate_control", "quality", 0);
             av_dict_set(&av_opts, "quality", quality, 0);
         }
+        else if (job->vcodec == HB_VCODEC_FFMPEG_DNXHR ||
+                 job->vcodec == HB_VCODEC_FFMPEG_DNXHR_10BIT)
+        {
+            av_dict_set( &av_opts, "quality", 0, 0 );
+            hb_log( "encavcodec: encoding at automatic quality" );
+        }
         else
         {
             // These settings produce better image quality than
@@ -962,6 +991,45 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 context->profile = AV_PROFILE_PRORES_4444;
             else if (!strcasecmp(job->encoder_profile, "4444xq"))
                 context->profile = AV_PROFILE_PRORES_XQ;
+        }
+    }
+    else if (job->vcodec == HB_VCODEC_FFMPEG_DNXHR)
+    {
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if (!strcasecmp(job->encoder_profile, "lb"))
+            {
+                context->profile = AV_PROFILE_DNXHR_LB;
+                av_dict_set(&av_opts, "profile", "dnxhr_lb", 0);
+            }
+            else if (!strcasecmp(job->encoder_profile, "sq"))
+            {
+                context->profile = AV_PROFILE_DNXHR_SQ;
+                av_dict_set(&av_opts, "profile", "dnxhr_sq", 0);
+            }
+            else if (!strcasecmp(job->encoder_profile, "hq") ||
+                     !strcasecmp(job->encoder_profile, "auto"))
+            {
+                context->profile = AV_PROFILE_DNXHR_HQ;
+                av_dict_set(&av_opts, "profile", "dnxhr_hq", 0);
+            }
+        }
+    }
+    else if (job->vcodec == HB_VCODEC_FFMPEG_DNXHR_10BIT)
+    {
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if (!strcasecmp(job->encoder_profile, "hqx") ||
+                !strcasecmp(job->encoder_profile, "auto"))
+            {
+                context->profile = AV_PROFILE_DNXHR_HQX;
+                av_dict_set(&av_opts, "profile", "dnxhr_hqx", 0);
+            }
+            else if (!strcasecmp(job->encoder_profile, "444"))
+            {
+                context->profile = AV_PROFILE_DNXHR_444;
+                av_dict_set(&av_opts, "profile", "dnxhr_444", 0);
+            }
         }
     }
 
@@ -1829,6 +1897,10 @@ const char* const* hb_av_profile_get_names(int encoder)
             return h265_qsv_profile_name;
         case HB_VCODEC_FFMPEG_MPEG2:
             return hb_mpeg2_profile_names;
+        case HB_VCODEC_FFMPEG_DNXHR:
+            return hb_dnxhr_profile_names;
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
+            return hb_dnxhr_10bit_profile_names;
         case HB_VCODEC_FFMPEG_PRORES:
             return hb_prores_profile_names;
          default:
@@ -1928,6 +2000,21 @@ const int* hb_av_get_pix_fmts(int encoder, const char *profile)
         case HB_VCODEC_FFMPEG_PRORES:
         {
             if (profile && (!strcasecmp(profile, "4444") || !strcasecmp(profile, "4444xq")))
+            {
+                return standard_444_10bit_pix_fmts;
+            }
+            else
+            {
+                return standard_422_10bit_pix_fmts;
+            }
+        }
+
+        case HB_VCODEC_FFMPEG_DNXHR:
+            return standard_422_pix_fmts;
+
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
+        {
+            if (profile && !strcasecmp(profile, "444"))
             {
                 return standard_444_10bit_pix_fmts;
             }
