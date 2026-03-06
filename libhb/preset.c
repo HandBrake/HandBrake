@@ -1888,6 +1888,19 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         }
     }
 
+    // Video AVFilter passthrough
+    const char * video_avfilter = hb_value_get_string(
+                                  hb_dict_get(preset, "VideoAvfilter"));
+    if (video_avfilter != NULL && video_avfilter[0] != '\0')
+    {
+        filter_dict = hb_dict_init();
+        hb_dict_set(filter_dict, "ID",
+                    hb_value_int(HB_FILTER_AVFILTER));
+        hb_dict_set(filter_dict, "Settings",
+                    hb_value_string(video_avfilter));
+        hb_add_filter2(filter_list, filter_dict);
+    }
+
     hb_value_t *fr_value = hb_dict_get(preset, "VideoFramerate");
     int vrate_den = get_video_framerate(fr_value);
     if (vrate_den < 0)
