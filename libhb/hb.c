@@ -2193,6 +2193,7 @@ int hb_global_init()
     hb_register(&hb_encx265);
 #endif
     hb_register(&hb_encsvtav1);
+    hb_register(&hb_audio_avfilter_work);
 
     hb_x264_global_init();
     hb_common_global_init(disable_hardware);
