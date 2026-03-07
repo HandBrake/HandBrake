@@ -88,7 +88,7 @@ Download available from Microsoft:
 ### Mac
 
 - Notifications sound is now played back when HandBrake is in the foreground
-- File name labels in queue as now truncated in the middle, same behaviour as the Finder
+- File name labels in queue are now truncated in the middle, same behaviour as the Finder
 - Minor miscellaneous fixes
 - Updated existing and maintained locales
 
@@ -181,7 +181,7 @@ Download available from Microsoft:
 
 #### Audio
 
-- Addded an option to disable track names passthru and autonaming
+- Added an option to disable track names passthru and autonaming
 - Fixed selection behaviour fallback when no audio track is found (#6666)
 - EAC3 + Atmos is now properly signaled in MP4
 
