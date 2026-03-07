@@ -19,7 +19,9 @@
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
 #endif
-
+#if HB_PROJECT_FEATURE_VCE
+#include "handbrake/vce_common.h"
+#endif
 #ifdef __APPLE__
 #include "platform/macosx/vt_common.h"
 #endif
@@ -1418,6 +1420,10 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
             }
         }
     }
+#if HB_PROJECT_FEATURE_VCE
+    if (hb_vce_dec_is_enabled(job))
+        hb_vce_sanitize_filter_list(job);
+#endif
 }
 
 static enum AVPixelFormat match_pix_fmt(enum AVPixelFormat pix_fmt,
@@ -1469,8 +1475,9 @@ static void sanitize_filter_list_post(hb_job_t *job)
 
     hb_hwaccel_t *hwaccel = job->hw_accel;
 
-    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0 ||
-        (job->hw_pix_fmt != AV_PIX_FMT_NONE && hwaccel && (hwaccel->caps & HB_HWACCEL_CAP_FORMAT_REQUIRED)))
+    if ((job->hw_pix_fmt != AV_PIX_FMT_AMF_SURFACE) &&
+        (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0 ||
+        (job->hw_pix_fmt != AV_PIX_FMT_NONE && hwaccel && (hwaccel->caps & HB_HWACCEL_CAP_FORMAT_REQUIRED))))
     {
         // Some encoders require a specific input pixel format
         // that could be different from the current pipeline format.
@@ -1760,6 +1767,13 @@ static void do_job(hb_job_t *job)
         {
             job->hw_accel = hwaccel;
             job->hw_pix_fmt = hwaccel->hw_pix_fmt;
+        }
+        else if (hwaccel && hwaccel->id == HB_DECODE_AMFDEC)
+        {
+            // Keep AMF HW decode enabled for mixed HW/SW filter chains.
+            // Frames will be transferred to system memory in the decoder path.
+            job->hw_accel = hwaccel;
+            job->hw_pix_fmt = AV_PIX_FMT_NONE;
         }
         else if (job->hw_decode & HB_DECODE_FORCE_HW)
         {
@@ -2426,4 +2440,3 @@ static void filter_loop( void * _f )
             hb_buffer_close( &buf_in );
     }
 }
-

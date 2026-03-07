@@ -268,6 +268,7 @@ extern hb_hwaccel_t hb_hwaccel_videotoolbox;
 extern hb_hwaccel_t hb_hwaccel_qsv;
 extern hb_hwaccel_t hb_hwaccel_nvdec;
 extern hb_hwaccel_t hb_hwaccel_mf;
+extern hb_hwaccel_t hb_hwaccel_amfdec;
 #endif
 
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_container_s.cs when changing this struct
@@ -927,6 +928,13 @@ struct hb_job_s
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
 
+    // AMF-specific settings
+    struct
+    {
+        int num_sw_filters;
+        int num_hw_filters;
+    } amf;
+
     int hw_decode;
     int hw_device_index;
     int hw_device_async_depth;
@@ -1366,8 +1374,9 @@ struct hb_title_s
 #define HB_DECODE_NVDEC          0x04
 #define HB_DECODE_VIDEOTOOLBOX   0x08
 #define HB_DECODE_MF             0x10 // Windows Media Foundation
-
-#define HB_DECODE_HWACCEL        (HB_DECODE_NVDEC | HB_DECODE_VIDEOTOOLBOX | HB_DECODE_QSV | HB_DECODE_MF)
+#define HB_DECODE_AMFDEC         0x20 // AMD Advance Media Framework
+ 
+#define HB_DECODE_HWACCEL        (HB_DECODE_NVDEC | HB_DECODE_VIDEOTOOLBOX | HB_DECODE_QSV | HB_DECODE_MF | HB_DECODE_AMFDEC)
 #define HB_DECODE_FORCE_HW       0x80000000
 
     hb_metadata_t * metadata;
