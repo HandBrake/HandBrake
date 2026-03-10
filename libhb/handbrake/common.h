@@ -1064,6 +1064,7 @@ struct hb_audio_config_s
             HB_AMIXDOWN_LEFT,
             HB_AMIXDOWN_RIGHT,
             HB_AMIXDOWN_STEREO,
+            HB_AMIXDOWN_3POINT0,
             HB_AMIXDOWN_DOLBY,
             HB_AMIXDOWN_DOLBYPLII,
             HB_AMIXDOWN_5POINT1,
