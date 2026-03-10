@@ -745,6 +745,8 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_QSV_AV1           HB_VCODEC_FFMPEG_QSV_AV1_8BIT
 
 #define HB_VCODEC_FFMPEG_PRORES     (0x00000100 | HB_VCODEC_FFMPEG_MASK)
+#define HB_VCODEC_FFMPEG_DNXHR      (0x00000101 | HB_VCODEC_FFMPEG_MASK)
+#define HB_VCODEC_FFMPEG_DNXHR_10BIT (0x00000102 | HB_VCODEC_FFMPEG_MASK)
 
 /* define an invalid CQ value compatible with all CQ-capable codecs */
 #define HB_INVALID_VIDEO_QUALITY (-1000.)
@@ -1064,6 +1066,7 @@ struct hb_audio_config_s
             HB_AMIXDOWN_STEREO,
             HB_AMIXDOWN_DOLBY,
             HB_AMIXDOWN_DOLBYPLII,
+            HB_AMIXDOWN_3POINT0,
             HB_AMIXDOWN_5POINT1,
             HB_AMIXDOWN_6POINT1,
             HB_AMIXDOWN_7POINT1,

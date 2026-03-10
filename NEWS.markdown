@@ -20,6 +20,11 @@ Download available from Microsoft:
 - Added AV1 VCN 2160p 4K preset
   - For AMD 9000 series GPU hardware and newer
   - Output dimensions may be incorrect on AMD 7000 series GPU hardware; this is unfixable in software
+- Added Production DNxHR presets
+  - MOV container
+  - Any resolution video using HQX and SQ encoder presets
+  - 2160p, 1080p, and 540p resolution proxy (LB) presets
+  - 24-bit PCM multi-channel audio with pass through support
 - Added Production ProRes presets
   - MOV container
   - Any resolution video using standard, HQ, and LT encoder presets
@@ -33,6 +38,7 @@ Download available from Microsoft:
 
 #### Video
 
+- Added DNxHR encoder
 - Added ProRes encoder
 - Added AMD VCN AV1 10-bit encoder
 - Added MPEG-2 profile and level selection
@@ -82,7 +88,7 @@ Download available from Microsoft:
 ### Mac
 
 - Notifications sound is now played back when HandBrake is in the foreground
-- File name labels in queue as now truncated in the middle, same behaviour as the Finder
+- File name labels in queue are now truncated in the middle, same behaviour as the Finder
 - Minor miscellaneous fixes
 - Updated existing and maintained locales
 
@@ -175,7 +181,7 @@ Download available from Microsoft:
 
 #### Audio
 
-- Addded an option to disable track names passthru and autonaming
+- Added an option to disable track names passthru and autonaming
 - Fixed selection behaviour fallback when no audio track is found (#6666)
 - EAC3 + Atmos is now properly signaled in MP4
 
