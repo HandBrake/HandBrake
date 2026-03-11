@@ -4633,6 +4633,7 @@ hb_title_t * hb_title_init( char * path, int index )
     t->color_prim         = HB_COLR_PRI_UNSET;
     t->color_transfer     = HB_COLR_TRA_UNSET;
     t->color_matrix       = HB_COLR_MAT_UNSET;
+    t->spherical_mapping.projection = HB_SPHERICAL_UNSET;
 
     return t;
 }
@@ -4747,6 +4748,8 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->dovi           = title->dovi;
     job->passthru_dynamic_hdr_metadata |= title->dovi.dv_profile ? HB_HDR_DYNAMIC_METADATA_DOVI : HB_HDR_DYNAMIC_METADATA_NONE;
     job->passthru_dynamic_hdr_metadata |= title->hdr_10_plus ? HB_HDR_DYNAMIC_METADATA_HDR10PLUS : HB_HDR_DYNAMIC_METADATA_NONE;
+
+    job->spherical_mapping = title->spherical_mapping;
 
     job->mux = HB_MUX_MP4;
 
