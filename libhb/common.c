@@ -5086,6 +5086,18 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_chroma_smooth;
             break;
 
+        case HB_FILTER_BM3D:
+            filter = &hb_filter_bm3d;
+            break;
+
+        case HB_FILTER_DEBAND:
+            filter = &hb_filter_deband;
+            break;
+
+        case HB_FILTER_EQ:
+            filter = &hb_filter_eq;
+            break;
+
         case HB_FILTER_RENDER_SUB:
             filter = &hb_filter_render_sub;
             break;

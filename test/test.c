@@ -4957,89 +4957,48 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
     }
 
-    // Named video filter shortcuts
+    // BM3D
     if (bm3d != NULL)
     {
-        char * bm3d_alloc = NULL;
-        const char * bm3d_str;
-        if (!strcmp(bm3d, "default"))
-            bm3d_str = "bm3d=sigma=1";
-        else if (!strcmp(bm3d, "medium"))
-            bm3d_str = "bm3d=sigma=3";
-        else if (!strcmp(bm3d, "strong"))
-            bm3d_str = "bm3d=sigma=6";
-        else if (strncmp(bm3d, "bm3d", 4) == 0)
-            bm3d_str = bm3d;
+        if (!strcasecmp(bm3d, "default") ||
+            !strcasecmp(bm3d, "medium") ||
+            !strcasecmp(bm3d, "strong"))
+        {
+            hb_dict_set_string(preset, "PictureBM3DPreset", bm3d);
+        }
         else
         {
-            bm3d_alloc = hb_strdup_printf("bm3d=%s", bm3d);
-            bm3d_str = bm3d_alloc;
+            hb_dict_set_string(preset, "PictureBM3DPreset", "custom");
+            hb_dict_set_string(preset, "PictureBM3DCustom", bm3d);
         }
-        hb_dict_set(preset, "VideoAvfilter",
-                    hb_value_string(bm3d_str));
-        free(bm3d_alloc);
     }
+    // Deband
     if (deband != NULL)
     {
-        char * db_alloc = NULL;
-        const char * db_str;
-        if (!strcmp(deband, "default"))
-            db_str = "deband=1thr=0.02:2thr=0.02:3thr=0.02:4thr=0.02:range=16:blur=1";
-        else if (strncmp(deband, "deband", 6) == 0)
-            db_str = deband;
-        else
+        if (!strcasecmp(deband, "default"))
         {
-            db_alloc = hb_strdup_printf("deband=%s", deband);
-            db_str = db_alloc;
-        }
-        const char * existing = hb_value_get_string(
-                                hb_dict_get(preset, "VideoAvfilter"));
-        if (existing != NULL && existing[0] != '\0')
-        {
-            char * combined = hb_strdup_printf("%s,%s", existing, db_str);
-            hb_dict_set(preset, "VideoAvfilter",
-                        hb_value_string(combined));
-            free(combined);
+            hb_dict_set_string(preset, "PictureDebandPreset", deband);
         }
         else
         {
-            hb_dict_set(preset, "VideoAvfilter",
-                        hb_value_string(db_str));
+            hb_dict_set_string(preset, "PictureDebandPreset", "custom");
+            hb_dict_set_string(preset, "PictureDebandCustom", deband);
         }
-        free(db_alloc);
     }
+    // EQ (Equalizer)
     if (eq != NULL)
     {
-        char * eq_alloc = NULL;
-        const char * eq_str;
-        if (!strcmp(eq, "brighten"))
-            eq_str = "eq=brightness=0.06:contrast=1.08:saturation=1.05:gamma=0.95";
-        else if (!strcmp(eq, "darken"))
-            eq_str = "eq=brightness=-0.06:contrast=1.06:saturation=1.00:gamma=1.05";
-        else if (!strcmp(eq, "vivid"))
-            eq_str = "eq=contrast=1.25:saturation=1.35:brightness=0.03:gamma=0.92";
-        else if (strncmp(eq, "eq", 2) == 0)
-            eq_str = eq;
-        else
+        if (!strcasecmp(eq, "brighten") ||
+            !strcasecmp(eq, "darken") ||
+            !strcasecmp(eq, "vivid"))
         {
-            eq_alloc = hb_strdup_printf("eq=%s", eq);
-            eq_str = eq_alloc;
-        }
-        const char * existing = hb_value_get_string(
-                                    hb_dict_get(preset, "VideoAvfilter"));
-        if (existing != NULL && existing[0] != '\0')
-        {
-            char * combined = hb_strdup_printf("%s,%s", existing, eq_str);
-            hb_dict_set(preset, "VideoAvfilter",
-                        hb_value_string(combined));
-            free(combined);
+            hb_dict_set_string(preset, "PictureEQPreset", eq);
         }
         else
         {
-            hb_dict_set(preset, "VideoAvfilter",
-                        hb_value_string(eq_str));
+            hb_dict_set_string(preset, "PictureEQPreset", "custom");
+            hb_dict_set_string(preset, "PictureEQCustom", eq);
         }
-        free(eq_alloc);
     }
     return preset;
 }

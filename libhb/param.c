@@ -37,6 +37,35 @@ static hb_filter_param_t nlmeans_tunes[] =
     { 0, NULL,          NULL,         NULL              }
 };
 
+static hb_filter_param_t bm3d_presets[] =
+{
+    { 1, "Custom",  "custom",  NULL        },
+    { 2, "Default", "default", "sigma=1"   },
+    { 3, "Medium",  "medium",  "sigma=3"   },
+    { 4, "Strong",  "strong",  "sigma=6"   },
+    { 0, NULL,      NULL,      NULL        }
+};
+
+static hb_filter_param_t deband_presets[] =
+{
+    { 1, "Custom",  "custom",  NULL },
+    { 2, "Default", "default",
+      "1thr=0.02:2thr=0.02:3thr=0.02:4thr=0.02:range=16:blur=1" },
+    { 0, NULL,      NULL,      NULL }
+};
+
+static hb_filter_param_t eq_presets[] =
+{
+    { 1, "Custom",   "custom",   NULL },
+    { 2, "Brighten", "brighten",
+      "brightness=0.05:contrast=1.08:saturation=1.05:gamma=0.95" },
+    { 3, "Darken",   "darken",
+      "brightness=-0.03:contrast=1.06:saturation=1.00:gamma=1.05" },
+    { 4, "Vivid",    "vivid",
+      "contrast=1.25:saturation=1.35:brightness=0.03:gamma=0.92" },
+    { 0, NULL,       NULL,       NULL }
+};
+
 static hb_filter_param_t deblock_presets[] =
 {
     { 0, "Off",         "off",        "disable=1"                  },
@@ -279,6 +308,15 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_DEBLOCK, deblock_presets, deblock_tunes,
       sizeof(deblock_presets) / sizeof(hb_filter_param_t),
       sizeof(deblock_tunes)   / sizeof(hb_filter_param_t),        },
+
+    { HB_FILTER_BM3D, bm3d_presets, NULL,
+      sizeof(bm3d_presets) / sizeof(hb_filter_param_t),        0, },
+
+    { HB_FILTER_DEBAND, deband_presets, NULL,
+      sizeof(deband_presets) / sizeof(hb_filter_param_t),      0, },
+
+    { HB_FILTER_EQ, eq_presets, NULL,
+      sizeof(eq_presets) / sizeof(hb_filter_param_t),          0, },
 
     { HB_FILTER_INVALID,     NULL,                NULL,     0, 0, },
 };
@@ -1262,6 +1300,9 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
             settings = generate_unsharp_settings(preset, tune, custom);
             break;
         case HB_FILTER_DEBLOCK:
+        case HB_FILTER_BM3D:
+        case HB_FILTER_DEBAND:
+        case HB_FILTER_EQ:
         case HB_FILTER_COMB_DETECT:
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
