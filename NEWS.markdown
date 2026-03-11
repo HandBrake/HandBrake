@@ -17,11 +17,29 @@ Download available from Microsoft:
 #### General
 
 - Added encoding to MOV container format
+- Added AV1 VCN 2160p 4K preset
+  - For AMD 9000 series GPU hardware and newer
+  - Output dimensions may be incorrect on AMD 7000 series GPU hardware; this is unfixable in software
+- Added Production DNxHR presets
+  - MOV container
+  - Any resolution video using HQX and SQ encoder presets
+  - 2160p, 1080p, and 540p resolution proxy (LB) presets
+  - 24-bit PCM multi-channel audio with pass through support
+- Added Production ProRes presets
+  - MOV container
+  - Any resolution video using standard, HQ, and LT encoder presets
+  - 2160p, 1080p, and 540p resolution proxy presets
+  - 24-bit PCM multi-channel audio with pass through support
+- Added Preservation FFV1 FLAC and PCM presets
+  - Same as Preservation FFV1 with single-codec audio
+- Updated Preservation FFV1 preset to pass through all supported audio codecs
+  - Adds Apple Lossless, PCM, and Vorbis to pass through list
 - Properly handle the case in which the first chapter timestamp is not zero
 
 #### Video
 
-- Added Prores encoder
+- Added DNxHR encoder
+- Added ProRes encoder
 - Added AMD VCN AV1 10-bit encoder
 - Added MPEG-2 profile and level selection
 - Allowed muxing FFV1 in the MP4 container
@@ -59,7 +77,9 @@ Download available from Microsoft:
 
 ### Linux
 
-- Added preference option to select the UI language
+- Uses GtkFileLauncher to open files in sandboxed apps
+- Added buttons to cycle through previews on summary page
+- Added an option to change the UI display language
 - Improved display of file sizes
 - Fixed the disk space checks
 - Fixed a crash that could happen when a preset category contains the ' character
@@ -68,7 +88,7 @@ Download available from Microsoft:
 ### Mac
 
 - Notifications sound is now played back when HandBrake is in the foreground
-- File name labels in queue as now truncated in the middle, same behaviour as the Finder
+- File name labels in queue are now truncated in the middle, same behaviour as the Finder
 - Minor miscellaneous fixes
 - Updated existing and maintained locales
 
@@ -161,7 +181,7 @@ Download available from Microsoft:
 
 #### Audio
 
-- Addded an option to disable track names passthru and autonaming
+- Added an option to disable track names passthru and autonaming
 - Fixed selection behaviour fallback when no audio track is found (#6666)
 - EAC3 + Atmos is now properly signaled in MP4
 

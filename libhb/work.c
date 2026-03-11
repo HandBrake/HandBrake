@@ -356,6 +356,11 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
            w = hb_get_work(h, WORK_ENCAVCODEC);
            w->codec_param = AV_CODEC_ID_PRORES;
             break;
+        case HB_VCODEC_FFMPEG_DNXHR:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_DNXHD;
+            break;
         default:
             hb_error("Unknown video codec (0x%x)", vcodec );
     }
@@ -675,6 +680,12 @@ void hb_display_job_info(hb_job_t *job)
         {
             hb_log("     + hdr10+ dynamic metadata");
 
+        }
+
+        if (job->spherical_mapping.projection > HB_SPHERICAL_UNSET)
+        {
+            hb_log("     + spherical mapping: %s",
+                   av_spherical_projection_name(job->spherical_mapping.projection));
         }
     }
 

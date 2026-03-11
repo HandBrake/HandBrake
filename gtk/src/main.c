@@ -21,6 +21,8 @@
 #include "settings.h"
 #include "ui_res.h"
 
+#include <locale.h>
+
 static char *
 get_locale_dir (const char *app_dir)
 {
@@ -56,13 +58,15 @@ main (int argc, char *argv[])
     // Tell gdk pixbuf where it's loader config file is.
     _putenv_s("GDK_PIXBUF_MODULE_FILE", "ghb.exe.local/loaders.cache");
 #endif
+    setlocale(LC_ALL, "");
+
     g_autofree char *app_dir = get_app_dir(argv ? argv[0] : NULL);
     const char *textdomaindir = getenv("TEXTDOMAINDIR");
     g_autofree char *locale_dir;
     if (textdomaindir)
         locale_dir = g_strdup(textdomaindir);
     else
-        locale_dir = get_locale_dir(app_dir); 
+        locale_dir = get_locale_dir(app_dir);
     bindtextdomain(GETTEXT_PACKAGE, locale_dir);
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
     textdomain(GETTEXT_PACKAGE);
