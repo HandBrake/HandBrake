@@ -12,6 +12,17 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v6
+
+    - name: Cargo-C Toolchain Cache
+      id: windows-arm-cargo-c-toolchain
+      uses: actions/cache@v5
+      with:
+        path: |
+          ~/.cargo/bin/cargo-capi
+          ~/.cargo/bin/cargo-cbuild
+          ~/.cargo/bin/cargo-cinstall
+        key: ${{ runner.os }}-${{ runner.arch }}-windows-arm-cargo-c-toolchain
+
     - name: Environment Setup
       run: |
         sudo apt-get install automake autoconf build-essential libtool libtool-bin make meson nasm patch tar yasm zlib1g-dev ninja-build gzip pax
@@ -35,7 +46,7 @@ jobs:
         fi
 
     - name: Setup Cargo-C Toolchain
-      if: steps.windows-cargo-c-toolchain.outputs.cache-hit != 'true'
+      if: steps.windows-arm-cargo-c-toolchain.outputs.cache-hit != 'true'
       run: |
         cargo install cargo-c
 
