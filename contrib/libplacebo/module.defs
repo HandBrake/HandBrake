@@ -1,0 +1,28 @@
+__deps__ := VULKAN
+
+$(eval $(call import.MODULE.defs,LIBPLACEBO,libplacebo))
+$(eval $(call import.CONTRIB.defs,LIBPLACEBO))
+
+LIBPLACEBO.FETCH.url = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libplacebo-v7.351.0.tar.gz
+LIBPLACEBO.FETCH.url += https://code.videolan.org/videolan/libplacebo/-/archive/v7.351.0/libplacebo-v7.351.0.tar.gz
+LIBPLACEBO.FETCH.sha256 = 4efe1c8d4da3c61295eb5fdfa50e6037409d8425eb3c15dd86788679c4ce59ee
+
+LIBPLACEBO.build_dir = build/
+LIBPLACEBO.CONFIGURE.exe = $(MESON.exe) setup
+LIBPLACEBO.prefix = $(call fn.ABSOLUTE,$(LIBPLACEBO.prefix/))contrib/
+LIBPLACEBO.CONFIGURE.deps =
+LIBPLACEBO.CONFIGURE.shared =
+LIBPLACEBO.CONFIGURE.host =
+LIBPLACEBO.CONFIGURE.build =
+LIBPLACEBO.CONFIGURE.static = -Ddefault_library=static
+LIBPLACEBO.CONFIGURE.extra = --libdir=$(call fn.ABSOLUTE,$(LIBPLACEBO.prefix/))contrib/lib/ \
+                                -Dvulkan=enabled -Dopengl=disabled -Ddemos=false \
+                                -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,LIBPLACEBO.GCC,*archs *sysroot *minver ?extra)" \
+                                -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,LIBPLACEBO.GCC,*archs *sysroot *minver ?extra.exe)"
+LIBPLACEBO.CONFIGURE.env =
+
+LIBPLACEBO.BUILD.make = $(NINJA.exe)
+LIBPLACEBO.BUILD.extra = -v
+LIBPLACEBO.INSTALL.make = $(NINJA.exe)
+LIBPLACEBO.CLEAN.make = $(NINJA.exe)
+LIBPLACEBO.UNINSTALL.make = $(NINJA.exe)
