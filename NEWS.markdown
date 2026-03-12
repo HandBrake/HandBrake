@@ -10,6 +10,15 @@ Download available from Microsoft:
 - [For x64 (AMD or Intel CPUs)](https://aka.ms/dotnet/10.0/windowsdesktop-runtime-win-x64.exe)
 - [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/10.0/windowsdesktop-runtime-win-arm64.exe)
 
+
+## HandBrake 1.11.1
+
+### Windows
+
+- Removed dependency on having Microsoft .NET 8 Desktop Runtime installed. 
+- Fixed a number of issues that impacted screen reader tools ability to read combo box controls.
+
+
 ## HandBrake 1.11.0
 
 ### All platforms
