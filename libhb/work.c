@@ -681,6 +681,12 @@ void hb_display_job_info(hb_job_t *job)
             hb_log("     + hdr10+ dynamic metadata");
 
         }
+
+        if (job->spherical_mapping.projection > HB_SPHERICAL_UNSET)
+        {
+            hb_log("     + spherical mapping: %s",
+                   av_spherical_projection_name(job->spherical_mapping.projection));
+        }
     }
 
     if (job->indepth_scan)

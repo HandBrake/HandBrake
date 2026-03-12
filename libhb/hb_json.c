@@ -378,6 +378,23 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         hb_dict_set(dict, "HDR10+", hb_value_int(title->hdr_10_plus));
     }
 
+    // Spherical mapping
+    hb_dict_t *spherical_mapping_dict;
+    if (title->spherical_mapping.projection > HB_SPHERICAL_UNSET)
+    {
+        spherical_mapping_dict = json_pack_ex(&error, 0, "{s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i}",
+            "Projection",  title->spherical_mapping.projection,
+            "Yaw",         title->spherical_mapping.yaw,
+            "Pitch",       title->spherical_mapping.pitch,
+            "Roll",        title->spherical_mapping.roll,
+            "BoundLeft",   title->spherical_mapping.bound_left,
+            "BoundTop",    title->spherical_mapping.bound_top,
+            "BoundRight",  title->spherical_mapping.bound_right,
+            "BoundBottom", title->spherical_mapping.bound_bottom,
+            "Padding",     title->spherical_mapping.padding);
+        hb_dict_set(dict, "SphericalMapping", spherical_mapping_dict);
+    }
+
     if (title->container_name != NULL)
     {
         hb_dict_set(dict, "Container", hb_value_string(title->container_name));
@@ -818,6 +835,23 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         hb_dict_set(video_dict, "DolbyVisionConfigurationRecord", dovi_dict);
     }
 
+    // Spherical mapping
+    hb_dict_t *spherical_mapping_dict;
+    if (job->spherical_mapping.projection > HB_SPHERICAL_UNSET)
+    {
+        spherical_mapping_dict = json_pack_ex(&error, 0, "{s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i}",
+            "Projection",  job->spherical_mapping.projection,
+            "Yaw",         job->spherical_mapping.yaw,
+            "Pitch",       job->spherical_mapping.pitch,
+            "Roll",        job->spherical_mapping.roll,
+            "BoundLeft",   job->spherical_mapping.bound_left,
+            "BoundTop",    job->spherical_mapping.bound_top,
+            "BoundRight",  job->spherical_mapping.bound_right,
+            "BoundBottom", job->spherical_mapping.bound_bottom,
+            "Padding",     job->spherical_mapping.padding);
+        hb_dict_set(video_dict, "SphericalMapping", spherical_mapping_dict);
+    }
+
     if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         hb_dict_set(video_dict, "Quality", hb_value_double(job->vquality));
@@ -1151,6 +1185,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_dict_t        * mastering_dict = NULL;
     hb_dict_t        * coll_dict = NULL;
     hb_dict_t        * dovi_dict = NULL;
+    hb_dict_t        * spherical_mapping_dict = NULL;
     hb_value_t       * acodec_copy_mask = NULL, * acodec_fallback = NULL;
     const char       * destfile = NULL;
     const char       * range_type = NULL;
@@ -1185,12 +1220,14 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //       MasteringDisplayColorVolume,
     //       ContentLightLevel,
     //       DolbyVisionConfigurationRecord
+    //       SphericalMapping
     //       ColorPrimariesOverride, ColorTransferOverride, ColorMatrixOverride,
     //       HardwareDecode, AdapterIndex, AsyncDepth
     "s:{s:o, s?F, s?i, s?s, s?s, s?s, s?s, s?s,"
     "   s?b, s?b, s?i,"
     "   s?i, s?i, s?i,"
     "   s?i, s?i, s?i, s?i,"
+    "   s?o,"
     "   s?o,"
     "   s?o,"
     "   s?o,"
@@ -1251,6 +1288,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "MasteringDisplayColorVolume", unpack_o(&mastering_dict),
             "ContentLightLevel",    unpack_o(&coll_dict),
             "DolbyVisionConfigurationRecord", unpack_o(&dovi_dict),
+            "SphericalMapping",     unpack_o(&spherical_mapping_dict),
             "ColorPrimariesOverride", unpack_i(&job->color_prim_override),
             "ColorTransferOverride",  unpack_i(&job->color_transfer_override),
             "ColorMatrixOverride",    unpack_i(&job->color_matrix_override),
@@ -1476,6 +1514,27 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         if (result < 0)
         {
             hb_error("hb_dict_to_job: failed to parse dovi_dict: %s", error.text);
+            goto fail;
+        }
+    }
+
+    if (spherical_mapping_dict != NULL)
+    {
+        result = json_unpack_ex(spherical_mapping_dict, &error, 0,
+        "{s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i}",
+            "Projection",  unpack_i(&job->spherical_mapping.projection),
+            "Yaw",         unpack_i(&job->spherical_mapping.yaw),
+            "Pitch",       unpack_i(&job->spherical_mapping.pitch),
+            "Roll",        unpack_i(&job->spherical_mapping.roll),
+            "BoundLeft",   unpack_u(&job->spherical_mapping.bound_left),
+            "BoundTop",    unpack_u(&job->spherical_mapping.bound_top),
+            "BoundRight",  unpack_u(&job->spherical_mapping.bound_right),
+            "BoundBottom", unpack_u(&job->spherical_mapping.bound_bottom),
+            "Padding",     unpack_u(&job->spherical_mapping.padding)
+        );
+        if (result < 0)
+        {
+            hb_error("hb_dict_to_job: failed to parse spherical_mapping_dict: %s", error.text);
             goto fail;
         }
     }

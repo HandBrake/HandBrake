@@ -671,6 +671,40 @@ hb_dovi_conf_t hb_dovi_ff_to_hb(AVDOVIDecoderConfigurationRecord dovi)
     return hb_dovi;
 }
 
+AVSphericalMapping hb_spherical_hb_to_ff(hb_spherical_mapping_t spherical_mapping)
+{
+    AVSphericalMapping ff_spherical_mapping;
+
+    ff_spherical_mapping.projection = spherical_mapping.projection;
+    ff_spherical_mapping.yaw        = spherical_mapping.yaw;
+    ff_spherical_mapping.pitch      = spherical_mapping.pitch;
+    ff_spherical_mapping.roll       = spherical_mapping.roll;
+    ff_spherical_mapping.bound_left   = spherical_mapping.bound_left;
+    ff_spherical_mapping.bound_top    = spherical_mapping.bound_top;
+    ff_spherical_mapping.bound_right  = spherical_mapping.bound_right;
+    ff_spherical_mapping.bound_bottom = spherical_mapping.bound_bottom;
+    ff_spherical_mapping.padding      = spherical_mapping.padding;
+
+    return ff_spherical_mapping;
+}
+
+hb_spherical_mapping_t hb_spherical_ff_to_hb(AVSphericalMapping spherical_mapping)
+{
+    hb_spherical_mapping_t hb_spherical_mapping;
+
+    hb_spherical_mapping.projection = spherical_mapping.projection;
+    hb_spherical_mapping.yaw        = spherical_mapping.yaw;
+    hb_spherical_mapping.pitch      = spherical_mapping.pitch;
+    hb_spherical_mapping.roll       = spherical_mapping.roll;
+    hb_spherical_mapping.bound_left   = spherical_mapping.bound_left;
+    hb_spherical_mapping.bound_top    = spherical_mapping.bound_top;
+    hb_spherical_mapping.bound_right  = spherical_mapping.bound_right;
+    hb_spherical_mapping.bound_bottom = spherical_mapping.bound_bottom;
+    hb_spherical_mapping.padding      = spherical_mapping.padding;
+
+    return hb_spherical_mapping;
+}
+
 int hb_ff_mixdown_ch_xlat(AVChannelLayout *channel_layout, int hb_mixdown, int *downmix_mode)
 {
     uint64_t layout = hb_ff_mixdown_xlat(hb_mixdown, downmix_mode);

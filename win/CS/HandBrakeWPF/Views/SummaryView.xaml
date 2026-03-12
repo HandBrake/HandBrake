@@ -56,7 +56,13 @@
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}" VerticalAlignment="Center"
                               ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
                               SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}" 
-                              AutomationProperties.Name="{x:Static Properties:Resources.MainView_Format}" />
+                              AutomationProperties.Name="{x:Static Properties:Resources.MainView_Format}" >
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="AutomationProperties.Name" Value="{Binding DisplayName}" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
 
             <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="1">
                 <CheckBox Name="WebOptimized" VerticalAlignment="Center" HorizontalAlignment="Left" 
