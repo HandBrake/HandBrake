@@ -112,7 +112,13 @@
                           SelectedItem="{Binding ChromaSmoothFilter.SelectedPreset}" 
                           AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_ChromaSmooth}"
                           HorizontalAlignment="Left" VerticalAlignment="Center" 
-                          ToolTip="{x:Static Properties:ResourcesTooltips.FiltersView_ChromaSmooth}" />
+                          ToolTip="{x:Static Properties:ResourcesTooltips.FiltersView_ChromaSmooth}" >
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="AutomationProperties.Name" Value="{Binding DisplayName}" />
+                </Style>
+            </ComboBox.ItemContainerStyle>
+        </ComboBox>
 
         <StackPanel Orientation="Horizontal" Visibility="{Binding ChromaSmoothFilter.ShowTune, Converter={StaticResource boolToVisConverter}}" Grid.Row="4"  Grid.Column="2" Margin="10,0,0,0" >
             <TextBlock Text="{x:Static Properties:Resources.FiltersView_Tune}" />
@@ -173,7 +179,13 @@
                           SelectedItem="{Binding DeblockFilter.SelectedPreset}" 
                           AutomationProperties.Name="{x:Static Properties:Resources.FiltersViewAuto_DeblockPreset}"
                           HorizontalAlignment="Left" VerticalAlignment="Center"
-                          ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deblock}" />
+                          ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deblock}" >
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="AutomationProperties.Name" Value="{Binding DisplayName}" />
+                </Style>
+            </ComboBox.ItemContainerStyle>
+        </ComboBox>
 
         <StackPanel Orientation="Horizontal" Visibility="{Binding DeblockFilter.ShowDeblockTune, Converter={StaticResource boolToVisConverter}}" Grid.Row="6"  Grid.Column="2" Margin="10,0,0,0" >
             <TextBlock Text="{x:Static Properties:Resources.FiltersView_Tune}" Margin="0,0,5,0" />
@@ -193,7 +205,13 @@
                   SelectedItem="{Binding ColourSpaceFilter.SelectedPreset}" 
                   AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_ColourSpace}"
                   HorizontalAlignment="Left" VerticalAlignment="Center"
-                  ToolTip="{x:Static Properties:ResourcesTooltips.FiltersView_ColourSpace}" />
+                  ToolTip="{x:Static Properties:ResourcesTooltips.FiltersView_ColourSpace}" >
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="AutomationProperties.Name" Value="{Binding DisplayName}" />
+                </Style>
+            </ComboBox.ItemContainerStyle>
+        </ComboBox>
         <TextBox Width="450" Text="{Binding ColourSpaceFilter.CustomColourspace, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" 
                  Visibility="{Binding ColourSpaceFilter.ShowColourspaceCustom, Converter={StaticResource boolToVisConverter}}" Grid.Row="7"  Grid.Column="2" Margin="10,0,0,0" />
 
