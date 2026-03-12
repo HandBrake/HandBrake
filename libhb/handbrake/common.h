@@ -433,6 +433,19 @@ typedef enum
     HB_HDR_DYNAMIC_METADATA_ALL       = HB_HDR_DYNAMIC_METADATA_HDR10PLUS | HB_HDR_DYNAMIC_METADATA_DOVI
 } hb_hdr_dynamic_metadata_mode_t;
 
+struct hb_spherical_mapping_s
+{
+    int projection;
+    int yaw;
+    int pitch;
+    int roll;
+    uint32_t bound_left;
+    uint32_t bound_top;
+    uint32_t bound_right;
+    uint32_t bound_bottom;
+    uint32_t padding;
+};
+
 int hb_str_ends_with(const char *base, const char *str);
 
 /*******************************************************************************
@@ -745,6 +758,8 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_QSV_AV1           HB_VCODEC_FFMPEG_QSV_AV1_8BIT
 
 #define HB_VCODEC_FFMPEG_PRORES     (0x00000100 | HB_VCODEC_FFMPEG_MASK)
+#define HB_VCODEC_FFMPEG_DNXHR      (0x00000101 | HB_VCODEC_FFMPEG_MASK)
+#define HB_VCODEC_FFMPEG_DNXHR_10BIT (0x00000102 | HB_VCODEC_FFMPEG_MASK)
 
 /* define an invalid CQ value compatible with all CQ-capable codecs */
 #define HB_INVALID_VIDEO_QUALITY (-1000.)
@@ -847,6 +862,16 @@ struct hb_job_s
 
     hb_hdr_dynamic_metadata_mode_t passthru_dynamic_hdr_metadata;
 
+
+    hb_spherical_mapping_t spherical_mapping;
+#define HB_SPHERICAL_UNSET                  -1
+#define HB_SPHERICAL_EQUIRECTANGULAR         0
+#define HB_SPHERICAL_CUBEMAP                 1
+#define HB_SPHERICAL_EQUIRECTANGULAR_TILE    2
+#define HB_SPHERICAL_HALF_EQUIRECTANGULAR    3
+#define HB_SPHERICAL_RECTILINEAR             4
+#define HB_SPHERICAL_FISHEYE                 5
+#define HB_SPHERICAL_PARAMETRIC_IMMERSIVE    6
 
     hb_list_t     * list_chapter;
 
@@ -1064,6 +1089,7 @@ struct hb_audio_config_s
             HB_AMIXDOWN_STEREO,
             HB_AMIXDOWN_DOLBY,
             HB_AMIXDOWN_DOLBYPLII,
+            HB_AMIXDOWN_3POINT0,
             HB_AMIXDOWN_5POINT1,
             HB_AMIXDOWN_6POINT1,
             HB_AMIXDOWN_7POINT1,
@@ -1338,6 +1364,8 @@ struct hb_title_s
     int             initial_rpu_type;
 
     int             hdr_10_plus;
+
+    hb_spherical_mapping_t spherical_mapping;
 
     hb_rational_t   vrate;
     int             crop[4];

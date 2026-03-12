@@ -492,6 +492,11 @@ static int avformatInit( hb_mux_object_t * m )
             track->st->codecpar->codec_id = AV_CODEC_ID_FFV1;
             break;
 
+        case HB_VCODEC_FFMPEG_DNXHR:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
+            track->st->codecpar->codec_id = AV_CODEC_ID_DNXHD;
+            break;
+
         case HB_VCODEC_FFMPEG_PRORES:
         case HB_VCODEC_VT_PRORES:
             track->st->codecpar->codec_id = AV_CODEC_ID_PRORES;
@@ -621,6 +626,20 @@ static int avformatInit( hb_mux_object_t * m )
                                 sizeof(AVDOVIDecoderConfigurationRecord), 0);
 
         m->oc->strict_std_compliance = FF_COMPLIANCE_UNOFFICIAL;
+    }
+
+    if (job->spherical_mapping.projection > HB_SPHERICAL_UNSET)
+    {
+        AVSphericalMapping spherical_mapping = hb_spherical_hb_to_ff(job->spherical_mapping);
+
+        uint8_t *spherical_data = av_malloc(sizeof(AVSphericalMapping));
+        memcpy(spherical_data, &spherical_mapping, sizeof(AVSphericalMapping));
+
+        av_packet_side_data_add(&track->st->codecpar->coded_side_data,
+                                &track->st->codecpar->nb_coded_side_data,
+                                AV_PKT_DATA_SPHERICAL,
+                                spherical_data,
+                                sizeof(AVSphericalMapping), 0);
     }
 
     hb_rational_t vrate = job->vrate;

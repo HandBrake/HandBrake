@@ -85,6 +85,7 @@ enum
     HB_GID_VCODEC_AV1_MF,
     HB_GID_VCODEC_FFV1,
     HB_GID_VCODEC_PRORES,
+    HB_GID_VCODEC_DNXHR,
     HB_GID_ACODEC_ALAC,
     HB_GID_ACODEC_ALAC_PASS,
     HB_GID_ACODEC_AAC,
@@ -262,6 +263,7 @@ hb_mixdown_internal_t hb_audio_mixdowns[]  =
     { { "Stereo",             "stereo",     HB_AMIXDOWN_STEREO,    }, NULL, 1, },
     { { "Dolby Surround",     "dpl1",       HB_AMIXDOWN_DOLBY,     }, NULL, 1, },
     { { "Dolby Pro Logic II", "dpl2",       HB_AMIXDOWN_DOLBYPLII, }, NULL, 1, },
+    { { "3.0 Channels",       "3point0",    HB_AMIXDOWN_3POINT0,   }, NULL, 1, },
     { { "5.1 Channels",       "5point1",    HB_AMIXDOWN_5POINT1,   }, NULL, 1, },
     { { "6.1 Channels",       "6point1",    HB_AMIXDOWN_6POINT1,   }, NULL, 1, },
     { { "7.1 Channels",       "7point1",    HB_AMIXDOWN_7POINT1,   }, NULL, 1, },
@@ -324,6 +326,8 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "VP8",                         "VP8",              "VP8 (libvpx)",                   HB_VCODEC_FFMPEG_VP8,                        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP8,        },
     { { "VP9",                         "VP9",              "VP9 (libvpx)",                   HB_VCODEC_FFMPEG_VP9,        HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
     { { "VP9 10-bit",                  "VP9_10bit",        "VP9 10-bit (libvpx)",            HB_VCODEC_FFMPEG_VP9_10BIT,  HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
+    { { "DNxHR",                       "dnxhr",            "DNxHR (libavcodec)",             HB_VCODEC_FFMPEG_DNXHR,                       HB_MUX_MASK_MOV|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_DNXHR,      },
+    { { "DNxHR 10-bit",                "dnxhr_10bit",      "DNxHR 10-bit (libavcodec)",      HB_VCODEC_FFMPEG_DNXHR_10BIT,                 HB_MUX_MASK_MOV|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_DNXHR,      },
     { { "ProRes",                      "ff_prores",        "ProRes (libavcodec)",            HB_VCODEC_FFMPEG_PRORES,                      HB_MUX_MASK_MOV|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_PRORES,     },
     { { "ProRes (VideoToolbox)",       "vt_prores",        "ProRes (VideoToolbox)",          HB_VCODEC_VT_PRORES,                          HB_MUX_MASK_MOV|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_PRORES,     },
     { { "Theora",                      "theora",           "Theora (libtheora)",             HB_VCODEC_THEORA,                                             HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_THEORA,     },
@@ -399,6 +403,8 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
         case HB_VCODEC_SVT_AV1:
         case HB_VCODEC_SVT_AV1_10BIT:
         case HB_VCODEC_FFMPEG_FFV1:
+        case HB_VCODEC_FFMPEG_DNXHR:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
 #if HB_PROJECT_FEATURE_FFMPEG_PRORES
         case HB_VCODEC_FFMPEG_PRORES:
 #endif
@@ -1732,6 +1738,8 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
             *high        = 100;
             break;
 
+        case HB_VCODEC_FFMPEG_DNXHR:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
         case HB_VCODEC_FFMPEG_FFV1:
         case HB_VCODEC_FFMPEG_PRORES:
         case HB_VCODEC_VT_PRORES:
@@ -1791,6 +1799,8 @@ const char* hb_video_quality_get_name(uint32_t codec)
         case HB_VCODEC_VT_H265_10BIT:
             return "CQ";
 
+        case HB_VCODEC_FFMPEG_DNXHR:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
         case HB_VCODEC_FFMPEG_MF_AV1:
@@ -1821,6 +1831,8 @@ int hb_video_bitrate_is_supported(uint32_t codec)
 {
     switch (codec)
     {
+        case HB_VCODEC_FFMPEG_DNXHR:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
         case HB_VCODEC_FFMPEG_FFV1:
         case HB_VCODEC_FFMPEG_PRORES:
         case HB_VCODEC_VT_PRORES:
@@ -1842,6 +1854,8 @@ int hb_video_multipass_is_supported(uint32_t codec, int constant_quality)
             return !constant_quality && hb_vt_is_multipass_available(codec);
 #endif
 
+        case HB_VCODEC_FFMPEG_DNXHR:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
         case HB_VCODEC_FFMPEG_MF_AV1:
@@ -1958,6 +1972,7 @@ int hb_video_encoder_get_depth(int encoder)
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_SVT_AV1_10BIT:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
@@ -2099,6 +2114,8 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_FFMPEG_MF_H265:
         case HB_VCODEC_FFMPEG_MF_AV1:
         case HB_VCODEC_FFMPEG_MPEG2:
+        case HB_VCODEC_FFMPEG_DNXHR:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
         case HB_VCODEC_FFMPEG_PRORES:
             return hb_av_profile_get_names(encoder);
 
@@ -2630,6 +2647,9 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
     switch (codec)
     {
         case HB_ACODEC_VORBIS:
+            return (mixdown <= HB_AMIXDOWN_7POINT1 &&
+                    mixdown != HB_AMIXDOWN_3POINT0);
+
         case HB_ACODEC_FFALAC:
         case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
@@ -2638,16 +2658,24 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
         case HB_ACODEC_FFPCM24:
         case HB_ACODEC_OPUS:
         case HB_ACODEC_CA_AAC:
-        case HB_ACODEC_CA_HAAC:
         case HB_ACODEC_FFAAC:
             return (mixdown <= HB_AMIXDOWN_7POINT1);
 
+        case HB_ACODEC_CA_HAAC:
+            return (mixdown <= HB_AMIXDOWN_7POINT1 &&
+                    mixdown != HB_AMIXDOWN_3POINT0);
+
         case HB_ACODEC_LAME:
-            return (mixdown <= HB_AMIXDOWN_DOLBYPLII);
+            return (mixdown <= HB_AMIXDOWN_DOLBYPLII &&
+                    mixdown != HB_AMIXDOWN_3POINT0);
 
         case HB_ACODEC_FDK_AAC:
-        case HB_ACODEC_FDK_HAAC:
             return ((mixdown <= HB_AMIXDOWN_5POINT1) ||
+                    (mixdown == HB_AMIXDOWN_7POINT1));
+
+        case HB_ACODEC_FDK_HAAC:
+            return ((mixdown <= HB_AMIXDOWN_5POINT1 &&
+                     mixdown != HB_AMIXDOWN_3POINT0) ||
                     (mixdown == HB_AMIXDOWN_7POINT1));
 
         default:
@@ -2684,6 +2712,10 @@ int hb_mixdown_has_remix_support(int mixdown, hb_channel_layout_t *ch_layout)
                     av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_6POINT0) == AV_CH_LAYOUT_6POINT0 ||
                     av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_HEXAGONAL) == AV_CH_LAYOUT_HEXAGONAL);
 
+        // stereo + front center
+        case HB_AMIXDOWN_3POINT0:
+            return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_SURROUND) == AV_CH_LAYOUT_SURROUND);
+            
         // stereo + either of front center, side or back left/right, back center
         case HB_AMIXDOWN_5POINT1:
             return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
@@ -2750,6 +2782,9 @@ int hb_mixdown_get_discrete_channel_count(int amixdown)
         case HB_AMIXDOWN_5POINT1:
             return 6;
 
+        case HB_AMIXDOWN_3POINT0:
+            return 3;
+            
         case HB_AMIXDOWN_MONO:
         case HB_AMIXDOWN_LEFT:
         case HB_AMIXDOWN_RIGHT:
@@ -4598,6 +4633,7 @@ hb_title_t * hb_title_init( char * path, int index )
     t->color_prim         = HB_COLR_PRI_UNSET;
     t->color_transfer     = HB_COLR_TRA_UNSET;
     t->color_matrix       = HB_COLR_MAT_UNSET;
+    t->spherical_mapping.projection = HB_SPHERICAL_UNSET;
 
     return t;
 }
@@ -4712,6 +4748,8 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->dovi           = title->dovi;
     job->passthru_dynamic_hdr_metadata |= title->dovi.dv_profile ? HB_HDR_DYNAMIC_METADATA_DOVI : HB_HDR_DYNAMIC_METADATA_NONE;
     job->passthru_dynamic_hdr_metadata |= title->hdr_10_plus ? HB_HDR_DYNAMIC_METADATA_HDR10PLUS : HB_HDR_DYNAMIC_METADATA_NONE;
+
+    job->spherical_mapping = title->spherical_mapping;
 
     job->mux = HB_MUX_MP4;
 

@@ -1396,6 +1396,12 @@ skip_preview:
             hb_log("scan: hdr10+ dynamic metadata found");
         }
 
+        if (title->spherical_mapping.projection > HB_SPHERICAL_UNSET)
+        {
+            hb_log("scan: spherical mapping: %s",
+                   av_spherical_projection_name(title->spherical_mapping.projection));
+        }
+
         if (title->video_decode_support != HB_DECODE_SW)
         {
             hb_log("scan: supported video decoders:%s%s%s",
