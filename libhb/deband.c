@@ -9,7 +9,6 @@
 
 #include "handbrake/common.h"
 #include "handbrake/avfilter_priv.h"
-#include "libavutil/pixdesc.h"
 
 static int deband_init(hb_filter_object_t * filter, hb_filter_init_t * init);
 
@@ -67,14 +66,6 @@ static int deband_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_set_int(avsettings, "range", range);
     hb_dict_set_int(avsettings, "blur", blur);
     hb_dict_set(avfilter, "deband", avsettings);
-    hb_value_array_append(avfilters, avfilter);
-
-    // Ensure output pixel format matches input
-    avfilter   = hb_dict_init();
-    avsettings = hb_dict_init();
-    hb_dict_set(avsettings, "pix_fmts",
-                hb_value_string(av_get_pix_fmt_name(init->pix_fmt)));
-    hb_dict_set(avfilter, "format", avsettings);
     hb_value_array_append(avfilters, avfilter);
 
     pv->avfilters = avfilters;

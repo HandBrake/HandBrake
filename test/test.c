@@ -224,7 +224,6 @@ static int      sub_name_passthru   = -1;
 /* Named video filter shortcuts */
 static char *   bm3d                = NULL;
 static char *   deband              = NULL;
-static char *   eq                  = NULL;
 
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
@@ -673,7 +672,6 @@ cleanup:
     free(lapsharp_tune);
     free(bm3d);
     free(deband);
-    free(eq);
     free(preset_export_name);
     free(preset_export_desc);
     free(preset_export_file);
@@ -1906,11 +1904,6 @@ static void ShowHelp(void)
 "                           gradients, dark scenes). Default: 1thr=0.02:\n"
 "                           2thr=0.02:3thr=0.02:4thr=0.02:range=16:blur=1\n"
 "                           Or custom FFmpeg deband params.\n"
-"   --eq[=preset]           Video equalizer: brightness, contrast,\n"
-"                           saturation, gamma. Presets: brighten/darken/\n"
-"                           vivid. Default: brighten.\n"
-"                           Or custom FFmpeg eq params, e.g.:\n"
-"                           --eq=brightness=0.06:contrast=1.1:saturation=1.2\n"
 "\n"
 "\n"
 "Subtitles Options ------------------------------------------------------------\n"
@@ -2298,7 +2291,6 @@ static int ParseOptions( int argc, char ** argv )
     #define COLOR_RANGE                   336
     #define FILTER_BM3D                   337
     #define FILTER_DEBAND                 338
-    #define FILTER_EQ                     339
 
     for( ;; )
     {
@@ -2437,7 +2429,6 @@ static int ParseOptions( int argc, char ** argv )
 
             { "bm3d",           optional_argument, NULL, FILTER_BM3D },
             { "deband",         optional_argument, NULL, FILTER_DEBAND },
-            { "eq",             optional_argument, NULL, FILTER_EQ },
 
             // mapping of legacy option names for backwards compatibility
             { "qsv-preset",           required_argument, NULL, ENCODER_PRESET,       },
@@ -3384,17 +3375,6 @@ static int ParseOptions( int argc, char ** argv )
                 else
                 {
                     deband = strdup("default");
-                }
-                break;
-            case FILTER_EQ:
-                free(eq);
-                if (optarg != NULL)
-                {
-                    eq = strdup(optarg);
-                }
-                else
-                {
-                    eq = strdup("brighten");
                 }
                 break;
             case ':':
@@ -4983,21 +4963,6 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         {
             hb_dict_set_string(preset, "PictureDebandPreset", "custom");
             hb_dict_set_string(preset, "PictureDebandCustom", deband);
-        }
-    }
-    // EQ (Equalizer)
-    if (eq != NULL)
-    {
-        if (!strcasecmp(eq, "brighten") ||
-            !strcasecmp(eq, "darken") ||
-            !strcasecmp(eq, "vivid"))
-        {
-            hb_dict_set_string(preset, "PictureEQPreset", eq);
-        }
-        else
-        {
-            hb_dict_set_string(preset, "PictureEQPreset", "custom");
-            hb_dict_set_string(preset, "PictureEQCustom", eq);
         }
     }
     return preset;
