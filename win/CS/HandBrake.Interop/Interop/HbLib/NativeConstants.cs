@@ -80,8 +80,9 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_DECODE_NVDEC = 0x04;
         public const uint HB_DECODE_VIDEOTOOLBOX = 0x08;
         public const uint HB_DECODE_MF = 0x10;
+        public const uint HB_DECODE_AMFDEC = 0x20;
 
-        public const uint HB_DECODE_HWACCEL = (HB_DECODE_NVDEC | HB_DECODE_VIDEOTOOLBOX | HB_DECODE_QSV | HB_DECODE_MF);
+        public const uint HB_DECODE_HWACCEL = (HB_DECODE_NVDEC | HB_DECODE_VIDEOTOOLBOX | HB_DECODE_QSV | HB_DECODE_MF | HB_DECODE_AMFDEC);
         public const uint HB_DECODE_FORCE_HW = 0x80000000;
 
     }

@@ -1404,9 +1404,10 @@ skip_preview:
 
         if (title->video_decode_support != HB_DECODE_SW)
         {
-            hb_log("scan: supported video decoders:%s%s%s",
+            hb_log("scan: supported video decoders:%s%s%s%s",
                    !(title->video_decode_support & HB_DECODE_SW)      ? "" : " avcodec",
                    !(title->video_decode_support & HB_DECODE_QSV)     ? "" : " qsv",
+                   !(title->video_decode_support & HB_DECODE_AMFDEC)  ? "" : " amfdec",
                    !(title->video_decode_support & HB_DECODE_HWACCEL) ? "" : " hwaccel");
         }
 
