@@ -13,6 +13,11 @@ Download available from Microsoft:
 
 ## HandBrake 1.11.1
 
+### All platforms
+
+#### Audio
+- Fixed a crash that could happen when scanning a PCM track in a DVD-Video or Blu-ray 
+
 ### Windows
 
 - Removed dependency on having Microsoft .NET 8 Desktop Runtime installed. 
