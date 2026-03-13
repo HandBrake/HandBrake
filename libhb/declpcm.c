@@ -394,6 +394,7 @@ static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     int64_t duration = b->data[0] * 150;
 
     memset( info, 0, sizeof(*info) );
+    info->ch_layout = calloc(1, sizeof(*info->ch_layout));
 
     info->name = "LPCM";
     info->rate.num = rate;
