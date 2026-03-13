@@ -99,16 +99,6 @@ struct reordered_data_s
 #define REORDERED_HASH_SZ   (2 << 7)
 #define REORDERED_HASH_MASK (REORDERED_HASH_SZ - 1)
 
-struct video_filters_s
-{
-    hb_avfilter_graph_t * graph;
-
-    int                   width;
-    int                   height;
-    int                   color_range;
-    int                   pix_fmt;
-};
-
 struct hb_work_private_s
 {
     hb_job_t             * job;
@@ -137,7 +127,6 @@ struct hb_work_private_s
     int64_t                sequence;
     int                    last_scr_sequence;
     int                    last_chapter;
-    struct video_filters_s video_filters;
 
     hb_audio_t           * audio;
     hb_audio_resample_t  * resample;
@@ -552,11 +541,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
  ***********************************************************************
  *
  **********************************************************************/
-static void close_video_filters(hb_work_private_t *pv)
-{
-    hb_avfilter_graph_close(&pv->video_filters.graph);
-}
-
 static void closePrivData( hb_work_private_t ** ppv )
 {
     hb_work_private_t * pv = *ppv;
@@ -572,7 +556,6 @@ static void closePrivData( hb_work_private_t ** ppv )
         }
         av_frame_free(&pv->frame);
         av_frame_free(&pv->hw_frame);
-        close_video_filters(pv);
         if ( pv->parser )
         {
             av_parser_close(pv->parser);
@@ -1145,10 +1128,8 @@ static hb_buffer_t * cc_fill_buffer(hb_work_private_t *pv, uint8_t *cc, int size
     return buf;
 }
 
-// copy one video frame into an HB buf. If the frame isn't in our color space
-// or at least one of its dimensions is odd, use sws_scale to convert/rescale it.
-// Otherwise just copy the bits.
-static hb_buffer_t *copy_frame( hb_work_private_t *pv )
+// Wrap one video frame into an HB buf
+static hb_buffer_t *wrap_frame(hb_work_private_t *pv)
 {
     reordered_data_t * reordered = NULL;
     hb_buffer_t      * out;
@@ -1347,274 +1328,6 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     return out;
 }
 
-int reinit_video_filters(hb_work_private_t * pv)
-{
-    int                orig_width;
-    int                orig_height;
-    hb_value_array_t * filters;
-    hb_dict_t        * settings;
-    hb_filter_init_t   filter_init;
-    enum AVPixelFormat pix_fmt;
-    enum AVColorRange  color_range;
-
-    if (!pv->job)
-    {
-        // HandBrake's preview pipeline uses yuv420 color.  This means all
-        // dimensions must be even.  So we must adjust the dimensions
-        // of incoming video if not even.
-        orig_width = pv->context->width & ~1;
-        orig_height = pv->context->height & ~1;
-        pix_fmt = AV_PIX_FMT_YUV420P;
-        color_range = AVCOL_RANGE_MPEG;
-    }
-    else
-    {
-        if (pv->job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
-        {
-            // Filtering is done in a separate filter
-            return 0;
-        }
-
-        if (pv->title->rotation == HB_ROTATION_90 ||
-            pv->title->rotation == HB_ROTATION_270)
-        {
-            orig_width = pv->job->title->geometry.height;
-            orig_height = pv->job->title->geometry.width;
-        }
-        else
-        {
-            orig_width = pv->job->title->geometry.width;
-            orig_height = pv->job->title->geometry.height;
-        }
-        pix_fmt = pv->job->hw_pix_fmt != AV_PIX_FMT_NONE ? pv->job->hw_pix_fmt : pv->job->input_pix_fmt;
-        color_range = pv->job->color_range;
-    }
-
-    if (pix_fmt            == pv->frame->format  &&
-        orig_width         == pv->frame->width   &&
-        orig_height        == pv->frame->height  &&
-        color_range        == pv->frame->color_range &&
-        HB_ROTATION_0      == pv->title->rotation)
-    {
-        // No filtering required.
-        close_video_filters(pv);
-        return 0;
-    }
-
-    if (pv->video_filters.graph       != NULL              &&
-        pv->video_filters.width       == pv->frame->width  &&
-        pv->video_filters.height      == pv->frame->height &&
-        pv->video_filters.color_range == pv->frame->color_range &&
-        pv->video_filters.pix_fmt     == pv->frame->format)
-    {
-        // Current filter settings are good
-        return 0;
-    }
-
-    pv->video_filters.width       = pv->frame->width;
-    pv->video_filters.height      = pv->frame->height;
-    pv->video_filters.color_range = pv->frame->color_range;
-    pv->video_filters.pix_fmt     = pv->frame->format;
-
-    // New filter required, create filter graph
-    close_video_filters(pv);
-
-    int clock_min, clock_max, clock;
-    hb_rational_t vrate;
-
-    hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
-    vrate.num = clock;
-    vrate.den = pv->duration * (clock / 90000.);
-
-    filters = hb_value_array_init();
-    if (pix_fmt            != pv->frame->format ||
-        orig_width         != pv->frame->width  ||
-        orig_height        != pv->frame->height ||
-        color_range        != pv->frame->color_range)
-    {
-        settings = hb_dict_init();
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_QSV)
-        {
-            hb_dict_set(settings, "w", hb_value_int(orig_width));
-            hb_dict_set(settings, "h", hb_value_int(orig_height));
-            hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
-            hb_dict_set_string(settings, "out_range", ((color_range == AVCOL_RANGE_JPEG) ? "full" : "limited"));
-            hb_avfilter_append_dict(filters, "vpp_qsv", settings);
-        }
-        else
-#endif
-        if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_CUDA)
-        {
-            if (color_range != pv->frame->color_range)
-            {
-                hb_dict_set_int(settings, "range", color_range);
-                hb_avfilter_append_dict(filters, "colorspace_cuda", settings);
-                settings = hb_dict_init();
-            }
-            hb_dict_set(settings, "w", hb_value_int(orig_width));
-            hb_dict_set(settings, "h", hb_value_int(orig_height));
-            hb_dict_set(settings, "interp_algo", hb_value_string("lanczos"));
-            hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
-            hb_avfilter_append_dict(filters, "scale_cuda", settings);
-        }
-        else if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_D3D11)
-        {
-            hb_dict_set(settings, "width", hb_value_int(orig_width));
-            hb_dict_set(settings, "height", hb_value_int(orig_height));
-            hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
-            hb_avfilter_append_dict(filters, "scale_d3d11", settings);
-        }
-        else if (hb_av_can_use_zscale(pv->frame->format,
-                                      pv->frame->width, pv->frame->height,
-                                      orig_width, orig_height))
-        {
-            hb_dict_set(settings, "w", hb_value_int(orig_width));
-            hb_dict_set(settings, "h", hb_value_int(orig_height));
-            hb_dict_set_string(settings, "filter", "lanczos");
-            hb_dict_set_string(settings, "range", av_color_range_name(color_range));
-            hb_avfilter_append_dict(filters, "zscale", settings);
-
-            settings = hb_dict_init();
-            hb_dict_set(settings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
-            hb_avfilter_append_dict(filters, "format", settings);
-        }
-        // Fallback to swscale, zscale requires a mod 2 width and height
-        else
-        {
-            hb_dict_set(settings, "w", hb_value_int(orig_width));
-            hb_dict_set(settings, "h", hb_value_int(orig_height));
-            hb_dict_set(settings, "flags", hb_value_string("lanczos+accurate_rnd"));
-            hb_dict_set_int(settings, "in_range", pv->frame->color_range);
-            hb_dict_set_int(settings, "out_range", color_range);
-            hb_avfilter_append_dict(filters, "scale", settings);
-
-            settings = hb_dict_init();
-            hb_dict_set(settings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
-            hb_avfilter_append_dict(filters, "format", settings);
-        }
-    }
-    if (pv->title->rotation != HB_ROTATION_0)
-    {
-#if HB_PROJECT_FEATURE_QSV
-        if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_QSV)
-        {
-            switch (pv->title->rotation)
-            {
-                case HB_ROTATION_90:
-                {
-                    settings = hb_dict_init();
-                    hb_dict_set(settings, "transpose", hb_value_string("clock"));
-                    hb_avfilter_append_dict(filters, "vpp_qsv", settings);
-                    hb_log("Auto-Rotating video 90 degrees");
-                    break;
-                }
-                case HB_ROTATION_180:
-                    settings = hb_dict_init();
-                    hb_dict_set(settings, "transpose", hb_value_string("reversal"));
-                    hb_avfilter_append_dict(filters, "vpp_qsv", settings);
-                    hb_log("Auto-Rotating video 180 degrees");
-                    break;
-                case HB_ROTATION_270:
-                {
-                    settings = hb_dict_init();
-                    hb_dict_set(settings, "transpose", hb_value_string("cclock"));
-                    hb_avfilter_append_dict(filters, "vpp_qsv", settings);
-                    hb_log("Auto-Rotating video 270 degrees");
-                    break;
-                }
-                default:
-                    hb_log("reinit_video_filters: Unknown rotation, failed");
-            }
-        }
-        else
-#endif
-        {
-            switch (pv->title->rotation)
-            {
-                case HB_ROTATION_90:
-                    settings = hb_dict_init();
-                    hb_dict_set(settings, "dir", hb_value_string("cclock"));
-                    hb_avfilter_append_dict(filters, "transpose", settings);
-                    hb_log("Auto-Rotating video 90 degrees");
-                    break;
-                case HB_ROTATION_180:
-                    hb_avfilter_append_dict(filters, "hflip", hb_value_null());
-                    hb_avfilter_append_dict(filters, "vflip", hb_value_null());
-                    hb_log("Auto-Rotating video 180 degrees");
-                    break;
-                case HB_ROTATION_270:
-                    settings = hb_dict_init();
-                    hb_dict_set(settings, "dir", hb_value_string("clock"));
-                    hb_avfilter_append_dict(filters, "transpose", settings);
-                    hb_log("Auto-Rotating video 270 degrees");
-                    break;
-                default:
-                    hb_log("reinit_video_filters: Unknown rotation, failed");
-            }
-
-            const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
-            if (desc->log2_chroma_w != desc->log2_chroma_h)
-            {
-                settings = hb_dict_init();
-                hb_dict_set(settings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
-                hb_avfilter_append_dict(filters, "format", settings);
-            }
-        }
-    }
-
-    enum AVPixelFormat sw_pix_fmt = pv->frame->format;
-    enum AVPixelFormat hw_pix_fmt = AV_PIX_FMT_NONE;
-    enum AVColorSpace color_matrix = pv->frame->colorspace;
-
-    if (!pv->job)
-    {
-        // Sanitize the color_matrix when decoding preview images
-        hb_rational_t par = {pv->frame->sample_aspect_ratio.num, pv->frame->sample_aspect_ratio.den};
-        hb_geometry_t geo = {pv->frame->width, pv->frame->height, par};
-        color_matrix = hb_get_color_matrix(pv->frame->colorspace, geo);
-    }
-
-    AVHWFramesContext *frames_ctx = NULL;
-    if (pv->frame->hw_frames_ctx)
-    {
-        frames_ctx = (AVHWFramesContext *)pv->frame->hw_frames_ctx->data;
-        sw_pix_fmt = frames_ctx->sw_format;
-        hw_pix_fmt = frames_ctx->format;
-    }
-
-    memset((void*)&filter_init, 0, sizeof(filter_init));
-
-    filter_init.job               = pv->job;
-    filter_init.pix_fmt           = sw_pix_fmt;
-    filter_init.hw_pix_fmt        = hw_pix_fmt;
-    filter_init.geometry.width    = pv->frame->width;
-    filter_init.geometry.height   = pv->frame->height;
-    filter_init.geometry.par.num  = pv->frame->sample_aspect_ratio.num;
-    filter_init.geometry.par.den  = pv->frame->sample_aspect_ratio.den;
-    filter_init.color_matrix      = color_matrix;
-    filter_init.color_range       = pv->frame->color_range;
-    filter_init.time_base.num     = 1;
-    filter_init.time_base.den     = 1;
-    filter_init.vrate.num         = vrate.num;
-    filter_init.vrate.den         = vrate.den;
-
-    pv->video_filters.graph = hb_avfilter_graph_init(filters, &filter_init);
-    hb_value_free(&filters);
-    if (pv->video_filters.graph == NULL)
-    {
-        hb_error("reinit_video_filters: failed to create filter graph");
-        goto fail;
-    }
-
-    return 0;
-
-fail:
-    close_video_filters(pv);
-
-    return 1;
-}
-
 static void sanitize_deprecated_pix_fmts(AVFrame *frame)
 {
     switch (frame->format)
@@ -1641,46 +1354,6 @@ static void sanitize_deprecated_pix_fmts(AVFrame *frame)
             break;
         default:
             break;
-    }
-}
-
-static void filter_video(hb_work_private_t *pv)
-{
-    // Make sure every frame is tagged
-    if (pv->job)
-    {
-        pv->frame->color_primaries = pv->title->color_prim;
-        pv->frame->color_trc       = pv->title->color_transfer;
-        pv->frame->colorspace      = pv->title->color_matrix;
-        pv->frame->color_range     = pv->title->color_range;
-    }
-
-    // J pixel formats are mostly deprecated, however
-    // they are still set by decoders, breaking some filters
-    sanitize_deprecated_pix_fmts(pv->frame);
-
-    reinit_video_filters(pv);
-    if (pv->video_filters.graph != NULL)
-    {
-        int result;
-
-        hb_avfilter_add_frame(pv->video_filters.graph, pv->frame);
-        result = hb_avfilter_get_frame(pv->video_filters.graph, pv->frame);
-        while (result >= 0)
-        {
-            hb_buffer_t * buf = copy_frame(pv);
-            hb_buffer_list_append(&pv->list, buf);
-            av_frame_unref(pv->frame);
-            ++pv->nframes;
-            result = hb_avfilter_get_frame(pv->video_filters.graph, pv->frame);
-        }
-    }
-    else
-    {
-        hb_buffer_t * buf = copy_frame(pv);
-        hb_buffer_list_append(&pv->list, buf);
-        av_frame_unref(pv->frame);
-        ++pv->nframes;
     }
 }
 
@@ -1798,7 +1471,28 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
 
         // recompute the frame/field duration, because sometimes it changes
         compute_frame_duration( pv );
-        filter_video(pv);
+
+        // Make sure every frame is tagged
+        if (pv->job)
+        {
+            pv->frame->color_primaries = pv->title->color_prim;
+            pv->frame->color_trc       = pv->title->color_transfer;
+            pv->frame->colorspace      = pv->title->color_matrix;
+        }
+
+        if (pv->frame->color_range == AVCOL_RANGE_UNSPECIFIED)
+        {
+            pv->frame->color_range = AVCOL_RANGE_MPEG;
+        }
+
+        // J pixel formats are mostly deprecated, however
+        // they are still set by some decoders, breaking some filters
+        sanitize_deprecated_pix_fmts(pv->frame);
+
+        hb_buffer_t *buf = wrap_frame(pv);
+        hb_buffer_list_append(&pv->list, buf);
+        av_frame_unref(pv->frame);
+        ++pv->nframes;
     } while (ret >= 0);
 
     if ( global_verbosity_level <= 1 )
