@@ -83,7 +83,6 @@ FFMPEG.CONFIGURE.extra = \
     --enable-filter=hwupload \
     --enable-filter=bm3d \
     --enable-filter=deband \
-    --enable-filter=eq \
     --cc="$(FFMPEG.GCC.gcc)"
 
 ifeq (size-aggressive,$(GCC.O))
