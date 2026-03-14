@@ -291,6 +291,8 @@ void hb_avfilter_combine( hb_list_t * list)
             case HB_FILTER_YADIF:
             case HB_FILTER_BWDIF:
             case HB_FILTER_DEBLOCK:
+            case HB_FILTER_BM3D:
+            case HB_FILTER_DEBAND:
             case HB_FILTER_CROP_SCALE:
             case HB_FILTER_PAD:
             case HB_FILTER_ROTATE:
