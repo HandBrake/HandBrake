@@ -3,9 +3,9 @@ __deps__ := FREETYPE
 $(eval $(call import.MODULE.defs,HARFBUZZ,harfbuzz,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,HARFBUZZ))
 
-HARFBUZZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/harfbuzz-13.0.0.tar.xz
-HARFBUZZ.FETCH.url    += https://github.com/harfbuzz/harfbuzz/releases/download/13.0.0/harfbuzz-13.0.0.tar.xz
-HARFBUZZ.FETCH.sha256  = 1626ebc763d28f4bcca1531fef42e92ca995d45f8ad90ad2ae0b5d1a567fe67a
+HARFBUZZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/harfbuzz-13.1.1.tar.xz
+HARFBUZZ.FETCH.url    += https://github.com/harfbuzz/harfbuzz/releases/download/13.1.1/harfbuzz-13.1.1.tar.xz
+HARFBUZZ.FETCH.sha256  = e7f3b8bac3fdcc529985be8e84fbd65c675ac47ee58512b15a5dd620c79ffe2a
 
 HARFBUZZ.build_dir             = build
 HARFBUZZ.CONFIGURE.exe         = cmake
@@ -13,7 +13,7 @@ HARFBUZZ.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(HARFBUZZ.CONFIGURE.pr
 HARFBUZZ.CONFIGURE.deps        =
 HARFBUZZ.CONFIGURE.static      =
 HARFBUZZ.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
-HARFBUZZ.CONFIGURE.extra       = -DHB_BUILD_UTILS=OFF -DHB_BUILD_TESTS=OFF
+HARFBUZZ.CONFIGURE.extra       = -DHB_BUILD_UTILS=OFF
 HARFBUZZ.CONFIGURE.extra      += -DCMAKE_INSTALL_LIBDIR=lib
 HARFBUZZ.CONFIGURE.extra      += -DHB_HAVE_FREETYPE=ON \
                                  -DFREETYPE_LIBRARIES="$(call fn.ABSOLUTE,$(CONTRIB.build/))lib" \
@@ -35,7 +35,9 @@ ifeq (1,$(HOST.cross))
                                     -DHB_HAVE_GOBJECT=OFF \
                                     -DHB_HAVE_GRAPHITE2=OFF \
                                     -DHB_HAVE_ICU=OFF \
-                                    -DHB_HAVE_UNISCRIBE=OFF
+                                    -DHB_HAVE_UNISCRIBE=OFF \
+									-DHB_BUILD_RASTER=OFF \
+									-DHB_BUILD_VECTOR=OFF
         HARFBUZZ.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(HARFBUZZ.CONFIGURE.host)"
     else ifeq ($(HOST.system),darwin)
         HARFBUZZ.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(HARFBUZZ.CONFIGURE.host)"
