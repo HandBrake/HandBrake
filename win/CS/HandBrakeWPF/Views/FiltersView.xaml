@@ -68,7 +68,13 @@
             <TextBlock Text="{x:Static Properties:Resources.FiltersView_DeinterlacePreset}" VerticalAlignment="Center" Margin="0,0,5,0" Visibility="{Binding DeinterlaceFilter.IsDeinterlaceEnabled, Converter={StaticResource boolToVisConverter}}"  />
             <ComboBox Width="120" ItemsSource="{Binding DeinterlaceFilter.DeinterlacePresets}" HorizontalAlignment="Left" VerticalAlignment="Center"
                               SelectedItem="{Binding DeinterlaceFilter.SelectedDeInterlacePreset}" DisplayMemberPath="Name" Visibility="{Binding DeinterlaceFilter.IsDeinterlaceEnabled, Converter={StaticResource boolToVisConverter}}"
-                              AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_DeinterlacePresetAuto}" />
+                              AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_DeinterlacePresetAuto}" >
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
 
             <TextBlock Text="{x:Static Properties:Resources.FiltersView_Custom}" VerticalAlignment="Center" Margin="5,0,5,0"  Visibility="{Binding DeinterlaceFilter.ShowCustomDeinterlace, Converter={StaticResource boolToVisConverter}}" />
             <TextBox Text="{Binding DeinterlaceFilter.CustomDeinterlaceSettings, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Stretch" MinWidth="240"
