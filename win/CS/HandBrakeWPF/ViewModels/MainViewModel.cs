@@ -1637,12 +1637,14 @@ namespace HandBrakeWPF.ViewModels
 
             string extension = Path.GetExtension(this.CurrentTask.Destination);
 
-            saveFileDialog.FilterIndex = !string.IsNullOrEmpty(this.CurrentTask.Destination)
-                                         && !string.IsNullOrEmpty(extension)
-                                             ? (extension == ".mp4" || extension == ".m4v" ? 1 : 2)
-                                             : (this.CurrentTask.OutputFormat == OutputFormat.Mkv 
-                                                 ? 2 
-                                                 : (this.CurrentTask.OutputFormat == OutputFormat.WebM ? 3 : 0));
+            saveFileDialog.FilterIndex = this.CurrentTask.OutputFormat switch
+            {
+                OutputFormat.Mp4 => 1,
+                OutputFormat.Mov => 2,
+                OutputFormat.Mkv => 3,
+                OutputFormat.WebM => 4,
+                _ => 0
+            };
 
             string mruDir = this.GetMru(Constants.FileSaveMru);
             if (!string.IsNullOrEmpty(mruDir) && Directory.Exists(mruDir))
