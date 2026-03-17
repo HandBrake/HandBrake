@@ -1,0 +1,41 @@
+From 080ca305f2b41797327e051863ea217f81684d9a Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Tue, 17 Mar 2026 13:50:32 +0100
+Subject: [PATCH] Fix a crash when trying to export a lossless image
+
+`edgeInclined` is allocated **only** when a set of specific
+flags is active
+---
+ source/common/lowres.cpp | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/source/common/lowres.cpp b/source/common/lowres.cpp
+index 2f684f7..84b3366 100644
+--- a/source/common/lowres.cpp
++++ b/source/common/lowres.cpp
+@@ -418,14 +418,15 @@ void Lowres::init(PicYuv *origPic, int poc)
+     int cuCount = maxBlocksInRow * maxBlocksInCol;
+     int cuCountFullRes = (origPic->m_param->rc.qgSize > 8) ? cuCount : cuCount << 2;
+     memset(intraCost, 0, sizeof(int32_t) * cuCount);
+-    memset(edgeInclined, 0, sizeof(int) * cuCountFullRes);
+-    if (!origPic->m_param->rc.bStatRead &&
+-        (origPic->m_param->rc.aqMode || origPic->m_param->rc.hevcAq ||
+-         origPic->m_param->bAQMotion || origPic->m_param->bEnableWeightedPred ||
+-         origPic->m_param->bEnableWeightedBiPred))
++    if (!!origPic->m_param->rc.aqMode || !!origPic->m_param->rc.hevcAq || !!origPic->m_param->bAQMotion || !!origPic->m_param->bEnableWeightedPred || !!origPic->m_param->bEnableWeightedBiPred)
+     {
+-        memset(qpAqOffset, 0, sizeof(double) * cuCountFullRes);
+-        memset(qpCuTreeOffset, 0,sizeof(double) * cuCountFullRes);
++        memset(edgeInclined, 0, sizeof(int) * cuCountFullRes);
++
++        if (!origPic->m_param->rc.bStatRead)
++        {
++            memset(qpAqOffset, 0, sizeof(double) * cuCountFullRes);
++            memset(qpCuTreeOffset, 0,sizeof(double) * cuCountFullRes);
++        }
+     }
+     if (origPic->m_param->bAQMotion && !origPic->m_param->rc.bStatRead)
+     {
+-- 
+2.43.0
+
