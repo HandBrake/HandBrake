@@ -21,6 +21,7 @@ Download available from Microsoft:
 ### Windows
 
 - Removed dependency on having Microsoft .NET 8 Desktop Runtime installed. 
+- Fixed the file type selection in the save panel
 - Fixed a number of issues that impacted screen reader tools ability to read combo box controls.
 
 
