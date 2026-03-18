@@ -23,6 +23,7 @@
 #include "libavutil/ambient_viewing_environment.h"
 #include "libavutil/dovi_meta.h"
 #include "libavutil/spherical.h"
+#include "libavutil/stereo3d.h"
 #include "libswscale/swscale.h"
 #include "libswresample/swresample.h"
 #include "handbrake/common.h"
@@ -57,6 +58,9 @@ hb_dovi_conf_t hb_dovi_ff_to_hb(AVDOVIDecoderConfigurationRecord dovi);
 
 AVSphericalMapping hb_spherical_hb_to_ff(hb_spherical_mapping_t spherical_mapping);
 hb_spherical_mapping_t hb_spherical_ff_to_hb(AVSphericalMapping spherical_mapping);
+
+AVStereo3D hb_stereo_3d_hb_to_ff(hb_stereo_3d_t stereo_3d);
+hb_stereo_3d_t hb_stereo_3d_ff_to_hb(AVStereo3D stereo_3d);
 
 struct SwsContext*
 hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat, int srcRange,

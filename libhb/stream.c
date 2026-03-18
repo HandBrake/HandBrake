@@ -6145,6 +6145,12 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                         title->dovi = hb_dovi_ff_to_hb(*dovi);
                         break;
                     }
+                    case AV_PKT_DATA_STEREO3D:
+                    {
+                        AVStereo3D *stereo = (AVStereo3D *)sd.data;
+                        title->stereo_3d = hb_stereo_3d_ff_to_hb(*stereo);
+                        break;
+                    }
                     case AV_PKT_DATA_SPHERICAL:
                     {
                         AVSphericalMapping *spherical_mapping = (AVSphericalMapping *)sd.data;
