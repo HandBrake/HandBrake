@@ -687,6 +687,12 @@ void hb_display_job_info(hb_job_t *job)
             hb_log("     + spherical mapping: %s",
                    av_spherical_projection_name(job->spherical_mapping.projection));
         }
+
+        if (job->stereo_3d.type > HB_STEREO3D_UNSET && job->stereo_3d.type < HB_STEREO3D_UNSPEC)
+        {
+            hb_log("     + stereo 3d: %s",
+                   av_stereo3d_type_name(job->stereo_3d.type));
+        }
     }
 
     if (job->indepth_scan)

@@ -395,6 +395,23 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         hb_dict_set(dict, "SphericalMapping", spherical_mapping_dict);
     }
 
+    // Stereo 3D
+    hb_dict_t *stereo_dict;
+    if (title->stereo_3d.type > HB_STEREO3D_UNSET)
+    {
+        stereo_dict = json_pack_ex(&error, 0, "{s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i}",
+            "Type",       title->stereo_3d.type,
+            "Flags",      title->stereo_3d.flags,
+            "View",       title->stereo_3d.view,
+            "PrimaryEye", title->stereo_3d.primary_eye,
+            "Baseline",   title->stereo_3d.baseline,
+            "HorizontalDisparityAdjustmentNum", title->stereo_3d.horizontal_disparity_adjustment.num,
+            "HorizontalDisparityAdjustmentDen", title->stereo_3d.horizontal_disparity_adjustment.den,
+            "HorizontalFieldOfViewNum", title->stereo_3d.horizontal_field_of_view.num,
+            "HorizontalFieldOfViewDen", title->stereo_3d.horizontal_field_of_view.den);
+        hb_dict_set(dict, "Stereo3D", stereo_dict);
+    }
+
     if (title->container_name != NULL)
     {
         hb_dict_set(dict, "Container", hb_value_string(title->container_name));
@@ -852,6 +869,23 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         hb_dict_set(video_dict, "SphericalMapping", spherical_mapping_dict);
     }
 
+    // Stereo 3D
+    hb_dict_t *stereo_dict;
+    if (job->stereo_3d.type > HB_STEREO3D_UNSET)
+    {
+        stereo_dict = json_pack_ex(&error, 0, "{s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i}",
+            "Type",       job->stereo_3d.type,
+            "Flags",      job->stereo_3d.flags,
+            "View",       job->stereo_3d.view,
+            "PrimaryEye", job->stereo_3d.primary_eye,
+            "Baseline",   job->stereo_3d.baseline,
+            "HorizontalDisparityAdjustmentNum", job->stereo_3d.horizontal_disparity_adjustment.num,
+            "HorizontalDisparityAdjustmentDen", job->stereo_3d.horizontal_disparity_adjustment.den,
+            "HorizontalFieldOfViewNum", job->stereo_3d.horizontal_field_of_view.num,
+            "HorizontalFieldOfViewDen", job->stereo_3d.horizontal_field_of_view.den);
+        hb_dict_set(video_dict, "Stereo3D", stereo_dict);
+    }
+
     if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         hb_dict_set(video_dict, "Quality", hb_value_double(job->vquality));
@@ -1186,6 +1220,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_dict_t        * coll_dict = NULL;
     hb_dict_t        * dovi_dict = NULL;
     hb_dict_t        * spherical_mapping_dict = NULL;
+    hb_dict_t        * stereo_dict = NULL;
     hb_value_t       * acodec_copy_mask = NULL, * acodec_fallback = NULL;
     const char       * destfile = NULL;
     const char       * range_type = NULL;
@@ -1221,12 +1256,14 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //       ContentLightLevel,
     //       DolbyVisionConfigurationRecord
     //       SphericalMapping
+    //       Stereo3D
     //       ColorPrimariesOverride, ColorTransferOverride, ColorMatrixOverride,
     //       HardwareDecode, AdapterIndex, AsyncDepth
     "s:{s:o, s?F, s?i, s?s, s?s, s?s, s?s, s?s,"
     "   s?b, s?b, s?i,"
     "   s?i, s?i, s?i,"
     "   s?i, s?i, s?i, s?i,"
+    "   s?o,"
     "   s?o,"
     "   s?o,"
     "   s?o,"
@@ -1289,6 +1326,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ContentLightLevel",    unpack_o(&coll_dict),
             "DolbyVisionConfigurationRecord", unpack_o(&dovi_dict),
             "SphericalMapping",     unpack_o(&spherical_mapping_dict),
+            "Stereo3D",             unpack_o(&stereo_dict),
             "ColorPrimariesOverride", unpack_i(&job->color_prim_override),
             "ColorTransferOverride",  unpack_i(&job->color_transfer_override),
             "ColorMatrixOverride",    unpack_i(&job->color_matrix_override),
@@ -1535,6 +1573,27 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         if (result < 0)
         {
             hb_error("hb_dict_to_job: failed to parse spherical_mapping_dict: %s", error.text);
+            goto fail;
+        }
+    }
+
+    if (stereo_dict != NULL)
+    {
+        result = json_unpack_ex(stereo_dict, &error, 0,
+        "{s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i}",
+            "Type",       unpack_i(&job->stereo_3d.type),
+            "Flags",      unpack_i(&job->stereo_3d.flags),
+            "View",       unpack_i(&job->stereo_3d.view),
+            "PrimaryEye", unpack_i(&job->stereo_3d.primary_eye),
+            "Baseline",   unpack_u(&job->stereo_3d.baseline),
+            "HorizontalDisparityAdjustmentNum", unpack_i(&job->stereo_3d.horizontal_disparity_adjustment.num),
+            "HorizontalDisparityAdjustmentDen", unpack_i(&job->stereo_3d.horizontal_disparity_adjustment.den),
+            "HorizontalFieldOfViewNum", unpack_i(&job->stereo_3d.horizontal_field_of_view.num),
+            "HorizontalFieldOfViewDen", unpack_i(&job->stereo_3d.horizontal_field_of_view.den)
+        );
+        if (result < 0)
+        {
+            hb_error("hb_dict_to_job: failed to parse stereo_dict: %s", error.text);
             goto fail;
         }
     }

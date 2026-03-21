@@ -642,6 +642,20 @@ static int avformatInit( hb_mux_object_t * m )
                                 sizeof(AVSphericalMapping), 0);
     }
 
+    if (job->stereo_3d.type > HB_STEREO3D_UNSET && job->stereo_3d.type < HB_STEREO3D_UNSPEC)
+    {
+        AVStereo3D stereo = hb_stereo_3d_hb_to_ff(job->stereo_3d);
+
+        uint8_t *stereo_data = av_malloc(sizeof(AVStereo3D));
+        memcpy(stereo_data, &stereo, sizeof(AVStereo3D));
+
+        av_packet_side_data_add(&track->st->codecpar->coded_side_data,
+                                &track->st->codecpar->nb_coded_side_data,
+                                AV_PKT_DATA_STEREO3D,
+                                stereo_data,
+                                sizeof(AVStereo3D), 0);
+    }
+
     hb_rational_t vrate = job->vrate;
     hb_rational_t clock_vrate = { clock, av_rescale(vrate.den, clock, vrate.num)};
     int standard_rate = 0;
