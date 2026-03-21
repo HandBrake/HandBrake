@@ -705,6 +705,40 @@ hb_spherical_mapping_t hb_spherical_ff_to_hb(AVSphericalMapping spherical_mappin
     return hb_spherical_mapping;
 }
 
+AVStereo3D hb_stereo_3d_hb_to_ff(hb_stereo_3d_t stereo_3d)
+{
+    AVStereo3D ff_stereo_3d;
+
+    ff_stereo_3d.type        = stereo_3d.type;
+    ff_stereo_3d.flags       = stereo_3d.flags;
+    ff_stereo_3d.view        = stereo_3d.view;
+    ff_stereo_3d.primary_eye = stereo_3d.primary_eye;
+    ff_stereo_3d.baseline    = stereo_3d.baseline;
+    ff_stereo_3d.horizontal_disparity_adjustment.num = stereo_3d.horizontal_disparity_adjustment.num;
+    ff_stereo_3d.horizontal_disparity_adjustment.den = stereo_3d.horizontal_disparity_adjustment.den;
+    ff_stereo_3d.horizontal_field_of_view.num = stereo_3d.horizontal_field_of_view.num;
+    ff_stereo_3d.horizontal_field_of_view.den = stereo_3d.horizontal_field_of_view.den;
+
+    return ff_stereo_3d;
+}
+
+hb_stereo_3d_t hb_stereo_3d_ff_to_hb(AVStereo3D stereo_3d)
+{
+    hb_stereo_3d_t hb_stereo_3d;
+
+    hb_stereo_3d.type        = stereo_3d.type;
+    hb_stereo_3d.flags       = stereo_3d.flags;
+    hb_stereo_3d.view        = stereo_3d.view;
+    hb_stereo_3d.primary_eye = stereo_3d.primary_eye;
+    hb_stereo_3d.baseline    = stereo_3d.baseline;
+    hb_stereo_3d.horizontal_disparity_adjustment.num = stereo_3d.horizontal_disparity_adjustment.num;
+    hb_stereo_3d.horizontal_disparity_adjustment.den = stereo_3d.horizontal_disparity_adjustment.den;
+    hb_stereo_3d.horizontal_field_of_view.num = stereo_3d.horizontal_field_of_view.num;
+    hb_stereo_3d.horizontal_field_of_view.den = stereo_3d.horizontal_field_of_view.den;
+
+    return hb_stereo_3d;
+}
+
 int hb_ff_mixdown_ch_xlat(AVChannelLayout *channel_layout, int hb_mixdown, int *downmix_mode)
 {
     uint64_t layout = hb_ff_mixdown_xlat(hb_mixdown, downmix_mode);

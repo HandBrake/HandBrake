@@ -446,6 +446,17 @@ struct hb_spherical_mapping_s
     uint32_t padding;
 };
 
+struct hb_stereo_3d_s
+{
+    int type;
+    int flags;
+    int view;
+    int primary_eye;
+    uint32_t baseline;
+    hb_rational_t horizontal_disparity_adjustment;
+    hb_rational_t horizontal_field_of_view;
+};
+
 int hb_str_ends_with(const char *base, const char *str);
 
 /*******************************************************************************
@@ -872,6 +883,18 @@ struct hb_job_s
 #define HB_SPHERICAL_RECTILINEAR             4
 #define HB_SPHERICAL_FISHEYE                 5
 #define HB_SPHERICAL_PARAMETRIC_IMMERSIVE    6
+
+    hb_stereo_3d_t stereo_3d;
+#define HB_STEREO3D_UNSET                   -1
+#define HB_STEREO3D_2D                       0
+#define HB_STEREO3D_SIDEBYSIDE               1
+#define HB_STEREO3D_TOPBOTTOM                2
+#define HB_STEREO3D_FRAMESEQUENCE            3
+#define HB_STEREO3D_CHECKERBOARD             4
+#define HB_STEREO3D_SIDEBYSIDE_QUINCUNX      5
+#define HB_STEREO3D_LINES                    6
+#define HB_STEREO3D_COLUMNS                  7
+#define HB_STEREO3D_UNSPEC                   8
 
     hb_list_t     * list_chapter;
 
@@ -1366,6 +1389,7 @@ struct hb_title_s
     int             hdr_10_plus;
 
     hb_spherical_mapping_t spherical_mapping;
+    hb_stereo_3d_t stereo_3d;
 
     hb_rational_t   vrate;
     int             crop[4];
