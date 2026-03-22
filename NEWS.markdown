@@ -16,12 +16,20 @@ Download available from Microsoft:
 ### All platforms
 
 #### Audio
+
 - Fixed a crash that could happen when scanning a PCM track in a DVD-Video or Blu-ray 
+
+#### Third-party libraries
+
+- Updated libraries
+  - Jansson 2.15.0 (JSON architecture)
+  - zlib 1.3.2 (general)
 
 ### Windows
 
-- Removed dependency on having Microsoft .NET 8 Desktop Runtime installed. 
-- Fixed a number of issues that impacted screen reader tools ability to read combo box controls.
+- Removed dependency on having Microsoft .NET 8 Desktop Runtime installed
+- Fixed the file type selection in the save panel
+- Fixed a number of issues that impacted screen reader tools ability to read combo box controls
 
 
 ## HandBrake 1.11.0
