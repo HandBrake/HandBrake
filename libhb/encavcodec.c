@@ -804,6 +804,21 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             }
         }
 #endif
+#if HB_PROJECT_FEATURE_MF
+        if ((job->vcodec == HB_VCODEC_FFMPEG_MF_H264 ||
+             job->vcodec == HB_VCODEC_FFMPEG_MF_H265 ||
+             job->vcodec == HB_VCODEC_FFMPEG_MF_AV1) &&
+            job->hw_device_ctx != NULL)
+        {
+            context->hw_device_ctx = av_buffer_ref(job->hw_device_ctx);
+            if (context->hw_device_ctx == NULL)
+            {
+                hb_log("encavcodecInit: av_buffer_ref for MF hw_device_ctx failed");
+                ret = 1;
+                goto done;
+            }
+        }
+#endif
         context->pix_fmt = job->output_pix_fmt;
     }
 
