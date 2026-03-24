@@ -11,10 +11,11 @@ diff --git a/libavformat/mov.c b/libavformat/mov.c
 index b29c41a6b6..6ce554ad07 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -391,6 +391,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -392,6 +392,6 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
          return mov_metadata_loci(c, pb, atom.size);
      case MKTAG( 'm','a','n','u'): key = "make"; break;
      case MKTAG( 'm','o','d','l'): key = "model"; break;
+-    case MKTAG( 'n','a','m','e'): key = "name"; break;
 +    case MKTAG( 'n','a','m','e'): key = "title"; raw = 1; break;
      case MKTAG( 'p','c','s','t'): key = "podcast";
          parse = mov_metadata_int8_no_padding; break;
