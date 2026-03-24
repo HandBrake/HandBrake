@@ -1888,6 +1888,53 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         }
     }
 
+    // BM3D
+    const char * bm3d = hb_value_get_string(
+                                hb_dict_get(preset, "PictureBM3DPreset"));
+    if (bm3d != NULL)
+    {
+        const char * bm3d_custom = hb_value_get_string(
+                                hb_dict_get(preset, "PictureBM3DCustom"));
+        filter_settings = hb_generate_filter_settings(HB_FILTER_BM3D,
+                                    bm3d, NULL, bm3d_custom);
+        if (filter_settings == NULL)
+        {
+            hb_error("Invalid BM3D filter settings (%s)", bm3d);
+            return -1;
+        }
+        else
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_BM3D));
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+    }
+
+    // Deband
+    const char * deband_preset = hb_value_get_string(
+                                hb_dict_get(preset, "PictureDebandPreset"));
+    if (deband_preset != NULL)
+    {
+        const char * deband_custom = hb_value_get_string(
+                                hb_dict_get(preset, "PictureDebandCustom"));
+        filter_settings = hb_generate_filter_settings(HB_FILTER_DEBAND,
+                                    deband_preset, NULL, deband_custom);
+        if (filter_settings == NULL)
+        {
+            hb_error("Invalid deband filter settings (%s)", deband_preset);
+            return -1;
+        }
+        else
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DEBAND));
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+    }
+
+
     hb_value_t *fr_value = hb_dict_get(preset, "VideoFramerate");
     int vrate_den = get_video_framerate(fr_value);
     if (vrate_den < 0)

@@ -221,6 +221,10 @@ static int      audio_name_passthru = -1;
 static char *   audio_autonaming_behaviour = NULL;
 static int      sub_name_passthru   = -1;
 
+/* Named video filter shortcuts */
+static char *   bm3d                = NULL;
+static char *   deband              = NULL;
+
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
 static volatile int die = 0;
@@ -666,6 +670,8 @@ cleanup:
     free(unsharp_tune);
     free(lapsharp);
     free(lapsharp_tune);
+    free(bm3d);
+    free(deband);
     free(preset_export_name);
     free(preset_export_desc);
     free(preset_export_file);
@@ -1892,6 +1898,13 @@ static void ShowHelp(void)
 "   -g, --grayscale         Grayscale encoding\n"
 "   --no-grayscale          Disable preset 'grayscale'\n"
 "\n"
+"   --bm3d[=preset]         BM3D advanced denoising (default/medium/strong)\n"
+"                           Or custom avfilter params.\n"
+"   --deband[=string]       Remove banding artifacts (common in anime,\n"
+"                           gradients, dark scenes). Default: 1thr=0.02:\n"
+"                           2thr=0.02:3thr=0.02:4thr=0.02:range=16:blur=1\n"
+"                           Or custom FFmpeg deband params.\n"
+"\n"
 "\n"
 "Subtitles Options ------------------------------------------------------------\n"
 "\n"
@@ -2276,6 +2289,8 @@ static int ParseOptions( int argc, char ** argv )
     #define HDR_DYNAMIC_METADATA          334
     #define AUDIO_AUTONAMING_BEHAVIOUR    335
     #define COLOR_RANGE                   336
+    #define FILTER_BM3D                   337
+    #define FILTER_DEBAND                 338
 
     for( ;; )
     {
@@ -2411,6 +2426,9 @@ static int ParseOptions( int argc, char ** argv )
             { "no-pad",      no_argument,       &pad_disable,    1 },
             { "colorspace",    required_argument, NULL,    FILTER_COLORSPACE},
             { "no-colorspace", no_argument,       &colorspace_disable, 1 },
+
+            { "bm3d",           optional_argument, NULL, FILTER_BM3D },
+            { "deband",         optional_argument, NULL, FILTER_DEBAND },
 
             // mapping of legacy option names for backwards compatibility
             { "qsv-preset",           required_argument, NULL, ENCODER_PRESET,       },
@@ -3335,6 +3353,28 @@ static int ParseOptions( int argc, char ** argv )
                 else
                 {
                     audio_autonaming_behaviour = strdup(AUDIO_AUTONAMING_BEHAVIOUR_DEFAULT_PRESET);
+                }
+                break;
+            case FILTER_BM3D:
+                free(bm3d);
+                if (optarg != NULL)
+                {
+                    bm3d = strdup(optarg);
+                }
+                else
+                {
+                    bm3d = strdup("default");
+                }
+                break;
+            case FILTER_DEBAND:
+                free(deband);
+                if (optarg != NULL)
+                {
+                    deband = strdup(optarg);
+                }
+                else
+                {
+                    deband = strdup("default");
                 }
                 break;
             case ':':
@@ -4897,6 +4937,34 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
     }
 
+    // BM3D
+    if (bm3d != NULL)
+    {
+        if (!strcasecmp(bm3d, "default") ||
+            !strcasecmp(bm3d, "medium") ||
+            !strcasecmp(bm3d, "strong"))
+        {
+            hb_dict_set_string(preset, "PictureBM3DPreset", bm3d);
+        }
+        else
+        {
+            hb_dict_set_string(preset, "PictureBM3DPreset", "custom");
+            hb_dict_set_string(preset, "PictureBM3DCustom", bm3d);
+        }
+    }
+    // Deband
+    if (deband != NULL)
+    {
+        if (!strcasecmp(deband, "default"))
+        {
+            hb_dict_set_string(preset, "PictureDebandPreset", deband);
+        }
+        else
+        {
+            hb_dict_set_string(preset, "PictureDebandPreset", "custom");
+            hb_dict_set_string(preset, "PictureDebandCustom", deband);
+        }
+    }
     return preset;
 }
 
