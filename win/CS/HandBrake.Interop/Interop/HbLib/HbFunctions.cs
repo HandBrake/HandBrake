@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="HBFunctions64.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
@@ -143,7 +143,7 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_audio_autonaming_behavior_get_from_name", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_audio_autonaming_behavior_get_from_name(IntPtr name);
 
-        [DllImport("hb", EntryPoint = "hb_audio_name_generate", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("hb", EntryPoint = "hb_audio_name_generate_s", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_audio_name_generate_s(IntPtr name, IntPtr layout, int mixdown, int keep_name, int behaviour);
 
         [DllImport("hb", EntryPoint = "hb_video_quality_get_limits", CallingConvention = CallingConvention.Cdecl)]
