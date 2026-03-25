@@ -155,7 +155,7 @@ static int is_encoder_supported(hb_hwaccel_t *hwaccel, int encoder)
 
 static int is_rotation_supported(hb_hwaccel_t *hwaccel, int rotation)
 {
-    return (rotation == HB_ROTATION_0) || (rotation != HB_ROTATION_0 && (hwaccel->caps & HB_HWACCEL_CAP_ROTATE) == 0 ? 0 : 1);
+    return (rotation != HB_ROTATION_0 && (hwaccel->caps & HB_HWACCEL_CAP_ROTATE) == 0 ? 0 : 1);
 }
 
 static int is_color_range_supported(hb_hwaccel_t *hwaccel, int color_range)

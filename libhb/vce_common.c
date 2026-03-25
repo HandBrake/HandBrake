@@ -17,51 +17,6 @@ static int is_vcn_hevc_available = -1;
 static int is_vcn_av1_available = -1;
 static int is_vcn_decoder_available = -1;
 
-typedef struct hb_vce_filter_counter_s
-{
-    int num_hw_filters;
-    int num_sw_filters;
-} hb_vce_filter_counter_t;
-
-static hb_vce_filter_counter_t hb_vce_count_filters(hb_list_t *filters)
-{
-    hb_vce_filter_counter_t counts = { 0, 0 };
-
-    if (filters == NULL)
-    {
-        return counts;
-    }
-
-    for (int i = 0; i < hb_list_count(filters); i++)
-    {
-        hb_filter_object_t *filter = hb_list_item(filters, i);
-        switch (filter->id)
-        {
-            // AMF VPP-capable filters.
-            case HB_FILTER_FORMAT:
-            case HB_FILTER_CROP_SCALE:
-                counts.num_hw_filters++;
-                break;
-            case HB_FILTER_VFR:
-            {
-                // mode=0 does not access frame data.
-                int mode = hb_dict_get_int(filter->settings, "mode");
-                if (mode != 0)
-                {
-                    counts.num_sw_filters++;
-                }
-                break;
-            }
-            default:
-                // Includes ROTATE and all other SW frame-processing filters.
-                counts.num_sw_filters++;
-                break;
-        }
-    }
-
-    return counts;
-}
-
 #if HB_PROJECT_FEATURE_VCE
 #include "AMF/core/Factory.h"
 #include "AMF/components/VideoEncoderVCE.h"
@@ -299,8 +254,40 @@ int hb_check_amfdec_available()
 
 int hb_vce_are_filters_supported(hb_list_t *filters)
 {
-    hb_vce_filter_counter_t counts = hb_vce_count_filters(filters);
-    return counts.num_sw_filters == 0;
+    int num_sw_filters = 0;
+
+    if (filters == NULL)
+    {
+        return 0;
+    }
+
+    for (int i = 0; i < hb_list_count(filters); i++)
+    {
+        hb_filter_object_t *filter = hb_list_item(filters, i);
+        switch (filter->id)
+        {
+            // AMF VPP-capable filters.
+            case HB_FILTER_FORMAT:
+            case HB_FILTER_CROP_SCALE:
+                break;
+            case HB_FILTER_VFR:
+            {
+                // mode=0 does not access frame data.
+                int mode = hb_dict_get_int(filter->settings, "mode");
+                if (mode != 0)
+                {
+                    num_sw_filters++;
+                }
+                break;
+            }
+            default:
+                // Includes ROTATE and all other SW frame-processing filters.
+                num_sw_filters++;
+                break;
+        }
+    }
+
+    return num_sw_filters == 0;
 }
 
 int hb_vce_dec_is_enabled(hb_job_t *job)
@@ -311,18 +298,6 @@ int hb_vce_dec_is_enabled(hb_job_t *job)
     }
     return 0;
 }
-
-int hb_vce_sanitize_filter_list(hb_job_t *job)
-{
-    if (job && (job->hw_decode & HB_DECODE_AMFDEC))
-    {
-        hb_vce_filter_counter_t counts = hb_vce_count_filters(job->list_filter);
-        job->amf.num_hw_filters = counts.num_hw_filters;
-        job->amf.num_sw_filters = counts.num_sw_filters;
-    }
-    return 0;
-}
-
 
 #else // !HB_PROJECT_FEATURE_VCE
 
@@ -382,11 +357,6 @@ int hb_vce_dec_is_enabled(hb_job_t *job)
     return 0;
 }
 
-int hb_vce_sanitize_filter_list(hb_job_t *job)
-{
-    return 0;
-}
-
 int hb_vce_are_filters_supported(hb_list_t *filters)
 {
     return 0;
@@ -437,102 +407,6 @@ const char* hb_vce_decode_get_codec_name(enum AVCodecID codec_id)
 int hb_vce_hw_filters_via_video_memory_are_enabled(hb_job_t *job)
 {
     return job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE;
-}
-
-hb_buffer_t *  hb_vce_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, AVRational time_base)
-{
-    hb_buffer_t *out = hb_buffer_wrapper_init();
-    AVFrame *frame_copy = NULL;
-
-    if (out == NULL)
-    {
-        return NULL;
-    }
-
-    if(job->amf.num_sw_filters == 0)
-    {
-        // keep frame in video memory
-        frame_copy = av_frame_clone(frame);
-        if (frame_copy == NULL)
-        {
-            goto fail;
-        }
-    }
-    else
-    {
-    // Alloc new frame
-        frame_copy = av_frame_alloc();
-        if (frame_copy == NULL)
-        {
-            goto fail;
-        }
-        
-        AVHWFramesContext *hwfc = (AVHWFramesContext *)frame->hw_frames_ctx->data;
-        frame_copy->format = hwfc->sw_format;
-
-        av_hwframe_transfer_data(frame_copy, frame, 0);
-        av_frame_copy_props(frame_copy, frame);
-            
-        const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(frame_copy->format);
-        for (int ii = 0; ii < desc->nb_components; ii++)
-        {
-            int pp = desc->comp[ii].plane;
-            if (pp > out->f.max_plane)
-            {
-                out->f.max_plane = pp;
-            }
-        }
-
-        for (int pp = 0; pp <= out->f.max_plane; pp++)
-        {
-            out->plane[pp].data          = frame_copy->data[pp];
-            out->plane[pp].width         = hb_image_width(out->f.fmt, out->f.width, pp);
-            out->plane[pp].height        = hb_image_height(out->f.fmt, out->f.height, pp);
-            out->plane[pp].stride        = frame_copy->linesize[pp];
-            out->plane[pp].size          = out->plane[pp].stride * out->plane[pp].height;
-
-            out->size += out->plane[pp].size;
-        }
-    }
-
-    out->storage_type = AVFRAME;
-    out->storage = frame_copy;
-
-    out->s.type = FRAME_BUF;
-    out->f.width  = frame_copy->width;
-    out->f.height = frame_copy->height;
-    hb_avframe_set_video_buffer_flags(out, frame_copy, time_base);
-
-    out->side_data = (void **)frame_copy->side_data;
-    out->nb_side_data = frame_copy->nb_side_data;
-
-    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(frame_copy->format);
-    for (int ii = 0; ii < desc->nb_components; ii++)
-    {
-        int pp = desc->comp[ii].plane;
-        if (pp > out->f.max_plane)
-        {
-            out->f.max_plane = pp;
-        }
-    }
-
-    for (int pp = 0; pp <= out->f.max_plane; pp++)
-    {
-        out->plane[pp].data          = frame_copy->data[pp];
-        out->plane[pp].width         = hb_image_width(out->f.fmt, out->f.width, pp);
-        out->plane[pp].height        = hb_image_height(out->f.fmt, out->f.height, pp);
-        out->plane[pp].stride        = frame_copy->linesize[pp];
-        out->plane[pp].size          = out->plane[pp].stride * out->plane[pp].height;
-
-        out->size += out->plane[pp].size;
-    }
-
-    return out;
-
-fail:
-    hb_buffer_close(&out);
-    av_frame_unref(frame_copy);
-    return NULL;
 }
 
 int hb_vce_available()

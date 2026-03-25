@@ -171,7 +171,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         goto fail;
     }
 
-#if 1
+#if 0
     char *dump = avfilter_graph_dump(graph->avgraph, NULL);
     hb_log("\n%s", dump);
     free(dump);
@@ -269,16 +269,8 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
     if (result >= 0)
     {
         hb_buffer_t * buf;
-#if HB_PROJECT_FEATURE_VCE
-        if(hb_vce_hw_filters_via_video_memory_are_enabled(graph->job))
-        {
-            buf = hb_vce_copy_avframe_to_video_buffer(graph->job, graph->frame, graph->out_time_base);
-        }
-        else
-#endif
-        {
-            buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
-        }
+        buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
+        
         av_frame_unref(graph->frame);
         return buf;
     }

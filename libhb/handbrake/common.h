@@ -926,13 +926,6 @@ struct hb_job_s
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
 
-    // AMF-specific settings
-    struct
-    {
-        int num_sw_filters;
-        int num_hw_filters;
-    } amf;
-
     int hw_decode;
     int hw_device_index;
     int hw_device_async_depth;
