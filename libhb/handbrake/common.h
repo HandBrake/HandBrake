@@ -1697,8 +1697,10 @@ enum
     HB_FILTER_VFR,
     // Filters that must operate on the original source image are next
     HB_FILTER_DEBLOCK,
+    HB_FILTER_DEBAND,
     HB_FILTER_DENOISE,
     HB_FILTER_HQDN3D = HB_FILTER_DENOISE,
+    HB_FILTER_BM3D,
     HB_FILTER_NLMEANS,
     HB_FILTER_CHROMA_SMOOTH,
     HB_FILTER_CHROMA_SMOOTH_VT,
