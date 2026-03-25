@@ -1157,16 +1157,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     reordered_data_t * reordered = NULL;
     hb_buffer_t      * out;
 
-#if HB_PROJECT_FEATURE_VCE
-    if(pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE && pv->title->rotation == HB_ROTATION_0)
-    {
-        out = hb_vce_copy_avframe_to_video_buffer(pv->job, pv->frame, (AVRational){1,1});
-    }
-    else
-#endif
-    {
-        out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1});
-    }
+    out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1});
 
     if (pv->frame->pts != AV_NOPTS_VALUE)
     {
@@ -1479,9 +1470,7 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_avfilter_append_dict(filters, "scale_d3d11", settings);
         }
 #if HB_PROJECT_FEATURE_AMFDEC
-        else if (pv->frame->hw_frames_ctx && pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE &&
-                 pv->title->rotation == HB_ROTATION_0 && pv->job->amf.num_hw_filters > 0 &&
-                 pv->job->amf.num_sw_filters == 0)
+        else if (pv->frame->hw_frames_ctx && pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE)
         {
             hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
             hb_avfilter_append_dict(filters, "vpp_amf", settings);
@@ -1812,23 +1801,28 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
 
         if (pv->hw_frame)
         {
-            int need_sw_transfer = pv->hw_frame->hw_frames_ctx != NULL;
 #if HB_PROJECT_FEATURE_AMFDEC
-            need_sw_transfer =
-                pv->hw_frame->hw_frames_ctx != NULL &&
-                (pv->job == NULL ||
-                pv->title == NULL ||
-                pv->hw_frame->format != AV_PIX_FMT_AMF_SURFACE ||
-                pv->job->hw_pix_fmt != AV_PIX_FMT_AMF_SURFACE ||
-                pv->title->rotation != HB_ROTATION_0 ||
-                pv->job->amf.num_sw_filters > 0);
+            if (pv->hw_frame->hw_frames_ctx != NULL &&
+                pv->job != NULL &&
+                pv->hw_frame->format == AV_PIX_FMT_AMF_SURFACE &&
+                pv->job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE)
+            {
+                // HW -> HW: keep AMF surface in video memory
+                ret = av_frame_ref(pv->frame, pv->hw_frame);
+                av_frame_unref(pv->hw_frame);
+                if (ret < 0)
+                {
+                    hb_error("decavcodec: error hwaccel copying frame");
+                    break;
+                }
+            } 
+            else
  #endif
-
-            if (need_sw_transfer)
+            if (pv->hw_frame->hw_frames_ctx)
             {
                 AVHWFramesContext *hwfc = (AVHWFramesContext *)pv->hw_frame->hw_frames_ctx->data;
                 pv->frame->format = hwfc->sw_format;
-                // Transfer GPU frame to system memory for SW filter path.
+                // HW -> SW: transfer hardware frame to system memory for SW filter path.
                 ret = av_hwframe_transfer_data(pv->frame, pv->hw_frame, 0);
                 av_frame_copy_props(pv->frame, pv->hw_frame);
                 av_frame_unref(pv->hw_frame);
@@ -1840,8 +1834,7 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
             } 
             else
             {
-                // Full HW AMF pipeline keeps surfaces in video memory or
-                // HWAccel falled back to the software decoder
+                // SW -> SW: hwaccel path already fell back to software decoding
                 ret = av_frame_ref(pv->frame, pv->hw_frame);
                 av_frame_unref(pv->hw_frame);
                 if (ret < 0)
@@ -1855,10 +1848,6 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
         // recompute the frame/field duration, because sometimes it changes
         compute_frame_duration( pv );
         filter_video(pv);
-        if(send_packet)
-        {
-            av_usleep(100);// wait 0.1 ms before resubmitting
-        }
     } while (ret >= 0 || send_packet);
 
     if ( global_verbosity_level <= 1 )

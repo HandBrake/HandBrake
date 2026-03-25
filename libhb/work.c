@@ -1415,10 +1415,6 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
             }
         }
     }
-#if HB_PROJECT_FEATURE_VCE
-    if (hb_vce_dec_is_enabled(job))
-        hb_vce_sanitize_filter_list(job);
-#endif
 }
 
 static enum AVPixelFormat match_pix_fmt(enum AVPixelFormat pix_fmt,
@@ -1762,13 +1758,6 @@ static void do_job(hb_job_t *job)
         {
             job->hw_accel = hwaccel;
             job->hw_pix_fmt = hwaccel->hw_pix_fmt;
-        }
-        else if (hwaccel && hwaccel->id == HB_DECODE_AMFDEC)
-        {
-            // Keep AMF HW decode enabled for mixed HW/SW filter chains.
-            // Frames will be transferred to system memory in the decoder path.
-            job->hw_accel = hwaccel;
-            job->hw_pix_fmt = AV_PIX_FMT_NONE;
         }
         else if (job->hw_decode & HB_DECODE_FORCE_HW)
         {
