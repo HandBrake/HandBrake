@@ -10,7 +10,7 @@
 #include "handbrake/common.h"
 #include "handbrake/avfilter_priv.h"
 
-static int bm3d_init(hb_filter_object_t * filter, hb_filter_init_t * init);
+static int bm3d_init(hb_filter_object_t *filter, hb_filter_init_t *init);
 
 const char bm3d_template[] =
     "sigma=^"HB_FLOAT_REG"$";
@@ -28,9 +28,9 @@ hb_filter_object_t hb_filter_bm3d =
     .settings_template = bm3d_template,
 };
 
-static int bm3d_init(hb_filter_object_t * filter, hb_filter_init_t * init)
+static int bm3d_init(hb_filter_object_t *filter, hb_filter_init_t *init)
 {
-    hb_filter_private_t * pv = NULL;
+    hb_filter_private_t *pv = NULL;
 
     pv = calloc(1, sizeof(struct hb_filter_private_s));
     filter->private_data = pv;
@@ -40,16 +40,16 @@ static int bm3d_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     }
     pv->input = *init;
 
-    hb_dict_t * settings = filter->settings;
+    hb_dict_t *settings = filter->settings;
 
     double sigma = 1;
 
     hb_dict_extract_double(&sigma, settings, "sigma");
 
-    hb_value_array_t * avfilters = hb_value_array_init();
+    hb_value_array_t *avfilters = hb_value_array_init();
 
-    hb_dict_t * avfilter   = hb_dict_init();
-    hb_dict_t * avsettings = hb_dict_init();
+    hb_dict_t *avfilter   = hb_dict_init();
+    hb_dict_t *avsettings = hb_dict_init();
 
     hb_dict_set_double(avsettings, "sigma", sigma);
     hb_dict_set(avfilter, "bm3d", avsettings);
