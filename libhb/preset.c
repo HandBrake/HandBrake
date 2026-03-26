@@ -1577,16 +1577,27 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     }
 
     // Denoise filter
-    int denoise;
+    int denoise = 0;
     hb_value_t *denoise_value = hb_dict_get(preset, "PictureDenoiseFilter");
-    denoise = hb_value_type(denoise_value) == HB_VALUE_TYPE_STRING ? (
-        !strcasecmp(hb_value_get_string(denoise_value), "off") ? 0 :
-        !strcasecmp(hb_value_get_string(denoise_value), "nlmeans") ? 1 : 2) :
-        hb_value_get_int(denoise_value);
+    if (hb_value_type(denoise_value) == HB_VALUE_TYPE_STRING)
+    {
+        if (!strcasecmp(hb_value_get_string(denoise_value), "hqdn3d"))
+        {
+            denoise = HB_FILTER_HQDN3D;
+        }
+        else if (!strcasecmp(hb_value_get_string(denoise_value), "bm3d"))
+        {
+            denoise = HB_FILTER_BM3D;
+        }
+        else if (!strcasecmp(hb_value_get_string(denoise_value), "nlmeans"))
+        {
+            denoise = HB_FILTER_NLMEANS;
+        }
+    }
 
     if (denoise != 0)
     {
-        int filter_id = denoise == 1 ? HB_FILTER_NLMEANS : HB_FILTER_HQDN3D;
+        int filter_id = denoise;
         const char *denoise_preset, *denoise_tune, *denoise_custom;
         denoise_preset = hb_value_get_string(
                             hb_dict_get(preset, "PictureDenoisePreset"));
