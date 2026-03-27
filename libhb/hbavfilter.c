@@ -95,6 +95,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
                                                            0);
         if (!par->hw_frames_ctx)
         {
+            hb_log("hb_avfilter_graph_init: failed to init hw frames ctx");
             goto fail;
         }
     }
