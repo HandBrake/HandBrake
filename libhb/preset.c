@@ -911,6 +911,15 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                 }
             }
 
+            // Copy audio filter list if present
+            hb_value_t * audio_filter_list = hb_dict_get(
+                                       encoder_dict, "AudioFilterList");
+            if (audio_filter_list != NULL)
+            {
+                hb_dict_set(audio_dict, "AudioFilterList",
+                            hb_value_dup(audio_filter_list));
+            }
+
             // Sanitize the settings before adding to the audio list
             hb_sanitize_audio_settings(title, audio_dict);
 

@@ -12,6 +12,7 @@
 #include "libavformat/avformat.h"
 #include "handbrake/decomb.h"
 #include "handbrake/hbavfilter.h"
+#include "handbrake/audio_filters.h"
 #include "handbrake/dovi_common.h"
 #include "handbrake/rpu.h"
 #include "handbrake/hwaccel.h"
@@ -830,6 +831,22 @@ void hb_display_job_info(hb_job_t *job)
                 {
                     hb_log("     + compression level: %.2f",
                            audio->config.out.compression_level);
+                }
+                if (audio->config.out.audio_filters != NULL &&
+                    hb_list_count(audio->config.out.audio_filters) > 0)
+                {
+                    for (int jj = 0;
+                         jj < hb_list_count(audio->config.out.audio_filters);
+                         jj++)
+                    {
+                        hb_audio_filter_entry_t * entry =
+                            hb_list_item(audio->config.out.audio_filters, jj);
+                        const hb_audio_filter_info_t * info =
+                            hb_audio_filter_get_info(entry->id);
+                        hb_log("     + audio filter: %s = %s",
+                               info ? info->name : "unknown",
+                               entry->settings);
+                    }
                 }
             }
         }
@@ -2012,6 +2029,23 @@ static void do_job(hb_job_t *job)
             audio = hb_list_item( job->list_audio, i );
 
             /*
+            * Audio Filter Chain (if configured)
+            */
+            hb_fifo_t * encoder_fifo_in = audio->priv.fifo_sync;
+            if (audio->config.out.audio_filters != NULL &&
+                hb_list_count(audio->config.out.audio_filters) > 0 &&
+                !(audio->config.out.codec & HB_ACODEC_PASS_FLAG))
+            {
+                audio->priv.fifo_af = hb_fifo_init(FIFO_SMALL, FIFO_SMALL_WAKE);
+                w = hb_get_work(job->h, WORK_AUDIO_AVFILTER);
+                w->fifo_in  = audio->priv.fifo_sync;
+                w->fifo_out = audio->priv.fifo_af;
+                w->audio    = audio;
+                hb_list_add(job->list_work, w);
+                encoder_fifo_in = audio->priv.fifo_af;
+            }
+
+            /*
             * Audio Encoder Thread
             */
             w = hb_audio_encoder( job->h, audio->config.out.codec);
@@ -2024,7 +2058,7 @@ static void do_job(hb_job_t *job)
                 goto cleanup;
             }
             w->init_delay = &audio->priv.init_delay;
-            w->fifo_in    = audio->priv.fifo_sync;
+            w->fifo_in    = encoder_fifo_in;
             w->fifo_out   = audio->priv.fifo_out;
             w->extradata  = &audio->priv.extradata;
             w->audio      = audio;
