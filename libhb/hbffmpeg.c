@@ -778,7 +778,15 @@ uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
         case HB_AMIXDOWN_3POINT0:
             ff_layout = AV_CH_LAYOUT_SURROUND;
             break;
-            
+
+        case HB_AMIXDOWN_4POINT0:
+            ff_layout = AV_CH_LAYOUT_4POINT0;
+            break;
+
+        case HB_AMIXDOWN_QUAD:
+            ff_layout = AV_CH_LAYOUT_QUAD;
+            break;
+
         case HB_AMIXDOWN_5POINT1:
             ff_layout = AV_CH_LAYOUT_5POINT1;
             break;
