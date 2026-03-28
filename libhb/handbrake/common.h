@@ -1113,6 +1113,8 @@ struct hb_audio_config_s
             HB_AMIXDOWN_DOLBY,
             HB_AMIXDOWN_DOLBYPLII,
             HB_AMIXDOWN_3POINT0,
+            HB_AMIXDOWN_4POINT0,
+            HB_AMIXDOWN_QUAD,
             HB_AMIXDOWN_5POINT1,
             HB_AMIXDOWN_6POINT1,
             HB_AMIXDOWN_7POINT1,
