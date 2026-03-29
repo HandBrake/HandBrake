@@ -1685,7 +1685,7 @@ try:
         autoconf   = ToolProbe( 'AUTOCONF.exe',   'autoconf',   'autoconf', abort=True, minversion=([2,71,0] if build_tuple.match('*-*-darwin*') else [2,69,0]) )
         automake   = ToolProbe( 'AUTOMAKE.exe',   'automake',   'automake', abort=True, minversion=[1,13,0] )
         libtool    = ToolProbe( 'LIBTOOL.exe',    'libtool',    'libtool', abort=True )
-        lipo       = ToolProbe( 'LIPO.exe',       'lipo',       'lipo', abort=False )
+        lipo       = ToolProbe( 'LIPO.exe',       'lipo',       'llvm-lipo', abort=False )
         pkgconfig  = ToolProbe( 'PKGCONFIG.exe',  'pkgconfig',  'pkg-config', abort=True, minversion=[0,27,0] )
         meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True, minversion=[0,51,0] )
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
