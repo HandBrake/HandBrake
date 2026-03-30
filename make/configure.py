@@ -1657,21 +1657,6 @@ try:
             xcode_opts['disabled'] = True
             continue
 
-    _lipo_probe_names = [ 'lipo', 'llvm-lipo' ]
-    _lv, _lp = -1, None
-    for _d in ( os.getenv( 'PATH' ) or os.defpath ).split( os.pathsep ):
-        try:
-            for _e in os.listdir( _d ):
-                _m = re.match( r'^llvm-lipo-(\d+)$', _e )
-                if _m and os.access( os.path.join( _d, _e ), os.X_OK ):
-                    _n = int( _m.group( 1 ) )
-                    if _n > _lv:
-                        _lv, _lp = _n, os.path.join( _d, _e )
-        except OSError:
-            pass
-    if _lp:
-        _lipo_probe_names.append( _lp )
-
     ## create tools in a scope
     class Tools:
         ar         = ToolProbe( 'AR.exe',         'ar',         'ar', abort=True )
@@ -1700,7 +1685,7 @@ try:
         autoconf   = ToolProbe( 'AUTOCONF.exe',   'autoconf',   'autoconf', abort=True, minversion=([2,71,0] if build_tuple.match('*-*-darwin*') else [2,69,0]) )
         automake   = ToolProbe( 'AUTOMAKE.exe',   'automake',   'automake', abort=True, minversion=[1,13,0] )
         libtool    = ToolProbe( 'LIBTOOL.exe',    'libtool',    'libtool', abort=True )
-        lipo       = ToolProbe( 'LIPO.exe',       'lipo',       *_lipo_probe_names, abort=False )
+        lipo       = ToolProbe( 'LIPO.exe',       'lipo',       'lipo', 'llvm-lipo', abort=False )
         pkgconfig  = ToolProbe( 'PKGCONFIG.exe',  'pkgconfig',  'pkg-config', abort=True, minversion=[0,27,0] )
         meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True, minversion=[0,51,0] )
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
