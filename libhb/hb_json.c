@@ -1007,6 +1007,26 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             hb_dict_set_string(audio_dict, "Name", audio->config.out.name);
         }
 
+        if (hb_list_count(audio->config.out.list_filter))
+        {
+            hb_value_array_t *filter_list = hb_value_array_init();
+            for (int jj = 0; jj < hb_list_count(audio->config.out.list_filter); jj++)
+            {
+                hb_filter_object_t *filter = hb_list_item(audio->config.out.list_filter, jj);
+
+                hb_dict_t *filter_dict = json_pack_ex(&error, 0, "{s:o}",
+                                                      "ID", hb_value_int(filter->id));
+                if (filter->settings != NULL)
+                {
+                    hb_dict_set(filter_dict, "Settings",
+                                hb_value_dup(filter->settings));
+                }
+
+                hb_value_array_append(filter_list, filter_dict);
+            }
+            hb_dict_set(audio_dict, "FilterList", filter_list);
+        }
+
         hb_value_array_append(audio_list, audio_dict);
     }
 
@@ -1654,7 +1674,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             {
                 hb_filter_object_t *filter;
                 filter = hb_filter_init(filter_id);
-                hb_add_filter_dict(job, filter, filter_settings);
+                hb_add_filter_dict(job->list_filter, filter, filter_settings);
             }
         }
     }
@@ -1727,10 +1747,11 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             hb_value_t *acodec = NULL, *samplerate = NULL, *mixdown = NULL;
             hb_value_t *dither = NULL;
             const char *name = NULL;
+            hb_value_t *filter_list = NULL;
 
             hb_audio_config_init(&audio);
             result = json_unpack_ex(audio_dict, &error, 0,
-                "{s:i, s?s, s?o, s?F, s?F, s?o, s?b, s?o, s?o, s?i, s?F, s?F}",
+                "{s:i, s?s, s?o, s?F, s?F, s?o, s?b, s?o, s?o, s?i, s?F, s?F, s?o}",
                 "Track",                unpack_i(&audio.index),
                 "Name",                 unpack_s(&name),
                 "Encoder",              unpack_o(&acodec),
@@ -1742,7 +1763,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 "Samplerate",           unpack_o(&samplerate),
                 "Bitrate",              unpack_i(&audio.out.bitrate),
                 "Quality",              unpack_f(&audio.out.quality),
-                "CompressionLevel",     unpack_f(&audio.out.compression_level));
+                "CompressionLevel",     unpack_f(&audio.out.compression_level),
+                "FilterList",           unpack_o(&filter_list));
             if (result < 0)
             {
                 hb_error("hb_dict_to_job: failed to find audio settings: %s",
@@ -1802,6 +1824,36 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             if (name != NULL)
             {
                 audio.out.name = name;
+            }
+            if (filter_list != NULL &&
+                hb_value_type(filter_list) == HB_VALUE_TYPE_ARRAY)
+            {
+                hb_dict_t *filter_dict;
+                int filter_count = hb_value_array_len(filter_list);
+
+                for (int jj = 0; jj < filter_count; jj++)
+                {
+                    filter_dict = hb_value_array_get(filter_list, ii);
+                    int filter_id = -1;
+                    hb_value_t *filter_settings = NULL;
+                    result = json_unpack_ex(filter_dict, &error, 0, "{s:i, s?o}",
+                                            "ID",       unpack_i(&filter_id),
+                                            "Settings", unpack_o(&filter_settings));
+                    if (result < 0)
+                    {
+                        hb_error("hb_dict_to_job: failed to find filter settings: %s",
+                                 error.text);
+                        goto fail;
+                    }
+                    if (filter_id >= HB_AUDIO_FILTER_FIRST &&
+                        filter_id <= HB_AUDIO_FILTER_LAST)
+                    {
+                        hb_filter_object_t *filter;
+                        filter = hb_filter_init(filter_id);
+                        hb_add_filter_dict(audio.out.list_filter, filter,
+                                           filter_settings);
+                    }
+                }
             }
             if (audio.index >= 0)
             {
