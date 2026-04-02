@@ -16,6 +16,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/extradata.h"
+#include "handbrake/audio_filters.h"
 #include "x264.h"
 #include "handbrake/lang.h"
 #include "handbrake/common.h"
@@ -5726,6 +5727,8 @@ hb_audio_t *hb_audio_copy(const hb_audio_t *src)
             }
         }
         audio->priv.extradata = hb_data_dup(src->priv.extradata);
+        audio->config.out.audio_filters =
+            hb_audio_filter_list_copy(src->config.out.audio_filters);
     }
     return audio;
 }
@@ -5769,6 +5772,7 @@ void hb_audio_close( hb_audio_t **_audio )
         hb_audio_config_close(&audio->config);
         free((char*)audio->config.in.name);
         free((char*)audio->config.out.name);
+        hb_audio_filter_list_close(&audio->config.out.audio_filters);
         free(audio);
         *_audio = NULL;
     }
@@ -5818,6 +5822,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->out.normalize_mix_level = 0;
     audiocfg->out.dither_method = hb_audio_dither_get_default();
     audiocfg->out.name = NULL;
+    audiocfg->out.audio_filters = NULL;
 }
 
 void hb_audio_config_close(hb_audio_config_t *audiocfg)
@@ -5873,6 +5878,8 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
     {
         audio->config.out.name = strdup(audiocfg->out.name);
     }
+    audio->config.out.audio_filters =
+        hb_audio_filter_list_copy(audiocfg->out.audio_filters);
 
     hb_list_add(job->list_audio, audio);
     return 1;

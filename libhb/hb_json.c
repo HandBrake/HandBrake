@@ -10,6 +10,7 @@
 #include <jansson.h>
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_json.h"
+#include "handbrake/audio_filters.h"
 #include "libavutil/base64.h"
 
 /**
@@ -1006,6 +1007,22 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         {
             hb_dict_set_string(audio_dict, "Name", audio->config.out.name);
         }
+        if (audio->config.out.audio_filters != NULL &&
+            hb_list_count(audio->config.out.audio_filters) > 0)
+        {
+            hb_value_array_t * af_list = hb_value_array_init();
+            for (int jj = 0;
+                 jj < hb_list_count(audio->config.out.audio_filters); jj++)
+            {
+                hb_audio_filter_entry_t * entry =
+                    hb_list_item(audio->config.out.audio_filters, jj);
+                hb_dict_t * af_dict = hb_dict_init();
+                hb_dict_set_int(af_dict, "ID", entry->id);
+                hb_dict_set_string(af_dict, "Settings", entry->settings);
+                hb_value_array_append(af_list, af_dict);
+            }
+            hb_dict_set(audio_dict, "AudioFilterList", af_list);
+        }
 
         hb_value_array_append(audio_list, audio_dict);
     }
@@ -1727,10 +1744,11 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             hb_value_t *acodec = NULL, *samplerate = NULL, *mixdown = NULL;
             hb_value_t *dither = NULL;
             const char *name = NULL;
+            hb_value_t *audio_filter_list = NULL;
 
             hb_audio_config_init(&audio);
             result = json_unpack_ex(audio_dict, &error, 0,
-                "{s:i, s?s, s?o, s?F, s?F, s?o, s?b, s?o, s?o, s?i, s?F, s?F}",
+                "{s:i, s?s, s?o, s?F, s?F, s?o, s?b, s?o, s?o, s?i, s?F, s?F, s?o}",
                 "Track",                unpack_i(&audio.index),
                 "Name",                 unpack_s(&name),
                 "Encoder",              unpack_o(&acodec),
@@ -1742,7 +1760,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 "Samplerate",           unpack_o(&samplerate),
                 "Bitrate",              unpack_i(&audio.out.bitrate),
                 "Quality",              unpack_f(&audio.out.quality),
-                "CompressionLevel",     unpack_f(&audio.out.compression_level));
+                "CompressionLevel",     unpack_f(&audio.out.compression_level),
+                "AudioFilterList",      unpack_o(&audio_filter_list));
             if (result < 0)
             {
                 hb_error("hb_dict_to_job: failed to find audio settings: %s",
@@ -1802,6 +1821,25 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             if (name != NULL)
             {
                 audio.out.name = name;
+            }
+            if (audio_filter_list != NULL &&
+                hb_value_type(audio_filter_list) == HB_VALUE_TYPE_ARRAY)
+            {
+                int af_count = hb_value_array_len(audio_filter_list);
+                if (af_count > 0)
+                {
+                    audio.out.audio_filters = hb_list_init();
+                    for (int jj = 0; jj < af_count; jj++)
+                    {
+                        hb_dict_t * af_dict =
+                            hb_value_array_get(audio_filter_list, jj);
+                        int af_id = hb_dict_get_int(af_dict, "ID");
+                        const char * af_settings =
+                            hb_dict_get_string(af_dict, "Settings");
+                        hb_list_add(audio.out.audio_filters,
+                            hb_audio_filter_entry_init(af_id, af_settings));
+                    }
+                }
             }
             if (audio.index >= 0)
             {

@@ -32,6 +32,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/lang.h"
+#include "handbrake/audio_filters.h"
 #include "parsecsv.h"
 
 #if HB_PROJECT_FEATURE_QSV
@@ -228,6 +229,20 @@ static int      metadata_passthru = -1;
 static int      audio_name_passthru = -1;
 static char *   audio_autonaming_behaviour = NULL;
 static int      sub_name_passthru   = -1;
+
+/* Named audio filter shortcuts (per-track arrays) */
+static char **  af_acompressor      = NULL;
+static char **  af_adeclick         = NULL;
+static char **  af_adeclip          = NULL;
+static char **  af_afftdn           = NULL;
+static char **  af_agate            = NULL;
+static char **  af_alimiter         = NULL;
+static char **  af_anlmdn           = NULL;
+static char **  af_crossfeed        = NULL;
+static char **  af_dialoguenhance   = NULL;
+static char **  af_loudnorm         = NULL;
+static char **  af_stereowiden      = NULL;
+static char **  af_surround         = NULL;
 
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
@@ -676,6 +691,18 @@ cleanup:
     free(lapsharp_tune);
     free(bm3d);
     free(deband);
+    hb_str_vfree(af_acompressor);
+    hb_str_vfree(af_adeclick);
+    hb_str_vfree(af_adeclip);
+    hb_str_vfree(af_afftdn);
+    hb_str_vfree(af_agate);
+    hb_str_vfree(af_alimiter);
+    hb_str_vfree(af_anlmdn);
+    hb_str_vfree(af_crossfeed);
+    hb_str_vfree(af_dialoguenhance);
+    hb_str_vfree(af_loudnorm);
+    hb_str_vfree(af_stereowiden);
+    hb_str_vfree(af_surround);
     free(preset_export_name);
     free(preset_export_desc);
     free(preset_export_file);
@@ -1924,6 +1951,48 @@ static void ShowHelp(void)
 "   --no-grayscale          Disable preset 'grayscale'\n"
 "\n"
 "\n"
+"Audio Filter Options ---------------------------------------------------------\n"
+"\n"
+"   Audio filters are per-track. Use commas to specify per track, e.g.:\n"
+"     --afftdn=default,nr=20  (track 1: default, track 2: custom)\n"
+"\n"
+"   --acompressor[=string]  Dynamic range compression. Reduces loud/quiet\n"
+"                           variation.\n"
+"                           Default: threshold=0.125:ratio=2:attack=20:\n"
+"                                    release=250:mix=1\n"
+"   --adeclick[=string]     Click/pop removal. Interpolates over detected\n"
+"                           impulsive noise (vinyl rips, bad recordings).\n"
+"                           Default: w=55:o=75:a=2:t=2:b=2\n"
+"   --adeclip[=string]      Declipping. Repairs clipped audio samples.\n"
+"                           Default: w=55:o=75:a=8:t=10\n"
+"   --afftdn[=string]       FFT-based audio denoiser. Removes hiss/hum.\n"
+"                           Default: nr=12:nf=-50\n"
+"   --agate[=string]        Noise gate. Silences audio below threshold.\n"
+"                           Default: threshold=0.125:ratio=2:attack=20:\n"
+"                                    release=250\n"
+"   --alimiter[=string]     Audio limiter. Prevents clipping.\n"
+"                           Default: limit=1:attack=5:release=50:\n"
+"                                    level=enabled\n"
+"   --anlmdn[=string]       Non-local means audio denoiser.\n"
+"                           Default: s=0.00001:p=2:r=6\n"
+"   --crossfeed[=string]    Headphone crossfeed. Makes stereo more natural\n"
+"                           on headphones.\n"
+"                           Default: strength=0.2:range=0.5:slope=0.5\n"
+"   --dialoguenhance[=str]  Dialog enhancement. Improves speech clarity.\n"
+"                           Default: original=1:enhance=1:voice=2\n"
+"   --loudnorm[=string]     EBU R128 loudness normalization. Levels volume\n"
+"                           across the file to a target loudness.\n"
+"                           Default: I=-24.0:TP=-2.0:LRA=7.0\n"
+"   --stereowiden[=string]  Stereo image widening. Enhances stereo effect\n"
+"                           by delaying left into right and vice versa.\n"
+"                           Non-stereo sources are downmixed to stereo.\n"
+"                           Default: delay=20:feedback=0.3:crossfeed=0.3:\n"
+"                           drymix=0.8\n"
+"   --surround[=string]     Surround upmix. Upmixes stereo to 5.1.\n"
+"                           Requires a multichannel encoder (e.g. eac3).\n"
+"                           Default: chl_in=stereo:chl_out=5.1\n"
+"\n"
+"\n"
 "Subtitles Options ------------------------------------------------------------\n"
 "\n"
 "  --subtitle-lang-list <string>\n"
@@ -2309,6 +2378,18 @@ static int ParseOptions( int argc, char ** argv )
     #define COLOR_RANGE                   336
     #define FILTER_BM3D                   337
     #define FILTER_DEBAND                 338
+    #define FILTER_ACOMPRESSOR            340
+    #define FILTER_ADECLICK               341
+    #define FILTER_ADECLIP                342
+    #define FILTER_AFFTDN                 343
+    #define FILTER_AGATE                  344
+    #define FILTER_ALIMITER               345
+    #define FILTER_ANLMDN                 346
+    #define FILTER_CROSSFEED              347
+    #define FILTER_DIALOGUENHANCE         348
+    #define FILTER_LOUDNORM               349
+    #define FILTER_STEREOWIDEN            350
+    #define FILTER_SURROUND               351
 
     for( ;; )
     {
@@ -2448,6 +2529,19 @@ static int ParseOptions( int argc, char ** argv )
             { "no-pad",      no_argument,       &pad_disable,    1 },
             { "colorspace",    required_argument, NULL,    FILTER_COLORSPACE},
             { "no-colorspace", no_argument,       &colorspace_disable, 1 },
+
+            { "acompressor",    optional_argument, NULL, FILTER_ACOMPRESSOR },
+            { "adeclick",       optional_argument, NULL, FILTER_ADECLICK },
+            { "adeclip",        optional_argument, NULL, FILTER_ADECLIP },
+            { "afftdn",         optional_argument, NULL, FILTER_AFFTDN },
+            { "agate",          optional_argument, NULL, FILTER_AGATE },
+            { "alimiter",       optional_argument, NULL, FILTER_ALIMITER },
+            { "anlmdn",         optional_argument, NULL, FILTER_ANLMDN },
+            { "crossfeed",      optional_argument, NULL, FILTER_CROSSFEED },
+            { "dialoguenhance", optional_argument, NULL, FILTER_DIALOGUENHANCE },
+            { "loudnorm",       optional_argument, NULL, FILTER_LOUDNORM },
+            { "stereowiden",    optional_argument, NULL, FILTER_STEREOWIDEN },
+            { "surround",       optional_argument, NULL, FILTER_SURROUND },
 
             // mapping of legacy option names for backwards compatibility
             { "qsv-preset",           required_argument, NULL, ENCODER_PRESET,       },
@@ -3396,6 +3490,54 @@ static int ParseOptions( int argc, char ** argv )
                     audio_autonaming_behaviour = strdup(AUDIO_AUTONAMING_BEHAVIOUR_DEFAULT_PRESET);
                 }
                 break;
+            case FILTER_ACOMPRESSOR:
+                hb_str_vfree(af_acompressor);
+                af_acompressor = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_ADECLICK:
+                hb_str_vfree(af_adeclick);
+                af_adeclick = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_ADECLIP:
+                hb_str_vfree(af_adeclip);
+                af_adeclip = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_AFFTDN:
+                hb_str_vfree(af_afftdn);
+                af_afftdn = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_AGATE:
+                hb_str_vfree(af_agate);
+                af_agate = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_ALIMITER:
+                hb_str_vfree(af_alimiter);
+                af_alimiter = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_ANLMDN:
+                hb_str_vfree(af_anlmdn);
+                af_anlmdn = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_CROSSFEED:
+                hb_str_vfree(af_crossfeed);
+                af_crossfeed = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_DIALOGUENHANCE:
+                hb_str_vfree(af_dialoguenhance);
+                af_dialoguenhance = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_LOUDNORM:
+                hb_str_vfree(af_loudnorm);
+                af_loudnorm = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_STEREOWIDEN:
+                hb_str_vfree(af_stereowiden);
+                af_stereowiden = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
+            case FILTER_SURROUND:
+                hb_str_vfree(af_surround);
+                af_surround = hb_str_vsplit(optarg != NULL ? optarg : "default", ',');
+                break;
             case ':':
                 fprintf( stderr, "missing parameter (%s)\n", argv[cur_optind] );
                 return -1;
@@ -4186,7 +4328,19 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         audio_gain                != NULL ||
         aqualities                != NULL ||
         acompressions             != NULL ||
-        anames                    != NULL))
+        anames                    != NULL ||
+        af_acompressor            != NULL ||
+        af_adeclick               != NULL ||
+        af_adeclip                != NULL ||
+        af_afftdn                 != NULL ||
+        af_agate                  != NULL ||
+        af_alimiter               != NULL ||
+        af_anlmdn                 != NULL ||
+        af_crossfeed              != NULL ||
+        af_dialoguenhance         != NULL ||
+        af_loudnorm               != NULL ||
+        af_stereowiden            != NULL ||
+        af_surround               != NULL))
     {
         // No explicit audio tracks, but track settings modified.
         // Modify the presets audio settings.
@@ -4200,17 +4354,24 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             hb_dict_set(preset, "AudioList", list);
         }
         int list_len = hb_value_array_len(list);
-        int count = MAX(hb_str_vlen(mixdowns),
-                    MAX(hb_str_vlen(dynamic_range_compression),
-                    MAX(hb_str_vlen(audio_gain),
-                    MAX(hb_str_vlen(audio_dither),
-                    MAX(hb_str_vlen(normalize_mix_level),
-                    MAX(hb_str_vlen(arates),
-                    MAX(hb_str_vlen(abitrates),
-                    MAX(hb_str_vlen(aqualities),
-                    MAX(hb_str_vlen(acompressions),
-                    MAX(hb_str_vlen(acodecs),
-                        hb_str_vlen(anames)))))))))));
+        int count = 0;
+        {
+            char ** audio_arrays[] = {
+                mixdowns, dynamic_range_compression, audio_gain,
+                audio_dither, normalize_mix_level, arates, abitrates,
+                aqualities, acompressions, acodecs, anames,
+                af_acompressor, af_adeclick,
+                af_adeclip, af_afftdn, af_agate, af_alimiter,
+                af_anlmdn, af_crossfeed, af_dialoguenhance,
+                af_loudnorm, af_stereowiden, af_surround, NULL
+            };
+            for (int aa = 0; audio_arrays[aa] != NULL; aa++)
+            {
+                int len = hb_str_vlen(audio_arrays[aa]);
+                if (len > count)
+                    count = len;
+            }
+        }
 
         if (list_len < count)
         {
@@ -4483,6 +4644,51 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     audio_dict = hb_value_array_get(list, ii);
                     hb_dict_set(audio_dict, "AudioTrackName",
                                         hb_value_string(anames[ii]));
+                }
+            }
+        }
+
+        // Build per-track audio filter lists
+        {
+            int af_count = hb_value_array_len(list);
+            for (ii = 0; ii < af_count; ii++)
+            {
+                hb_value_array_t * af_list = NULL;
+
+                #define COLLECT_AF(arr, fid) \
+                    if (arr != NULL && ii < hb_str_vlen(arr) && \
+                        arr[ii] != NULL && arr[ii][0] != '\0') \
+                    { \
+                        if (af_list == NULL) \
+                            af_list = hb_value_array_init(); \
+                        hb_dict_t * af_entry = hb_dict_init(); \
+                        hb_dict_set_int(af_entry, "ID", fid); \
+                        hb_dict_set_string(af_entry, "Settings", arr[ii]); \
+                        hb_value_array_append(af_list, af_entry); \
+                    }
+
+                // Order matters: signal chain order
+                // restore -> denoise -> dynamics ->
+                //   enhance -> spatial -> upmix -> limit -> normalize
+                COLLECT_AF(af_adeclick,       HB_AUDIO_FILTER_ADECLICK)
+                COLLECT_AF(af_adeclip,        HB_AUDIO_FILTER_ADECLIP)
+                COLLECT_AF(af_afftdn,         HB_AUDIO_FILTER_AFFTDN)
+                COLLECT_AF(af_anlmdn,         HB_AUDIO_FILTER_ANLMDN)
+                COLLECT_AF(af_acompressor,    HB_AUDIO_FILTER_ACOMPRESSOR)
+                COLLECT_AF(af_agate,          HB_AUDIO_FILTER_AGATE)
+                COLLECT_AF(af_dialoguenhance, HB_AUDIO_FILTER_DIALOGUENHANCE)
+                COLLECT_AF(af_crossfeed,      HB_AUDIO_FILTER_CROSSFEED)
+                COLLECT_AF(af_stereowiden,    HB_AUDIO_FILTER_STEREOWIDEN)
+                COLLECT_AF(af_surround,       HB_AUDIO_FILTER_SURROUND)
+                COLLECT_AF(af_alimiter,       HB_AUDIO_FILTER_ALIMITER)
+                COLLECT_AF(af_loudnorm,       HB_AUDIO_FILTER_LOUDNORM)
+
+                #undef COLLECT_AF
+
+                if (af_list != NULL)
+                {
+                    audio_dict = hb_value_array_get(list, ii);
+                    hb_dict_set(audio_dict, "AudioFilterList", af_list);
                 }
             }
         }
