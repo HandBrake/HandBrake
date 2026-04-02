@@ -245,6 +245,20 @@ static hb_filter_param_t bwdif_presets[] =
     { 0,  NULL,                NULL,           NULL             },
 };
 
+static hb_filter_param_t acompressor_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL             },
+    { 3, "Default",            "default",      NULL             },
+    { 0,  NULL,                NULL,           NULL             },
+};
+
+static hb_filter_param_t agate_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL             },
+    { 3, "Default",            "default",      NULL             },
+    { 0,  NULL,                NULL,           NULL             },
+};
+
 typedef struct
 {
     int                filter_id;
@@ -302,6 +316,12 @@ static filter_param_map_t param_map[] =
 
     { HB_FILTER_DEBAND, deband_presets, NULL,
       sizeof(deband_presets) / sizeof(hb_filter_param_t),      0, },
+
+    { HB_AUDIO_FILTER_ACOMPRESSOR, acompressor_presets, NULL,
+      sizeof(acompressor_presets) / sizeof(hb_filter_param_t), 0, },
+
+    { HB_AUDIO_FILTER_AGATE, agate_presets, NULL,
+      sizeof(agate_presets) / sizeof(hb_filter_param_t),       0, },
 
     { HB_FILTER_INVALID,     NULL,                NULL,     0, 0, },
 };
@@ -1294,6 +1314,8 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_YADIF:
         case HB_FILTER_BWDIF:
         case HB_FILTER_COLORSPACE:
+        case HB_AUDIO_FILTER_ACOMPRESSOR:
+        case HB_AUDIO_FILTER_AGATE:
             settings = generate_generic_settings(filter_id, preset,
                                                  tune, custom);
             break;

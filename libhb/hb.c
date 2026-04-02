@@ -1668,12 +1668,12 @@ void hb_add_filter2( hb_value_array_t * list, hb_dict_t * filter_dict )
 }
 
 /**
- * Add a filter to a jobs filter list
+ * Add a filter to a  filter list
  *
- * @param job Handle to hb_job_t
+ * @param list Handle to a filter hb_list_t
  * @param settings to give the filter
  */
-void hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
+void hb_add_filter_dict( hb_list_t * list_filter, hb_filter_object_t * filter,
                          const hb_dict_t * settings_in )
 {
     if (filter == NULL)
@@ -1701,12 +1701,12 @@ void hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
     {
         // Find the position in the filter chain this filter belongs in
         int i;
-        for( i = 0; i < hb_list_count( job->list_filter ); i++ )
+        for( i = 0; i < hb_list_count( list_filter ); i++ )
         {
-            hb_filter_object_t * f = hb_list_item( job->list_filter, i );
+            hb_filter_object_t * f = hb_list_item( list_filter, i );
             if( f->id > filter->id )
             {
-                hb_list_insert( job->list_filter, i, filter );
+                hb_list_insert( list_filter, i, filter );
                 return;
             }
             else if( f->id == filter->id )
@@ -1718,16 +1718,16 @@ void hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
         }
     }
     // No position found or order not enforced for this filter
-    hb_list_add( job->list_filter, filter );
+    hb_list_add( list_filter, filter );
 }
 
 /**
- * Add a filter to a jobs filter list
+ * Add a filter to a  filter list
  *
- * @param job Handle to hb_job_t
+ * @param list Handle to a filter hb_list_t
  * @param settings to give the filter
  */
-void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter,
+void hb_add_filter( hb_list_t * list, hb_filter_object_t * filter,
                     const char * settings_in )
 {
     if (filter == NULL)
@@ -1741,7 +1741,7 @@ void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter,
         hb_log("hb_add_filter: failed to parse filter settings!");
         return;
     }
-    hb_add_filter_dict(job, filter, settings);
+    hb_add_filter_dict(list, filter, settings);
     hb_value_free(&settings);
 }
 

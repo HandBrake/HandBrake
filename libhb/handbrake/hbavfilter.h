@@ -18,6 +18,9 @@ typedef struct hb_avfilter_graph_s hb_avfilter_graph_t;
 hb_avfilter_graph_t *
 hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init);
 
+hb_avfilter_graph_t *
+hb_avfilter_audio_graph_init(hb_value_t *settings, hb_filter_init_t *init);
+
 void    hb_avfilter_graph_close(hb_avfilter_graph_t ** _g);
 
 const char *
@@ -35,9 +38,14 @@ int     hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t ** in);
 hb_buffer_t *
 hb_avfilter_get_buf(hb_avfilter_graph_t * graph);
 
+int hb_audio_avfilter_add_buf(hb_avfilter_graph_t *graph, hb_buffer_t **buf_in);
+
+hb_buffer_t * hb_audio_avfilter_get_buf(hb_avfilter_graph_t *graph);
+
 void    hb_avfilter_append_dict(hb_value_array_t * filters,
                                 const char * name, hb_dict_t * settings);
 
 void    hb_avfilter_combine(hb_list_t * list);
+void    hb_avfilter_audio_combine(hb_list_t *list);
 
 #endif // HANDBRAKE_AVFILTER_H
