@@ -15,11 +15,13 @@ HARFBUZZ.CONFIGURE.shared      =
 HARFBUZZ.CONFIGURE.host        =
 HARFBUZZ.CONFIGURE.build       =
 HARFBUZZ.CONFIGURE.static      = -Ddefault_library=static
-HARFBUZZ.CONFIGURE.extra       = --libdir=$(call fn.ABSOLUTE,$(HARFBUZZ.prefix/))contrib/lib/ \
-                                  -Dutilities=disabled -Dtests=disabled -Dfreetype=enabled \
-                                  -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,HARFBUZZ.GCC,*archs *sysroot *minver ?extra)" \
-                                  -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,HARFBUZZ.GCC,*archs *sysroot *minver ?extra.exe)" \
-                                  -Dpkg_config_path=$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/pkgconfig)
+HARFBUZZ.CONFIGURE.extra       = -Dlibdir=$(call fn.ABSOLUTE,$(HARFBUZZ.prefix/))contrib/lib/ \
+                                 -Dutilities=disabled -Dbuildtype=release -Dfreetype=enabled \
+                                 -Dtests=disabled -Ddocs=disabled -Dbenchmark=disabled \
+                                 -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,HARFBUZZ.GCC,*archs *sysroot *minver ?extra)" \
+                                 -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,HARFBUZZ.GCC,*archs *sysroot *minver ?extra.exe)" \
+                                 -Dpkg_config_path=$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/pkgconfig)
+ 
 HARFBUZZ.CONFIGURE.env         =
 
 ifeq (1,$(HOST.cross))
@@ -29,7 +31,8 @@ ifeq (1,$(HOST.cross))
                                  -Dgraphite2=disabled \
                                  -Dicu=disabled \
                                  -Dgdi=disabled \
-								 -Dgpu=disabled
+                                 -Draster=disabled \
+                                 -Dvector=disabled
 endif
 
 ifeq ($(HOST.system),darwin)
