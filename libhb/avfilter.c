@@ -11,26 +11,6 @@
 #include "handbrake/hbavfilter.h"
 #include "handbrake/avfilter_priv.h"
 
-static int  avfilter_init(hb_filter_object_t * filter, hb_filter_init_t * init);
-static int  avfilter_post_init( hb_filter_object_t * filter, hb_job_t * job );
-static void avfilter_close( hb_filter_object_t * filter );
-static int  avfilter_work( hb_filter_object_t * filter,
-                           hb_buffer_t ** buf_in, hb_buffer_t ** buf_out );
-static hb_filter_info_t * avfilter_info( hb_filter_object_t * filter );
-
-hb_filter_object_t hb_filter_avfilter =
-{
-    .id            = HB_FILTER_AVFILTER,
-    .enforce_order = 0,
-    .name          = "AVFilter",
-    .settings      = NULL,
-    .init          = avfilter_init,
-    .post_init     = avfilter_post_init,
-    .work          = avfilter_work,
-    .close         = avfilter_close,
-    .info          = avfilter_info,
-};
-
 int  hb_avfilter_null_work( hb_filter_object_t * filter,
                             hb_buffer_t ** buf_in, hb_buffer_t ** buf_out )
 {
@@ -223,6 +203,8 @@ void hb_avfilter_alias_close( hb_filter_object_t * filter )
         return;
     }
 
+    hb_filter_init_close(&pv->input);
+    hb_filter_init_close(&pv->output);
     hb_buffer_list_close(&pv->list);
     hb_value_free(&pv->avfilters);
     free(pv);
@@ -282,3 +264,151 @@ static int avfilter_work( hb_filter_object_t * filter,
 
     return HB_FILTER_OK;
 }
+
+hb_filter_object_t hb_filter_avfilter =
+{
+    .id            = HB_FILTER_AVFILTER,
+    .enforce_order = 0,
+    .name          = "AVFilter",
+    .settings      = NULL,
+    .init          = avfilter_init,
+    .post_init     = avfilter_post_init,
+    .work          = avfilter_work,
+    .close         = avfilter_close,
+    .info          = avfilter_info,
+};
+
+static int avfilter_audio_init(hb_filter_object_t *filter, hb_filter_init_t *init)
+{
+    hb_filter_private_t *pv = NULL;
+
+    pv = calloc(1, sizeof(struct hb_filter_private_s));
+    filter->private_data = pv;
+    if (pv == NULL)
+    {
+        return 1;
+    }
+    pv->input = *init;
+    pv->initialized = 1;
+
+    pv->graph = hb_avfilter_audio_graph_init(filter->settings, init);
+    if (pv->graph == NULL)
+    {
+        goto fail;
+    }
+
+    // Retrieve the parameters of the output filter
+    hb_avfilter_graph_update_init(pv->graph, init);
+    pv->output = *init;
+
+    hb_buffer_list_clear(&pv->list);
+
+    return 0;
+
+fail:
+    hb_avfilter_graph_close(&pv->graph);
+    free(pv);
+
+    return 1;
+}
+
+static int avfilter_audio_post_init(hb_filter_object_t *filter, hb_job_t *job)
+{
+    hb_filter_private_t *pv = filter->private_data;
+
+    if (pv == NULL)
+    {
+        return 1;
+    }
+    if (pv->initialized)
+    {
+        return 0;
+    }
+
+    pv->graph = hb_avfilter_audio_graph_init(filter->settings, &pv->input);
+    if (pv->graph == NULL)
+    {
+        goto fail;
+    }
+
+    // Retrieve the parameters of the output filter
+    pv->output = pv->input;
+    hb_avfilter_graph_update_init(pv->graph, &pv->output);
+
+    hb_buffer_list_clear(&pv->list);
+
+    return 0;
+
+fail:
+    hb_avfilter_graph_close(&pv->graph);
+    free(pv);
+
+    return 1;
+}
+
+static hb_buffer_t * filterAudioFrame(hb_filter_private_t *pv, hb_buffer_t **buf_in)
+{
+    hb_buffer_list_t  list;
+    hb_buffer_t      *buf = NULL, *next = NULL;
+
+    hb_audio_avfilter_add_buf(pv->graph, buf_in);
+    buf = hb_audio_avfilter_get_buf(pv->graph);
+
+    while (buf != NULL)
+    {
+        hb_buffer_list_append(&pv->list, buf);
+        buf = hb_avfilter_get_buf(pv->graph);
+    }
+    // Delay one frame so we can set the stop time of the output buffer
+    hb_buffer_list_clear(&list);
+    while (hb_buffer_list_count(&pv->list) > 1)
+    {
+        buf  = hb_buffer_list_rem_head(&pv->list);
+        next = hb_buffer_list_head(&pv->list);
+
+        buf->s.stop = next->s.start;
+        buf->s.duration = buf->s.stop - buf->s.start;
+        hb_buffer_list_append(&list, buf);
+    }
+
+    return hb_buffer_list_head(&list);
+}
+
+static int avfilter_audio_work(hb_filter_object_t *filter,
+                               hb_buffer_t **buf_in, hb_buffer_t **buf_out)
+{
+    hb_filter_private_t *pv = filter->private_data;
+    hb_buffer_t *in = *buf_in;
+
+    if (in->s.flags & HB_BUF_FLAG_EOF)
+    {
+        hb_buffer_t *out  = filterAudioFrame(pv, NULL);
+        hb_buffer_t *last = hb_buffer_list_tail(&pv->list);
+        if (last != NULL && last->s.start != AV_NOPTS_VALUE)
+        {
+            last->s.stop = last->s.start + last->s.duration;
+        }
+        hb_buffer_list_prepend(&pv->list, out);
+        hb_buffer_list_append(&pv->list, in);
+        *buf_out = hb_buffer_list_clear(&pv->list);
+        *buf_in = NULL;
+        return HB_FILTER_DONE;
+    }
+
+    *buf_out = filterAudioFrame(pv, buf_in);
+
+    return HB_FILTER_OK;
+}
+
+hb_filter_object_t hb_filter_avfilter_audio =
+{
+    .id            = HB_AUDIO_FILTER_AVFILTER,
+    .enforce_order = 0,
+    .name          = "AVFilter Audio",
+    .settings      = NULL,
+    .init          = avfilter_audio_init,
+    .post_init     = avfilter_audio_post_init,
+    .work          = avfilter_audio_work,
+    .close         = avfilter_close,
+    .info          = avfilter_info,
+};

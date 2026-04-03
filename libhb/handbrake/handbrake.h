@@ -93,9 +93,9 @@ void          hb_rotate_geometry( hb_geometry_crop_t * geo,
 void          hb_set_anamorphic_size2(hb_geometry_t          * src_geo,
                                       hb_geometry_settings_t * geo,
                                       hb_geometry_t          * result);
-void          hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
+void          hb_add_filter_dict( hb_list_t * list_filter, hb_filter_object_t * filter,
                                   const hb_dict_t * settings_in );
-void          hb_add_filter( hb_job_t * job, hb_filter_object_t * filter,
+void          hb_add_filter( hb_list_t * list_filter, hb_filter_object_t * filter,
                              const char * settings );
 void          hb_add_filter2( hb_value_array_t * list, hb_dict_t * filter );
 

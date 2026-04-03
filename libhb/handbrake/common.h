@@ -1132,6 +1132,7 @@ struct hb_audio_config_s
         int      normalize_mix_level; /* mix level normalization (boolean) */
         int      dither_method; /* dither algorithm */
         const char * name; /* Output track name */
+        hb_list_t  * list_filter; /* List of hb_filter_object_t */
     } out;
 
     /* Input */
@@ -1184,6 +1185,7 @@ struct hb_audio_s
         hb_fifo_t * fifo_in;   /* AC3/MPEG/LPCM ES */
         hb_fifo_t * fifo_raw;  /* Raw audio */
         hb_fifo_t * fifo_sync; /* Resampled, synced raw audio */
+        hb_fifo_t * fifo_render;/* Filtered raw audio */
         hb_fifo_t * fifo_out;  /* MP3/AAC/Vorbis ES */
 
         hb_mux_data_t * mux_data;
@@ -1616,8 +1618,11 @@ extern hb_work_object_t hb_reader;
 typedef struct hb_filter_init_s
 {
     hb_job_t      * job;
+
     int             pix_fmt;
     int             hw_pix_fmt;
+    void          * hw_frames_ctx;
+
     int             color_prim;
     int             color_transfer;
     int             color_matrix;
@@ -1625,12 +1630,20 @@ typedef struct hb_filter_init_s
     int             chroma_location;
     hb_geometry_t   geometry;
     int             crop[4];
+    int             grayscale;
+
     hb_rational_t   vrate;
     int             cfr;
-    int             grayscale;
     hb_rational_t   time_base;
-    void          * hw_frames_ctx;
+
+    int             samplerate;
+    int             sample_fmt;
+    AVChannelLayout ch_layout;
+
 } hb_filter_init_t;
+
+void hb_filter_init_copy(hb_filter_init_t *dst, hb_filter_init_t *src);
+void hb_filter_init_close(hb_filter_init_t *init);
 
 typedef struct hb_filter_info_s
 {
@@ -1678,6 +1691,21 @@ struct hb_filter_object_s
 
     hb_filter_object_t  * sub_filter;
 #endif
+};
+
+enum
+{
+    HB_AUDIO_FILTER_INVALID = 0,
+    HB_AUDIO_FILTER_FIRST = 10001,
+
+    HB_AUDIO_FILTER_ACOMPRESSOR,
+    HB_AUDIO_FILTER_AGATE,
+
+    // Finally filters that don't care what order they are in,
+    // except that they must be after the above filters
+    HB_AUDIO_FILTER_AVFILTER,
+
+    HB_AUDIO_FILTER_LAST
 };
 
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_filter_ids.cs when changing this enum

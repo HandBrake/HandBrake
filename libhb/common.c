@@ -5019,6 +5019,40 @@ void hb_job_set_file(hb_job_t *job, const char *file)
     }
 }
 
+void hb_filter_init_copy(hb_filter_init_t *dst, hb_filter_init_t *src)
+{
+    dst->job = src->job;
+
+    dst->pix_fmt = src->pix_fmt;
+    dst->hw_pix_fmt = src->hw_pix_fmt;
+    dst->hw_frames_ctx = src->hw_frames_ctx;
+
+    dst->color_prim = src->color_prim;
+    dst->color_transfer = src->color_transfer;
+    dst->color_matrix = src->color_matrix;
+    dst->color_range = src->color_range;
+    dst->chroma_location = src->chroma_location;
+    dst->geometry = src->geometry;
+    dst->crop[0] = src->crop[0];
+    dst->crop[1] = src->crop[1];
+    dst->crop[2] = src->crop[2];
+    dst->crop[3] = src->crop[3];
+
+    dst->grayscale = src->grayscale;
+    dst->vrate = src->vrate;
+    dst->cfr = src->cfr;
+    dst->time_base = src->time_base;
+
+    dst->samplerate = src->samplerate;
+    dst->sample_fmt = src->sample_fmt;
+    av_channel_layout_copy(&dst->ch_layout, &src->ch_layout);
+}
+
+void hb_filter_init_close(hb_filter_init_t *init)
+{
+    av_channel_layout_uninit(&init->ch_layout);
+}
+
 hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter )
 {
     if( filter == NULL )
@@ -5249,6 +5283,18 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_unsharp_vt;
             break;
 #endif
+
+        case HB_AUDIO_FILTER_ACOMPRESSOR:
+            filter = &hb_filter_acompressor;
+            break;
+
+        case HB_AUDIO_FILTER_AGATE:
+            filter = &hb_filter_agate;
+            break;
+
+        case HB_AUDIO_FILTER_AVFILTER:
+            filter = &hb_filter_avfilter_audio;
+            break;
 
         default:
             filter = NULL;
@@ -5727,6 +5773,10 @@ hb_audio_t *hb_audio_copy(const hb_audio_t *src)
             }
         }
         audio->priv.extradata = hb_data_dup(src->priv.extradata);
+        if (src->config.out.list_filter)
+        {
+            audio->config.out.list_filter = hb_filter_list_copy(src->config.out.list_filter);
+        }
     }
     return audio;
 }
@@ -5819,6 +5869,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->out.normalize_mix_level = 0;
     audiocfg->out.dither_method = hb_audio_dither_get_default();
     audiocfg->out.name = NULL;
+    audiocfg->out.list_filter = hb_list_init();
 }
 
 void hb_audio_config_close(hb_audio_config_t *audiocfg)
@@ -5826,6 +5877,7 @@ void hb_audio_config_close(hb_audio_config_t *audiocfg)
     if (audiocfg)
     {
         void *item;
+        hb_filter_object_t *filter;
 
         while ((item = hb_list_item(audiocfg->list_linked_index, 0)))
         {
@@ -5838,6 +5890,12 @@ void hb_audio_config_close(hb_audio_config_t *audiocfg)
             av_channel_layout_uninit(audiocfg->in.ch_layout);
             free(audiocfg->in.ch_layout);
         }
+        while ((filter = hb_list_item(audiocfg->out.list_filter, 0)))
+        {
+            hb_list_rem(audiocfg->out.list_filter, filter);
+            hb_filter_close(&filter);
+        }
+        hb_list_close(&audiocfg->out.list_filter);
     }
 }
 
@@ -5873,6 +5931,11 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
     if (audiocfg->out.name && *audiocfg->out.name)
     {
         audio->config.out.name = strdup(audiocfg->out.name);
+    }
+
+    if (audiocfg->out.list_filter)
+    {
+        audio->config.out.list_filter = hb_filter_list_copy(audiocfg->out.list_filter);
     }
 
     hb_list_add(job->list_audio, audio);
