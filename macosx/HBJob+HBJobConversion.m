@@ -488,6 +488,7 @@
 
     // Now lets call the filters if applicable.
     hb_filter_object_t *filter;
+    hb_list_t *filter_list = job->list_filter;
 
     // Detelecine
     if (![self.filters.detelecine isEqualToString:@"off"])
@@ -498,7 +499,7 @@
                                                              NULL,
                                                              self.filters.detelecineCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
-        hb_add_filter_dict(job, filter, filter_dict);
+        hb_add_filter_dict(filter_list, filter, filter_dict);
         hb_value_free(&filter_dict);
     }
 
@@ -511,7 +512,7 @@
                                                              NULL,
                                                              self.filters.combDetectionCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
-        hb_add_filter_dict(job, filter, filter_dict);
+        hb_add_filter_dict(filter_list, filter, filter_dict);
         hb_value_free(&filter_dict);
     }
 
@@ -533,13 +534,13 @@
                                                             NULL,
                                                             self.filters.deinterlaceCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
-        hb_add_filter_dict(job, filter, filter_dict);
+        hb_add_filter_dict(filter_list, filter, filter_dict);
         hb_value_free(&filter_dict);
     }
 
     // Add framerate shaping filter
     filter = hb_filter_init(HB_FILTER_VFR);
-    hb_add_filter(job, filter, [[NSString stringWithFormat:@"mode=%d:rate=%d/%d",
+    hb_add_filter(filter_list, filter, [[NSString stringWithFormat:@"mode=%d:rate=%d/%d",
                                  fps_mode, fps_num, fps_den] UTF8String]);
 
     // Deblock
@@ -551,7 +552,7 @@
                                                              self.filters.deblockTune.UTF8String,
                                                              self.filters.deblockCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
-        hb_add_filter_dict(job, filter, filter_dict);
+        hb_add_filter_dict(filter_list, filter, filter_dict);
         hb_value_free(&filter_dict);
     }
 
@@ -569,7 +570,7 @@
                                                   self.filters.denoiseTune.UTF8String,
                                                   self.filters.denoiseCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
-        hb_add_filter_dict(job, filter, filter_dict);
+        hb_add_filter_dict(filter_list, filter, filter_dict);
         hb_dict_free(&filter_dict);
     }
 
@@ -582,13 +583,13 @@
                                                              self.filters.chromaSmoothTune.UTF8String,
                                                              self.filters.chromaSmoothCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
-        hb_add_filter_dict(job, filter, filter_dict);
+        hb_add_filter_dict(filter_list, filter, filter_dict);
         hb_value_free(&filter_dict);
     }
 
     // Add Crop/Scale filter
     filter = hb_filter_init(HB_FILTER_CROP_SCALE);
-    hb_add_filter( job, filter,
+    hb_add_filter( filter_list, filter,
                    [NSString stringWithFormat:
                     @"width=%d:height=%d:crop-top=%d:crop-bottom=%d:crop-left=%d:crop-right=%d",
                     self.picture.width, self.picture.height,
@@ -609,7 +610,7 @@
                                                   self.filters.sharpenTune.UTF8String,
                                                   self.filters.sharpenCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
-        hb_add_filter_dict(job, filter, filter_dict);
+        hb_add_filter_dict(filter_list, filter, filter_dict);
         hb_dict_free(&filter_dict);
     }
 
@@ -617,7 +618,7 @@
     if (self.filters.grayscale)
     {
         filter = hb_filter_init(HB_FILTER_GRAYSCALE);
-        hb_add_filter(job, filter, NULL);
+        hb_add_filter(filter_list, filter, NULL);
     }
 
     // Rotate
@@ -630,7 +631,7 @@
                                                               self.picture.angle, self.picture.flip].UTF8String);
 
         filter = hb_filter_init(filter_id);
-        hb_add_filter_dict(job, filter, filter_dict);
+        hb_add_filter_dict(filter_list, filter, filter_dict);
         hb_dict_free(&filter_dict);
     }
 
@@ -662,7 +663,7 @@
         hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id, NULL, NULL, settings.UTF8String);
 
         filter = hb_filter_init(filter_id);
-        hb_add_filter_dict(job, filter, filter_dict);
+        hb_add_filter_dict(filter_list, filter, filter_dict);
         hb_dict_free(&filter_dict);
     }
 
@@ -675,7 +676,7 @@
                                                              NULL,
                                                              self.filters.colorspaceCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
-        hb_add_filter_dict(job, filter, filter_dict);
+        hb_add_filter_dict(filter_list, filter, filter_dict);
         hb_value_free(&filter_dict);
     }
 
