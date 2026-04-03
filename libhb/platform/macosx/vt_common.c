@@ -488,7 +488,7 @@ static void replace_filter(hb_job_t *job, int prev_filter_id, int new_filter_id)
         {
             hb_list_rem(list, filter);
             hb_filter_object_t *new_filter = hb_filter_init(new_filter_id);
-            hb_add_filter_dict(job, new_filter, settings);
+            hb_add_filter_dict(job->list_filter, new_filter, settings);
             hb_filter_close(&filter);
         }
     }
@@ -503,7 +503,7 @@ void hb_vt_setup_hw_filters(hb_job_t *job)
         // Add adapter
         hb_filter_object_t *filter = hb_filter_init(HB_FILTER_ADAPTER_VT);
         char *settings = hb_strdup_printf("rotation=%d", job->title->rotation);
-        hb_add_filter(job, filter, settings);
+        hb_add_filter(job->list_filter, filter, settings);
         free(settings);
 
         replace_filter(job, HB_FILTER_COMB_DETECT, HB_FILTER_COMB_DETECT_VT);
