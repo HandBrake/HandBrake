@@ -2234,6 +2234,7 @@ static void do_job(hb_job_t *job)
 
         for (i = 0; i < hb_list_count(job->list_audio); i++)
         {
+            audio = hb_list_item(job->list_audio, i);
             hb_list_t *list_filter = audio->config.out.list_filter;
             for (int j = 0; j < hb_list_count(list_filter); j++)
             {
@@ -2284,6 +2285,7 @@ cleanup:
 
     for (i = 0; i < hb_list_count(job->list_audio); i++)
     {
+        audio = hb_list_item(job->list_audio, i);
         hb_list_t *list_filter = audio->config.out.list_filter;
         for (int j = 0; j < hb_list_count(list_filter); j++)
         {
@@ -2335,6 +2337,7 @@ cleanup:
     }
     for (i = 0; i < hb_list_count( job->list_audio ); i++)
     {
+        audio = hb_list_item(job->list_audio, i);
         hb_list_t *list_filter = audio->config.out.list_filter;
         for (int j = 0; j < hb_list_count(list_filter); j++)
         {
