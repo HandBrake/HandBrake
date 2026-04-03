@@ -1705,8 +1705,6 @@ static void do_job(hb_job_t *job)
     hb_title_t       * title;
     hb_interjob_t    * interjob;
     hb_work_object_t * w;
-    hb_audio_t       * audio;
-    hb_subtitle_t    * subtitle;
 
     title = job->title;
 
@@ -1928,7 +1926,7 @@ static void do_job(hb_job_t *job)
         // Audio fifos must be initialized before sync
         for (i = 0; i < hb_list_count(job->list_audio); i++)
         {
-            audio = hb_list_item(job->list_audio, i);
+            hb_audio_t *audio = hb_list_item(job->list_audio, i);
 
             /* set up the audio work fifos */
             audio->priv.fifo_in   = hb_fifo_init(FIFO_LARGE, FIFO_LARGE_WAKE);
@@ -1959,7 +1957,7 @@ static void do_job(hb_job_t *job)
     // Subtitle decoder and sync fifos must be initialized before sync
     for (i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
-        subtitle = hb_list_item( job->list_subtitle, i );
+        hb_subtitle_t *subtitle = hb_list_item( job->list_subtitle, i );
         w = hb_get_work( job->h, subtitle->codec );
         // Must set capacity of the raw-FIFO to be set >= the maximum
         // number of subtitle lines that could be decoded prior to a
@@ -2016,7 +2014,7 @@ static void do_job(hb_job_t *job)
     {
         for( i = 0; i < hb_list_count( job->list_audio ); i++ )
         {
-            audio = hb_list_item( job->list_audio, i );
+            hb_audio_t *audio = hb_list_item( job->list_audio, i );
 
             // Audio Filter Chain
             hb_list_t *list_filter = audio->config.out.list_filter;
@@ -2110,7 +2108,7 @@ static void do_job(hb_job_t *job)
 
         for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
         {
-            subtitle = hb_list_item(job->list_subtitle, i);
+            hb_subtitle_t *subtitle = hb_list_item(job->list_subtitle, i);
 
             /*
             * Subtitle Encoder Thread
@@ -2234,8 +2232,9 @@ static void do_job(hb_job_t *job)
 
         for (i = 0; i < hb_list_count(job->list_audio); i++)
         {
-            audio = hb_list_item(job->list_audio, i);
+            hb_audio_t *audio = hb_list_item(job->list_audio, i);
             hb_list_t *list_filter = audio->config.out.list_filter;
+
             for (int j = 0; j < hb_list_count(list_filter); j++)
             {
                 hb_filter_object_t *filter = hb_list_item(list_filter, j);
@@ -2285,8 +2284,9 @@ cleanup:
 
     for (i = 0; i < hb_list_count(job->list_audio); i++)
     {
-        audio = hb_list_item(job->list_audio, i);
+        hb_audio_t *audio = hb_list_item(job->list_audio, i);
         hb_list_t *list_filter = audio->config.out.list_filter;
+
         for (int j = 0; j < hb_list_count(list_filter); j++)
         {
             hb_filter_object_t *filter = hb_list_item(list_filter, j);
@@ -2326,7 +2326,7 @@ cleanup:
 
     for (i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
-        subtitle = hb_list_item( job->list_subtitle, i );
+        hb_subtitle_t *subtitle = hb_list_item( job->list_subtitle, i );
         if( subtitle )
         {
             hb_fifo_close( &subtitle->fifo_in );
@@ -2337,8 +2337,9 @@ cleanup:
     }
     for (i = 0; i < hb_list_count( job->list_audio ); i++)
     {
-        audio = hb_list_item(job->list_audio, i);
+        hb_audio_t *audio = hb_list_item(job->list_audio, i);
         hb_list_t *list_filter = audio->config.out.list_filter;
+
         for (int j = 0; j < hb_list_count(list_filter); j++)
         {
             hb_filter_object_t *filter = hb_list_item(list_filter, j);
@@ -2348,7 +2349,6 @@ cleanup:
             }
         }
 
-        audio = hb_list_item( job->list_audio, i );
         if( audio->priv.fifo_in != NULL )
             hb_fifo_close( &audio->priv.fifo_in );
         if( audio->priv.fifo_raw != NULL )
