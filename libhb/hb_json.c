@@ -1062,21 +1062,32 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
     const char *path = NULL;
     hw_decode = 0;
  
-    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i, s?b}, s:{s?i}}",
+    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i, s?i, s?b}}",
                             "Source",
                                 "Path",     unpack_s(&path),
                                 "Title",    unpack_i(&title_index),
-                                "KeepDuplicateTitles", unpack_b(&keep_duplicate_titles),
-                                "Video",
-                                "HardwareDecode", unpack_i(&hw_decode)
-                           );
+                                "HWDecode", unpack_i(&hw_decode),
+                                "KeepDuplicateTitles", unpack_b(&keep_duplicate_titles)
+                        );
     if (result < 0)
     {
         hb_error("json unpack failure, failed to find title: %s", error.text);
         hb_value_free(&dict);
         return;
     }
-
+    if (result == 0)
+    {
+        json_t *video = json_object_get(dict, "Video");
+        if (video != NULL)
+        {
+            json_t *hardware_decode = json_object_get(video, "HardwareDecode");
+            if (json_is_integer(hardware_decode))
+            {
+                hw_decode = json_integer_value(hardware_decode);
+            }
+        }
+    }
+    
     // If the job wants to use Hardware decode, it must also be
     // enabled during scan.  So enable it here.
     hb_list_t *file_paths = hb_list_init();

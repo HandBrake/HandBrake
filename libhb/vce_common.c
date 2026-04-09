@@ -409,6 +409,25 @@ int hb_vce_hw_filters_via_video_memory_are_enabled(hb_job_t *job)
     return job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE;
 }
 
+int hb_vce_decode_is_codec_supported(int video_codec_param)
+{
+#if HB_PROJECT_FEATURE_AMFDEC
+    switch (video_codec_param)
+    {
+        case AV_CODEC_ID_H264:
+        case AV_CODEC_ID_HEVC:
+        case AV_CODEC_ID_AV1:
+            return 1;
+
+        default:
+            return 0;
+    }
+    return 0;
+#else
+    return 0;
+#endif
+}
+
 int hb_vce_available()
 {
     if (hb_is_hardware_disabled())

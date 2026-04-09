@@ -1909,12 +1909,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         av_buffer_replace(&pv->context->hw_device_ctx, w->hw_device_ctx);
 
         if (job == NULL ||
-            (job->hw_pix_fmt == AV_PIX_FMT_NONE && job->hw_decode & HB_DECODE_FORCE_HW) ||
-            job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE
-#if HB_PROJECT_FEATURE_AMFDEC
-            || (w->hw_accel && w->hw_accel->type == AV_HWDEVICE_TYPE_AMF)
-#endif
-           )
+            (job->hw_pix_fmt == AV_PIX_FMT_NONE && job->hw_decode & HB_DECODE_FORCE_HW))
         {
             pv->hw_frame = av_frame_alloc();
         }
@@ -2510,7 +2505,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 #if HB_PROJECT_FEATURE_VCE
     if (hb_vce_available())
     {
-        if (hb_vce_decode_get_codec_name(pv->context->codec_id) != NULL)
+        if (hb_vce_decode_is_codec_supported(pv->context->codec_id))
         {
             info->video_decode_support |= HB_DECODE_AMFDEC;
         }
