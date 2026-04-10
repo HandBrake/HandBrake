@@ -123,6 +123,42 @@ static long ReadESDSDescExt(void* descExt, UInt8 **buffer, UInt32 *size, int ver
     return noErr;
 }
 
+// based off get_aac_tag from audiotoolboxenc.c in ffmpeg's libavcodec
+static const struct
+{
+    AVChannelLayout chl;
+    AudioChannelLayoutTag tag;
+}
+aac_channel_layout_map[] =
+{
+    { AV_CHANNEL_LAYOUT_MONO,              kAudioChannelLayoutTag_Mono },
+    { AV_CHANNEL_LAYOUT_STEREO,            kAudioChannelLayoutTag_Stereo },
+    { AV_CHANNEL_LAYOUT_QUAD,              kAudioChannelLayoutTag_AAC_Quadraphonic },
+    { AV_CHANNEL_LAYOUT_OCTAGONAL,         kAudioChannelLayoutTag_AAC_Octagonal },
+    { AV_CHANNEL_LAYOUT_SURROUND,          kAudioChannelLayoutTag_AAC_3_0 },
+    { AV_CHANNEL_LAYOUT_4POINT0,           kAudioChannelLayoutTag_AAC_4_0 },
+    { AV_CHANNEL_LAYOUT_5POINT0,           kAudioChannelLayoutTag_AAC_5_0 },
+    { AV_CHANNEL_LAYOUT_5POINT1,           kAudioChannelLayoutTag_AAC_5_1 },
+    { AV_CHANNEL_LAYOUT_6POINT0,           kAudioChannelLayoutTag_AAC_6_0 },
+    { AV_CHANNEL_LAYOUT_6POINT1,           kAudioChannelLayoutTag_AAC_6_1 },
+    { AV_CHANNEL_LAYOUT_7POINT0,           kAudioChannelLayoutTag_AAC_7_0 },
+    { AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK, kAudioChannelLayoutTag_AAC_7_1 },
+    { AV_CHANNEL_LAYOUT_7POINT1,           kAudioChannelLayoutTag_AAC_7_1_B },
+};
+static int aac_channel_layout_map_count = sizeof(aac_channel_layout_map) / sizeof(aac_channel_layout_map[0]);
+
+static AudioChannelLayoutTag get_aac_tag(const AVChannelLayout *in_layout)
+{
+    for (int i = 0; i <= aac_channel_layout_map_count; i++)
+    {
+        if (!av_channel_layout_compare(in_layout, &aac_channel_layout_map[i].chl))
+        {
+            return aac_channel_layout_map[i].tag;
+        }
+    }
+    return 0;
+}
+
 /***********************************************************************
  * hb_work_encCoreAudio_init switches
  ***********************************************************************
@@ -305,6 +341,23 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     pv->remap = hb_audio_remap_init(AV_SAMPLE_FMT_FLT,
                                     &out_layout,
                                     &mixdown_layout);
+
+    AudioChannelLayout channel_layout;
+    bzero(&channel_layout, sizeof(channel_layout));
+
+    channel_layout.mChannelLayoutTag = get_aac_tag(&mixdown_layout);
+
+    if (channel_layout.mChannelLayoutTag != 0)
+    {
+        AudioConverterSetProperty(pv->converter, kAudioConverterInputChannelLayout,
+                                  sizeof(channel_layout), &channel_layout);
+        AudioConverterSetProperty(pv->converter, kAudioConverterOutputChannelLayout,
+                                  sizeof(channel_layout), &channel_layout);
+    }
+    else
+    {
+        hb_log("encCoreAudioInit: get_aac_tag() failed");
+    }
 
     av_channel_layout_uninit(&out_layout);
     av_channel_layout_uninit(&mixdown_layout);

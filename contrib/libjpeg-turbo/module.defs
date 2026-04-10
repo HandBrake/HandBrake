@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBJPEGTURBO,libjpeg-turbo))
 $(eval $(call import.CONTRIB.defs,LIBJPEGTURBO))
 
-LIBJPEGTURBO.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libjpeg-turbo-3.1.3.tar.gz
-LIBJPEGTURBO.FETCH.url    += https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/3.1.3.tar.gz
-LIBJPEGTURBO.FETCH.sha256  = 3a13a5ba767dc8264bc40b185e41368a80d5d5f945944d1dbaa4b2fb0099f4e5
+LIBJPEGTURBO.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libjpeg-turbo-3.1.4.1.tar.gz
+LIBJPEGTURBO.FETCH.url    += https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/3.1.4.1.tar.gz
+LIBJPEGTURBO.FETCH.sha256  = a7da42b640377c2a9a9665e2c4b0ea60cd5599afb48c2521e6df0c9dc9d15a25
 
 LIBJPEGTURBO.build_dir             = build
 LIBJPEGTURBO.CONFIGURE.exe         = cmake
@@ -12,6 +12,7 @@ LIBJPEGTURBO.CONFIGURE.deps        =
 LIBJPEGTURBO.CONFIGURE.static      =
 LIBJPEGTURBO.CONFIGURE.shared      = -DENABLE_SHARED=OFF
 LIBJPEGTURBO.CONFIGURE.extra       = -DCMAKE_INSTALL_LIBDIR=lib
+LIBJPEGTURBO.CONFIGURE.extra      += -DWITH_TOOLS=OFF -DWITH_TESTS=OFF
 
 ifeq (size-aggressive,$(GCC.O))
     LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_CXX_FLAGS_MINSIZEREL="-Oz -DNDEBUG" -DCMAKE_C_FLAGS_MINSIZEREL="-Oz -DNDEBUG"
