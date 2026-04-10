@@ -2654,6 +2654,9 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
 
         case HB_ACODEC_FFALAC:
         case HB_ACODEC_FFALAC24:
+            return (mixdown <= HB_AMIXDOWN_6POINT1 &&
+                    mixdown != HB_AMIXDOWN_QUAD);
+
         case HB_ACODEC_FFTRUEHD:
             return (mixdown <= HB_AMIXDOWN_7POINT1 &&
                     mixdown != HB_AMIXDOWN_QUAD);
