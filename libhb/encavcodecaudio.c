@@ -141,8 +141,6 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                 out_channel_layout  = AV_CH_LAYOUT_5POINT1_BACK;
             if (in_channel_layout == AV_CH_LAYOUT_6POINT1)
                 out_channel_layout  = AV_CH_LAYOUT_6POINT1_BACK;
-            if (in_channel_layout == AV_CH_LAYOUT_7POINT1)
-                out_channel_layout  = AV_CH_LAYOUT_7POINT1_WIDE_BACK;
             break;
 
         case HB_ACODEC_FFFLAC:
