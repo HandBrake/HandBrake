@@ -2646,56 +2646,113 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
     if (mixdown == HB_AMIXDOWN_NONE)
         return 0;
 
+    /*
+     * for clarity: explicitly list/test every mixdown above 2 channels
+     *              list all encoders separately in alphabetical order
+     */
     switch (codec)
     {
-        case HB_ACODEC_VORBIS:
-            return (mixdown <= HB_AMIXDOWN_7POINT1 &&
-                    mixdown != HB_AMIXDOWN_3POINT0);
+        case HB_ACODEC_AC3:
+        case HB_ACODEC_FFEAC3:
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_3POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_4POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_QUAD)      ||
+                    (mixdown == HB_AMIXDOWN_5POINT1));
+
+        case HB_ACODEC_CA_AAC:
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_3POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_4POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_QUAD)      ||
+                    (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_6POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_7POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_5_2_LFE));
+
+        case HB_ACODEC_CA_HAAC:
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_QUAD)      ||
+                    (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_7POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_5_2_LFE));
+
+        case HB_ACODEC_FDK_AAC:
+        case HB_ACODEC_FDK_HAAC:
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_3POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_4POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_7POINT1));
+
+        case HB_ACODEC_FFAAC:
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_3POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_4POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_QUAD)      ||
+                    (mixdown == HB_AMIXDOWN_5POINT1));
 
         case HB_ACODEC_FFALAC:
         case HB_ACODEC_FFALAC24:
-            return (mixdown <= HB_AMIXDOWN_6POINT1 &&
-                    mixdown != HB_AMIXDOWN_QUAD);
-
-        case HB_ACODEC_FFTRUEHD:
-            return (mixdown <= HB_AMIXDOWN_7POINT1 &&
-                    mixdown != HB_AMIXDOWN_QUAD);
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_3POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_4POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_6POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_5_2_LFE));
 
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
-        case HB_ACODEC_OPUS:
-        case HB_ACODEC_CA_AAC:
-        case HB_ACODEC_FFAAC:
-            return (mixdown <= HB_AMIXDOWN_7POINT1 &&
-                    mixdown != HB_AMIXDOWN_4POINT0);
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_3POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_4POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_QUAD)      ||
+                    (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_6POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_7POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_5_2_LFE));
 
         case HB_ACODEC_FFPCM16:
         case HB_ACODEC_FFPCM24:
-            return (mixdown <= HB_AMIXDOWN_7POINT1);
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_3POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_4POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_QUAD)      ||
+                    (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_6POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_7POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_5_2_LFE));
 
-        case HB_ACODEC_CA_HAAC:
-            return (mixdown <= HB_AMIXDOWN_7POINT1 &&
-                    mixdown != HB_AMIXDOWN_3POINT0 &&
-                    mixdown != HB_AMIXDOWN_4POINT0);
+        case HB_ACODEC_FFTRUEHD:
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_3POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_4POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_5POINT1));
 
         case HB_ACODEC_LAME:
-            return (mixdown <= HB_AMIXDOWN_DOLBYPLII &&
-                    mixdown != HB_AMIXDOWN_3POINT0);
+            return (mixdown <= HB_AMIXDOWN_DOLBYPLII);
 
-        case HB_ACODEC_FDK_AAC:
-            return ((mixdown <= HB_AMIXDOWN_5POINT1 &&
-                     mixdown != HB_AMIXDOWN_4POINT0) ||
+        case HB_ACODEC_OPUS:
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_3POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_QUAD)      ||
+                    (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_6POINT1)   ||
                     (mixdown == HB_AMIXDOWN_7POINT1));
 
-        case HB_ACODEC_FDK_HAAC:
-            return ((mixdown <= HB_AMIXDOWN_5POINT1 &&
-                     mixdown != HB_AMIXDOWN_3POINT0 &&
-                     mixdown != HB_AMIXDOWN_4POINT0) ||
+        case HB_ACODEC_VORBIS:
+            return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
+                    (mixdown == HB_AMIXDOWN_3POINT0)   ||
+                    (mixdown == HB_AMIXDOWN_QUAD)      ||
+                    (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_6POINT1)   ||
                     (mixdown == HB_AMIXDOWN_7POINT1));
 
         default:
-            return (mixdown <= HB_AMIXDOWN_5POINT1);
+            break;
     }
+    hb_error("hb_mixdown_has_codec_support not explicitly implemented for encoder: %"PRIu32"", codec);
+    return 0;
 }
 
 int hb_mixdown_has_remix_support(int mixdown, hb_channel_layout_t *ch_layout)
