@@ -141,7 +141,7 @@ static NSDictionary<NSString *, NSNumber *> *localizedReversedMixdownsNames;
           @"5.1 Channels": HBKitLocalizedString(@"5.1 Channels", @"HBAudio -> Mixdown"),
           @"6.1 Channels": HBKitLocalizedString(@"6.1 Channels", @"HBAudio -> Mixdown"),
           @"7.1 Channels": HBKitLocalizedString(@"7.1 Channels", @"HBAudio -> Mixdown"),
-          @"7.1 (5F/2R/LFE)": HBKitLocalizedString(@"7.1 (5F/2R/LFE)", @"HBAudio -> Mixdown"),
+          @"7.1 (SDDS)": HBKitLocalizedString(@"7.1 (SDDS)", @"HBAudio -> Mixdown"),
           };
 
         localizedReversedMixdownsNames =
@@ -158,7 +158,7 @@ static NSDictionary<NSString *, NSNumber *> *localizedReversedMixdownsNames;
           HBKitLocalizedString(@"5.1 Channels", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_5POINT1),
           HBKitLocalizedString(@"6.1 Channels", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_6POINT1),
           HBKitLocalizedString(@"7.1 Channels", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_7POINT1),
-          HBKitLocalizedString(@"7.1 (5F/2R/LFE)", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_5_2_LFE),
+          HBKitLocalizedString(@"7.1 (SDDS)", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_7POINT1_SDDS),
           };
     }
 }
@@ -193,8 +193,8 @@ static NSDictionary<NSString *, NSNumber *> *localizedReversedMixdownsNames;
             return HBKitLocalizedString(@"6.1 Channels", @"HBAudio -> Mixdown");
         case HB_AMIXDOWN_7POINT1:
             return HBKitLocalizedString(@"7.1 Channels", @"HBAudio -> Mixdown");
-        case HB_AMIXDOWN_5_2_LFE:
-            return HBKitLocalizedString(@"7.1 (5F/2R/LFE)", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_7POINT1_SDDS:
+            return HBKitLocalizedString(@"7.1 (SDDS)", @"HBAudio -> Mixdown");
         default:
         {
             const char *name = hb_mixdown_get_name(mixdown);
