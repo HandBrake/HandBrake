@@ -1119,7 +1119,7 @@ struct hb_audio_config_s
             HB_AMIXDOWN_5POINT1,
             HB_AMIXDOWN_6POINT1,
             HB_AMIXDOWN_7POINT1,
-            HB_AMIXDOWN_5_2_LFE,
+            HB_AMIXDOWN_7POINT1_SDDS,
         } mixdown; /* Audio mixdown */
         int      track; /* Output track number */
         uint32_t codec; /* Output audio codec */

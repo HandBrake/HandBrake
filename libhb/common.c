@@ -255,6 +255,7 @@ hb_mixdown_internal_t hb_audio_mixdowns[]  =
     { { "DTS Passthru",       "",           HB_AMIXDOWN_NONE,      }, NULL, 0, },
     { { "DTS-HD Passthru",    "",           HB_AMIXDOWN_NONE,      }, NULL, 0, },
     { { "6-channel discrete", "6ch",        HB_AMIXDOWN_5POINT1,   }, NULL, 0, },
+    { { "7.1 (5F/2R/LFE)",    "5_2_lfe",    HB_AMIXDOWN_7POINT1_SDDS, }, NULL, 0, },
     // actual mixdowns
     { { "None",               "none",       HB_AMIXDOWN_NONE,      }, NULL, 1, },
     { { "Mono",               "mono",       HB_AMIXDOWN_MONO,      }, NULL, 1, },
@@ -269,7 +270,7 @@ hb_mixdown_internal_t hb_audio_mixdowns[]  =
     { { "5.1 Channels",       "5point1",    HB_AMIXDOWN_5POINT1,   }, NULL, 1, },
     { { "6.1 Channels",       "6point1",    HB_AMIXDOWN_6POINT1,   }, NULL, 1, },
     { { "7.1 Channels",       "7point1",    HB_AMIXDOWN_7POINT1,   }, NULL, 1, },
-    { { "7.1 (5F/2R/LFE)",    "5_2_lfe",    HB_AMIXDOWN_5_2_LFE,   }, NULL, 1, },
+    { { "7.1 (SDDS)",    "7point1_sdds",    HB_AMIXDOWN_7POINT1_SDDS, }, NULL, 1, }, // https://en.wikipedia.org/wiki/Sony_Dynamic_Digital_Sound
 };
 int hb_audio_mixdowns_count = sizeof(hb_audio_mixdowns) / sizeof(hb_audio_mixdowns[0]);
 
@@ -2608,8 +2609,8 @@ static int mixdown_get_opus_coupled_stream_count(int mixdown)
 
         case HB_AMIXDOWN_NONE:
         case HB_INVALID_AMIXDOWN:
-        case HB_AMIXDOWN_5_2_LFE:
-            // The 5F/2R/LFE configuration is currently not supported by Opus,
+        case HB_AMIXDOWN_7POINT1_SDDS:
+            // The 7.1 SDDS configuration is currently not supported by Opus,
             // so don't set coupled streams.
             return 0;
 
@@ -2676,14 +2677,14 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
                     (mixdown == HB_AMIXDOWN_5POINT1)   ||
                     (mixdown == HB_AMIXDOWN_6POINT1)   ||
                     (mixdown == HB_AMIXDOWN_7POINT1)   ||
-                    (mixdown == HB_AMIXDOWN_5_2_LFE));
+                    (mixdown == HB_AMIXDOWN_7POINT1_SDDS));
 
         case HB_ACODEC_CA_HAAC:
             return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
                     (mixdown == HB_AMIXDOWN_QUAD)      ||
                     (mixdown == HB_AMIXDOWN_5POINT1)   ||
                     (mixdown == HB_AMIXDOWN_7POINT1)   ||
-                    (mixdown == HB_AMIXDOWN_5_2_LFE));
+                    (mixdown == HB_AMIXDOWN_7POINT1_SDDS));
 
         case HB_ACODEC_FDK_AAC:
         case HB_ACODEC_FDK_HAAC:
@@ -2707,7 +2708,7 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
                     (mixdown == HB_AMIXDOWN_4POINT0)   ||
                     (mixdown == HB_AMIXDOWN_5POINT1)   ||
                     (mixdown == HB_AMIXDOWN_6POINT1)   ||
-                    (mixdown == HB_AMIXDOWN_5_2_LFE));
+                    (mixdown == HB_AMIXDOWN_7POINT1_SDDS));
 
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
@@ -2718,7 +2719,7 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
                     (mixdown == HB_AMIXDOWN_5POINT1)   ||
                     (mixdown == HB_AMIXDOWN_6POINT1)   ||
                     (mixdown == HB_AMIXDOWN_7POINT1)   ||
-                    (mixdown == HB_AMIXDOWN_5_2_LFE));
+                    (mixdown == HB_AMIXDOWN_7POINT1_SDDS));
 
         case HB_ACODEC_FFPCM16:
         case HB_ACODEC_FFPCM24:
@@ -2729,7 +2730,7 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
                     (mixdown == HB_AMIXDOWN_5POINT1)   ||
                     (mixdown == HB_AMIXDOWN_6POINT1)   ||
                     (mixdown == HB_AMIXDOWN_7POINT1)   ||
-                    (mixdown == HB_AMIXDOWN_5_2_LFE));
+                    (mixdown == HB_AMIXDOWN_7POINT1_SDDS));
 
         case HB_ACODEC_FFTRUEHD:
             return ((mixdown <= HB_AMIXDOWN_DOLBYPLII) ||
@@ -2777,7 +2778,7 @@ int hb_mixdown_has_remix_support(int mixdown, hb_channel_layout_t *ch_layout)
     switch (mixdown)
     {
         // stereo + front left/right of center
-        case HB_AMIXDOWN_5_2_LFE:
+        case HB_AMIXDOWN_7POINT1_SDDS:
             return (av_channel_layout_subset(ch_layout, AV_CH_FRONT_LEFT_OF_CENTER) &&
                     av_channel_layout_subset(ch_layout, AV_CH_FRONT_RIGHT_OF_CENTER) &&
                     av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_STEREO) == AV_CH_LAYOUT_STEREO);
@@ -2860,7 +2861,7 @@ int hb_mixdown_get_discrete_channel_count(int amixdown)
 {
     switch (amixdown)
     {
-        case HB_AMIXDOWN_5_2_LFE:
+        case HB_AMIXDOWN_7POINT1_SDDS:
         case HB_AMIXDOWN_7POINT1:
             return 8;
 
@@ -2897,7 +2898,7 @@ int hb_mixdown_get_low_freq_channel_count(int amixdown)
         case HB_AMIXDOWN_5POINT1:
         case HB_AMIXDOWN_6POINT1:
         case HB_AMIXDOWN_7POINT1:
-        case HB_AMIXDOWN_5_2_LFE:
+        case HB_AMIXDOWN_7POINT1_SDDS:
             return 1;
 
         default:
