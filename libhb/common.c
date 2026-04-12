@@ -251,26 +251,26 @@ hb_mixdown_t *hb_audio_mixdowns_last_item  = NULL;
 hb_mixdown_internal_t hb_audio_mixdowns[]  =
 {
     // legacy mixdowns, back to HB 0.9.4 whenever possible (disabled)
-    { { "AC3 Passthru",       "",           HB_AMIXDOWN_NONE,      }, NULL, 0, },
-    { { "DTS Passthru",       "",           HB_AMIXDOWN_NONE,      }, NULL, 0, },
-    { { "DTS-HD Passthru",    "",           HB_AMIXDOWN_NONE,      }, NULL, 0, },
-    { { "6-channel discrete", "6ch",        HB_AMIXDOWN_5POINT1,   }, NULL, 0, },
-    { { "7.1 (5F/2R/LFE)",    "5_2_lfe",    HB_AMIXDOWN_7POINT1_SDDS, }, NULL, 0, },
+    { { "AC3 Passthru",       "",             HB_AMIXDOWN_NONE,         }, NULL, 0, },
+    { { "DTS Passthru",       "",             HB_AMIXDOWN_NONE,         }, NULL, 0, },
+    { { "DTS-HD Passthru",    "",             HB_AMIXDOWN_NONE,         }, NULL, 0, },
+    { { "6-channel discrete", "6ch",          HB_AMIXDOWN_5POINT1,      }, NULL, 0, },
+    { { "7.1 (5F/2R/LFE)",    "5_2_lfe",      HB_AMIXDOWN_7POINT1_SDDS, }, NULL, 0, },
     // actual mixdowns
-    { { "None",               "none",       HB_AMIXDOWN_NONE,      }, NULL, 1, },
-    { { "Mono",               "mono",       HB_AMIXDOWN_MONO,      }, NULL, 1, },
-    { { "Mono (Left Only)",   "left_only",  HB_AMIXDOWN_LEFT,      }, NULL, 1, },
-    { { "Mono (Right Only)",  "right_only", HB_AMIXDOWN_RIGHT,     }, NULL, 1, },
-    { { "Stereo",             "stereo",     HB_AMIXDOWN_STEREO,    }, NULL, 1, },
-    { { "Dolby Surround",     "dpl1",       HB_AMIXDOWN_DOLBY,     }, NULL, 1, },
-    { { "Dolby Pro Logic II", "dpl2",       HB_AMIXDOWN_DOLBYPLII, }, NULL, 1, },
-    { { "3.0 Channels",       "3point0",    HB_AMIXDOWN_3POINT0,   }, NULL, 1, },
-    { { "4.0 Channels",       "4point0",    HB_AMIXDOWN_4POINT0,   }, NULL, 1, },
-    { { "Quadrophonic",       "quad",       HB_AMIXDOWN_QUAD,      }, NULL, 1, },
-    { { "5.1 Channels",       "5point1",    HB_AMIXDOWN_5POINT1,   }, NULL, 1, },
-    { { "6.1 Channels",       "6point1",    HB_AMIXDOWN_6POINT1,   }, NULL, 1, },
-    { { "7.1 Channels",       "7point1",    HB_AMIXDOWN_7POINT1,   }, NULL, 1, },
-    { { "7.1 (SDDS)",    "7point1_sdds",    HB_AMIXDOWN_7POINT1_SDDS, }, NULL, 1, }, // https://en.wikipedia.org/wiki/Sony_Dynamic_Digital_Sound
+    { { "None",               "none",         HB_AMIXDOWN_NONE,         }, NULL, 1, },
+    { { "Mono",               "mono",         HB_AMIXDOWN_MONO,         }, NULL, 1, },
+    { { "Mono (Left Only)",   "left_only",    HB_AMIXDOWN_LEFT,         }, NULL, 1, },
+    { { "Mono (Right Only)",  "right_only",   HB_AMIXDOWN_RIGHT,        }, NULL, 1, },
+    { { "Stereo",             "stereo",       HB_AMIXDOWN_STEREO,       }, NULL, 1, },
+    { { "Dolby Surround",     "dpl1",         HB_AMIXDOWN_DOLBY,        }, NULL, 1, },
+    { { "Dolby Pro Logic II", "dpl2",         HB_AMIXDOWN_DOLBYPLII,    }, NULL, 1, },
+    { { "3.0 Channels",       "3point0",      HB_AMIXDOWN_3POINT0,      }, NULL, 1, },
+    { { "4.0 Channels",       "4point0",      HB_AMIXDOWN_4POINT0,      }, NULL, 1, },
+    { { "Quadrophonic",       "quad",         HB_AMIXDOWN_QUAD,         }, NULL, 1, },
+    { { "5.1 Channels",       "5point1",      HB_AMIXDOWN_5POINT1,      }, NULL, 1, },
+    { { "6.1 Channels",       "6point1",      HB_AMIXDOWN_6POINT1,      }, NULL, 1, },
+    { { "7.1 Channels",       "7point1",      HB_AMIXDOWN_7POINT1,      }, NULL, 1, },
+    { { "7.1 (SDDS)",         "7point1_sdds", HB_AMIXDOWN_7POINT1_SDDS, }, NULL, 1, }, // https://en.wikipedia.org/wiki/Sony_Dynamic_Digital_Sound
 };
 int hb_audio_mixdowns_count = sizeof(hb_audio_mixdowns) / sizeof(hb_audio_mixdowns[0]);
 
