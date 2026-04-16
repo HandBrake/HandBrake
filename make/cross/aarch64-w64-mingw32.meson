@@ -3,11 +3,12 @@ c = 'aarch64-w64-mingw32-gcc'
 cpp = 'aarch64-w64-mingw32-g++'
 rust = ['rustc', '--target', 'aarch64-pc-windows-msvc', '-C', 'linker=aarch64-w64-mingw32-gcc']
 ar = 'aarch64-w64-mingw32-ar'
-pkg-config = 'aarch64-w64-mingw32-pkg-config'
 ranlib = 'aarch64-w64-mingw32-ranlib'
 strip = 'aarch64-w64-mingw32-strip'
 windres = 'aarch64-w64-mingw32-windres'
 dlltool = 'aarch64-w64-mingw32-dlltool'
+pkgconfig = 'pkg-config'
+pkg-config = 'pkg-config'
 
 [properties]
 needs_exe_wrapper = true
