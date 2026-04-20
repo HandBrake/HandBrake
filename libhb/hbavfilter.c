@@ -145,6 +145,9 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
                  graph->settings);
         goto fail;
     }
+    hb_deep_log(3,
+                "hb_avfilter_graph_init: avfilter_graph_parse2 (%s)",
+                graph->settings);
 
     result = avfilter_link(graph->input, 0, in->filter_ctx, 0);
     if (result != 0)
