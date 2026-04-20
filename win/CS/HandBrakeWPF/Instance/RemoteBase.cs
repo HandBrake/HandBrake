@@ -133,7 +133,7 @@ namespace HandBrakeWPF.Instance
             }
         }
 
-        private void StopServer()
+        public void StopServer()
         {
             try
             {
