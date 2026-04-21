@@ -1,0 +1,57 @@
+From fa16d3522b6422815a661eb6e05fce7cad8c0e9e Mon Sep 17 00:00:00 2001
+From: Ashrit Shetty <ashritshetty@microsoft.com>
+Date: Tue, 21 Apr 2026 13:29:18 -0700
+Subject: [PATCH] avcodec/mfenc: populate video input type with size, rate,
+ interlace
+
+mf_encv_input_adjust() currently only validates the pixel format and
+otherwise leaves the input IMFMediaType unchanged. The Microsoft
+H.264, H.265 and AV1 encoder MFTs tolerate this and internally infer
+the missing attributes from the previously-set output type. Other
+MediaFoundation encoder MFTs that follow the specification more
+strictly reject the input type with MF_E_INVALIDMEDIATYPE (due to
+MF_E_ATTRIBUTENOTFOUND on MF_MT_FRAME_SIZE / MF_MT_FRAME_RATE) when
+those attributes are absent, which causes IMFTransform::SetInputType
+to fail and aborts encoding.
+
+Set MF_MT_FRAME_SIZE, MF_MT_FRAME_RATE and MF_MT_INTERLACE_MODE on
+the input media type, mirroring what mf_encv_output_adjust() already
+writes to the output type. Behaviour on the Microsoft MFTs is
+unchanged (they were already using these values) and encoding now
+works with stricter third-party MFTs.
+
+The MF_MT_FRAME_SIZE assignment has been present but commented out
+since the original MediaFoundation wrapper was added in 050b72ab5e.
+---
+ libavcodec/mfenc.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+--- a/libavcodec/mfenc.c
++++ b/libavcodec/mfenc.c
+@@ -903,6 +903,8 @@ static int mf_enca_input_adjust(AVCodecContext *avctx, IMFMediaType *type)
+ static int mf_encv_input_adjust(AVCodecContext *avctx, IMFMediaType *type)
+ {
+     enum AVPixelFormat pix_fmt = ff_media_type_to_pix_fmt((IMFAttributes *)type);
++    AVRational framerate;
++
+     if (avctx->pix_fmt == AV_PIX_FMT_D3D11) {
+         if (pix_fmt != AV_PIX_FMT_NV12 && pix_fmt != AV_PIX_FMT_D3D11) {
+             av_log(avctx, AV_LOG_ERROR, "unsupported input pixel format set\n");
+@@ -916,7 +918,16 @@ static int mf_encv_input_adjust(AVCodecContext *avctx, IMFMediaType *type)
+         }
+     }
+ 
+-    //ff_MFSetAttributeSize((IMFAttributes *)type, &MF_MT_FRAME_SIZE, avctx->width, avctx->height);
++    ff_MFSetAttributeSize((IMFAttributes *)type, &MF_MT_FRAME_SIZE, avctx->width, avctx->height);
++    IMFAttributes_SetUINT32(type, &MF_MT_INTERLACE_MODE, MFVideoInterlace_Progressive);
++
++    if (avctx->framerate.num > 0 && avctx->framerate.den > 0) {
++        framerate = avctx->framerate;
++    } else {
++        framerate = av_inv_q(avctx->time_base);
++    }
++
++    ff_MFSetAttributeRatio((IMFAttributes *)type, &MF_MT_FRAME_RATE, framerate.num, framerate.den);
+ 
+     return 0;
+ }
