@@ -1,7 +1,7 @@
-From 4cff3eb1cb6faebfbc82ec500d8441313d02e1d7 Mon Sep 17 00:00:00 2001
+From a95e5691390fb33a3d38538c0cb1b901a8032757 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 22 Nov 2024 10:51:25 +0100
-Subject: [PATCH 5/6] Fix Dolby Vision RPU memory management
+Subject: [PATCH 4/7] Fix Dolby Vision RPU memory management
 
 ---
  source/common/frame.cpp    |  5 +++++
@@ -9,10 +9,10 @@ Subject: [PATCH 5/6] Fix Dolby Vision RPU memory management
  2 files changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/source/common/frame.cpp b/source/common/frame.cpp
-index 200717425..1244fdc24 100644
+index ac54c3427..718944196 100644
 --- a/source/common/frame.cpp
 +++ b/source/common/frame.cpp
-@@ -370,6 +370,11 @@ void Frame::destroy()
+@@ -378,6 +378,11 @@ void Frame::destroy()
          delete[] m_userSEI.payloads;
      }
  
@@ -25,10 +25,10 @@ index 200717425..1244fdc24 100644
      {
          uint32_t widthInCU = (m_param->sourceWidth + m_param->maxCUSize - 1) >> m_param->maxLog2CUSize;
 diff --git a/source/encoder/encoder.cpp b/source/encoder/encoder.cpp
-index 39ca2ada1..4461ed8e2 100644
+index 39fda07f0..c7537e039 100644
 --- a/source/encoder/encoder.cpp
 +++ b/source/encoder/encoder.cpp
-@@ -1689,11 +1689,20 @@ int Encoder::encode(const x265_picture* pic_in, x265_picture* pic_out)
+@@ -1768,11 +1768,20 @@ int Encoder::encode(const x265_picture* pic_in, x265_picture* pic_out)
          }
          copyUserSEIMessages(inFrame[0], inputPic[0]);
  
@@ -52,5 +52,5 @@ index 39ca2ada1..4461ed8e2 100644
          }
  
 -- 
-2.39.5 (Apple Git-154)
+2.50.1 (Apple Git-155)
 
