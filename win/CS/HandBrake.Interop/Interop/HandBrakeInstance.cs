@@ -579,5 +579,18 @@ namespace HandBrake.Interop.Interop
                    a.PassCount == b.PassCount &&
                    a.StateCode == b.StateCode;
         }
+
+        public void Terminate()
+        {
+            try
+            {
+                this.StopEncode();
+                this.StopScan();
+            }
+            catch (Exception e)
+            { 
+                Debug.WriteLine(e); // We don't care about this exception.
+            }
+        }
     }
 }

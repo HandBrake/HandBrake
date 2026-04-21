@@ -48,5 +48,10 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// Stops the current encode.
         /// </summary>
         void StopEncode();
+
+        /// <summary>
+        /// Force stop the process that's running the encode.
+        /// </summary>
+        void Terminate();
     }
 }

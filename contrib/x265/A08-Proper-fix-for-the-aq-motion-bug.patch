@@ -1,0 +1,51 @@
+From cfee9638c82b655c5887cedbdf1aa856f81b906a Mon Sep 17 00:00:00 2001
+From: Mr-Z-2697 <74594146+Mr-Z-2697@users.noreply.github.com>
+Date: Thu, 26 Mar 2026 11:05:08 +0530
+Subject: [PATCH] Proper fix for the aq-motion bug
+
+---
+ source/common/lowres.cpp   | 14 +++++---------
+ source/encoder/encoder.cpp |  2 ++
+ 2 files changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/source/common/lowres.cpp b/source/common/lowres.cpp
+index 856f716b8..52953a812 100644
+--- a/source/common/lowres.cpp
++++ b/source/common/lowres.cpp
+@@ -415,15 +415,11 @@ void Lowres::init(PicYuv *origPic, int poc)
+             quarterSampleLowResStrideY,
+             widthFullRes / 4, heightFullRes / 4);
+     }
+-    int cuCount = maxBlocksInRow * maxBlocksInCol;
+-    int cuCountFullRes = (origPic->m_param->rc.qgSize > 8) ? cuCount : cuCount << 2;
+-    memset(intraCost, 0, sizeof(int32_t) * cuCount);
+-    if (!!origPic->m_param->rc.aqMode || !!origPic->m_param->rc.hevcAq || !!origPic->m_param->bAQMotion || !!origPic->m_param->bEnableWeightedPred || !!origPic->m_param->bEnableWeightedBiPred)
+-        {
++    if (origPic->m_param->bAQMotion && !origPic->m_param->rc.aqMode && !origPic->m_param->rc.cuTree && !origPic->m_param->rc.hevcAq)
++    {
++        int cuCount = maxBlocksInRow * maxBlocksInCol;
++        int cuCountFullRes = (origPic->m_param->rc.qgSize > 8) ? cuCount : cuCount << 2;
+         memset(qpAqOffset, 0, sizeof(double) * cuCountFullRes);
+-        memset(qpCuTreeOffset, 0,sizeof(double) * cuCountFullRes);
+-        memset(edgeInclined, 0, sizeof(int) * cuCountFullRes);
+-        }
+-     if (origPic->m_param->bAQMotion)
+         memset(qpAqMotionOffset, 0, sizeof(double) * cuCountFullRes);
++    }
+ }
+diff --git a/source/encoder/encoder.cpp b/source/encoder/encoder.cpp
+index 3df3ba25a..4870a2723 100644
+--- a/source/encoder/encoder.cpp
++++ b/source/encoder/encoder.cpp
+@@ -1676,6 +1676,8 @@ int Encoder::encode(const x265_picture* pic_in, x265_picture* pic_out)
+                 inFrame[layer]->m_encodeStartTime = x265_mdate();
+                 /* Set lowres scencut and satdCost here to aovid overwriting ANALYSIS_READ
+                    decision by lowres init*/
++                int cuCount = inFrame[layer]->m_lowres.maxBlocksInRow * inFrame[layer]->m_lowres.maxBlocksInCol;
++                memset(inFrame[layer]->m_lowres.intraCost, 0, sizeof(int32_t) * cuCount);
+                 inFrame[layer]->m_lowres.bScenecut = false;
+                 inFrame[layer]->m_lowres.satdCost = (int64_t)-1;
+                 inFrame[layer]->m_lowresInit = false;
+-- 
+2.50.1 (Apple Git-155)
+

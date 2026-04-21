@@ -386,9 +386,16 @@ namespace HandBrakeWPF.Model.Audio
             get
             {
                 IList<AudioEncoderRateType> types = EnumHelper<AudioEncoderRateType>.GetEnumList().ToList();
-                if (this.Encoder == null || !this.Encoder.SupportsQuality)
+
+                HBAudioEncoder hbaenc = GetEncoderForLimits();
+                if (!hbaenc.SupportsQuality)
                 {
                     types.Remove(AudioEncoderRateType.Quality);
+                }
+
+                if (hbaenc.IsPassthru || hbaenc.IsLosslessEncoder)
+                {
+                    types.Remove(AudioEncoderRateType.Bitrate);
                 }
 
                 return types;
@@ -403,7 +410,8 @@ namespace HandBrakeWPF.Model.Audio
         {
             get
             {
-                if (this.Encoder != null && this.Encoder.IsLosslessEncoder)
+                HBAudioEncoder hbaenc = GetEncoderForLimits();
+                if (hbaenc.IsPassthru || hbaenc.IsLosslessEncoder) 
                 {
                     return false;
                 }
@@ -420,7 +428,9 @@ namespace HandBrakeWPF.Model.Audio
         {
             get
             {
-                if (this.Encoder != null && this.Encoder.IsLosslessEncoder)
+
+                HBAudioEncoder hbaenc = GetEncoderForLimits();
+                if (!hbaenc.SupportsQuality)
                 {
                     return false;
                 }
@@ -437,7 +447,8 @@ namespace HandBrakeWPF.Model.Audio
         {
             get
             {
-                if (this.Encoder != null && this.Encoder.IsLosslessEncoder)
+                HBAudioEncoder hbaenc = GetEncoderForLimits();
+                if (hbaenc.IsLosslessEncoder || hbaenc.IsPassthru)
                 {
                     return false;
                 }
@@ -637,7 +648,7 @@ namespace HandBrakeWPF.Model.Audio
         private HBAudioEncoder GetEncoderForLimits()
         {
             HBAudioEncoder hbaenc = this.Encoder;
-            if (hbaenc != null && hbaenc.IsPassthru)
+            if (hbaenc != null && (hbaenc.IsPassthru || hbaenc.IsLosslessEncoder))
             {
                 hbaenc = this.fallbackEncoder;
             }

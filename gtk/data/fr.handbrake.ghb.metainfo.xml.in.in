@@ -80,6 +80,7 @@
     <mediatype>video/msvideo</mediatype>
     <mediatype>video/quicktime</mediatype>
     <mediatype>video/vnd.divx</mediatype>
+    <mediatype>video/webm</mediatype>
     <mediatype>video/x-avi</mediatype>
     <mediatype>video/x-m4v</mediatype>
     <mediatype>video/x-matroska</mediatype>
