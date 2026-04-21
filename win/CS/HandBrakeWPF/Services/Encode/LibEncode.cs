@@ -148,7 +148,20 @@ namespace HandBrakeWPF.Services.Encode
             {
                 this.IsEncoding = false;
 
-                this.ServiceLogMessage("Failed to start encoding ..." + Environment.NewLine + exc);
+                string errorInfo = exc is GeneralApplicationException gae
+                    ? string.Format("{1}{0}{2}{0}{3}", Environment.NewLine, gae.Error, gae.Solution, gae.ActualException)
+                    : exc.ToString();
+
+                try
+                {
+                    this.instance?.Terminate(); // Try kill old worker instance if we get a failure. 
+                }
+                catch (Exception excShutdown)
+                {
+                    Debug.WriteLine(excShutdown); // We don't care about this exception, let it fail.
+                }
+
+                this.ServiceLogMessage("Failed to start encoding ..." + Environment.NewLine + errorInfo);
                 this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", this.currentTask.Source, this.currentTask.Destination, null, 0, 3));
             }
         }

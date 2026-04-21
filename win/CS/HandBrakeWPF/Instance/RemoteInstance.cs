@@ -10,6 +10,17 @@
 
 namespace HandBrakeWPF.Instance
 {
+    using HandBrake.App.Core.Utilities;
+    using HandBrake.Interop.Interop.Interfaces;
+    using HandBrake.Interop.Interop.Interfaces.EventArgs;
+    using HandBrake.Interop.Interop.Json.Encode;
+    using HandBrake.Interop.Interop.Json.State;
+    using HandBrake.Interop.Utilities;
+    using HandBrake.Worker.Routing.Commands;
+    using HandBrakeWPF.Instance.Model;
+    using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging.Interfaces;
+    using HandBrakeWPF.Utilities;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -18,20 +29,6 @@ namespace HandBrakeWPF.Instance
     using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
-
-    using HandBrake.App.Core.Utilities;
-    using HandBrake.Interop.Interop.Interfaces;
-    using HandBrake.Interop.Interop.Interfaces.EventArgs;
-    using HandBrake.Interop.Interop.Json.Encode;
-    using HandBrake.Interop.Interop.Json.State;
-    using HandBrake.Interop.Utilities;
-    using HandBrake.Worker.Routing.Commands;
-
-    using HandBrakeWPF.Instance.Model;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Logging.Interfaces;
-    using HandBrakeWPF.Utilities;
-
     using EncodeCommand = HandBrakeWPF.Model.Worker.EncodeCommand;
     using Timer = System.Timers.Timer;
 
@@ -89,6 +86,11 @@ namespace HandBrakeWPF.Instance
             {
                 await this.MakeHttpGetRequest("StopEncode");
             }
+        }
+
+        public void Terminate()
+        {
+            this.StopServer();
         }
 
         public JsonState GetProgress()
