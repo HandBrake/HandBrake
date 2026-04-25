@@ -8,7 +8,7 @@
         Width="1060"
         Height="690"
         MinWidth="1018"
-        MinHeight="690"
+        MinHeight="600"
         AllowDrop="True"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
