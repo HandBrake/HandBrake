@@ -7,7 +7,7 @@
         Width="740"
         Height="650"
         MinWidth="625"
-        MinHeight="600"
+        MinHeight="500"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
         PreviewKeyDown="LogView_OnPreviewKeyDown">
