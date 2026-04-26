@@ -13,6 +13,7 @@
 #include "handbrake/hbffmpeg.h"
 
 int            hb_nvenc_h264_available();
+int            hb_nvenc_h264_10bit_available();
 int            hb_nvenc_h265_available();
 int            hb_nvenc_av1_available();
 int            hb_check_nvenc_available();
