@@ -1,4 +1,4 @@
-__deps__ := BZIP2 ZLIB
+__deps__ := ZLIB
 $(eval $(call import.MODULE.defs,FREETYPE,freetype,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FREETYPE))
 
@@ -7,6 +7,6 @@ FREETYPE.FETCH.url    += https://download.savannah.gnu.org/releases/freetype/fre
 FREETYPE.FETCH.sha256  = e61b31ab26358b946e767ed7eb7f4bb2e507da1cfefeb7a8861ace7fd5c899a1
 
 FREETYPE.CONFIGURE.deps  =
-FREETYPE.CONFIGURE.extra = --with-harfbuzz=no --with-png=no --with-brotli=no
+FREETYPE.CONFIGURE.extra = --with-harfbuzz=no --with-png=no --with-brotli=no --with-bzip2=no
 
 FREETYPE.GCC.args.extra += $(FREETYPE.GCC.args.O.$(FREETYPE.GCC.O))
