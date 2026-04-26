@@ -117,12 +117,17 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             bool nvdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
+            bool amfdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableAmfDecSupport);
             bool directx = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
 
             int hwDecode = 0;
             if (nvdec)
             {
                 hwDecode = (int)NativeConstants.HB_DECODE_NVDEC;
+            }
+            if (amfdec)
+            {
+                hwDecode = (int)NativeConstants.HB_DECODE_AMFDEC;
             }
 
             if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
@@ -318,6 +323,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsNVDecAvailable &&  this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport) && job.VideoEncoder.IsNVEnc)
             {
                 video.HardwareDecode = NativeConstants.HB_DECODE_NVDEC;
+            }
+
+            //use AMFDec to scan and detect format
+            if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsAMFDecAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableAmfDecSupport) && job.VideoEncoder.IsVCN)
+            {
+                video.HardwareDecode = NativeConstants.HB_DECODE_AMFDEC;
             }
 
             if (HandBrakeHardwareEncoderHelper.IsDirectXAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding))

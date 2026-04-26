@@ -9,16 +9,20 @@
 
 #include "handbrake/project.h"
 #include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/vce_common.h"
 
 static int is_vcn_available = -1;
 static int is_vcn_hevc_available = -1;
 static int is_vcn_av1_available = -1;
+static int is_vcn_decoder_available = -1;
 
 #if HB_PROJECT_FEATURE_VCE
 #include "AMF/core/Factory.h"
 #include "AMF/components/VideoEncoderVCE.h"
 #include "AMF/components/VideoEncoderHEVC.h"
 #include "AMF/components/VideoEncoderAV1.h"
+#include "AMF/components/VideoDecoderUVD.h"
 
 AMF_RESULT check_component_available(const wchar_t *componentID)
 {
@@ -27,8 +31,8 @@ AMF_RESULT check_component_available(const wchar_t *componentID)
     AMFFactory         *factory = NULL;
     AMFContext         *context = NULL;
     AMFContext1        *context1 = NULL;
-    AMFComponent       *encoder = NULL;
-    AMFCaps            *encoderCaps = NULL;
+    AMFComponent       *component = NULL;
+    AMFCaps            *componentCaps = NULL;
     AMF_RESULT          result = AMF_FAIL;
 
     libHandle = hb_dlopen(AMF_DLL_NAMEA);
@@ -83,27 +87,27 @@ AMF_RESULT check_component_available(const wchar_t *componentID)
         }
     }
 
-    result = factory->pVtbl->CreateComponent(factory, context, componentID, &encoder);
+    result = factory->pVtbl->CreateComponent(factory, context, componentID, &component);
 
     if(result != AMF_OK)
     {
         goto clean;
     }
 
-    result = encoder->pVtbl->GetCaps(encoder, &encoderCaps);
+    result = component->pVtbl->GetCaps(component, &componentCaps);
 
 clean:
-    if (encoderCaps)
+    if (componentCaps)
     {
-        encoderCaps->pVtbl->Clear(encoderCaps);
-        encoderCaps->pVtbl->Release(encoderCaps);
-        encoderCaps = NULL;
+        componentCaps->pVtbl->Clear(componentCaps);
+        componentCaps->pVtbl->Release(componentCaps);
+        componentCaps = NULL;
     }
-    if (encoder)
+    if (component)
     {
-        encoder->pVtbl->Terminate(encoder);
-        encoder->pVtbl->Release(encoder);
-        encoder = NULL;
+        component->pVtbl->Terminate(component);
+        component->pVtbl->Release(component);
+        component = NULL;
     }
     if (context)
     {
@@ -184,39 +188,113 @@ int hb_vce_av1_available()
 
 int hb_map_vce_preset_name(int vcodec, const char *preset)
 {
-    if (vcodec == HB_VCODEC_FFMPEG_VCE_AV1 ||
-        vcodec == HB_VCODEC_FFMPEG_VCE_AV1_10BIT)
+    if (preset)
     {
-        if (strcmp(preset, "high quality") == 0) {
-            return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_HIGH_QUALITY;
-        }  else if (strcmp(preset, "quality") == 0) {
-            return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_QUALITY;
-        } else if (strcmp(preset, "balanced") == 0) {
-            return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_BALANCED;
-        } else if (strcmp(preset, "speed") == 0) {
-            return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_SPEED;
+        if (vcodec == HB_VCODEC_FFMPEG_VCE_AV1)
+        {
+            if (strcmp(preset, "high quality") == 0) {
+                return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_HIGH_QUALITY;
+            }  else if (strcmp(preset, "quality") == 0) {
+                return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_QUALITY;
+            } else if (strcmp(preset, "balanced") == 0) {
+                return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_BALANCED;
+            } else if (strcmp(preset, "speed") == 0) {
+                return AMF_VIDEO_ENCODER_AV1_QUALITY_PRESET_SPEED;
+            }
+        }
+        else if (vcodec == HB_VCODEC_FFMPEG_VCE_H265 ||
+                vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
+        {
+            if (strcmp(preset, "quality") == 0) {
+                return AMF_VIDEO_ENCODER_HEVC_QUALITY_PRESET_QUALITY;
+            } else if (strcmp(preset, "balanced") == 0) {
+                return AMF_VIDEO_ENCODER_HEVC_QUALITY_PRESET_BALANCED;
+            } else if (strcmp(preset, "speed") == 0) {
+                return AMF_VIDEO_ENCODER_HEVC_QUALITY_PRESET_SPEED;
+            }
+        }
+        else if (vcodec == HB_VCODEC_FFMPEG_VCE_H264)
+        {
+            if (strcmp(preset, "quality") == 0) {
+                return AMF_VIDEO_ENCODER_QUALITY_PRESET_QUALITY;
+            } else if (strcmp(preset, "balanced") == 0) {
+                return AMF_VIDEO_ENCODER_QUALITY_PRESET_BALANCED;
+            } else if (strcmp(preset, "speed") == 0) {
+                return  AMF_VIDEO_ENCODER_QUALITY_PRESET_SPEED;
+            }
         }
     }
-    else if (vcodec == HB_VCODEC_FFMPEG_VCE_H265 ||
-             vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
+    return 0;
+}
+
+int hb_check_amfdec_available()
+{
+    if (hb_is_hardware_disabled())
     {
-        if (strcmp(preset, "quality") == 0) {
-            return AMF_VIDEO_ENCODER_HEVC_QUALITY_PRESET_QUALITY;
-        } else if (strcmp(preset, "balanced") == 0) {
-            return AMF_VIDEO_ENCODER_HEVC_QUALITY_PRESET_BALANCED;
-        } else if (strcmp(preset, "speed") == 0) {
-            return AMF_VIDEO_ENCODER_HEVC_QUALITY_PRESET_SPEED;
+        return 0;
+    }
+
+    if (is_vcn_decoder_available != -1)
+    {
+        return is_vcn_decoder_available;
+    }
+
+    is_vcn_decoder_available = (check_component_available(AMFVideoDecoderUVD_H264_AVC) == AMF_OK) ? 1 : 0;
+    if (is_vcn_decoder_available == 1)
+    {
+        hb_log("vcn decoder: is available");
+    }
+    else
+    {
+        hb_log("vcn decoder: not available on this system");
+    }
+
+    return is_vcn_decoder_available;
+}
+
+int hb_vce_are_filters_supported(hb_list_t *filters)
+{
+    int num_sw_filters = 0;
+
+    if (filters == NULL)
+    {
+        return 0;
+    }
+
+    for (int i = 0; i < hb_list_count(filters); i++)
+    {
+        hb_filter_object_t *filter = hb_list_item(filters, i);
+        switch (filter->id)
+        {
+            // AMF VPP-capable filters.
+            case HB_FILTER_FORMAT:
+            case HB_FILTER_CROP_SCALE:
+                break;
+            case HB_FILTER_VFR:
+            {
+                // mode=0 does not access frame data.
+                int mode = hb_dict_get_int(filter->settings, "mode");
+                if (mode != 0)
+                {
+                    num_sw_filters++;
+                }
+                break;
+            }
+            default:
+                // Includes ROTATE and all other SW frame-processing filters.
+                num_sw_filters++;
+                break;
         }
     }
-    else if (vcodec == HB_VCODEC_FFMPEG_VCE_H264)
+
+    return num_sw_filters == 0;
+}
+
+int hb_vce_dec_is_enabled(hb_job_t *job)
+{
+    if (job && (job->hw_decode & HB_DECODE_AMFDEC))
     {
-        if (strcmp(preset, "quality") == 0) {
-            return AMF_VIDEO_ENCODER_QUALITY_PRESET_QUALITY;
-        } else if (strcmp(preset, "balanced") == 0) {
-            return AMF_VIDEO_ENCODER_QUALITY_PRESET_BALANCED;
-        } else if (strcmp(preset, "speed") == 0) {
-            return  AMF_VIDEO_ENCODER_QUALITY_PRESET_SPEED;
-        }
+        return 1;
     }
     return 0;
 }
@@ -265,4 +343,95 @@ int hb_map_vce_preset_name(int vcodec, const char *preset)
     return 0;
 }
 
+int hb_check_amfdec_available()
+{
+    #if HB_PROJECT_FEATURE_AMFDEC
+        return 1;
+    #else
+        return 0;
+    #endif
+}
+
+int hb_vce_dec_is_enabled(hb_job_t *job)
+{
+    return 0;
+}
+
+int hb_vce_are_filters_supported(hb_list_t *filters)
+{
+    return 0;
+}
+
 #endif // HB_PROJECT_FEATURE_VCE
+
+static void * find_decoder(int codec_param)
+{
+    if (!hb_check_amfdec_available())
+        return NULL;
+
+    const char *codec_name = hb_vce_decode_get_codec_name(codec_param);
+    return (void *)avcodec_find_decoder_by_name(codec_name);
+}
+
+static const int vce_encoders[] =
+{
+    HB_VCODEC_FFMPEG_VCE_H264,
+    HB_VCODEC_FFMPEG_VCE_H265,
+    HB_VCODEC_FFMPEG_VCE_H265_10BIT,
+    HB_VCODEC_FFMPEG_VCE_AV1
+};
+
+const char* hb_vce_decode_get_codec_name(enum AVCodecID codec_id)
+{
+#if HB_PROJECT_FEATURE_AMFDEC
+    switch (codec_id)
+    {
+        case AV_CODEC_ID_H264:
+            return "h264_amf";
+
+        case AV_CODEC_ID_HEVC:
+            return "hevc_amf";
+
+        case AV_CODEC_ID_AV1:
+            return "av1_amf";
+
+        default:
+            return NULL;
+    }
+    return NULL;
+#else
+    return NULL;
+#endif
+}
+
+int hb_vce_hw_filters_via_video_memory_are_enabled(hb_job_t *job)
+{
+    return job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE;
+}
+
+int hb_vce_available()
+{
+    if (hb_is_hardware_disabled())
+    {
+        return 0;
+    }
+
+    int vce_available = 0;
+    vce_available = (hb_vce_h264_available() |
+                    hb_vce_h265_available() |
+                    hb_vce_av1_available());
+    
+    return vce_available;
+}
+
+hb_hwaccel_t hb_hwaccel_amfdec =
+{
+    .id           = HB_DECODE_AMFDEC,
+    .name         = "amfdec",
+    .encoders     = vce_encoders,
+    .type         = AV_HWDEVICE_TYPE_AMF,
+    .hw_pix_fmt   = AV_PIX_FMT_AMF_SURFACE,
+    .can_filter   = hb_vce_are_filters_supported,
+    .find_decoder = find_decoder,
+    .caps         = HB_HWACCEL_CAP_SCAN
+};

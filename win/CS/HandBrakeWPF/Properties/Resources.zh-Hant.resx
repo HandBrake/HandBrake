@@ -2656,6 +2656,9 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>在使用 Nvidia NVEnc 編碼器以及硬體可以使用的前提下，偏好使用 NVDec 來解碼視訊串流。</value>
   </data>
+  <data name="OptionsView_EnableAmfDecSupport" xml:space="preserve">
+    <value>Prefer use of AMF AMFDec for decoding video when using the AMFEnc encoder and the hardware is available for use.</value>
+  </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>硬體支援</value>
   </data>
