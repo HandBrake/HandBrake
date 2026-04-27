@@ -867,6 +867,11 @@ void hb_muxmp4_process_subtitle_style(
     }
     while (ssa_text[in_pos] != '\0')
     {
+        if (ctx->style_atom_count > INT16_MAX)
+        {
+            goto fail;
+        }
+
         text = ssa_to_text(ssa_text + in_pos, &consumed, ctx->in_style);
         if (text == NULL)
             break;

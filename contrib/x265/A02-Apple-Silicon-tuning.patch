@@ -1,34 +1,34 @@
-From 7dff83433c71d55fd0e859045025d1e007ec65a4 Mon Sep 17 00:00:00 2001
+From 76d38ec6613413c594ac48d3343a363edfe400f8 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 13 Sep 2024 16:08:25 +0200
-Subject: [PATCH 2/6] Apple Silicon tuning
+Subject: [PATCH 2/7] Apple Silicon tuning
 
 ---
  source/common/threadpool.cpp | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/source/common/threadpool.cpp b/source/common/threadpool.cpp
-index 615b04b6f..7d99f8cb1 100644
+index 140445119..8ba7556ed 100644
 --- a/source/common/threadpool.cpp
 +++ b/source/common/threadpool.cpp
-@@ -661,10 +661,16 @@ void ThreadPool::getFrameThreadsCount(x265_param* p, int cpuCount)
+@@ -829,10 +829,16 @@ int ThreadPool::getFrameThreadsCount(x265_param* p, int cpuCount)
      else if (cpuCount >= 32)
-         p->frameNumThreads = (p->sourceHeight > 2000) ? 6 : 5; 
+         return (p->sourceHeight > 2000) ? 6 : 5; 
      else if (cpuCount >= 16)
--        p->frameNumThreads = 4; 
+-        return 4; 
 +#if MACOS && X265_ARCH_ARM64
-+        p->frameNumThreads = 16;
++        return 16;
 +#else
-+        p->frameNumThreads = 4;
++        return 4;
 +#endif
      else if (cpuCount >= 8)
  #if _WIN32 && X265_ARCH_ARM64
-         p->frameNumThreads = cpuCount;
+         return cpuCount;
 +#elif MACOS && X265_ARCH_ARM64
-+        p->frameNumThreads = 8;
++        return 8;
  #else
-         p->frameNumThreads = 3;
+         return 3;
  #endif
 -- 
-2.39.5 (Apple Git-154)
+2.50.1 (Apple Git-155)
 
