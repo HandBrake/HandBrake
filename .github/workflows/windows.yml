@@ -95,17 +95,17 @@ jobs:
 
     - name: Setup Toolchain
       run: |
-        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64.tar.gz
-        SHA=$(sha1sum mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64.tar.gz)
-        EXPECTED="ac2b0b2a58f6c07c9456420ca50da5b597f4fe19  mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64.tar.gz"
+        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/mingw-w64-toolchain-11.0.1-ucrt-linux-x86_64.tar.gz
+        SHA=$(sha1sum mingw-w64-toolchain-11.0.1-ucrt-linux-x86_64.tar.gz)
+        EXPECTED="4ebef58a5c816e52ae8973612fe095c1eca303f1  mingw-w64-toolchain-11.0.1-ucrt-linux-x86_64.tar.gz"
         if [ "$SHA" == "$EXPECTED" ];
         then
             echo "Toolchain Verified. Extracting ..."
             mkdir toolchains
-            mv mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64.tar.gz toolchains
+            mv mingw-w64-toolchain-11.0.1-ucrt-linux-x86_64.tar.gz toolchains
             cd toolchains
-            tar xvf mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64.tar.gz
-            cd mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64/mingw-w64-x86_64/
+            tar xvf mingw-w64-toolchain-11.0.1-ucrt-linux-x86_64.tar.gz
+            cd mingw-w64-toolchain-11.0.1-ucrt-linux-x86_64/mingw-w64-x86_64/
             pwd
         else
             echo "Toolchain Verification FAILED. Exiting!"
@@ -119,7 +119,7 @@ jobs:
 
     - name: Build CLI and LibHB
       run: |
-        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-11.0.0-ucrt-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
+        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-11.0.1-ucrt-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
         export PATH=/usr/bin:$PATH
         ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --launch-jobs=0 --launch
         cd build
