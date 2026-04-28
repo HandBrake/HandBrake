@@ -174,7 +174,7 @@ function mingw-w64-build {  # mingw-w64-build [args] $TARGET_PARAM $TARGET_DIR
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="11.0.0"
+    VERSION="11.0.1"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -669,7 +669,7 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-ucrt-gcc-${GC
     GMP_DIR="${BUILD_DIR}/gmp-${GMP_VER}-${SYS_ARCH}"
     mkdir -pv "${BUILD_DIR}/gmp" > "${LOG_DIR}/gmp.log" 2>&1 || return 1
     cd "${BUILD_DIR}/gmp"
-    sed -i.bak '/^void g(){}$/s/void g(){}/void g(int,t1 const*,t1,t2,t1 const*,int){}/' "${SOURCE_DIR}/gmp/gmp-${GMP_VER}/configure" 2>&1 || return 1
+    sed -i.bak '/^void g(){}$/s/void g(){}/void g(int a,t1 const*b,t1 c,t2 d,t1 const*e,int f){}/' "${SOURCE_DIR}/gmp/gmp-${GMP_VER}/configure" 2>&1 || return 1
     "${SOURCE_DIR}/gmp/gmp-${GMP_VER}/configure" CC=gcc CXX=g++ CPPFLAGS=-fexceptions --build="${SYS_TYPE}" --prefix="${GMP_DIR}" --enable-cxx --disable-shared --enable-static >> "${LOG_DIR}/gmp.log" 2>&1 || return 1
     make -j "${JOBS}" >> "${LOG_DIR}/gmp.log" 2>&1 || return 1
     make check >> "${LOG_DIR}/gmp.log" 2>&1 || return 1
