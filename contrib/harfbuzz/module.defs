@@ -3,55 +3,52 @@ __deps__ := FREETYPE
 $(eval $(call import.MODULE.defs,HARFBUZZ,harfbuzz,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,HARFBUZZ))
 
-HARFBUZZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/harfbuzz-13.1.1.tar.xz
-HARFBUZZ.FETCH.url    += https://github.com/harfbuzz/harfbuzz/releases/download/13.1.1/harfbuzz-13.1.1.tar.xz
-HARFBUZZ.FETCH.sha256  = e7f3b8bac3fdcc529985be8e84fbd65c675ac47ee58512b15a5dd620c79ffe2a
+HARFBUZZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/harfbuzz-14.0.0.tar.xz
+HARFBUZZ.FETCH.url    += https://github.com/harfbuzz/harfbuzz/releases/download/14.0.0/harfbuzz-14.0.0.tar.xz
+HARFBUZZ.FETCH.sha256  = d4aa312728136e3dc7c3cda47b871614ce0d12bbb19f9dcac2ea70de836dc307
 
 HARFBUZZ.build_dir             = build
-HARFBUZZ.CONFIGURE.exe         = cmake
-HARFBUZZ.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(HARFBUZZ.CONFIGURE.prefix)"
+HARFBUZZ.CONFIGURE.exe         = $(MESON.exe) setup
+HARFBUZZ.prefix                = $(call fn.ABSOLUTE,$(HARFBUZZ.prefix/))contrib/
 HARFBUZZ.CONFIGURE.deps        =
-HARFBUZZ.CONFIGURE.static      =
-HARFBUZZ.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
-HARFBUZZ.CONFIGURE.extra       = -DHB_BUILD_UTILS=OFF
-HARFBUZZ.CONFIGURE.extra      += -DCMAKE_INSTALL_LIBDIR=lib
-HARFBUZZ.CONFIGURE.extra      += -DHB_HAVE_FREETYPE=ON \
-                                 -DFREETYPE_LIBRARIES="$(call fn.ABSOLUTE,$(CONTRIB.build/))lib" \
-                                 -DFREETYPE_INCLUDE_DIRS="$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
-                                 -DFREETYPE_INCLUDE_DIR_freetype2="$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
-                                 -DFREETYPE_INCLUDE_DIR_ft2build="$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2"
-
-HARFBUZZ.GCC.args.extra += $(HARFBUZZ.GCC.args.O.$(HARFBUZZ.GCC.O))
+HARFBUZZ.CONFIGURE.shared      =
+HARFBUZZ.CONFIGURE.host        =
+HARFBUZZ.CONFIGURE.build       =
+HARFBUZZ.CONFIGURE.static      = -Ddefault_library=static
+HARFBUZZ.CONFIGURE.extra       = -Dlibdir=$(call fn.ABSOLUTE,$(HARFBUZZ.prefix/))contrib/lib/ \
+                                 -Dutilities=disabled -Dbuildtype=release -Dfreetype=enabled \
+                                 -Dtests=disabled -Ddocs=disabled -Dbenchmark=disabled \
+                                 -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,HARFBUZZ.GCC,*archs *sysroot *minver ?extra)" \
+                                 -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,HARFBUZZ.GCC,*archs *sysroot *minver ?extra.exe)" \
+                                 -Dpkg_config_path=$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/pkgconfig)
+ 
+HARFBUZZ.CONFIGURE.env         =
 
 ifeq (1,$(HOST.cross))
-    ifeq (mingw,$(HOST.system))
-        HARFBUZZ.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(HARFBUZZ.GCC.gcc)
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(HARFBUZZ.GCC.gxx)
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
-        HARFBUZZ.CONFIGURE.extra += -DHB_HAVE_DIRECTWRITE=OFF \
-                                    -DHB_HAVE_GLIB=OFF \
-                                    -DHB_HAVE_GOBJECT=OFF \
-                                    -DHB_HAVE_GRAPHITE2=OFF \
-                                    -DHB_HAVE_ICU=OFF \
-                                    -DHB_HAVE_UNISCRIBE=OFF \
-									-DHB_BUILD_RASTER=OFF \
-									-DHB_BUILD_VECTOR=OFF
-        HARFBUZZ.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(HARFBUZZ.CONFIGURE.host)"
-    else ifeq ($(HOST.system),darwin)
-        HARFBUZZ.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(HARFBUZZ.CONFIGURE.host)"
-    else
-        HARFBUZZ.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(HARFBUZZ.CONFIGURE.host)"
-    endif
-    HARFBUZZ.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(HARFBUZZ.CONFIGURE.build)"
-else
-    HARFBUZZ.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(HARFBUZZ.CONFIGURE.host)"
+     HARFBUZZ.CONFIGURE.extra += -Ddirectwrite=disabled \
+                                 -Dglib=disabled \
+                                 -Dgobject=disabled \
+                                 -Dgraphite2=disabled \
+                                 -Dicu=disabled \
+                                 -Dgdi=disabled \
+                                 -Draster=disabled \
+                                 -Dvector=disabled
 endif
 
 ifeq ($(HOST.system),darwin)
-    HARFBUZZ.CONFIGURE.extra += -DHB_HAVE_CORETEXT=OFF -DHB_HAVE_GLIB=OFF -DCMAKE_OSX_ARCHITECTURES=$(HOST.machine)
+    HARFBUZZ.CONFIGURE.extra += -Dglib=disabled -Dcoretext=disabled
 endif
 
-## find CMakeLists.txt
-HARFBUZZ.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(HARFBUZZ.EXTRACT.dir/))"
+ifeq (darwin,$(HOST.system))
+    HARFBUZZ.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(HARFBUZZ.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-darwin-gcc.meson
+endif
+
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
+    HARFBUZZ.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(HARFBUZZ.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-w64-mingw32.meson
+endif
+
+HARFBUZZ.BUILD.make       = $(NINJA.exe)
+HARFBUZZ.BUILD.extra      = -v
+HARFBUZZ.INSTALL.make     = $(NINJA.exe)
+HARFBUZZ.CLEAN.make       = $(NINJA.exe)
+HARFBUZZ.UNINSTALL.make   = $(NINJA.exe)
