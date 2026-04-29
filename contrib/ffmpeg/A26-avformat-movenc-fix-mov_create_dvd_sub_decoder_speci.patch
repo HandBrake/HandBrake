@@ -1,0 +1,26 @@
+From eff67b15a75dbb9a0e8ca9a710b5450c84a35197 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Wed, 29 Apr 2026 10:26:48 +0200
+Subject: [PATCH] avformat/movenc: fix mov_create_dvd_sub_decoder_specific_info
+
+It has been broken since 3064487.
+---
+ libavformat/movenc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index 8157b5e277..5c43b7d75f 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -7831,7 +7831,7 @@ static int mov_create_dvd_sub_decoder_specific_info(MOVTrack *track,
+     int i, width = 720, height = 480;
+     int have_palette = 0, have_size = 0;
+     uint32_t palette[16];
+-    char *cur = track->extradata[track->last_stsd_index];
++    char *cur = st->codecpar->extradata;
+ 
+     while (cur && *cur) {
+         if (strncmp("palette:", cur, 8) == 0) {
+-- 
+2.50.1 (Apple Git-155)
+
