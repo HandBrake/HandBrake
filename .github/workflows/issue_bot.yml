@@ -2,19 +2,19 @@ name: IssueBot
 
 on:
   issues:
-    types: [opened]
+    types:
+      - opened
 
 permissions:
-   issues: write
+  issues: write
 
 jobs:
   greeting:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/first-interaction@v3
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        issue-message: |-
+      - uses: actions/first-interaction@v3
+        with:
+          issue_message: |-
             Hello,
 
             Welcome to the HandBrake repository.
@@ -29,3 +29,4 @@ jobs:
 
             Thank You,
             The HandBrake Bot
+    
