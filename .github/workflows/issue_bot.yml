@@ -7,7 +7,8 @@ on:
 
 permissions:
   issues: write
-
+  pull-requests: write
+  
 jobs:
   greeting:
     runs-on: ubuntu-latest
@@ -29,4 +30,13 @@ jobs:
 
             Thank You,
             The HandBrake Bot
-    
+          pr_message: |
+            Hello,
+
+            Welcome to the HandBrake repository. Thank you for your submission. Please be patient while we review your submission. 
+
+            >[!TIP]
+            > For HandBrake documentation, please see https://handbrake.fr/docs
+
+            Thank You,
+            The HandBrake Bot
