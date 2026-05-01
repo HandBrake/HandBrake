@@ -1,0 +1,51 @@
+From 2c4c6bc5b14214840bd7a84acd48bc9858f1a903 Mon Sep 17 00:00:00 2001
+From: Derek Buitenhuis <derek.buitenhuis@gmail.com>
+Date: Mon, 22 Sep 2025 20:00:54 +0100
+Subject: [PATCH] avformat/mov: Merge tts after building index for old-style
+ uncompressed PCM
+
+This was a regression introduced in 292c1df7c159c8a1a7afe52613d164ff417e81ce.
+
+Since we don't know the length of the stts data until after building the
+index, since we're generating it, we need to merge any ctts data after,
+since otherwise tts_count is set to 0, and no packets will be output.
+
+We can't remove the merge entirely, because uncompressed PCM with
+a ctts atom is technically valid (e.g. a constant CTS offset).
+
+This fixes old-style uncompressed PCM demuxing.
+
+Fixes #11490.
+
+Signed-off-by: Derek Buitenhuis <derek.buitenhuis@gmail.com>
+(cherry picked from commit ae03b629db116a8a5b6b40ede912fbb8b1ca0175)
+---
+ libavformat/mov.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/libavformat/mov.c b/libavformat/mov.c
+index 3fdf6d21f8..54eafa5e1c 100644
+--- a/libavformat/mov.c
++++ b/libavformat/mov.c
+@@ -4850,10 +4850,6 @@ static void mov_build_index(MOVContext *mov, AVStream *st)
+         if (!sc->chunk_count || sc->tts_count)
+             return;
+ 
+-        ret = mov_merge_tts_data(mov, st, MOV_MERGE_CTTS);
+-        if (ret < 0)
+-            return;
+-
+         // compute total chunk count
+         for (i = 0; i < sc->stsc_count; i++) {
+             unsigned count, chunk_count;
+@@ -4948,6 +4944,10 @@ static void mov_build_index(MOVContext *mov, AVStream *st)
+                 chunk_samples -= samples;
+             }
+         }
++
++        ret = mov_merge_tts_data(mov, st, MOV_MERGE_CTTS);
++        if (ret < 0)
++            return;
+     }
+ 
+     if (!mov->ignore_editlist && mov->advanced_editlist) {
