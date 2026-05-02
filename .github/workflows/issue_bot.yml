@@ -2,19 +2,20 @@ name: IssueBot
 
 on:
   issues:
-    types: [opened]
+    types:
+      - opened
 
 permissions:
-   issues: write
-
+  issues: write
+  pull-requests: write
+  
 jobs:
   greeting:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/first-interaction@v3
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        issue-message: |-
+      - uses: actions/first-interaction@v3
+        with:
+          issue_message: |-
             Hello,
 
             Welcome to the HandBrake repository.
@@ -23,6 +24,16 @@ jobs:
             >Please be cautious of any non-members suggesting that you download a "DLL" or any other files from 3rd party websites.
             >These are likely malicious!
             >Members of the HandBrake team can be identified by the "(Member)" label in the top right of any response from them.
+
+            >[!TIP]
+            > For HandBrake documentation, please see https://handbrake.fr/docs
+
+            Thank You,
+            The HandBrake Bot
+          pr_message: |
+            Hello,
+
+            Welcome to the HandBrake repository. Thank you for your submission. Please be patient while we review your submission. 
 
             >[!TIP]
             > For HandBrake documentation, please see https://handbrake.fr/docs
