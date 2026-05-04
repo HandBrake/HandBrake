@@ -3007,15 +3007,24 @@ int hb_mixdown_get_default_s(uint32_t codec, const char *layout)
 
 hb_mixdown_t* hb_mixdown_get_from_mixdown(int mixdown)
 {
-    int i;
-    for (i = 0; i < hb_audio_mixdowns_count; i++)
+    /*
+     * Return the first matching *enabled* mixdown.
+     *
+     * Disabled mixdowns are meant for mapping of legacy mixdowns by name with
+     * hb_mixdown_get_from_name() e.g. someone specifying 6ch or 5_2_lfe using
+     * HandBrakeCLI.
+     *
+     * The full mixdown list should always have a single, current enabled
+     * mixdown for any disabled legacy mixdowns also present in said list.
+     */
+    for (int i = 0; i < hb_audio_mixdowns_count; i++)
     {
-        if (hb_audio_mixdowns[i].item.amixdown == mixdown)
+        if (hb_audio_mixdowns[i].enabled &&
+            hb_audio_mixdowns[i].item.amixdown == mixdown)
         {
             return &hb_audio_mixdowns[i].item;
         }
     }
-
     return NULL;
 }
 
