@@ -22,6 +22,7 @@ int            hb_vce_available();
 int            hb_vce_dec_is_enabled(hb_job_t *job);
 
 int            hb_vce_are_filters_supported(hb_list_t *filters);
+int            hb_vce_decode_is_codec_supported(enum AVCodecID codec_id);
 const char*    hb_vce_decode_get_codec_name(enum AVCodecID codec_id);
 int            hb_vce_hw_filters_via_video_memory_are_enabled(hb_job_t *job);
 

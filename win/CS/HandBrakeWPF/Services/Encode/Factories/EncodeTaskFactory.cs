@@ -328,7 +328,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             //use AMFDec to scan and detect format
             if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsAMFDecAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableAmfDecSupport) && job.VideoEncoder.IsVCN)
             {
-                video.HardwareDecode = NativeConstants.HB_DECODE_AMFDEC;
+                video.HardwareDecode = NativeConstants.HB_DECODE_AMFDEC | NativeConstants.HB_DECODE_FORCE_HW;
             }
 
             if (HandBrakeHardwareEncoderHelper.IsDirectXAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding))

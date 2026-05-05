@@ -1075,6 +1075,9 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
         hb_value_free(&dict);
         return;
     }
+    
+    // If the job wants to use Hardware decode, it must also be
+    // enabled during scan.  So enable it here.
     if (result == 0)
     {
         json_t *video = json_object_get(dict, "Video");
@@ -1087,9 +1090,6 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
             }
         }
     }
-    
-    // If the job wants to use Hardware decode, it must also be
-    // enabled during scan.  So enable it here.
     hb_list_t *file_paths = hb_list_init();
     hb_list_add(file_paths, (char *)path);
     hb_scan(h, file_paths, title_index, -1, 0, 0, 0, 0, 0, NULL, hw_decode, keep_duplicate_titles);

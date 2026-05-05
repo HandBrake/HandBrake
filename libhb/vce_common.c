@@ -409,10 +409,10 @@ int hb_vce_hw_filters_via_video_memory_are_enabled(hb_job_t *job)
     return job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE;
 }
 
-int hb_vce_decode_is_codec_supported(int video_codec_param)
+int hb_vce_decode_is_codec_supported(enum AVCodecID codec_id)
 {
 #if HB_PROJECT_FEATURE_AMFDEC
-    switch (video_codec_param)
+    switch (codec_id)
     {
         case AV_CODEC_ID_H264:
         case AV_CODEC_ID_HEVC:

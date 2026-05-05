@@ -1472,6 +1472,7 @@ int reinit_video_filters(hb_work_private_t * pv)
 #if HB_PROJECT_FEATURE_AMFDEC
         else if (pv->frame->hw_frames_ctx && pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE)
         {
+            hb_log("Reinit video filter, added AMF vpp_amf");
             hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
             hb_avfilter_append_dict(filters, "vpp_amf", settings);
         }
@@ -1801,13 +1802,12 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
 
         if (pv->hw_frame)
         {
-#if HB_PROJECT_FEATURE_AMFDEC
             if (pv->hw_frame->hw_frames_ctx != NULL &&
                 pv->job != NULL &&
-                pv->hw_frame->format == AV_PIX_FMT_AMF_SURFACE &&
-                pv->job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE)
+                pv->job->hw_pix_fmt != AV_PIX_FMT_NONE &&
+                pv->hw_frame->format == pv->job->hw_pix_fmt)
             {
-                // HW -> HW: keep AMF surface in video memory
+                // HW -> HW: keep hardware frame in video memory.
                 ret = av_frame_ref(pv->frame, pv->hw_frame);
                 av_frame_unref(pv->hw_frame);
                 if (ret < 0)
@@ -1817,7 +1817,6 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
                 }
             } 
             else
- #endif
             if (pv->hw_frame->hw_frames_ctx)
             {
                 AVHWFramesContext *hwfc = (AVHWFramesContext *)pv->hw_frame->hw_frames_ctx->data;

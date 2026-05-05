@@ -444,19 +444,20 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
     int videoHWDecode = ghb_dict_get_int(settings, "VideoHWDecode");
     ghb_dict_set_int(settings, "HardwareDecode", videoHWDecode);
 
+    int videoHWDecodeId = videoHWDecode & ~HB_DECODE_FORCE_HW;
     if (encoder & (HB_VCODEC_FFMPEG_VCE_H264 |
     HB_VCODEC_FFMPEG_VCE_H265 |
     HB_VCODEC_FFMPEG_VCE_H265_10BIT |
     HB_VCODEC_FFMPEG_VCE_AV1))
     {
-        if (videoHWDecode == HB_DECODE_AMFDEC)
+        if (videoHWDecodeId == HB_DECODE_AMFDEC)
         {
             ghb_dict_set_bool(settings, "AmfHwDecode", TRUE);
         } else
         {
             ghb_dict_set_bool(settings, "AmfHwDecode", FALSE);
         }
-    } else if (videoHWDecode == HB_DECODE_AMFDEC)
+    } else if (videoHWDecodeId == HB_DECODE_AMFDEC)
     {
         ghb_dict_set_bool(settings, "AmfHwDecode", FALSE);
         ghb_dict_set_int(settings, "VideoHWDecode", 0);
@@ -1949,8 +1950,8 @@ ghb_settings_to_preset(GhbValue *settings)
     {
         if (hwAmfDec)
         {
-            ghb_dict_set_int(preset, "VideoHWDecode", HB_DECODE_AMFDEC);
-            ghb_dict_set_int(preset, "HardwareDecode", HB_DECODE_AMFDEC);
+            ghb_dict_set_int(preset, "VideoHWDecode", HB_DECODE_AMFDEC | HB_DECODE_FORCE_HW);
+            ghb_dict_set_int(preset, "HardwareDecode", HB_DECODE_AMFDEC | HB_DECODE_FORCE_HW);
         } else
         {
             ghb_dict_set_int(preset, "VideoHWDecode", 0);

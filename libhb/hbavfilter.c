@@ -77,7 +77,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
             par->frame_rate.num = init->time_base.den;
             par->frame_rate.den = init->time_base.num;
         }
-        else if (init->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE)
+        else
         {
             par->frame_rate.num = init->vrate.num;
             par->frame_rate.den = init->vrate.den;
