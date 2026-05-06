@@ -1393,7 +1393,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     if (pix_fmt            == pv->frame->format  &&
         orig_width         == pv->frame->width   &&
         orig_height        == pv->frame->height  &&
-        color_range        == pv->frame->color_range &&
+        color_range        == hb_get_color_range(pv->frame->color_range) &&
         HB_ROTATION_0      == pv->title->rotation)
     {
         // No filtering required.
@@ -1404,7 +1404,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     if (pv->video_filters.graph       != NULL              &&
         pv->video_filters.width       == pv->frame->width  &&
         pv->video_filters.height      == pv->frame->height &&
-        pv->video_filters.color_range == pv->frame->color_range &&
+        pv->video_filters.color_range == hb_get_color_range(pv->frame->color_range) &&
         pv->video_filters.pix_fmt     == pv->frame->format)
     {
         // Current filter settings are good
@@ -1413,7 +1413,7 @@ int reinit_video_filters(hb_work_private_t * pv)
 
     pv->video_filters.width       = pv->frame->width;
     pv->video_filters.height      = pv->frame->height;
-    pv->video_filters.color_range = pv->frame->color_range;
+    pv->video_filters.color_range = hb_get_color_range(pv->frame->color_range);
     pv->video_filters.pix_fmt     = pv->frame->format;
 
     // New filter required, create filter graph
@@ -1430,7 +1430,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     if (pix_fmt            != pv->frame->format ||
         orig_width         != pv->frame->width  ||
         orig_height        != pv->frame->height ||
-        color_range        != pv->frame->color_range)
+        color_range        != hb_get_color_range(pv->frame->color_range))
     {
         settings = hb_dict_init();
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
@@ -1446,7 +1446,7 @@ int reinit_video_filters(hb_work_private_t * pv)
 #endif
         if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_CUDA)
         {
-            if (color_range != pv->frame->color_range)
+            if (color_range != hb_get_color_range(pv->frame->color_range))
             {
                 hb_dict_set_int(settings, "range", color_range);
                 hb_avfilter_append_dict(filters, "colorspace_cuda", settings);
@@ -1485,7 +1485,7 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
             hb_dict_set(settings, "flags", hb_value_string("lanczos+accurate_rnd"));
-            hb_dict_set_int(settings, "in_range", pv->frame->color_range);
+            hb_dict_set_int(settings, "in_range", hb_get_color_range(pv->frame->color_range));
             hb_dict_set_int(settings, "out_range", color_range);
             hb_avfilter_append_dict(filters, "scale", settings);
 
@@ -1593,7 +1593,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     filter_init.geometry.par.num  = pv->frame->sample_aspect_ratio.num;
     filter_init.geometry.par.den  = pv->frame->sample_aspect_ratio.den;
     filter_init.color_matrix      = color_matrix;
-    filter_init.color_range       = pv->frame->color_range;
+    filter_init.color_range       = hb_get_color_range(pv->frame->color_range);
     filter_init.time_base.num     = 1;
     filter_init.time_base.den     = 1;
     filter_init.vrate.num         = vrate.num;
