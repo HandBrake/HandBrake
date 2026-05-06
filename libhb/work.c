@@ -19,7 +19,9 @@
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
 #endif
-
+#if HB_PROJECT_FEATURE_VCE
+#include "handbrake/vce_common.h"
+#endif
 #ifdef __APPLE__
 #include "platform/macosx/vt_common.h"
 #endif
@@ -1489,8 +1491,9 @@ static void sanitize_filter_list_post(hb_job_t *job)
 
     hb_hwaccel_t *hwaccel = job->hw_accel;
 
-    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0 ||
-        (job->hw_pix_fmt != AV_PIX_FMT_NONE && hwaccel && (hwaccel->caps & HB_HWACCEL_CAP_FORMAT_REQUIRED)))
+    if ((job->hw_pix_fmt != AV_PIX_FMT_AMF_SURFACE) &&
+        (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0 ||
+        (job->hw_pix_fmt != AV_PIX_FMT_NONE && hwaccel && (hwaccel->caps & HB_HWACCEL_CAP_FORMAT_REQUIRED))))
     {
         // Some encoders require a specific input pixel format
         // that could be different from the current pipeline format.
@@ -2560,4 +2563,3 @@ static void filter_loop( void * _f )
             hb_buffer_close( &buf_in );
     }
 }
-

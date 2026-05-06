@@ -10,9 +10,21 @@
 #ifndef HANDBRAKE_VCE_COMMON_H
 #define HANDBRAKE_VCE_COMMON_H
 
+#define HB_VCE_FFMPEG_INITIAL_POOL_SIZE (0)
+#define HB_VCE_FFMPEG_EXTRA_HW_FRAMES (50)
+
 int            hb_vce_h264_available();
 int            hb_vce_h265_available();
 int            hb_vce_av1_available();
+int            hb_check_amfdec_available();
+int            hb_vce_available();
+
+int            hb_vce_dec_is_enabled(hb_job_t *job);
+
+int            hb_vce_are_filters_supported(hb_list_t *filters);
+int            hb_vce_decode_is_codec_supported(enum AVCodecID codec_id);
+const char*    hb_vce_decode_get_codec_name(enum AVCodecID codec_id);
+int            hb_vce_hw_filters_via_video_memory_are_enabled(hb_job_t *job);
 
 static const char * const hb_vce_preset_names[] = { "speed", "balanced", "quality", NULL, };
 
