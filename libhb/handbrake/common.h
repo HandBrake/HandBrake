@@ -746,6 +746,7 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_NVENC_H265_10BIT   (0x00000032 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
 #define HB_VCODEC_FFMPEG_NVENC_AV1          (0x00000033 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_FFMPEG_NVENC_AV1_10BIT    (0x00000034 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_FFMPEG_NVENC_H264_10BIT   (0x00000035 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H264_MASK)
 
 #define HB_VCODEC_FFMPEG_FFV1        (0x00000040 | HB_VCODEC_FFMPEG_MASK)
 
@@ -1118,7 +1119,7 @@ struct hb_audio_config_s
             HB_AMIXDOWN_5POINT1,
             HB_AMIXDOWN_6POINT1,
             HB_AMIXDOWN_7POINT1,
-            HB_AMIXDOWN_5_2_LFE,
+            HB_AMIXDOWN_7POINT1_SDDS,
         } mixdown; /* Audio mixdown */
         int      track; /* Output track number */
         uint32_t codec; /* Output audio codec */

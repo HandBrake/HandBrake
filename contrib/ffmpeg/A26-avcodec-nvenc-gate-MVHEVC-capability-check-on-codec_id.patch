@@ -1,0 +1,30 @@
+From bdc0a29204104301f0ce3b02481d7603d8d70577 Mon Sep 17 00:00:00 2001
+From: Semih Baskan <strst.gs@gmail.com>
+Date: Sun, 26 Apr 2026 12:00:00 +0000
+Subject: [PATCH] avcodec/nvenc: gate MVHEVC capability check on codec_id
+
+NV_ENC_H264_PROFILE_HIGH_10 and NV_ENC_HEVC_PROFILE_MULTIVIEW_MAIN
+both equal 3 when their respective NVENC_HAVE_* flags are defined.
+The MVHEVC check in nvenc_check_capabilities() matches against
+ctx->profile alone, so an H.264 encode with profile=high10 is
+rejected as if it were an HEVC multiview request on hardware
+without MVHEVC support.
+
+Signed-off-by: Semih Baskan <strst.gs@gmail.com>
+---
+ libavcodec/nvenc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+--- a/libavcodec/nvenc.c
++++ b/libavcodec/nvenc.c
+@@ -700,7 +700,9 @@ static int nvenc_check_capabilities(AVCodecContext *avctx)
+
+ #ifdef NVENC_HAVE_MVHEVC
+     ctx->multiview_supported = nvenc_check_cap(avctx, NV_ENC_CAPS_SUPPORT_MVHEVC_ENCODE) > 0;
+-    if(ctx->profile == NV_ENC_HEVC_PROFILE_MULTIVIEW_MAIN && !ctx->multiview_supported) {
++    if (avctx->codec_id == AV_CODEC_ID_HEVC &&
++        ctx->profile == NV_ENC_HEVC_PROFILE_MULTIVIEW_MAIN &&
++        !ctx->multiview_supported) {
+         av_log(avctx, AV_LOG_WARNING, "Multiview not supported by the device\n");
+         return AVERROR(ENOSYS);
+     }
