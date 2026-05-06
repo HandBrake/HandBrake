@@ -11,6 +11,16 @@ Download available from Microsoft:
 - [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/10.0/windowsdesktop-runtime-win-arm64.exe)
 
 
+## HandBrake 1.12.0
+
+### All platforms
+
+#### Audio
+
+- Renamed "7.1 (5F/2R/LFE)" mixdown to "7.1 (SDDS)" (speaker layout used by Sony Dynamic Digital Sound)
+
+## HandBrake 1.11.2
+
 ## HandBrake 1.11.1
 
 ### All platforms

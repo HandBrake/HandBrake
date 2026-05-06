@@ -799,10 +799,8 @@ uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
             ff_layout = AV_CH_LAYOUT_7POINT1;
             break;
 
-        case HB_AMIXDOWN_5_2_LFE:
-            ff_layout = (AV_CH_LAYOUT_5POINT1_BACK|
-                         AV_CH_FRONT_LEFT_OF_CENTER|
-                         AV_CH_FRONT_RIGHT_OF_CENTER);
+        case HB_AMIXDOWN_7POINT1_SDDS:
+            ff_layout = AV_CH_LAYOUT_7POINT1_WIDE_BACK;
             break;
 
         default:

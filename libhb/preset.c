@@ -3066,6 +3066,33 @@ static void und_to_any(hb_value_array_t * list)
     }
 }
 
+static void import_mixdown_72_0_0(hb_value_t *preset)
+{
+    hb_value_array_t *audio_list = hb_dict_get(preset, "AudioList");
+    int audio_count = hb_value_array_len(audio_list);
+    hb_value_t *audio_dict, *audio_amix;
+    hb_mixdown_t *mixdown;
+    int amixdown, ii;
+    for (ii = 0; ii < audio_count; ii++)
+    {
+        audio_dict = hb_value_array_get(audio_list, ii);
+        audio_amix = hb_dict_get(audio_dict, "AudioMixdown");
+        if (hb_value_type(audio_amix) == HB_VALUE_TYPE_STRING)
+        {
+            amixdown = hb_mixdown_get_from_name(hb_value_get_string(audio_amix));
+        }
+        else
+        {
+            amixdown = hb_value_get_int(audio_amix);
+        }
+        if ((amixdown == HB_AMIXDOWN_7POINT1_SDDS) &&
+            (mixdown = hb_mixdown_get_from_mixdown(amixdown)))
+        {
+            hb_dict_set(audio_dict, "AudioMixdown", hb_value_string(mixdown->short_name));
+        }
+    }
+}
+
 static void import_pic_par_settings_69_0_0(hb_value_t *preset)
 {
     const char *pic_par = hb_dict_get_string(preset, "PicturePAR");
@@ -3876,9 +3903,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_72_0_0(hb_value_t *preset)
+{
+    import_mixdown_72_0_0(preset);
+}
+
 static void import_69_0_0(hb_value_t *preset)
 {
     import_pic_par_settings_69_0_0(preset);
+
+    import_72_0_0(preset);
 }
 
 static void import_64_0_0(hb_value_t *preset)
@@ -4152,6 +4186,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 69, 0, 0) <= 0)
         {
             import_69_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 72, 0, 0) <= 0)
+        {
+            import_72_0_0(preset);
             result = 1;
         }
 
