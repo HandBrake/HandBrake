@@ -1134,6 +1134,7 @@ struct hb_audio_config_s
         int      dither_method; /* dither algorithm */
         const char * name; /* Output track name */
         hb_list_t  * list_filter; /* List of hb_filter_object_t */
+        PRIVATE hb_channel_layout_t *ch_layout; /* Output channel layout, set by the audio filter chain */
     } out;
 
     /* Input */

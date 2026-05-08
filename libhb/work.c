@@ -1209,6 +1209,8 @@ static int sanitize_audio(hb_job_t *job)
             audio->config.out.samples_per_frame =
                                     audio->config.in.samples_per_frame;
             audio->config.out.samplerate = audio->config.in.samplerate;
+
+            av_channel_layout_copy(audio->config.out.ch_layout, audio->config.in.ch_layout);
             continue;
         }
 
@@ -1256,6 +1258,8 @@ static int sanitize_audio(hb_job_t *job)
                 audio->config.out.mixdown = best_mixdown;
             }
         }
+
+        av_channel_layout_from_mask(audio->config.out.ch_layout, hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL));
 
         /* sense-check the requested compression level */
         if (audio->config.out.compression_level < 0)
@@ -2016,18 +2020,18 @@ static void do_job(hb_job_t *job)
         for( i = 0; i < hb_list_count( job->list_audio ); i++ )
         {
             hb_audio_t *audio = hb_list_item( job->list_audio, i );
+            hb_list_t *list_filter = audio->config.out.list_filter;
+
+            hb_filter_init_t init;
+            memset(&init, 0, sizeof(init));
+
+            init.samplerate = audio->config.out.samplerate;
+            init.sample_fmt = AV_SAMPLE_FMT_FLT;
+            av_channel_layout_copy(&init.ch_layout, audio->config.in.ch_layout);
 
             // Audio Filter Chain
-            hb_list_t *list_filter = audio->config.out.list_filter;
             if (hb_list_count(list_filter))
             {
-                hb_filter_init_t init;
-                memset(&init, 0, sizeof(init));
-
-                init.samplerate = audio->config.out.samplerate;
-                init.sample_fmt = AV_SAMPLE_FMT_FLT;
-                av_channel_layout_from_mask(&init.ch_layout, hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL));
-
                 for (int j = 0; j < hb_list_count(list_filter);)
                 {
                     hb_filter_object_t *filter = hb_list_item(list_filter, j);
@@ -2042,7 +2046,12 @@ static void do_job(hb_job_t *job)
                     }
                     j++;
                 }
+            }
 
+            av_channel_layout_copy(audio->config.out.ch_layout, &init.ch_layout);
+
+            if (hb_list_count(list_filter))
+            {
                 // Combine HB_AUDIO_FILTER_AVFILTERs that are sequential
                 hb_avfilter_audio_combine(list_filter);
 
@@ -2060,11 +2069,8 @@ static void do_job(hb_job_t *job)
                     }
                     j++;
                 }
-            }
 
-            // Set up the audio filter fifo pipeline
-            if (hb_list_count(list_filter))
-            {
+                // Set up the audio filter fifo pipeline
                 hb_fifo_t *fifo_in = audio->priv.fifo_sync;
                 for (int j = 0; j < hb_list_count(list_filter); j++)
                 {

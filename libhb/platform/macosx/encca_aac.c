@@ -44,7 +44,6 @@ hb_work_object_t hb_encca_haac =
 struct hb_work_private_s
 {
     uint8_t *buf;
-    hb_job_t *job;
     hb_list_t *list;
 
     AudioConverterRef converter;
@@ -188,12 +187,10 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     OSStatus err;
 
     w->private_data = pv;
-    pv->job = job;
     pv->first_pts = AV_NOPTS_VALUE;
 
     // pass the number of channels used into the private work data
-    pv->nchannels =
-        hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
+    pv->nchannels = audio->config.out.ch_layout->nb_channels;
 
     bzero(&input, sizeof(AudioStreamBasicDescription));
     input.mSampleRate = (Float64)audio->config.out.samplerate;
@@ -334,18 +331,17 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     audio->config.out.samples_per_frame = pv->isamples;
 
     // channel remapping
-    AVChannelLayout out_layout, mixdown_layout;
-    hb_ff_mixdown_ch_xlat(&mixdown_layout, audio->config.out.mixdown, NULL);
-    hb_audio_remap_map_channel_layout(&hb_aac_chan_map, &out_layout, &mixdown_layout);
+    AVChannelLayout out_layout;
+    hb_audio_remap_map_channel_layout(&hb_aac_chan_map, &out_layout, audio->config.out.ch_layout);
 
     pv->remap = hb_audio_remap_init(AV_SAMPLE_FMT_FLT,
                                     &out_layout,
-                                    &mixdown_layout);
+                                    audio->config.out.ch_layout);
 
     AudioChannelLayout channel_layout;
     bzero(&channel_layout, sizeof(channel_layout));
 
-    channel_layout.mChannelLayoutTag = get_aac_tag(&mixdown_layout);
+    channel_layout.mChannelLayoutTag = get_aac_tag(audio->config.out.ch_layout);
 
     if (channel_layout.mChannelLayoutTag != 0)
     {
@@ -360,7 +356,6 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     }
 
     av_channel_layout_uninit(&out_layout);
-    av_channel_layout_uninit(&mixdown_layout);
 
     if (pv->remap == NULL)
     {
