@@ -16,7 +16,7 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 
 TEST.libs = $(LIBHB.a)
 
-TEST.pkgconfig_libs = libass libavformat libavfilter libavcodec libavutil libswresample dvdnav \
+TEST.pkgconfig_libs = libass libavformat libavfilter libavcodec libavutil libswresample vidstab dvdnav \
 	dvdread libswscale theoraenc theoradec vorbis vorbisenc ogg x264 libbluray libudfread \
 	jansson libturbojpeg SvtAv1Enc
 
@@ -96,3 +96,5 @@ endif
     TEST.GCC.D += PTW32_STATIC_LIB
     TEST.GCC.args.extra.exe++ += -static
 endif #   (1-mingw,$(HOST.cross)-$(HOST.system))
+TEST.GCC.f += openmp
+TEST.GCC.L += $(if $(wildcard $(CONTRIB.build/)lib/libomp.a),$(CONTRIB.build/)lib)

@@ -45,7 +45,7 @@ test.xclean: test.clean
 ########################################
 
 $(TEST.exe): | $(dir $(TEST.exe))
-$(TEST.exe): $(TEST.c.o)
+$(TEST.exe): $(TEST.c.o) $(if $(wildcard $(CONTRIB.build/)bin/libomp.dll),$(dir $(TEST.exe))libomp.dll)
 	$(call TEST.GCC.EXE++,$@,$^ $(TEST.libs))
 ifeq (none,$(FFMPEG.GCC.g))
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
@@ -54,6 +54,9 @@ else
 	$(STRIP.exe) $(TEST.exe)
 endif
 endif
+
+$(dir $(TEST.exe))libomp.dll:
+	install -m 755 $(CONTRIB.build/)bin/libomp.dll $(dir $(TEST.exe))libomp.dll
 
 $(TEST.c.o): $(LIBHB.a)
 $(TEST.c.o): | $(dir $(TEST.c.o))
