@@ -970,6 +970,7 @@ struct hb_job_s
     int             optimize;
     int             ipod_atom;
 
+    int                     filter_scan;
     int                     indepth_scan;
     hb_subtitle_config_t    select_subtitle_config;
 
@@ -1483,6 +1484,7 @@ struct hb_state_s
         struct
         {
             /* HB_STATE_WORKING || HB_STATE_SEARCHING || HB_STATE_WORKDONE */
+#define HB_PASS_FILTER_ANALYSIS    -2
 #define HB_PASS_SUBTITLE    -1
 #define HB_PASS_ENCODE      0
 #define HB_PASS_ENCODE_ANALYSIS  1   // Some code depends on these values being
@@ -1673,6 +1675,7 @@ struct hb_filter_object_s
     int                   enforce_order;
     int                   skip;
     int                   aliased;
+    int                   last;
     char                * name;
     char                * short_name;
     hb_dict_t           * settings;
@@ -1751,6 +1754,12 @@ enum
     HB_FILTER_NLMEANS,
     HB_FILTER_CHROMA_SMOOTH,
     HB_FILTER_CHROMA_SMOOTH_VT,
+
+    // Filters that require their own job pass to analyze frames only
+    HB_FILTER_SCAN_FIRST,
+    HB_FILTER_SCAN_LAST,
+
+    // Filters that should operate after noise handling, for frame manipulation
     HB_FILTER_ROTATE,
     HB_FILTER_ROTATE_VT,
     HB_FILTER_RENDER_SUB,
