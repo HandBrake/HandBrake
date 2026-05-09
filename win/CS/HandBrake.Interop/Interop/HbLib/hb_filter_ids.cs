@@ -34,6 +34,7 @@ namespace HandBrake.Interop.Interop.HbLib
 
         // Filters that require their own job pass to analyze frames only
         HB_FILTER_SCAN_FIRST,
+        HB_FILTER_VIDSTABDETECT,
         HB_FILTER_SCAN_LAST,
 
         // Filters that should operate after noise handling, for frame manipulation
