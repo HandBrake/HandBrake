@@ -16,7 +16,7 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 
 TEST.libs = $(LIBHB.a)
 
-TEST.pkgconfig_libs = libass libavformat libavfilter libavcodec libavutil libswresample dvdnav \
+TEST.pkgconfig_libs = libass libavformat libavfilter libavcodec libavutil libswresample vidstab dvdnav \
 	dvdread libswscale theoraenc theoradec vorbis vorbisenc ogg x264 libbluray \
 	jansson libturbojpeg SvtAv1Enc
 
@@ -61,6 +61,7 @@ ifeq ($(HOST.system),darwin)
     TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox VideoToolbox CoreMedia CoreVideo IOSurface Foundation DiskArbitration Metal
     TEST.GCC.l += iconv
 else ifeq ($(HOST.system),linux)
+    TEST.GCC.f += openmp
     TEST.GCC.l += pthread dl m
 ifeq (1, $(FEATURE.numa))
     TEST.GCC.l += numa
@@ -89,6 +90,7 @@ ifeq (1,$(HAS.pthread))
 else
     TEST.GCC.l += pthreadGC2
 endif
+    TEST.GCC.f += openmp
     TEST.GCC.l += bcrypt iconv ws2_32 regex uuid ole32 gdi32 userenv ntdll
     ifeq (1,$(FEATURE.mf))
         TEST.GCC.l += mfplat strmiids
