@@ -2804,9 +2804,10 @@ int hb_mixdown_has_remix_support(int mixdown, hb_channel_layout_t *ch_layout)
         case HB_AMIXDOWN_4POINT0:
                 return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_4POINT0) == AV_CH_LAYOUT_4POINT0);
 
-        // stereo + back stereo
+        // stereo + side or back stereo
         case HB_AMIXDOWN_QUAD:
-                return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD);
+                return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
+                        av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD);
 
         // stereo + front center
         case HB_AMIXDOWN_3POINT0:
