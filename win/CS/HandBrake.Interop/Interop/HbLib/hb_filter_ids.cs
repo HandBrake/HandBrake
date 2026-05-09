@@ -38,6 +38,7 @@ namespace HandBrake.Interop.Interop.HbLib
         HB_FILTER_SCAN_LAST,
 
         // Filters that should operate after noise handling, for frame manipulation
+        HB_FILTER_VIDSTABTRANSFORM,
         HB_FILTER_ROTATE,
         HB_FILTER_ROTATE_VT,
         HB_FILTER_RENDER_SUB,
