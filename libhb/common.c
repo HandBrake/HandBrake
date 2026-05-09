@@ -5386,6 +5386,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_vidstabdetect;
             break;
 
+        case HB_FILTER_VIDSTABTRANSFORM:
+            filter = &hb_filter_vidstabtransform;
+            break;
+
         case HB_FILTER_RENDER_SUB:
             filter = &hb_filter_render_sub;
             break;

@@ -89,6 +89,7 @@ FFMPEG.CONFIGURE.extra = \
     --enable-filter=acompressor \
     --enable-filter=agate \
     --enable-filter=vidstabdetect \
+    --enable-filter=vidstabtransform \
     --cc="$(FFMPEG.GCC.gcc)"
 
 ifeq (size-aggressive,$(GCC.O))
