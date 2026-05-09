@@ -1,0 +1,8 @@
+$(eval $(call import.MODULE.rules,VIDSTAB))
+$(eval $(call import.CONTRIB.rules,VIDSTAB))
+
+$(VIDSTAB.INSTALL.target): $(if $(wildcard $(dir $(VIDSTAB.GCC.gcc))../$(HOST.spec)/bin/libomp.dll),$(CONTRIB.build/)bin/libomp.dll)
+
+$(CONTRIB.build/)bin/libomp.dll:
+	cp $(dir $(VIDSTAB.GCC.gcc))../$(HOST.spec)/lib/libomp.dll.a $(CONTRIB.build/)lib/libomp.a
+	cp $(dir $(VIDSTAB.GCC.gcc))../$(HOST.spec)/bin/libomp.dll $(CONTRIB.build/)bin/libomp.dll
