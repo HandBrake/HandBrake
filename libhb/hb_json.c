@@ -1672,6 +1672,9 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             }
             if (filter_id >= HB_FILTER_FIRST && filter_id <= HB_FILTER_LAST)
             {
+                if (filter_id > HB_FILTER_SCAN_FIRST && filter_id < HB_FILTER_SCAN_LAST)
+                  job->filter_scan = 1;
+
                 hb_filter_object_t *filter;
                 filter = hb_filter_init(filter_id);
                 hb_add_filter_dict(job->list_filter, filter, filter_settings);

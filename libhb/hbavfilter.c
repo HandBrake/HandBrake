@@ -501,7 +501,7 @@ hb_buffer_t * hb_audio_avfilter_get_buf(hb_avfilter_graph_t *graph)
     return NULL;
 }
 
-void hb_avfilter_combine( hb_list_t * list)
+void hb_avfilter_combine( hb_list_t * list, int filter_scan )
 {
     hb_filter_object_t  * avfilter = NULL;
     hb_value_t          * settings = NULL;
@@ -510,6 +510,15 @@ void hb_avfilter_combine( hb_list_t * list)
     for (ii = 0; ii < hb_list_count(list); ii++)
     {
         hb_filter_object_t * filter = hb_list_item(list, ii);
+
+        // For filter scan, omit filters that have no analysis output.
+        if (filter_scan && filter->id > HB_FILTER_SCAN_LAST)
+          continue;
+
+        // For job pass other than filter scan, omit filters that scan.
+        if (!filter_scan && filter->id > HB_FILTER_SCAN_FIRST && filter->id < HB_FILTER_SCAN_LAST)
+          continue;
+
         hb_filter_private_t * pv = filter->private_data;
         switch (filter->id)
         {
