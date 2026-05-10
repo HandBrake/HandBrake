@@ -3008,14 +3008,14 @@ int hb_mixdown_get_default_s(uint32_t codec, const char *layout)
 hb_mixdown_t* hb_mixdown_get_from_mixdown(int mixdown)
 {
     /*
-     * Return the first matching *enabled* mixdown.
+     * Return the first matching *enabled* element of the list.
      *
-     * Disabled mixdowns are meant for mapping of legacy mixdowns by name with
-     * hb_mixdown_get_from_name() e.g. someone specifying 6ch or 5_2_lfe using
-     * HandBrakeCLI.
+     * Disabled elements are meant for mapping of legacy items by name
+     * with hb_*_get_from_name() - e.g. someone specifying an old name
+     * using HandBrakeCLI.
      *
-     * The full mixdown list should always have a single, current enabled
-     * mixdown for any disabled legacy mixdowns also present in said list.
+     * The full lists should always have a single enabled item
+     * for any disabled legacy items also present in said list.
      */
     for (int i = 0; i < hb_audio_mixdowns_count; i++)
     {
@@ -3138,15 +3138,24 @@ fail:
 
 hb_encoder_t * hb_video_encoder_get_from_codec(int codec)
 {
-    int i;
-    for (i = 0; i < hb_video_encoders_count; i++)
+    /*
+     * Return the first matching *enabled* element of the list.
+     *
+     * Disabled elements are meant for mapping of legacy items by name
+     * with hb_*_get_from_name() - e.g. someone specifying an old name
+     * using HandBrakeCLI.
+     *
+     * The full lists should always have a single enabled item
+     * for any disabled legacy items also present in said list.
+     */
+    for (int i = 0; i < hb_video_encoders_count; i++)
     {
-        if (hb_video_encoders[i].item.codec == codec)
+        if (hb_video_encoders[i].enabled &&
+            hb_video_encoders[i].item.codec == codec)
         {
             return &hb_video_encoders[i].item;
         }
     }
-
     return NULL;
 }
 
@@ -3312,15 +3321,24 @@ fail:
 
 hb_encoder_t* hb_audio_encoder_get_from_codec(int codec)
 {
-    int i;
-    for (i = 0; i < hb_audio_encoders_count; i++)
+    /*
+     * Return the first matching *enabled* element of the list.
+     *
+     * Disabled elements are meant for mapping of legacy items by name
+     * with hb_*_get_from_name() - e.g. someone specifying an old name
+     * using HandBrakeCLI.
+     *
+     * The full lists should always have a single enabled item
+     * for any disabled legacy items also present in said list.
+     */
+    for (int i = 0; i < hb_audio_encoders_count; i++)
     {
-        if (hb_audio_encoders[i].item.codec == codec)
+        if (hb_audio_encoders[i].enabled &&
+            hb_audio_encoders[i].item.codec == codec)
         {
             return &hb_audio_encoders[i].item;
         }
     }
-
     return NULL;
 }
 
@@ -3629,15 +3647,24 @@ const char* hb_audio_decoder_get_name(int codec, int codec_param)
 
 hb_container_t* hb_container_get_from_format(int format)
 {
-    int i;
-    for (i = 0; i < hb_containers_count; i++)
+    /*
+     * Return the first matching *enabled* element of the list.
+     *
+     * Disabled elements are meant for mapping of legacy items by name
+     * with hb_*_get_from_name() - e.g. someone specifying an old name
+     * using HandBrakeCLI.
+     *
+     * The full lists should always have a single enabled item
+     * for any disabled legacy items also present in said list.
+     */
+    for (int i = 0; i < hb_containers_count; i++)
     {
-        if (hb_containers[i].item.format == format)
+        if (hb_containers[i].enabled &&
+            hb_containers[i].item.format == format)
         {
             return &hb_containers[i].item;
         }
     }
-
     return NULL;
 }
 
