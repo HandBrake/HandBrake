@@ -13,8 +13,9 @@
 const char acompressor_template[] =
     "level-in=^"HB_FLOAT_REG"$:mode=^"HB_INT_REG"$:threshold=^"HB_FLOAT_REG"$:"
     "ratio=^"HB_FLOAT_REG"$:attack=^"HB_FLOAT_REG"$:release=^"HB_FLOAT_REG"$:"
-    "makeup=^"HB_FLOAT_REG"$:knee=^"HB_FLOAT_REG"$:link=^"HB_INT_REG"$"
-    "detection=^"HB_INT_REG"$:level-sc=^"HB_FLOAT_REG"$:mix=^"HB_FLOAT_REG"$";
+    "makeup=^"HB_FLOAT_REG"$:knee=^"HB_FLOAT_REG"$:link=^"HB_INT_REG"$:"
+    "detection=^"HB_INT_REG"$:level-sc=^"HB_FLOAT_REG"$:mix=^"HB_FLOAT_REG"$:"
+    "disable=^"HB_BOOL_REG"$";
 
 static int acompressor_init(hb_filter_object_t *filter, hb_filter_init_t *init)
 {

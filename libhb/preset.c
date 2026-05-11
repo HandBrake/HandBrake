@@ -909,6 +909,59 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                         hb_dict_get(encoder_dict, "AudioBitrate"),
                         HB_VALUE_TYPE_INT));
                 }
+
+                // Audio filter chain (acompressor, agate).
+                // Each filter uses a preset+custom key pair matching the
+                // PictureDebandPreset/PictureDebandCustom convention.
+                struct {
+                    int          id;
+                    const char * preset_key;
+                    const char * custom_key;
+                } audio_filters[] = {
+                    { HB_AUDIO_FILTER_ACOMPRESSOR,
+                      "AudioCompressorPreset", "AudioCompressorCustom" },
+                    { HB_AUDIO_FILTER_AGATE,
+                      "AudioGatePreset",       "AudioGateCustom"       },
+                };
+                for (size_t af = 0;
+                     af < sizeof(audio_filters) / sizeof(audio_filters[0]);
+                     af++)
+                {
+                    const char *preset_str = hb_value_get_string(
+                        hb_dict_get(encoder_dict, audio_filters[af].preset_key));
+                    if (preset_str == NULL || preset_str[0] == 0)
+                    {
+                        continue;
+                    }
+                    const char *custom_str = hb_value_get_string(
+                        hb_dict_get(encoder_dict, audio_filters[af].custom_key));
+                    hb_dict_t *filter_settings = hb_generate_filter_settings(
+                        audio_filters[af].id, preset_str, NULL, custom_str);
+                    if (filter_settings == NULL)
+                    {
+                        hb_error("Invalid audio filter settings for %s (%s)",
+                                 audio_filters[af].preset_key, preset_str);
+                        continue;
+                    }
+                    if (hb_dict_get_bool(filter_settings, "disable"))
+                    {
+                        hb_value_free(&filter_settings);
+                        continue;
+                    }
+                    hb_value_array_t *audio_filter_list =
+                        hb_dict_get(audio_dict, "FilterList");
+                    if (audio_filter_list == NULL)
+                    {
+                        audio_filter_list = hb_value_array_init();
+                        hb_dict_set(audio_dict, "FilterList",
+                                    audio_filter_list);
+                    }
+                    hb_dict_t *filter_dict = hb_dict_init();
+                    hb_dict_set(filter_dict, "ID",
+                                hb_value_int(audio_filters[af].id));
+                    hb_dict_set(filter_dict, "Settings", filter_settings);
+                    hb_add_filter2(audio_filter_list, filter_dict);
+                }
             }
 
             // Sanitize the settings before adding to the audio list

@@ -247,15 +247,21 @@ static hb_filter_param_t bwdif_presets[] =
 
 static hb_filter_param_t acompressor_presets[] =
 {
+    { 0, "Off",                "off",          "disable=1"      },
     { 1, "Custom",             "custom",       NULL             },
-    { 3, "Default",            "default",      NULL             },
+    { 3, "Default",            "default",
+      "level-in=1:mode=0:threshold=0.125:ratio=2:attack=20:release=250:"
+      "makeup=1:knee=2.82843:link=0:detection=1:level-sc=1:mix=1"        },
     { 0,  NULL,                NULL,           NULL             },
 };
 
 static hb_filter_param_t agate_presets[] =
 {
+    { 0, "Off",                "off",          "disable=1"      },
     { 1, "Custom",             "custom",       NULL             },
-    { 3, "Default",            "default",      NULL             },
+    { 3, "Default",            "default",
+      "level-in=1:mode=0:range=0.06125:threshold=0.125:ratio=2:attack=20:"
+      "release=250:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
     { 0,  NULL,                NULL,           NULL             },
 };
 
