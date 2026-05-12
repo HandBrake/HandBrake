@@ -2049,6 +2049,7 @@ static void do_job(hb_job_t *job)
             }
 
             av_channel_layout_copy(audio->config.out.ch_layout, &init.ch_layout);
+            av_channel_layout_uninit(&init.ch_layout);
 
             if (hb_list_count(list_filter))
             {
