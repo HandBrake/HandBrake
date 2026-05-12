@@ -47,7 +47,9 @@ namespace HandBrakeWPF.Model.Audio
             this.SelectedLanguages = behaviours.selectedLanguages != null
                 ? new BindingList<Language>(behaviours.selectedLanguages.ToList())
                 : new BindingList<Language>();
-            this.BehaviourTracks = behaviours.BehaviourTracks;
+            this.BehaviourTracks = behaviours.BehaviourTracks != null
+                ? new BindingList<AudioBehaviourTrack>(behaviours.BehaviourTracks.ToList())
+                : new BindingList<AudioBehaviourTrack>();
             this.AllowedPassthruOptions = behaviours.AllowedPassthruOptions != null
                 ? new BindingList<HBAudioEncoder>(behaviours.AllowedPassthruOptions)
                 : new BindingList<HBAudioEncoder>();
