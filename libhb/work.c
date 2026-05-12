@@ -2027,7 +2027,7 @@ static void do_job(hb_job_t *job)
 
             init.samplerate = audio->config.out.samplerate;
             init.sample_fmt = AV_SAMPLE_FMT_FLT;
-            av_channel_layout_copy(&init.ch_layout, audio->config.in.ch_layout);
+            av_channel_layout_copy(&init.ch_layout, audio->config.out.ch_layout);
 
             // Audio Filter Chain
             if (hb_list_count(list_filter))

@@ -68,12 +68,6 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
     hb_ff_mixdown_xlat(audio->config.out.mixdown, &matrix_encoding);
 
-    // Templates for layout comparisons
-    AVChannelLayout ch_5point1 = AV_CHANNEL_LAYOUT_5POINT1;
-    AVChannelLayout ch_5point1_back = AV_CHANNEL_LAYOUT_5POINT1_BACK;
-    AVChannelLayout ch_6point1 = AV_CHANNEL_LAYOUT_6POINT1;
-    AVChannelLayout ch_6point1_back = AV_CHANNEL_LAYOUT_6POINT1_BACK;
-
     // default settings and options
     AVDictionary *av_opts          = NULL;
     const char *codec_name         = NULL;
@@ -113,8 +107,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             }
             // FFmpeg's libfdk-aac wrapper expects back channels for 5.1
             // audio, and will error out unless we translate the layout
-            if (av_channel_layout_compare(&in_ch_layout, &ch_5point1))
-                av_channel_layout_copy(&out_ch_layout, &ch_5point1_back);
+            if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1) == 0)
+                av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
             break;
 
         case HB_ACODEC_FFAAC:
@@ -122,8 +116,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             // Use 5.1 back for AAC because 5.1 side uses a
             // not-so-universally supported feature to signal the
             // non-standard layout
-            if (av_channel_layout_compare(&in_ch_layout, &ch_5point1))
-                av_channel_layout_copy(&out_ch_layout, &ch_5point1_back);
+            if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1) == 0)
+                av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
             break;
 
         case HB_ACODEC_FFALAC:
@@ -140,10 +134,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                     bits_per_raw_sample = 16;
                     break;
             }
-            if (av_channel_layout_compare(&in_ch_layout, &ch_5point1))
-                av_channel_layout_copy(&out_ch_layout, &ch_5point1_back);
-            if (av_channel_layout_compare(&in_ch_layout, &ch_6point1))
-                av_channel_layout_copy(&out_ch_layout, &ch_6point1_back);
+            if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1) == 0)
+                av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
+            if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1) == 0)
+                av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1_BACK);
             break;
 
         case HB_ACODEC_FFFLAC:
@@ -191,8 +185,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             codec_name = "libopus";
             // FFmpeg's libopus wrapper expects back channels for 5.1
             // audio, and will error out unless we translate the layout
-            if (av_channel_layout_compare(&in_ch_layout, &ch_5point1))
-                av_channel_layout_copy(&out_ch_layout, &ch_5point1_back);
+            if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1) == 0)
+                av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
 
             if (out_ch_layout.nb_channels > 2)
                 av_dict_set(&av_opts, "mapping_family", "1", 0);
@@ -298,7 +292,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
     int needs_resample = context->sample_fmt != AV_SAMPLE_FMT_FLT;
     int needs_remap    = av_channel_layout_compare(&in_ch_layout, &out_ch_layout) &&
-                         av_channel_layout_compare(&out_ch_layout, &ch_5point1_back);
+                         av_channel_layout_compare(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
 
     // sample_fmt or remap conversion
     if (needs_resample || needs_remap)
