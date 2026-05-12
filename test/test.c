@@ -68,14 +68,14 @@
 #define AGATE_DEFAULT_PRESET         "default"
 
 /*
- * Per-track audio filter chain preset keys, stored inside each entry of the
- * preset's "AudioList" array. Mirrors the PictureDebandPreset/Custom shape.
- * Translated to FilterList entries on the job's audio dict by libhb/preset.c.
+ * Per-track audio filter chain. Each AudioList entry has an "AudioFilters"
+ * array of { Name, Preset, Custom? } dicts. Absence from the array means the
+ * filter is not applied. Translated to FilterList entries on the job's audio
+ * dict by libhb/preset.c.
  */
-#define AUDIO_COMPRESSOR_PRESET_KEY  "AudioCompressorPreset"
-#define AUDIO_COMPRESSOR_CUSTOM_KEY  "AudioCompressorCustom"
-#define AUDIO_GATE_PRESET_KEY        "AudioGatePreset"
-#define AUDIO_GATE_CUSTOM_KEY        "AudioGateCustom"
+#define AUDIO_FILTERS_KEY            "AudioFilters"
+#define AUDIO_COMPRESSOR_NAME        "acompressor"
+#define AUDIO_GATE_NAME              "agate"
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
@@ -1387,11 +1387,6 @@ static void add_audio_filter_to_dict(hb_dict_t *audio_dict, int filter_id,
         fprintf(stderr, "Invalid audio filter settings: %s\n", value);
         return;
     }
-    if (hb_dict_get_bool(settings, "disable"))
-    {
-        hb_value_free(&settings);
-        return;
-    }
 
     hb_value_array_t *filter_list = hb_dict_get(audio_dict, "FilterList");
     if (filter_list == NULL)
@@ -1404,6 +1399,80 @@ static void add_audio_filter_to_dict(hb_dict_t *audio_dict, int filter_id,
     hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
     hb_dict_set(filter_dict, "Settings", settings);
     hb_add_filter2(filter_list, filter_dict);
+}
+
+/*
+ * Per-track preset "AudioFilters" array helpers. Each entry is a dict of the
+ * form { "Name": <short name>, "Preset": <preset name>, "Custom": <string> }.
+ * The "Custom" key is only present when Preset == "custom". libhb/preset.c
+ * translates the array into FilterList entries on the job's audio dict.
+ */
+static int audio_filter_array_find(hb_value_array_t *array, const char *name)
+{
+    int len = hb_value_array_len(array);
+    for (int ii = 0; ii < len; ii++)
+    {
+        const char *entry_name = hb_value_get_string(
+            hb_dict_get(hb_value_array_get(array, ii), "Name"));
+        if (entry_name != NULL && !strcasecmp(entry_name, name))
+        {
+            return ii;
+        }
+    }
+    return -1;
+}
+
+static void audio_filter_array_set(hb_dict_t *audio_dict, const char *name,
+                                   const char *value, int is_custom)
+{
+    if (value == NULL || value[0] == 0)
+    {
+        return;
+    }
+
+    hb_value_array_t *array = hb_dict_get(audio_dict, AUDIO_FILTERS_KEY);
+    if (array == NULL)
+    {
+        array = hb_value_array_init();
+        hb_dict_set(audio_dict, AUDIO_FILTERS_KEY, array);
+    }
+
+    hb_dict_t *entry = hb_dict_init();
+    hb_dict_set_string(entry, "Name", name);
+    if (is_custom)
+    {
+        hb_dict_set_string(entry, "Preset", "custom");
+        hb_dict_set_string(entry, "Custom", value);
+    }
+    else
+    {
+        hb_dict_set_string(entry, "Preset", value);
+    }
+
+    int idx = audio_filter_array_find(array, name);
+    if (idx >= 0)
+    {
+        hb_value_array_remove(array, idx);
+        hb_value_array_insert(array, idx, entry);
+    }
+    else
+    {
+        hb_value_array_append(array, entry);
+    }
+}
+
+static void audio_filter_array_remove(hb_dict_t *audio_dict, const char *name)
+{
+    hb_value_array_t *array = hb_dict_get(audio_dict, AUDIO_FILTERS_KEY);
+    if (array == NULL)
+    {
+        return;
+    }
+    int idx = audio_filter_array_find(array, name);
+    if (idx >= 0)
+    {
+        hb_value_array_remove(array, idx);
+    }
 }
 
 static void ShowHelp(void)
@@ -4506,43 +4575,24 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                 hb_dict_set(audio_dict_stub, "AudioCompressionLevel",
                   hb_value_double(strtod(acompressions[last], NULL)));
             }
-            // Audio compressor / noise gate. libhb/preset.c translates these
-            // preset keys into FilterList entries on each audio dict.
+            // Audio compressor / noise gate. libhb/preset.c translates the
+            // per-track AudioFilters array into FilterList entries on each
+            // audio dict.
             last = hb_str_vlen(acompressors) - 1;
             if (last >= 0 && acompressors[last][0] != 0)
             {
-                if (acompressor_custom_flags != NULL &&
-                    acompressor_custom_flags[last])
-                {
-                    hb_dict_set_string(audio_dict_stub,
-                                       AUDIO_COMPRESSOR_PRESET_KEY, "custom");
-                    hb_dict_set_string(audio_dict_stub,
-                                       AUDIO_COMPRESSOR_CUSTOM_KEY,
-                                       acompressors[last]);
-                }
-                else
-                {
-                    hb_dict_set_string(audio_dict_stub,
-                                       AUDIO_COMPRESSOR_PRESET_KEY,
-                                       acompressors[last]);
-                }
+                audio_filter_array_set(audio_dict_stub, AUDIO_COMPRESSOR_NAME,
+                                       acompressors[last],
+                                       acompressor_custom_flags != NULL &&
+                                       acompressor_custom_flags[last]);
             }
             last = hb_str_vlen(agates) - 1;
             if (last >= 0 && agates[last][0] != 0)
             {
-                if (agate_custom_flags != NULL && agate_custom_flags[last])
-                {
-                    hb_dict_set_string(audio_dict_stub,
-                                       AUDIO_GATE_PRESET_KEY, "custom");
-                    hb_dict_set_string(audio_dict_stub,
-                                       AUDIO_GATE_CUSTOM_KEY,
-                                       agates[last]);
-                }
-                else
-                {
-                    hb_dict_set_string(audio_dict_stub,
-                                       AUDIO_GATE_PRESET_KEY, agates[last]);
-                }
+                audio_filter_array_set(audio_dict_stub, AUDIO_GATE_NAME,
+                                       agates[last],
+                                       agate_custom_flags != NULL &&
+                                       agate_custom_flags[last]);
             }
             // Add entries to preset audio list for extra command line options
             for (ii = list_len; ii < count; ii++)
@@ -4701,8 +4751,6 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Override command line specified audio compressor filter.
-        // These preset keys are not yet consumed by libhb/preset.c;
-        // PrepareJob also injects the FilterList directly for now.
         if (hb_str_vlen(acompressors) > 0)
         {
             for (ii = 0; acompressors[ii] != NULL; ii++)
@@ -4710,22 +4758,10 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                 if (acompressors[ii][0] != 0)
                 {
                     audio_dict = hb_value_array_get(list, ii);
-                    if (acompressor_custom_flags != NULL &&
-                        acompressor_custom_flags[ii])
-                    {
-                        hb_dict_set_string(audio_dict,
-                                           AUDIO_COMPRESSOR_PRESET_KEY,
-                                           "custom");
-                        hb_dict_set_string(audio_dict,
-                                           AUDIO_COMPRESSOR_CUSTOM_KEY,
-                                           acompressors[ii]);
-                    }
-                    else
-                    {
-                        hb_dict_set_string(audio_dict,
-                                           AUDIO_COMPRESSOR_PRESET_KEY,
-                                           acompressors[ii]);
-                    }
+                    audio_filter_array_set(audio_dict, AUDIO_COMPRESSOR_NAME,
+                                           acompressors[ii],
+                                           acompressor_custom_flags != NULL &&
+                                           acompressor_custom_flags[ii]);
                 }
             }
         }
@@ -4738,20 +4774,10 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                 if (agates[ii][0] != 0)
                 {
                     audio_dict = hb_value_array_get(list, ii);
-                    if (agate_custom_flags != NULL && agate_custom_flags[ii])
-                    {
-                        hb_dict_set_string(audio_dict,
-                                           AUDIO_GATE_PRESET_KEY, "custom");
-                        hb_dict_set_string(audio_dict,
-                                           AUDIO_GATE_CUSTOM_KEY,
-                                           agates[ii]);
-                    }
-                    else
-                    {
-                        hb_dict_set_string(audio_dict,
-                                           AUDIO_GATE_PRESET_KEY,
-                                           agates[ii]);
-                    }
+                    audio_filter_array_set(audio_dict, AUDIO_GATE_NAME,
+                                           agates[ii],
+                                           agate_custom_flags != NULL &&
+                                           agate_custom_flags[ii]);
                 }
             }
         }
@@ -4790,12 +4816,11 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                 hb_dict_t *adict = hb_value_array_get(audio_list, idx);
                 if (acompressor_disable)
                 {
-                    hb_dict_set_string(adict,
-                                       AUDIO_COMPRESSOR_PRESET_KEY, "off");
+                    audio_filter_array_remove(adict, AUDIO_COMPRESSOR_NAME);
                 }
                 if (agate_disable)
                 {
-                    hb_dict_set_string(adict, AUDIO_GATE_PRESET_KEY, "off");
+                    audio_filter_array_remove(adict, AUDIO_GATE_NAME);
                 }
             }
         }

@@ -19,12 +19,9 @@
             {
                 "AudioBitrate": 192,
                 "AudioCompressionLevel": -1.0,
-                "AudioCompressorPreset": "off",
-                "AudioCompressorCustom": "",
                 "AudioDitherMethod": "auto",
                 "AudioEncoder": "copy:ac3",
-                "AudioGatePreset": "off",
-                "AudioGateCustom": "",
+                "AudioFilters": [],
                 "AudioMixdown": "dpl2",
                 "AudioNormalizeMixLevel": false,
                 "AudioSamplerate": "auto",
