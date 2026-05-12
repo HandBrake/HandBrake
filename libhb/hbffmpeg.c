@@ -739,12 +739,6 @@ hb_stereo_3d_t hb_stereo_3d_ff_to_hb(AVStereo3D stereo_3d)
     return hb_stereo_3d;
 }
 
-int hb_ff_mixdown_ch_xlat(AVChannelLayout *channel_layout, int hb_mixdown, int *downmix_mode)
-{
-    uint64_t layout = hb_ff_mixdown_xlat(hb_mixdown, downmix_mode);
-    return av_channel_layout_from_mask(channel_layout, layout);
-}
-
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
 {
     uint64_t ff_layout = 0;

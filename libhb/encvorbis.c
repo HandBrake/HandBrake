@@ -32,7 +32,6 @@ hb_work_object_t hb_encvorbis =
 struct hb_work_private_s
 {
     float     *buf;
-    hb_job_t  *job;
     hb_list_t *list;
 
     vorbis_dsp_state vd;
@@ -58,14 +57,12 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
     }
     hb_audio_t *audio = w->audio;
     w->private_data = pv;
-    pv->job = job;
 
     hb_log("encvorbis: opening libvorbis");
 
     vorbis_info_init(&pv->vi);
 
-    pv->out_discrete_channels =
-        hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
+    pv->out_discrete_channels = audio->config.out.ch_layout->nb_channels;
 
     if (audio->config.out.bitrate > 0)
     {
@@ -133,16 +130,14 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
     pv->list = hb_list_init();
 
     // channel remapping
-    AVChannelLayout out_layout, mixdown_layout;
-    hb_ff_mixdown_ch_xlat(&mixdown_layout, audio->config.out.mixdown, NULL);
-    hb_audio_remap_map_channel_layout(&hb_vorbis_chan_map, &out_layout, &mixdown_layout);
+    AVChannelLayout out_layout;
+    hb_audio_remap_map_channel_layout(&hb_vorbis_chan_map, &out_layout, audio->config.out.ch_layout);
 
     hb_audio_remap_build_table(&out_layout,
-                               &mixdown_layout,
+                               audio->config.out.ch_layout,
                                pv->remap_table);
 
     av_channel_layout_uninit(&out_layout);
-    av_channel_layout_uninit(&mixdown_layout);
 
     return 0;
 }

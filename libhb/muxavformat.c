@@ -867,16 +867,7 @@ static int avformatInit( hb_mux_object_t * m )
             av_dict_set(&track->st->metadata, "language", lang, 0);
         }
         track->st->codecpar->sample_rate = audio->config.out.samplerate;
-        if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
-        {
-            av_channel_layout_copy(&track->st->codecpar->ch_layout, audio->config.in.ch_layout);
-        }
-        else
-        {
-            AVChannelLayout ch_layout = {0};
-            av_channel_layout_from_mask(&ch_layout, hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL));
-            track->st->codecpar->ch_layout = ch_layout;
-        }
+        av_channel_layout_copy(&track->st->codecpar->ch_layout, audio->config.out.ch_layout);
 
         // Set audio track title
         const char *name = audio->config.out.name;
