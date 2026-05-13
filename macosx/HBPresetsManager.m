@@ -297,7 +297,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
             firstUserPreset = obj;
         }
 
-        if ([obj isDefault])
+        if ([obj isDefault] && [obj isSupported])
         {
             self.defaultPreset = obj;
             defaultAlreadySet = YES;
