@@ -1071,7 +1071,11 @@ static uint64_t align_to_next_packet(BLURAY *bd, uint8_t *pkt)
                 break;
             }
             off = 8 * 192;
-            memcpy(buf, buf + sizeof(buf) - off, off);
+            if (off > sizeof(buf))
+            {
+                off = sizeof(buf);
+            }
+            memmove(buf, buf + sizeof(buf) - off, off);
             start += sizeof(buf) - off;
         }
         else if (result < 0)
