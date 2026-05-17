@@ -48,7 +48,7 @@ FOUNDATION_EXPORT const unsigned char HandBrakeKitVersionString[];
 #import <HandBrakeKit/HBRange+UIAdditions.h>
 #import <HandBrakeKit/HBVideo+UIAdditions.h>
 #import <HandBrakeKit/HBPicture+UIAdditions.h>
-#import <HandBrakeKit/HBFilters+UIAdditions.h>
+#import <HandBrakeKit/HBFilter+UIAdditions.h>
 #import <HandBrakeKit/HBAudioTransformers.h>
 
 #import <HandBrakeKit/HBSecurityAccessToken.h>

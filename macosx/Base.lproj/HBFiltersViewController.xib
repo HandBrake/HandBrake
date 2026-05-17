@@ -1,1182 +1,324 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="HBPictureViewController">
+        <customObject id="-2" userLabel="File's Owner" customClass="HBFiltersViewController">
             <connections>
+                <outlet property="pullDown" destination="LtF-J0-RF8" id="OeO-rb-72U"/>
+                <outlet property="tableView" destination="hpm-hI-Qua" id="daQ-20-fTd"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="875" height="335"/>
+        <customView misplaced="YES" id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="890" height="335"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField verticalHuggingPriority="750" verticalCompressionResistancePriority="751" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="1a5-Yb-uwn">
-                    <rect key="frame" x="8" y="305" width="108" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Detelecine:" id="vTS-MJ-8nt">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="M2A-q7-iOs"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Mwp-XS-2tc">
-                    <rect key="frame" x="278" y="305" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="DvX-m9-Q6u">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customDetelecineSelected" id="Pld-vq-ajk">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="lK9-eT-tUn"/>
-                    </connections>
-                </textField>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DER-tS-cLx">
-                    <rect key="frame" x="118" y="300" width="138" height="22"/>
-                    <string key="toolTip">Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</string>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="jiO-4I-seR"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="OXp-Ux-Kwq">
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LtF-J0-RF8">
+                    <rect key="frame" x="16" y="299" width="90" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Filters" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="Ca1-fI-xZj">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="tlc-kS-W8X"/>
+                        <menu key="menu" id="pcK-ZJ-dK7">
+                            <items>
+                                <menuItem title="Filters" state="on" hidden="YES" id="d6h-4U-HRQ"/>
+                                <menuItem isSeparatorItem="YES" id="rKm-P9-QWJ"/>
+                                <menuItem title="Remove All" id="qOv-JZ-dG1">
+                                    <connections>
+                                        <action selector="removeAll:" target="-2" id="Uvc-9C-RS8"/>
+                                    </connections>
+                                </menuItem>
+                            </items>
+                        </menu>
                     </popUpButtonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="82" id="OuO-at-RVd"/>
+                    </constraints>
                     <connections>
-                        <accessibilityConnection property="title" destination="1a5-Yb-uwn" id="9sT-x7-00K"/>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="JKy-Uz-aTl">
+                        <binding destination="-2" name="enabled" keyPath="self.filters" id="NAF-VQ-e4b">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.detelecine" previousBinding="GNQ-0G-9m1" id="nrd-Qr-ocH">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBDetelecineTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.detelecineSettings" id="GNQ-0G-9m1"/>
-                        <outlet property="nextKeyView" destination="ipJ-z3-XnJ" id="fgB-Yd-xLt"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ipJ-z3-XnJ">
-                    <rect key="frame" x="332" y="303" width="180" height="19"/>
-                    <string key="toolTip">Custom Detelecine parameters.
-
-Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d
-
-Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="180" id="pp8-Nd-IDn"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Vb4-om-eIT">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <accessibility description="Custom deleteline settings."/>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customDetelecineSelected" id="tIw-ln-ir8">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.filters.detelecineCustomString" id="SiU-ty-o5F">
-                            <dictionary key="options">
-                                <bool key="NSValidatesImmediately" value="YES"/>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="N8y-at-fwU">
-                    <rect key="frame" x="8" y="199" width="108" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deblock:" id="gKq-xF-AZE">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="m7I-VM-1ct"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="xKf-yr-nCk">
-                    <rect key="frame" x="8" y="239" width="108" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deinterlace:" id="VsK-mC-9Pj">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="PYk-vE-y5t"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="C83-aJ-v3x">
-                    <rect key="frame" x="486" y="239" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="n6U-tH-vo0">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customDeinterlaceSelected" id="kHC-eH-FKE">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="OOp-ec-hRZ"/>
-                    </connections>
-                </textField>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xct-UB-bKm">
-                    <rect key="frame" x="118" y="234" width="138" height="22"/>
-                    <string key="toolTip">Deinterlace removes comb artifacts from the picture.
-
-Bwdif and Yadif are two popular and fast deinterlacers.
-
-Decomb switches between multiple interpolation algorithms for speed and quality.</string>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="6uU-S0-JCh"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="CsF-zp-vt2">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="PyP-FP-gGx"/>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="xKf-yr-nCk" id="9ol-TG-r46"/>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="M9v-44-EJq">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.deinterlace" previousBinding="1XG-JZ-nFn" id="jo4-ky-6QP">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBDeinterlaceTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlaceTypes" id="1XG-JZ-nFn"/>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r64-vI-ymx">
-                    <rect key="frame" x="539" y="237" width="180" height="19"/>
-                    <string key="toolTip">Custom Deinterlace parameters.
-
-Bwdif and Yadif syntax: mode=m:parity=p
-
-Bwdif and Yadif default: mode=3
-
-Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
-
-Decomb default: mode=7</string>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="180" id="Zyf-11-jCC"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OKz-qW-7ai">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customDeinterlaceSelected" id="h6M-Dy-tBR">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.filters.deinterlaceCustomString" id="BYN-Yd-5o5">
-                            <dictionary key="options">
-                                <bool key="NSValidatesImmediately" value="YES"/>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="9Uz-PL-igg">
-                    <rect key="frame" x="278" y="239" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="zvZ-ZX-yKE">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.deinterlaceEnabled" id="9z5-2i-puG">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="58H-r8-xBi"/>
-                    </connections>
-                </textField>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6nG-zk-FMo">
-                    <rect key="frame" x="328" y="234" width="136" height="22"/>
-                    <string key="toolTip">Deinterlace filter preset.
-
-Default is well balanced for speed and quality.
-
-Skip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.
-
-EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.
-
-Bob attempts to better preserve motion for a slight penalty to perceived resolution.</string>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="128" id="h3s-SV-BGA"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="at1-DR-WGs">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="qey-Yo-9sX"/>
-                    </popUpButtonCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.deinterlaceEnabled" id="gBQ-b8-r6y">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.deinterlacePreset" previousBinding="ZVC-PA-ji4" id="4RE-n6-Oyz">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBDeinterlacePresetTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlacePresets" id="ZVC-PA-ji4"/>
-                        <outlet property="nextKeyView" destination="1XQ-md-5cQ" id="LJa-RO-dzf"/>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="Mg1-Yq-F9S">
-                    <rect key="frame" x="8" y="265" width="108" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Interlace Detection:" id="xHD-vC-ePQ">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="eKb-Bh-OkE"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="RZE-gp-SB7">
-                    <rect key="frame" x="278" y="265" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="Da7-pY-5vu">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customCombDetectionSelected" id="x5q-SE-Xds">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="s78-d3-GZY"/>
-                    </connections>
-                </textField>
-                <popUpButton toolTip="Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IQG-Nn-HTb">
-                    <rect key="frame" x="118" y="260" width="138" height="22"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="Kbc-Vj-81g"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="nfb-CJ-1J3">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="Qz4-EY-GFO"/>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="Mg1-Yq-F9S" id="nhI-oN-u5h"/>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="mJ8-zq-tQ8">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.combDetection" previousBinding="lKn-uj-nGl" id="XIZ-dC-cLu">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBCombDetectionTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.combDetectionSettings" id="lKn-uj-nGl"/>
-                        <outlet property="nextKeyView" destination="rPg-F2-gtl" id="46r-ZD-dTe"/>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rPg-F2-gtl">
-                    <rect key="frame" x="332" y="263" width="180" height="19"/>
-                    <string key="toolTip">Custom Interlace Detection parameters.
-
-Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
-
-Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</string>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="180" id="192-EN-kTE"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="4YG-Q6-1tM">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="value" keyPath="self.filters.combDetectionCustomString" id="r46-bK-tom">
-                            <dictionary key="options">
-                                <bool key="NSValidatesImmediately" value="YES"/>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customCombDetectionSelected" id="avq-Zl-5gA">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="9hM-c1-7hB">
-                    <rect key="frame" x="8" y="173" width="108" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denoise:" id="Rxe-Xm-vXj">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="tH6-cB-0O3"/>
-                    </connections>
-                </textField>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ins-7X-kbN">
-                    <rect key="frame" x="118" y="168" width="138" height="22"/>
-                    <string key="toolTip">Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.
-
-NLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.
-
-HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail.</string>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="Qv7-4C-QPk"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="a2c-wR-CQ6">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="IHH-Se-l6d"/>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="9hM-c1-7hB" id="Y24-nk-rpo"/>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="MHi-Qm-SZA">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.denoise" previousBinding="kTQ-KD-pXs" id="GTi-Qd-jWl">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBDenoiseTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.denoiseTypes" id="kTQ-KD-pXs"/>
-                        <outlet property="nextKeyView" destination="cTy-PO-BSd" id="rNc-zg-awd"/>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="k1h-3F-Xh0">
-                    <rect key="frame" x="278" y="173" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="8am-ve-1Xl">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.denoiseEnabled" id="y4E-17-yN9">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="P6z-nu-QHk"/>
-                    </connections>
-                </textField>
-                <popUpButton toolTip="Denoise filter preset. Sets the strength of the filter." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cTy-PO-BSd">
-                    <rect key="frame" x="328" y="168" width="136" height="22"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="128" id="Zly-jH-wkv"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="eym-Bg-FVe">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="akB-JW-MPe"/>
-                    </popUpButtonCell>
-                    <accessibility description="Denoise Preset"/>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.denoiseEnabled" id="XQe-ei-Bp1">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.denoisePreset" previousBinding="eY4-v3-EBE" id="gmQ-cq-nqe">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBDenoisePresetTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.denoisePresets" id="eY4-v3-EBE"/>
-                        <outlet property="nextKeyView" destination="1XQ-md-5cQ" id="MZj-WA-YC4"/>
-                    </connections>
-                </popUpButton>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1XQ-md-5cQ">
-                    <rect key="frame" x="536" y="168" width="116" height="22"/>
-                    <string key="toolTip">Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
-
-None uses the default preset settings.
-
-Film refines settings for use with most live action content.
-
-Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
-
-High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
-
-Animation is useful for cel animation such as anime and cartoons.
-
-Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
-
-Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</string>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="108" id="U9U-Li-ShI"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="QNk-3W-T3X">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="pIO-dE-81w"/>
-                    </popUpButtonCell>
-                    <accessibility description="Denoise Tune"/>
-                    <connections>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.denoiseTune" previousBinding="DIk-Cg-Tqu" id="aXQ-14-pzv">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBDenoiseTuneTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.denoiseTunes" id="DIk-Cg-Tqu"/>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.denoiseTunesAvailable" id="nHU-MP-sKz">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="O3I-G6-dfv">
-                    <rect key="frame" x="486" y="173" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="KiY-kz-54k">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customDenoiseSelected" id="BFC-VQ-bJj">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="s0f-8C-cZp"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZR9-YG-pfn">
-                    <rect key="frame" x="540" y="171" width="180" height="19"/>
-                    <string key="toolTip">Custom Denoise parameters.
-
-NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
-
-NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
-
-HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
-
-HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</string>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="180" id="B3W-fX-P58"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="EhQ-sa-Xvv">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customDenoiseSelected" id="zff-ce-4Wm">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.filters.denoiseCustomString" id="hUO-UW-Y5p">
-                            <dictionary key="options">
-                                <bool key="NSValidatesImmediately" value="YES"/>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="A6i-ft-02b">
-                    <rect key="frame" x="486" y="173" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="tje-4P-jKt">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.denoiseTunesAvailable" id="nym-Kx-saO">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="GTk-Mv-iiv"/>
-                    </connections>
-                </textField>
-                <popUpButton toolTip="Deblock reduces blocky artifacts caused by low quality video compression." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bz8-FC-vYp">
-                    <rect key="frame" x="118" y="194" width="138" height="22"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="lTF-ns-c6C"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="U5y-F0-hVJ">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="rfp-ah-CVB"/>
-                    </popUpButtonCell>
-                    <accessibility description="Deblock Preset"/>
-                    <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="08f-g4-1l6">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.deblock" previousBinding="D7X-Ji-bKI" id="vWE-jl-DeJ">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBDeblockTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.deblockPresets" id="D7X-Ji-bKI"/>
-                        <outlet property="nextKeyView" destination="bRd-Km-Wa8" id="v6m-st-Act"/>
-                    </connections>
-                </popUpButton>
-                <popUpButton toolTip="Deblock tune. Further adjusts the Deblock preset to optimize settings for specific scenarios." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bRd-Km-Wa8">
-                    <rect key="frame" x="328" y="194" width="116" height="22"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="108" id="Q7t-rC-L8C"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="26D-4d-qNS">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="b6A-ax-2Ed"/>
-                    </popUpButtonCell>
-                    <accessibility description="Sharpen Tune"/>
-                    <connections>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.deblockTune" previousBinding="cBI-OC-EBm" id="jxm-0Y-L1h">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBDeblockTuneTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.deblockTunes" id="cBI-OC-EBm"/>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.deblockTunesAvailable" id="zp9-UY-07t">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="dXf-9u-LSs">
-                    <rect key="frame" x="278" y="199" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="xqk-dM-L3o">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customDeblockSelected" id="jLt-N6-9FO">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="9fb-PH-9eu"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DI9-Ed-acp">
-                    <rect key="frame" x="332" y="197" width="180" height="19"/>
-                    <string key="toolTip">Custom Deblock parameters.
-
-strength=s:thresh=t:blocksize=b</string>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="180" id="aRy-Pl-0j9"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="l4W-St-uq7">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customDeblockSelected" id="Pef-PC-oIM">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.filters.deblockCustomString" id="ier-75-T1F">
-                            <dictionary key="options">
-                                <bool key="NSValidatesImmediately" value="YES"/>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="PIN-cz-nC7">
-                    <rect key="frame" x="278" y="199" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="ydN-tP-vpt">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.deblockTunesAvailable" id="dw2-w0-Ybn">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="oXp-3N-eOD"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="ZRr-ED-W8e">
-                    <rect key="frame" x="8" y="81" width="108" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Colorspace:" id="HVj-4g-OVv">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="gaS-8u-kUv"/>
-                    </connections>
-                </textField>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ScE-ad-pHc">
-                    <rect key="frame" x="118" y="76" width="138" height="22"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="jyp-SN-ebY"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="TCz-OC-qgk">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="zV7-gM-Qpk"/>
-                    </popUpButtonCell>
-                    <accessibility description="Colorspace Preset"/>
-                    <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="YAW-46-huV">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.colorspace" previousBinding="3Cp-8k-5OQ" id="0C7-EW-iDi">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBColorspaceTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.colorspacePresets" id="3Cp-8k-5OQ"/>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="rJQ-Rd-fR6">
-                    <rect key="frame" x="278" y="81" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="oWz-qF-JYk">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customColorspaceSelected" id="SyP-se-3lg">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="PQM-Yk-hGa"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uzk-ZU-EFM">
-                    <rect key="frame" x="332" y="79" width="180" height="19"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="180" id="uXw-nC-F2h"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="BqD-6M-XUl">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="value" keyPath="self.filters.colorspaceCustomString" id="ghZ-e7-Txu">
-                            <dictionary key="options">
-                                <bool key="NSValidatesImmediately" value="YES"/>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customColorspaceSelected" id="tYT-SC-GOi">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="p9P-Fd-bNm">
-                    <rect key="frame" x="8" y="121" width="108" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Sharpen:" id="TwB-ag-L1L">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="aWG-5H-kZQ"/>
-                    </connections>
-                </textField>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="boo-YC-gWm">
-                    <rect key="frame" x="118" y="116" width="138" height="22"/>
-                    <string key="toolTip">Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
-
-Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
-
-Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</string>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="eFv-ac-2nd"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="dOl-cy-AQW">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="jQg-bp-pb3"/>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="p9P-Fd-bNm" id="2KJ-Az-gNw"/>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="duv-hY-CcP">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpen" previousBinding="gcv-LW-YUV" id="zKi-DZ-fmw">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBSharpenTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenTypes" id="gcv-LW-YUV"/>
-                        <outlet property="nextKeyView" destination="cG4-79-P9J" id="Ytl-M2-eCA"/>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="P47-pv-TEW">
-                    <rect key="frame" x="278" y="121" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="D7G-kY-TSj">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.sharpenEnabled" id="ZJz-pV-8z1">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="LtV-W9-AKA"/>
-                    </connections>
-                </textField>
-                <popUpButton toolTip="Sharpen filter preset. Sets the strength of the filter." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cG4-79-P9J">
-                    <rect key="frame" x="328" y="116" width="136" height="22"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="128" id="5QK-Vs-3FG"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="Vkj-aJ-U3q">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="ztV-i0-btG"/>
-                    </popUpButtonCell>
-                    <accessibility description="Sharpen Preset"/>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.sharpenEnabled" id="vR4-hv-wEB">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenPreset" previousBinding="h9z-WJ-t0Y" id="u94-vK-AEi">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBSharpenPresetTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenPresets" id="h9z-WJ-t0Y"/>
-                        <outlet property="nextKeyView" destination="Hcn-5m-N9x" id="BLD-FK-DI6"/>
-                    </connections>
-                </popUpButton>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hcn-5m-N9x">
-                    <rect key="frame" x="536" y="116" width="116" height="22"/>
-                    <string key="toolTip">Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
-
-None uses the default preset settings.
-
-Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
-
-Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
-
-Lapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.
-
-Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
-
-Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</string>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="108" id="CbL-oL-nlI"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="hvW-B6-EF6">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="MJr-ob-Uoe"/>
-                    </popUpButtonCell>
-                    <accessibility description="Sharpen Tune"/>
-                    <connections>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenTune" previousBinding="YKu-Me-xRd" id="Tiq-Qf-HRZ">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBSharpenTuneTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenTunes" id="YKu-Me-xRd"/>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.sharpenTunesAvailable" id="Z7B-xU-S2z">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="BOw-ko-ODH">
-                    <rect key="frame" x="486" y="121" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="CFV-ur-emt">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customSharpenSelected" id="gEp-is-rZa">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="ef5-KL-XpA"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bBr-vV-iAz">
-                    <rect key="frame" x="540" y="119" width="180" height="19"/>
-                    <string key="toolTip">Custom Sharpen parameters.
-
-Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
-
-Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
-
-Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
-
-Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</string>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="180" id="coj-TK-8pi"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="XA2-nG-eq7">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customSharpenSelected" id="4O1-Eu-Dr6">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.filters.sharpenCustomString" id="BXK-kP-6qL">
-                            <dictionary key="options">
-                                <bool key="NSValidatesImmediately" value="YES"/>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="8EJ-8r-9In">
-                    <rect key="frame" x="486" y="121" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="5Vt-0j-92R">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.sharpenTunesAvailable" id="rKk-mc-DXH">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="KbK-21-rdc"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="ns7-Ww-hmX">
-                    <rect key="frame" x="8" y="55" width="108" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Color:" id="uDH-ts-vs5">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="pzU-oe-yEE"/>
-                    </connections>
-                </textField>
-                <button toolTip="Grayscale removes the color component of the video. Often referred to as Black &amp; White video." translatesAutoresizingMaskIntoConstraints="NO" id="Psx-nN-XiT">
-                    <rect key="frame" x="121" y="54" width="73" height="16"/>
-                    <buttonCell key="cell" type="check" title="Grayscale" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="h7g-eE-vgv">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="5OR-jI-ZCD">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.filters.grayscale" id="iuG-9X-7Dc"/>
-                    </connections>
-                </button>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="jIE-qq-CIX">
-                    <rect key="frame" x="8" y="147" width="108" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Chroma Smooth:" id="ZLl-Q6-HpE">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="h3z-xv-Xfb"/>
-                    </connections>
-                </textField>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hiK-Va-rbJ">
-                    <rect key="frame" x="118" y="142" width="138" height="22"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="sLi-Ba-GZ5"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="e4b-ge-mfc">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="lad-BT-Hgz"/>
-                    </popUpButtonCell>
-                    <accessibility description="Chroma Smooth Preset"/>
-                    <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="7tE-jc-wm4">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.chromaSmooth" previousBinding="JzX-S5-IZV" id="JXo-oJ-PQ8">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBChromaSmoothTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.chromaSmoothPresets" id="JzX-S5-IZV"/>
-                        <outlet property="nextKeyView" destination="jFk-Eg-o2W" id="v1P-dU-Tjf"/>
-                    </connections>
-                </popUpButton>
-                <popUpButton toolTip="Chroma Smooth tune. Further adjusts the Chroma Smooth preset to optimize settings for specific scenarios." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jFk-Eg-o2W">
-                    <rect key="frame" x="328" y="142" width="116" height="22"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="108" id="v10-eF-W38"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="TQm-O5-qG1">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="r9i-tL-qtD"/>
-                    </popUpButtonCell>
-                    <accessibility description="Chroma Smooth Tune"/>
-                    <connections>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.chromaSmoothTunes" id="8fC-ge-uue"/>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.chromaSmoothTune" previousBinding="8fC-ge-uue" id="kRG-Er-vIp">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBChromaSmoothTuneTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.chromaSmoothEnabled" id="AMm-ys-xDB">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="hidden2" keyPath="self.filters.customChromaSmoothSelected" previousBinding="AMm-ys-xDB" id="8pf-jg-07J">
-                            <dictionary key="options">
-                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                <integer key="NSNullPlaceholder" value="-1"/>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="PZ7-Nx-ctH">
-                    <rect key="frame" x="278" y="147" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="aem-qz-Cqk">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customChromaSmoothSelected" id="eyZ-dj-0zf">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Tk0-nx-RNV"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JRz-wh-Qqk">
-                    <rect key="frame" x="332" y="145" width="180" height="19"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="180" id="UKZ-Hz-thL"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="jMB-dS-ABU">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="value" keyPath="self.filters.chromaSmoothCustomString" id="r7c-uw-qFL">
-                            <dictionary key="options">
-                                <bool key="NSValidatesImmediately" value="YES"/>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customChromaSmoothSelected" id="zBU-lb-bUj">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="UEb-07-vEn">
-                    <rect key="frame" x="278" y="147" width="48" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="hyH-QP-Zdi">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.chromaSmoothEnabled" id="sBY-7C-VuR">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="hidden2" keyPath="self.filters.customChromaSmoothSelected" previousBinding="sBY-7C-VuR" id="uEF-o0-TBa">
-                            <dictionary key="options">
-                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                <integer key="NSNullPlaceholder" value="-1"/>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="meD-9K-TkI"/>
-                    </connections>
-                </textField>
+                <scrollView misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="50" horizontalPageScroll="10" verticalLineScroll="50" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7NL-ot-fSZ">
+                    <rect key="frame" x="20" y="20" width="850" height="273"/>
+                    <clipView key="contentView" id="K1O-Ob-Cg2">
+                        <rect key="frame" x="1" y="1" width="848" height="271"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" autosaveColumns="NO" rowHeight="50" usesAutomaticRowHeights="YES" viewBased="YES" id="hpm-hI-Qua" customClass="HBTableView">
+                                <rect key="frame" x="0.0" y="0.0" width="848" height="271"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <size key="intercellSpacing" width="17" height="0.0"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                <tableColumns>
+                                    <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="836" minWidth="40" maxWidth="1000" id="rXD-cf-j7A">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="47n-C0-eUe">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <tableCellView id="uzw-TG-ibY" customClass="HBFiltersCellView">
+                                                <rect key="frame" x="8" y="0.0" width="831" height="97"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xUL-FP-bVw">
+                                                        <rect key="frame" x="0.0" y="79" width="34" height="14"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Filter" id="98d-bL-h2s">
+                                                            <font key="font" metaFont="smallSystemBold"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="uzw-TG-ibY" name="value" keyPath="objectValue.localizedName" id="UQr-tH-TA6"/>
+                                                        </connections>
+                                                    </textField>
+                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5wL-wE-M3G">
+                                                        <rect key="frame" x="816" y="78" width="16" height="16"/>
+                                                        <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Delete" imagePosition="only" alignment="center" alternateImage="DeleteHighlightPressed" id="z6T-Ao-wDI">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="16" id="NhB-sM-nnj"/>
+                                                            <constraint firstAttribute="height" constant="16" id="Wsj-WF-mJS"/>
+                                                        </constraints>
+                                                        <connections>
+                                                            <action selector="remove:" target="uzw-TG-ibY" id="YnW-u7-zFi"/>
+                                                        </connections>
+                                                    </button>
+                                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="7" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U7H-XX-u9t">
+                                                        <rect key="frame" x="16" y="8" width="802" height="63"/>
+                                                        <subviews>
+                                                            <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0or-yo-xZy">
+                                                                <rect key="frame" x="0.0" y="47" width="357" height="16"/>
+                                                                <subviews>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KN9-FT-Wga">
+                                                                        <rect key="frame" x="-2" y="1" width="48" height="14"/>
+                                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Preset:" id="oqp-RT-tNE">
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                    </textField>
+                                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cp6-ai-Atw">
+                                                                        <rect key="frame" x="48" y="-4" width="138" height="22"/>
+                                                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="VM9-fk-Sg9">
+                                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                            <menu key="menu" id="VN0-l7-Zs6"/>
+                                                                        </popUpButtonCell>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="vQt-qC-Uea"/>
+                                                                        </constraints>
+                                                                        <connections>
+                                                                            <binding destination="uzw-TG-ibY" name="content" keyPath="objectValue.presets" id="nmA-Wb-0WG"/>
+                                                                        </connections>
+                                                                    </popUpButton>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="a8o-62-dtb">
+                                                                        <rect key="frame" x="188" y="1" width="33" height="14"/>
+                                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Tune:" id="uij-Ls-rkw">
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                        <connections>
+                                                                            <binding destination="uzw-TG-ibY" name="hidden" keyPath="objectValue.tunesAvailable" id="KLp-Sr-wKE">
+                                                                                <dictionary key="options">
+                                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                                </dictionary>
+                                                                            </binding>
+                                                                        </connections>
+                                                                    </textField>
+                                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ujC-lR-S3N">
+                                                                        <rect key="frame" x="223" y="-4" width="138" height="22"/>
+                                                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="2AS-R8-djO">
+                                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                            <menu key="menu" id="216-oS-eV4"/>
+                                                                        </popUpButtonCell>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="iil-rj-w1R"/>
+                                                                        </constraints>
+                                                                        <connections>
+                                                                            <binding destination="uzw-TG-ibY" name="content" keyPath="objectValue.tunes" id="rXV-fr-o0b"/>
+                                                                            <binding destination="uzw-TG-ibY" name="hidden" keyPath="objectValue.tunesAvailable" id="ekv-6m-bMU">
+                                                                                <dictionary key="options">
+                                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                                </dictionary>
+                                                                            </binding>
+                                                                        </connections>
+                                                                    </popUpButton>
+                                                                </subviews>
+                                                                <visibilityPriorities>
+                                                                    <integer value="1000"/>
+                                                                    <integer value="1000"/>
+                                                                    <integer value="1000"/>
+                                                                    <integer value="1000"/>
+                                                                </visibilityPriorities>
+                                                                <customSpacing>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                </customSpacing>
+                                                            </stackView>
+                                                            <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ktF-CP-dox">
+                                                                <rect key="frame" x="0.0" y="0.0" width="802" height="40"/>
+                                                                <subviews>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="01E-ih-jT9">
+                                                                        <rect key="frame" x="-2" y="23" width="48" height="14"/>
+                                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Custom:" id="AMN-8J-YgC">
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                    </textField>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tr2-0E-JAO">
+                                                                        <rect key="frame" x="52" y="21" width="750" height="19"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="Wi6-6I-80a"/>
+                                                                        </constraints>
+                                                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="MSP-i0-skM">
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                        <connections>
+                                                                            <binding destination="uzw-TG-ibY" name="value" keyPath="objectValue.custom" id="q0h-Lt-oJO">
+                                                                                <dictionary key="options">
+                                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                                </dictionary>
+                                                                            </binding>
+                                                                        </connections>
+                                                                    </textField>
+                                                                </subviews>
+                                                                <visibilityPriorities>
+                                                                    <integer value="1000"/>
+                                                                    <integer value="1000"/>
+                                                                </visibilityPriorities>
+                                                                <customSpacing>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                </customSpacing>
+                                                                <connections>
+                                                                    <binding destination="uzw-TG-ibY" name="hidden" keyPath="objectValue.customSelected" id="NZG-zX-yUo">
+                                                                        <dictionary key="options">
+                                                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                        </dictionary>
+                                                                    </binding>
+                                                                </connections>
+                                                            </stackView>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="01E-ih-jT9" firstAttribute="width" secondItem="KN9-FT-Wga" secondAttribute="width" id="ww0-An-4A7"/>
+                                                        </constraints>
+                                                        <visibilityPriorities>
+                                                            <integer value="1000"/>
+                                                            <integer value="1000"/>
+                                                        </visibilityPriorities>
+                                                        <customSpacing>
+                                                            <real value="3.4028234663852886e+38"/>
+                                                            <real value="3.4028234663852886e+38"/>
+                                                        </customSpacing>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="xUL-FP-bVw" firstAttribute="top" secondItem="uzw-TG-ibY" secondAttribute="top" constant="4" id="1ck-kT-G45"/>
+                                                    <constraint firstItem="5wL-wE-M3G" firstAttribute="centerY" secondItem="xUL-FP-bVw" secondAttribute="centerY" id="3sw-pD-sl6"/>
+                                                    <constraint firstAttribute="bottom" secondItem="U7H-XX-u9t" secondAttribute="bottom" constant="8" id="9nt-nE-2Sc"/>
+                                                    <constraint firstItem="U7H-XX-u9t" firstAttribute="leading" secondItem="uzw-TG-ibY" secondAttribute="leading" constant="16" id="PQI-cb-NZa"/>
+                                                    <constraint firstItem="5wL-wE-M3G" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="xUL-FP-bVw" secondAttribute="trailing" constant="8" symbolic="YES" id="US0-4p-M1C"/>
+                                                    <constraint firstItem="xUL-FP-bVw" firstAttribute="leading" secondItem="uzw-TG-ibY" secondAttribute="leading" constant="2" id="eab-gL-prs"/>
+                                                    <constraint firstAttribute="trailing" secondItem="U7H-XX-u9t" secondAttribute="trailing" constant="16" id="jFE-rx-EXR"/>
+                                                    <constraint firstAttribute="trailing" secondItem="5wL-wE-M3G" secondAttribute="trailing" constant="2" id="ltI-FG-ehA"/>
+                                                    <constraint firstItem="U7H-XX-u9t" firstAttribute="top" secondItem="xUL-FP-bVw" secondAttribute="bottom" constant="8" symbolic="YES" id="s3M-b8-OMz"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outlet property="presetsPopUpButton" destination="Cp6-ai-Atw" id="IIb-is-VyG"/>
+                                                    <outlet property="textField" destination="xUL-FP-bVw" id="8nV-cc-Lbx"/>
+                                                    <outlet property="tunesPopUpButton" destination="ujC-lR-S3N" id="HK4-hc-Ub7"/>
+                                                </connections>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                </tableColumns>
+                                <accessibility description="Filters"/>
+                                <connections>
+                                    <binding destination="aqJ-cP-R7n" name="content" keyPath="arrangedObjects" id="HIB-Y2-ZUh"/>
+                                    <binding destination="-2" name="enabled" keyPath="self.filters" id="b6a-gW-8D5">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNotNil</string>
+                                        </dictionary>
+                                    </binding>
+                                    <outlet property="menu" destination="LUf-7d-1Fl" id="0E3-vL-WH3"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="lfw-Yz-hpO">
+                        <rect key="frame" x="1" y="256" width="843" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="rZE-nL-Blr">
+                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
             </subviews>
             <constraints>
-                <constraint firstItem="ZRr-ED-W8e" firstAttribute="top" secondItem="p9P-Fd-bNm" secondAttribute="bottom" constant="26" id="0PS-1r-nxB"/>
-                <constraint firstItem="IQG-Nn-HTb" firstAttribute="firstBaseline" secondItem="RZE-gp-SB7" secondAttribute="firstBaseline" id="0dS-SS-8hV"/>
-                <constraint firstItem="cG4-79-P9J" firstAttribute="leading" secondItem="P47-pv-TEW" secondAttribute="trailing" constant="8" id="0v6-Mr-OYd"/>
-                <constraint firstItem="O3I-G6-dfv" firstAttribute="width" secondItem="A6i-ft-02b" secondAttribute="width" id="1Bm-P8-EJ6"/>
-                <constraint firstItem="N8y-at-fwU" firstAttribute="top" secondItem="xKf-yr-nCk" secondAttribute="bottom" constant="26" id="26h-Zf-LOW"/>
-                <constraint firstItem="boo-YC-gWm" firstAttribute="firstBaseline" secondItem="P47-pv-TEW" secondAttribute="firstBaseline" id="2gx-W6-VVJ"/>
-                <constraint firstItem="jFk-Eg-o2W" firstAttribute="leading" secondItem="UEb-07-vEn" secondAttribute="trailing" constant="8" id="3yZ-Pe-Yub"/>
-                <constraint firstItem="6nG-zk-FMo" firstAttribute="firstBaseline" secondItem="C83-aJ-v3x" secondAttribute="firstBaseline" id="4Gh-ni-riT"/>
-                <constraint firstItem="DER-tS-cLx" firstAttribute="firstBaseline" secondItem="Mwp-XS-2tc" secondAttribute="firstBaseline" id="4Ne-Es-RdZ"/>
-                <constraint firstItem="ScE-ad-pHc" firstAttribute="firstBaseline" secondItem="rJQ-Rd-fR6" secondAttribute="firstBaseline" id="4ar-oH-g7s"/>
-                <constraint firstItem="1a5-Yb-uwn" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="4v0-Rd-A4l"/>
-                <constraint firstItem="O3I-G6-dfv" firstAttribute="firstBaseline" secondItem="ZR9-YG-pfn" secondAttribute="firstBaseline" id="50f-Fo-ZOR"/>
-                <constraint firstItem="Mg1-Yq-F9S" firstAttribute="leading" secondItem="1a5-Yb-uwn" secondAttribute="leading" id="5BY-Ix-ea2"/>
-                <constraint firstItem="ins-7X-kbN" firstAttribute="firstBaseline" secondItem="k1h-3F-Xh0" secondAttribute="firstBaseline" id="5R3-bd-R0R"/>
-                <constraint firstItem="N8y-at-fwU" firstAttribute="width" secondItem="xKf-yr-nCk" secondAttribute="width" id="5Uq-cM-Mxj"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ipJ-z3-XnJ" secondAttribute="trailing" constant="16" id="5gz-m6-AVl"/>
-                <constraint firstItem="cTy-PO-BSd" firstAttribute="firstBaseline" secondItem="A6i-ft-02b" secondAttribute="firstBaseline" id="65k-wK-z3r"/>
-                <constraint firstItem="cTy-PO-BSd" firstAttribute="leading" secondItem="k1h-3F-Xh0" secondAttribute="trailing" constant="8" id="69x-s6-r1K"/>
-                <constraint firstItem="hiK-Va-rbJ" firstAttribute="firstBaseline" secondItem="jIE-qq-CIX" secondAttribute="firstBaseline" id="6lf-Mh-PFQ"/>
-                <constraint firstItem="BOw-ko-ODH" firstAttribute="leading" secondItem="cG4-79-P9J" secondAttribute="trailing" constant="28" id="72c-7c-0yl"/>
-                <constraint firstItem="hiK-Va-rbJ" firstAttribute="firstBaseline" secondItem="PZ7-Nx-ctH" secondAttribute="firstBaseline" id="7Mm-c1-TXI"/>
-                <constraint firstItem="r64-vI-ymx" firstAttribute="leading" secondItem="C83-aJ-v3x" secondAttribute="trailing" constant="7" id="7hY-RC-dVu"/>
-                <constraint firstItem="ZRr-ED-W8e" firstAttribute="leading" secondItem="p9P-Fd-bNm" secondAttribute="leading" id="8Qi-np-l0C"/>
-                <constraint firstItem="PIN-cz-nC7" firstAttribute="leading" secondItem="bz8-FC-vYp" secondAttribute="trailing" constant="28" id="AEP-Mg-Q8f"/>
-                <constraint firstItem="O3I-G6-dfv" firstAttribute="leading" secondItem="cTy-PO-BSd" secondAttribute="trailing" constant="28" id="Be0-r6-4tC"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="jFk-Eg-o2W" secondAttribute="trailing" constant="20" symbolic="YES" id="DLl-rO-ugO"/>
-                <constraint firstItem="C83-aJ-v3x" firstAttribute="width" secondItem="O3I-G6-dfv" secondAttribute="width" id="EWH-EM-7gu"/>
-                <constraint firstItem="ns7-Ww-hmX" firstAttribute="firstBaseline" secondItem="Psx-nN-XiT" secondAttribute="firstBaseline" id="EWh-CY-9Rf"/>
-                <constraint firstItem="C83-aJ-v3x" firstAttribute="leading" secondItem="6nG-zk-FMo" secondAttribute="trailing" constant="28" id="F2f-25-6rO"/>
-                <constraint firstItem="rJQ-Rd-fR6" firstAttribute="leading" secondItem="ScE-ad-pHc" secondAttribute="trailing" constant="28" id="Fgl-8s-xeG"/>
-                <constraint firstItem="9hM-c1-7hB" firstAttribute="firstBaseline" secondItem="ins-7X-kbN" secondAttribute="firstBaseline" id="G4h-Af-D9U"/>
-                <constraint firstItem="xKf-yr-nCk" firstAttribute="leading" secondItem="Mg1-Yq-F9S" secondAttribute="leading" id="GGp-x0-Xh9"/>
-                <constraint firstItem="ins-7X-kbN" firstAttribute="leading" secondItem="9hM-c1-7hB" secondAttribute="trailing" constant="8" id="GpT-1T-5wU"/>
-                <constraint firstItem="jIE-qq-CIX" firstAttribute="width" secondItem="9hM-c1-7hB" secondAttribute="width" id="HL7-8s-jmF"/>
-                <constraint firstItem="xct-UB-bKm" firstAttribute="leading" secondItem="xKf-yr-nCk" secondAttribute="trailing" constant="8" symbolic="YES" id="Hhn-Wm-CKa"/>
-                <constraint firstItem="hiK-Va-rbJ" firstAttribute="firstBaseline" secondItem="UEb-07-vEn" secondAttribute="firstBaseline" id="I08-oO-JwN"/>
-                <constraint firstItem="k1h-3F-Xh0" firstAttribute="firstBaseline" secondItem="cTy-PO-BSd" secondAttribute="firstBaseline" id="I9w-GF-tGe"/>
-                <constraint firstItem="p9P-Fd-bNm" firstAttribute="top" secondItem="jIE-qq-CIX" secondAttribute="bottom" constant="12" id="Ich-0P-Y7K"/>
-                <constraint firstItem="Hcn-5m-N9x" firstAttribute="leading" secondItem="8EJ-8r-9In" secondAttribute="trailing" constant="8" id="JF5-HG-8Ch"/>
-                <constraint firstItem="cG4-79-P9J" firstAttribute="firstBaseline" secondItem="8EJ-8r-9In" secondAttribute="firstBaseline" id="LWQ-4v-gaK"/>
-                <constraint firstItem="ns7-Ww-hmX" firstAttribute="leading" secondItem="ZRr-ED-W8e" secondAttribute="leading" id="MOK-0F-Q7a"/>
-                <constraint firstItem="UEb-07-vEn" firstAttribute="leading" secondItem="hiK-Va-rbJ" secondAttribute="trailing" constant="28" id="MfA-dy-QAE"/>
-                <constraint firstItem="DI9-Ed-acp" firstAttribute="leading" secondItem="dXf-9u-LSs" secondAttribute="trailing" constant="8" id="Mzi-vZ-iwp"/>
-                <constraint firstItem="DER-tS-cLx" firstAttribute="leading" secondItem="1a5-Yb-uwn" secondAttribute="trailing" constant="8" id="OEe-H1-h7h"/>
-                <constraint firstItem="cG4-79-P9J" firstAttribute="firstBaseline" secondItem="BOw-ko-ODH" secondAttribute="firstBaseline" id="Oa8-FE-7Zk"/>
-                <constraint firstItem="RZE-gp-SB7" firstAttribute="firstBaseline" secondItem="rPg-F2-gtl" secondAttribute="firstBaseline" id="OiR-HB-gIM"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Psx-nN-XiT" secondAttribute="trailing" constant="20" symbolic="YES" id="PFE-0C-68s"/>
-                <constraint firstItem="PZ7-Nx-ctH" firstAttribute="firstBaseline" secondItem="JRz-wh-Qqk" secondAttribute="firstBaseline" id="QNr-MN-tOK"/>
-                <constraint firstItem="dXf-9u-LSs" firstAttribute="firstBaseline" secondItem="DI9-Ed-acp" secondAttribute="firstBaseline" id="Rzb-Eo-Irg"/>
-                <constraint firstItem="PZ7-Nx-ctH" firstAttribute="leading" secondItem="hiK-Va-rbJ" secondAttribute="trailing" constant="28" id="SOj-Gh-gkZ"/>
-                <constraint firstItem="Mg1-Yq-F9S" firstAttribute="firstBaseline" secondItem="IQG-Nn-HTb" secondAttribute="firstBaseline" id="TUA-D9-0hP"/>
-                <constraint firstItem="9hM-c1-7hB" firstAttribute="top" secondItem="N8y-at-fwU" secondAttribute="bottom" constant="12" id="TUK-Ba-Aer"/>
-                <constraint firstItem="hiK-Va-rbJ" firstAttribute="leading" secondItem="jIE-qq-CIX" secondAttribute="trailing" constant="8" id="TZ5-fY-a21"/>
-                <constraint firstItem="cTy-PO-BSd" firstAttribute="firstBaseline" secondItem="O3I-G6-dfv" secondAttribute="firstBaseline" id="TkU-Tx-eUQ"/>
-                <constraint firstItem="A6i-ft-02b" firstAttribute="firstBaseline" secondItem="1XQ-md-5cQ" secondAttribute="firstBaseline" id="Ttq-h5-KQ7"/>
-                <constraint firstItem="boo-YC-gWm" firstAttribute="leading" secondItem="p9P-Fd-bNm" secondAttribute="trailing" constant="8" id="UBW-1Q-Bs7"/>
-                <constraint firstItem="bz8-FC-vYp" firstAttribute="firstBaseline" secondItem="PIN-cz-nC7" secondAttribute="firstBaseline" id="UeH-cp-uAL"/>
-                <constraint firstItem="ipJ-z3-XnJ" firstAttribute="leading" secondItem="Mwp-XS-2tc" secondAttribute="trailing" constant="8" id="Uep-dq-b95"/>
-                <constraint firstItem="PIN-cz-nC7" firstAttribute="width" secondItem="Mwp-XS-2tc" secondAttribute="width" id="V0I-kx-Uyo"/>
-                <constraint firstItem="RZE-gp-SB7" firstAttribute="width" secondItem="9Uz-PL-igg" secondAttribute="width" id="VJ3-tq-b3d"/>
-                <constraint firstItem="Mg1-Yq-F9S" firstAttribute="top" secondItem="1a5-Yb-uwn" secondAttribute="bottom" constant="26" id="VNy-3S-NiX"/>
-                <constraint firstItem="PIN-cz-nC7" firstAttribute="firstBaseline" secondItem="bRd-Km-Wa8" secondAttribute="firstBaseline" id="VO4-nQ-nZT"/>
-                <constraint firstItem="xKf-yr-nCk" firstAttribute="width" secondItem="Mg1-Yq-F9S" secondAttribute="width" id="VSJ-pe-iZe"/>
-                <constraint firstItem="N8y-at-fwU" firstAttribute="leading" secondItem="xKf-yr-nCk" secondAttribute="leading" id="VTb-sB-GBO"/>
-                <constraint firstItem="8EJ-8r-9In" firstAttribute="width" secondItem="BOw-ko-ODH" secondAttribute="width" id="Vb8-0g-jsC"/>
-                <constraint firstItem="xct-UB-bKm" firstAttribute="firstBaseline" secondItem="9Uz-PL-igg" secondAttribute="firstBaseline" id="W1H-eO-Cb6"/>
-                <constraint firstItem="P47-pv-TEW" firstAttribute="firstBaseline" secondItem="cG4-79-P9J" secondAttribute="firstBaseline" id="WBf-Sk-xBT"/>
-                <constraint firstItem="8EJ-8r-9In" firstAttribute="firstBaseline" secondItem="Hcn-5m-N9x" secondAttribute="firstBaseline" id="WMK-fC-zUV"/>
-                <constraint firstItem="xKf-yr-nCk" firstAttribute="firstBaseline" secondItem="xct-UB-bKm" secondAttribute="firstBaseline" id="XEq-wm-fhi"/>
-                <constraint firstItem="IQG-Nn-HTb" firstAttribute="leading" secondItem="Mg1-Yq-F9S" secondAttribute="trailing" constant="8" id="XHx-q2-MUy"/>
-                <constraint firstItem="UEb-07-vEn" firstAttribute="firstBaseline" secondItem="jFk-Eg-o2W" secondAttribute="firstBaseline" id="Xhk-35-gZK"/>
-                <constraint firstItem="9hM-c1-7hB" firstAttribute="leading" secondItem="N8y-at-fwU" secondAttribute="leading" id="Yil-hv-p4i"/>
-                <constraint firstItem="bBr-vV-iAz" firstAttribute="leading" secondItem="BOw-ko-ODH" secondAttribute="trailing" constant="8" id="ZK0-iw-eyt"/>
-                <constraint firstItem="ns7-Ww-hmX" firstAttribute="top" secondItem="ZRr-ED-W8e" secondAttribute="bottom" constant="12" id="ZMh-gm-LdZ"/>
-                <constraint firstItem="8EJ-8r-9In" firstAttribute="leading" secondItem="cG4-79-P9J" secondAttribute="trailing" constant="28" id="Zvs-eE-9iu"/>
-                <constraint firstItem="dXf-9u-LSs" firstAttribute="leading" secondItem="bz8-FC-vYp" secondAttribute="trailing" constant="28" id="a0a-wA-Fan"/>
-                <constraint firstItem="rPg-F2-gtl" firstAttribute="leading" secondItem="RZE-gp-SB7" secondAttribute="trailing" constant="8" id="aEN-SB-67H"/>
-                <constraint firstItem="bz8-FC-vYp" firstAttribute="firstBaseline" secondItem="N8y-at-fwU" secondAttribute="firstBaseline" id="aHL-a7-xlD"/>
-                <constraint firstItem="bz8-FC-vYp" firstAttribute="firstBaseline" secondItem="dXf-9u-LSs" secondAttribute="firstBaseline" id="atf-z8-B5P"/>
-                <constraint firstItem="k1h-3F-Xh0" firstAttribute="leading" secondItem="ins-7X-kbN" secondAttribute="trailing" constant="28" id="awt-JK-Bop"/>
-                <constraint firstItem="ns7-Ww-hmX" firstAttribute="width" secondItem="ZRr-ED-W8e" secondAttribute="width" id="ayv-X3-3Jf"/>
-                <constraint firstItem="1a5-Yb-uwn" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="b0c-m2-fWB"/>
-                <constraint firstItem="ZRr-ED-W8e" firstAttribute="width" secondItem="p9P-Fd-bNm" secondAttribute="width" id="bSa-Z8-Qrg"/>
-                <constraint firstItem="Mwp-XS-2tc" firstAttribute="width" secondItem="RZE-gp-SB7" secondAttribute="width" id="bbp-0P-bnR"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Uzk-ZU-EFM" secondAttribute="trailing" constant="20" symbolic="YES" id="cVS-uf-ggP"/>
-                <constraint firstItem="C83-aJ-v3x" firstAttribute="firstBaseline" secondItem="r64-vI-ymx" secondAttribute="firstBaseline" id="e8e-r5-iiZ"/>
-                <constraint firstItem="BOw-ko-ODH" firstAttribute="firstBaseline" secondItem="bBr-vV-iAz" secondAttribute="firstBaseline" id="eIM-bJ-swg"/>
-                <constraint firstItem="ScE-ad-pHc" firstAttribute="firstBaseline" secondItem="ZRr-ED-W8e" secondAttribute="firstBaseline" id="eWE-wA-Qwz"/>
-                <constraint firstItem="PZ7-Nx-ctH" firstAttribute="width" secondItem="UEb-07-vEn" secondAttribute="width" id="een-pa-4o6"/>
-                <constraint firstItem="Psx-nN-XiT" firstAttribute="leading" secondItem="ns7-Ww-hmX" secondAttribute="trailing" constant="8" id="gGh-rk-4tF"/>
-                <constraint firstItem="9Uz-PL-igg" firstAttribute="firstBaseline" secondItem="6nG-zk-FMo" secondAttribute="firstBaseline" id="gI6-6V-Dh4"/>
-                <constraint firstItem="ZR9-YG-pfn" firstAttribute="leading" secondItem="O3I-G6-dfv" secondAttribute="trailing" constant="8" id="gn5-IW-Afc"/>
-                <constraint firstItem="1a5-Yb-uwn" firstAttribute="firstBaseline" secondItem="DER-tS-cLx" secondAttribute="firstBaseline" id="gxp-Ie-JgE"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ZR9-YG-pfn" secondAttribute="trailing" constant="16" id="i1I-OX-yOq"/>
-                <constraint firstItem="JRz-wh-Qqk" firstAttribute="leading" secondItem="PZ7-Nx-ctH" secondAttribute="trailing" constant="8" id="iiU-he-gZ1"/>
-                <constraint firstItem="Mwp-XS-2tc" firstAttribute="firstBaseline" secondItem="ipJ-z3-XnJ" secondAttribute="firstBaseline" id="jrb-l5-YB4"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="rPg-F2-gtl" secondAttribute="trailing" constant="16" id="kex-Bu-K8r"/>
-                <constraint firstItem="A6i-ft-02b" firstAttribute="leading" secondItem="cTy-PO-BSd" secondAttribute="trailing" constant="28" id="knQ-nH-aEW"/>
-                <constraint firstItem="9Uz-PL-igg" firstAttribute="leading" secondItem="xct-UB-bKm" secondAttribute="trailing" constant="28" id="mHx-m0-xjq"/>
-                <constraint firstItem="jIE-qq-CIX" firstAttribute="leading" secondItem="p9P-Fd-bNm" secondAttribute="leading" id="mfK-YQ-HFW"/>
-                <constraint firstItem="1XQ-md-5cQ" firstAttribute="leading" secondItem="A6i-ft-02b" secondAttribute="trailing" constant="8" id="nGl-Aq-089"/>
-                <constraint firstItem="RZE-gp-SB7" firstAttribute="leading" secondItem="IQG-Nn-HTb" secondAttribute="trailing" constant="28" id="npG-fJ-eXc"/>
-                <constraint firstItem="dXf-9u-LSs" firstAttribute="width" secondItem="PIN-cz-nC7" secondAttribute="width" id="oSM-fN-AlD"/>
-                <constraint firstItem="jIE-qq-CIX" firstAttribute="leading" secondItem="9hM-c1-7hB" secondAttribute="leading" id="pEz-w0-AWB"/>
-                <constraint firstItem="bz8-FC-vYp" firstAttribute="leading" secondItem="N8y-at-fwU" secondAttribute="trailing" constant="8" id="px3-NP-9iI"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="r64-vI-ymx" secondAttribute="trailing" constant="16" id="qBi-eK-wC6"/>
-                <constraint firstItem="Mwp-XS-2tc" firstAttribute="leading" secondItem="DER-tS-cLx" secondAttribute="trailing" constant="28" id="qf0-yA-nvR"/>
-                <constraint firstItem="P47-pv-TEW" firstAttribute="width" secondItem="UEb-07-vEn" secondAttribute="width" id="qq7-HA-lPE"/>
-                <constraint firstItem="jIE-qq-CIX" firstAttribute="top" secondItem="9hM-c1-7hB" secondAttribute="bottom" constant="12" id="qy9-la-Asa"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bRd-Km-Wa8" secondAttribute="trailing" constant="20" symbolic="YES" id="rGV-su-AmC"/>
-                <constraint firstItem="Mg1-Yq-F9S" firstAttribute="width" secondItem="1a5-Yb-uwn" secondAttribute="width" id="rW7-Mh-RBN"/>
-                <constraint firstItem="9Uz-PL-igg" firstAttribute="width" secondItem="k1h-3F-Xh0" secondAttribute="width" id="tAb-z7-anc"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1XQ-md-5cQ" secondAttribute="trailing" constant="20" symbolic="YES" id="tIL-sP-iSX"/>
-                <constraint firstItem="ScE-ad-pHc" firstAttribute="leading" secondItem="ZRr-ED-W8e" secondAttribute="trailing" constant="8" id="taC-Y0-mXY"/>
-                <constraint firstItem="Uzk-ZU-EFM" firstAttribute="leading" secondItem="rJQ-Rd-fR6" secondAttribute="trailing" constant="8" id="tlZ-hl-dd0"/>
-                <constraint firstItem="P47-pv-TEW" firstAttribute="leading" secondItem="boo-YC-gWm" secondAttribute="trailing" constant="28" id="tqX-Th-b7k"/>
-                <constraint firstItem="xKf-yr-nCk" firstAttribute="top" secondItem="Mg1-Yq-F9S" secondAttribute="bottom" constant="12" id="u90-Po-dOZ"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Hcn-5m-N9x" secondAttribute="trailing" constant="20" symbolic="YES" id="w0M-B8-Xzg"/>
-                <constraint firstItem="bRd-Km-Wa8" firstAttribute="leading" secondItem="PIN-cz-nC7" secondAttribute="trailing" constant="8" id="wvq-ZA-Jq2"/>
-                <constraint firstItem="6nG-zk-FMo" firstAttribute="leading" secondItem="9Uz-PL-igg" secondAttribute="trailing" constant="8" id="yfU-Fj-aGf"/>
-                <constraint firstItem="9hM-c1-7hB" firstAttribute="width" secondItem="N8y-at-fwU" secondAttribute="width" id="z2o-1a-JSL"/>
-                <constraint firstItem="rJQ-Rd-fR6" firstAttribute="firstBaseline" secondItem="Uzk-ZU-EFM" secondAttribute="firstBaseline" id="zED-2J-OIo"/>
-                <constraint firstItem="jIE-qq-CIX" firstAttribute="width" secondItem="p9P-Fd-bNm" secondAttribute="width" id="zEn-BL-N47"/>
-                <constraint firstItem="p9P-Fd-bNm" firstAttribute="firstBaseline" secondItem="boo-YC-gWm" secondAttribute="firstBaseline" id="zqT-dl-AIS"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="LtF-J0-RF8" secondAttribute="trailing" constant="20" symbolic="YES" id="1T8-bK-b9Y"/>
+                <constraint firstItem="7NL-ot-fSZ" firstAttribute="top" secondItem="LtF-J0-RF8" secondAttribute="bottom" constant="10" id="JAM-Qw-05S"/>
+                <constraint firstItem="LtF-J0-RF8" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="Pbd-Je-Z8u"/>
+                <constraint firstAttribute="bottom" secondItem="7NL-ot-fSZ" secondAttribute="bottom" constant="20" symbolic="YES" id="bOQ-zo-Tq1"/>
+                <constraint firstItem="LtF-J0-RF8" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="fBd-MV-zm8"/>
+                <constraint firstAttribute="trailing" secondItem="7NL-ot-fSZ" secondAttribute="trailing" constant="20" symbolic="YES" id="fem-qH-cfn"/>
+                <constraint firstItem="7NL-ot-fSZ" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="xnN-md-zJ2"/>
             </constraints>
-            <point key="canvasLocation" x="113.5" y="123.5"/>
+            <point key="canvasLocation" x="549" y="42.5"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="UZ0-eg-oV8"/>
+        <arrayController objectClassName="HBFilter" id="aqJ-cP-R7n">
+            <classReference key="objectClass" className="HBFilter"/>
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.filters.filters" id="SDr-Md-c22"/>
+            </connections>
+        </arrayController>
+        <menu id="LUf-7d-1Fl">
+            <items>
+                <menuItem title="Remove" id="yqv-q0-p8y">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="remove:" target="-2" id="iax-PT-ZrP"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="2H3-bW-eMs"/>
+                <menuItem title="Remove all" id="yLL-nZ-qC5">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="removeAll:" target="-2" id="lwy-t1-6sc"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="161" y="-149"/>
+        </menu>
     </objects>
+    <resources>
+        <image name="Delete" width="16" height="16"/>
+        <image name="DeleteHighlightPressed" width="16" height="16"/>
+    </resources>
 </document>
