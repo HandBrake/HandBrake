@@ -121,6 +121,7 @@ hb_filter_object_t hb_filter_lapsharp_vt =
     .id                = HB_FILTER_LAPSHARP_VT,
     .enforce_order     = 1,
     .name              = "Lapsharp (VideoToolbox)",
+    .short_name        = "lapsharp_vt",
     .settings          = NULL,
     .init              = lapsharp_vt_init,
     .work              = lapsharp_vt_work,

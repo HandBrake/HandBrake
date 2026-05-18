@@ -21,6 +21,7 @@ hb_filter_object_t hb_filter_grayscale =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "Grayscale",
+    .short_name        = "grayscale",
     .settings          = NULL,
     .init              = grayscale_init,
     .work              = hb_avfilter_null_work,

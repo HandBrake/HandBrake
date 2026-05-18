@@ -122,6 +122,7 @@ hb_filter_object_t hb_filter_render_sub =
     .id            = HB_FILTER_RENDER_SUB,
     .enforce_order = 1,
     .name          = "Subtitle renderer",
+    .short_name    = "rendersub",
     .settings      = NULL,
     .init          = hb_rendersub_init,
     .post_init     = hb_rendersub_post_init,

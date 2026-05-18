@@ -121,6 +121,7 @@ hb_filter_object_t hb_filter_detelecine =
     .id                = HB_FILTER_DETELECINE,
     .enforce_order     = 1,
     .name              = "Detelecine (pullup)",
+    .short_name        = "detelecine",
     .settings          = NULL,
     .init              = hb_detelecine_init,
     .work              = hb_detelecine_work,

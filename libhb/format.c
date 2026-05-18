@@ -22,6 +22,7 @@ hb_filter_object_t hb_filter_format =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "Format",
+    .short_name        = "format",
     .settings          = NULL,
     .init              = format_init,
     .work              = hb_avfilter_null_work,

@@ -64,6 +64,7 @@ hb_filter_object_t hb_filter_rpu =
     .id                = HB_FILTER_RPU,
     .enforce_order     = 1,
     .name              = "RPU converter",
+    .short_name        = "rpu",
     .settings          = NULL,
     .init              = rpu_init,
     .work              = rpu_work,

@@ -5754,6 +5754,45 @@ char * hb_parse_filter_settings_json(const char * settings_str)
     return result;
 }
 
+static hb_filter_object_t * hb_filter_find_by_name(const char *name, int start, int end)
+{
+    for (int ii = start; ii < end; ii++)
+    {
+        hb_filter_object_t *filter = hb_filter_get(ii);
+        if (filter != NULL &&
+            (!strcasecmp(filter->name, name) ||
+             !strcasecmp(filter->short_name, name)))
+        {
+            return filter;
+        }
+    }
+
+    return NULL;
+}
+
+int hb_filter_get_from_name(const char *name)
+{
+    hb_filter_object_t *filter = hb_filter_find_by_name(name, HB_FILTER_FIRST, HB_FILTER_LAST);
+
+    if (filter == NULL)
+    {
+        filter = hb_filter_find_by_name(name, HB_AUDIO_FILTER_FIRST, HB_AUDIO_FILTER_LAST);
+    }
+
+    return filter != NULL ? filter->id : HB_FILTER_INVALID;
+}
+
+const char * hb_filter_get_short_name(int filter_id)
+{
+    hb_filter_object_t *filter = hb_filter_get(filter_id);
+    if (filter)
+    {
+        return filter->short_name;
+    }
+
+    return "invalid";
+}
+
 /**********************************************************************
  * hb_chapter_copy
  **********************************************************************

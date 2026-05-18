@@ -1660,6 +1660,7 @@ struct hb_filter_object_s
     int                   skip;
     int                   aliased;
     char                * name;
+    char                * short_name;
     hb_dict_t           * settings;
 
 #ifdef __LIBHB__
@@ -1778,6 +1779,8 @@ char               * hb_filter_settings_string(int filter_id,
 char               * hb_filter_settings_string_json(int filter_id,
                                                     const char * json);
 
+int                  hb_filter_get_from_name(const char *name);
+const char *         hb_filter_get_short_name(int filter_id);
 struct hb_motion_metric_object_s
 {
     char                * name;

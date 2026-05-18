@@ -73,6 +73,7 @@ hb_filter_object_t hb_filter_chroma_smooth =
     .id                = HB_FILTER_CHROMA_SMOOTH,
     .enforce_order     = 1,
     .name              = "Chroma Smooth",
+    .short_name        = "chromasmooth",
     .settings          = NULL,
     .init              = chroma_smooth_init,
     .init_thread       = chroma_smooth_init_thread,

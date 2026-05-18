@@ -59,6 +59,7 @@ hb_filter_object_t hb_filter_pad_vt =
     .id                = HB_FILTER_PAD_VT,
     .enforce_order     = 1,
     .name              = "Pad (VideoToolbox)",
+    .short_name        = "pad_vt",
     .settings          = NULL,
     .init              = pad_vt_init,
     .work              = pad_vt_work,

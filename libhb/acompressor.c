@@ -78,6 +78,7 @@ hb_filter_object_t hb_filter_acompressor =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "Compressor",
+    .short_name        = "acompressor",
     .settings          = NULL,
     .init              = acompressor_init,
     .work              = hb_avfilter_null_work,

@@ -75,6 +75,7 @@ hb_filter_object_t hb_filter_unsharp =
     .id                = HB_FILTER_UNSHARP,
     .enforce_order     = 1,
     .name              = "Sharpen (unsharp)",
+    .short_name        = "unsharp",
     .settings          = NULL,
     .init              = unsharp_init,
     .init_thread       = unsharp_init_thread,

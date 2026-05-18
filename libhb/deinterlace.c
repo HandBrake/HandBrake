@@ -11,7 +11,7 @@
 #include "handbrake/decomb.h"
 #include "handbrake/avfilter_priv.h"
 
-#define FFMPEG_DEINTERLACE_FILTER(FILTER_ID, FILTER_NAME, FFMPEG_NAME, OPTS_TEMPLATE)  \
+#define FFMPEG_DEINTERLACE_FILTER(FILTER_ID, FILTER_NAME, FILTER_SHORT_NAME, FFMPEG_NAME, OPTS_TEMPLATE)  \
     static int deinterlace_##FFMPEG_NAME(hb_filter_object_t * filter,   \
         hb_filter_init_t * init);                                       \
                                                                         \
@@ -21,6 +21,7 @@
         .enforce_order     = 1,                                         \
         .skip              = 1,                                         \
         .name              = FILTER_NAME,                               \
+        .short_name        = FILTER_SHORT_NAME,                         \
         .settings          = NULL,                                      \
         .init              = deinterlace_##FFMPEG_NAME,                 \
         .work              = hb_avfilter_null_work,                     \
@@ -40,9 +41,9 @@ static int deinterlace_init(hb_filter_object_t * filter,
 const char deint_template[] =
     "mode=^"HB_INT_REG"$:parity=^([01])$";
 
-FFMPEG_DEINTERLACE_FILTER(HB_FILTER_YADIF, "Deinterlace", yadif,
+FFMPEG_DEINTERLACE_FILTER(HB_FILTER_YADIF, "Deinterlace", "yadif", yadif,
                           deint_template);
-FFMPEG_DEINTERLACE_FILTER(HB_FILTER_BWDIF, "Bwdif", bwdif,
+FFMPEG_DEINTERLACE_FILTER(HB_FILTER_BWDIF, "Bwdif", "bwdif", bwdif,
                           deint_template);
 /* FFMPEG_DEINTERLACE_FILTER(..., "Estdif", estdif,
                           estdif_template); */

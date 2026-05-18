@@ -131,6 +131,7 @@ hb_filter_object_t hb_filter_comb_detect =
     .id                = HB_FILTER_COMB_DETECT,
     .enforce_order     = 1,
     .name              = "Comb Detect",
+    .short_name        = "combdetect",
     .settings          = NULL,
     .init              = comb_detect_init,
     .work              = comb_detect_work,

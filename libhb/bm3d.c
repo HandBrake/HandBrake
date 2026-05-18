@@ -21,6 +21,7 @@ hb_filter_object_t hb_filter_bm3d =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "BM3D",
+    .short_name        = "bm3d",
     .settings          = NULL,
     .init              = bm3d_init,
     .work              = hb_avfilter_null_work,

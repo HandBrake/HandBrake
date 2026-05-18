@@ -78,6 +78,7 @@ hb_filter_object_t hb_filter_agate =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "Gate",
+    .short_name        = "agate",
     .settings          = NULL,
     .init              = agate_init,
     .work              = hb_avfilter_null_work,
