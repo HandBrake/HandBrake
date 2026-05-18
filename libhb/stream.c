@@ -5124,7 +5124,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
                 if ((pes[7] >> 6) != 0)
                 {
                     // if we have a dts use it otherwise use the pts
-                    // We simulate a psuedo-PCR here by sampling a timestamp
+                    // We simulate a pseudo-PCR here by sampling a timestamp
                     // about every 600ms.
                     int64_t timestamp;
                     timestamp = pes_timestamp(pes + (pes[7] & 0x40 ? 14 : 9));
