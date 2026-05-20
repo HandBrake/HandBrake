@@ -1833,7 +1833,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
 
                 for (int jj = 0; jj < filter_count; jj++)
                 {
-                    filter_dict = hb_value_array_get(filter_list, ii);
+                    filter_dict = hb_value_array_get(filter_list, jj);
                     int filter_id = -1;
                     hb_value_t *filter_settings = NULL;
                     result = json_unpack_ex(filter_dict, &error, 0, "{s:i, s?o}",
