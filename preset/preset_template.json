@@ -27,7 +27,9 @@
                 "AudioTrackQualityEnable": false,
                 "AudioTrackQuality": -1.0,
                 "AudioTrackGainSlider": 0.0,
-                "AudioTrackDRCSlider": 0.0
+                "AudioTrackDRCSlider": 0.0,
+                "AudioFilterList" : [
+                ]
             }
         ],
         "AudioSecondaryEncoderMode": true,

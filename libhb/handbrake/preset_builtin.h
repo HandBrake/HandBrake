@@ -12273,6 +12273,7 @@ const char hb_builtin_presets_json[] =
 "                    \"AudioCompressionLevel\": -1.0,\n"
 "                    \"AudioDitherMethod\": \"auto\",\n"
 "                    \"AudioEncoder\": \"copy:ac3\",\n"
+"                    \"AudioFilterList\": [],\n"
 "                    \"AudioMixdown\": \"dpl2\",\n"
 "                    \"AudioNormalizeMixLevel\": false,\n"
 "                    \"AudioSamplerate\": \"auto\",\n"
