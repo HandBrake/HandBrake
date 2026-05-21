@@ -23,6 +23,7 @@ hb_filter_object_t hb_filter_deband =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "Deband",
+    .short_name        = "deband",
     .settings          = NULL,
     .init              = deband_init,
     .work              = hb_avfilter_null_work,

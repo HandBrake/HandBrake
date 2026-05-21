@@ -2804,9 +2804,10 @@ int hb_mixdown_has_remix_support(int mixdown, hb_channel_layout_t *ch_layout)
         case HB_AMIXDOWN_4POINT0:
                 return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_4POINT0) == AV_CH_LAYOUT_4POINT0);
 
-        // stereo + back stereo
+        // stereo + side or back stereo
         case HB_AMIXDOWN_QUAD:
-                return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD);
+                return (av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
+                        av_channel_layout_subset(ch_layout, AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD);
 
         // stereo + front center
         case HB_AMIXDOWN_3POINT0:
@@ -5753,6 +5754,45 @@ char * hb_parse_filter_settings_json(const char * settings_str)
     return result;
 }
 
+static hb_filter_object_t * hb_filter_find_by_name(const char *name, int start, int end)
+{
+    for (int ii = start; ii < end; ii++)
+    {
+        hb_filter_object_t *filter = hb_filter_get(ii);
+        if (filter != NULL &&
+            (!strcasecmp(filter->name, name) ||
+             !strcasecmp(filter->short_name, name)))
+        {
+            return filter;
+        }
+    }
+
+    return NULL;
+}
+
+int hb_filter_get_from_name(const char *name)
+{
+    hb_filter_object_t *filter = hb_filter_find_by_name(name, HB_FILTER_FIRST, HB_FILTER_LAST);
+
+    if (filter == NULL)
+    {
+        filter = hb_filter_find_by_name(name, HB_AUDIO_FILTER_FIRST, HB_AUDIO_FILTER_LAST);
+    }
+
+    return filter != NULL ? filter->id : HB_FILTER_INVALID;
+}
+
+const char * hb_filter_get_short_name(int filter_id)
+{
+    hb_filter_object_t *filter = hb_filter_get(filter_id);
+    if (filter)
+    {
+        return filter->short_name;
+    }
+
+    return "invalid";
+}
+
 /**********************************************************************
  * hb_chapter_copy
  **********************************************************************
@@ -5853,9 +5893,15 @@ hb_audio_t *hb_audio_copy(const hb_audio_t *src)
     {
         audio = calloc(1, sizeof(*audio));
         memcpy(audio, src, sizeof(*audio));
-        AVChannelLayout *ch_layout = calloc(1, sizeof(*ch_layout));
-        av_channel_layout_copy(ch_layout, src->config.in.ch_layout);
-        audio->config.in.ch_layout = ch_layout;
+
+        AVChannelLayout *in_ch_layout = calloc(1, sizeof(*in_ch_layout));
+        av_channel_layout_copy(in_ch_layout, src->config.in.ch_layout);
+        audio->config.in.ch_layout = in_ch_layout;
+
+        AVChannelLayout *out_ch_layout = calloc(1, sizeof(*out_ch_layout));
+        av_channel_layout_copy(out_ch_layout, src->config.in.ch_layout);
+        audio->config.out.ch_layout = out_ch_layout;
+
         if ( src->config.out.name )
         {
             audio->config.out.name = strdup(src->config.out.name);
@@ -5974,6 +6020,8 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->out.dither_method = hb_audio_dither_get_default();
     audiocfg->out.name = NULL;
     audiocfg->out.list_filter = hb_list_init();
+    audiocfg->out.ch_layout = calloc(1, sizeof(*audiocfg->out.ch_layout));
+    av_channel_layout_default(audiocfg->out.ch_layout, 0);
 }
 
 void hb_audio_config_close(hb_audio_config_t *audiocfg)
@@ -5998,6 +6046,11 @@ void hb_audio_config_close(hb_audio_config_t *audiocfg)
         {
             hb_list_rem(audiocfg->out.list_filter, filter);
             hb_filter_close(&filter);
+        }
+        if (audiocfg->out.ch_layout != NULL)
+        {
+            av_channel_layout_uninit(audiocfg->out.ch_layout);
+            free(audiocfg->out.ch_layout);
         }
         hb_list_close(&audiocfg->out.list_filter);
     }
@@ -6030,6 +6083,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
 
     /* Really shouldn't ignore the passed out track, but there is currently no
      * way to handle duplicates or out-of-order track numbers. */
+    AVChannelLayout *out_ch_layout = audio->config.out.ch_layout;
     audio->config.out = audiocfg->out;
     audio->config.out.track = hb_list_count(job->list_audio) + 1;
     if (audiocfg->out.name && *audiocfg->out.name)
@@ -6041,6 +6095,8 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
     {
         audio->config.out.list_filter = hb_filter_list_copy(audiocfg->out.list_filter);
     }
+
+    audio->config.out.ch_layout = out_ch_layout;
 
     hb_list_add(job->list_audio, audio);
     return 1;

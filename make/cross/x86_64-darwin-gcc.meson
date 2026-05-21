@@ -1,6 +1,9 @@
 [binaries]
 c = 'clang'
 cpp = 'clang++'
+pkgconfig = 'pkg-config'
+pkg-config = 'pkg-config'
+cmake = 'cmake'
 
 [host_machine]
 system = 'darwin'

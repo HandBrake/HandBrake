@@ -23,6 +23,7 @@ hb_filter_object_t hb_filter_colorspace =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "Colorspace",
+    .short_name        = "colorspace",
     .settings          = NULL,
     .init              = colorspace_init,
     .work              = hb_avfilter_null_work,

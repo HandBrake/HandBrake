@@ -184,6 +184,7 @@ hb_filter_object_t hb_filter_decomb =
     .id                = HB_FILTER_DECOMB,
     .enforce_order     = 1,
     .name              = "Decomb",
+    .short_name        = "decomb",
     .settings          = NULL,
     .init              = hb_decomb_init,
     .work              = hb_decomb_work,

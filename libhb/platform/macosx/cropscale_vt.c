@@ -41,6 +41,7 @@ hb_filter_object_t hb_filter_crop_scale_vt =
     .id                = HB_FILTER_CROP_SCALE_VT,
     .enforce_order     = 1,
     .name              = "Crop and Scale (VideoToolbox)",
+    .short_name        = "cropscale_vt",
     .settings          = NULL,
     .init              = crop_scale_vt_init,
     .work              = crop_scale_vt_work,

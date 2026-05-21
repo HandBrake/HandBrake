@@ -22,6 +22,7 @@ hb_filter_object_t hb_filter_deblock =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "Deblock",
+    .short_name        = "deblock",
     .settings          = NULL,
     .init              = deblock_init,
     .work              = hb_avfilter_null_work,

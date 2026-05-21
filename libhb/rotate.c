@@ -21,6 +21,7 @@ hb_filter_object_t hb_filter_rotate =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "Rotate",
+    .short_name        = "rotate",
     .settings          = NULL,
     .init              = rotate_init,
     .work              = hb_avfilter_null_work,

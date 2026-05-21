@@ -25,6 +25,7 @@ hb_filter_object_t hb_filter_pad =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "Pad",
+    .short_name        = "pad",
     .settings          = NULL,
     .init              = pad_init,
     .work              = hb_avfilter_null_work,

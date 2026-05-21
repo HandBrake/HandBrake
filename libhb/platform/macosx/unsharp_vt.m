@@ -70,6 +70,7 @@ hb_filter_object_t hb_filter_unsharp_vt =
     .id                = HB_FILTER_UNSHARP_VT,
     .enforce_order     = 1,
     .name              = "Unsharp (VideoToolbox)",
+    .short_name        = "unsharp_vt",
     .settings          = NULL,
     .init              = unsharp_vt_init,
     .work              = unsharp_vt_work,

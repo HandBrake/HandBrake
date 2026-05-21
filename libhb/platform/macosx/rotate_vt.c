@@ -41,6 +41,7 @@ hb_filter_object_t hb_filter_rotate_vt =
     .id                = HB_FILTER_ROTATE_VT,
     .enforce_order     = 1,
     .name              = "Rotate (VideoToolbox)",
+    .short_name        = "rotate_vt",
     .settings          = NULL,
     .init              = rotate_vt_init,
     .work              = rotate_vt_work,

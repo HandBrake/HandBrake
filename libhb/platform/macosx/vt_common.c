@@ -432,16 +432,23 @@ static int are_filters_supported(hb_list_t *filters)
 
         switch (filter->id)
         {
-            case HB_FILTER_DETELECINE:
-            case HB_FILTER_DECOMB:
-            case HB_FILTER_DEBLOCK:
-            case HB_FILTER_DENOISE:
-            case HB_FILTER_NLMEANS:
-            case HB_FILTER_COLORSPACE:
+            case HB_FILTER_VFR:
+            case HB_FILTER_COMB_DETECT:
+            case HB_FILTER_YADIF:
+            case HB_FILTER_BWDIF:
+            case HB_FILTER_CROP_SCALE:
+            case HB_FILTER_CHROMA_SMOOTH:
+            case HB_FILTER_ROTATE:
+            case HB_FILTER_PAD:
+            case HB_FILTER_GRAYSCALE:
+            case HB_FILTER_LAPSHARP:
+            case HB_FILTER_UNSHARP:
+            case HB_FILTER_RENDER_SUB:
             case HB_FILTER_FORMAT:
-                supported = 0;
+            case HB_FILTER_RPU:
                 break;
             default:
+                supported = 0;
                 break;
         }
 

@@ -114,6 +114,7 @@ hb_filter_object_t hb_filter_lapsharp =
     .id                = HB_FILTER_LAPSHARP,
     .enforce_order     = 1,
     .name              = "Sharpen (lapsharp)",
+    .short_name        = "lapsharp",
     .settings          = NULL,
     .init              = hb_lapsharp_init,
     .work              = hb_lapsharp_work,

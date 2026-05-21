@@ -29,6 +29,7 @@ hb_filter_object_t hb_filter_crop_scale =
     .enforce_order     = 1,
     .skip              = 1,
     .name              = "Crop and Scale",
+    .short_name        = "cropscale",
     .settings          = NULL,
     .init              = crop_scale_init,
     .work              = hb_avfilter_null_work,

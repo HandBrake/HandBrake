@@ -203,10 +203,10 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
     }
 
     // If the preset list contains no leaf,
-    // add back the built in presets.
+    // or no supported preset, add back the built in presets.
     __block BOOL leafFound = NO;
     [self.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop) {
-        if ([obj isLeaf])
+        if ([obj isLeaf] && [obj isSupported])
         {
             leafFound = YES;
             *stop = YES;
@@ -297,7 +297,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
             firstUserPreset = obj;
         }
 
-        if ([obj isDefault])
+        if ([obj isDefault] && [obj isSupported])
         {
             self.defaultPreset = obj;
             defaultAlreadySet = YES;

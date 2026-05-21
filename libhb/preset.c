@@ -909,6 +909,54 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                         hb_dict_get(encoder_dict, "AudioBitrate"),
                         HB_VALUE_TYPE_INT));
                 }
+
+                hb_value_array_t *filter_list = hb_dict_get(audio_dict, "FilterList");
+                if (filter_list == NULL)
+                {
+                    filter_list = hb_value_array_init();
+                    hb_dict_set(audio_dict, "FilterList", filter_list);
+                }
+
+                if (hb_dict_get(encoder_dict, "AudioFilterList") != NULL)
+                {
+                    hb_value_array_t *preset_filter_list = hb_dict_get(encoder_dict, "AudioFilterList");
+                    int count = hb_value_array_len(preset_filter_list);
+
+                    for (int jj = 0; jj < count; jj++)
+                    {
+                        hb_dict_t *filter_dict = hb_value_array_get(preset_filter_list, jj);
+
+                        const char *name = NULL, *preset = NULL, *custom = NULL;
+
+                        name = hb_dict_get_string(filter_dict, "AudioFilterName");
+                        preset = hb_dict_get_string(filter_dict, "AudioFilterPreset");
+                        custom = hb_dict_get_string(filter_dict, "AudioFilterCustom");
+
+                        if (name != NULL && preset != NULL)
+                        {
+                            int filter_id = hb_filter_get_from_name(name);
+
+                            if (filter_id >= HB_AUDIO_FILTER_FIRST &&
+                                filter_id <= HB_AUDIO_FILTER_LAST)
+                            {
+                                hb_dict_t *filter_settings = hb_generate_filter_settings(
+                                                           filter_id, preset, NULL, custom);
+
+                                if (filter_settings == NULL)
+                                {
+                                    hb_error("Invalid audio filter preset (%s)", preset);
+                                    hb_value_free(&filter_settings);
+                                    continue;
+                                }
+
+                                hb_dict_t *filter_dict = hb_dict_init();
+                                hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
+                                hb_dict_set(filter_dict, "Settings", filter_settings);
+                                hb_add_filter2(filter_list, filter_dict);
+                            }
+                        }
+                    }
+                }
             }
 
             // Sanitize the settings before adding to the audio list

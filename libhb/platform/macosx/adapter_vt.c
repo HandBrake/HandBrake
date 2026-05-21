@@ -365,6 +365,7 @@ hb_filter_object_t hb_filter_adapter_vt =
     .id                = HB_FILTER_ADAPTER_VT,
     .enforce_order     = 1,
     .name              = "Adapter (VideoToolbox)",
+    .short_name        = "adapter_vt",
     .settings          = NULL,
     .init              = adapter_vt_init,
     .work              = adapter_vt_work,

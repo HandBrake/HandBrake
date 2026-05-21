@@ -29,6 +29,10 @@ namespace HandBrakeWPF.Helpers
                 {
                     dynamicRange = "HDR10";
                 }
+                else if (title.ColorInformation.HDR)
+                {
+                    dynamicRange = "HDR";
+                }
 
                 if (title.ColorInformation.DBV)
                 {
