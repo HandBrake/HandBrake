@@ -828,6 +828,30 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         vid_decoder->frame_count = 0;
         while (vid_decoder->frame_count < PREVIEW_READ_THRESH && packets < 10000)
         {
+            if ( *data->die )
+            {
+                if ( buf_es )
+                    hb_buffer_close( &buf_es );
+
+                hb_buffer_list_close(&list_es);
+
+                if (vid_buf == NULL)
+                {
+                    vid_buf = last_vid_buf;
+                    last_vid_buf = NULL;
+                }
+                hb_buffer_close(&last_vid_buf);
+                hb_buffer_close(&vid_buf);
+
+                free( info_list );
+                crop_record_free( crops );
+                vid_decoder->close( vid_decoder );
+                free( vid_decoder );
+                hb_stream_close(&stream);
+                hb_hwaccel_hw_device_ctx_close(&hw_device_ctx);
+                return 0;
+            }
+
             if ((buf = read_buf(data, stream)) == NULL)
             {
                 // If we reach EOF and no audio, don't continue looking for
