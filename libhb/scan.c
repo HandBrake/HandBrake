@@ -106,7 +106,11 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
     data->max_title_duration = max_duration;
-     
+
+    // Do at least 3 previews for any case.
+    if (data->preview_count < 3)
+        data->preview_count = 3;
+
     data->crop_threshold_frames = crop_threshold_frames;
     data->crop_threshold_pixels = crop_threshold_pixels;
     data->exclude_extensions    = hb_string_list_copy(exclude_extensions);
