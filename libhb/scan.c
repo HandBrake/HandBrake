@@ -926,6 +926,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         while (vid_decoder->frame_count < PREVIEW_READ_THRESH ||
               (!AllAudioOK(title) && packets < 10000))
         {
+            if (*data->die)
+            {
+                hb_buffer_close(&last_vid_buf);
+                hb_buffer_close(&vid_buf);
+                npreviews = 0;
+                goto finish;
+            }
+
             if ((buf = read_buf(data, stream)) == NULL)
             {
                 // If we reach EOF and no audio, don't continue looking for
