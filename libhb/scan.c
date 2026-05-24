@@ -107,6 +107,10 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->min_title_duration = min_duration;
     data->max_title_duration = max_duration;
 
+    // Discard previews if user disables them.
+    if (data->preview_count == 0)
+        data->store_previews = 0;
+
     // Do at least 3 previews for any case.
     if (data->preview_count < 3)
         data->preview_count = 3;
