@@ -1562,16 +1562,6 @@ static void ShowHelp(void)
 "                           corresponding audio track without modification\n"
 "                           if passthru is supported for the audio type.\n"
 "                           Separate tracks by commas.\n"
-"                           Defaults:\n");
-    container = NULL;
-    while ((container = hb_container_get_next(container)) != NULL)
-    {
-        int audio_encoder = hb_audio_encoder_get_default(container->format);
-        fprintf(out, "                               %-8s %s\n",
-                container->short_name,
-                hb_audio_encoder_get_short_name(audio_encoder));
-    }
-    fprintf(out,
 "       --audio-copy-mask <string>\n"
 "                           Set audio codecs that are permitted when the\n"
 "                           \"copy\" audio encoder option is specified\n"
@@ -1616,20 +1606,6 @@ static void ShowHelp(void)
     }
     fprintf(out,
 "                           Separate tracks by commas.\n"
-"                           Defaults:\n");
-    encoder = NULL;
-    while((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
-    {
-        if (!(encoder->codec & HB_ACODEC_PASS_FLAG))
-        {
-            // layout: 7.1 should work with all supported mixdowns
-            int mixdown = hb_mixdown_get_default_s(encoder->codec, "7.1");
-            // assumes that the encoder short name is <= 16 characters long
-            fprintf(out, "                               %-16s up to %s\n",
-                    encoder->short_name, hb_mixdown_get_short_name(mixdown));
-        }
-    }
-    fprintf(out,
 "       --normalize-mix     Normalize audio mix levels to prevent clipping.\n"
 "              <string>     Separate tracks by commas.\n"
 "                           0 = Disable Normalization (default)\n"
