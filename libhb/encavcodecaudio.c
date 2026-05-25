@@ -141,7 +141,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                 out_channel_layout  = AV_CH_LAYOUT_5POINT1_BACK;
             if (in_channel_layout == AV_CH_LAYOUT_6POINT1)
                 out_channel_layout  = AV_CH_LAYOUT_6POINT1_BACK;
-            if (in_channel_layout == AV_CH_LAYOUT_7POINT1)
+            if (in_channel_layout == AV_CH_LAYOUT_7POINT1_WIDE)
                 out_channel_layout  = AV_CH_LAYOUT_7POINT1_WIDE_BACK;
             break;
 
@@ -329,7 +329,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                        context->sample_rate, 0);
         av_opt_set_int(pv->swresample, "out_sample_rate",
                        context->sample_rate, 0);
-        if (hb_audio_dither_is_supported(audio->config.out.codec,
+        if (needs_resample && // not required for remap-only
+            hb_audio_dither_is_supported(audio->config.out.codec,
                                          audio->config.in.sample_bit_depth))
         {
             // dithering needs the sample rate

@@ -142,7 +142,7 @@ aac_channel_layout_map[] =
     { AV_CHANNEL_LAYOUT_6POINT0,           kAudioChannelLayoutTag_AAC_6_0 },
     { AV_CHANNEL_LAYOUT_6POINT1,           kAudioChannelLayoutTag_AAC_6_1 },
     { AV_CHANNEL_LAYOUT_7POINT0,           kAudioChannelLayoutTag_AAC_7_0 },
-    { AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK, kAudioChannelLayoutTag_AAC_7_1 },
+    { AV_CHANNEL_LAYOUT_7POINT1_WIDE,      kAudioChannelLayoutTag_AAC_7_1 },
     { AV_CHANNEL_LAYOUT_7POINT1,           kAudioChannelLayoutTag_AAC_7_1_B },
 };
 static int aac_channel_layout_map_count = sizeof(aac_channel_layout_map) / sizeof(aac_channel_layout_map[0]);
