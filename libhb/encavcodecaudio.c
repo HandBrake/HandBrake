@@ -118,6 +118,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             // non-standard layout
             if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1) == 0)
                 av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
+            if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_2_2) == 0)
+                av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_QUAD);
             break;
 
         case HB_ACODEC_FFALAC:
@@ -138,6 +140,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                 av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
             if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1) == 0)
                 av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1_BACK);
+            if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_7POINT1_WIDE) == 0)
+                av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK);
             break;
 
         case HB_ACODEC_FFFLAC:
@@ -187,7 +191,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             // audio, and will error out unless we translate the layout
             if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1) == 0)
                 av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
-
+            if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_2_2) == 0)
+                av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_QUAD);
             if (out_ch_layout.nb_channels > 2)
                 av_dict_set(&av_opts, "mapping_family", "1", 0);
             break;
@@ -292,6 +297,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
     int needs_resample = context->sample_fmt != AV_SAMPLE_FMT_FLT;
     int needs_remap    = av_channel_layout_compare(&in_ch_layout, &out_ch_layout) &&
+                         av_channel_layout_compare(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_QUAD) &&
                          av_channel_layout_compare(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
 
     // sample_fmt or remap conversion
@@ -316,7 +322,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                        context->sample_rate, 0);
         av_opt_set_int(pv->swresample, "out_sample_rate",
                        context->sample_rate, 0);
-        if (hb_audio_dither_is_supported(audio->config.out.codec,
+        if (needs_resample && // not required for remap-only
+            hb_audio_dither_is_supported(audio->config.out.codec,
                                          audio->config.in.sample_bit_depth))
         {
             // dithering needs the sample rate

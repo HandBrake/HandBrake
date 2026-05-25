@@ -741,6 +741,16 @@ hb_stereo_3d_t hb_stereo_3d_ff_to_hb(AVStereo3D stereo_3d)
 
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
 {
+    /*
+     * When choosing a target layout with either side or back channels,
+     * always pick the variant with side channels for downmix purposes.
+     *
+     * For some encoders, we may need to remap the layout to the back variant
+     * before sending samples to the encoder, but doing it earlier (e.g. here)
+     * could result in a sub-optimal downmix (where regular surround channels
+     * are attenuated and then mixed into the rear surround channels, instead
+     * of the reverse).
+     */
     uint64_t ff_layout = 0;
     int mode = AV_MATRIX_ENCODING_NONE;
     switch (hb_mixdown)
@@ -778,7 +788,7 @@ uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
             break;
 
         case HB_AMIXDOWN_QUAD:
-            ff_layout = AV_CH_LAYOUT_QUAD;
+            ff_layout = AV_CH_LAYOUT_2_2;
             break;
 
         case HB_AMIXDOWN_5POINT1:
@@ -794,7 +804,7 @@ uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
             break;
 
         case HB_AMIXDOWN_7POINT1_SDDS:
-            ff_layout = AV_CH_LAYOUT_7POINT1_WIDE_BACK;
+            ff_layout = AV_CH_LAYOUT_7POINT1_WIDE;
             break;
 
         default:
