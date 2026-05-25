@@ -1570,7 +1570,7 @@ static void ShowHelp(void)
 "                           tracks, default: first one).\n"
 "                           Multiple output tracks can be used for one input.\n"
 "   -E, --aencoder <string> Select audio encoder(s):\n" );
-    encoder = NULL;
+    encoder = hb_audio_encoder_get_next(NULL); // skip HB_ACODEC_NONE
     while ((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
     {
         fprintf(out, "                               %s\n", encoder->short_name);
@@ -1585,7 +1585,7 @@ static void ShowHelp(void)
 "                           \"copy\" audio encoder option is specified\n"
 "                           (" );
     i       = 0;
-    encoder = NULL;
+    encoder = hb_audio_encoder_get_next(NULL); // skip HB_ACODEC_NONE
     while ((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
     {
         if ((encoder->codec &  HB_ACODEC_PASS_FLAG) &&
@@ -1667,7 +1667,7 @@ static void ShowHelp(void)
     fprintf(out,
 "                           Separate tracks by commas.\n"
 "                           Supported by encoder(s):\n");
-    encoder = NULL;
+    encoder = hb_audio_encoder_get_next(NULL); // skip HB_ACODEC_NONE
     while ((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
     {
         if (hb_audio_dither_is_supported(encoder->codec, 0))
