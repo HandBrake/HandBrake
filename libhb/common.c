@@ -2659,6 +2659,10 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
     if (mixdown == HB_AMIXDOWN_NONE)
         return 0;
 
+    // Not an actual audio encoder
+    if (codec == HB_ACODEC_NONE)
+        return 0;
+
     /*
      * for clarity: explicitly list/test every mixdown above 2 channels
      *              list all encoders separately in alphabetical order
