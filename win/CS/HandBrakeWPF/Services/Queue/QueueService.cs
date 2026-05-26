@@ -768,11 +768,6 @@ namespace HandBrakeWPF.Services.Queue
                     return; // Hardware is busy, we'll try again later when another job completes.
                 }
 
-                if (CheckDiskSpace(job))
-                {
-                    return; // Don't start the next job.
-                }
-
                 this.jobIdCounter = this.jobIdCounter + 1;
                 IEncode libEncode = new LibEncode(this.userSettingService, this.logInstanceManager, this.jobIdCounter, this.portService);
                 ActiveJob activeJob = new ActiveJob(job, libEncode);

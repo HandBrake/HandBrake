@@ -682,7 +682,7 @@ static int avformatInit( hb_mux_object_t * m )
     if ((job->mux & HB_MUX_MASK_ISOBFF_FAMILY) && standard_rate &&
         job->cfr == 1 && vrate.den * 90000L % vrate.num)
     {
-        // Set the the correct video time base to avoid
+        // Set the correct video time base to avoid
         // timestamps jitter when using NTSC framerates
         track->st->time_base.num = vrate.den;
         track->st->time_base.den = vrate.num;
