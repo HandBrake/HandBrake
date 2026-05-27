@@ -68,12 +68,16 @@
 #define AGATE_DEFAULT_PRESET         "default"
 
 /*
- * Per-track audio filter chain. Each AudioList entry has an "AudioFilters"
- * array of { Name, Preset, Custom? } dicts. Absence from the array means the
- * filter is not applied. Translated to FilterList entries on the job's audio
- * dict by libhb/preset.c.
+ * Per-track audio filter chain. Each AudioList entry has an "AudioFilterList"
+ * array of { AudioFilterName, AudioFilterPreset, AudioFilterCustom? } dicts.
+ * Absence from the array means the filter is not applied. libhb/preset.c
+ * (add_audio_for_lang) reads these keys and translates them into FilterList
+ * entries on the job's audio dict, so the names must match exactly.
  */
-#define AUDIO_FILTERS_KEY            "AudioFilters"
+#define AUDIO_FILTER_LIST_KEY        "AudioFilterList"
+#define AUDIO_FILTER_NAME_KEY        "AudioFilterName"
+#define AUDIO_FILTER_PRESET_KEY      "AudioFilterPreset"
+#define AUDIO_FILTER_CUSTOM_KEY      "AudioFilterCustom"
 #define AUDIO_COMPRESSOR_NAME        "acompressor"
 #define AUDIO_GATE_NAME              "agate"
 
@@ -1421,10 +1425,11 @@ static void add_audio_filter_to_dict(hb_dict_t *audio_dict, int filter_id,
 }
 
 /*
- * Per-track preset "AudioFilters" array helpers. Each entry is a dict of the
- * form { "Name": <short name>, "Preset": <preset name>, "Custom": <string> }.
- * The "Custom" key is only present when Preset == "custom". libhb/preset.c
- * translates the array into FilterList entries on the job's audio dict.
+ * Per-track preset "AudioFilterList" array helpers. Each entry is a dict of the
+ * form { "AudioFilterName": <short name>, "AudioFilterPreset": <preset name>,
+ * "AudioFilterCustom": <string> }. The "AudioFilterCustom" key is only present
+ * when AudioFilterPreset == "custom". libhb/preset.c translates the array into
+ * FilterList entries on the job's audio dict.
  */
 static int audio_filter_array_find(hb_value_array_t *array, const char *name)
 {
@@ -1432,7 +1437,7 @@ static int audio_filter_array_find(hb_value_array_t *array, const char *name)
     for (int ii = 0; ii < len; ii++)
     {
         const char *entry_name = hb_value_get_string(
-            hb_dict_get(hb_value_array_get(array, ii), "Name"));
+            hb_dict_get(hb_value_array_get(array, ii), AUDIO_FILTER_NAME_KEY));
         if (entry_name != NULL && !strcasecmp(entry_name, name))
         {
             return ii;
@@ -1449,23 +1454,23 @@ static void audio_filter_array_set(hb_dict_t *audio_dict, int filter_id,
         return;
     }
 
-    hb_value_array_t *array = hb_dict_get(audio_dict, AUDIO_FILTERS_KEY);
+    hb_value_array_t *array = hb_dict_get(audio_dict, AUDIO_FILTER_LIST_KEY);
     if (array == NULL)
     {
         array = hb_value_array_init();
-        hb_dict_set(audio_dict, AUDIO_FILTERS_KEY, array);
+        hb_dict_set(audio_dict, AUDIO_FILTER_LIST_KEY, array);
     }
 
     hb_dict_t *entry = hb_dict_init();
-    hb_dict_set_string(entry, "Name", name);
+    hb_dict_set_string(entry, AUDIO_FILTER_NAME_KEY, name);
     if (audio_filter_value_is_custom(filter_id, value) == 1)
     {
-        hb_dict_set_string(entry, "Preset", "custom");
-        hb_dict_set_string(entry, "Custom", value);
+        hb_dict_set_string(entry, AUDIO_FILTER_PRESET_KEY, "custom");
+        hb_dict_set_string(entry, AUDIO_FILTER_CUSTOM_KEY, value);
     }
     else
     {
-        hb_dict_set_string(entry, "Preset", value);
+        hb_dict_set_string(entry, AUDIO_FILTER_PRESET_KEY, value);
     }
 
     int idx = audio_filter_array_find(array, name);
@@ -1482,7 +1487,7 @@ static void audio_filter_array_set(hb_dict_t *audio_dict, int filter_id,
 
 static void audio_filter_array_remove(hb_dict_t *audio_dict, const char *name)
 {
-    hb_value_array_t *array = hb_dict_get(audio_dict, AUDIO_FILTERS_KEY);
+    hb_value_array_t *array = hb_dict_get(audio_dict, AUDIO_FILTER_LIST_KEY);
     if (array == NULL)
     {
         return;
@@ -1491,6 +1496,182 @@ static void audio_filter_array_remove(hb_dict_t *audio_dict, const char *name)
     if (idx >= 0)
     {
         hb_value_array_remove(array, idx);
+    }
+}
+
+/*
+ * Descriptor table for the CLI audio filters. Each row carries pointers to the
+ * filter's globals (the per-track value array and the --no-<filter> flag) plus
+ * its identifying constants. The helpers below iterate this table so the
+ * per-filter logic exists once; adding a new audio filter is a single row here
+ * (plus its globals, its ParseOptions case, and its help text).
+ */
+typedef struct
+{
+    int            filter_id;       // HB_AUDIO_FILTER_*
+    const char   * name;            // CLI flag and AudioFilters "Name"
+    const char   * desc;            // human-readable label for messages
+    char        ***values;          // &<filter>s   (per-track CLI values)
+    int          * disable;         // &<filter>_disable
+} audio_filter_cli_t;
+
+static const audio_filter_cli_t audio_filter_cli[] =
+{
+    { HB_AUDIO_FILTER_ACOMPRESSOR, AUDIO_COMPRESSOR_NAME, "audio compressor",
+      &acompressors, &acompressor_disable },
+    { HB_AUDIO_FILTER_AGATE,       AUDIO_GATE_NAME,       "audio noise gate",
+      &agates,       &agate_disable },
+};
+#define AUDIO_FILTER_CLI_COUNT \
+    (sizeof(audio_filter_cli) / sizeof(audio_filter_cli[0]))
+
+/*
+ * Validate every audio filter's per-track CLI values and reject combining a
+ * filter with its own --no-<filter>. Returns 0 on success, -1 on error (with
+ * the message already printed).
+ */
+static int check_audio_filter_options(void)
+{
+    for (size_t f = 0; f < AUDIO_FILTER_CLI_COUNT; f++)
+    {
+        const audio_filter_cli_t *filter = &audio_filter_cli[f];
+        char **values = *filter->values;
+        if (values == NULL)
+        {
+            continue;
+        }
+        if (*filter->disable)
+        {
+            fprintf(stderr, "Incompatible options --%s and --no-%s\n",
+                    filter->name, filter->name);
+            return -1;
+        }
+        int count = hb_str_vlen(values);
+        for (int i = 0; i < count; i++)
+        {
+            const char *val = values[i];
+            if (val == NULL || val[0] == 0)
+            {
+                continue;
+            }
+            if (audio_filter_value_is_custom(filter->filter_id, val) < 0)
+            {
+                fprintf(stderr, "Invalid %s option %s\n", filter->name, val);
+                return -1;
+            }
+        }
+    }
+    return 0;
+}
+
+/*
+ * Apply each filter's last per-track value to a stub audio dict. Used when the
+ * preset's AudioList must be grown to cover more CLI tracks than it had: the
+ * stub becomes the template that the new entries are cloned from.
+ */
+static void audio_filters_set_stub(hb_dict_t *audio_dict_stub)
+{
+    for (size_t f = 0; f < AUDIO_FILTER_CLI_COUNT; f++)
+    {
+        const audio_filter_cli_t *filter = &audio_filter_cli[f];
+        char **values = *filter->values;
+        int last = hb_str_vlen(values) - 1;
+        if (last >= 0 && values[last][0] != 0)
+        {
+            audio_filter_array_set(audio_dict_stub, filter->filter_id,
+                                   filter->name, values[last]);
+        }
+    }
+}
+
+/*
+ * Apply each filter's per-track CLI values onto the matching entries of the
+ * preset's AudioList.
+ */
+static void audio_filters_override_tracks(hb_value_array_t *list)
+{
+    for (size_t f = 0; f < AUDIO_FILTER_CLI_COUNT; f++)
+    {
+        const audio_filter_cli_t *filter = &audio_filter_cli[f];
+        char **values = *filter->values;
+        if (hb_str_vlen(values) > 0)
+        {
+            for (int ii = 0; values[ii] != NULL; ii++)
+            {
+                if (values[ii][0] != 0)
+                {
+                    audio_filter_array_set(hb_value_array_get(list, ii),
+                                           filter->filter_id, filter->name,
+                                           values[ii]);
+                }
+            }
+        }
+    }
+}
+
+/*
+ * Strip any disabled filter (--no-<filter>) from every entry of the preset's
+ * AudioList.
+ */
+static void audio_filters_remove_disabled(hb_dict_t *preset)
+{
+    hb_value_array_t *audio_list = hb_dict_get(preset, "AudioList");
+    if (audio_list == NULL)
+    {
+        return;
+    }
+    int len = hb_value_array_len(audio_list);
+    for (int idx = 0; idx < len; idx++)
+    {
+        hb_dict_t *adict = hb_value_array_get(audio_list, idx);
+        for (size_t f = 0; f < AUDIO_FILTER_CLI_COUNT; f++)
+        {
+            const audio_filter_cli_t *filter = &audio_filter_cli[f];
+            if (*filter->disable)
+            {
+                audio_filter_array_remove(adict, filter->name);
+            }
+        }
+    }
+}
+
+/*
+ * Apply each filter's per-track CLI values directly to the job's audio dicts
+ * (the explicit --audio / --all-audio path, which bypasses libhb's preset
+ * audio selection). A single value is replicated across the remaining tracks,
+ * matching --gain / --adither behaviour.
+ */
+static void audio_filters_apply_job(hb_value_array_t *audio_array,
+                                     int track_count)
+{
+    for (size_t f = 0; f < AUDIO_FILTER_CLI_COUNT; f++)
+    {
+        const audio_filter_cli_t *filter = &audio_filter_cli[f];
+        char **values = *filter->values;
+        if (values == NULL)
+        {
+            continue;
+        }
+        int ii = 0;
+        for (; values[ii] != NULL && ii < track_count; ii++)
+        {
+            if (values[ii][0] != 0)
+            {
+                add_audio_filter_to_dict(hb_value_array_get(audio_array, ii),
+                                         filter->filter_id, values[ii]);
+            }
+        }
+        if (values[ii] != NULL)
+        {
+            fprintf(stderr, "Dropping excess %s settings\n", filter->desc);
+        }
+        // If exactly one value was specified, apply it to the rest of the
+        // tracks.
+        if (ii == 1 && values[0][0] != 0) for (; ii < track_count; ii++)
+        {
+            add_audio_filter_to_dict(hb_value_array_get(audio_array, ii),
+                                     filter->filter_id, values[0]);
+        }
     }
 }
 
@@ -2906,24 +3087,12 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             case AUDIO_COMPRESSOR:
-                if (optarg != NULL)
-                {
-                    acompressors = hb_str_vsplit(optarg, ',');
-                }
-                else
-                {
-                    acompressors = hb_str_vsplit(ACOMPRESSOR_DEFAULT_PRESET, ',');
-                }
+                acompressors = hb_str_vsplit(
+                    optarg ? optarg : ACOMPRESSOR_DEFAULT_PRESET, ',');
                 break;
             case AUDIO_GATE:
-                if (optarg != NULL)
-                {
-                    agates = hb_str_vsplit(optarg, ',');
-                }
-                else
-                {
-                    agates = hb_str_vsplit(AGATE_DEFAULT_PRESET, ',');
-                }
+                agates = hb_str_vsplit(
+                    optarg ? optarg : AGATE_DEFAULT_PRESET, ',');
                 break;
             case NORMALIZE_MIX:
                 normalize_mix_level = hb_str_vsplit(optarg, ',');
@@ -3669,53 +3838,9 @@ static int ParseOptions( int argc, char ** argv )
         }
     }
 
-    if (acompressors != NULL)
+    if (check_audio_filter_options() < 0)
     {
-        if (acompressor_disable)
-        {
-            fprintf(stderr,
-                    "Incompatible options --acompressor and --no-acompressor\n");
-            return -1;
-        }
-        int count = hb_str_vlen(acompressors);
-        for (int i = 0; i < count; i++)
-        {
-            const char *val = acompressors[i];
-            if (val == NULL || val[0] == 0)
-            {
-                continue;
-            }
-            if (audio_filter_value_is_custom(HB_AUDIO_FILTER_ACOMPRESSOR,
-                                             val) < 0)
-            {
-                fprintf(stderr, "Invalid acompressor option %s\n", val);
-                return -1;
-            }
-        }
-    }
-
-    if (agates != NULL)
-    {
-        if (agate_disable)
-        {
-            fprintf(stderr,
-                    "Incompatible options --agate and --no-agate\n");
-            return -1;
-        }
-        int count = hb_str_vlen(agates);
-        for (int i = 0; i < count; i++)
-        {
-            const char *val = agates[i];
-            if (val == NULL || val[0] == 0)
-            {
-                continue;
-            }
-            if (audio_filter_value_is_custom(HB_AUDIO_FILTER_AGATE, val) < 0)
-            {
-                fprintf(stderr, "Invalid agate option %s\n", val);
-                return -1;
-            }
-        }
+        return -1;
     }
 
     if (detelecine != NULL)
@@ -4581,20 +4706,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             // Audio compressor / noise gate. libhb/preset.c translates the
             // per-track AudioFilters array into FilterList entries on each
             // audio dict.
-            last = hb_str_vlen(acompressors) - 1;
-            if (last >= 0 && acompressors[last][0] != 0)
-            {
-                audio_filter_array_set(audio_dict_stub,
-                                       HB_AUDIO_FILTER_ACOMPRESSOR,
-                                       AUDIO_COMPRESSOR_NAME,
-                                       acompressors[last]);
-            }
-            last = hb_str_vlen(agates) - 1;
-            if (last >= 0 && agates[last][0] != 0)
-            {
-                audio_filter_array_set(audio_dict_stub, HB_AUDIO_FILTER_AGATE,
-                                       AUDIO_GATE_NAME, agates[last]);
-            }
+            audio_filters_set_stub(audio_dict_stub);
             // Add entries to preset audio list for extra command line options
             for (ii = list_len; ii < count; ii++)
             {
@@ -4751,35 +4863,8 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             }
         }
 
-        // Override command line specified audio compressor filter.
-        if (hb_str_vlen(acompressors) > 0)
-        {
-            for (ii = 0; acompressors[ii] != NULL; ii++)
-            {
-                if (acompressors[ii][0] != 0)
-                {
-                    audio_dict = hb_value_array_get(list, ii);
-                    audio_filter_array_set(audio_dict,
-                                           HB_AUDIO_FILTER_ACOMPRESSOR,
-                                           AUDIO_COMPRESSOR_NAME,
-                                           acompressors[ii]);
-                }
-            }
-        }
-
-        // Override command line specified audio noise gate filter.
-        if (hb_str_vlen(agates) > 0)
-        {
-            for (ii = 0; agates[ii] != NULL; ii++)
-            {
-                if (agates[ii][0] != 0)
-                {
-                    audio_dict = hb_value_array_get(list, ii);
-                    audio_filter_array_set(audio_dict, HB_AUDIO_FILTER_AGATE,
-                                           AUDIO_GATE_NAME, agates[ii]);
-                }
-            }
-        }
+        // Override command line specified audio filters (compressor, gate).
+        audio_filters_override_tracks(list);
 
         // Override command line specified track names
         if (hb_str_vlen(anames) > 0)
@@ -4806,23 +4891,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
 
     if (acompressor_disable || agate_disable)
     {
-        hb_value_array_t *audio_list = hb_dict_get(preset, "AudioList");
-        if (audio_list != NULL)
-        {
-            int len = hb_value_array_len(audio_list);
-            for (int idx = 0; idx < len; idx++)
-            {
-                hb_dict_t *adict = hb_value_array_get(audio_list, idx);
-                if (acompressor_disable)
-                {
-                    audio_filter_array_remove(adict, AUDIO_COMPRESSOR_NAME);
-                }
-                if (agate_disable)
-                {
-                    audio_filter_array_remove(adict, AUDIO_GATE_NAME);
-                }
-            }
-        }
+        audio_filters_remove_disabled(preset);
     }
 
     if (vcodec != NULL)
@@ -5912,63 +5981,8 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             hb_dict_set(audio_dict, "Gain", hb_value_double(gain));
         }
 
-        /* Audio Compressor Filter */
-        ii = 0;
-        if (acompressors)
-        {
-            for (; acompressors[ii] != NULL && ii < track_count; ii++)
-            {
-                if (acompressors[ii][0] != 0)
-                {
-                    audio_dict = hb_value_array_get(audio_array, ii);
-                    add_audio_filter_to_dict(
-                        audio_dict, HB_AUDIO_FILTER_ACOMPRESSOR,
-                        acompressors[ii]);
-                }
-            }
-            if (acompressors[ii] != NULL)
-            {
-                fprintf(stderr, "Dropping excess audio compressor settings\n");
-            }
-        }
-        // If exactly one acompressor was specified, apply it to the rest
-        // of the tracks.
-        if (ii == 1 && acompressors[0][0] != 0) for (; ii < track_count; ii++)
-        {
-            audio_dict = hb_value_array_get(audio_array, ii);
-            add_audio_filter_to_dict(
-                audio_dict, HB_AUDIO_FILTER_ACOMPRESSOR,
-                acompressors[0]);
-        }
-
-        /* Audio Noise Gate Filter */
-        ii = 0;
-        if (agates)
-        {
-            for (; agates[ii] != NULL && ii < track_count; ii++)
-            {
-                if (agates[ii][0] != 0)
-                {
-                    audio_dict = hb_value_array_get(audio_array, ii);
-                    add_audio_filter_to_dict(
-                        audio_dict, HB_AUDIO_FILTER_AGATE,
-                        agates[ii]);
-                }
-            }
-            if (agates[ii] != NULL)
-            {
-                fprintf(stderr, "Dropping excess audio gate settings\n");
-            }
-        }
-        // If exactly one agate was specified, apply it to the rest
-        // of the tracks.
-        if (ii == 1 && agates[0][0] != 0) for (; ii < track_count; ii++)
-        {
-            audio_dict = hb_value_array_get(audio_array, ii);
-            add_audio_filter_to_dict(
-                audio_dict, HB_AUDIO_FILTER_AGATE,
-                agates[0]);
-        }
+        /* Audio Filters (compressor, noise gate) */
+        audio_filters_apply_job(audio_array, track_count);
 
         /* Audio Dither */
         int dither = 0;
