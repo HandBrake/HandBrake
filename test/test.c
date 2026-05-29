@@ -46,26 +46,8 @@
 #include <sys/mount.h>
 #endif
 
-#define LAPSHARP_DEFAULT_PRESET      "medium"
-#define UNSHARP_DEFAULT_PRESET       "medium"
-#define CHROMA_SMOOTH_DEFAULT_PRESET "medium"
-#define BM3D_DEFAULT_PRESET          "default"
-#define NLMEANS_DEFAULT_PRESET       "medium"
-#define YADIF_DEFAULT_PRESET         "default"
-#define BWDIF_DEFAULT_PRESET         "default"
-#define DECOMB_DEFAULT_PRESET        "default"
-#define DETELECINE_DEFAULT_PRESET    "default"
-#define COMB_DETECT_DEFAULT_PRESET   "default"
-#define HQDN3D_DEFAULT_PRESET        "medium"
-#define ROTATE_DEFAULT               "angle=180:hflip=0"
-#define DEBLOCK_DEFAULT_PRESET       "medium"
-#define DEBAND_DEFAULT_PRESET        "default"
-#define COLORSPACE_DEFAULT_PRESET    "bt709"
 #define HDR_DYNAMIC_METADATA_DEFAULT_PRESET "all"
 #define AUDIO_AUTONAMING_BEHAVIOUR_DEFAULT_PRESET "unnamed"
-
-#define ACOMPRESSOR_DEFAULT_PRESET   "default"
-#define AGATE_DEFAULT_PRESET         "default"
 
 /*
  * Per-track audio filter chain. Each AudioList entry has an "AudioFilterList"
@@ -1250,60 +1232,11 @@ static void showFilterKeys(FILE* const out, int filter_id)
 
 static void showFilterDefault(FILE* const out, int filter_id)
 {
-    const char * preset = "default";
+    const char * preset = hb_filter_param_get_default_preset(filter_id);
 
     fprintf(out, "                           Default:\n"
                  "                               ");
-    switch (filter_id)
-    {
-        case HB_FILTER_UNSHARP:
-            preset = UNSHARP_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_LAPSHARP:
-            preset = LAPSHARP_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_CHROMA_SMOOTH:
-            preset = CHROMA_SMOOTH_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_BM3D:
-            preset = BM3D_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_NLMEANS:
-            preset = NLMEANS_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_YADIF:
-            preset = YADIF_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_BWDIF:
-            preset = BWDIF_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_DECOMB:
-            preset = DECOMB_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_DETELECINE:
-            preset = DETELECINE_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_HQDN3D:
-            preset = HQDN3D_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_COMB_DETECT:
-            preset = COMB_DETECT_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_DEBLOCK:
-            preset = DEBLOCK_DEFAULT_PRESET;
-            break;
-        case HB_FILTER_DEBAND:
-            preset = DEBAND_DEFAULT_PRESET;
-            break;
-        case HB_AUDIO_FILTER_ACOMPRESSOR:
-            preset = ACOMPRESSOR_DEFAULT_PRESET;
-            break;
-        case HB_AUDIO_FILTER_AGATE:
-            preset = AGATE_DEFAULT_PRESET;
-            break;
-        default:
-            break;
-    }
+
     switch (filter_id)
     {
         case HB_FILTER_YADIF:
@@ -1353,7 +1286,7 @@ static void showFilterDefault(FILE* const out, int filter_id)
             free(str);
         } break;
         case HB_FILTER_ROTATE:
-            fprintf(out, "%s", ROTATE_DEFAULT);
+            fprintf(out, "%s", hb_filter_param_get_default_preset(HB_FILTER_ROTATE));
             break;
         default:
             break;
@@ -3062,11 +2995,11 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case AUDIO_COMPRESSOR:
                 acompressors = hb_str_vsplit(
-                    optarg ? optarg : ACOMPRESSOR_DEFAULT_PRESET, ',');
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_ACOMPRESSOR), ',');
                 break;
             case AUDIO_GATE:
                 agates = hb_str_vsplit(
-                    optarg ? optarg : AGATE_DEFAULT_PRESET, ',');
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_AGATE), ',');
                 break;
             case NORMALIZE_MIX:
                 normalize_mix_level = hb_str_vsplit(optarg, ',');
@@ -3209,7 +3142,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    yadif = strdup(YADIF_DEFAULT_PRESET);
+                    yadif = strdup(hb_filter_param_get_default_preset(HB_FILTER_YADIF));
                 }
                 break;
             case '7':
@@ -3220,7 +3153,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    deblock = strdup(DEBLOCK_DEFAULT_PRESET);
+                    deblock = strdup(hb_filter_param_get_default_preset(HB_FILTER_DEBLOCK));
                 }
                 break;
             case FILTER_DEBLOCK_TUNE:
@@ -3235,7 +3168,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    hqdn3d = strdup(HQDN3D_DEFAULT_PRESET);
+                    hqdn3d = strdup(hb_filter_param_get_default_preset(HB_FILTER_HQDN3D));
                 }
                 break;
             case FILTER_DEBAND:
@@ -3246,7 +3179,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    deband = strdup(DEBAND_DEFAULT_PRESET);
+                    deband = strdup(hb_filter_param_get_default_preset(HB_FILTER_DEBAND));
                 }
                 break;
             case FILTER_BM3D:
@@ -3257,7 +3190,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    bm3d = strdup(BM3D_DEFAULT_PRESET);
+                    bm3d = strdup(hb_filter_param_get_default_preset(HB_FILTER_BM3D));
                 }
                 break;
             case FILTER_NLMEANS:
@@ -3268,7 +3201,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    nlmeans = strdup(NLMEANS_DEFAULT_PRESET);
+                    nlmeans = strdup(hb_filter_param_get_default_preset(HB_FILTER_NLMEANS));
                 }
                 break;
             case FILTER_NLMEANS_TUNE:
@@ -3283,7 +3216,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    colorspace = strdup(COLORSPACE_DEFAULT_PRESET);
+                    colorspace = strdup(hb_filter_param_get_default_preset(HB_FILTER_COLORSPACE));
                 }
                 break;
             case FILTER_CHROMA_SMOOTH:
@@ -3294,7 +3227,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    chroma_smooth = strdup(CHROMA_SMOOTH_DEFAULT_PRESET);
+                    chroma_smooth = strdup(hb_filter_param_get_default_preset(HB_FILTER_CHROMA_SMOOTH));
                 }
                 break;
             case FILTER_CHROMA_SMOOTH_TUNE:
@@ -3309,7 +3242,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    unsharp = strdup(UNSHARP_DEFAULT_PRESET);
+                    unsharp = strdup(hb_filter_param_get_default_preset(HB_FILTER_UNSHARP));
                 }
                 break;
             case FILTER_UNSHARP_TUNE:
@@ -3324,7 +3257,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    lapsharp = strdup(LAPSHARP_DEFAULT_PRESET);
+                    lapsharp = strdup(hb_filter_param_get_default_preset(HB_FILTER_LAPSHARP));
                 }
                 break;
             case FILTER_LAPSHARP_TUNE:
@@ -3339,7 +3272,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    detelecine = strdup(DETELECINE_DEFAULT_PRESET);
+                    detelecine = strdup(hb_filter_param_get_default_preset(HB_FILTER_DETELECINE));
                 }
                 break;
             case FILTER_COMB_DETECT:
@@ -3350,7 +3283,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    comb_detect = strdup(COMB_DETECT_DEFAULT_PRESET);
+                    comb_detect = strdup(hb_filter_param_get_default_preset(HB_FILTER_COMB_DETECT));
                 }
                 break;
             case '5':
@@ -3361,7 +3294,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    decomb = strdup(DECOMB_DEFAULT_PRESET);
+                    decomb = strdup(hb_filter_param_get_default_preset(HB_FILTER_DECOMB));
                 }
                 break;
             case 'g':
@@ -3375,7 +3308,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    rotate = strdup(ROTATE_DEFAULT);
+                    rotate = strdup(hb_filter_param_get_default_preset(HB_FILTER_ROTATE));
                 }
                 break;
             case KEEP_DISPLAY_ASPECT:
@@ -3669,8 +3602,8 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    bwdif = strdup(BWDIF_DEFAULT_PRESET);
-                } 
+                    bwdif = strdup(hb_filter_param_get_default_preset(HB_FILTER_BWDIF));
+                }
                 break;
 #if HB_PROJECT_FEATURE_QSV
             case QSV_ASYNC_DEPTH:
