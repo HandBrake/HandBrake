@@ -1823,8 +1823,7 @@ static void ShowHelp(void)
 
 "\n"
 "\n"
-"Audio Filters Options --------------------------------------------------------\n"
-"\n"
+"Audio Options ----------------------------------------------------------------\n""\n"
 "       --audio-lang-list <string>\n"
 "                           Specify a comma separated list of audio\n"
 "                           languages you would like to select from the\n"
@@ -1960,6 +1959,27 @@ static void ShowHelp(void)
 "                           Disable the source audio track(s) name(s) passthru.\n"
 "   -A, --aname <string>    Set audio track name(s).\n"
 "                           Separate tracks by commas.\n"
+"\n"
+"\n"
+"Audio Filters Options --------------------------------------------------------\n"
+"\n"
+"       --acompressor[=string]\n"
+"                           Apply a dynamic range compressor to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_ACOMPRESSOR);
+    showFilterKeys(out, HB_AUDIO_FILTER_ACOMPRESSOR);
+    showFilterDefault(out, HB_AUDIO_FILTER_ACOMPRESSOR);
+    fprintf(out,
+"       --no-acompressor    Disable the audio compressor.\n"
+"       --agate[=string]    Apply a noise gate to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_AGATE);
+    showFilterKeys(out, HB_AUDIO_FILTER_AGATE);
+    showFilterDefault(out, HB_AUDIO_FILTER_AGATE);
+    fprintf(out,
+"       --no-agate          Disable the audio noise gate.\n"
 "\n"
 "\n"
 "Picture Options --------------------------------------------------------------\n"
@@ -2172,26 +2192,6 @@ static void ShowHelp(void)
     fprintf( out,
 "   -g, --grayscale         Grayscale encoding\n"
 "   --no-grayscale          Disable preset 'grayscale'\n"
-"\n"
-"-- Audio Filters -------------------------------------------------------------\n"
-"\n"
-"       --acompressor[=string]\n"
-"                           Apply a dynamic range compressor to audio.\n"
-"                           Separate tracks by commas. An empty entry leaves\n"
-"                           the track unaffected.\n");
-    showFilterPresets(out, HB_AUDIO_FILTER_ACOMPRESSOR);
-    showFilterKeys(out, HB_AUDIO_FILTER_ACOMPRESSOR);
-    showFilterDefault(out, HB_AUDIO_FILTER_ACOMPRESSOR);
-    fprintf(out,
-"       --no-acompressor    Disable the audio compressor.\n"
-"       --agate[=string]    Apply a noise gate to audio.\n"
-"                           Separate tracks by commas. An empty entry leaves\n"
-"                           the track unaffected.\n");
-    showFilterPresets(out, HB_AUDIO_FILTER_AGATE);
-    showFilterKeys(out, HB_AUDIO_FILTER_AGATE);
-    showFilterDefault(out, HB_AUDIO_FILTER_AGATE);
-    fprintf(out,
-"       --no-agate          Disable the audio noise gate.\n"
 "\n"
 "\n"
 "Subtitles Options ------------------------------------------------------------\n"
