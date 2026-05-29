@@ -78,8 +78,6 @@
 #define AUDIO_FILTER_NAME_KEY        "AudioFilterName"
 #define AUDIO_FILTER_PRESET_KEY      "AudioFilterPreset"
 #define AUDIO_FILTER_CUSTOM_KEY      "AudioFilterCustom"
-#define AUDIO_COMPRESSOR_NAME        "acompressor"
-#define AUDIO_GATE_NAME              "agate"
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
@@ -1517,9 +1515,9 @@ typedef struct
 
 static const audio_filter_cli_t audio_filter_cli[] =
 {
-    { HB_AUDIO_FILTER_ACOMPRESSOR, AUDIO_COMPRESSOR_NAME, "audio compressor",
+    { HB_AUDIO_FILTER_ACOMPRESSOR, "acompressor", "audio compressor",
       &acompressors, &acompressor_disable },
-    { HB_AUDIO_FILTER_AGATE,       AUDIO_GATE_NAME,       "audio noise gate",
+    { HB_AUDIO_FILTER_AGATE,       "agate",       "audio noise gate",
       &agates,       &agate_disable },
 };
 #define AUDIO_FILTER_CLI_COUNT \
@@ -1892,7 +1890,7 @@ static void ShowHelp(void)
 
 "\n"
 "\n"
-"Audio Options ----------------------------------------------------------------\n"
+"Audio Filters Options --------------------------------------------------------\n"
 "\n"
 "       --audio-lang-list <string>\n"
 "                           Specify a comma separated list of audio\n"
@@ -4865,10 +4863,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     hb_value_string("none"));
     }
 
-    if (acompressor_disable || agate_disable)
-    {
-        audio_filters_remove_disabled(preset);
-    }
+    audio_filters_remove_disabled(preset);
 
     if (vcodec != NULL)
     {
