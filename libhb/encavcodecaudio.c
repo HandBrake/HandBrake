@@ -61,7 +61,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
     // channel count, layout and matrix encoding
     int matrix_encoding;
-    AVChannelLayout in_ch_layout, out_ch_layout;
+    AVChannelLayout in_ch_layout = {0}, out_ch_layout = {0};
 
     av_channel_layout_copy(&in_ch_layout, audio->config.out.ch_layout);
     av_channel_layout_copy(&out_ch_layout, audio->config.out.ch_layout);

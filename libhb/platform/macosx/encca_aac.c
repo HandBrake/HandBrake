@@ -331,7 +331,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     audio->config.out.samples_per_frame = pv->isamples;
 
     // channel remapping
-    AVChannelLayout out_layout;
+    AVChannelLayout out_layout = {0};
     hb_audio_remap_map_channel_layout(&hb_aac_chan_map, &out_layout, audio->config.out.ch_layout);
 
     pv->remap = hb_audio_remap_init(AV_SAMPLE_FMT_FLT,
