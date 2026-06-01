@@ -1190,6 +1190,11 @@ void encavcodecClose( hb_work_object_t * w )
         if( pv->context->codec ) {
             avcodec_flush_buffers( pv->context );
         }
+        if (pv->context->stats_in)
+        {
+            free(pv->context->stats_in);
+            pv->context->stats_in = NULL;
+        }
         hb_avcodec_free_context(&pv->context);
     }
     if( pv->file )
