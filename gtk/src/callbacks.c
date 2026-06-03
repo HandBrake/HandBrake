@@ -1461,10 +1461,21 @@ hide_scan_progress(signal_user_data_t *ud)
 }
 
 static void
+amf_hw_decode_from_prefs (signal_user_data_t *ud, int *hw_decoder)
+{
+    *hw_decoder = 0;
+    if (ghb_dict_get_bool(ud->prefs, "AmfHwDecode"))
+    {
+        *hw_decoder = HB_DECODE_AMFDEC;
+    }
+}
+
+static void
 start_scan (signal_user_data_t *ud, const char *path, int title_id, int preview_count)
 {
     GtkWidget *widget;
     ghb_status_t status;
+    int hw_decoder;
 
     ghb_get_status(&status);
     if (status.scan.state != GHB_STATE_IDLE)
@@ -1477,10 +1488,11 @@ start_scan (signal_user_data_t *ud, const char *path, int title_id, int preview_
     widget = ghb_builder_widget("sourcetoolmenubutton");
     gtk_widget_set_sensitive(widget, false);
     gboolean limit_max_duration = ghb_dict_get_bool(ud->prefs, "LimitMaxDuration");
+    amf_hw_decode_from_prefs(ud, &hw_decoder);
     ghb_backend_scan(path, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"),
             limit_max_duration ? 90000L * ghb_dict_get_int(ud->prefs, "MaxTitleDuration") : 0,
-            ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
+            hw_decoder, ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
 }
 
 static void
@@ -1488,6 +1500,7 @@ start_scan_list (signal_user_data_t *ud, GListModel *files, int title_id, int pr
 {
     GtkWidget *widget;
     ghb_status_t status;
+    int hw_decoder;
 
     ghb_get_status(&status);
     if (status.scan.state != GHB_STATE_IDLE)
@@ -1500,10 +1513,11 @@ start_scan_list (signal_user_data_t *ud, GListModel *files, int title_id, int pr
     widget = ghb_builder_widget("sourcetoolmenubutton");
     gtk_widget_set_sensitive(widget, false);
     gboolean limit_max_duration = ghb_dict_get_bool(ud->prefs, "LimitMaxDuration");
+    amf_hw_decode_from_prefs(ud, &hw_decoder);
     ghb_backend_scan_list(files, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"),
             limit_max_duration ? 90000L * ghb_dict_get_int(ud->prefs, "MaxTitleDuration") : 0,
-            ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
+            hw_decoder, ghb_dict_get_bool(ud->prefs, "KeepDuplicateTitles"));
 }
 
 gboolean
@@ -2389,6 +2403,11 @@ ghb_update_summary_info(signal_user_data_t *ud)
     else if (ghb_dict_get_bool(ud->settings, "VideoFramerateVFR"))
     {
         g_string_append_printf(str, " %s", _("VFR"));
+    }
+
+    if (strstr(video_encoder->name, "(AMD VCE)") != NULL && ghb_dict_get_bool(ud->prefs, "AmfHwDecode"))
+    {
+        g_string_append_printf(str, " %s", _("AMF Decoder"));
     }
 
     // Audio Tracks (show at most 3 tracks)
@@ -5229,6 +5248,10 @@ when_complete_changed_cb (GtkWidget *widget, gpointer data)
 
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
+    if (strcmp(name, "AmfHwDecode") == 0)
+    {
+        ghb_update_summary_info(ud);
+    }
     ghb_prefs_store();
 }
 

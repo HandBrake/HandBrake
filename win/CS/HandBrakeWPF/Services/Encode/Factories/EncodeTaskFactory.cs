@@ -117,6 +117,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             bool nvdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
+            bool amfdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableAmfDecSupport);
             bool directx = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
 
             int hwDecode = 0;
@@ -124,8 +125,11 @@ namespace HandBrakeWPF.Services.Encode.Factories
             {
                 hwDecode = (int)NativeConstants.HB_DECODE_NVDEC;
             }
-
-            if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
+            if (amfdec && HandBrakeHardwareEncoderHelper.IsAMFDecAvailable)
+            {
+                hwDecode = (int)NativeConstants.HB_DECODE_AMFDEC;
+            }
+            else if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
             {
                 hwDecode = (int)NativeConstants.HB_DECODE_MF;
             }
@@ -320,7 +324,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.HardwareDecode = NativeConstants.HB_DECODE_NVDEC;
             }
 
-            if (HandBrakeHardwareEncoderHelper.IsDirectXAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding))
+            //use AMFDec to scan and detect format
+            if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsAMFDecAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableAmfDecSupport) && job.VideoEncoder.IsVCN)
+            {
+                video.HardwareDecode = NativeConstants.HB_DECODE_AMFDEC | NativeConstants.HB_DECODE_FORCE_HW;
+            }
+            else if (HandBrakeHardwareEncoderHelper.IsDirectXAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding))
             {
                 video.HardwareDecode = NativeConstants.HB_DECODE_MF | NativeConstants.HB_DECODE_FORCE_HW;
             }

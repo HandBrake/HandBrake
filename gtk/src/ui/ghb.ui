@@ -5932,6 +5932,41 @@ battery is charged.</property>
                 </child>
                 <child>
                   <object class="GtkStackPage">
+                    <property name="title" translatable="yes">Video</property>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">2</property>
+                        <property name="margin-top">6</property>
+                        <property name="margin-bottom">6</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="halign">start</property>
+                            <property name="margin-start">4</property>
+                            <property name="margin-top">4</property>
+                            <property name="margin-bottom">4</property>
+                            <property name="label" translatable="yes">Hardware Support</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"></attribute>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="AmfHwDecode">
+                            <property name="label" translatable="yes">Prefer AMD AMFDec for decoding with AMD VCE encoders</property>
+                            <property name="focusable">1</property>
+                            <property name="tooltip-text" translatable="yes">Enable to prioritize AMD AMF for video decoding when using AMD VCE encoders.</property>
+                            <property name="halign">start</property>
+                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
                     <property name="title" translatable="yes">Advanced</property>
                     <property name="child">
                       <object class="GtkBox" id="vbox1">
@@ -7252,4 +7287,3 @@ DRC allows you to &apos;compress&apos; the range by making loud sounds softer an
     </widgets>
   </object>
 </interface>
-
