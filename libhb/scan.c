@@ -967,6 +967,13 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
             hb_buffer_close( &vid_buf );
             continue;
         }
+
+        // If scan produced a preview while using the requested hardware
+        // decoder, keep it marked as supported for the encode job.
+        if (hwaccel != NULL && hw_device_ctx != NULL)
+        {
+            vid_info.video_decode_support |= hwaccel->id;
+        }
         remember_info( info_list, &vid_info );
 
         /* Check preview for interlacing artifacts */
@@ -1410,9 +1417,10 @@ skip_preview:
 
         if (title->video_decode_support != HB_DECODE_SW)
         {
-            hb_log("scan: supported video decoders:%s%s%s",
+            hb_log("scan: supported video decoders:%s%s%s%s",
                    !(title->video_decode_support & HB_DECODE_SW)      ? "" : " avcodec",
                    !(title->video_decode_support & HB_DECODE_QSV)     ? "" : " qsv",
+                   !(title->video_decode_support & HB_DECODE_AMFDEC)  ? "" : " amfdec",
                    !(title->video_decode_support & HB_DECODE_HWACCEL) ? "" : " hwaccel");
         }
 

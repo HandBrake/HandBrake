@@ -2039,7 +2039,7 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
 
 int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
 {
-    hb_dict_t    *dest_dict, *video_dict;
+    hb_dict_t    *dest_dict, *source_dict, *video_dict;
     hb_value_t   *value, *vcodec_value;
     int           mux, vcodec, vqtype, color_matrix_code;
     const char   *color_range;
@@ -2074,7 +2074,8 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         return -1;
     }
 
-    video_dict = hb_dict_get(job_dict, "Video");
+    source_dict = hb_dict_get(job_dict, "Source");
+    video_dict  = hb_dict_get(job_dict, "Video");
     hb_dict_set(video_dict, "Encoder", hb_value_string(encoder->short_name));
 
     color_matrix_code = hb_value_get_int(hb_dict_get(preset, "VideoColorMatrixCodeOverride"));
@@ -2224,7 +2225,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
 
     if ((value = hb_dict_get(preset, "VideoHWDecode")) != NULL)
     {
-        hb_dict_set(video_dict, "HardwareDecode", hb_value_xform(value, HB_VALUE_TYPE_INT));
+        hb_dict_set(source_dict, "HWDecode", hb_value_xform(value, HB_VALUE_TYPE_INT));
     }
     if ((value = hb_dict_get(preset, "VideoAsyncDepth")) != NULL)
     {

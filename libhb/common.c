@@ -610,6 +610,9 @@ static void hb_common_global_hw_init()
 #if HB_PROJECT_FEATURE_VCE
     hb_vce_h264_available();
 #endif
+#if HB_PROJECT_FEATURE_AMFDEC
+    hb_register_hwaccel(&hb_hwaccel_amfdec);
+#endif
 #if HB_PROJECT_FEATURE_MF
     hb_directx_available();
     hb_register_hwaccel(&hb_hwaccel_mf);
