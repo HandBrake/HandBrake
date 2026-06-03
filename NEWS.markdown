@@ -19,7 +19,49 @@ Download available from Microsoft:
 
 - Renamed "7.1 (5F/2R/LFE)" mixdown to "7.1 (SDDS)" (speaker layout used by Sony Dynamic Digital Sound)
 
+
 ## HandBrake 1.11.2
+
+### All platforms
+
+#### Video
+
+- Fixed a crash that happened when doing a 2-pass lossless x265 encode
+
+#### Audio
+
+- Updated the list of supported dithers and encoders combinations
+- Fixed the Core Audio AAC encoder 7.1 channel layout
+
+#### Subtitles
+
+- Fixed the VobSub palette creation in the MP4 container
+
+#### Build system
+
+- Improved build system compatibility with older build tools
+
+#### Third-party libraries
+
+- Updated libraries
+  - FFmpeg 8.0.2 (decoding and filters)
+  - SVT-AV1 4.1.0 (AV1 video encoding)
+
+### Linux
+
+- Added WebM MIME type to the list of the supported formats
+  
+### Mac
+
+- Improved handling of unsupported presets
+
+### Windows
+
+- Improved handling of unsupported presets
+- Improved queue low space behaviour
+- Fixed the automatic audio track name generation
+- Fixed the summary description of HDR video
+
 
 ## HandBrake 1.11.1
 

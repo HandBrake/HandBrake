@@ -66,7 +66,7 @@ namespace HandBrakeWPF.Services.Presets
         {
             get
             {
-                return this.flatPresetDict.Values.FirstOrDefault(p => p.IsDefault);
+                return this.flatPresetDict.Values.FirstOrDefault(p => p.IsDefault && !p.IsPresetDisabled);
             }
         }
 

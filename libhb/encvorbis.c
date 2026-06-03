@@ -130,7 +130,7 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
     pv->list = hb_list_init();
 
     // channel remapping
-    AVChannelLayout out_layout;
+    AVChannelLayout out_layout = {0};
     hb_audio_remap_map_channel_layout(&hb_vorbis_chan_map, &out_layout, audio->config.out.ch_layout);
 
     hb_audio_remap_build_table(&out_layout,

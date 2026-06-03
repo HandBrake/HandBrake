@@ -132,7 +132,7 @@ aac_channel_layout_map[] =
 {
     { AV_CHANNEL_LAYOUT_MONO,              kAudioChannelLayoutTag_Mono },
     { AV_CHANNEL_LAYOUT_STEREO,            kAudioChannelLayoutTag_Stereo },
-    { AV_CHANNEL_LAYOUT_QUAD,              kAudioChannelLayoutTag_AAC_Quadraphonic },
+    { AV_CHANNEL_LAYOUT_2_2,               kAudioChannelLayoutTag_AAC_Quadraphonic },
     { AV_CHANNEL_LAYOUT_OCTAGONAL,         kAudioChannelLayoutTag_AAC_Octagonal },
     { AV_CHANNEL_LAYOUT_SURROUND,          kAudioChannelLayoutTag_AAC_3_0 },
     { AV_CHANNEL_LAYOUT_4POINT0,           kAudioChannelLayoutTag_AAC_4_0 },
@@ -141,7 +141,7 @@ aac_channel_layout_map[] =
     { AV_CHANNEL_LAYOUT_6POINT0,           kAudioChannelLayoutTag_AAC_6_0 },
     { AV_CHANNEL_LAYOUT_6POINT1,           kAudioChannelLayoutTag_AAC_6_1 },
     { AV_CHANNEL_LAYOUT_7POINT0,           kAudioChannelLayoutTag_AAC_7_0 },
-    { AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK, kAudioChannelLayoutTag_AAC_7_1 },
+    { AV_CHANNEL_LAYOUT_7POINT1_WIDE,      kAudioChannelLayoutTag_AAC_7_1 },
     { AV_CHANNEL_LAYOUT_7POINT1,           kAudioChannelLayoutTag_AAC_7_1_B },
 };
 static int aac_channel_layout_map_count = sizeof(aac_channel_layout_map) / sizeof(aac_channel_layout_map[0]);
@@ -331,7 +331,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     audio->config.out.samples_per_frame = pv->isamples;
 
     // channel remapping
-    AVChannelLayout out_layout;
+    AVChannelLayout out_layout = {0};
     hb_audio_remap_map_channel_layout(&hb_aac_chan_map, &out_layout, audio->config.out.ch_layout);
 
     pv->remap = hb_audio_remap_init(AV_SAMPLE_FMT_FLT,

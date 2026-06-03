@@ -1453,6 +1453,26 @@ hb_filter_param_t* hb_filter_param_get_tunes(int filter_id)
     return filter_param_get_tunes_internal(filter_id, NULL);
 }
 
+const char * hb_filter_param_get_default_preset(int filter_id)
+{
+    switch (filter_id)
+    {
+        case HB_FILTER_UNSHARP:
+        case HB_FILTER_LAPSHARP:
+        case HB_FILTER_CHROMA_SMOOTH:
+        case HB_FILTER_NLMEANS:
+        case HB_FILTER_HQDN3D:
+        case HB_FILTER_DEBLOCK:
+            return "medium";
+        case HB_FILTER_COLORSPACE:
+            return "bt709";
+        case HB_FILTER_ROTATE:
+            return "angle=180:hflip=0";
+        default:
+            return "default";
+    }
+}
+
 // Get json array of filter preset name and short_name
 char * hb_filter_get_presets_json(int filter_id)
 {
