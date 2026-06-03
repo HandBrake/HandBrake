@@ -643,8 +643,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     "s:{s:o, s:o, s:o, s:o, s:o},"
     // PAR {Num, Den}
     "s:{s:o, s:o},"
-    // Video {Encoder, HardwareDecode, AdapterIndex, AsyncDepth}
-    "s:{s:o, s:o, s:o, s:o},"
+    // Video {Encoder, AdapterIndex, AsyncDepth}
+    "s:{s:o, s:o, s:o},"
     // Audio {CopyMask, FallbackEncoder, AudioList []}
     "s:{s:[], s:o, s:[]},"
     // Subtitles {Search {Enable, Forced, Default, Burn}, SubtitleList []}
@@ -672,7 +672,6 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "Den",              hb_value_int(job->par.den),
         "Video",
             "Encoder",          hb_value_int(job->vcodec),
-            "HardwareDecode",   hb_value_int(job->hw_decode),
             "AdapterIndex",     hb_value_int(job->hw_device_index),
             "AsyncDepth",       hb_value_int(job->hw_device_async_depth),
         "Audio",
@@ -1148,6 +1147,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
 
     int title_index, hw_decode, keep_duplicate_titles;
     const char *path = NULL;
+    hw_decode = 0;
 
     result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i, s?i, s?b}}",
                             "Source",
@@ -1155,16 +1155,13 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
                                 "Title",    unpack_i(&title_index),
                                 "HWDecode", unpack_i(&hw_decode),
                                 "KeepDuplicateTitles", unpack_b(&keep_duplicate_titles)
-                           );
+                        );
     if (result < 0)
     {
         hb_error("json unpack failure, failed to find title: %s", error.text);
         hb_value_free(&dict);
         return;
     }
-
-    // If the job wants to use Hardware decode, it must also be
-    // enabled during scan.  So enable it here.
     hb_list_t *file_paths = hb_list_init();
     hb_list_add(file_paths, (char *)path);
     hb_scan(h, file_paths, title_index, -1, 0, 0, 0, 0, 0, NULL, hw_decode, keep_duplicate_titles);
@@ -1264,8 +1261,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //              ChapterMarkers, ChapterList,
     //              Options {Optimize, IpodAtom}}
     "s:{s?s, s:o, s?b, s?b, s:b, s?o s?{s?b, s?b}},"
-    // Source {Angle, KeepDuplicateTitles, Range {Type, Start, End, SeekPoints}}
-    "s:{s?i, s?b, s?{s:s, s?I, s?I, s?I}},"
+    // Source {Angle, HWDecode, KeepDuplicateTitles, Range {Type, Start, End, SeekPoints}}
+    "s:{s?i, s?i, s?b, s?{s:s, s?I, s?I, s?I}},"
     // PAR {Num, Den}
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
@@ -1278,7 +1275,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //       SphericalMapping
     //       Stereo3D
     //       ColorPrimariesOverride, ColorTransferOverride, ColorMatrixOverride,
-    //       HardwareDecode, AdapterIndex, AsyncDepth
+    //       AdapterIndex, AsyncDepth
     "s:{s:o, s?F, s?i, s?s, s?s, s?s, s?s, s?s,"
     "   s?b, s?b, s?i,"
     "   s?i, s?i, s?i,"
@@ -1289,7 +1286,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "   s?o,"
     "   s?o,"
     "   s?i, s?i, s?i,"
-    "   s?i, s?i, s?i},"
+    "   s?i, s?i},"
     // Audio {CopyMask, FallbackEncoder, AudioList}
     "s?{s?o, s?o, s?o},"
     // Subtitle {Search {Enable, Forced, Default, Burn, ExternalFilename}, SubtitleList}
@@ -1314,6 +1311,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 "IpodAtom",         unpack_b(&job->ipod_atom),
         "Source",
             "Angle",                unpack_i(&job->angle),
+            "HWDecode",             unpack_i(&job->hw_decode),
             "KeepDuplicateTitles",  unpack_b(&job->keep_duplicate_titles),
             "Range",
                 "Type",             unpack_s(&range_type),
@@ -1350,7 +1348,6 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ColorPrimariesOverride", unpack_i(&job->color_prim_override),
             "ColorTransferOverride",  unpack_i(&job->color_transfer_override),
             "ColorMatrixOverride",    unpack_i(&job->color_matrix_override),
-            "HardwareDecode",         unpack_i(&job->hw_decode),
             "AdapterIndex",           unpack_i(&job->hw_device_index),
             "AsyncDepth",             unpack_i(&job->hw_device_async_depth),
         "Audio",

@@ -19,7 +19,6 @@
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
 #endif
-
 #ifdef __APPLE__
 #include "platform/macosx/vt_common.h"
 #endif
@@ -2567,4 +2566,3 @@ static void filter_loop( void * _f )
             hb_buffer_close( &buf_in );
     }
 }
-

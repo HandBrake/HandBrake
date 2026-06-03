@@ -1444,7 +1444,7 @@ int reinit_video_filters(hb_work_private_t * pv)
         }
         else
 #endif
-        if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_CUDA)
+        if (pv->frame->hw_frames_ctx && pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_CUDA)
         {
             if (color_range != pv->frame->color_range)
             {
@@ -1465,6 +1465,13 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
             hb_avfilter_append_dict(filters, "scale_d3d11", settings);
         }
+#if HB_PROJECT_FEATURE_AMFDEC
+        else if (pv->frame->hw_frames_ctx && pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE)
+        {
+            hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
+            hb_avfilter_append_dict(filters, "vpp_amf", settings);
+        }
+#endif
         else if (hb_av_can_use_zscale(pv->frame->format,
                                       pv->frame->width, pv->frame->height,
                                       orig_width, orig_height))
@@ -1696,6 +1703,7 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
     AVPacket *avp = pv->pkt;
     reordered_data_t * reordered;
     AVFrame *recv_frame = pv->frame;
+    int send_packet = 1;
 
     if (pv->hw_frame)
     {
@@ -1750,24 +1758,35 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
         hb_buffer_close(&pv->palette);
     }
 
-    ret = avcodec_send_packet(pv->context, avp);
-    av_packet_unref(avp);
-    if (ret < 0 && ret != AVERROR_EOF)
-    {
-        ++pv->decode_errors;
-        return 0;
-    }
-
     do
     {
+        if (send_packet)
+        {
+            send_packet = 0;
+            ret = avcodec_send_packet(pv->context, avp);
+            if (ret == AVERROR(EAGAIN))
+            {
+                send_packet = 1; // input is full: receive frame and repeat send
+                av_packet_unref(avp);
+                ret = 0;
+                continue;
+            }
+            if (ret < 0)
+            {
+                ++pv->decode_errors;
+                break;
+            }
+        }
         ret = avcodec_receive_frame(pv->context, recv_frame);
         if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
         {
             ++pv->decode_errors;
-        }
-        if (ret < 0)
-        {
             break;
+        }
+        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
+        {
+            av_packet_unref(avp);
+            continue;
         }
         got_picture = 1;
 
@@ -1787,11 +1806,12 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
             else
             {
                 // HWAccel falled back to the software decoder
-                av_frame_ref(pv->frame, pv->hw_frame);
+                ret = av_frame_ref(pv->frame, pv->hw_frame);
                 av_frame_unref(pv->hw_frame);
                 if (ret < 0)
                 {
                     hb_error("decavcodec: error hwaccel copying frame");
+                    break;
                 }
             }
         }
@@ -1799,7 +1819,7 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
         // recompute the frame/field duration, because sometimes it changes
         compute_frame_duration( pv );
         filter_video(pv);
-    } while (ret >= 0);
+    } while (ret >= 0 || send_packet);
 
     if ( global_verbosity_level <= 1 )
     {
@@ -1812,7 +1832,7 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
 
 static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 {
-
+    AVDictionary * av_opts = NULL;
     hb_work_private_t *pv = calloc( 1, sizeof( hb_work_private_t ) );
 
     w->private_data = pv;
@@ -1874,7 +1894,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                                   ic->streams[pv->title->video_id]->codecpar);
 
         // Set decoder opts
-        AVDictionary * av_opts = NULL;
         if (pv->title->flags & HBTF_NO_IDR)
         {
             av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
@@ -1898,6 +1917,17 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         if (w->hw_accel && w->hw_accel->type == AV_HWDEVICE_TYPE_D3D11VA)
         {
            pv->context->extra_hw_frames = 30;
+        }
+#endif
+
+#if HB_PROJECT_FEATURE_AMFDEC
+        if (w->hw_accel && w->hw_accel->type == AV_HWDEVICE_TYPE_AMF)
+        {
+            if (job && job->hw_pix_fmt != AV_PIX_FMT_NONE)
+            {
+                hb_hwaccel_hwframes_ctx_init(pv->context, job->input_pix_fmt, job->hw_pix_fmt);
+            }
+
         }
 #endif
 

@@ -278,6 +278,7 @@ namespace HandBrakeWPF.Services.Scan
                 List<string> excludedExtensions = this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions);
 
                 bool nvdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
+                bool amfdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableAmfDecSupport);
                 bool directx = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
 
                 int hwDecode = 0;
@@ -285,7 +286,11 @@ namespace HandBrakeWPF.Services.Scan
                 {
                     hwDecode = (int)NativeConstants.HB_DECODE_NVDEC;
                 }
-                if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
+                if (amfdec && HandBrakeHardwareEncoderHelper.IsAMFDecAvailable)
+                {
+                    hwDecode = (int)NativeConstants.HB_DECODE_AMFDEC;
+                }
+                else if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
                 {
                     hwDecode = (int)NativeConstants.HB_DECODE_MF;
                 }
