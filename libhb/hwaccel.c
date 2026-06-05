@@ -10,6 +10,7 @@
 #include "handbrake/hwaccel.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/qsv_common.h"
+#include "handbrake/vce_common.h"
 
 static hb_buffer_t * upload(void *hw_frames_ctx, hb_buffer_t **buf_in)
 {
@@ -328,7 +329,13 @@ int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx,
         frames_hwctx->frame_type = MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET;
     }
 #endif
-
+#if HB_PROJECT_FEATURE_AMFDEC
+    if (hw_pix_fmt == AV_PIX_FMT_AMF_SURFACE)
+    {
+        ctx->extra_hw_frames = HB_VCE_FFMPEG_EXTRA_HW_FRAMES;
+        frames_ctx->initial_pool_size = HB_VCE_FFMPEG_INITIAL_POOL_SIZE;
+    }
+#endif
     if (av_hwframe_ctx_init(ctx->hw_frames_ctx) != 0)
     {
         hb_error("hwaccel: failed to initialize hw frames context - av_hwframe_ctx_init");

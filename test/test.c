@@ -1813,8 +1813,14 @@ static void ShowHelp(void)
 "   --enable-hw-decoding <string>                                        \n"
 #if defined( __APPLE_CC__ )
 "                           Use 'videotoolbox' to enable VideoToolbox    \n"
-#else
+#endif
+#if HB_PROJECT_FEATURE_AMFDEC
+"                           Use 'amfdec' to enable AMFdec                \n"
+#endif
+#if HB_PROJECT_FEATURE_NVDEC
 "                           Use 'nvdec' to enable NVDec                  \n"
+#endif
+#if HB_PROJECT_FEATURE_QSV
 "                           Use 'qsv' to enable QSV decoding             \n"
 #endif
 "   --disable-hw-decoding   Disable hardware decoding of the video track,\n"
@@ -3646,6 +3652,12 @@ static int ParseOptions( int argc, char ** argv )
                     {
                         hw_decode = HB_DECODE_MF;
                     }
+#if HB_PROJECT_FEATURE_AMFDEC
+                    else if (!strcmp(optarg, "amfdec"))
+                    {
+                        hw_decode = HB_DECODE_AMFDEC;
+                    }
+#endif
                     else
                     {
                         hw_decode = 0;
