@@ -10,9 +10,13 @@
 #ifndef HANDBRAKE_VCE_COMMON_H
 #define HANDBRAKE_VCE_COMMON_H
 
+#define HB_VCE_FFMPEG_INITIAL_POOL_SIZE (0)
+#define HB_VCE_FFMPEG_EXTRA_HW_FRAMES (50)
+
 int            hb_vce_h264_available();
 int            hb_vce_h265_available();
 int            hb_vce_av1_available();
+int            hb_check_amfdec_available();
 
 static const char * const hb_vce_preset_names[] = { "speed", "balanced", "quality", NULL, };
 
