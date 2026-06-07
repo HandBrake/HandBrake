@@ -49,7 +49,7 @@ Download available from Microsoft:
 ### Windows
 
 - Improved handling of unsupported presets
-- Improved queue low space behaviour
+- Improved queue low space pause behaviour
 - Fixed the automatic audio track name generation
 - Fixed the summary description of HDR video
 
