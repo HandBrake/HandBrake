@@ -251,6 +251,18 @@ static hb_filter_param_t acompressor_presets[] =
     { 3, "Default",            "default",
       "level-in=1:mode=0:threshold=0.125:ratio=2:attack=20:release=250:"
       "makeup=1:knee=2.82843:link=0:detection=1:level-sc=1:mix=1"        },
+    { 4, "Light",              "light",
+      "level-in=1:mode=0:threshold=0.177:ratio=2:attack=20:release=250:"
+      "makeup=1:knee=2.82843:link=0:detection=1:level-sc=1:mix=1"        },
+    { 5, "Moderate",           "moderate",
+      "level-in=1:mode=0:threshold=0.125:ratio=3:attack=20:release=250:"
+      "makeup=1.41:knee=2.82843:link=0:detection=1:level-sc=1:mix=1"     },
+    { 6, "Strong",             "strong",
+      "level-in=1:mode=0:threshold=0.063:ratio=4:attack=10:release=250:"
+      "makeup=1:knee=2.82843:link=0:detection=1:level-sc=1:mix=1"        },
+    { 7, "Night Mode",         "nightmode",
+      "level-in=1:mode=0:threshold=0.063:ratio=4:attack=10:release=200:"
+      "makeup=2.2:knee=2.82843:link=0:detection=1:level-sc=1:mix=1"      },
     { 0,  NULL,                NULL,           NULL             },
 };
 
@@ -259,6 +271,15 @@ static hb_filter_param_t agate_presets[] =
     { 1, "Custom",             "custom",       NULL             },
     { 3, "Default",            "default",
          "level-in=1:mode=0:range=0.06125:threshold=0.125:ratio=2:attack=20:"
+         "release=250:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
+    { 4, "Light",              "light",
+         "level-in=1:mode=0:range=0.125:threshold=0.016:ratio=2:attack=20:"
+         "release=400:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
+    { 5, "Moderate",           "moderate",
+         "level-in=1:mode=0:range=0.063:threshold=0.032:ratio=2:attack=15:"
+         "release=300:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
+    { 6, "Strong",             "strong",
+         "level-in=1:mode=0:range=0.032:threshold=0.063:ratio=2:attack=10:"
          "release=250:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
     { 0,  NULL,                NULL,           NULL             },
 };
