@@ -18,6 +18,7 @@ Download available from Microsoft:
 #### Video
 
 - Fixed a crash that happened when doing a 2-pass lossless x265 encode
+- Fixed a memory leak that happened when doing a 2-pass MPEG-4/MPEG-2/VP9/FFV1 encode
 
 #### Audio
 
@@ -45,6 +46,7 @@ Download available from Microsoft:
 ### Mac
 
 - Improved handling of unsupported presets
+- Updated Sparkle automatic update library
 
 ### Windows
 
