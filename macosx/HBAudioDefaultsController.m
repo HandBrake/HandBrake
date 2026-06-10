@@ -45,6 +45,7 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
                             forKeyPath:@"selectedObjects"
                                options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                                context:HBAudioDefaultsContext];
+    self.window.preventsApplicationTerminationWhenModal = NO;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

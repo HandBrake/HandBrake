@@ -90,6 +90,8 @@
     [self.rangeView addSubview:self.selectionRangeController.view];
 
     self.selectionRangeController.range.undo = self.window.undoManager;
+
+    self.window.preventsApplicationTerminationWhenModal = NO;
 }
 
 - (IBAction)enable:(id)sender

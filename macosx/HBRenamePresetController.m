@@ -36,8 +36,6 @@
 
 - (void)windowDidLoad
 {
-    [super windowDidLoad];
-
     self.name.placeholderString = self.preset.name;
     self.name.stringValue = self.preset.name;
 
@@ -47,6 +45,8 @@
     [NSNotificationCenter.defaultCenter addObserver:self
                                            selector:@selector(controlTextDidChange:)
                                                name:NSControlTextDidChangeNotification object:self.name];
+
+    self.window.preventsApplicationTerminationWhenModal = NO;
 }
 
 - (void)dealloc

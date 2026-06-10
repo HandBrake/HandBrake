@@ -60,8 +60,6 @@
 
 - (void)windowDidLoad
 {
-    [super windowDidLoad];
-
     // Build the categories menu, and select the last used or the first
     [self buildCategoriesMenu];
     if ([self.categories indexOfItemWithTag:2] == -1)
@@ -118,6 +116,8 @@
     [self.picWidth setIntValue:self.width];
     [self.picHeight setIntValue:self.height];
     [self addPresetPicDropdownChanged:nil];
+
+    self.window.preventsApplicationTerminationWhenModal = NO;
 }
 
 /**
