@@ -252,7 +252,7 @@ static hb_filter_param_t acompressor_presets[] =
       "level-in=1:mode=0:threshold=0.125:ratio=2:attack=20:release=250:"
       "makeup=1:knee=2.82843:link=0:detection=1:level-sc=1:mix=1"        },
     { 4, "Light",              "light",
-      "level-in=1:mode=0:threshold=0.177:ratio=2:attack=20:release=250:"
+      "level-in=1:mode=0:threshold=0.177:ratio=1.5:attack=20:release=250:"
       "makeup=1:knee=2.82843:link=0:detection=1:level-sc=1:mix=1"        },
     { 5, "Moderate",           "moderate",
       "level-in=1:mode=0:threshold=0.125:ratio=3:attack=20:release=250:"
