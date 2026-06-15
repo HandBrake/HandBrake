@@ -1973,7 +1973,8 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     // Deband
     const char * deband_preset = hb_value_get_string(
                                 hb_dict_get(preset, "PictureDebandPreset"));
-    if (deband_preset != NULL)
+    if (deband_preset != NULL &&
+        strcasecmp(deband_preset, "off"))
     {
         const char * deband_custom = hb_value_get_string(
                                 hb_dict_get(preset, "PictureDebandCustom"));

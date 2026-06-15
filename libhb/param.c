@@ -48,6 +48,7 @@ static hb_filter_param_t bm3d_presets[] =
 
 static hb_filter_param_t deband_presets[] =
 {
+    { 0, "Off",     "off",     NULL },
     { 1, "Custom",  "custom",  NULL },
     { 2, "Default", "default",
       "1thr=0.02:2thr=0.02:3thr=0.02:4thr=0.02:range=16:blur=1" },

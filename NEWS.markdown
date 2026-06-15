@@ -27,6 +27,7 @@ Download available from Microsoft:
 #### Video
 
 - Fixed a crash that happened when doing a 2-pass lossless x265 encode
+- Fixed a memory leak that happened when doing a 2-pass MPEG-4/MPEG-2/VP9/FFV1 encode
 
 #### Audio
 
@@ -50,15 +51,16 @@ Download available from Microsoft:
 ### Linux
 
 - Added WebM MIME type to the list of the supported formats
-  
+
 ### Mac
 
 - Improved handling of unsupported presets
+- Updated Sparkle automatic update library
 
 ### Windows
 
 - Improved handling of unsupported presets
-- Improved queue low space behaviour
+- Improved queue low space pause behaviour
 - Fixed the automatic audio track name generation
 - Fixed the summary description of HDR video
 

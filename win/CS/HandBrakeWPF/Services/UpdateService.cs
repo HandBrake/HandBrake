@@ -107,7 +107,12 @@ namespace HandBrakeWPF.Services
 
                         // Further parse the information
                         string build = reader.Build;
-                        int latest = int.Parse(build);
+
+                        int latest = 0;
+                        if (!int.TryParse(build, out latest))
+                        {
+                            throw new Exception("Build Information not available");
+                        }
 
                         // Security Check
                         // Verify the download URL is for handbrake.fr and served over https.
@@ -115,7 +120,9 @@ namespace HandBrakeWPF.Services
                         // The download itself will also be checked against a signature later. 
                         Uri uriResult;
                         bool result = Uri.TryCreate(reader.DownloadFile, UriKind.Absolute, out uriResult) && uriResult.Scheme == Uri.UriSchemeHttps;
-                        if (!result || (uriResult.Host != "handbrake.fr" && uriResult.Host != "download.handbrake.fr" && uriResult.Host != "github.com"))
+
+                        bool isHandBrakeGitHub = uriResult.Host == "github.com" && uriResult.AbsolutePath.StartsWith("/HandBrake/", StringComparison.OrdinalIgnoreCase);
+                        if (!result || (uriResult.Host != "handbrake.fr" && uriResult.Host != "download.handbrake.fr" && !isHandBrakeGitHub))
                         {
                             this.userSettingService.SetUserSetting(UserSettingConstants.IsUpdateAvailableBuild, 0);
                             callback(new UpdateCheckInformation { NewVersionAvailable = false, Error = new Exception("The HandBrake update service is currently unavailable.") });
@@ -131,7 +138,6 @@ namespace HandBrakeWPF.Services
                                 Build = reader.Build,
                                 Version = reader.Version,
                                 Signature = reader.Signature,
-                                UseLargerKey = reader.IsLargerKey
                             };
 
                         this.userSettingService.SetUserSetting(UserSettingConstants.IsUpdateAvailableBuild, latest);
@@ -170,7 +176,7 @@ namespace HandBrakeWPF.Services
                        Task.Run(() => DownloadSetupFile(update.DownloadFile, progress, tempPath)).GetAwaiter().GetResult();
 
                        completed(
-                           this.VerifyDownload(update.Signature, tempPath, update.UseLargerKey)
+                           this.VerifyDownload(update.Signature, tempPath)
                                ? new DownloadStatus { WasSuccessful = true, Message = "Download Complete." } :
                                  new DownloadStatus
                                    {
@@ -190,9 +196,8 @@ namespace HandBrakeWPF.Services
         /// </summary>
         /// <param name="signature">The RSA SHA256 Signature from the appcast</param>
         /// <param name="updateFile">Path to the downloaded update file</param>
-        /// <param name="useLargerKey">Use the 4096 bit key</param>
         /// <returns>True if the file is valid, false otherwise.</returns>
-        public bool VerifyDownload(string signature, string updateFile, bool useLargerKey)
+        public bool VerifyDownload(string signature, string updateFile)
         {
             if (!File.Exists(updateFile))
             {
@@ -205,9 +210,7 @@ namespace HandBrakeWPF.Services
             }
 
             // Fetch our Public Key
-            // For now, we'll have the ability to fall-back to the old key if there is a problem. 
-            // This ability will be removed later.
-            string publicKey = GetPulicKey(useLargerKey ? "HandBrakeWPF.public.4096.key" : "HandBrakeWPF.public.key");
+            string publicKey = GetPublicKey( "HandBrakeWPF.public.4096.key");
             if (string.IsNullOrEmpty(publicKey))
             {
                 return false;
@@ -235,6 +238,8 @@ namespace HandBrakeWPF.Services
             {
                 string armDevice = SystemInfo.IsArmDevice ? "_ARM" : string.Empty;
                 httpClient.DefaultRequestHeaders.Add("User-Agent", string.Format("HandBrakeWinUpdate{0} {1}", armDevice, HandBrakeVersionHelper.Version));
+                httpClient.MaxResponseContentBufferSize = 1 * 1024 * 1024; // 1 MB cap
+                httpClient.Timeout = TimeSpan.FromSeconds(30);
 
                 var httpResponse = await httpClient.GetAsync(url);
                 httpResponse.EnsureSuccessStatusCode();
@@ -298,7 +303,7 @@ namespace HandBrakeWPF.Services
             return true;
         }
 
-        private string GetPulicKey(string keyFile)
+        private string GetPublicKey(string keyFile)
         {
             string publicKey;
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(keyFile))
