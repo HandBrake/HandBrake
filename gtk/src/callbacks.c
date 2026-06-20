@@ -3498,6 +3498,9 @@ ptop_update_bg (int side_changed, double new_val, gpointer data)
 
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
         set_has_chapter_markers (end_int > start_int, ud);
+    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1 || 
+        ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
+        update_title_duration(ud);
 }
 
 G_MODULE_EXPORT void
