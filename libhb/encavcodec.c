@@ -1418,6 +1418,7 @@ static void Encode( hb_work_object_t *w, hb_buffer_t **buf_in,
     // Convert the hb_buffer_t to avframe
     // This will consume the hb_buffer_t and make it NULL
     hb_video_buffer_to_avframe(&frame, buf_in);
+    frame.sample_aspect_ratio = pv->context->sample_aspect_ratio;
     frame.pts = pv->frameno_in++;
     frame.duration = 0;
 
