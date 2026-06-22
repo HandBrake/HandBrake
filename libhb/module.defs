@@ -138,6 +138,12 @@ ifeq (1,$(FEATURE.libdovi))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libdovi.a
 endif
 
+ifeq (1,$(FEATURE.vaapi))
+LIBHB.dll.libs += $(foreach n, \
+        X11 va va-drm va-x11, \
+        $(CONTRIB.build/)lib/lib$(n).a )
+endif
+
 ifneq ($(HAS.iconv),1)
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libiconv.a
 else
