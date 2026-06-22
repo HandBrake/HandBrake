@@ -1732,6 +1732,7 @@ static void Encode( hb_work_object_t *w, hb_buffer_t **buf_in,
     // Convert the hb_buffer_t to avframe
     // This will consume the hb_buffer_t and make it NULL
     hb_video_buffer_to_avframe(&frame, buf_in);
+
 #if HB_PROJECT_FEATURE_VAAPI
     if (HB_VCODEC_FFMPEG_VAAPI_H264 == pv->job->vcodec)
     {
@@ -1742,6 +1743,9 @@ static void Encode( hb_work_object_t *w, hb_buffer_t **buf_in,
     {
         frame.pts = pv->frameno_in++;
     }
+
+    frame.sample_aspect_ratio = pv->context->sample_aspect_ratio;
+
     frame.duration = 0;
 
     // For constant quality, setting the quality in AVCodecContext
