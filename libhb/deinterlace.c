@@ -41,7 +41,7 @@ static int deinterlace_init(hb_filter_object_t * filter,
 const char deint_template[] =
     "mode=^"HB_INT_REG"$:parity=^([01])$";
 
-FFMPEG_DEINTERLACE_FILTER(HB_FILTER_YADIF, "Deinterlace", "yadif", yadif,
+FFMPEG_DEINTERLACE_FILTER(HB_FILTER_YADIF, "Deinterlace", "deinterlace", yadif,
                           deint_template);
 FFMPEG_DEINTERLACE_FILTER(HB_FILTER_BWDIF, "Bwdif", "bwdif", bwdif,
                           deint_template);

@@ -1474,6 +1474,17 @@ const char * hb_filter_param_get_default_preset(int filter_id)
     }
 }
 
+const char * hb_filter_param_get_default_tune(int filter_id)
+{
+    switch (filter_id)
+    {
+        case HB_FILTER_DEBLOCK:
+            return "medium";
+        default:
+            return "none";
+    }
+}
+
 // Get json array of filter preset name and short_name
 char * hb_filter_get_presets_json(int filter_id)
 {

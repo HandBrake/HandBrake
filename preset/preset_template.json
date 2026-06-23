@@ -55,6 +55,8 @@
         "PictureRightCrop": 0,
         "PictureTopCrop": 0,
         "PictureDARWidth": 0,
+        "PictureDebandCustom" : "",
+        "PictureDebandPreset" : "off",
         "PictureDeblockPreset": "off",
         "PictureDeblockTune": "medium",
         "PictureDeblockCustom": "strength=strong:thresh=20:blocksize=8",

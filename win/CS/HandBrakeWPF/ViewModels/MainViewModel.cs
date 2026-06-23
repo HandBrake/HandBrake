@@ -2295,17 +2295,24 @@ namespace HandBrakeWPF.ViewModels
             {
                 case PointToPointMode.Chapters:
                     output = this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint);
-                    return string.Format("{0:00}:{1:00}:{2:00}", output.Hours, output.Minutes, output.Seconds);
+                    return FormatDuration(output);
                 case PointToPointMode.Seconds:
                     output = TimeSpan.FromSeconds(startEndDuration);
-                    return string.Format("{0:00}:{1:00}:{2:00}", output.Hours, output.Minutes, output.Seconds);
+                    return FormatDuration(output);
                 case PointToPointMode.Frames:
                     startEndDuration = startEndDuration / selectedTitle.Fps;
                     output = TimeSpan.FromSeconds(Math.Round(startEndDuration, 2));
-                    return string.Format("{0:00}:{1:00}:{2:00}", output.Hours, output.Minutes, output.Seconds);
+                    return FormatDuration(output);
             }
 
             return "--:--:--";
+        }
+
+        private static string FormatDuration(TimeSpan ts)
+        {
+            return ts.Days > 0
+                ? string.Format("{0}:{1:00}:{2:00}:{3:00}", ts.Days, ts.Hours, ts.Minutes, ts.Seconds)
+                : string.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
         }
 
         private void HandleUpdateCheckResults(UpdateCheckInformation information)

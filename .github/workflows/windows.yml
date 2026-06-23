@@ -11,7 +11,7 @@ jobs:
     name: CLI / LibHB (ARM)
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Cargo-C Toolchain Cache
       id: windows-arm-cargo-c-toolchain
@@ -76,7 +76,7 @@ jobs:
     name: CLI / LibHB
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Cargo-C Toolchain Cache
       id: windows-cargo-c-toolchain
@@ -145,7 +145,7 @@ jobs:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Download LibHandBrake
       uses: actions/download-artifact@v8
@@ -225,7 +225,7 @@ jobs:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Download LibHandBrake_ARM64
       uses: actions/download-artifact@v8
