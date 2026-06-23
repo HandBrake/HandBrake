@@ -1015,7 +1015,7 @@ int hb_avcodec_test_encoder(const AVCodec *codec, enum AVPixelFormat fmt)
 #endif
 
     av_dict_set(&av_opts, "b", "2M", 0);
-    if (avcodec_open2(context, codec, &av_opts) < 0)
+    if ((err = avcodec_open2(context, codec, &av_opts)) < 0)
     {
         res = -3;
         goto close;

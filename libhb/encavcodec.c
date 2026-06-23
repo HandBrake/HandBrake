@@ -187,6 +187,7 @@ static const char * const av1_vaapi_profile_names[] =
     "auto", "main", "high", "professional", NULL  // default -99, main 0, high 1, professional 2
 };
 
+#if HB_PROJECT_FEATURE_VAAPI
 /**
  * synchronized with 'hb_h264_level_names' definition
  * ffmpeg -h encoder=h264_vaapi
@@ -224,6 +225,8 @@ static const char * const av1_vaapi_level_values[] =
     // "5.3", "6.0", "6.1", "6.2", "6.3", NULL,
        "15",  "16",  "17",  "18",  "19",  NULL
 };
+
+#endif
 
 static const char * const hb_ffv1_level_names[] =
 {
