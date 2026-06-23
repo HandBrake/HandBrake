@@ -246,13 +246,25 @@ static hb_filter_param_t bwdif_presets[] =
     { 0,  NULL,                NULL,           NULL             },
 };
 
+/* Strength presets; settings are produced by generate_acompressor_settings()
+ * so each strength can be tailored per content tune. */
 static hb_filter_param_t acompressor_presets[] =
 {
     { 1, "Custom",             "custom",       NULL             },
-    { 3, "Default",            "default",
-      "level-in=1:mode=0:threshold=0.125:ratio=2:attack=20:release=250:"
-      "makeup=1:knee=2.82843:link=0:detection=1:level-sc=1:mix=1"        },
+    { 3, "Default",            "default",      NULL             },
+    { 4, "Light",              "light",        NULL             },
+    { 5, "Moderate",           "moderate",     NULL             },
+    { 6, "Strong",             "strong",       NULL             },
+    { 7, "Night Mode",         "nightmode",    NULL             },
     { 0,  NULL,                NULL,           NULL             },
+};
+
+static hb_filter_param_t acompressor_tunes[] =
+{
+    { 0, "None",               "none",         NULL             },
+    { 1, "Voice",              "voice",        NULL             },
+    { 2, "Music",              "music",        NULL             },
+    { 0, NULL,                 NULL,           NULL             },
 };
 
 static hb_filter_param_t agate_presets[] =
@@ -260,6 +272,15 @@ static hb_filter_param_t agate_presets[] =
     { 1, "Custom",             "custom",       NULL             },
     { 3, "Default",            "default",
          "level-in=1:mode=0:range=0.06125:threshold=0.125:ratio=2:attack=20:"
+         "release=250:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
+    { 4, "Light",              "light",
+         "level-in=1:mode=0:range=0.125:threshold=0.016:ratio=2:attack=20:"
+         "release=400:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
+    { 5, "Moderate",           "moderate",
+         "level-in=1:mode=0:range=0.063:threshold=0.032:ratio=2:attack=15:"
+         "release=300:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
+    { 6, "Strong",             "strong",
+         "level-in=1:mode=0:range=0.032:threshold=0.063:ratio=2:attack=10:"
          "release=250:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
     { 0,  NULL,                NULL,           NULL             },
 };
@@ -322,8 +343,9 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_DEBAND, deband_presets, NULL,
       sizeof(deband_presets) / sizeof(hb_filter_param_t),      0, },
 
-    { HB_AUDIO_FILTER_ACOMPRESSOR, acompressor_presets, NULL,
-      sizeof(acompressor_presets) / sizeof(hb_filter_param_t), 0, },
+    { HB_AUDIO_FILTER_ACOMPRESSOR, acompressor_presets, acompressor_tunes,
+      sizeof(acompressor_presets) / sizeof(hb_filter_param_t),
+      sizeof(acompressor_tunes)   / sizeof(hb_filter_param_t), },
 
     { HB_AUDIO_FILTER_AGATE, agate_presets, NULL,
       sizeof(agate_presets) / sizeof(hb_filter_param_t),       0, },
@@ -1212,6 +1234,112 @@ filter_param_get_entry(hb_filter_param_t *table, const char *name, int count)
     return NULL;
 }
 
+/* acompressor presets and tunes
+ *
+ * Presets adjust strength, i.e. how much gain reduction is applied:
+ * light, moderate, strong (default sits between light and moderate)
+ *
+ * Tunes tailor every parameter to the content type, so that a given
+ * strength does something appropriate for the material:
+ * none  - general use; fine for movies and other mixed content
+ * voice - podcasts and other spoken word; tighter, faster leveling
+ * music - music-dominant content; mastering-style, "tweak not crush"
+ *         (ratios stay gentle and knee stays soft even at strong)
+ *
+ * Night Mode is a dedicated use-case preset and ignores the tune.
+ */
+static hb_dict_t * generate_acompressor_settings(const char *preset,
+                                                 const char *tune,
+                                                 const char *custom)
+{
+    const char * settings = NULL;
+
+    if (preset == NULL)
+        return NULL;
+
+    if (!strcasecmp(preset, "custom"))
+    {
+        return hb_parse_filter_settings(custom);
+    }
+
+    if (!strcasecmp(preset, "nightmode"))
+    {
+        settings = "level-in=1:mode=0:threshold=0.063:ratio=4:attack=10:"
+                   "release=200:makeup=2.2:knee=2.82843:link=0:detection=1:"
+                   "level-sc=1:mix=1";
+    }
+    else if (tune == NULL || !strcasecmp(tune, "none"))
+    {
+        if (!strcasecmp(preset, "light"))
+            settings = "level-in=1:mode=0:threshold=0.177:ratio=1.5:attack=20:"
+                       "release=250:makeup=1:knee=2.82843:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+        else if (!strcasecmp(preset, "moderate"))
+            settings = "level-in=1:mode=0:threshold=0.125:ratio=3:attack=20:"
+                       "release=250:makeup=1.41:knee=2.82843:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+        else if (!strcasecmp(preset, "strong"))
+            settings = "level-in=1:mode=0:threshold=0.063:ratio=4:attack=10:"
+                       "release=250:makeup=1:knee=2.82843:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+        else /* default */
+            settings = "level-in=1:mode=0:threshold=0.125:ratio=2:attack=20:"
+                       "release=250:makeup=1:knee=2.82843:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+    }
+    else if (!strcasecmp(tune, "voice"))
+    {
+        /* Faster attack to catch plosives, shorter release and harder
+         * knee for tighter, more consistent dialogue leveling, with more
+         * makeup gain to bring speech up. */
+        if (!strcasecmp(preset, "light"))
+            settings = "level-in=1:mode=0:threshold=0.125:ratio=2:attack=10:"
+                       "release=200:makeup=1.41:knee=2:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+        else if (!strcasecmp(preset, "moderate"))
+            settings = "level-in=1:mode=0:threshold=0.089:ratio=3:attack=7:"
+                       "release=180:makeup=2:knee=2:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+        else if (!strcasecmp(preset, "strong"))
+            settings = "level-in=1:mode=0:threshold=0.063:ratio=4:attack=5:"
+                       "release=150:makeup=2.5:knee=1.5:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+        else /* default */
+            settings = "level-in=1:mode=0:threshold=0.1:ratio=2.5:attack=8:"
+                       "release=180:makeup=1.7:knee=2:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+    }
+    else if (!strcasecmp(tune, "music"))
+    {
+        /* Mastering-style: gentle ratios capped low even at strong, slow
+         * attack to preserve transients/punch, slow release and a soft
+         * knee. Tweak, don't crush. */
+        if (!strcasecmp(preset, "light"))
+            settings = "level-in=1:mode=0:threshold=0.25:ratio=1.5:attack=30:"
+                       "release=300:makeup=1:knee=4:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+        else if (!strcasecmp(preset, "moderate"))
+            settings = "level-in=1:mode=0:threshold=0.177:ratio=2:attack=25:"
+                       "release=300:makeup=1.2:knee=4:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+        else if (!strcasecmp(preset, "strong"))
+            settings = "level-in=1:mode=0:threshold=0.125:ratio=2.5:attack=20:"
+                       "release=250:makeup=1.41:knee=4:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+        else /* default */
+            settings = "level-in=1:mode=0:threshold=0.177:ratio=2:attack=25:"
+                       "release=300:makeup=1.2:knee=4:link=0:detection=1:"
+                       "level-sc=1:mix=1";
+    }
+    else
+    {
+        fprintf(stderr, "Unrecognized acompressor tune (%s).\n", tune);
+        return NULL;
+    }
+
+    return hb_parse_filter_settings(settings);
+}
+
 static hb_value_t *
 generate_generic_settings(int filter_id, const char * preset,
                           const char * tune, const char * custom)
@@ -1319,10 +1447,12 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_YADIF:
         case HB_FILTER_BWDIF:
         case HB_FILTER_COLORSPACE:
-        case HB_AUDIO_FILTER_ACOMPRESSOR:
         case HB_AUDIO_FILTER_AGATE:
             settings = generate_generic_settings(filter_id, preset,
                                                  tune, custom);
+            break;
+        case HB_AUDIO_FILTER_ACOMPRESSOR:
+            settings = generate_acompressor_settings(preset, tune, custom);
             break;
         default:
             fprintf(stderr,
