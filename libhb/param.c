@@ -246,6 +246,14 @@ static hb_filter_param_t bwdif_presets[] =
     { 0,  NULL,                NULL,           NULL             },
 };
 
+static hb_filter_param_t grayscale_presets[] =
+{
+    { 0, "Off",      "off",      NULL },
+    { 1, "Default",  "default",  "cb=0:cr=0:size=1:high=0" },
+    { 0, NULL,        NULL,      NULL }
+};
+
+
 static hb_filter_param_t acompressor_presets[] =
 {
     { 1, "Custom",             "custom",       NULL             },
@@ -321,6 +329,9 @@ static filter_param_map_t param_map[] =
 
     { HB_FILTER_DEBAND, deband_presets, NULL,
       sizeof(deband_presets) / sizeof(hb_filter_param_t),      0, },
+
+    { HB_FILTER_GRAYSCALE, grayscale_presets, NULL,
+      sizeof(grayscale_presets) / sizeof(hb_filter_param_t),   0, },
 
     { HB_AUDIO_FILTER_ACOMPRESSOR, acompressor_presets, NULL,
       sizeof(acompressor_presets) / sizeof(hb_filter_param_t), 0, },
