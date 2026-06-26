@@ -221,8 +221,10 @@ CFNumberRef hb_cv_colr_gamma_xlat(int color_transfer) CF_RETURNS_RETAINED
     {
         case HB_COLR_TRA_GAMMA22:
             gamma = 2.2;
+            break;
         case HB_COLR_TRA_GAMMA28:
             gamma = 2.8;
+            break;
     }
 
     return gamma > 0 ? CFNumberCreate(NULL, kCFNumberFloat32Type, &gamma) : NULL;
@@ -337,24 +339,35 @@ int hb_cv_match_rgb_to_colorspace(int rgb,
         CFStringRef matrix   = CVYCbCrMatrixGetStringForIntegerCodePoint(color_matrix);
 
         CGColorSpaceRef colorspace = NULL;
-        if (transfer == kCVImageBufferTransferFunction_UseGamma)
+        CFMutableDictionaryRef attachments = CFDictionaryCreateMutable(NULL, 0,
+                                                                       &kCFTypeDictionaryKeyCallBacks,
+                                                                       &kCFTypeDictionaryValueCallBacks);
+        if (attachments != NULL)
         {
-            const void *keys[4] = { kCVImageBufferColorPrimariesKey, kCVImageBufferTransferFunctionKey,
-                kCVImageBufferYCbCrMatrixKey, kCVImageBufferGammaLevelKey };
-            const void *values[4] = { prim, transfer, matrix, gamma };
-            CFDictionaryRef attachments = CFDictionaryCreate(NULL, keys, values, 4, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+            if (prim != NULL)
+            {
+                CFDictionarySetValue(attachments, kCVImageBufferColorPrimariesKey, prim);
+            }
+            if (transfer != NULL)
+            {
+                CFDictionarySetValue(attachments, kCVImageBufferTransferFunctionKey, transfer);
+            }
+            if (matrix != NULL)
+            {
+                CFDictionarySetValue(attachments, kCVImageBufferYCbCrMatrixKey, matrix);
+            }
+            if (transfer == kCVImageBufferTransferFunction_UseGamma && gamma != NULL)
+            {
+                CFDictionarySetValue(attachments, kCVImageBufferGammaLevelKey, gamma);
+            }
 
             colorspace = CVImageBufferCreateColorSpaceFromAttachments(attachments);
             CFRelease(attachments);
         }
-        else
-        {
-            const void *keys[3] = { kCVImageBufferColorPrimariesKey, kCVImageBufferTransferFunctionKey, kCVImageBufferYCbCrMatrixKey };
-            const void *values[3] = { prim, transfer, gamma };
-            CFDictionaryRef attachments = CFDictionaryCreate(NULL, keys, values, 3, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
-            colorspace = CVImageBufferCreateColorSpaceFromAttachments(attachments);
-            CFRelease(attachments);
+        if (gamma != NULL)
+        {
+            CFRelease(gamma);
         }
 
         if (colorspace == NULL)
