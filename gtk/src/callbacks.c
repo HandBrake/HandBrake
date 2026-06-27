@@ -1177,19 +1177,17 @@ update_title_duration(signal_user_data_t *ud)
     gint hh, mm, ss;
     gint64 duration;
     gchar *text;
-    GtkWidget *widget;
     int title_id, titleindex;
     const hb_title_t *title;
 
     title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    widget = ghb_builder_widget("title_duration");
 
     duration = title_range_get_duration(ud->settings, title);
     ghb_break_duration(duration, &hh, &mm, &ss);
 
     text = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
-    gtk_label_set_text(GTK_LABEL(widget), text);
+    gtk_label_set_text(GTK_LABEL(ghb_builder_widget("title_duration_inline")), text);
     g_free(text);
 }
 
