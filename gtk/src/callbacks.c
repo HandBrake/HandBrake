@@ -3352,7 +3352,6 @@ set_has_chapter_markers (gboolean markers, signal_user_data_t *ud)
         ghb_set_destination(ud);
     GtkWidget *widget = ghb_builder_widget("ChapterMarkers");
     gtk_widget_set_sensitive(widget, markers);
-    update_title_duration(ud);
 
     markers &= ghb_dict_get_int(ud->settings, "ChapterMarkers");
     ghb_dict_set_bool(dest, "ChapterMarkers", markers);
@@ -3498,6 +3497,7 @@ ptop_update_bg (int side_changed, double new_val, gpointer data)
 
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
         set_has_chapter_markers (end_int > start_int, ud);
+    update_title_duration(ud);
 }
 
 G_MODULE_EXPORT void
