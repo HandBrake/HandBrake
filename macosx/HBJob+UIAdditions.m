@@ -16,7 +16,7 @@
 #import "HBSubtitlesTrack.h"
 
 #import "HBPicture+UIAdditions.h"
-#import "HBFilters+UIAdditions.h"
+#import "HBFilter+UIAdditions.h"
 
 #import "HBAudioTransformers.h"
 #import "HBLocalizationUtilities.h"
@@ -25,6 +25,7 @@
 #import "HBVideo+UIAdditions.h"
 #import "HBPicture.h"
 #import "HBFilters.h"
+#import "HBFilter.h"
 #import "HBAudio.h"
 #import "HBSubtitles.h"
 
@@ -330,140 +331,21 @@ static HBMixdownTransformer    *mixdownTransformer;
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
 
     NSMutableString *summary = [NSMutableString string];
-    HBFilters *filters = self.filters;
 
-    // Detelecine
-    if (![filters.detelecine isEqualToString:@"off"])
+    for (HBFilter *filter in self.filters.filters)
     {
-        if ([filters.detelecine isEqualToString:@"custom"])
+        if ([filter.preset isEqualToString:@"custom"])
         {
-            [summary appendFormat:@", %@ (%@)", HBKitLocalizedString(@"Detelecine", @"Dimensions description"), filters.detelecineCustomString];
+            [summary appendFormat:@", %@ (%@)", filter.localizedName, filter.custom];
+        }
+        else if (filter.tune.length)
+        {
+            [summary appendFormat:@", %@ (%@, %@)", filter.localizedName, filter.preset, filter.tune];
         }
         else
         {
-            [summary appendFormat:@", %@ (%@)", HBKitLocalizedString(@"Detelecine", @"Dimensions description"), [[[HBFilters detelecinePresetsDict] allKeysForObject:filters.detelecine] firstObject]];
+            [summary appendFormat:@", %@ (%@)", filter.localizedName, filter.preset];
         }
-    }
-    else if (![filters.deinterlace isEqualToString:@"off"])
-    {
-        // Deinterlace filters
-        NSString *type =  [[[HBFilters deinterlaceTypesDict] allKeysForObject:filters.deinterlace] firstObject];
-
-        if ([filters.deinterlacePreset isEqualToString:@"custom"])
-        {
-            [summary appendFormat:@", %@ (%@)", type, filters.deinterlaceCustomString];
-        }
-        else
-        {
-            if ([filters.deinterlace isEqualToString:@"decomb"])
-            {
-                [summary appendFormat:@", %@ (%@)", type, [[[HBFilters decombPresetsDict] allKeysForObject:filters.deinterlacePreset] firstObject]];
-            }
-            else if ([filters.deinterlace isEqualToString:@"deinterlace"])
-            {
-                [summary appendFormat:@", %@ (%@)", type, [[[HBFilters yadifPresetsDict] allKeysForObject:filters.deinterlacePreset] firstObject]];
-            }
-            else if ([filters.deinterlace isEqualToString:@"bwdif"])
-            {
-                [summary appendFormat:@", %@ (%@)", type, [[[HBFilters bwdifPresetsDict] allKeysForObject:filters.deinterlacePreset] firstObject]];
-            }
-        }
-    }
-
-    // Deblock
-    if (![filters.deblock isEqualToString:@"off"])
-    {
-        [summary appendFormat:@", %@ (%@", HBKitLocalizedString(@"Deblock", @"Filters description"), [[[HBFilters deblockPresetDict] allKeysForObject:filters.deblock] firstObject]];
-        if (![filters.deblock isEqualToString:@"custom"])
-        {
-            [summary appendFormat:@", %@", [[[HBFilters deblockTunesDict] allKeysForObject:filters.deblockTune] firstObject]];
-        }
-        else
-        {
-            [summary appendFormat:@", %@", filters.deblockCustomString];
-        }
-
-        [summary appendString:@")"];
-    }
-
-    // Denoise
-    if (![filters.denoise isEqualToString:@"off"])
-    {
-        [summary appendFormat:@", %@ (%@", HBKitLocalizedString(@"Denoise", @"Filters description"), [[[HBFilters denoiseTypesDict] allKeysForObject:filters.denoise] firstObject]];
-        if (![filters.denoisePreset isEqualToString:@"custom"])
-        {
-            [summary appendFormat:@", %@", [[[HBFilters denoisePresetDict] allKeysForObject:filters.denoisePreset] firstObject]];
-
-            if ([filters.denoise isEqualToString:@"nlmeans"])
-            {
-                [summary appendFormat:@", %@", [[[HBFilters nlmeansTunesDict] allKeysForObject:filters.denoiseTune] firstObject]];
-            }
-        }
-        else
-        {
-            [summary appendFormat:@", %@", filters.denoiseCustomString];
-        }
-
-        [summary appendString:@")"];
-    }
-
-    // Chroma Smooth
-    if (![filters.chromaSmooth isEqualToString:@"off"])
-    {
-        [summary appendFormat:@", %@ (%@", HBKitLocalizedString(@"Chroma Smooth", @"Filters description"), [[[HBFilters chromaSmoothPresetDict] allKeysForObject:filters.chromaSmooth] firstObject]];
-        if (![filters.chromaSmooth isEqualToString:@"custom"])
-        {
-            [summary appendFormat:@", %@", [[[HBFilters chromaSmoothTunesDict] allKeysForObject:filters.chromaSmoothTune] firstObject]];
-        }
-        else
-        {
-            [summary appendFormat:@", %@", filters.chromaSmoothCustomString];
-        }
-
-        [summary appendString:@")"];
-    }
-
-    // Sharpen
-    if (![filters.sharpen isEqualToString:@"off"])
-    {
-        [summary appendFormat:@", %@ (%@", HBKitLocalizedString(@"Sharpen", @"Filters description"), [[[HBFilters sharpenTypesDict] allKeysForObject:filters.sharpen] firstObject]];
-        if (![filters.sharpenPreset isEqualToString:@"custom"])
-        {
-            [summary appendFormat:@", %@", [[[HBFilters sharpenPresetDict] allKeysForObject:filters.sharpenPreset] firstObject]];
-
-            if ([filters.sharpen isEqualToString:@"unsharp"])
-            {
-                [summary appendFormat:@", %@", [[[HBFilters sharpenTunesDict] allKeysForObject:filters.sharpenTune] firstObject]];
-            }
-            else if ([filters.sharpen isEqualToString:@"lapsharp"])
-            {
-                [summary appendFormat:@", %@", [[[HBFilters sharpenTunesDict] allKeysForObject:filters.sharpenTune] firstObject]];
-            }
-        }
-        else
-        {
-            [summary appendFormat:@", %@", filters.sharpenCustomString];
-        }
-
-        [summary appendString:@")"];
-    }
-
-    // Grayscale
-    if (filters.grayscale)
-    {
-        [summary appendFormat:@", %@", HBKitLocalizedString(@"Grayscale", @"Filters description")];
-    }
-
-    // Colorspace
-    if (![filters.colorspace isEqualToString:@"off"])
-    {
-        [summary appendFormat:@", %@ (%@", HBKitLocalizedString(@"Colorspace", @"Filters description"), [[[HBFilters colorspacePresetDict] allKeysForObject:filters.colorspace] firstObject]];
-        if ([filters.colorspace isEqualToString:@"custom"])
-        {
-            [summary appendFormat:@", %@", filters.colorspaceCustomString];
-        }
-
-        [summary appendString:@")"];
     }
 
     if ([summary hasPrefix:@", "])
@@ -960,81 +842,10 @@ static HBMixdownTransformer    *mixdownTransformer;
 - (NSString *)filtersShortDescription
 {
     NSMutableString *summary = [NSMutableString string];
-    HBFilters *filters = self.filters;
 
-    // Detelecine
-    if (![filters.detelecine isEqualToString:@"off"])
+    for (HBFilter *filter in self.filters.filters)
     {
-        [summary appendString:HBKitLocalizedString(@"Detelecine", @"HBJob -> filters short description")];
-        [summary appendString:@", "];
-    }
-
-    // Comb detect
-    if (![filters.combDetection isEqualToString:@"off"])
-    {
-        [summary appendString:HBKitLocalizedString(@"Comb Detect", @"HBJob -> filters short description")];
-        [summary appendString:@", "];
-    }
-
-    // Deinterlace
-    if (![filters.deinterlace isEqualToString:@"off"])
-    {
-        // Deinterlace filters
-        NSString *type = [[[HBFilters deinterlaceTypesDict] allKeysForObject:filters.deinterlace] firstObject];
-        if (type)
-        {
-            [summary appendString:type];
-            [summary appendString:@", "];
-        }
-    }
-
-    // Deblock
-    if (![filters.deblock isEqualToString:@"off"])
-    {
-        [summary appendString:HBKitLocalizedString(@"Deblock", @"HBJob -> filters short description")];
-        [summary appendString:@", "];
-    }
-
-    // Denoise
-    if (![filters.denoise isEqualToString:@"off"])
-    {
-        NSString *type = [[[HBFilters denoiseTypesDict] allKeysForObject:filters.denoise] firstObject];
-        if (type)
-        {
-            [summary appendString:type];
-            [summary appendString:@", "];
-        }
-    }
-
-    // Chroma Smooth
-    if (![filters.chromaSmooth isEqualToString:@"off"])
-    {
-        [summary appendString:HBKitLocalizedString(@"Chroma Smooth", @"HBJob -> filters short description")];
-        [summary appendString:@", "];
-    }
-
-    // Sharpen
-    if (![filters.sharpen isEqualToString:@"off"])
-    {
-        NSString *type = [[[HBFilters sharpenTypesDict] allKeysForObject:filters.sharpen] firstObject];
-        if (type)
-        {
-            [summary appendString:type];
-            [summary appendString:@", "];
-        }
-    }
-
-    // Grayscale
-    if (filters.grayscale)
-    {
-        [summary appendString:HBKitLocalizedString(@"Grayscale", @"HBJob -> filters short description")];
-        [summary appendString:@", "];
-    }
-
-    // Colorspace
-    if (![filters.colorspace isEqualToString:@"off"])
-    {
-        [summary appendString:HBKitLocalizedString(@"Colorspace", @"HBJob -> filters short description")];
+        [summary appendString:filter.localizedName];
         [summary appendString:@", "];
     }
 

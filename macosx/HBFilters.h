@@ -6,50 +6,47 @@
 
 #import <Foundation/Foundation.h>
 #import <HandBrakeKit/HBPresetCoding.h>
+#import <HandBrakeKit/HBFilter.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString * const HBFiltersChangedNotification;
 
+@interface HBFilterGroup : NSObject
+
+@property (nonatomic, readonly, nullable) NSString *name;
+@property (nonatomic, readonly) NSArray<NSNumber *> *filters;
+
+@end
+
 /**
  *  Filters settings.
  */
-@interface HBFilters : NSObject <NSSecureCoding, NSCopying>
+@interface HBFilters : NSObject <HBFilterDelegate, NSSecureCoding, NSCopying>
 
-@property (nonatomic, readwrite, copy) NSString *detelecine;
-@property (nonatomic, readwrite, copy) NSString *detelecineCustomString;
+@property (nonatomic, readonly) NSMutableArray<HBFilter *> *filters;
 
-@property (nonatomic, readwrite, copy) NSString *combDetection;
-@property (nonatomic, readwrite, copy) NSString *combDetectionCustomString;
+- (void)addFilterWithID:(int)filterID;
 
-@property (nonatomic, readwrite, copy) NSString *deinterlace;
-@property (nonatomic, readwrite, copy) NSString *deinterlacePreset;
-@property (nonatomic, readwrite, copy) NSString *deinterlaceCustomString;
+- (BOOL)containsFilterWithIDs:(NSArray<NSNumber *> *)filterIDs;
+- (BOOL)containsFilterWithID:(int)filterID;
 
-@property (nonatomic, readwrite, copy) NSString *denoise;
-@property (nonatomic, readwrite, copy) NSString *denoisePreset;
-@property (nonatomic, readwrite, copy) NSString *denoiseTune;
-@property (nonatomic, readwrite, copy) NSString *denoiseCustomString;
+- (void)removeFilterWithID:(int)filterID;
 
-@property (nonatomic, readwrite, copy) NSString *chromaSmooth;
-@property (nonatomic, readwrite, copy) NSString *chromaSmoothTune;
-@property (nonatomic, readwrite, copy) NSString *chromaSmoothCustomString;
+- (nullable HBFilterGroup *)groupWithFilterID:(int)filterID;
 
-@property (nonatomic, readwrite, copy) NSString *sharpen;
-@property (nonatomic, readwrite, copy) NSString *sharpenPreset;
-@property (nonatomic, readwrite, copy) NSString *sharpenTune;
-@property (nonatomic, readwrite, copy) NSString *sharpenCustomString;
+- (void)removeAll;
 
-@property (nonatomic, readwrite, copy) NSString *deblock;
-@property (nonatomic, readwrite, copy) NSString *deblockTune;
-@property (nonatomic, readwrite, copy) NSString *deblockCustomString;
-
-@property (nonatomic, readwrite) BOOL grayscale;
-
-@property (nonatomic, readwrite, copy) NSString *colorspace;
-@property (nonatomic, readwrite, copy) NSString *colorspaceCustomString;
+@property (class, nonatomic, readonly) NSArray<NSNumber *> *availableFilters;
+@property (class, nonatomic, readonly) NSArray<HBFilterGroup *> *availableFilterGroups;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
+
+@property (nonatomic, readonly) NSUInteger countOfFilters;
+- (HBFilter *)objectInFiltersAtIndex:(NSUInteger)index;
+- (void)insertObject:(HBFilter *)filter inFiltersAtIndex:(NSUInteger)index;
+- (void)removeObjectFromFiltersAtIndex:(NSUInteger)index;
+- (void)removeFiltersAtIndexes:(NSIndexSet *)indexes;
 
 @end
 
