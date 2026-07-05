@@ -148,6 +148,8 @@ namespace HandBrakeWPF.Helpers
                 string modifyTime = modificationDateTime.ToString("HH-mm");
 
                 string angle = task.Angle.ToString();
+                
+                string date = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseIsoDateFormat) ? DateTime.Now.Date.ToString("yyyy-MM-dd") : DateTime.Now.Date.ToShortDateString().Replace('/', '-');
 
                 destinationFilename = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
                 destinationFilename =
@@ -156,7 +158,7 @@ namespace HandBrakeWPF.Helpers
                         .Replace(Constants.Title, dvdTitle)
                         .Replace(Constants.Angle, angle)
                         .Replace(Constants.Chapters, combinedChapterTag)
-                        .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
+                        .Replace(Constants.Date, date)
                         .Replace(Constants.Time, DateTime.Now.ToString("HH-mm"))
                         .Replace(Constants.CreationDate, createDate)
                         .Replace(Constants.CreationTime, createTime)
