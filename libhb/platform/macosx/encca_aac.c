@@ -63,12 +63,14 @@ struct hb_work_private_s
 #define MP4DecSpecificDescrTag          0x05
 
 // based off of mov_mp4_read_descr_len from mov.c in ffmpeg's libavformat
-static int readDescrLen(UInt8 **buffer)
+static int readDescrLen(UInt8 **buffer, const UInt8 *end)
 {
     int len = 0;
     int count = 4;
     while (count--)
     {
+        if (*buffer >= end)
+            return -1;
         int c = *(*buffer)++;
         len = (len << 7) | (c & 0x7f);
         if (!(c & 0x80))
@@ -78,38 +80,64 @@ static int readDescrLen(UInt8 **buffer)
 }
 
 // based off of mov_mp4_read_descr from mov.c in ffmpeg's libavformat
-static int readDescr(UInt8 **buffer, int *tag)
+static int readDescr(UInt8 **buffer, const UInt8 *end, int *tag)
 {
+    if (*buffer >= end)
+        return -1;
     *tag = *(*buffer)++;
-    return readDescrLen(buffer);
+    return readDescrLen(buffer, end);
 }
 
 // based off of mov_read_esds from mov.c in ffmpeg's libavformat
-static long ReadESDSDescExt(void* descExt, UInt8 **buffer, UInt32 *size, int versionFlags)
+static long ReadESDSDescExt(void* descExt, UInt32 descExtSize, UInt8 **buffer, UInt32 *size, int versionFlags)
 {
     UInt8 *esds = (UInt8*)descExt;
+    const UInt8 *end = esds + descExtSize;
     int tag, len;
     *size = 0;
 
     if (versionFlags)
+    {
+        if (esds + 4 > end)
+            return -1;
         esds += 4; // version + flags
-    readDescr(&esds, &tag);
+    }
+    len = readDescr(&esds, end, &tag);
+    if (len < 0)
+        return -1;
+
+    if (esds + 2 > end)
+        return -1;
     esds += 2;     // ID
     if (tag == MP4ESDescrTag)
+    {
+        if (esds + 1 > end)
+            return -1;
         esds++;    // priority
+    }
 
-    readDescr(&esds, &tag);
+    len = readDescr(&esds, end, &tag);
+    if (len < 0)
+        return -1;
+
     if (tag == MP4DecConfigDescrTag)
     {
+        if (esds + 13 > end)
+            return -1;
         esds++;    // object type id
         esds++;    // stream type
         esds += 3; // buffer size db
         esds += 4; // max bitrate
         esds += 4; // average bitrate
 
-        len = readDescr(&esds, &tag);
+        len = readDescr(&esds, end, &tag);
+        if (len < 0)
+            return -1;
+
         if (tag == MP4DecSpecificDescrTag)
         {
+            if (esds + len > end)
+                return -1;
             *buffer = calloc(1, len + 8);
             if (*buffer)
             {
@@ -373,16 +401,20 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
                                   kAudioConverterCompressionMagicCookie,
                                   &tmpsiz, NULL);
     UInt8 *magicCookie = malloc(tmpsiz);
-    AudioConverterGetProperty(pv->converter,
-                              kAudioConverterCompressionMagicCookie,
-                              &tmpsiz, magicCookie);
-    // CoreAudio returns a complete ESDS, but we only need
-    // the DecoderSpecific info.
-    UInt8 *buffer = NULL;
-    ReadESDSDescExt(magicCookie, &buffer, &tmpsiz, 0);
-    hb_set_extradata(w->extradata, buffer, tmpsiz);
-    free(buffer);
-    free(magicCookie);
+    if (magicCookie != NULL)
+    {
+        AudioConverterGetProperty(pv->converter,
+                                  kAudioConverterCompressionMagicCookie,
+                                  &tmpsiz, magicCookie);
+        // CoreAudio returns a complete ESDS, but we only need
+        // the DecoderSpecific info.
+        UInt8 *buffer = NULL;
+        UInt32 out_size = 0;
+        ReadESDSDescExt(magicCookie, tmpsiz, &buffer, &out_size, 0);
+        hb_set_extradata(w->extradata, buffer, out_size);
+        free(buffer);
+        free(magicCookie);
+    }
 
     AudioConverterPrimeInfo primeInfo;
     UInt32 piSize = sizeof(primeInfo);
