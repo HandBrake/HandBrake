@@ -333,41 +333,16 @@ int hb_cv_match_rgb_to_colorspace(int rgb,
 
         CGColorRef rgb_color = CGColorCreateSRGB(r / 255.f, g / 255.f, b / 255.f, 1.f);
 
-        CFStringRef prim     = CVColorPrimariesGetStringForIntegerCodePoint(color_prim);
-        CFStringRef transfer = CVTransferFunctionGetStringForIntegerCodePoint(color_transfer);
-        CFNumberRef gamma    = hb_cv_colr_gamma_xlat(color_transfer);
-        CFStringRef matrix   = CVYCbCrMatrixGetStringForIntegerCodePoint(color_matrix);
-
         CGColorSpaceRef colorspace = NULL;
         CFMutableDictionaryRef attachments = CFDictionaryCreateMutable(NULL, 0,
                                                                        &kCFTypeDictionaryKeyCallBacks,
                                                                        &kCFTypeDictionaryValueCallBacks);
+
         if (attachments != NULL)
         {
-            if (prim != NULL)
-            {
-                CFDictionarySetValue(attachments, kCVImageBufferColorPrimariesKey, prim);
-            }
-            if (transfer != NULL)
-            {
-                CFDictionarySetValue(attachments, kCVImageBufferTransferFunctionKey, transfer);
-            }
-            if (matrix != NULL)
-            {
-                CFDictionarySetValue(attachments, kCVImageBufferYCbCrMatrixKey, matrix);
-            }
-            if (transfer == kCVImageBufferTransferFunction_UseGamma && gamma != NULL)
-            {
-                CFDictionarySetValue(attachments, kCVImageBufferGammaLevelKey, gamma);
-            }
-
+            hb_cv_add_color_tag(attachments, color_prim, color_transfer, color_matrix, 0);
             colorspace = CVImageBufferCreateColorSpaceFromAttachments(attachments);
             CFRelease(attachments);
-        }
-
-        if (gamma != NULL)
-        {
-            CFRelease(gamma);
         }
 
         if (colorspace == NULL)
