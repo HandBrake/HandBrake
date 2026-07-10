@@ -1,0 +1,23 @@
+From 7cef79c495caac7d87cd284f9b38b91eb412a57e Mon Sep 17 00:00:00 2001
+From: Dan Dennedy <dan@dennedy.org>
+Date: Mon, 15 Dec 2025 09:40:43 -0800
+Subject: [PATCH 12/13] Fix build with CMake 4
+
+> Compatibility with CMake < 3.5 has been removed from CMake.
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b11d7d7..4d2cdc2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.8.5)
++cmake_minimum_required (VERSION 3.14)
+ project (vid.stab C)
+ 
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/")
+-- 
+2.30.2
+

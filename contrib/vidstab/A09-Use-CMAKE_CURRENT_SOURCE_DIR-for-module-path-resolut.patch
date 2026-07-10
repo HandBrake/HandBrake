@@ -1,0 +1,54 @@
+From 3fd4420669af91ba117cebb1d06a310432ad82b6 Mon Sep 17 00:00:00 2001
+From: sammiler <app.evergreen055@passinbox.com>
+Date: Thu, 21 Aug 2025 18:30:43 +0800
+Subject: [PATCH 11/13] Use CMAKE_CURRENT_SOURCE_DIR for module path resolution
+
+Switches from CMAKE_SOURCE_DIR to CMAKE_CURRENT_SOURCE_DIR when setting the module path to ensure correct handling of subdirectories and improve CMake configuration reliability in multi-directory builds.
+---
+ CMakeLists.txt           | 2 +-
+ tests/CMakeLists.txt     | 2 +-
+ transcode/CMakeLists.txt | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 61a2594..b11d7d7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ cmake_minimum_required (VERSION 2.8.5)
+ project (vid.stab C)
+ 
+-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
++set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/")
+ 
+ include (FindSSE)
+ include (GNUInstallDirs)
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 84a98dc..4a5befe 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -5,7 +5,7 @@
+ cmake_minimum_required (VERSION 2.6)
+ project (vid.stab)
+ 
+-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../CMakeModules/")
++set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../CMakeModules/")
+ 
+ include (FindSSE)
+ 
+diff --git a/transcode/CMakeLists.txt b/transcode/CMakeLists.txt
+index 8255952..37dab65 100644
+--- a/transcode/CMakeLists.txt
++++ b/transcode/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ cmake_minimum_required (VERSION 2.6)
+ project (vid.stab.transcode)
+ 
+-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../CMakeModules/")
++set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../CMakeModules/")
+ 
+ # set your transcode path here!
+ set(TRANSCODE_ROOT ../../transcode)
+-- 
+2.30.2
+

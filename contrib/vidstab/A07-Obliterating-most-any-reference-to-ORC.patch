@@ -1,0 +1,1945 @@
+From 05d2903bd88edf2135f2f7bcf4069f8cacadd189 Mon Sep 17 00:00:00 2001
+From: Kalin KOZHUHAROV <me.kalin@gmail.com>
+Date: Sun, 11 Feb 2024 01:52:46 +0100
+Subject: [PATCH 07/13] Obliterating most any reference to ORC
+
+This should clean the code and fix issue #95
+
+Bug:https://github.com/georgmartius/vid.stab/issues/95
+Signed-off-by:Kalin KOZHUHAROV <kalin@thinrope.net>
+---
+ CMakeLists.txt                |  17 +-
+ CMakeModules/FindOrc.cmake    |  29 --
+ src/motiondetect.c            |   3 +-
+ src/motiondetect_opt.c        |  97 +-----
+ src/motiondetect_opt.h        |  20 --
+ src/orc/Makefile              |  14 -
+ src/orc/motiondetectorc.c     | 539 ----------------------------------
+ src/orc/motiondetectorc.h     |  79 -----
+ src/orc/motiondetectorc.orc   |  84 ------
+ src/orc/transformorc.orc      |  65 ----
+ src/transformfixedpoint.c     | 118 --------
+ src/transformfixedpoint.h     |   4 -
+ tests/CMakeLists.txt          |  12 +-
+ tests/orc_bug/CMakeLists.txt  |  15 -
+ tests/orc_bug/FindOrc.cmake   |  29 --
+ tests/orc_bug/orc_bug.c       |  31 --
+ tests/orc_bug/orc_bug_orc.c   | 314 --------------------
+ tests/orc_bug/orc_bug_orc.h   |  76 -----
+ tests/orc_bug/orc_bug_orc.orc |  20 --
+ tests/test_compareimg.c       |  10 -
+ tests/test_contrast.c         |  30 --
+ tests/test_transform.c        |   2 +-
+ transcode/CMakeLists.txt      |  20 +-
+ 23 files changed, 8 insertions(+), 1620 deletions(-)
+ delete mode 100644 CMakeModules/FindOrc.cmake
+ delete mode 100644 src/orc/Makefile
+ delete mode 100644 src/orc/motiondetectorc.c
+ delete mode 100644 src/orc/motiondetectorc.h
+ delete mode 100644 src/orc/motiondetectorc.orc
+ delete mode 100644 src/orc/transformorc.orc
+ delete mode 100644 tests/orc_bug/CMakeLists.txt
+ delete mode 100644 tests/orc_bug/FindOrc.cmake
+ delete mode 100644 tests/orc_bug/orc_bug.c
+ delete mode 100644 tests/orc_bug/orc_bug_orc.c
+ delete mode 100644 tests/orc_bug/orc_bug_orc.h
+ delete mode 100644 tests/orc_bug/orc_bug_orc.orc
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bbf9907..e9d1bb7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,17 +36,6 @@ if(APPLE AND NOT CMAKE_OSX_ARCHITECTURES AND NOT SSE2_FOUND)
+   add_definitions(-march=armv8-a+fp+simd+crypto+crc)
+ endif()
+ 
+-### ORC is not used in any active code at the moment  ###
+-# I tried it with 0.4.14
+-#  0.4.10 did not work (not all opcode implemented)
+-# find_package(Orc)
+-if(ORC_FOUND)
+-add_definitions( -DUSE_ORC ${ORC_DEFINITIONS} )
+-include_directories( ${ORC_INCLUDE_DIRS} )
+-else()
+-add_definitions( -DDISABLE_ORC )
+-endif()
+-
+ # here we should check for SSE2
+ # our  -DUSE_SSE2_ASM code does not work with fpic
+ if(SSE2_FOUND)
+@@ -60,7 +49,7 @@ endif()
+ set(SOURCES src/frameinfo.c src/transformtype.c src/libvidstab.c
+   src/transform.c src/transformfixedpoint.c src/motiondetect.c
+   src/motiondetect_opt.c src/serialize.c src/localmotion2transform.c
+-  src/boxblur.c src/vsvector.c src/orc/motiondetectorc.c)
++  src/boxblur.c src/vsvector.c)
+ 
+ set(HEADERS src/frameinfo.h src/transformtype.h src/libvidstab.h
+   src/transform.h src/motiondetect.h src/serialize.h
+@@ -76,10 +65,6 @@ set_target_properties(vidstab PROPERTIES SOVERSION ${MAJOR_VERSION}.${MINOR_VERS
+ 
+ target_link_libraries(vidstab m)
+ set(PKG_EXTRA_LIBS -lm)
+-if(ORC_FOUND)
+-target_link_libraries(vidstab ${ORC_LIBRARIES})
+-set(PKG_EXTRA_LIBS "${PKG_EXTRA_LIBS} ${ORC_LIBRARIES}")
+-endif()
+ if(USE_OMP AND OPENMP_FOUND)
+ if(TARGET OpenMP::OpenMP_C)
+ target_link_libraries(vidstab OpenMP::OpenMP_C)
+diff --git a/CMakeModules/FindOrc.cmake b/CMakeModules/FindOrc.cmake
+deleted file mode 100644
+index 117fd34..0000000
+--- a/CMakeModules/FindOrc.cmake
++++ /dev/null
+@@ -1,29 +0,0 @@
+-# find ORC
+-# - Try to find LibOrc-0.4
+-# Once done this will define
+-#  ORC_FOUND - System has LibOrc
+-#  ORC_INCLUDE_DIRS - The LibOrc include directories
+-#  ORC_LIBRARIES - The libraries needed to use LibOrc
+-#  ORC_DEFINITIONS - Compiler switches required for using LibOrc
+-
+-find_package(PkgConfig) 
+-pkg_check_modules(PC_ORC orc-0.4)
+-set(ORC_DEFINITIONS ${PC_ORC_CFLAGS_OTHER})
+-
+-find_path(ORC_INCLUDE_DIR orc/orc.h
+-          HINTS ${PC_ORC_INCLUDEDIR} ${PC_ORC_INCLUDE_DIRS}
+-          PATH_SUFFIXES orc)
+-
+-find_library(ORC_LIBRARY NAMES orc-0.4
+-             HINTS ${PC_ORC_LIBDIR} ${PC_ORC_LIBRARY_DIRS} )
+-
+-set(ORC_LIBRARIES ${ORC_LIBRARY} )
+-set(ORC_INCLUDE_DIRS ${ORC_INCLUDE_DIR} )
+-include(FindPackageHandleStandardArgs)
+-# handle the QUIETLY and REQUIRED arguments and set ORC_FOUND to TRUE
+-# if all listed variables are TRUE
+-find_package_handle_standard_args(LibOrc  DEFAULT_MSG
+-                                  ORC_LIBRARY ORC_INCLUDE_DIR)
+-
+-mark_as_advanced(ORC_INCLUDE_DIR ORC_LIBRARY )
+-# End find ORC
+diff --git a/src/motiondetect.c b/src/motiondetect.c
+index af96772..a856d1b 100644
+--- a/src/motiondetect.c
++++ b/src/motiondetect.c
+@@ -878,8 +878,7 @@ void drawLine(unsigned char* I, int width, int height, int bytesPerPixel,
+ // }
+ 
+ 
+-//#ifdef TESTING
+-/// plain C implementation of compareSubImg (without ORC)
++/// plain C implementation of compareSubImg
+ unsigned int compareSubImg_thr(unsigned char* const I1, unsigned char* const I2,
+                                const Field* field, int width1, int width2, int height,
+            int bytesPerPixel, int d_x, int d_y,
+diff --git a/src/motiondetect_opt.c b/src/motiondetect_opt.c
+index 570f89b..817daf1 100644
+--- a/src/motiondetect_opt.c
++++ b/src/motiondetect_opt.c
+@@ -26,10 +26,6 @@
+  */
+ #include "motiondetect_opt.h"
+ 
+-#ifdef USE_ORC
+-#include "orc/motiondetectorc.h"
+-#endif
+-
+ #ifdef USE_SSE2
+ #include <emmintrin.h>
+ 
+@@ -100,35 +96,7 @@ double contrastSubImg1_SSE(unsigned char* const I, const Field* field,
+ }
+ #endif
+ 
+-#ifdef USE_ORC
+-/**
+-   calculates the contrast in the given small part of the given image
+-   using the absolute difference from mean luminance (like Root-Mean-Square,
+-   but with abs() (Manhattan-Norm))
+-   For multichannel images use contrastSubImg_Michelson()
+-
+-   \param I pointer to framebuffer
+-   \param field Field specifies position(center) and size of subimage
+-   \param width width of frame
+-   \param height height of frame
+-*/
+-double contrastSubImg_variance_orc(unsigned char* const I, const Field* field,
+-                                   int width, int height) {
+-  unsigned char* p = NULL;
+-  int s2 = field->size / 2;
+-  int numpixel = field->size*field->size;
+-
+-  p = I + ((field->x - s2) + (field->y - s2) * width);
+-
+-  unsigned int sum=0;
+-  image_sum_optimized((signed int*)&sum, p, width, field->size, field->size);
+-  unsigned char mean = sum / numpixel;
+-  int var=0;
+-  image_variance_optimized(&var, p, width, mean, field->size, field->size);
+-  return (double)var/numpixel/255.0;
+-}
+-
+-/// plain C implementation of variance based contrastSubImg (without ORC)
++/// plain C implementation of variance based contrastSubImg
+ double contrastSubImg_variance_C(unsigned char* const I,
+                                  const Field* field, int width, int height) {
+   int k, j;
+@@ -158,69 +126,6 @@ double contrastSubImg_variance_C(unsigned char* const I,
+   }
+   return (double)var/numpixel/255.0;
+ }
+-#endif
+-
+-
+-
+-
+-
+-
+-#ifdef USE_ORC
+-/**
+-   compares a small part of two given images
+-   and returns the average absolute difference.
+-   Field center, size and shift have to be choosen,
+-   so that no clipping is required.
+-   Uses optimized inner loops by ORC.
+-
+-   \param field Field specifies position(center) and size of subimage
+-   \param d_x shift in x direction
+-   \param d_y shift in y direction
+-*/
+-unsigned int compareSubImg_thr_orc(unsigned char* const I1, unsigned char* const I2,
+-                                   const Field* field, int width1, int width2, int height,
+-                                   int bytesPerPixel, int d_x, int d_y,
+-                                   unsigned int threshold) {
+-  unsigned char* p1 = NULL;
+-  unsigned char* p2 = NULL;
+-  int s2 = field->size / 2;
+-  int j;
+-  unsigned int sum = 0;
+-  p1 = I1 + ((field->x - s2) + (field->y - s2) * width1) * bytesPerPixel;
+-  p2 = I2 + ((field->x - s2 + d_x) + (field->y - s2 + d_y) * width2) * bytesPerPixel;
+-
+-  for (j = 0; j < field->size; j++) {
+-    unsigned int s = 0;
+-    image_line_difference_optimized(&s, p1, p2, field->size* bytesPerPixel);
+-    sum += s;
+-    if( sum > threshold) // no need to calculate any longer: worse than the best match
+-      break;
+-    p1 += width1 * bytesPerPixel;
+-    p2 += width2 * bytesPerPixel;
+-  }
+-
+-
+-  return sum;
+-}
+-
+-// implementation with 1 orc function, but no threshold
+-unsigned int compareSubImg_orc(unsigned char* const I1, unsigned char* const I2,
+-                               const Field* field, int width1, int width2, int height,
+-                               int bytesPerPixel, int d_x, int d_y,
+-                               unsigned int threshold) {
+-  unsigned char* p1 = NULL;
+-  unsigned char* p2 = NULL;
+-  int s2 = field->size / 2;
+-  unsigned int sum=0;
+-  p1 = I1 + ((field->x - s2) + (field->y - s2) * width1) * bytesPerPixel;
+-  p2 = I2 + ((field->x - s2 + d_x) + (field->y - s2 + d_y) * width2)
+-    * bytesPerPixel;
+-
+-  image_difference_optimized(&sum, p1, width1 * bytesPerPixel, p2, width2 * bytesPerPixel,
+-                             field->size* bytesPerPixel , field->size);
+-  return sum;
+-}
+-#endif
+ 
+ #ifdef USE_SSE2
+ unsigned int compareSubImg_thr_sse2(unsigned char* const I1, unsigned char* const I2,
+diff --git a/src/motiondetect_opt.h b/src/motiondetect_opt.h
+index 75fa6c9..d250c7c 100644
+--- a/src/motiondetect_opt.h
++++ b/src/motiondetect_opt.h
+@@ -34,8 +34,6 @@
+ #define compareSubImg compareSubImg_thr_sse2_asm
+ #elif defined(USE_SSE2)      //enable SSE2 code
+ #define compareSubImg compareSubImg_thr_sse2
+-#elif defined(USE_ORC)
+-#define compareSubImg compareSubImg_thr_orc
+ #else
+ #define compareSubImg compareSubImg_thr
+ #endif
+@@ -45,27 +43,9 @@ double contrastSubImg1_SSE(unsigned char* const I, const Field* field,
+                            int width, int height);
+ #endif
+ 
+-#ifdef USE_ORC
+-double contrastSubImg_variance_orc(unsigned char* const I, const Field* field,
+-                          int width, int height);
+ double contrastSubImg_variance_C(unsigned char* const I, const Field* field,
+                         int width, int height);
+ 
+-#endif
+-
+-#ifdef USE_ORC
+-unsigned int compareSubImg_orc(unsigned char* const I1, unsigned char* const I2,
+-                               const Field* field, int width1, int width2, int height,
+-                               int bytesPerPixel, int d_x, int d_y,
+-                               unsigned int threshold);
+-
+-
+-unsigned int compareSubImg_thr_orc(unsigned char* const I1, unsigned char* const I2,
+-                                   const Field* field, int width1, int width2, int height,
+-                                   int bytesPerPixel, int d_x, int d_y,
+-                                   unsigned int threshold);
+-#endif
+-
+ #ifdef USE_SSE2
+ unsigned int compareSubImg_thr_sse2(unsigned char* const I1, unsigned char* const I2,
+                                     const Field* field, int width1, int width2, int height,
+diff --git a/src/orc/Makefile b/src/orc/Makefile
+deleted file mode 100644
+index fc63d87..0000000
+--- a/src/orc/Makefile
++++ /dev/null
+@@ -1,14 +0,0 @@
+-
+-all: motiondetectorc.c motiondetectorc.h transformorc.c transformorc.h
+-
+-motiondetectorc.c : motiondetectorc.orc
+-	orcc --implementation -o motiondetectorc.c motiondetectorc.orc
+-
+-motiondetectorc.h : motiondetectorc.orc
+-	orcc --header -o motiondetectorc.h motiondetectorc.orc
+-
+-transformorc.c : transformorc.orc
+-	orcc --implementation -o transformorc.c transformorc.orc
+-
+-transformorc.h : transformorc.orc
+-	orcc --header -o transformorc.h transformorc.orc
+\ No newline at end of file
+diff --git a/src/orc/motiondetectorc.c b/src/orc/motiondetectorc.c
+deleted file mode 100644
+index e7329d7..0000000
+--- a/src/orc/motiondetectorc.c
++++ /dev/null
+@@ -1,539 +0,0 @@
+-
+-/* autogenerated from motiondetectorc.orc */
+-
+-#ifdef HAVE_CONFIG_H
+-#include "config.h"
+-#endif
+-
+-#ifndef _ORC_INTEGER_TYPEDEFS_
+-#define _ORC_INTEGER_TYPEDEFS_
+-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-#include <stdint.h>
+-typedef int8_t orc_int8;
+-typedef int16_t orc_int16;
+-typedef int32_t orc_int32;
+-typedef int64_t orc_int64;
+-typedef uint8_t orc_uint8;
+-typedef uint16_t orc_uint16;
+-typedef uint32_t orc_uint32;
+-typedef uint64_t orc_uint64;
+-#define ORC_UINT64_C(x) UINT64_C(x)
+-#elif defined(_MSC_VER)
+-typedef signed __int8 orc_int8;
+-typedef signed __int16 orc_int16;
+-typedef signed __int32 orc_int32;
+-typedef signed __int64 orc_int64;
+-typedef unsigned __int8 orc_uint8;
+-typedef unsigned __int16 orc_uint16;
+-typedef unsigned __int32 orc_uint32;
+-typedef unsigned __int64 orc_uint64;
+-#define ORC_UINT64_C(x) (x##Ui64)
+-#define inline __inline
+-#else
+-#include <limits.h>
+-typedef signed char orc_int8;
+-typedef short orc_int16;
+-typedef int orc_int32;
+-typedef unsigned char orc_uint8;
+-typedef unsigned short orc_uint16;
+-typedef unsigned int orc_uint32;
+-#if INT_MAX == LONG_MAX
+-typedef long long orc_int64;
+-typedef unsigned long long orc_uint64;
+-#define ORC_UINT64_C(x) (x##ULL)
+-#else
+-typedef long orc_int64;
+-typedef unsigned long orc_uint64;
+-#define ORC_UINT64_C(x) (x##UL)
+-#endif
+-#endif
+-typedef union { orc_int16 i; orc_int8 x2[2]; } orc_union16;
+-typedef union { orc_int32 i; float f; orc_int16 x2[2]; orc_int8 x4[4]; } orc_union32;
+-typedef union { orc_int64 i; double f; orc_int32 x2[2]; float x2f[2]; orc_int16 x4[4]; } orc_union64;
+-#endif
+-#ifndef ORC_RESTRICT
+-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-#define ORC_RESTRICT restrict
+-#elif defined(__GNUC__) && __GNUC__ >= 4
+-#define ORC_RESTRICT __restrict__
+-#else
+-#define ORC_RESTRICT
+-#endif
+-#endif
+-
+-#ifndef DISABLE_ORC
+-#include <orc/orc.h>
+-#endif
+-void image_difference_optimized (orc_uint32 * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, const orc_uint8 * ORC_RESTRICT s2, int s2_stride, int n, int m);
+-void image_line_difference_optimized (orc_uint32 * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, const orc_uint8 * ORC_RESTRICT s2, int n);
+-void image_sum_optimized (int * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, int n, int m);
+-void image_variance_optimized (int * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, int p2, int n, int m);
+-
+-
+-/* begin Orc C target preamble */
+-#define ORC_CLAMP(x,a,b) ((x)<(a) ? (a) : ((x)>(b) ? (b) : (x)))
+-#define ORC_ABS(a) ((a)<0 ? -(a) : (a))
+-#define ORC_MIN(a,b) ((a)<(b) ? (a) : (b))
+-#define ORC_MAX(a,b) ((a)>(b) ? (a) : (b))
+-#define ORC_SB_MAX 127
+-#define ORC_SB_MIN (-1-ORC_SB_MAX)
+-#define ORC_UB_MAX 255
+-#define ORC_UB_MIN 0
+-#define ORC_SW_MAX 32767
+-#define ORC_SW_MIN (-1-ORC_SW_MAX)
+-#define ORC_UW_MAX 65535
+-#define ORC_UW_MIN 0
+-#define ORC_SL_MAX 2147483647
+-#define ORC_SL_MIN (-1-ORC_SL_MAX)
+-#define ORC_UL_MAX 4294967295U
+-#define ORC_UL_MIN 0
+-#define ORC_CLAMP_SB(x) ORC_CLAMP(x,ORC_SB_MIN,ORC_SB_MAX)
+-#define ORC_CLAMP_UB(x) ORC_CLAMP(x,ORC_UB_MIN,ORC_UB_MAX)
+-#define ORC_CLAMP_SW(x) ORC_CLAMP(x,ORC_SW_MIN,ORC_SW_MAX)
+-#define ORC_CLAMP_UW(x) ORC_CLAMP(x,ORC_UW_MIN,ORC_UW_MAX)
+-#define ORC_CLAMP_SL(x) ORC_CLAMP(x,ORC_SL_MIN,ORC_SL_MAX)
+-#define ORC_CLAMP_UL(x) ORC_CLAMP(x,ORC_UL_MIN,ORC_UL_MAX)
+-#define ORC_SWAP_W(x) ((((x)&0xff)<<8) | (((x)&0xff00)>>8))
+-#define ORC_SWAP_L(x) ((((x)&0xff)<<24) | (((x)&0xff00)<<8) | (((x)&0xff0000)>>8) | (((x)&0xff000000)>>24))
+-#define ORC_SWAP_Q(x) ((((x)&ORC_UINT64_C(0xff))<<56) | (((x)&ORC_UINT64_C(0xff00))<<40) | (((x)&ORC_UINT64_C(0xff0000))<<24) | (((x)&ORC_UINT64_C(0xff000000))<<8) | (((x)&ORC_UINT64_C(0xff00000000))>>8) | (((x)&ORC_UINT64_C(0xff0000000000))>>24) | (((x)&ORC_UINT64_C(0xff000000000000))>>40) | (((x)&ORC_UINT64_C(0xff00000000000000))>>56))
+-#define ORC_PTR_OFFSET(ptr,offset) ((void *)(((unsigned char *)(ptr)) + (offset)))
+-#define ORC_DENORMAL(x) ((x) & ((((x)&0x7f800000) == 0) ? 0xff800000 : 0xffffffff))
+-#define ORC_ISNAN(x) ((((x)&0x7f800000) == 0x7f800000) && (((x)&0x007fffff) != 0))
+-#define ORC_DENORMAL_DOUBLE(x) ((x) & ((((x)&ORC_UINT64_C(0x7ff0000000000000)) == 0) ? ORC_UINT64_C(0xfff0000000000000) : ORC_UINT64_C(0xffffffffffffffff)))
+-#define ORC_ISNAN_DOUBLE(x) ((((x)&ORC_UINT64_C(0x7ff0000000000000)) == ORC_UINT64_C(0x7ff0000000000000)) && (((x)&ORC_UINT64_C(0x000fffffffffffff)) != 0))
+-#ifndef ORC_RESTRICT
+-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-#define ORC_RESTRICT restrict
+-#elif defined(__GNUC__) && __GNUC__ >= 4
+-#define ORC_RESTRICT __restrict__
+-#else
+-#define ORC_RESTRICT
+-#endif
+-#endif
+-/* end Orc C target preamble */
+-
+-
+-
+-/* image_difference_optimized */
+-#ifdef DISABLE_ORC
+-void
+-image_difference_optimized (orc_uint32 * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, const orc_uint8 * ORC_RESTRICT s2, int s2_stride, int n, int m){
+-  int i;
+-  int j;
+-  const orc_int8 * ORC_RESTRICT ptr4;
+-  const orc_int8 * ORC_RESTRICT ptr5;
+-  orc_union32 var12 =  { 0 };
+-  orc_int8 var32;
+-  orc_int8 var33;
+-
+-  for (j = 0; j < m; j++) {
+-    ptr4 = ORC_PTR_OFFSET(s1, s1_stride * j);
+-    ptr5 = ORC_PTR_OFFSET(s2, s2_stride * j);
+-
+-
+-    for (i = 0; i < n; i++) {
+-      /* 0: loadb */
+-      var32 = ptr4[i];
+-      /* 1: loadb */
+-      var33 = ptr5[i];
+-      /* 2: accsadubl */
+-      var12.i = var12.i + ORC_ABS((orc_int32)(orc_uint8)var32 - (orc_int32)(orc_uint8)var33);
+-    }
+-  }
+-  *a1 = var12.i;
+-
+-}
+-
+-#else
+-static void
+-_backup_image_difference_optimized (OrcExecutor * ORC_RESTRICT ex)
+-{
+-  int i;
+-  int j;
+-  int n = ex->n;
+-  int m = ex->params[ORC_VAR_A1];
+-  const orc_int8 * ORC_RESTRICT ptr4;
+-  const orc_int8 * ORC_RESTRICT ptr5;
+-  orc_union32 var12 =  { 0 };
+-  orc_int8 var32;
+-  orc_int8 var33;
+-
+-  for (j = 0; j < m; j++) {
+-    ptr4 = ORC_PTR_OFFSET(ex->arrays[4], ex->params[4] * j);
+-    ptr5 = ORC_PTR_OFFSET(ex->arrays[5], ex->params[5] * j);
+-
+-
+-    for (i = 0; i < n; i++) {
+-      /* 0: loadb */
+-      var32 = ptr4[i];
+-      /* 1: loadb */
+-      var33 = ptr5[i];
+-      /* 2: accsadubl */
+-      var12.i = var12.i + ORC_ABS((orc_int32)(orc_uint8)var32 - (orc_int32)(orc_uint8)var33);
+-    }
+-  }
+-  ex->accumulators[0] = var12.i;
+-
+-}
+-
+-void
+-image_difference_optimized (orc_uint32 * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, const orc_uint8 * ORC_RESTRICT s2, int s2_stride, int n, int m)
+-{
+-  OrcExecutor _ex, *ex = &_ex;
+-  static int p_inited = 0;
+-  static OrcCode *c = 0;
+-  void (*func) (OrcExecutor *);
+-
+-  if (!p_inited) {
+-    orc_once_mutex_lock ();
+-    if (!p_inited) {
+-      OrcProgram *p;
+-
+-      p = orc_program_new ();
+-      orc_program_set_2d (p);
+-      orc_program_set_name (p, "image_difference_optimized");
+-      orc_program_set_backup_function (p, _backup_image_difference_optimized);
+-      orc_program_add_source (p, 1, "s1");
+-      orc_program_add_source (p, 1, "s2");
+-      orc_program_add_accumulator (p, 4, "a1");
+-
+-      orc_program_append_2 (p, "accsadubl", 0, ORC_VAR_A1, ORC_VAR_S1, ORC_VAR_S2, ORC_VAR_D1);
+-
+-      orc_program_compile (p);
+-      c = orc_program_take_code (p);
+-      orc_program_free (p);
+-    }
+-    p_inited = TRUE;
+-    orc_once_mutex_unlock ();
+-  }
+-  ex->arrays[ORC_VAR_A2] = c;
+-  ex->program = 0;
+-
+-  ex->n = n;
+-  ORC_EXECUTOR_M(ex) = m;
+-  ex->arrays[ORC_VAR_S1] = (void *)s1;
+-  ex->params[ORC_VAR_S1] = s1_stride;
+-  ex->arrays[ORC_VAR_S2] = (void *)s2;
+-  ex->params[ORC_VAR_S2] = s2_stride;
+-
+-  func = c->exec;
+-  func (ex);
+-  *a1 = orc_executor_get_accumulator (ex, ORC_VAR_A1);
+-}
+-#endif
+-
+-
+-/* image_line_difference_optimized */
+-#ifdef DISABLE_ORC
+-void
+-image_line_difference_optimized (orc_uint32 * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, const orc_uint8 * ORC_RESTRICT s2, int n){
+-  int i;
+-  const orc_int8 * ORC_RESTRICT ptr4;
+-  const orc_int8 * ORC_RESTRICT ptr5;
+-  orc_union32 var12 =  { 0 };
+-  orc_int8 var32;
+-  orc_int8 var33;
+-
+-  ptr4 = (orc_int8 *)s1;
+-  ptr5 = (orc_int8 *)s2;
+-
+-
+-  for (i = 0; i < n; i++) {
+-    /* 0: loadb */
+-    var32 = ptr4[i];
+-    /* 1: loadb */
+-    var33 = ptr5[i];
+-    /* 2: accsadubl */
+-    var12.i = var12.i + ORC_ABS((orc_int32)(orc_uint8)var32 - (orc_int32)(orc_uint8)var33);
+-  }
+-  *a1 = var12.i;
+-
+-}
+-
+-#else
+-static void
+-_backup_image_line_difference_optimized (OrcExecutor * ORC_RESTRICT ex)
+-{
+-  int i;
+-  int n = ex->n;
+-  const orc_int8 * ORC_RESTRICT ptr4;
+-  const orc_int8 * ORC_RESTRICT ptr5;
+-  orc_union32 var12 =  { 0 };
+-  orc_int8 var32;
+-  orc_int8 var33;
+-
+-  ptr4 = (orc_int8 *)ex->arrays[4];
+-  ptr5 = (orc_int8 *)ex->arrays[5];
+-
+-
+-  for (i = 0; i < n; i++) {
+-    /* 0: loadb */
+-    var32 = ptr4[i];
+-    /* 1: loadb */
+-    var33 = ptr5[i];
+-    /* 2: accsadubl */
+-    var12.i = var12.i + ORC_ABS((orc_int32)(orc_uint8)var32 - (orc_int32)(orc_uint8)var33);
+-  }
+-  ex->accumulators[0] = var12.i;
+-
+-}
+-
+-void
+-image_line_difference_optimized (orc_uint32 * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, const orc_uint8 * ORC_RESTRICT s2, int n)
+-{
+-  OrcExecutor _ex, *ex = &_ex;
+-  static int p_inited = 0;
+-  static OrcCode *c = 0;
+-  void (*func) (OrcExecutor *);
+-
+-  if (!p_inited) {
+-    orc_once_mutex_lock ();
+-    if (!p_inited) {
+-      OrcProgram *p;
+-
+-      p = orc_program_new ();
+-      orc_program_set_name (p, "image_line_difference_optimized");
+-      orc_program_set_backup_function (p, _backup_image_line_difference_optimized);
+-      orc_program_add_source (p, 1, "s1");
+-      orc_program_add_source (p, 1, "s2");
+-      orc_program_add_accumulator (p, 4, "a1");
+-
+-      orc_program_append_2 (p, "accsadubl", 0, ORC_VAR_A1, ORC_VAR_S1, ORC_VAR_S2, ORC_VAR_D1);
+-
+-      orc_program_compile (p);
+-      c = orc_program_take_code (p);
+-      orc_program_free (p);
+-    }
+-    p_inited = TRUE;
+-    orc_once_mutex_unlock ();
+-  }
+-  ex->arrays[ORC_VAR_A2] = c;
+-  ex->program = 0;
+-
+-  ex->n = n;
+-  ex->arrays[ORC_VAR_S1] = (void *)s1;
+-  ex->arrays[ORC_VAR_S2] = (void *)s2;
+-
+-  func = c->exec;
+-  func (ex);
+-  *a1 = orc_executor_get_accumulator (ex, ORC_VAR_A1);
+-}
+-#endif
+-
+-
+-/* image_sum_optimized */
+-#ifdef DISABLE_ORC
+-void
+-image_sum_optimized (int * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, int n, int m){
+-  int i;
+-  int j;
+-  const orc_int8 * ORC_RESTRICT ptr4;
+-  orc_union32 var12 =  { 0 };
+-  orc_int8 var34;
+-  orc_union16 var35;
+-  orc_union32 var36;
+-
+-  for (j = 0; j < m; j++) {
+-    ptr4 = ORC_PTR_OFFSET(s1, s1_stride * j);
+-
+-
+-    for (i = 0; i < n; i++) {
+-      /* 0: loadb */
+-      var34 = ptr4[i];
+-      /* 1: convubw */
+-      var35.i = (orc_uint8)var34;
+-      /* 2: convuwl */
+-      var36.i = (orc_uint16)var35.i;
+-      /* 3: accl */
+-      var12.i = var12.i + var36.i;
+-    }
+-  }
+-  *a1 = var12.i;
+-
+-}
+-
+-#else
+-static void
+-_backup_image_sum_optimized (OrcExecutor * ORC_RESTRICT ex)
+-{
+-  int i;
+-  int j;
+-  int n = ex->n;
+-  int m = ex->params[ORC_VAR_A1];
+-  const orc_int8 * ORC_RESTRICT ptr4;
+-  orc_union32 var12 =  { 0 };
+-  orc_int8 var34;
+-  orc_union16 var35;
+-  orc_union32 var36;
+-
+-  for (j = 0; j < m; j++) {
+-    ptr4 = ORC_PTR_OFFSET(ex->arrays[4], ex->params[4] * j);
+-
+-
+-    for (i = 0; i < n; i++) {
+-      /* 0: loadb */
+-      var34 = ptr4[i];
+-      /* 1: convubw */
+-      var35.i = (orc_uint8)var34;
+-      /* 2: convuwl */
+-      var36.i = (orc_uint16)var35.i;
+-      /* 3: accl */
+-      var12.i = var12.i + var36.i;
+-    }
+-  }
+-  ex->accumulators[0] = var12.i;
+-
+-}
+-
+-void
+-image_sum_optimized (int * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, int n, int m)
+-{
+-  OrcExecutor _ex, *ex = &_ex;
+-  static int p_inited = 0;
+-  static OrcCode *c = 0;
+-  void (*func) (OrcExecutor *);
+-
+-  if (!p_inited) {
+-    orc_once_mutex_lock ();
+-    if (!p_inited) {
+-      OrcProgram *p;
+-
+-      p = orc_program_new ();
+-      orc_program_set_2d (p);
+-      orc_program_set_name (p, "image_sum_optimized");
+-      orc_program_set_backup_function (p, _backup_image_sum_optimized);
+-      orc_program_add_source (p, 1, "s1");
+-      orc_program_add_accumulator (p, 4, "a1");
+-      orc_program_add_temporary (p, 2, "t1");
+-      orc_program_add_temporary (p, 4, "t2");
+-
+-      orc_program_append_2 (p, "convubw", 0, ORC_VAR_T1, ORC_VAR_S1, ORC_VAR_D1, ORC_VAR_D1);
+-      orc_program_append_2 (p, "convuwl", 0, ORC_VAR_T2, ORC_VAR_T1, ORC_VAR_D1, ORC_VAR_D1);
+-      orc_program_append_2 (p, "accl", 0, ORC_VAR_A1, ORC_VAR_T2, ORC_VAR_D1, ORC_VAR_D1);
+-
+-      orc_program_compile (p);
+-      c = orc_program_take_code (p);
+-      orc_program_free (p);
+-    }
+-    p_inited = TRUE;
+-    orc_once_mutex_unlock ();
+-  }
+-  ex->arrays[ORC_VAR_A2] = c;
+-  ex->program = 0;
+-
+-  ex->n = n;
+-  ORC_EXECUTOR_M(ex) = m;
+-  ex->arrays[ORC_VAR_S1] = (void *)s1;
+-  ex->params[ORC_VAR_S1] = s1_stride;
+-
+-  func = c->exec;
+-  func (ex);
+-  *a1 = orc_executor_get_accumulator (ex, ORC_VAR_A1);
+-}
+-#endif
+-
+-
+-/* image_variance_optimized */
+-#ifdef DISABLE_ORC
+-void
+-image_variance_optimized (int * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, int p2, int n, int m){
+-  int i;
+-  int j;
+-  const orc_int8 * ORC_RESTRICT ptr4;
+-  orc_union32 var12 =  { 0 };
+-  orc_int8 var32;
+-  orc_int8 var33;
+-
+-  for (j = 0; j < m; j++) {
+-    ptr4 = ORC_PTR_OFFSET(s1, s1_stride * j);
+-
+-      /* 1: loadpb */
+-        var33 = p2;
+-
+-    for (i = 0; i < n; i++) {
+-      /* 0: loadb */
+-      var32 = ptr4[i];
+-      /* 2: accsadubl */
+-      var12.i = var12.i + ORC_ABS((orc_int32)(orc_uint8)var32 - (orc_int32)(orc_uint8)var33);
+-    }
+-  }
+-  *a1 = var12.i;
+-
+-}
+-
+-#else
+-static void
+-_backup_image_variance_optimized (OrcExecutor * ORC_RESTRICT ex)
+-{
+-  int i;
+-  int j;
+-  int n = ex->n;
+-  int m = ex->params[ORC_VAR_A1];
+-  const orc_int8 * ORC_RESTRICT ptr4;
+-  orc_union32 var12 =  { 0 };
+-  orc_int8 var32;
+-  orc_int8 var33;
+-
+-  for (j = 0; j < m; j++) {
+-    ptr4 = ORC_PTR_OFFSET(ex->arrays[4], ex->params[4] * j);
+-
+-      /* 1: loadpb */
+-        var33 = ex->params[25];
+-
+-    for (i = 0; i < n; i++) {
+-      /* 0: loadb */
+-      var32 = ptr4[i];
+-      /* 2: accsadubl */
+-      var12.i = var12.i + ORC_ABS((orc_int32)(orc_uint8)var32 - (orc_int32)(orc_uint8)var33);
+-    }
+-  }
+-  ex->accumulators[0] = var12.i;
+-
+-}
+-
+-void
+-image_variance_optimized (int * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, int p2, int n, int m)
+-{
+-  OrcExecutor _ex, *ex = &_ex;
+-  static int p_inited = 0;
+-  static OrcCode *c = 0;
+-  void (*func) (OrcExecutor *);
+-
+-  if (!p_inited) {
+-    orc_once_mutex_lock ();
+-    if (!p_inited) {
+-      OrcProgram *p;
+-
+-      p = orc_program_new ();
+-      orc_program_set_2d (p);
+-      orc_program_set_name (p, "image_variance_optimized");
+-      orc_program_set_backup_function (p, _backup_image_variance_optimized);
+-      orc_program_add_source (p, 1, "s1");
+-      orc_program_add_accumulator (p, 4, "a1");
+-      orc_program_add_parameter (p, 1, "p2");
+-
+-      orc_program_append_2 (p, "accsadubl", 0, ORC_VAR_A1, ORC_VAR_S1, ORC_VAR_P2, ORC_VAR_D1);
+-
+-      orc_program_compile (p);
+-      c = orc_program_take_code (p);
+-      orc_program_free (p);
+-    }
+-    p_inited = TRUE;
+-    orc_once_mutex_unlock ();
+-  }
+-  ex->arrays[ORC_VAR_A2] = c;
+-  ex->program = 0;
+-
+-  ex->n = n;
+-  ORC_EXECUTOR_M(ex) = m;
+-  ex->arrays[ORC_VAR_S1] = (void *)s1;
+-  ex->params[ORC_VAR_S1] = s1_stride;
+-  ex->params[ORC_VAR_P2] = p2;
+-
+-  func = c->exec;
+-  func (ex);
+-  *a1 = orc_executor_get_accumulator (ex, ORC_VAR_A1);
+-}
+-#endif
+-
+-
+diff --git a/src/orc/motiondetectorc.h b/src/orc/motiondetectorc.h
+deleted file mode 100644
+index 1c2c7ae..0000000
+--- a/src/orc/motiondetectorc.h
++++ /dev/null
+@@ -1,79 +0,0 @@
+-
+-/* autogenerated from motiondetectorc.orc */
+-
+-#ifndef _MOTIONDETECTORC_H_
+-#define _MOTIONDETECTORC_H_
+-
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-
+-
+-#ifndef _ORC_INTEGER_TYPEDEFS_
+-#define _ORC_INTEGER_TYPEDEFS_
+-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-#include <stdint.h>
+-typedef int8_t orc_int8;
+-typedef int16_t orc_int16;
+-typedef int32_t orc_int32;
+-typedef int64_t orc_int64;
+-typedef uint8_t orc_uint8;
+-typedef uint16_t orc_uint16;
+-typedef uint32_t orc_uint32;
+-typedef uint64_t orc_uint64;
+-#define ORC_UINT64_C(x) UINT64_C(x)
+-#elif defined(_MSC_VER)
+-typedef signed __int8 orc_int8;
+-typedef signed __int16 orc_int16;
+-typedef signed __int32 orc_int32;
+-typedef signed __int64 orc_int64;
+-typedef unsigned __int8 orc_uint8;
+-typedef unsigned __int16 orc_uint16;
+-typedef unsigned __int32 orc_uint32;
+-typedef unsigned __int64 orc_uint64;
+-#define ORC_UINT64_C(x) (x##Ui64)
+-#define inline __inline
+-#else
+-#include <limits.h>
+-typedef signed char orc_int8;
+-typedef short orc_int16;
+-typedef int orc_int32;
+-typedef unsigned char orc_uint8;
+-typedef unsigned short orc_uint16;
+-typedef unsigned int orc_uint32;
+-#if INT_MAX == LONG_MAX
+-typedef long long orc_int64;
+-typedef unsigned long long orc_uint64;
+-#define ORC_UINT64_C(x) (x##ULL)
+-#else
+-typedef long orc_int64;
+-typedef unsigned long orc_uint64;
+-#define ORC_UINT64_C(x) (x##UL)
+-#endif
+-#endif
+-typedef union { orc_int16 i; orc_int8 x2[2]; } orc_union16;
+-typedef union { orc_int32 i; float f; orc_int16 x2[2]; orc_int8 x4[4]; } orc_union32;
+-typedef union { orc_int64 i; double f; orc_int32 x2[2]; float x2f[2]; orc_int16 x4[4]; } orc_union64;
+-#endif
+-#ifndef ORC_RESTRICT
+-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-#define ORC_RESTRICT restrict
+-#elif defined(__GNUC__) && __GNUC__ >= 4
+-#define ORC_RESTRICT __restrict__
+-#else
+-#define ORC_RESTRICT
+-#endif
+-#endif
+-void image_difference_optimized (orc_uint32 * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, const orc_uint8 * ORC_RESTRICT s2, int s2_stride, int n, int m);
+-void image_line_difference_optimized (orc_uint32 * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, const orc_uint8 * ORC_RESTRICT s2, int n);
+-void image_sum_optimized (int * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, int n, int m);
+-void image_variance_optimized (int * ORC_RESTRICT a1, const orc_uint8 * ORC_RESTRICT s1, int s1_stride, int p2, int n, int m);
+-
+-#ifdef __cplusplus
+-}
+-#endif
+-
+-#endif
+-
+diff --git a/src/orc/motiondetectorc.orc b/src/orc/motiondetectorc.orc
+deleted file mode 100644
+index fd825dd..0000000
+--- a/src/orc/motiondetectorc.orc
++++ /dev/null
+@@ -1,84 +0,0 @@
+-################################################################################
+-# Optimized functions 
+-################################################################################
+-
+-# Image Difference
+-#
+-#  for (j = 0; j < field->size; j++) {
+-#    for (k = 0; k < field->size * bytesPerPixel; k++) {
+-#      sum += abs((int) *p1 - (int) *p2);
+-#      p1++;
+-#      p2++;
+-#    }
+-#    p1 += (width - field->size) * bytesPerPixel;
+-#    p2 += (width - field->size) * bytesPerPixel;
+-#  }
+-
+-.function image_difference_optimized
+-.flags 2d
+-.source 1 s1 uint8_t
+-.source 1 s2 uint8_t
+-.accumulator 4 sum uint32_t
+-accsadubl sum, s1, s2
+-
+-
+-.function image_line_difference_optimized
+-.source 1 s1 uint8_t
+-.source 1 s2 uint8_t
+-.accumulator 4 sum uint32_t
+-accsadubl sum, s1, s2
+-
+-
+-
+-# Image Contrast
+-#  SUM
+-# p = pstart;
+-# for (j = 0; j < field->size; j++) {      
+-#   for (k = 0; k < field->size; k++, p++) {
+-#     sum+=*p;
+-#   }
+-#   p += (width - field->size);
+-# }
+-# mean=sum/numpixel;
+-# p = pstart;  
+-#  VARIANCE
+-# for (j = 0; j < field->size; j++) {      
+-#   for (k = 0; k < field->size; k++, p++) {
+-#     var+=abs(*p-mean);
+-#   }
+-#   p += (width - field->size);
+-# }
+-
+-
+-# Image Contrast functions
+-# Sum of all pixels (used to calculate mean)
+-.function image_sum_optimized
+-.flags 2d
+-.accumulator 4 sum int
+-.source 1 s uint8_t
+-.temp 2 t1 
+-.temp 4 t2
+-convubw t1 s
+-convuwl t2 t1
+-accl sum, t2
+-
+-# this implementation appears to be slower
+-# .function image_sum_optimized
+-# .flags 2d
+-# .accumulator 4 sum int
+-# .source 1 s uint8_t
+-# .const 1 c1 0
+-# accsadubl sum, s, c1
+-
+-# Variance of the image in Manhattan-Norm (absolute value)
+-.function image_variance_optimized
+-.flags 2d
+-.accumulator 4 var int
+-.source 1 s uint8_t
+-.param 1 mean uint8_t
+-accsadubl var, s, mean
+-
+-
+-
+-
+-
+diff --git a/src/orc/transformorc.orc b/src/orc/transformorc.orc
+deleted file mode 100644
+index 3a5ba68..0000000
+--- a/src/orc/transformorc.orc
++++ /dev/null
+@@ -1,65 +0,0 @@
+-################################################################################
+-# Optimized functions 
+-################################################################################
+-
+-# Hint: use only one space between opcode and operands (and also between them)
+-
+-# Rotation and Translation of one line
+-
+-# for (x = 0; x < td->fiDest.width; x++) {
+-# 	int32_t x_d1 = (xs[x] - c_d_x);
+-# 	x_ss[x]  =  zcos_a * x_d1 + zsin_a * y_d1 + c_tx;
+-# 	y_ss[x]  = -zsin_a * x_d1 + zcos_a * y_d1 + c_ty;
+-# }
+-
+-
+-.function transform_one_line_optimized
+-.dest 4 x_ss int32_t    # fp16
+-.dest 4 y_ss int32_t    # fp16
+-.source 4 xs int32_t
+-.param 4 y_d1 int32_t
+-.param 4 c_d_x int32_t
+-.param 4 c_tx int32_t   # fp16
+-.param 4 c_ty int32_t   # fp16
+-.param 4 zcos_a int32_t # fp16
+-.param 4 zsin_a int32_t # fp16
+-.temp 4 x_d1
+-.temp 4 tmp1
+-.temp 4 tmp2
+-
+-subl x_d1, xs, c_d_x
+-mulll tmp1 zcos_a x_d1
+-mulll tmp2 zsin_a y_d1
+-addl tmp1 tmp1 tmp2
+-addl x_ss tmp1 c_tx
+-mulll tmp1 zcos_a y_d1
+-mulll tmp2 zsin_a x_d1
+-subl tmp1 tmp1 tmp2
+-addl y_ss tmp1 c_ty
+-
+-
+-.function transform_one_line_optimized1
+-.dest 4 x_ss int32_t    # fp16
+-.source 4 xs int32_t
+-.param 4 y_d1 int32_t
+-.param 4 c_d_x int32_t
+-.param 4 c_tx int32_t   # fp16
+-.param 4 c_ty int32_t   # fp16
+-.param 4 zcos_a int32_t # fp16
+-.param 4 zsin_a int32_t # fp16
+-.param 4 sin_y int32_t # fp16
+-.param 4 cos_y int32_t # fp16
+-.temp 4 x_d1
+-.temp 4 tmp1
+-.temp 4 tmp2
+-subl x_d1, xs, c_d_x
+-mulll tmp1, x_d1, zcos_a
+-addl tmp1, tmp1, sin_y
+-addl x_ss, tmp1, c_tx
+-mulll tmp1, x_d1, zsin_a
+-mulll tmp1, tmp1, -1
+-addl tmp2, tmp1, cos_y
+-# addl y_ss, tmp1, c_ty
+-
+-
+-
+diff --git a/src/transformfixedpoint.c b/src/transformfixedpoint.c
+index 3549747..bfc0a9c 100644
+--- a/src/transformfixedpoint.c
++++ b/src/transformfixedpoint.c
+@@ -28,9 +28,6 @@
+ #include "transform.h"
+ #include "transformtype_operations.h"
+ 
+-// the orc code does not work at the moment (BUG in ORC?)
+-// #include "orc/transformorc.h"
+-
+ //#include <math.h>
+ //#include <libgen.h>
+ 
+@@ -394,121 +391,6 @@ int transformPlanar(VSTransformData* td, VSTransform t)
+ }
+ 
+ 
+-
+-/* /\** TESTING */
+-/*  * transformPlanar_orc: applies current transformation to frame */
+-/*  * */
+-/*  * Parameters: */
+-/*  *         td: private data structure of this filter */
+-/*  * Return value:  */
+-/*  *         0 for failture, 1 for success */
+-/*  * Preconditions: */
+-/*  *  The frame must be in Planar format */
+-/*  * */
+-/*  * Fixed-point format 32 bit integer: */
+-/*  *  for image coords we use val<<8 */
+-/*  *  for angle and zoom we use val<<16 */
+-/*  * */
+-/*  *\/ */
+-/* int transformPlanar_orc(VSTransformData* td, VSTransform t) */
+-/* { */
+-/*     int32_t x = 0, y = 0; */
+-/*     uint8_t *Y_1, *Y_2, *Cb_1, *Cb_2, *Cr_1, *Cr_2; */
+-
+-/*     if (t.alpha==0 && t.x==0 && t.y==0 && t.zoom == 0) return VS_OK; // noop */
+-
+-/*     Y_1  = td->src;   */
+-/*     Y_2  = td->destbuf;   */
+-/*     Cb_1 = td->src + td->fiSrc.width * td->fiSrc.height; */
+-/*     Cb_2 = td->destbuf + td->fiDest.width * td->fiDest.height; */
+-/*     Cr_1 = td->src + 5*td->fiSrc.width * td->fiSrc.height/4; */
+-/*     Cr_2 = td->destbuf + 5*td->fiDest.width * td->fiDest.height/4; */
+-/*     fp16 c_s_x = iToFp16(td->fiSrc.width / 2); */
+-/*     fp16 c_s_y = iToFp16(td->fiSrc.height / 2); */
+-/*     int32_t c_d_x = td->fiDest.width / 2; */
+-/*     int32_t c_d_y = td->fiDest.height / 2;     */
+-
+-/*     float z     = 1.0-t.zoom/100.0; */
+-/*     fp16 zcos_a = fToFp16(z*cos(-t.alpha)); // scaled cos */
+-/*     fp16 zsin_a = fToFp16(z*sin(-t.alpha)); // scaled sin */
+-/*     fp16  c_tx    = c_s_x - fToFp16(t.x); */
+-/*     fp16  c_ty    = c_s_y - fToFp16(t.y); */
+-
+-/*     /\* for each pixel in the destination image we calc the source */
+-/*      * coordinate and make an interpolation:  */
+-/*      *      p_d = c_d + M(p_s - c_s) + t  */
+-/*      * where p are the points, c the center coordinate,  */
+-/*      *  _s source and _d destination,  */
+-/*      *  t the translation, and M the rotation and scaling matrix */
+-/*      *      p_s = M^{-1}(p_d - c_d - t) + c_s */
+-/*      *\/ */
+-/*     /\* Luminance channel *\/ */
+-/*     fp16* x_ss = (fp16*)malloc(sizeof(fp16)*td->fiDest.width); */
+-/*     fp16* y_ss = (fp16*)malloc(sizeof(fp16)*td->fiDest.width);     */
+-/*     int32_t* xs = (int32_t*)malloc(sizeof(int32_t)*td->fiDest.width);         */
+-/*     for (x = 0; x < td->fiDest.width; x++) { // this can go to td */
+-/*       xs[x]=x; */
+-/*     } */
+-
+-/*     for (y = 0; y < td->fiDest.height; y++) { */
+-/*       int32_t y_d1 = (y - c_d_y);   */
+-/*       fp16 sin_y   = zsin_a * y_d1; */
+-/*       fp16 cos_y   = zcos_a * y_d1; */
+-/*       for (x = 0; x < td->fiDest.width; x++) { */
+-/*         int32_t x_d1 = (xs[x] - c_d_x); */
+-/*         //x_ss[x]  =  zcos_a * x_d1 + zsin_a * y_d1 + c_tx; */
+-/*   y_ss[x]  = -zsin_a * x_d1 + zcos_a * y_d1 + c_ty; */
+-/*       } */
+-/*       transform_one_line_optimized1 (x_ss, y_ss, xs, y_d1, c_d_x,  */
+-/*              c_tx, c_ty, zcos_a, zsin_a, sin_y, cos_y,  */
+-/*              td->fiDest.width); */
+-/*       // transform_one_line_optimized (x_ss, y_ss, xs, y_d1, c_d_x,  */
+-/*       //             c_tx, c_ty, zcos_a, zsin_a, td->fiDest.width); */
+-
+-/*       for (x = 0; x < td->fiDest.width; x++) { */
+-/*   uint8_t *dest = &Y_2[x + y * td->fiDest.width]; */
+-/*   td->interpolate(dest, x_ss[x], y_ss[x], Y_1,  */
+-/*         td->fiSrc.width, td->fiSrc.height,  */
+-/*         td->crop ? 16 : *dest); */
+-/*       } */
+-/*     } */
+-
+-/*     /\* Color channels *\/ */
+-/*     int32_t ws2 = td->fiSrc.width/2; */
+-/*     int32_t wd2 = td->fiDest.width/2; */
+-/*     int32_t hs2 = td->fiSrc.height/2; */
+-/*     int32_t hd2 = td->fiDest.height/2; */
+-/*     fp16 c_tx2   = c_tx/2; */
+-/*     fp16 c_ty2   = c_ty/2; */
+-
+-/*     for (y = 0; y < hd2; y++) { */
+-/*       int32_t y_d1 = y - (c_d_y)/2; */
+-/*       for (x = 0; x < wd2; x++) { */
+-/*   int32_t x_d1 = x - (c_d_x)/2; */
+-/*   fp16 x_s  =  zcos_a * x_d1 + zsin_a * y_d1 + c_tx2; */
+-/*   fp16 y_s  = -zsin_a * x_d1 + zcos_a * y_d1 + c_ty2;  */
+-/*   uint8_t *dest = &Cr_2[x + y * wd2]; */
+-/*   td->interpolate(dest, x_s, y_s, Cr_1, ws2, hs2,  */
+-/*         td->crop ? 128 : *dest); */
+-/*   dest = &Cb_2[x + y * wd2]; */
+-/*   td->interpolate(dest, x_s, y_s, Cb_1, ws2, hs2,  */
+-/*         td->crop ? 128 : *dest); */
+-/*       } */
+-/*     } */
+-
+-/*     return VS_OK; */
+-/* } */
+-
+-/*
+-  some debugging stuff
+-  FILE* f1 = fopen("transFP.pos","w");
+-  fprintf(f1,"%i,%i:\t %f,%f\n", x, y, x_s / (float)(1<<16), y_s / (float)(1<<16));
+-  fclose(f1);
+-
+-*/
+-
+-
+-
+ /*
+  * Local variables:
+  *   c-file-style: "stroustrup"
+diff --git a/src/transformfixedpoint.h b/src/transformfixedpoint.h
+index e96011d..e56473d 100644
+--- a/src/transformfixedpoint.h
++++ b/src/transformfixedpoint.h
+@@ -38,10 +38,6 @@ int transformPacked(struct _VSTransformData* td, VSTransform t);
+ /// does the actual transformation in Planar space
+ int transformPlanar(struct _VSTransformData* td, VSTransform t);
+ 
+-// testing
+-/// does the actual transformation in Planar space
+-int transformPlanar_orc(struct _VSTransformData* td, VSTransform t);
+-
+ 
+ /* forward deklarations, please see .c file for documentation*/
+ void interpolateBiLinBorder(uint8_t *rv, fp16 x, fp16 y,
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 6812916..84a98dc 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -17,13 +17,6 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+ endif()
+ 
+ add_definitions(-Wall -Wno-pointer-sign -DTESTING -std=gnu99)
+-find_package(Orc)
+-if(ORC_FOUND)
+-add_definitions( -DUSE_ORC ${ORC_DEFINITIONS})
+-include_directories( ${ORC_INCLUDE_DIRS} )
+-else()
+-add_definitions( -DDISABLE_ORC)
+-endif()
+ 
+ if(SSE2_FOUND)
+ add_definitions( -DUSE_SSE2 -msse2 -ffast-math -fno-show-column ) # -DUSE_SSE2_ASM
+@@ -40,12 +33,9 @@ add_executable (tests tests.c testutils.c testframework.c ../src/vsvector.c
+   ../src/transform.c ../src/transformfloat.c ../src/transformfixedpoint.c
+   ../src/libvidstab.c ../src/transformtype.c ../src/frameinfo.c
+   ../src/serialize.c ../src/localmotion2transform.c
+-  ../src/motiondetect.c ../src/motiondetect_opt.c ../src/orc/motiondetectorc.c ../src/boxblur.c)
++  ../src/motiondetect.c ../src/motiondetect_opt.c ../src/boxblur.c)
+ 
+ target_link_libraries(tests m)
+-if(ORC_FOUND)
+-target_link_libraries(tests ${ORC_LIBRARIES})
+-endif()
+ if(USE_OMP)
+ target_link_libraries(tests gomp)
+ endif()
+diff --git a/tests/orc_bug/CMakeLists.txt b/tests/orc_bug/CMakeLists.txt
+deleted file mode 100644
+index 71e35f5..0000000
+--- a/tests/orc_bug/CMakeLists.txt
++++ /dev/null
+@@ -1,15 +0,0 @@
+-cmake_minimum_required (VERSION 2.6) 
+-project (vid.stab.test) 
+-
+-SET(CMAKE_BUILTTYPE None)
+-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/")
+-
+-find_package(Orc REQUIRED) 
+-
+-add_definitions(  -Wall -O0 -g  -DTESTING ${ORC_DEFINITIONS})
+-include_directories (${ORC_INCLUDE_DIRS}) 
+-
+-add_executable (orc_bug orc_bug.c orc_bug_orc.c )
+-
+-target_link_libraries(orc_bug m ${ORC_LIBRARIES}) #link the math library
+- 
+diff --git a/tests/orc_bug/FindOrc.cmake b/tests/orc_bug/FindOrc.cmake
+deleted file mode 100644
+index 117fd34..0000000
+--- a/tests/orc_bug/FindOrc.cmake
++++ /dev/null
+@@ -1,29 +0,0 @@
+-# find ORC
+-# - Try to find LibOrc-0.4
+-# Once done this will define
+-#  ORC_FOUND - System has LibOrc
+-#  ORC_INCLUDE_DIRS - The LibOrc include directories
+-#  ORC_LIBRARIES - The libraries needed to use LibOrc
+-#  ORC_DEFINITIONS - Compiler switches required for using LibOrc
+-
+-find_package(PkgConfig) 
+-pkg_check_modules(PC_ORC orc-0.4)
+-set(ORC_DEFINITIONS ${PC_ORC_CFLAGS_OTHER})
+-
+-find_path(ORC_INCLUDE_DIR orc/orc.h
+-          HINTS ${PC_ORC_INCLUDEDIR} ${PC_ORC_INCLUDE_DIRS}
+-          PATH_SUFFIXES orc)
+-
+-find_library(ORC_LIBRARY NAMES orc-0.4
+-             HINTS ${PC_ORC_LIBDIR} ${PC_ORC_LIBRARY_DIRS} )
+-
+-set(ORC_LIBRARIES ${ORC_LIBRARY} )
+-set(ORC_INCLUDE_DIRS ${ORC_INCLUDE_DIR} )
+-include(FindPackageHandleStandardArgs)
+-# handle the QUIETLY and REQUIRED arguments and set ORC_FOUND to TRUE
+-# if all listed variables are TRUE
+-find_package_handle_standard_args(LibOrc  DEFAULT_MSG
+-                                  ORC_LIBRARY ORC_INCLUDE_DIR)
+-
+-mark_as_advanced(ORC_INCLUDE_DIR ORC_LIBRARY )
+-# End find ORC
+diff --git a/tests/orc_bug/orc_bug.c b/tests/orc_bug/orc_bug.c
+deleted file mode 100644
+index d529fd2..0000000
+--- a/tests/orc_bug/orc_bug.c
++++ /dev/null
+@@ -1,31 +0,0 @@
+-#include <stdint.h>
+-#include <math.h>
+-#include <stdlib.h>
+-#include "orc_bug_orc.h"
+-
+-// cd ../ && orcc --implementation -o orc_bug_orc.c orc_bug_orc.orc && orcc --header -o orc_bug_orc.h orc_bug_orc.orc ; cd cmake
+-
+-int main(){
+-  int x;
+-  int N = 512;
+-
+-  // some random parameters
+-  int32_t zcos_a = 12345;
+-  int32_t zsin_a = 65432;
+-  int32_t c_tx   = 250;
+-  int32_t c_ty   = 6;
+-  int32_t c_d_x  = 256;
+-  int32_t y_d1 = 100;
+-
+-  int32_t* x_ss = (int32_t*)malloc(sizeof(int32_t)*N);
+-  int32_t* y_ss = (int32_t*)malloc(sizeof(int32_t)*N);
+-  int32_t* xs   = (int32_t*)malloc(sizeof(int32_t)*N);
+-  for (x = 0; x < N; x++) {
+-    xs[x]=x;
+-  }
+-
+-  test_orc (x_ss, y_ss, xs,
+-      y_d1, c_d_x, c_tx, c_ty, zcos_a, zsin_a, N);
+-
+-  return 0;
+-}
+diff --git a/tests/orc_bug/orc_bug_orc.c b/tests/orc_bug/orc_bug_orc.c
+deleted file mode 100644
+index e77c7db..0000000
+--- a/tests/orc_bug/orc_bug_orc.c
++++ /dev/null
+@@ -1,314 +0,0 @@
+-
+-/* autogenerated from orc_bug_orc.orc */
+-
+-#ifdef HAVE_CONFIG_H
+-#include "config.h"
+-#endif
+-
+-#ifndef _ORC_INTEGER_TYPEDEFS_
+-#define _ORC_INTEGER_TYPEDEFS_
+-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-#include <stdint.h>
+-typedef int8_t orc_int8;
+-typedef int16_t orc_int16;
+-typedef int32_t orc_int32;
+-typedef int64_t orc_int64;
+-typedef uint8_t orc_uint8;
+-typedef uint16_t orc_uint16;
+-typedef uint32_t orc_uint32;
+-typedef uint64_t orc_uint64;
+-#define ORC_UINT64_C(x) UINT64_C(x)
+-#elif defined(_MSC_VER)
+-typedef signed __int8 orc_int8;
+-typedef signed __int16 orc_int16;
+-typedef signed __int32 orc_int32;
+-typedef signed __int64 orc_int64;
+-typedef unsigned __int8 orc_uint8;
+-typedef unsigned __int16 orc_uint16;
+-typedef unsigned __int32 orc_uint32;
+-typedef unsigned __int64 orc_uint64;
+-#define ORC_UINT64_C(x) (x##Ui64)
+-#define inline __inline
+-#else
+-#include <limits.h>
+-typedef signed char orc_int8;
+-typedef short orc_int16;
+-typedef int orc_int32;
+-typedef unsigned char orc_uint8;
+-typedef unsigned short orc_uint16;
+-typedef unsigned int orc_uint32;
+-#if INT_MAX == LONG_MAX
+-typedef long long orc_int64;
+-typedef unsigned long long orc_uint64;
+-#define ORC_UINT64_C(x) (x##ULL)
+-#else
+-typedef long orc_int64;
+-typedef unsigned long orc_uint64;
+-#define ORC_UINT64_C(x) (x##UL)
+-#endif
+-#endif
+-typedef union { orc_int16 i; orc_int8 x2[2]; } orc_union16;
+-typedef union { orc_int32 i; float f; orc_int16 x2[2]; orc_int8 x4[4]; } orc_union32;
+-typedef union { orc_int64 i; double f; orc_int32 x2[2]; float x2f[2]; orc_int16 x4[4]; } orc_union64;
+-#endif
+-#ifndef ORC_RESTRICT
+-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-#define ORC_RESTRICT restrict
+-#elif defined(__GNUC__) && __GNUC__ >= 4
+-#define ORC_RESTRICT __restrict__
+-#else
+-#define ORC_RESTRICT
+-#endif
+-#endif
+-
+-#ifndef DISABLE_ORC
+-#include <orc/orc.h>
+-#endif
+-void test_orc (orc_int32 * ORC_RESTRICT d1, orc_int32 * ORC_RESTRICT d2, const orc_int32 * ORC_RESTRICT s1, int p1, int p2, int p3, int p4, int p5, int p6, int n);
+-
+-
+-/* begin Orc C target preamble */
+-#define ORC_CLAMP(x,a,b) ((x)<(a) ? (a) : ((x)>(b) ? (b) : (x)))
+-#define ORC_ABS(a) ((a)<0 ? -(a) : (a))
+-#define ORC_MIN(a,b) ((a)<(b) ? (a) : (b))
+-#define ORC_MAX(a,b) ((a)>(b) ? (a) : (b))
+-#define ORC_SB_MAX 127
+-#define ORC_SB_MIN (-1-ORC_SB_MAX)
+-#define ORC_UB_MAX 255
+-#define ORC_UB_MIN 0
+-#define ORC_SW_MAX 32767
+-#define ORC_SW_MIN (-1-ORC_SW_MAX)
+-#define ORC_UW_MAX 65535
+-#define ORC_UW_MIN 0
+-#define ORC_SL_MAX 2147483647
+-#define ORC_SL_MIN (-1-ORC_SL_MAX)
+-#define ORC_UL_MAX 4294967295U
+-#define ORC_UL_MIN 0
+-#define ORC_CLAMP_SB(x) ORC_CLAMP(x,ORC_SB_MIN,ORC_SB_MAX)
+-#define ORC_CLAMP_UB(x) ORC_CLAMP(x,ORC_UB_MIN,ORC_UB_MAX)
+-#define ORC_CLAMP_SW(x) ORC_CLAMP(x,ORC_SW_MIN,ORC_SW_MAX)
+-#define ORC_CLAMP_UW(x) ORC_CLAMP(x,ORC_UW_MIN,ORC_UW_MAX)
+-#define ORC_CLAMP_SL(x) ORC_CLAMP(x,ORC_SL_MIN,ORC_SL_MAX)
+-#define ORC_CLAMP_UL(x) ORC_CLAMP(x,ORC_UL_MIN,ORC_UL_MAX)
+-#define ORC_SWAP_W(x) ((((x)&0xff)<<8) | (((x)&0xff00)>>8))
+-#define ORC_SWAP_L(x) ((((x)&0xff)<<24) | (((x)&0xff00)<<8) | (((x)&0xff0000)>>8) | (((x)&0xff000000)>>24))
+-#define ORC_SWAP_Q(x) ((((x)&ORC_UINT64_C(0xff))<<56) | (((x)&ORC_UINT64_C(0xff00))<<40) | (((x)&ORC_UINT64_C(0xff0000))<<24) | (((x)&ORC_UINT64_C(0xff000000))<<8) | (((x)&ORC_UINT64_C(0xff00000000))>>8) | (((x)&ORC_UINT64_C(0xff0000000000))>>24) | (((x)&ORC_UINT64_C(0xff000000000000))>>40) | (((x)&ORC_UINT64_C(0xff00000000000000))>>56))
+-#define ORC_PTR_OFFSET(ptr,offset) ((void *)(((unsigned char *)(ptr)) + (offset)))
+-#define ORC_DENORMAL(x) ((x) & ((((x)&0x7f800000) == 0) ? 0xff800000 : 0xffffffff))
+-#define ORC_ISNAN(x) ((((x)&0x7f800000) == 0x7f800000) && (((x)&0x007fffff) != 0))
+-#define ORC_DENORMAL_DOUBLE(x) ((x) & ((((x)&ORC_UINT64_C(0x7ff0000000000000)) == 0) ? ORC_UINT64_C(0xfff0000000000000) : ORC_UINT64_C(0xffffffffffffffff)))
+-#define ORC_ISNAN_DOUBLE(x) ((((x)&ORC_UINT64_C(0x7ff0000000000000)) == ORC_UINT64_C(0x7ff0000000000000)) && (((x)&ORC_UINT64_C(0x000fffffffffffff)) != 0))
+-#ifndef ORC_RESTRICT
+-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-#define ORC_RESTRICT restrict
+-#elif defined(__GNUC__) && __GNUC__ >= 4
+-#define ORC_RESTRICT __restrict__
+-#else
+-#define ORC_RESTRICT
+-#endif
+-#endif
+-/* end Orc C target preamble */
+-
+-
+-
+-/* test_orc */
+-#ifdef DISABLE_ORC
+-void
+-test_orc (orc_int32 * ORC_RESTRICT d1, orc_int32 * ORC_RESTRICT d2, const orc_int32 * ORC_RESTRICT s1, int p1, int p2, int p3, int p4, int p5, int p6, int n){
+-  int i;
+-  orc_union32 * ORC_RESTRICT ptr0;
+-  orc_union32 * ORC_RESTRICT ptr1;
+-  const orc_union32 * ORC_RESTRICT ptr4;
+-  orc_union32 var35;
+-  orc_union32 var36;
+-  orc_union32 var37;
+-  orc_union32 var38;
+-  orc_union32 var39;
+-  orc_union32 var40;
+-  orc_union32 var41;
+-  orc_union32 var42;
+-  orc_union32 var43;
+-  orc_union32 var44;
+-  orc_union32 var45;
+-  orc_union32 var46;
+-  orc_union32 var47;
+-  orc_union32 var48;
+-  orc_union32 var49;
+-
+-  ptr0 = (orc_union32 *)d1;
+-  ptr1 = (orc_union32 *)d2;
+-  ptr4 = (orc_union32 *)s1;
+-
+-    /* 1: loadpl */
+-    var36.i = p2;
+-    /* 3: loadpl */
+-    var37.i = p5;
+-    /* 5: loadpl */
+-    var38.i = p6;
+-    /* 6: loadpl */
+-    var39.i = p1;
+-    /* 9: loadpl */
+-    var40.i = p3;
+-    /* 12: loadpl */
+-    var42.i = p6;
+-    /* 14: loadpl */
+-    var43.i = p4;
+-
+-  for (i = 0; i < n; i++) {
+-    /* 0: loadl */
+-    var35 = ptr4[i];
+-    /* 2: subl */
+-    var45.i = var35.i - var36.i;
+-    /* 4: mulll */
+-    var46.i = (var37.i * var45.i) & 0xffffffff;
+-    /* 7: mulll */
+-    var47.i = (var38.i * var39.i) & 0xffffffff;
+-    /* 8: addl */
+-    var48.i = var46.i + var47.i;
+-    /* 10: addl */
+-    var41.i = var48.i + var40.i;
+-    /* 11: storel */
+-    ptr0[i] = var41;
+-    /* 13: mulll */
+-    var49.i = (var45.i * var42.i) & 0xffffffff;
+-    /* 15: addl */
+-    var44.i = var49.i + var43.i;
+-    /* 16: storel */
+-    ptr1[i] = var44;
+-  }
+-
+-}
+-
+-#else
+-static void
+-_backup_test_orc (OrcExecutor * ORC_RESTRICT ex)
+-{
+-  int i;
+-  int n = ex->n;
+-  orc_union32 * ORC_RESTRICT ptr0;
+-  orc_union32 * ORC_RESTRICT ptr1;
+-  const orc_union32 * ORC_RESTRICT ptr4;
+-  orc_union32 var35;
+-  orc_union32 var36;
+-  orc_union32 var37;
+-  orc_union32 var38;
+-  orc_union32 var39;
+-  orc_union32 var40;
+-  orc_union32 var41;
+-  orc_union32 var42;
+-  orc_union32 var43;
+-  orc_union32 var44;
+-  orc_union32 var45;
+-  orc_union32 var46;
+-  orc_union32 var47;
+-  orc_union32 var48;
+-  orc_union32 var49;
+-
+-  ptr0 = (orc_union32 *)ex->arrays[0];
+-  ptr1 = (orc_union32 *)ex->arrays[1];
+-  ptr4 = (orc_union32 *)ex->arrays[4];
+-
+-    /* 1: loadpl */
+-    var36.i = ex->params[25];
+-    /* 3: loadpl */
+-    var37.i = ex->params[28];
+-    /* 5: loadpl */
+-    var38.i = ex->params[29];
+-    /* 6: loadpl */
+-    var39.i = ex->params[24];
+-    /* 9: loadpl */
+-    var40.i = ex->params[26];
+-    /* 12: loadpl */
+-    var42.i = ex->params[29];
+-    /* 14: loadpl */
+-    var43.i = ex->params[27];
+-
+-  for (i = 0; i < n; i++) {
+-    /* 0: loadl */
+-    var35 = ptr4[i];
+-    /* 2: subl */
+-    var45.i = var35.i - var36.i;
+-    /* 4: mulll */
+-    var46.i = (var37.i * var45.i) & 0xffffffff;
+-    /* 7: mulll */
+-    var47.i = (var38.i * var39.i) & 0xffffffff;
+-    /* 8: addl */
+-    var48.i = var46.i + var47.i;
+-    /* 10: addl */
+-    var41.i = var48.i + var40.i;
+-    /* 11: storel */
+-    ptr0[i] = var41;
+-    /* 13: mulll */
+-    var49.i = (var45.i * var42.i) & 0xffffffff;
+-    /* 15: addl */
+-    var44.i = var49.i + var43.i;
+-    /* 16: storel */
+-    ptr1[i] = var44;
+-  }
+-
+-}
+-
+-void
+-test_orc (orc_int32 * ORC_RESTRICT d1, orc_int32 * ORC_RESTRICT d2, const orc_int32 * ORC_RESTRICT s1, int p1, int p2, int p3, int p4, int p5, int p6, int n)
+-{
+-  OrcExecutor _ex, *ex = &_ex;
+-  static int p_inited = 0;
+-  static OrcCode *c = 0;
+-  void (*func) (OrcExecutor *);
+-
+-  if (!p_inited) {
+-    orc_once_mutex_lock ();
+-    if (!p_inited) {
+-      OrcProgram *p;
+-
+-      p = orc_program_new ();
+-      orc_program_set_name (p, "test_orc");
+-      orc_program_set_backup_function (p, _backup_test_orc);
+-      orc_program_add_destination (p, 4, "d1");
+-      orc_program_add_destination (p, 4, "d2");
+-      orc_program_add_source (p, 4, "s1");
+-      orc_program_add_parameter (p, 4, "p1");
+-      orc_program_add_parameter (p, 4, "p2");
+-      orc_program_add_parameter (p, 4, "p3");
+-      orc_program_add_parameter (p, 4, "p4");
+-      orc_program_add_parameter (p, 4, "p5");
+-      orc_program_add_parameter (p, 4, "p6");
+-      orc_program_add_temporary (p, 4, "t1");
+-      orc_program_add_temporary (p, 4, "t2");
+-      orc_program_add_temporary (p, 4, "t3");
+-
+-      orc_program_append_2 (p, "subl", 0, ORC_VAR_T1, ORC_VAR_S1, ORC_VAR_P2, ORC_VAR_D1);
+-      orc_program_append_2 (p, "mulll", 0, ORC_VAR_T2, ORC_VAR_P5, ORC_VAR_T1, ORC_VAR_D1);
+-      orc_program_append_2 (p, "mulll", 0, ORC_VAR_T3, ORC_VAR_P6, ORC_VAR_P1, ORC_VAR_D1);
+-      orc_program_append_2 (p, "addl", 0, ORC_VAR_T2, ORC_VAR_T2, ORC_VAR_T3, ORC_VAR_D1);
+-      orc_program_append_2 (p, "addl", 0, ORC_VAR_D1, ORC_VAR_T2, ORC_VAR_P3, ORC_VAR_D1);
+-      orc_program_append_2 (p, "mulll", 0, ORC_VAR_T2, ORC_VAR_T1, ORC_VAR_P6, ORC_VAR_D1);
+-      orc_program_append_2 (p, "addl", 0, ORC_VAR_D2, ORC_VAR_T2, ORC_VAR_P4, ORC_VAR_D1);
+-
+-      orc_program_compile (p);
+-      c = orc_program_take_code (p);
+-      orc_program_free (p);
+-    }
+-    p_inited = TRUE;
+-    orc_once_mutex_unlock ();
+-  }
+-  ex->arrays[ORC_VAR_A2] = c;
+-  ex->program = 0;
+-
+-  ex->n = n;
+-  ex->arrays[ORC_VAR_D1] = d1;
+-  ex->arrays[ORC_VAR_D2] = d2;
+-  ex->arrays[ORC_VAR_S1] = (void *)s1;
+-  ex->params[ORC_VAR_P1] = p1;
+-  ex->params[ORC_VAR_P2] = p2;
+-  ex->params[ORC_VAR_P3] = p3;
+-  ex->params[ORC_VAR_P4] = p4;
+-  ex->params[ORC_VAR_P5] = p5;
+-  ex->params[ORC_VAR_P6] = p6;
+-
+-  func = c->exec;
+-  func (ex);
+-}
+-#endif
+-
+-
+diff --git a/tests/orc_bug/orc_bug_orc.h b/tests/orc_bug/orc_bug_orc.h
+deleted file mode 100644
+index 2d5fc25..0000000
+--- a/tests/orc_bug/orc_bug_orc.h
++++ /dev/null
+@@ -1,76 +0,0 @@
+-
+-/* autogenerated from orc_bug_orc.orc */
+-
+-#ifndef _ORC_BUG_ORC_H_
+-#define _ORC_BUG_ORC_H_
+-
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-
+-
+-#ifndef _ORC_INTEGER_TYPEDEFS_
+-#define _ORC_INTEGER_TYPEDEFS_
+-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-#include <stdint.h>
+-typedef int8_t orc_int8;
+-typedef int16_t orc_int16;
+-typedef int32_t orc_int32;
+-typedef int64_t orc_int64;
+-typedef uint8_t orc_uint8;
+-typedef uint16_t orc_uint16;
+-typedef uint32_t orc_uint32;
+-typedef uint64_t orc_uint64;
+-#define ORC_UINT64_C(x) UINT64_C(x)
+-#elif defined(_MSC_VER)
+-typedef signed __int8 orc_int8;
+-typedef signed __int16 orc_int16;
+-typedef signed __int32 orc_int32;
+-typedef signed __int64 orc_int64;
+-typedef unsigned __int8 orc_uint8;
+-typedef unsigned __int16 orc_uint16;
+-typedef unsigned __int32 orc_uint32;
+-typedef unsigned __int64 orc_uint64;
+-#define ORC_UINT64_C(x) (x##Ui64)
+-#define inline __inline
+-#else
+-#include <limits.h>
+-typedef signed char orc_int8;
+-typedef short orc_int16;
+-typedef int orc_int32;
+-typedef unsigned char orc_uint8;
+-typedef unsigned short orc_uint16;
+-typedef unsigned int orc_uint32;
+-#if INT_MAX == LONG_MAX
+-typedef long long orc_int64;
+-typedef unsigned long long orc_uint64;
+-#define ORC_UINT64_C(x) (x##ULL)
+-#else
+-typedef long orc_int64;
+-typedef unsigned long orc_uint64;
+-#define ORC_UINT64_C(x) (x##UL)
+-#endif
+-#endif
+-typedef union { orc_int16 i; orc_int8 x2[2]; } orc_union16;
+-typedef union { orc_int32 i; float f; orc_int16 x2[2]; orc_int8 x4[4]; } orc_union32;
+-typedef union { orc_int64 i; double f; orc_int32 x2[2]; float x2f[2]; orc_int16 x4[4]; } orc_union64;
+-#endif
+-#ifndef ORC_RESTRICT
+-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-#define ORC_RESTRICT restrict
+-#elif defined(__GNUC__) && __GNUC__ >= 4
+-#define ORC_RESTRICT __restrict__
+-#else
+-#define ORC_RESTRICT
+-#endif
+-#endif
+-void test_orc (orc_int32 * ORC_RESTRICT d1, orc_int32 * ORC_RESTRICT d2, const orc_int32 * ORC_RESTRICT s1, int p1, int p2, int p3, int p4, int p5, int p6, int n);
+-
+-#ifdef __cplusplus
+-}
+-#endif
+-
+-#endif
+-
+diff --git a/tests/orc_bug/orc_bug_orc.orc b/tests/orc_bug/orc_bug_orc.orc
+deleted file mode 100644
+index 1cd7337..0000000
+--- a/tests/orc_bug/orc_bug_orc.orc
++++ /dev/null
+@@ -1,20 +0,0 @@
+-.function test_orc
+-.dest 4 x_ss int32_t    
+-.dest 4 y_ss int32_t    
+-.source 4 xs int32_t
+-.param 4 y_d1 int32_t
+-.param 4 c_d_x int32_t
+-.param 4 c_tx int32_t   
+-.param 4 c_ty int32_t   
+-.param 4 zcos_a int32_t 
+-.param 4 zsin_a int32_t 
+-.temp 4 x_d1
+-.temp 4 tmp1
+-.temp 4 tmp2
+-subl x_d1, xs, c_d_x
+-mulll tmp1 zcos_a x_d1
+-mulll tmp2 zsin_a y_d1
+-addl tmp1 tmp1 tmp2
+-addl x_ss tmp1 c_tx
+-mulll tmp1, x_d1, zsin_a # with this line I get a segfault
+-addl y_ss, tmp1, c_ty
+diff --git a/tests/test_compareimg.c b/tests/test_compareimg.c
+index 08e0379..3d1b9c6 100644
+--- a/tests/test_compareimg.c
++++ b/tests/test_compareimg.c
+@@ -78,16 +78,6 @@ void test_compareImg_performance(const TestData* testdata){
+   timeC=runcompare(compareSubImg_thr, testdata->frames[0], testdata->frames[1],
+                    f, testdata->fi, diffsC, 0, numruns);
+   fprintf(stderr,"***C        time for %i runs: %i ms ****\n", numruns, timeC);
+-#ifdef USE_ORC
+-  timeO=runcompare(compareSubImg_orc, testdata->frames[0], testdata->frames[1],
+-                   f, testdata->fi, diffsO, diffsC, numruns);
+-  fprintf(stderr,"***orc      time for %i runs: %i ms \tSpeedup %3.2f\n",
+-          numruns, timeO, (double)timeC/timeO);
+-  timeO=runcompare(compareSubImg_thr_orc, testdata->frames[0], testdata->frames[1],
+-                   f, testdata->fi, diffsO, diffsC, numruns);
+-  fprintf(stderr,"***thr_orc  time for %i runs: %i ms \tSpeedup %3.2f\n",
+-          numruns, timeO, (double)timeC/timeO);
+-#endif
+ #ifdef USE_SSE2
+   timeO=runcompare(compareSubImg_thr_sse2, testdata->frames[0], testdata->frames[1],
+                    f, testdata->fi, diffsO, diffsC, numruns);
+diff --git a/tests/test_contrast.c b/tests/test_contrast.c
+index 668e759..68d988a 100644
+--- a/tests/test_contrast.c
++++ b/tests/test_contrast.c
+@@ -13,36 +13,6 @@ void test_contrastImg(const TestData* testdata){
+   double contrastC[numruns];
+   double contrastOpt[numruns];
+   int timeC, timeOpt;
+-#ifdef USE_ORC
+-  fprintf(stderr,"********** Variance - based Contrast (with ORC):\n");
+-  {
+-    int start = timeOfDayinMS();
+-    for(i=0; i<numruns; i++){
+-      contrastC[i]=contrastSubImg_variance_C(testdata->frames[0],
+-                                             &f, testdata->fi.width, testdata->fi.height);
+-    }
+-    int end = timeOfDayinMS();
+-    timeC=end-start;
+-    fprintf(stderr,"***C    time for %i runs: %i ms ****\n", numruns, timeC);
+-  }
+-  {
+-    int start = timeOfDayinMS();
+-    for(i=0; i<numruns; i++){
+-      contrastOpt[i]=contrastSubImg_variance_orc(testdata->frames[0],
+-                                                 &f, testdata->fi.width, testdata->fi.height);
+-    }
+-    int end = timeOfDayinMS();
+-    timeOpt=end-start;
+-    fprintf(stderr,"***Orc  time for %i runs: %i ms ****\n", numruns, timeOpt);
+-  }
+-  fprintf(stderr,"***Speedup %3.2f\n", timeC/timeOpt);
+-  for(i=0; i<numruns; i++){
+-    if(i==0){
+-      printf("Orc contrast %3.2f, C contrast %3.2f\n",contrastOpt[i], contrastC[i]);
+-    }
+-    test_bool(contrastC[i]==contrastOpt[i]);
+-  }
+-#endif
+   fprintf(stderr,"********** Michelson Contrast (with SSE2):\n");
+   {
+     int start = timeOfDayinMS();
+diff --git a/tests/test_transform.c b/tests/test_transform.c
+index a3e60d5..4a8ee6f 100644
+--- a/tests/test_transform.c
++++ b/tests/test_transform.c
+@@ -85,7 +85,7 @@ void test_transform_performance(const TestData* testdata){
+   VSFrame cfinal;
+   int it;
+   int start, numruns;
+-  int timeC, timeCFP; //, timeOrc;
++  int timeC, timeCFP;
+   vsFrameAllocate(&dest, &testdata->fi);
+   vsFrameAllocate(&cfinal, &testdata->fi);
+   numruns = 5;
+diff --git a/transcode/CMakeLists.txt b/transcode/CMakeLists.txt
+index 60f69af..3d4a129 100644
+--- a/transcode/CMakeLists.txt
++++ b/transcode/CMakeLists.txt
+@@ -12,15 +12,6 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+ endif()
+ 
+ add_definitions(-Wall -Wno-pointer-sign -DTRANSCODE -std=gnu99)
+-# I tried it with 0.4.14
+-#  0.4.10 did not work (not all opcode implemented)
+-# find_package(Orc)  // it actually not used by any active code
+-if(ORC_FOUND)
+-add_definitions( -DUSE_ORC ${ORC_DEFINITIONS} )
+-include_directories( ${ORC_INCLUDE_DIRS} )
+-else()
+-add_definitions( -DDISABLE_ORC )
+-endif()
+ 
+ # here we should check for SSE2
+ # our  -DUSE_SSE2_ASM code does not work with fpic
+@@ -35,14 +26,14 @@ include_directories (../src ${TRANSCODE_ROOT}/src ${TRANSCODE_ROOT}/ )
+ add_library (filter_transform SHARED filter_transform.c
+   ../src/transformtype.c ../src/libvidstab.c ../src/transform.c
+   ../src/transformfixedpoint.c  ../src/vsvector.c ../src/serialize.c ../src/frameinfo.c
+-	../src/localmotion2transform.c) #  orc/transformorc.c)
++	../src/localmotion2transform.c)
+ add_library (filter_stabilize SHARED filter_stabilize.c
+   ../src/transformtype.c ../src/libvidstab.c ../src/motiondetect.c
+-	../src/orc/motiondetectorc.c ../src/motiondetect_opt.c ../src/localmotion2transform.c
++	../src/motiondetect_opt.c ../src/localmotion2transform.c
+   ../src/boxblur.c ../src/vsvector.c ../src/serialize.c  ../src/frameinfo.c)
+ add_library (filter_deshake SHARED filter_deshake.c
+   ../src/transformtype.c ../src/libvidstab.c ../src/motiondetect.c
+-  ../src/orc/motiondetectorc.c ../src/boxblur.c ../src/transform.c ../src/motiondetect_opt.c
++  ../src/boxblur.c ../src/transform.c ../src/motiondetect_opt.c
+   ../src/transformfixedpoint.c ../src/vsvector.c ../src/serialize.c ../src/frameinfo.c
+ 	../src/localmotion2transform.c)
+ 
+@@ -55,11 +46,6 @@ target_link_libraries(filter_stabilize m )
+ target_link_libraries(filter_transform m )
+ target_link_libraries(filter_deshake   m )
+ 
+-if(ORC_FOUND)
+-target_link_libraries(filter_stabilize ${ORC_LIBRARIES} )
+-target_link_libraries(filter_transform ${ORC_LIBRARIES} )
+-target_link_libraries(filter_deshake   ${ORC_LIBRARIES} )
+-endif()
+ if(USE_OMP)
+ target_link_libraries(filter_stabilize gomp )
+ target_link_libraries(filter_transform gomp )
+-- 
+2.30.2
+

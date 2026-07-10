@@ -1,0 +1,27 @@
+From 1fe9f83a7f5e9f24406f61048078417ec36fe8db Mon Sep 17 00:00:00 2001
+From: Viktor Walter <viktor.walter@disroot.com>
+Date: Thu, 23 Jun 2022 19:31:19 +0200
+Subject: [PATCH 01/13] Fixing an asymmetry between writing an reading of the
+ binary transformation file - read was expecting an extra nextline, which
+ ofsetted the following bytes and thus corrupted the reading
+
+---
+ src/serialize.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/serialize.c b/src/serialize.c
+index 2b0a1b2..963f0b7 100644
+--- a/src/serialize.c
++++ b/src/serialize.c
+@@ -386,7 +386,7 @@ int vsReadFileVersionBinary(FILE* f){
+   unsigned char version;
+   VSMotionDetectConfig conf;
+ 
+-  if(fscanf(f, "TRF%hhu\n", &version)!=LIBVIDSTAB_FILE_FORMAT_VERSION) goto parse_error_handling;
++  if(fscanf(f, "TRF%hhu", &version)!=LIBVIDSTAB_FILE_FORMAT_VERSION) goto parse_error_handling;
+   if(readInt32(&conf.accuracy, f)<=0) goto parse_error_handling;
+   if(readInt32(&conf.shakiness, f)<=0) goto parse_error_handling;
+   if(readInt32(&conf.stepSize, f)<=0) goto parse_error_handling;
+-- 
+2.30.2
+

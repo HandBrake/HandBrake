@@ -1,0 +1,29 @@
+From b68f0791bb8c1884d5101c1a4e85a70d696a4758 Mon Sep 17 00:00:00 2001
+From: Dan Dennedy <dan@dennedy.org>
+Date: Mon, 8 Jan 2024 10:50:37 -0800
+Subject: [PATCH 06/13] respect CMAKE_OSX_ARCHITECTURES
+
+cbe3d5c3 introduced a change to `CMakeLists.txt` that hardcodes an arch value that not only breaks Intel arch build on macOS but also does not respect a user-supplied `CMAKE_OSX_ARCHITECTURES`
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2b6f170..bbf9907 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -32,9 +32,9 @@ if(NOT WIN32)
+   add_definitions(-fPIC)
+ endif()
+ 
+-if(APPLE)
++if(APPLE AND NOT CMAKE_OSX_ARCHITECTURES AND NOT SSE2_FOUND)
+   add_definitions(-march=armv8-a+fp+simd+crypto+crc)
+-endif(APPLE)
++endif()
+ 
+ ### ORC is not used in any active code at the moment  ###
+ # I tried it with 0.4.14
+-- 
+2.30.2
+

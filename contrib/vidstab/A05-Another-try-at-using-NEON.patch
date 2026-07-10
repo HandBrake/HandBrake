@@ -1,0 +1,46 @@
+From 406e61d726781b6924289f542b9005b01dcb38f5 Mon Sep 17 00:00:00 2001
+From: Felipe Meneguzzi <felipe.meneguzzi@gmail.com>
+Date: Wed, 7 Jun 2023 14:05:10 +0100
+Subject: [PATCH 05/13] Another try at using NEON
+
+---
+ CMakeLists.txt         | 4 ++++
+ src/motiondetect_opt.c | 7 +++++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5009c05..2b6f170 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -32,6 +32,10 @@ if(NOT WIN32)
+   add_definitions(-fPIC)
+ endif()
+ 
++if(APPLE)
++  add_definitions(-march=armv8-a+fp+simd+crypto+crc)
++endif(APPLE)
++
+ ### ORC is not used in any active code at the moment  ###
+ # I tried it with 0.4.14
+ #  0.4.10 did not work (not all opcode implemented)
+diff --git a/src/motiondetect_opt.c b/src/motiondetect_opt.c
+index de63e3b..570f89b 100644
+--- a/src/motiondetect_opt.c
++++ b/src/motiondetect_opt.c
+@@ -37,6 +37,13 @@
+ #define SSE2_CMP_SUM_ROWS 8
+ #endif
+ 
++#ifdef __ARM_NEON__
++#include "sse2neon.h"
++#define USE_SSE2
++#define USE_SSE2_CMP_HOR
++#define SSE2_CMP_SUM_ROWS 8
++#endif
++
+ #ifdef USE_SSE2
+ /**
+    \see contrastSubImg using SSE2 optimization, Planar (1 byte per channel) only
+-- 
+2.30.2
+
