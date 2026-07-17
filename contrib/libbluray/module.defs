@@ -1,9 +1,14 @@
 $(eval $(call import.MODULE.defs,LIBBLURAY,libbluray))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
-LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libbluray-1.4.1.tar.xz
-LIBBLURAY.FETCH.url    += https://download.videolan.org/pub/videolan/libbluray/1.4.1/libbluray-1.4.1.tar.xz
-LIBBLURAY.FETCH.sha256  = 76b5dc40097f28dca4ebb009c98ed51321b2927453f75cc72cf74acd09b9f449
+LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libbluray-1.5.0.tar.bz2
+LIBBLURAY.FETCH.url    += https://code.videolan.org/videolan/libbluray/-/archive/1.5.0/libbluray-1.5.0.tar.bz2
+LIBBLURAY.FETCH.sha256  = 0a70f8c63aa1c64c0d3fc743d0a0e7071ac6c68f69b49e596505a3f64c71cf0a
+
+# Get missing libudfread submodule
+LIBBLURAY.CONFIGURE.bootstrap   = cd ..;
+LIBBLURAY.CONFIGURE.bootstrap  += rm -rf ./contrib/libudfread; git clone --depth=1 https://code.videolan.org/videolan/libudfread.git ./contrib/libudfread;
+LIBBLURAY.CONFIGURE.bootstrap  += cd ./build;
 
 LIBBLURAY.build_dir             = build/
 LIBBLURAY.CONFIGURE.exe         = $(MESON.exe) setup
