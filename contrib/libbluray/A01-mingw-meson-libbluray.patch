@@ -1,0 +1,48 @@
+diff --git a/package/crossfiles/aarch64-w64-mingw32.meson b/package/crossfiles/aarch64-w64-mingw32.meson
+--- a/package/crossfiles/aarch64-w64-mingw32.meson	2026-07-17 11:55:51.000000000 +0200
++++ b/package/crossfiles/aarch64-w64-mingw32.meson	2026-07-17 22:45:37.229428900 +0200
+@@ -5,6 +5,8 @@
+ strip = 'aarch64-w64-mingw32-strip'
+ windres = 'aarch64-w64-mingw32-windres'
+ pkgconfig = 'pkg-config'
++pkg-config = 'pkg-config'
++cmake = 'cmake'
+ 
+ [built-in options]
+ c_link_args = ['-static-libgcc']
+diff --git a/package/crossfiles/armv7-w64-mingw32.meson b/package/crossfiles/armv7-w64-mingw32.meson
+--- a/package/crossfiles/armv7-w64-mingw32.meson	2026-07-17 11:55:51.000000000 +0200
++++ b/package/crossfiles/armv7-w64-mingw32.meson	2026-07-17 22:45:37.229428900 +0200
+@@ -4,7 +4,7 @@
+ ar = 'armv7-w64-mingw32-ar'
+ strip = 'armv7-w64-mingw32-strip'
+ windres = 'armv7-w64-mingw32-windres'
+-pkgconfig = 'pkg-config'
++pkg-config = 'pkg-config'
+ 
+ [built-in options]
+ c_link_args = ['-static-libgcc']
+diff --git a/package/crossfiles/i686-w64-mingw32.meson b/package/crossfiles/i686-w64-mingw32.meson
+--- a/package/crossfiles/i686-w64-mingw32.meson	2026-07-17 11:55:51.000000000 +0200
++++ b/package/crossfiles/i686-w64-mingw32.meson	2026-07-17 22:45:37.229428900 +0200
+@@ -4,7 +4,7 @@
+ ar = 'i686-w64-mingw32-ar'
+ strip = 'i686-w64-mingw32-strip'
+ windres = 'i686-w64-mingw32-windres'
+-pkgconfig = 'i686-w64-mingw32-pkg-config'
++pkg-config = 'i686-w64-mingw32-pkg-config'
+ exe_wrapper = 'wine'
+ 
+ [built-in options]
+diff --git a/package/crossfiles/x86_64-w64-mingw32.meson b/package/crossfiles/x86_64-w64-mingw32.meson
+--- a/package/crossfiles/x86_64-w64-mingw32.meson	2026-07-17 11:55:51.000000000 +0200
++++ b/package/crossfiles/x86_64-w64-mingw32.meson	2026-07-17 22:45:37.229428900 +0200
+@@ -4,7 +4,7 @@
+ ar = 'x86_64-w64-mingw32-ar'
+ strip = 'x86_64-w64-mingw32-strip'
+ windres = 'x86_64-w64-mingw32-windres'
+-pkgconfig = 'x86_64-w64-mingw32-pkg-config'
++pkg-config = 'pkg-config'
+ exe_wrapper = 'wine'
+ 
+ [built-in options]
