@@ -3874,7 +3874,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
-				PATH = $PATH;
+				PATH = "$PATH";
 				PRODUCT_NAME = external;
 			};
 			name = debug;
@@ -3884,7 +3884,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
-				PATH = $PATH;
+				PATH = "$PATH";
 				PRODUCT_NAME = external;
 			};
 			name = release;
@@ -5224,7 +5224,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
-				PATH = $PATH;
+				PATH = "$PATH";
 				PRODUCT_NAME = external;
 			};
 			name = "debug-sandbox";
@@ -5509,7 +5509,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
-				PATH = $PATH;
+				PATH = "$PATH";
 				PRODUCT_NAME = external;
 			};
 			name = "release-sandbox";
