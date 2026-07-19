@@ -30,8 +30,64 @@ namespace HandBrakeWPF.Helpers
     /// </summary>
     public class AutoNameHelper
     {
+        public const int AutoIncrementPadMin = 2;
+        public const int AutoIncrementPadMax = 5;
+
         /// <summary>
-        /// Function which generates the filename and path automatically based on 
+        /// Whether automatic naming is enabled and the format uses {auto-increment}
+        /// </summary>
+        public static bool IsAutoIncrementUsed()
+        {
+            IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
+            if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+            {
+                return false;
+            }
+
+            string format = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
+            return format != null && format.Contains(Constants.AutoIncrement);
+        }
+
+        /// <summary>
+        /// Advances the stored {auto-increment} counter after a job using it has
+        /// been committed to the queue, rolling over to 1 past the highest value
+        /// that fits in the configured padding
+        /// </summary>
+        public static void AdvanceAutoIncrement()
+        {
+            IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
+            int max = GetAutoIncrementMax(GetAutoIncrementPadding(userSettingService));
+            int used = GetAutoIncrementValue(userSettingService);
+            userSettingService.SetUserSetting(UserSettingConstants.AutoNameAutoIncrementNext, (used % max) + 1);
+        }
+
+        private static int GetAutoIncrementPadding(IUserSettingService userSettingService)
+        {
+            int padding = userSettingService.GetUserSetting<int>(UserSettingConstants.AutoNameAutoIncrementPadding);
+            return Math.Clamp(padding, AutoIncrementPadMin, AutoIncrementPadMax);
+        }
+
+        // Highest value that fits in the configured padding, e.g. 99 for 2 digits
+        private static int GetAutoIncrementMax(int padding)
+        {
+            int max = 1;
+            while (padding-- > 0)
+            {
+                max *= 10;
+            }
+
+            return max - 1;
+        }
+
+        private static int GetAutoIncrementValue(IUserSettingService userSettingService)
+        {
+            int max = GetAutoIncrementMax(GetAutoIncrementPadding(userSettingService));
+            int next = userSettingService.GetUserSetting<int>(UserSettingConstants.AutoNameAutoIncrementNext);
+            return (next < 1 || next > max) ? 1 : next;
+        }
+
+        /// <summary>
+        /// Function which generates the filename and path automatically based on
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
         public static string AutoName(EncodeTask task, string titleName, string sourceDisplayName, Preset presetName)
@@ -168,7 +224,8 @@ namespace HandBrakeWPF.Helpers
                         .Replace(Constants.StorageHeight, task.Height?.ToString())
                         .Replace(Constants.Codec, task.VideoEncoder?.Codec)
                         .Replace(Constants.EncoderDisplay, task.VideoEncoder?.DisplayName)
-                        .Replace(Constants.Encoder, task.VideoEncoder?.ShortName);
+                        .Replace(Constants.Encoder, task.VideoEncoder?.ShortName)
+                        .Replace(Constants.AutoIncrement, GetAutoIncrementValue(userSettingService).ToString("D" + GetAutoIncrementPadding(userSettingService)));
 
 
                 if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)

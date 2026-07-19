@@ -1121,6 +1121,15 @@ namespace HandBrakeWPF.ViewModels
             if (!this.queueProcessor.CheckForDestinationPathDuplicates(task.Task.Destination))
             {
                 this.queueProcessor.Add(task);
+
+                if (AutoNameHelper.IsAutoIncrementUsed())
+                {
+                    // Advance the {auto-increment} counter and show the next
+                    // number in the destination. Batch adds regenerate the
+                    // destination per title, numbering them consecutively.
+                    AutoNameHelper.AdvanceAutoIncrement();
+                    this.ReGenerateAutoName();
+                }
             }
             else
             {
