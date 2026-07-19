@@ -254,6 +254,8 @@ ghb_add_title_to_queue (signal_user_data_t *ud, GhbValue *settings, gint batch)
     ghb_update_pending(ud);
     ghb_queue_buttons_grey(ud);
 
+    ghb_auto_increment_advance(ud, settings, batch);
+
     return TRUE;
 }
 
@@ -394,6 +396,8 @@ static void title_add_check_conflicts (signal_user_data_t *ud)
     title_add_set_error_text(ud, are_conflicts);
 }
 
+static void title_add_reset_increment_offsets (signal_user_data_t *ud);
+
 static void
 add_multiple_titles (signal_user_data_t *ud)
 {
@@ -412,6 +416,7 @@ add_multiple_titles (signal_user_data_t *ud)
             break;
         }
     }
+    title_add_reset_increment_offsets(ud);
     ghb_queue_selection_init(ud);
 }
 
@@ -683,6 +688,29 @@ title_add_action_cb (GSimpleAction *action, GVariant *param,
     ghb_audio_list_refresh_all(ud);
 }
 
+// Undo the consecutive numbering applied while the add-multiple list
+// was displayed; remaining titles go back to showing the next number
+static void
+title_add_reset_increment_offsets (signal_user_data_t *ud)
+{
+    gint count, ii;
+
+    count = ghb_array_len(ud->settings_array);
+    for (ii = 0; ii < count; ii++)
+    {
+        GhbValue *settings = ghb_array_get(ud->settings_array, ii);
+        if (ghb_dict_get_int(settings, "auto_increment_offset") != 0)
+        {
+            ghb_dict_set_int(settings, "auto_increment_offset", 0);
+            ghb_update_title_destination(ud, settings);
+        }
+    }
+    if (ghb_dict_get(ud->settings, "auto_increment_value") != NULL)
+    {
+        ghb_set_destination(ud);
+    }
+}
+
 static void
 title_add_multiple_response_cb (GtkDialog *dialog, int response,
                                 signal_user_data_t *ud)
@@ -693,6 +721,7 @@ title_add_multiple_response_cb (GtkDialog *dialog, int response,
     {
         add_multiple_titles(ud);
     }
+    title_add_reset_increment_offsets(ud);
 }
 
 G_MODULE_EXPORT void
@@ -733,6 +762,12 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
         button = GHB_FILE_BUTTON(find_widget(row, "title_dir"));
 
         settings = ghb_array_get(ud->settings_array, ii);
+        if (ghb_dict_get(settings, "auto_increment_value") != NULL)
+        {
+            // Number the titles in the list consecutively
+            ghb_dict_set_int(settings, "auto_increment_offset", ii);
+            ghb_update_title_destination(ud, settings);
+        }
         if (preset != NULL)
         {
             ghb_preset_to_settings(settings, preset);
