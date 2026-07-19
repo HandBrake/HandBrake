@@ -32,6 +32,8 @@ extern NSString * const HBAutoNamingRemoveUnderscore;
 extern NSString * const HBAutoNamingRemovePunctuation;
 extern NSString * const HBAutoNamingTitleCase;
 extern NSString * const HBAutoNamingISODateFormat;
+extern NSString * const HBAutoNamingAutoIncrementPadding;
+extern NSString * const HBAutoNamingAutoIncrementNext;
 
 extern NSString * const HBDefaultMpegExtension;
 
