@@ -45,7 +45,7 @@ hb_buffer_t * hb_audio_avfilter_get_buf(hb_avfilter_graph_t *graph);
 void    hb_avfilter_append_dict(hb_value_array_t * filters,
                                 const char * name, hb_dict_t * settings);
 
-void    hb_avfilter_combine(hb_list_t * list);
+void    hb_avfilter_combine(hb_list_t * list, int filter_scan);
 void    hb_avfilter_audio_combine(hb_list_t *list);
 
 #endif // HANDBRAKE_AVFILTER_H

@@ -611,7 +611,8 @@ void hb_display_job_info(hb_job_t *job)
             job->width * job->par.num / job->par.den, job->height );
 
 
-    if( !job->indepth_scan )
+    // Encoder is disabled for analysis job pass.
+    if( !job->indepth_scan && !job->filter_scan )
     {
         /* Video encoder */
         hb_log("   + encoder: %s",
@@ -786,7 +787,8 @@ void hb_display_job_info(hb_job_t *job)
         }
     }
 
-    if( !job->indepth_scan )
+    // Audio is not processed for analysis job pass.
+    if( !job->indepth_scan && !job->filter_scan )
     {
         for( i = 0; i < hb_list_count( job->list_audio ); i++ )
         {
@@ -996,7 +998,7 @@ static int sanitize_subtitles( hb_job_t * job )
     hb_interjob_t * interjob = hb_interjob_get(job->h);
     hb_subtitle_t * subtitle;
 
-    if (job->indepth_scan)
+    if (job->indepth_scan || job->filter_scan)
     {
         // Subtitles are set by hb_add() during subtitle scan
         return 0;
@@ -1145,7 +1147,7 @@ static int sanitize_audio(hb_job_t *job)
     int          i;
     hb_audio_t * audio;
 
-    if (job->indepth_scan)
+    if (job->indepth_scan || job->filter_scan)
     {
         // Audio is not processed during subtitle scan
         return 0;
@@ -1752,6 +1754,10 @@ static void do_job(hb_job_t *job)
     {
         hb_log( "Starting Task: Subtitle Scan" );
     }
+    else if (job->filter_scan)
+    {
+        hb_log( "Starting Task: Filter Scan" );
+    }
     else if (job->pass_id == HB_PASS_ENCODE_ANALYSIS)
     {
         hb_log( "Starting Task: Analysis Pass" );
@@ -1848,6 +1854,25 @@ static void do_job(hb_job_t *job)
         for( i = 0; i < hb_list_count( job->list_filter ); )
         {
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+
+            // For filter scan, omit filters that have no analysis output.
+            if (job->filter_scan && filter->id > HB_FILTER_SCAN_LAST)
+              {
+                hb_log("work: skipping %s filter", filter->name);
+                hb_list_rem(job->list_filter, filter);
+                hb_filter_close(&filter);
+                continue;
+              }
+
+            // For job pass other than filter scan, omit filters that scan.
+            if (!job->filter_scan && filter->id > HB_FILTER_SCAN_FIRST && filter->id < HB_FILTER_SCAN_LAST)
+              {
+                hb_log("work: skipping %s filter", filter->name);
+                hb_list_rem(job->list_filter, filter);
+                hb_filter_close(&filter);
+                continue;
+              }
+
             filter->done = &job->done;
             if (filter->init != NULL && filter->init(filter, &init))
             {
@@ -1877,7 +1902,7 @@ static void do_job(hb_job_t *job)
         job->grayscale = init.grayscale;
 
         // Combine HB_FILTER_AVFILTERs that are sequential
-        hb_avfilter_combine(job->list_filter);
+        hb_avfilter_combine(job->list_filter, job->filter_scan);
 
         // Perform filter post_init which informs filters of final
         // job configuration. e.g. rendersub filter needs to know the
@@ -1946,6 +1971,9 @@ static void do_job(hb_job_t *job)
         *job->die = 1;
         goto cleanup;
     }
+
+    if (job->filter_scan)
+      goto video_decoder_init;
 
     if (!job->indepth_scan)
     {
@@ -2020,6 +2048,7 @@ static void do_job(hb_job_t *job)
         hb_list_add( job->list_work, w );
     }
 
+video_decoder_init:
     // Video decoder
     w = hb_video_decoder(job->h, title->video_codec, title->video_codec_param,
                          job->hw_device_ctx, job->hw_accel);
@@ -2036,6 +2065,9 @@ static void do_job(hb_job_t *job)
     // Synchronization
     w = hb_get_work(job->h, WORK_SYNC_VIDEO);
     hb_list_add(job->list_work, w);
+
+    if (job->filter_scan)
+      goto filter_fifo_init;
 
     if (!job->indepth_scan)
     {
@@ -2159,6 +2191,7 @@ static void do_job(hb_job_t *job)
             hb_list_add( job->list_work, w );
         }
 
+filter_fifo_init:
         /* Set up the video filter fifo pipeline */
         if ( job->list_filter )
         {
@@ -2174,12 +2207,31 @@ static void do_job(hb_job_t *job)
                 }
             }
             job->fifo_render = fifo_in;
+
+            // Pipeline ends at last filter for filter scan, remove FIFO out link for last filter.
+            if (job->filter_scan)
+            {
+                for (i = hb_list_count(job->list_filter); i > 0; i--)
+                {
+                    hb_filter_object_t * filter = hb_list_item(job->list_filter, i - 1);
+
+                    if (!filter->skip)
+                    {
+                        hb_fifo_close( &filter->fifo_out );
+                        job->fifo_render = NULL;
+                        break;
+                    }
+                }
+            }
         }
         else if ( !job->list_filter )
         {
             hb_log("work: Internal Error: no filters");
             job->fifo_render = NULL;
         }
+
+        if (job->filter_scan)
+          goto job_display;
 
         // Video encoder
         w = hb_video_encoder(job->h, job->vcodec);
@@ -2220,6 +2272,7 @@ static void do_job(hb_job_t *job)
         hb_log("work: only 1 chapter, disabling chapter markers");
     }
 
+job_display:
     /* Display settings */
     hb_display_job_info( job );
 
@@ -2285,8 +2338,27 @@ static void do_job(hb_job_t *job)
     // last thread has exited. So we must be careful with the sequence
     // of closing threads below.
     w = hb_list_item(job->list_work, hb_list_count(job->list_work) - 1);
-    w->die = job->die;
-    hb_thread_close(&w->thread);
+
+    // Pipeline ends at last filter for filter scan, end job after last filter thread.
+    if (job->filter_scan)
+    {
+        for (i = hb_list_count(job->list_filter); i > 0; i--)
+        {
+            hb_filter_object_t * f = hb_list_item(job->list_filter, i - 1);
+
+            if (!f->skip && !f->aliased)
+            {
+                f->last = 1;
+                hb_thread_close(&f->thread);
+                break;
+            }
+        }
+    }
+    else
+    {
+        w->die = job->die;
+        hb_thread_close(&w->thread);
+    }
 
     hb_handle_t * h = job->h;
     hb_state_t state;
@@ -2582,7 +2654,8 @@ static void filter_loop( void * _f )
 
     // Consume data in incoming fifo till job complete so that
     // residual data does not stall the pipeline
-    while( !*f->done )
+    hb_deep_log(3, "filter thread %s waiting to die", f->name);
+    while( !*f->done && !f->last )
     {
         buf_in = hb_fifo_get_wait( f->fifo_in );
         if ( buf_in != NULL )

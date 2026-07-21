@@ -2318,9 +2318,13 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     pv->common->job = job;
 
     // count number of streams we need
+    // For filter scan pass, only video is passed from reader.
     pv->common->stream_count = 1;
-    pv->common->stream_count += hb_list_count(job->list_audio);
-    pv->common->stream_count += hb_list_count(job->list_subtitle);
+    if (!job->filter_scan)
+    {
+        pv->common->stream_count += hb_list_count(job->list_audio);
+        pv->common->stream_count += hb_list_count(job->list_subtitle);
+    }
     pv->common->streams = calloc(pv->common->stream_count,
                                  sizeof(sync_stream_t));
 
@@ -2417,6 +2421,10 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     }
     hb_log("sync: expecting %d video frames", pv->common->est_frame_count);
 
+    // For filter scan pass, only video is passed from reader.
+    if (job->filter_scan)
+      goto video_sync_only;
+
     // Initialize audio sync work objects
     for (ii = 0; ii < hb_list_count(job->list_audio); ii++ )
     {
@@ -2439,6 +2447,7 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
                                       work, HB_LOW_PRIORITY);
     }
 
+video_sync_only:
     if (job->frame_to_start || job->pts_to_start)
     {
         pv->common->start_found    = 0;

@@ -67,6 +67,8 @@
 		27D6C76F14B102DA00B785E4 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73E14B102DA00B785E4 /* libvorbisenc.a */; };
 		27D6C77114B102DA00B785E4 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73F14B102DA00B785E4 /* libx264.a */; };
 		3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3490BCB31614CF8D002A5AD7 /* HandBrake.icns */; };
+		64184F819B730A259B122EF8 /* libvidstab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62634F39936DF403E6AF379B /* libvidstab.a */; };
+		A7454D1FBCB7E2E9DDA089B9 /* libvidstab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62634F39936DF403E6AF379B /* libvidstab.a */; };
 		A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
 		A900E6BE1D7B1B6800CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
 		A90273D42FB879F3003D5DE1 /* HBFilter+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A90273D32FB879F3003D5DE1 /* HBFilter+UIAdditions.m */; };
@@ -546,6 +548,7 @@
 		3490BCB31614CF8D002A5AD7 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		46AB433315F98A2B009C0961 /* HBDockTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBDockTextField.h; sourceTree = "<group>"; };
 		46AB433415F98A2B009C0961 /* HBDockTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBDockTextField.m; sourceTree = "<group>"; };
+		62634F39936DF403E6AF379B /* libvidstab.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvidstab.a; path = external/contrib/lib/libvidstab.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A900E6BC1D7B1B4800CB6C0A /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = external/contrib/lib/libopus.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A90273D22FB879F3003D5DE1 /* HBFilter+UIAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HBFilter+UIAdditions.h"; sourceTree = "<group>"; };
 		A90273D32FB879F3003D5DE1 /* HBFilter+UIAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "HBFilter+UIAdditions.m"; sourceTree = "<group>"; };
@@ -1346,6 +1349,7 @@
 				A955128B1A320B02001BFC6F /* libjansson.a in Frameworks */,
 				1C6D76551CD7733300F5B943 /* libharfbuzz.a in Frameworks */,
 				A9C3A8F6278DFF8D00839EDF /* libzimg.a in Frameworks */,
+				64184F819B730A259B122EF8 /* libvidstab.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1439,6 +1443,7 @@
 				A91CE2C81C7DABBC0068F46F /* libx264.a in Frameworks */,
 				A9C3A8F8278DFFC900839EDF /* libzimg.a in Frameworks */,
 				A91CE2B11C7DAA530068F46F /* libhandbrake.a in Frameworks */,
+				A7454D1FBCB7E2E9DDA089B9 /* libvidstab.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1485,6 +1490,7 @@
 				1C15C82B1CD7722500368223 /* libharfbuzz.a */,
 				A9935867256C349B00A6875E /* libzimg.a */,
 				A99E13372833B97A0006D720 /* libSvtAv1Enc.a */,
+				62634F39936DF403E6AF379B /* libvidstab.a */,
 			);
 			name = "Static Libraries";
 			sourceTree = "<group>";
@@ -3874,7 +3880,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
-				PATH = $PATH;
+				PATH = "$PATH";
 				PRODUCT_NAME = external;
 			};
 			name = debug;
@@ -3884,7 +3890,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
-				PATH = $PATH;
+				PATH = "$PATH";
 				PRODUCT_NAME = external;
 			};
 			name = release;
@@ -5224,7 +5230,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
-				PATH = $PATH;
+				PATH = "$PATH";
 				PRODUCT_NAME = external;
 			};
 			name = "debug-sandbox";
@@ -5509,7 +5515,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
-				PATH = $PATH;
+				PATH = "$PATH";
 				PRODUCT_NAME = external;
 			};
 			name = "release-sandbox";

@@ -72,6 +72,7 @@ else ifeq ($(HOST.system),darwin)
     LIBHB.metal += $(wildcard $(LIBHB.src/)platform/macosx/shaders/*.metal)
 else ifeq ($(HOST.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+    LIBHB.GCC.f += openmp
 else ifeq ($(HOST.system),freebsd)
     LIBHB.GCC.D += SYS_FREEBSD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(HOST.system),netbsd)
@@ -80,6 +81,7 @@ else ifeq ($(HOST.system),openbsd)
     LIBHB.GCC.D += SYS_OPENBSD
 else ifeq ($(HOST.system),mingw)
     LIBHB.GCC.D += SYS_MINGW
+    LIBHB.GCC.f += openmp
 ifneq ($(HAS.pthread),1)
     LIBHB.GCC.D += PTW32_STATIC_LIB
 endif
@@ -116,7 +118,7 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        ass avformat avfilter avcodec avutil swresample dvdnav dvdread \
+        ass avformat avfilter avcodec avutil swresample vidstab dvdnav dvdread \
         freetype mp3lame swscale vpx theora vorbis vorbisenc ogg x264 \
         bluray jansson harfbuzz opus speex dav1d turbojpeg zimg SvtAv1Enc, \
         $(CONTRIB.build/)lib/lib$(n).a )

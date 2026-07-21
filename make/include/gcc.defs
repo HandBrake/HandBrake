@@ -84,7 +84,11 @@ GCC.args.I                 = -I$(1)
 GCC.args.muldefs           = -Wl,--allow-multiple-definition
 GCC.args.start             = -Wl,--start-group
 GCC.args.F                 = -F$(1)
-GCC.args.f                 = -framework $(1)
+ifeq ($(HOST.system),darwin)
+    GCC.args.f             = -framework $(1)
+else
+    GCC.args.f             = -f$(1)
+endif
 GCC.args.L                 = -L$(1)
 GCC.args.l                 = -l$(1)
 GCC.args.pkgconfig         = $(1)

@@ -1,0 +1,1490 @@
+From 3899bafdf69b992e79e972a8dc0b5b986d13c6a6 Mon Sep 17 00:00:00 2001
+From: sammiler <app.evergreen055@passinbox.com>
+Date: Sun, 13 Jul 2025 21:47:31 +0800
+Subject: [PATCH 10/13] build: Enable compilation with MSVC on Windows
+
+This commit introduces the necessary changes to allow the project to be compiled successfully using the Microsoft Visual C++ (MSVC) toolchain on Windows.
+
+- Adapt CMakeLists.txt for MSVC-specific compilation paths and flags.
+- Introduce compat.h to handle MSVC compatibility issues.
+- Apply VS_API macro to public APIs for proper DLL export/import.
+- Update FindSSE.cmake to correctly detect SSE support with MSVC.
+---
+ CMakeLists.txt                 |  31 +++++++--
+ CMakeModules/FindSSE.cmake     | 112 ++++++++++++++++++---------------
+ src/boxblur.h                  |   4 +-
+ src/compat.h                   |  18 ++++++
+ src/frameinfo.h                |  28 ++++-----
+ src/localmotion2transform.c    |   2 +-
+ src/localmotion2transform.h    |  12 ++--
+ src/motiondetect.c             |   4 +-
+ src/motiondetect.h             |  19 +++---
+ src/motiondetect_internal.h    |  34 +++++-----
+ src/motiondetect_opt.h         |   8 +--
+ src/serialize.c                |   2 +-
+ src/serialize.h                |  20 +++---
+ src/transform.c                |   4 +-
+ src/transform.h                |  43 +++++++------
+ src/transform_internal.h       |  10 +--
+ src/transformfixedpoint.h      |  17 ++---
+ src/transformfloat.h           |  17 ++---
+ src/transformtype.c            |  14 ++++-
+ src/transformtype.h            |   9 +--
+ src/transformtype_operations.h |  69 ++++++++++----------
+ src/vidstab_api.h              |  14 +++++
+ src/vidstabdefines.h           |  46 ++++++++------
+ src/vsvector.h                 |  47 +++++++-------
+ transcode/CMakeLists.txt       |  11 ++--
+ 25 files changed, 347 insertions(+), 248 deletions(-)
+ create mode 100644 src/compat.h
+ create mode 100644 src/vidstab_api.h
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e9d1bb7..61a2594 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,7 +26,15 @@ option(USE_OMP "use parallelization use OMP" ON)
+ 
+ set(CMAKE_C_STANDARD 99)
+ 
+-add_definitions(-Wall -Wno-pointer-sign)
++if(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang")
++  add_definitions(-Wall -Wno-pointer-sign)
++elseif(MSVC)
++  add_definitions(/W3)
++endif()
++
++if(NOT WIN32)
++  add_definitions(-fPIC)
++endif()
+ 
+ if(NOT WIN32)
+   add_definitions(-fPIC)
+@@ -38,10 +46,15 @@ endif()
+ 
+ # here we should check for SSE2
+ # our  -DUSE_SSE2_ASM code does not work with fpic
+-if(SSE2_FOUND)
+-add_definitions( -DUSE_SSE2 -msse2 -ffast-math )
+-endif()
++if (NOT MSVC)
++  if(SSE2_FOUND)
++      add_definitions( -DUSE_SSE2 -msse2 -ffast-math )
++endif ()
+ 
++endif()
++if(MSVC AND USE_OMP)
++  add_compile_options(/openmp)
++endif()
+ if(USE_OMP AND OPENMP_FOUND)
+ add_definitions(${OpenMP_C_FLAGS} -DUSE_OMP)
+ endif()
+@@ -63,7 +76,15 @@ add_library (vidstab ${SOURCES})
+ set_target_properties(vidstab PROPERTIES SOVERSION ${MAJOR_VERSION}.${MINOR_VERSION})
+ 
+ 
+-target_link_libraries(vidstab m)
++if(MSVC)
++  target_compile_definitions(vidstab PRIVATE VIDSTAB_EXPORTS)
++endif()
++target_include_directories(vidstab PUBLIC
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
++)
++if (NOT MSVC)
++  target_link_libraries(vidstab m)
++endif ()
+ set(PKG_EXTRA_LIBS -lm)
+ if(USE_OMP AND OPENMP_FOUND)
+ if(TARGET OpenMP::OpenMP_C)
+diff --git a/CMakeModules/FindSSE.cmake b/CMakeModules/FindSSE.cmake
+index 264a94e..b5adfe3 100644
+--- a/CMakeModules/FindSSE.cmake
++++ b/CMakeModules/FindSSE.cmake
+@@ -1,69 +1,79 @@
+-# Check if SSE instructions are available by the compiler and target platform (be aware of cross compilation)
+ include(CheckCCompilerFlag)
+ 
+-check_c_compiler_flag(-msse2 HAVE_SSE2)
+-check_c_compiler_flag(-msse3 HAVE_SSE3)
+-check_c_compiler_flag(-mssse3 HAVE_SSSE3)
+-check_c_compiler_flag(-msse4.1 HAVE_SSE4_1)
++if (MSVC)
++      message(STATUS "MSVC detected, enabling default SSE2+ support")
+ 
+-# Some compilers understand SSE flags, even when target platform doesn't support it (Clang with arm target)
+-# It is necessary try to compile actual code
+-if(HAVE_SSE2)
+-      try_compile(SSE_OK "${PROJECT_BINARY_DIR}"
+-          "${CMAKE_CURRENT_LIST_DIR}/TestSSE2.c"
+-          COMPILE_DEFINITIONS "-msse2" )
+-      if(NOT SSE_OK)
+-            message(STATUS "SSE2 test compilation fails")
+-            set(HAVE_SSE2 FALSE)
++      set(SSE2_FOUND TRUE CACHE BOOL "SSE2 available on target" FORCE)
++      set(SSE3_FOUND TRUE CACHE BOOL "SSE3 available on target" FORCE)
++      set(SSSE3_FOUND TRUE CACHE BOOL "SSSE3 available on target" FORCE)
++      set(SSE4_1_FOUND TRUE CACHE BOOL "SSE4.1 available on target" FORCE)
++      add_compile_options(/arch:AVX2)
++
++else()
++      # GNU/Clang-like flow
++      check_c_compiler_flag(-msse2 HAVE_SSE2)
++      check_c_compiler_flag(-msse3 HAVE_SSE3)
++      check_c_compiler_flag(-mssse3 HAVE_SSSE3)
++      check_c_compiler_flag(-msse4.1 HAVE_SSE4_1)
++
++      if(HAVE_SSE2)
++            try_compile(SSE_OK "${PROJECT_BINARY_DIR}"
++                    "${CMAKE_CURRENT_LIST_DIR}/TestSSE2.c"
++                    COMPILE_DEFINITIONS "-msse2" )
++            if(NOT SSE_OK)
++                  message(STATUS "SSE2 test compilation fails")
++                  set(HAVE_SSE2 FALSE)
++            endif()
+       endif()
+-endif()
+ 
+-if(HAVE_SSE3)
+-      try_compile(SSE_OK "${PROJECT_BINARY_DIR}"
+-          "${CMAKE_CURRENT_LIST_DIR}/TestSSE3.c"
+-          COMPILE_DEFINITIONS "-msse3" )
+-      if(NOT SSE_OK)
+-            message(STATUS "SSE3 test compilation fails")
+-            set(HAVE_SSE3 FALSE)
++      if(HAVE_SSE3)
++            try_compile(SSE_OK "${PROJECT_BINARY_DIR}"
++                    "${CMAKE_CURRENT_LIST_DIR}/TestSSE3.c"
++                    COMPILE_DEFINITIONS "-msse3" )
++            if(NOT SSE_OK)
++                  message(STATUS "SSE3 test compilation fails")
++                  set(HAVE_SSE3 FALSE)
++            endif()
+       endif()
+-endif()
+ 
+-if(HAVE_SSSE3)
+-      try_compile(SSE_OK "${PROJECT_BINARY_DIR}"
+-          "${CMAKE_CURRENT_LIST_DIR}/TestSSSE3.c"
+-          COMPILE_DEFINITIONS "-mssse3" )
+-      if(NOT SSE_OK)
+-            message(STATUS "SSE3 test compilation fails")
+-            set(HAVE_SSSE3 FALSE)
++      if(HAVE_SSSE3)
++            try_compile(SSE_OK "${PROJECT_BINARY_DIR}"
++                    "${CMAKE_CURRENT_LIST_DIR}/TestSSSE3.c"
++                    COMPILE_DEFINITIONS "-mssse3" )
++            if(NOT SSE_OK)
++                  message(STATUS "SSSE3 test compilation fails")
++                  set(HAVE_SSSE3 FALSE)
++            endif()
+       endif()
+-endif()
+ 
+-if(HAVE_SSE4_1)
+-      try_compile(SSE_OK "${PROJECT_BINARY_DIR}"
+-          "${CMAKE_CURRENT_LIST_DIR}/TestSSE41.c"
+-          COMPILE_DEFINITIONS "-msse4.1" )
+-      if(NOT SSE_OK)
+-            message(STATUS "SSE4.1 test compilation fails")
+-            set(HAVE_SSE4_1 FALSE)
++      if(HAVE_SSE4_1)
++            try_compile(SSE_OK "${PROJECT_BINARY_DIR}"
++                    "${CMAKE_CURRENT_LIST_DIR}/TestSSE41.c"
++                    COMPILE_DEFINITIONS "-msse4.1" )
++            if(NOT SSE_OK)
++                  message(STATUS "SSE4.1 test compilation fails")
++                  set(HAVE_SSE4_1 FALSE)
++            endif()
+       endif()
+-endif()
+ 
+-set(SSE2_FOUND   ${HAVE_SSE2}   CACHE BOOL "SSE2 available on target")
+-set(SSE3_FOUND   ${HAVE_SSE3}   CACHE BOOL "SSE3 available on target")
+-set(SSSE3_FOUND  ${HAVE_SSSE3}  CACHE BOOL "SSSE3 available on target")
+-set(SSE4_1_FOUND ${HAVE_SSE4_1} CACHE BOOL "SSE4.1 available on target")
++      set(SSE2_FOUND   ${HAVE_SSE2}   CACHE BOOL "SSE2 available on target")
++      set(SSE3_FOUND   ${HAVE_SSE3}   CACHE BOOL "SSE3 available on target")
++      set(SSSE3_FOUND  ${HAVE_SSSE3}  CACHE BOOL "SSSE3 available on target")
++      set(SSE4_1_FOUND ${HAVE_SSE4_1} CACHE BOOL "SSE4.1 available on target")
++endif()
+ 
++# Output messages
+ if(NOT SSE2_FOUND)
+-      MESSAGE(STATUS "SSE2 is not supported on target platform.")
+-endif(NOT SSE2_FOUND)
++      message(STATUS "SSE2 is not supported on target platform.")
++endif()
+ if(NOT SSE3_FOUND)
+-      MESSAGE(STATUS "SSE3 is not supported on target platform.")
+-endif(NOT SSE3_FOUND)
++      message(STATUS "SSE3 is not supported on target platform.")
++endif()
+ if(NOT SSSE3_FOUND)
+-      MESSAGE(STATUS "SSSE3 is not supported on target platform.")
+-endif(NOT SSSE3_FOUND)
++      message(STATUS "SSSE3 is not supported on target platform.")
++endif()
+ if(NOT SSE4_1_FOUND)
+-      MESSAGE(STATUS "SSE4.1 is not supported on target platform.")
+-endif(NOT SSE4_1_FOUND)
++      message(STATUS "SSE4.1 is not supported on target platform.")
++endif()
+ 
+ mark_as_advanced(SSE2_FOUND SSE3_FOUND SSSE3_FOUND SSE4_1_FOUND)
+diff --git a/src/boxblur.h b/src/boxblur.h
+index 3f8fac0..a4adf54 100644
+--- a/src/boxblur.h
++++ b/src/boxblur.h
+@@ -25,7 +25,7 @@
+ #define __BOXBLUR_H
+ 
+ #include "frameinfo.h"
+-
++#include "vidstab_api.h"
+ /** BoxBlurColor     - blur also color channels,
+     BoxBlurKeepColor - copy original color channels
+     BoxBlurNoColor   - do not touch color channels in dest
+@@ -39,7 +39,7 @@ typedef enum _BoxBlurColorMode { BoxBlurColor, BoxBlurKeepColor, BoxBlurNoColor}
+  * @param size of bluring kernel, (min 3 and it is made odd)
+  * @param onlyLumincance if true color planes stay untouched
+  */
+-void boxblurPlanar(VSFrame* dest, const VSFrame* src,
++VS_API void boxblurPlanar(VSFrame* dest, const VSFrame* src,
+     VSFrame* buffer, const VSFrameInfo* fi,
+     unsigned int size, BoxBlurColorMode colormode);
+ 
+diff --git a/src/compat.h b/src/compat.h
+new file mode 100644
+index 0000000..1af9219
+--- /dev/null
++++ b/src/compat.h
+@@ -0,0 +1,18 @@
++#ifndef COMPAT_H
++#define COMPAT_H
++
++#if defined(_MSC_VER)
++  #ifndef _USE_MATH_DEFINES
++    #define _USE_MATH_DEFINES
++  #endif
++  #include <math.h>
++
++  #ifndef M_PI
++    #define M_PI 3.14159265358979323846
++  #endif
++#else
++  #include <math.h>
++#endif
++
++
++#endif //COMPAT_H
+diff --git a/src/frameinfo.h b/src/frameinfo.h
+index f48e92e..3fda756 100644
+--- a/src/frameinfo.h
++++ b/src/frameinfo.h
+@@ -27,7 +27,7 @@
+ #include <stddef.h>
+ #include <stdlib.h>
+ #include <inttypes.h>
+-
++#include "vidstab_api.h"
+ /// pixel formats
+ typedef enum {PF_NONE = -1,
+               PF_GRAY8,     ///<        Y        ,  8bpp
+@@ -48,7 +48,7 @@ typedef enum {PF_NONE = -1,
+ /** frame information for deshaking lib
+     This only works for planar image formats
+  */
+-typedef struct vsframeinfo {
++typedef struct VS_API vsframeinfo {
+   int width, height;
+   int planes;        // number of planes (1 luma, 2,3 chroma, 4 alpha)
+   int log2ChromaW; // subsampling of width in chroma planes
+@@ -59,7 +59,7 @@ typedef struct vsframeinfo {
+ 
+ /** frame data according to frameinfo
+  */
+-typedef struct vsframe {
++typedef struct VS_API vsframe {
+   uint8_t* data[4]; // data in planes. For packed data everthing is in plane 0
+   int linesize[4]; // line size of each line in a the planes
+ } VSFrame;
+@@ -68,43 +68,43 @@ typedef struct vsframe {
+ #define CHROMA_SIZE(width,log2sub)  (-(-(width) >> (log2sub)))
+ 
+ /// initializes the frameinfo for the given format
+-int vsFrameInfoInit(VSFrameInfo* fi, int width, int height, VSPixelFormat pFormat);
++VS_API int vsFrameInfoInit(VSFrameInfo* fi, int width, int height, VSPixelFormat pFormat);
+ 
+ 
+ /// returns the subsampling shift amount, horizonatally for the given plane
+-int vsGetPlaneWidthSubS(const VSFrameInfo* fi, int plane);
++VS_API int vsGetPlaneWidthSubS(const VSFrameInfo* fi, int plane);
+ 
+ /// returns the subsampling shift amount, vertically for the given plane
+-int vsGetPlaneHeightSubS(const VSFrameInfo* fi, int plane);
++VS_API int vsGetPlaneHeightSubS(const VSFrameInfo* fi, int plane);
+ 
+ /// zero initialization
+-void vsFrameNull(VSFrame* frame);
++VS_API void vsFrameNull(VSFrame* frame);
+ 
+ /// returns true if frame is null (data[0]==0)
+-int vsFrameIsNull(const VSFrame* frame);
++VS_API int vsFrameIsNull(const VSFrame* frame);
+ 
+ /// compares two frames for identity (based in data[0])
+-int vsFramesEqual(const VSFrame* frame1,const VSFrame* frame2);
++VS_API int vsFramesEqual(const VSFrame* frame1,const VSFrame* frame2);
+ 
+ /// allocates memory for a frame
+-void vsFrameAllocate(VSFrame* frame, const VSFrameInfo* fi);
++VS_API void vsFrameAllocate(VSFrame* frame, const VSFrameInfo* fi);
+ 
+ 
+ /// copies the given plane number from src to dest
+-void vsFrameCopyPlane(VSFrame* dest, const VSFrame* src,
++VS_API void vsFrameCopyPlane(VSFrame* dest, const VSFrame* src,
+                     const VSFrameInfo* fi, int plane);
+ 
+ /// copies src to dest
+-void vsFrameCopy(VSFrame* dest, const VSFrame* src, const VSFrameInfo* fi);
++VS_API void vsFrameCopy(VSFrame* dest, const VSFrame* src, const VSFrameInfo* fi);
+ 
+ /** fills the data pointer so that it corresponds to the img saved in the linear buffer.
+     No copying is performed.
+     Do not call vsFrameFree() on it.
+  */
+-void vsFrameFillFromBuffer(VSFrame* frame, uint8_t* img, const VSFrameInfo* fi);
++VS_API void vsFrameFillFromBuffer(VSFrame* frame, uint8_t* img, const VSFrameInfo* fi);
+ 
+ /// frees memory
+-void vsFrameFree(VSFrame* frame);
++VS_API void vsFrameFree(VSFrame* frame);
+ 
+ #endif  /* FRAMEINFO_H */
+ 
+diff --git a/src/localmotion2transform.c b/src/localmotion2transform.c
+index a78b86b..6ff0f9c 100644
+--- a/src/localmotion2transform.c
++++ b/src/localmotion2transform.c
+@@ -26,7 +26,7 @@
+ #include "transformtype_operations.h"
+ #include <assert.h>
+ #include <string.h>
+-
++#include "compat.h"
+ /* #include <sys/time.h> */
+ /* long timeOfDayinMS() { */
+ /*   struct timeval t; */
+diff --git a/src/localmotion2transform.h b/src/localmotion2transform.h
+index 18940e5..e82eff6 100644
+--- a/src/localmotion2transform.h
++++ b/src/localmotion2transform.h
+@@ -29,18 +29,18 @@
+ #include "transform.h"
+ #include "transformtype.h"
+ #include "serialize.h"
+-
++#include "vidstab_api.h"
+ 
+ /** converts for each frame the localmotions into a transform
+  */
+-int vsLocalmotions2Transforms(VSTransformData* td,
++VS_API int vsLocalmotions2Transforms(VSTransformData* td,
+                               const VSManyLocalMotions* motions,
+                               VSTransformations* trans );
+ 
+ /** calculates rotation angle for the given transform and
+  * field with respect to the given center-point
+  */
+-double vsCalcAngle(const LocalMotion* lm, int center_x, int center_y);
++VS_API double vsCalcAngle(const LocalMotion* lm, int center_x, int center_y);
+ 
+ /** calculates the transformation that caused the observed motions.
+     Using a simple cleaned-means approach to eliminate outliers.
+@@ -51,7 +51,7 @@ double vsCalcAngle(const LocalMotion* lm, int center_x, int center_y);
+     calculate rotation angle as cleaned mean of all angles
+     compensate for possibly off-center rotation
+ */
+-VSTransform vsSimpleMotionsToTransform(VSFrameInfo fi, const char* modname,
++VS_API VSTransform vsSimpleMotionsToTransform(VSFrameInfo fi, const char* modname,
+                                        const LocalMotions* motions);
+ 
+ 
+@@ -60,7 +60,7 @@ VSTransform vsSimpleMotionsToTransform(VSFrameInfo fi, const char* modname,
+     Outliers are removed by repeated gaussianizing error distribution.
+     (File for exporting transforms)
+ */
+-VSTransform vsMotionsToTransform(VSTransformData* td,
++VS_API VSTransform vsMotionsToTransform(VSTransformData* td,
+                                  const LocalMotions* motions,
+                                  FILE* f);
+ 
+@@ -79,7 +79,7 @@ VSTransform vsMotionsToTransform(VSTransformData* td,
+  * Return Value:
+  *     Optimized parameters
+  */
+-VSArray vsGradientDescent(double (*eval)(VSArray, void*),
++VS_API VSArray vsGradientDescent(double (*eval)(VSArray, void*),
+                          VSArray params, void* dat,
+                          int N, VSArray stepsizes, double threshold, double* residual);
+ 
+diff --git a/src/motiondetect.c b/src/motiondetect.c
+index a856d1b..815b00b 100644
+--- a/src/motiondetect.c
++++ b/src/motiondetect.c
+@@ -726,11 +726,13 @@ LocalMotions calcTransFields(VSMotionDetect* md,
+ 
+   VSVector goodflds = selectfields(md, fields, contrastfunc);
+   // use all "good" fields and calculate optimal match to previous frame
++  //MSVC requires the OpenMP loop index to be a signed integer, declared in the same function, and visible if not declared inside the loop.
++  int index;
+ #ifdef USE_OMP
+   omp_set_num_threads(md->conf.numThreads);
+ #pragma omp parallel for shared(goodflds, md, localmotions)
+ #endif
+-  for(int index=0; index < vs_vector_size(&goodflds); index++){
++  for(index=0; index < vs_vector_size(&goodflds); index++){
+     int i = ((contrast_idx*)vs_vector_get(&goodflds,index))->index;
+     LocalMotion m;
+     m = fieldfunc(md, fields, &fields->fields[i], i); // e.g. calcFieldTransPlanar
+diff --git a/src/motiondetect.h b/src/motiondetect.h
+index c7573e3..9216975 100644
+--- a/src/motiondetect.h
++++ b/src/motiondetect.h
+@@ -35,11 +35,12 @@
+ #include "vidstabdefines.h"
+ #include "vsvector.h"
+ #include "frameinfo.h"
++#include "vidstab_api.h"
+ 
+ #define ASCII_SERIALIZATION_MODE 1
+ #define BINARY_SERIALIZATION_MODE 2
+ 
+-typedef struct _vsmotiondetectconfig {
++typedef struct VS_API _vsmotiondetectconfig {
+   /* meta parameter for maxshift and fieldsize between 1 and 15 */
+   int         shakiness;
+   int         accuracy;         // meta parameter for number of fields between 1 and 10
+@@ -55,7 +56,7 @@ typedef struct _vsmotiondetectconfig {
+ } VSMotionDetectConfig;
+ 
+ /** structure for motion detection fields */
+-typedef struct _vsmotiondetectfields {
++typedef struct VS_API _vsmotiondetectfields {
+   /* maximum number of pixels we expect the shift of subsequent frames */
+   int maxShift;
+   int stepSize;                 // stepsize for detection
+@@ -70,7 +71,7 @@ typedef struct _vsmotiondetectfields {
+ } VSMotionDetectFields;
+ 
+ /** data structure for motion detection part of deshaking*/
+-typedef struct _vsmotiondetect {
++typedef struct VS_API _vsmotiondetect {
+   VSFrameInfo fi;
+ 
+   VSMotionDetectConfig conf;
+@@ -115,13 +116,13 @@ static const char vs_motiondetect_help[] = ""
+ 
+ /** returns the default config
+  */
+-VSMotionDetectConfig vsMotionDetectGetDefaultConfig(const char* modName);
++VS_API VSMotionDetectConfig vsMotionDetectGetDefaultConfig(const char* modName);
+ 
+ /** initialized the VSMotionDetect structure and allocates memory
+  *  for the frames and stuff
+  *  @return VS_OK on success otherwise VS_ERROR
+  */
+-int vsMotionDetectInit(VSMotionDetect* md, const VSMotionDetectConfig* conf,
++VS_API int vsMotionDetectInit(VSMotionDetect* md, const VSMotionDetectConfig* conf,
+                        const VSFrameInfo* fi);
+ 
+ /**
+@@ -130,18 +131,18 @@ int vsMotionDetectInit(VSMotionDetect* md, const VSMotionDetectConfig* conf,
+  *  is stored internally
+  *  @param motions: calculated local motions. (must be deleted manually)
+  * */
+-int vsMotionDetection(VSMotionDetect* md, LocalMotions* motions, VSFrame *frame);
++VS_API int vsMotionDetection(VSMotionDetect* md, LocalMotions* motions, VSFrame *frame);
+ 
+ /** Deletes internal data structures.
+  * In order to use the VSMotionDetect again, you have to call vsMotionDetectInit
+  */
+-void vsMotionDetectionCleanup(VSMotionDetect* md);
++VS_API void vsMotionDetectionCleanup(VSMotionDetect* md);
+ 
+ /// returns the current config
+-void vsMotionDetectGetConfig(VSMotionDetectConfig* conf, const VSMotionDetect* md);
++VS_API void vsMotionDetectGetConfig(VSMotionDetectConfig* conf, const VSMotionDetect* md);
+ 
+ /// returns the frame info
+-const VSFrameInfo* vsMotionDetectGetFrameInfo(const VSMotionDetect* md);
++VS_API const VSFrameInfo* vsMotionDetectGetFrameInfo(const VSMotionDetect* md);
+ 
+ #endif  /* MOTIONDETECT_H */
+ 
+diff --git a/src/motiondetect_internal.h b/src/motiondetect_internal.h
+index 6e09c14..c2b5b98 100644
+--- a/src/motiondetect_internal.h
++++ b/src/motiondetect_internal.h
+@@ -29,7 +29,7 @@
+ #define MOTIONDETECT_INTERNAL_H
+ 
+ #include "motiondetect.h"
+-
++#include "vidstab_api.h"
+ /* type for a function that calculates the transformation of a certain field
+  */
+ typedef LocalMotion (*calcFieldTransFunc)(VSMotionDetect*, VSMotionDetectFields*,
+@@ -40,41 +40,41 @@ typedef LocalMotion (*calcFieldTransFunc)(VSMotionDetect*, VSMotionDetectFields*
+ typedef double (*contrastSubImgFunc)(VSMotionDetect*, const Field*);
+ 
+ 
+-int initFields(VSMotionDetect* md, VSMotionDetectFields* fs,
++VS_API int initFields(VSMotionDetect* md, VSMotionDetectFields* fs,
+                int fieldSize, int maxShift, int stepSize, short border,
+                int spacing, double contrastThreshold );
+ 
+-double contrastSubImgPlanar(VSMotionDetect* md, const Field* field);
+-double contrastSubImgPacked(VSMotionDetect* md, const Field* field);
+-double contrastSubImg(unsigned char* const I, const Field* field,
++VS_API double contrastSubImgPlanar(VSMotionDetect* md, const Field* field);
++VS_API double contrastSubImgPacked(VSMotionDetect* md, const Field* field);
++VS_API double contrastSubImg(unsigned char* const I, const Field* field,
+                       int width, int height, int bytesPerPixel);
+ 
+ 
+-int cmp_contrast_idx(const void *ci1, const void* ci2);
+-VSVector selectfields(VSMotionDetect* md, VSMotionDetectFields* fields,
++VS_API int cmp_contrast_idx(const void *ci1, const void* ci2);
++VS_API VSVector selectfields(VSMotionDetect* md, VSMotionDetectFields* fields,
+                       contrastSubImgFunc contrastfunc);
+ 
+-LocalMotion calcFieldTransPlanar(VSMotionDetect* md, VSMotionDetectFields* fields,
++VS_API LocalMotion calcFieldTransPlanar(VSMotionDetect* md, VSMotionDetectFields* fields,
+                                  const Field* field, int fieldnum);
+-LocalMotion calcFieldTransPacked(VSMotionDetect* md, VSMotionDetectFields* fields,
++VS_API LocalMotion calcFieldTransPacked(VSMotionDetect* md, VSMotionDetectFields* fields,
+                                  const Field* field, int fieldnum);
+-LocalMotions calcTransFields(VSMotionDetect* md, VSMotionDetectFields* fields,
++VS_API LocalMotions calcTransFields(VSMotionDetect* md, VSMotionDetectFields* fields,
+                              calcFieldTransFunc fieldfunc,
+                              contrastSubImgFunc contrastfunc);
+ 
+ 
+-void drawFieldScanArea(VSMotionDetect* md, const LocalMotion* motion, int maxShift);
+-void drawField(VSMotionDetect* md, const LocalMotion* motion, short box);
+-void drawFieldTrans(VSMotionDetect* md, const LocalMotion* motion, int color);
+-void drawBox(unsigned char* I, int width, int height, int bytesPerPixel,
++VS_API void drawFieldScanArea(VSMotionDetect* md, const LocalMotion* motion, int maxShift);
++VS_API void drawField(VSMotionDetect* md, const LocalMotion* motion, short box);
++VS_API void drawFieldTrans(VSMotionDetect* md, const LocalMotion* motion, int color);
++VS_API void drawBox(unsigned char* I, int width, int height, int bytesPerPixel,
+              int x, int y, int sizex, int sizey, unsigned char color);
+-void drawRectangle(unsigned char* I, int width, int height, int bytesPerPixel,
++VS_API void drawRectangle(unsigned char* I, int width, int height, int bytesPerPixel,
+                    int x, int y, int sizex, int sizey, unsigned char color);
+ 
+-void drawLine(unsigned char* I, int width, int height, int bytesPerPixel,
++VS_API void drawLine(unsigned char* I, int width, int height, int bytesPerPixel,
+               Vec* a, Vec* b, int thickness, unsigned char color);
+ 
+-unsigned int compareSubImg_thr(unsigned char* const I1, unsigned char* const I2,
++VS_API unsigned int compareSubImg_thr(unsigned char* const I1, unsigned char* const I2,
+                                const Field* field, int width1, int width2, int height,
+                                int bytesPerPixel,
+                                int d_x, int d_y, unsigned int threshold);
+diff --git a/src/motiondetect_opt.h b/src/motiondetect_opt.h
+index d250c7c..06b2d06 100644
+--- a/src/motiondetect_opt.h
++++ b/src/motiondetect_opt.h
+@@ -29,7 +29,7 @@
+ #define MOTIONDETECT_OPT_H
+ 
+ #include "motiondetect.h"
+-
++#include "vidstab_api.h"
+ #ifdef USE_SSE2_ASM //enable SSE2 inline asm code
+ #define compareSubImg compareSubImg_thr_sse2_asm
+ #elif defined(USE_SSE2)      //enable SSE2 code
+@@ -39,15 +39,15 @@
+ #endif
+ 
+ #ifdef USE_SSE2
+-double contrastSubImg1_SSE(unsigned char* const I, const Field* field,
++VS_API double contrastSubImg1_SSE(unsigned char* const I, const Field* field,
+                            int width, int height);
+ #endif
+ 
+-double contrastSubImg_variance_C(unsigned char* const I, const Field* field,
++VS_API double contrastSubImg_variance_C(unsigned char* const I, const Field* field,
+                         int width, int height);
+ 
+ #ifdef USE_SSE2
+-unsigned int compareSubImg_thr_sse2(unsigned char* const I1, unsigned char* const I2,
++VS_API unsigned int compareSubImg_thr_sse2(unsigned char* const I1, unsigned char* const I2,
+                                     const Field* field, int width1, int width2, int height,
+                                     int bytesPerPixel, int d_x, int d_y,
+                                     unsigned int threshold);
+diff --git a/src/serialize.c b/src/serialize.c
+index d143657..6da9890 100644
+--- a/src/serialize.c
++++ b/src/serialize.c
+@@ -73,7 +73,7 @@ static double byteSwapDouble(double v)
+     defined(__ARMEL__) || \
+     defined(__THUMBEL__) || \
+     defined(__AARCH64EL__) || \
+-    defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__)
++    defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__) || defined(_WIN32)
+ // It's a little-endian target architecture
+ #define __IS_LITTLE_ENDIAN__
+ #else
+diff --git a/src/serialize.h b/src/serialize.h
+index 7985982..dbc1a91 100644
+--- a/src/serialize.h
++++ b/src/serialize.h
+@@ -30,7 +30,7 @@
+ #include "transformtype.h"
+ #include "motiondetect.h"
+ #include "transform.h"
+-
++#include "vidstab_api.h"
+ 
+ /// Vector of LocalMotions
+ typedef VSVector VSManyLocalMotions;
+@@ -39,29 +39,29 @@ typedef VSVector VSManyLocalMotions;
+     ((LocalMotions*)vs_vector_get(manylocalmotions,index))
+ 
+ /// guess the serialization mode of the local motions file
+-int vsGuessSerializationMode(FILE* f);
++VS_API int vsGuessSerializationMode(FILE* f);
+ 
+ /// stores local motions to file
+-int vsStoreLocalmotions(FILE* f, const LocalMotions* lms, const int serializationMode);
++VS_API int vsStoreLocalmotions(FILE* f, const LocalMotions* lms, const int serializationMode);
+ 
+ /// restores local motions from file
+-LocalMotions vsRestoreLocalmotions(FILE* f, const int serializationMode);
++VS_API LocalMotions vsRestoreLocalmotions(FILE* f, const int serializationMode);
+ 
+ 
+ /// writes the header to the file that is to be holding the local motions
+-int vsPrepareFile(const VSMotionDetect* td, FILE* f);
++VS_API int vsPrepareFile(const VSMotionDetect* td, FILE* f);
+ 
+ /// appends the given localmotions to the file
+-int vsWriteToFile(const VSMotionDetect* td, FILE* f, const LocalMotions* lms);
++VS_API int vsWriteToFile(const VSMotionDetect* td, FILE* f, const LocalMotions* lms);
+ 
+ /// reads the header of the file and return the version number (used by readLocalmotionsFile)
+-int vsReadFileVersion(FILE* f, const int serializationMode);
++VS_API int vsReadFileVersion(FILE* f, const int serializationMode);
+ 
+ /*
+  * reads the next set of localmotions from the file, return VS_ERROR on error or
+  * if nothing is read (used by readLocalmotionsFile)
+  */
+-int vsReadFromFile(FILE* f, LocalMotions* lms, const int serializationMode);
++VS_API int vsReadFromFile(FILE* f, LocalMotions* lms, const int serializationMode);
+ 
+ /*
+  * reads the entire file of localmotions, return VS_ERROR on error or if nothing is read
+@@ -72,10 +72,10 @@ int vsReadFromFile(FILE* f, LocalMotions* lms, const int serializationMode);
+  *   Data lines have the structure: Frame NUM (<LocalMotions>)
+  *   where LocalMotions ::= List [(LM v.x v.y f.x f.y f.size contrast match),...]
+  */
+-int vsReadLocalMotionsFile(FILE* f, VSManyLocalMotions* lms);
++VS_API int vsReadLocalMotionsFile(FILE* f, VSManyLocalMotions* lms);
+ 
+ // read the transformations from the given file (Deprecated format)
+-int vsReadOldTransforms(const VSTransformData* td, FILE* f , VSTransformations* trans);
++VS_API int vsReadOldTransforms(const VSTransformData* td, FILE* f , VSTransformations* trans);
+ 
+ 
+ #endif
+diff --git a/src/transform.c b/src/transform.c
+index 380ad28..6360418 100644
+--- a/src/transform.c
++++ b/src/transform.c
+@@ -32,7 +32,9 @@
+ #endif
+ 
+ #include <math.h>
+-#include <libgen.h>
++#ifndef _MSC_VER
++    #include <libgen.h>
++#endif
+ #include <string.h>
+ 
+ const char* interpol_type_names[5] = {"No (0)", "Linear (1)", "Bi-Linear (2)",
+diff --git a/src/transform.h b/src/transform.h
+index 62e8ff4..1c37add 100644
+--- a/src/transform.h
++++ b/src/transform.h
+@@ -25,24 +25,27 @@
+ #define __TRANSFORM_H
+ 
+ #include <math.h>
+-#include <libgen.h>
++#ifndef _MSC_VER
++    #include <libgen.h>
++#endif
+ #include <stdint.h>
+ #include "transformtype.h"
+ #include "frameinfo.h"
+ #include "vidstabdefines.h"
++#include "vidstab_api.h"
+ #ifdef TESTING
+ #include "transformfloat.h"
+ #endif
+ 
+ 
+-typedef struct _vstransformations {
++typedef struct VS_API _vstransformations {
+     VSTransform* ts; // array of transformations
+     int current;   // index to current transformation
+     int len;       // length of trans array
+     short warned_end; // whether we warned that there is no transform left
+ } VSTransformations;
+ 
+-typedef struct _vsslidingavgtrans {
++typedef struct VS_API _vsslidingavgtrans {
+     VSTransform avg; // average transformation
+     VSTransform accum; // accumulator for relative to absolute conversion
+     double zoomavg;     // average zoom value
+@@ -54,7 +57,7 @@ typedef struct _vsslidingavgtrans {
+ typedef enum { VS_Zero, VS_Linear, VS_BiLinear, VS_BiCubic, VS_NBInterPolTypes} VSInterpolType;
+ 
+ /// returns a name for the interpolation type
+-const char* getInterpolationTypeName(VSInterpolType type);
++VS_API const char* getInterpolationTypeName(VSInterpolType type);
+ 
+ typedef enum { VSKeepBorder = 0, VSCropBorder } VSBorderType;
+ typedef enum { VSOptimalL1 = 0, VSGaussian, VSAvg } VSCamPathAlgo;
+@@ -76,7 +79,7 @@ typedef void (*vsInterpolateFun)(uint8_t *rv, int32_t x, int32_t y,
+                                  const uint8_t *img, int linesize,
+                                  int width, int height, uint8_t def);
+ 
+-typedef struct _VSTransformConfig {
++typedef struct VS_API _VSTransformConfig {
+ 
+     /* whether to consider transforms as relative (to previous frame)
+      * or absolute transforms
+@@ -102,7 +105,7 @@ typedef struct _VSTransformConfig {
+     VSCamPathAlgo  camPathAlgo;  // algorithm to use for camera path optimization
+ } VSTransformConfig;
+ 
+-typedef struct _VSTransformData {
++typedef struct VS_API _VSTransformData {
+     VSFrameInfo fiSrc;
+     VSFrameInfo fiDest;
+ 
+@@ -157,61 +160,61 @@ static const char vs_transform_help[] = ""
+ 
+ /** returns the default config
+  */
+-VSTransformConfig vsTransformGetDefaultConfig(const char* modName);
++VS_API VSTransformConfig vsTransformGetDefaultConfig(const char* modName);
+ 
+ /** initialized the VSTransformData structure using the config and allocates memory
+  *  for the frames and stuff
+  *  @return VS_OK on success otherwise VS_ERROR
+  */
+-int vsTransformDataInit(VSTransformData* td, const VSTransformConfig* conf,
++VS_API int vsTransformDataInit(VSTransformData* td, const VSTransformConfig* conf,
+                         const VSFrameInfo* fi_src, const VSFrameInfo* fi_dest);
+ 
+ 
+ /** Deletes internal data structures.
+  * In order to use the VSTransformData again, you have to call vsTransformDataInit
+  */
+-void vsTransformDataCleanup(VSTransformData* td);
++VS_API void vsTransformDataCleanup(VSTransformData* td);
+ 
+ /// returns the current config
+-void vsTransformGetConfig(VSTransformConfig* conf, const VSTransformData* td);
++VS_API void vsTransformGetConfig(VSTransformConfig* conf, const VSTransformData* td);
+ 
+ /// returns the frame info for the src
+-const VSFrameInfo* vsTransformGetSrcFrameInfo(const VSTransformData* td);
++VS_API const VSFrameInfo* vsTransformGetSrcFrameInfo(const VSTransformData* td);
+ /// returns the frame info for the dest
+-const VSFrameInfo* vsTransformGetDestFrameInfo(const VSTransformData* td);
++VS_API const VSFrameInfo* vsTransformGetDestFrameInfo(const VSTransformData* td);
+ 
+ 
+ /// initializes VSTransformations structure
+-void vsTransformationsInit(VSTransformations* trans);
++VS_API void vsTransformationsInit(VSTransformations* trans);
+ /// deletes VSTransformations internal memory
+-void vsTransformationsCleanup(VSTransformations* trans);
++VS_API void vsTransformationsCleanup(VSTransformations* trans);
+ 
+ /// return next Transform and increases internal counter
+-VSTransform vsGetNextTransform(const VSTransformData* td, VSTransformations* trans);
++VS_API VSTransform vsGetNextTransform(const VSTransformData* td, VSTransformations* trans);
+ 
+ /** preprocesses the list of transforms all at once. Here the deshaking is calculated!
+  */
+-int vsPreprocessTransforms(VSTransformData* td, VSTransformations* trans);
++VS_API int vsPreprocessTransforms(VSTransformData* td, VSTransformations* trans);
+ 
+ /**
+  * vsLowPassTransforms: single step smoothing of transforms, using only the past.
+  *  see also vsPreprocessTransforms. */
+-VSTransform vsLowPassTransforms(VSTransformData* td, VSSlidingAvgTrans* mem,
++VS_API VSTransform vsLowPassTransforms(VSTransformData* td, VSSlidingAvgTrans* mem,
+                             const VSTransform* trans);
+ 
+ /** call this function to prepare for a next transformation (transformPacked/transformPlanar)
+     and supply the src frame buffer and the frame to write to. These can be the same pointer
+     for an inplace operation (working on framebuffer directly)
+  */
+-int vsTransformPrepare(VSTransformData* td, const VSFrame* src, VSFrame* dest);
++VS_API int vsTransformPrepare(VSTransformData* td, const VSFrame* src, VSFrame* dest);
+ 
+ /// does the actual transformation
+-int vsDoTransform(VSTransformData* td, VSTransform t);
++VS_API int vsDoTransform(VSTransformData* td, VSTransform t);
+ 
+ 
+ /** call this function to finish the transformation of a frame (transformPacked/transformPlanar)
+  */
+-int vsTransformFinish(VSTransformData* td);
++VS_API int vsTransformFinish(VSTransformData* td);
+ 
+ 
+ #endif
+diff --git a/src/transform_internal.h b/src/transform_internal.h
+index e4d3135..7c504c8 100644
+--- a/src/transform_internal.h
++++ b/src/transform_internal.h
+@@ -25,7 +25,7 @@
+ #define __TRANSFORM_INTERNAL_H
+ 
+ #include "transform.h"
+-
++#include "vidstab_api.h"
+ #include "transformfixedpoint.h"
+ #ifdef TESTING
+ #include "transformfloat.h"
+@@ -37,11 +37,11 @@ const char* getInterpolationTypeName(VSInterpolType type);
+ /** performs the smoothing of the camera path and modifies the transforms
+     to compensate for the jiggle
+     */
+-int cameraPathOptimization(VSTransformData* td, VSTransformations* trans);
++VS_API int cameraPathOptimization(VSTransformData* td, VSTransformations* trans);
+ 
+-int cameraPathAvg(VSTransformData* td, VSTransformations* trans);
+-int cameraPathGaussian(VSTransformData* td, VSTransformations* trans);
+-int cameraPathOptimalL1(VSTransformData* td, VSTransformations* trans);
++VS_API int cameraPathAvg(VSTransformData* td, VSTransformations* trans);
++VS_API int cameraPathGaussian(VSTransformData* td, VSTransformations* trans);
++VS_API int cameraPathOptimalL1(VSTransformData* td, VSTransformations* trans);
+ 
+ #endif
+ 
+diff --git a/src/transformfixedpoint.h b/src/transformfixedpoint.h
+index e56473d..2108e3f 100644
+--- a/src/transformfixedpoint.h
++++ b/src/transformfixedpoint.h
+@@ -25,6 +25,7 @@
+ #define __TRANSFORMFIXEDPOINT_H
+ 
+ #include "transformtype.h"
++#include "vidstab_api.h"
+ #include <stdint.h>
+ 
+ typedef int32_t fp8;
+@@ -33,29 +34,29 @@ typedef int32_t fp16; // also ncot definition of interpolFun in transform.h
+ struct _VSTransformData;
+ 
+ /// does the actual transformation in Packed space
+-int transformPacked(struct _VSTransformData* td, VSTransform t);
++VS_API int transformPacked(struct _VSTransformData* td, VSTransform t);
+ 
+ /// does the actual transformation in Planar space
+-int transformPlanar(struct _VSTransformData* td, VSTransform t);
++VS_API int transformPlanar(struct _VSTransformData* td, VSTransform t);
+ 
+ 
+ /* forward deklarations, please see .c file for documentation*/
+-void interpolateBiLinBorder(uint8_t *rv, fp16 x, fp16 y,
++VS_API void interpolateBiLinBorder(uint8_t *rv, fp16 x, fp16 y,
+                             const uint8_t *img, int img_linesize,
+                             int w, int h, uint8_t def);
+-void interpolateBiCub(uint8_t *rv, fp16 x, fp16 y,
++VS_API void interpolateBiCub(uint8_t *rv, fp16 x, fp16 y,
+                       const uint8_t *img, int img_linesize,
+                       int width, int height, uint8_t def);
+-void interpolateBiLin(uint8_t *rv, fp16 x, fp16 y,
++VS_API void interpolateBiLin(uint8_t *rv, fp16 x, fp16 y,
+                       const uint8_t *img, int img_linesize,
+                       int w, int h, uint8_t def);
+-void interpolateLin(uint8_t *rv, fp16 x, fp16 y,
++VS_API void interpolateLin(uint8_t *rv, fp16 x, fp16 y,
+                     const uint8_t *img, int img_linesize,
+                     int w, int h, uint8_t def);
+-void interpolateZero(uint8_t *rv, fp16 x, fp16 y,
++VS_API void interpolateZero(uint8_t *rv, fp16 x, fp16 y,
+                      const uint8_t *img, int img_linesize,
+                      int w, int h, uint8_t def);
+-void interpolateN(uint8_t *rv, fp16 x, fp16 y,
++VS_API void interpolateN(uint8_t *rv, fp16 x, fp16 y,
+                   const uint8_t *img, int img_linesize,
+                   int width, int height,
+                   uint8_t N, uint8_t channel, uint8_t def);
+diff --git a/src/transformfloat.h b/src/transformfloat.h
+index ed9428b..daf9862 100644
+--- a/src/transformfloat.h
++++ b/src/transformfloat.h
+@@ -26,6 +26,7 @@
+ #define __TRANSFORMFLOAT_H
+ 
+ #include "transformtype.h"
++#include "vidstab_api.h"
+ #include <stdint.h>
+ 
+ #ifdef TESTING
+@@ -37,9 +38,9 @@
+ struct _VSTransformData;
+ 
+ /// does the actual transformation in Packed space
+-int _FLT(transformPacked)(struct _VSTransformData* td, VSTransform t);
++VS_API int _FLT(transformPacked)(struct _VSTransformData* td, VSTransform t);
+ /// does the actual transformation in Planar space
+-int _FLT(transformPlanar)(struct _VSTransformData* td, VSTransform t);
++VS_API int _FLT(transformPlanar)(struct _VSTransformData* td, VSTransform t);
+ 
+ /**
+  * interpolate: general interpolation function pointer for one channel image data
+@@ -59,22 +60,22 @@ typedef void (*_FLT(vsInterpolateFun))(uint8_t *rv, float x, float y,
+                                        int width, int height, uint8_t def);
+ 
+ /* forward deklarations, please look in the .c file for documentation*/
+-void _FLT(interpolateBiLinBorder)(uint8_t *rv, float x, float y,
++VS_API void _FLT(interpolateBiLinBorder)(uint8_t *rv, float x, float y,
+                                   const uint8_t *img, int img_linesize,
+                                   int w, int h, uint8_t def);
+-void _FLT(interpolateBiCub)(uint8_t *rv, float x, float y,
++VS_API void _FLT(interpolateBiCub)(uint8_t *rv, float x, float y,
+                             const uint8_t *img, int img_linesize,
+                             int width, int height, uint8_t def);
+-void _FLT(interpolateBiLin)(uint8_t *rv, float x, float y,
++VS_API void _FLT(interpolateBiLin)(uint8_t *rv, float x, float y,
+                             const uint8_t *img, int img_linesize,
+                             int w, int h, uint8_t def);
+-void _FLT(interpolateLin)(uint8_t *rv, float x, float y,
++VS_API void _FLT(interpolateLin)(uint8_t *rv, float x, float y,
+                           const uint8_t *img, int img_linesize,
+                           int w, int h, uint8_t def);
+-void _FLT(interpolateZero)(uint8_t *rv, float x, float y,
++VS_API void _FLT(interpolateZero)(uint8_t *rv, float x, float y,
+                            const uint8_t *img, int img_linesize,
+                            int w, int h, uint8_t def);
+-void _FLT(interpolateN)(uint8_t *rv, float x, float y,
++VS_API void _FLT(interpolateN)(uint8_t *rv, float x, float y,
+                         const uint8_t *img, int img_linesize,
+                         int width, int height,
+                         uint8_t N, uint8_t channel, uint8_t def);
+diff --git a/src/transformtype.c b/src/transformtype.c
+index ca6c88b..30d3b5e 100644
+--- a/src/transformtype.c
++++ b/src/transformtype.c
+@@ -21,7 +21,19 @@
+  *
+  */
+ #include <stdlib.h>
+-#include <math.h>
++#if defined(_MSC_VER)
++  #ifndef _USE_MATH_DEFINES
++    #define _USE_MATH_DEFINES
++  #endif
++  #include <math.h>
++
++  #ifndef M_PI
++    #define M_PI 3.14159265358979323846
++  #endif
++#else
++  #include <math.h>  // Linux 下正常使用
++#endif
++
+ #include <string.h>
+ #include "transformtype.h"
+ #include "transformtype_operations.h"
+diff --git a/src/transformtype.h b/src/transformtype.h
+index 0b594ba..c4e3c84 100644
+--- a/src/transformtype.h
++++ b/src/transformtype.h
+@@ -26,13 +26,14 @@
+ #include <stdio.h>
+ #include <stdint.h>
+ #include "vsvector.h"
++#include "vidstab_api.h"
+ 
+ /* structure to hold information about frame transformations
+    x,y are translations, alpha is a rotation around the center in RAD,
+    zoom is a percentage to zoom in and
+    extra is for additional information like scene cut (unused)
+  */
+-typedef struct _transform {
++typedef struct VS_API _transform {
+     double x;
+     double y;
+     double alpha;
+@@ -44,21 +45,21 @@ typedef struct _transform {
+ } VSTransform;
+ 
+ /** stores x y and size of a measurement field */
+-typedef struct _field {
++typedef struct VS_API _field {
+   int16_t x;     // middle position x
+   int16_t y;     // middle position y
+   int16_t size;  // size of field
+ } Field;
+ 
+ /** stores x y coordinates (integer) */
+-typedef struct _vec {
++typedef struct VS_API _vec {
+   int16_t x;     // middle position x
+   int16_t y;     // middle position y
+ } Vec;
+ 
+ /* structure to hold information about local motion.
+  */
+-typedef struct _localmotion {
++typedef struct VS_API _localmotion {
+     Vec v;
+     Field f;
+     double contrast; // local contrast of the measurement field
+diff --git a/src/transformtype_operations.h b/src/transformtype_operations.h
+index d41adbe..4d3ffe2 100644
+--- a/src/transformtype_operations.h
++++ b/src/transformtype_operations.h
+@@ -27,6 +27,7 @@
+ #include "vidstabdefines.h"
+ #include "vsvector.h"
+ #include "frameinfo.h"
++#include "vidstab_api.h"
+ 
+ /// helper macro to access a localmotion in the VSVector
+ #define LMGet(localmotions,index) \
+@@ -38,19 +39,19 @@
+  * but useful when cascading calculations like
+  * add_transforms_(mult_transform(&t1, 5.0), &t2)
+  */
+-VSTransform null_transform(void);
+-VSTransform new_transform(double x, double y, double alpha,
++VS_API VSTransform null_transform(void);
++VS_API VSTransform new_transform(double x, double y, double alpha,
+                           double zoom, double barrel, double rshutter, int extra);
+-VSTransform add_transforms(const VSTransform* t1, const VSTransform* t2);
+-VSTransform add_transforms_(const VSTransform t1, const VSTransform t2);
+-VSTransform sub_transforms(const VSTransform* t1, const VSTransform* t2);
+-VSTransform mult_transform(const VSTransform* t1, double f);
+-VSTransform mult_transform_(const VSTransform t1, double f);
++VS_API VSTransform add_transforms(const VSTransform* t1, const VSTransform* t2);
++VS_API VSTransform add_transforms_(const VSTransform t1, const VSTransform t2);
++VS_API VSTransform sub_transforms(const VSTransform* t1, const VSTransform* t2);
++VS_API VSTransform mult_transform(const VSTransform* t1, double f);
++VS_API VSTransform mult_transform_(const VSTransform t1, double f);
+ 
+-void storeVSTransform(FILE* f, const VSTransform* t);
++VS_API void storeVSTransform(FILE* f, const VSTransform* t);
+ 
+ 
+-typedef struct _preparedtransform {
++typedef struct VS_API _preparedtransform {
+   const VSTransform* t;
+   double zcos_a;
+   double zsin_a;
+@@ -59,79 +60,79 @@ typedef struct _preparedtransform {
+ } PreparedTransform;
+ 
+ // transforms vector
+-PreparedTransform prepare_transform(const VSTransform* t, const VSFrameInfo* fi);
++VS_API PreparedTransform prepare_transform(const VSTransform* t, const VSFrameInfo* fi);
+ // transforms vector (attention, only integer)
+-Vec transform_vec(const PreparedTransform* t, const Vec* v);
+-void transform_vec_double(double *x, double* y, const PreparedTransform* t, const Vec* v);
++VS_API Vec transform_vec(const PreparedTransform* t, const Vec* v);
++VS_API void transform_vec_double(double *x, double* y, const PreparedTransform* t, const Vec* v);
+ 
+ // subtract two vectors
+-Vec sub_vec(Vec v1, Vec v2);
++VS_API Vec sub_vec(Vec v1, Vec v2);
+ // adds two vectors
+-Vec add_vec(Vec v1, Vec v2);
+-Vec field_to_vec(Field f);
++VS_API Vec add_vec(Vec v1, Vec v2);
++VS_API Vec field_to_vec(Field f);
+ 
+ /* compares a transform with respect to x (for sort function) */
+-int cmp_trans_x(const void *t1, const void* t2);
++VS_API int cmp_trans_x(const void *t1, const void* t2);
+ /* compares a transform with respect to y (for sort function) */
+-int cmp_trans_y(const void *t1, const void* t2);
++VS_API int cmp_trans_y(const void *t1, const void* t2);
+ /* static int cmp_trans_alpha(const void *t1, const void* t2); */
+ 
+ /* compares two double values (for sort function)*/
+-int cmp_double(const void *t1, const void* t2);
++VS_API int cmp_double(const void *t1, const void* t2);
+ /* compares two int values (for sort function)*/
+-int cmp_int(const void *t1, const void* t2);
++VS_API int cmp_int(const void *t1, const void* t2);
+ 
+ 
+ /** square of a number */
+-double sqr(double x);
++VS_API double sqr(double x);
+ 
+ /* calculates the median of an array of transforms,
+  * considering only x and y
+  */
+-VSTransform median_xy_transform(const VSTransform* transforms, int len);
++VS_API VSTransform median_xy_transform(const VSTransform* transforms, int len);
+ /* median of a double array */
+-double median(double* ds, int len);
++VS_API double median(double* ds, int len);
+ /* mean of a double array */
+-double mean(const double* ds, int len);
++VS_API double mean(const double* ds, int len);
+ /* standard deviation of a double array */
+-double stddev(const double* ds, int len, double mean);
++VS_API double stddev(const double* ds, int len, double mean);
+ /* mean with cutted upper and lower pentile
+  * (min and max are optionally returned)
+  */
+-double cleanmean(double* ds, int len, double* minimum, double* maximum);
++VS_API double cleanmean(double* ds, int len, double* minimum, double* maximum);
+ /* calulcates the cleaned mean of an array of transforms,
+  * considerung only x and y
+  */
+-VSTransform cleanmean_xy_transform(const VSTransform* transforms, int len);
++VS_API VSTransform cleanmean_xy_transform(const VSTransform* transforms, int len);
+ 
+ /* calculates the cleaned (cutting of x-th percentil)
+  * maximum and minimum of an array of transforms,
+  * considerung only x and y
+  */
+-void cleanmaxmin_xy_transform(const VSTransform* transforms, int len,
++VS_API void cleanmaxmin_xy_transform(const VSTransform* transforms, int len,
+                               int percentil,
+                               VSTransform* min, VSTransform* max);
+ 
+ /* calculates the required zoom value to have no borders visible
+  */
+-double transform_get_required_zoom(const VSTransform* transform, int width, int height);
++VS_API double transform_get_required_zoom(const VSTransform* transform, int width, int height);
+ 
+ /* helper function to work with local motions */
+ 
+-LocalMotion null_localmotion(void);
++VS_API LocalMotion null_localmotion(void);
+ /// a new array of the v.x values is returned (vs_free has to be called)
+-int* localmotions_getx(const LocalMotions* localmotions);
++VS_API int* localmotions_getx(const LocalMotions* localmotions);
+ /// a new array of the v.y values is returned (vs_free has to be called)
+-int* localmotions_gety(const LocalMotions* localmotions);
++VS_API int* localmotions_gety(const LocalMotions* localmotions);
+ /// lm1 - lm2 only for the Vec (the remaining values are taken from lm1)
+-LocalMotion sub_localmotion(const LocalMotion* lm1, const LocalMotion* lm2);
++VS_API LocalMotion sub_localmotion(const LocalMotion* lm1, const LocalMotion* lm2);
+ 
+ /* calulcates the cleaned mean of the vector of localmotions
+  * considerung only v.x and v.y
+  */
+-LocalMotion cleanmean_localmotions(const LocalMotions* localmotions);
++VS_API LocalMotion cleanmean_localmotions(const LocalMotions* localmotions);
+ 
+-VSArray localmotionsGetMatch(const LocalMotions* localmotions);
++VS_API VSArray localmotionsGetMatch(const LocalMotions* localmotions);
+ 
+ /* helper functions */
+ 
+diff --git a/src/vidstab_api.h b/src/vidstab_api.h
+new file mode 100644
+index 0000000..3657649
+--- /dev/null
++++ b/src/vidstab_api.h
+@@ -0,0 +1,14 @@
++#ifndef VIDSTAB_API_H
++#define VIDSTAB_API_H
++
++#if defined(_WIN32) && defined(_MSC_VER)
++  #ifdef VIDSTAB_EXPORTS
++    #define VS_API __declspec(dllexport)
++  #else
++    #define VS_API __declspec(dllimport)
++  #endif
++#else
++  #define VS_API
++#endif
++
++#endif // VIDSTAB_API_H
+\ No newline at end of file
+diff --git a/src/vidstabdefines.h b/src/vidstabdefines.h
+index 4e8f23a..44dee03 100644
+--- a/src/vidstabdefines.h
++++ b/src/vidstabdefines.h
+@@ -29,6 +29,8 @@
+ #include <stddef.h>
+ #include <stdlib.h>
+ 
++#include "vidstab_api.h"
++
+ #ifdef __GNUC__
+ #define likely(x)       __builtin_expect(!!(x), 1)
+ #define unlikely(x)     __builtin_expect(!!(x), 0)
+@@ -66,25 +68,30 @@ typedef int (*vs_log_t) (int type, const char* tag, const char* format, ...);
+ 
+ typedef char* (*vs_strdup_t) (const char* s);
+ 
+-extern vs_log_t vs_log;
+-extern int vs_log_level;
+-
+-extern vs_malloc_t vs_malloc;
+-extern vs_realloc_t vs_realloc;
+-extern vs_free_t vs_free;
+-extern vs_zalloc_t vs_zalloc;
+-
+-extern vs_strdup_t vs_strdup;
+-
+-extern int VS_ERROR_TYPE;
+-extern int VS_WARN_TYPE;
+-extern int VS_INFO_TYPE;
+-extern int VS_MSG_TYPE;
+-
+-extern int VS_ERROR;
+-extern int VS_OK;
+-
+-
++extern VS_API vs_log_t vs_log;
++extern VS_API int vs_log_level;
++
++extern VS_API vs_malloc_t vs_malloc;
++extern VS_API vs_realloc_t vs_realloc;
++extern VS_API vs_free_t vs_free;
++extern VS_API vs_zalloc_t vs_zalloc;
++
++extern VS_API vs_strdup_t vs_strdup;
++
++extern VS_API int VS_ERROR_TYPE;
++extern VS_API int VS_WARN_TYPE;
++extern VS_API int VS_INFO_TYPE;
++extern VS_API int VS_MSG_TYPE;
++
++extern VS_API int VS_ERROR;
++extern VS_API int VS_OK;
++#if defined(_MSC_VER)
++#define VS_LOG_MSVC_HELPER(log_func, log_type, tag, format, ...) log_func(log_type, tag, format, __VA_ARGS__)
++#define vs_log_error(tag, format, ...) VS_LOG_MSVC_HELPER(vs_log, VS_ERROR_TYPE, tag, format, __VA_ARGS__)
++#define vs_log_warn(tag, format, ...)  VS_LOG_MSVC_HELPER(vs_log, VS_WARN_TYPE, tag, format, __VA_ARGS__)
++#define vs_log_info(tag, format, ...)  VS_LOG_MSVC_HELPER(vs_log, VS_INFO_TYPE, tag, format, __VA_ARGS__)
++#define vs_log_msg(tag, format, ...)   VS_LOG_MSVC_HELPER(vs_log, VS_MSG_TYPE, tag, format, __VA_ARGS__)
++#else
+ #define vs_log_error(tag, format, args...) \
+     vs_log(VS_ERROR_TYPE, tag, format , ## args)
+ #define vs_log_warn(tag, format, args...) \
+@@ -93,5 +100,6 @@ extern int VS_OK;
+     vs_log(VS_INFO_TYPE, tag, format , ## args)
+ #define vs_log_msg(tag, format, args...) \
+     vs_log(VS_MSG_TYPE, tag, format , ## args)
++#endif
+ 
+ #endif /* VIDSTABDEFINES_H_ */
+diff --git a/src/vsvector.h b/src/vsvector.h
+index 9c4062b..7b5af0b 100644
+--- a/src/vsvector.h
++++ b/src/vsvector.h
+@@ -24,12 +24,13 @@
+ 
+ #include <stddef.h>
+ #include <stdio.h>
++#include "vidstab_api.h"
+ 
+ /**
+    A vector for arbitrary elements that resizes
+ */
+ typedef struct vsvector_ VSVector;
+-struct vsvector_ {
++struct VS_API vsvector_ {
+   void**  data;
+   int    buffersize;
+   int    nelems;
+@@ -47,7 +48,7 @@ struct vsvector_ {
+  *     VS_OK on success,
+  *     VS_ERROR on error.
+  */
+-int vs_vector_init(VSVector *V, int buffersize);
++VS_API int vs_vector_init(VSVector *V, int buffersize);
+ 
+ /**
+  * vs_vector_fini:
+@@ -60,7 +61,7 @@ int vs_vector_init(VSVector *V, int buffersize);
+  *     VS_OK on success,
+  *     VS_ERROR on error.
+  */
+-int vs_vector_fini(VSVector *V);
++VS_API int vs_vector_fini(VSVector *V);
+ 
+ /**
+  * vs_vector_del:
+@@ -72,14 +73,14 @@ int vs_vector_fini(VSVector *V);
+  *     VS_OK on success,
+  *     VS_ERROR on error.
+  */
+-int vs_vector_del(VSVector *V);
++VS_API int vs_vector_del(VSVector *V);
+ 
+ /**
+  * vs_vector_zero:
+  *    deletes all data pointed to by the vector elements.
+  *    sets the number of elements to 0 but does not delete buffer
+ */
+-int vs_vector_zero(VSVector *V);
++VS_API int vs_vector_zero(VSVector *V);
+ 
+ /**
+  * vs_vector_size:
+@@ -92,7 +93,7 @@ int vs_vector_zero(VSVector *V);
+  *    -1 on error,
+  *    the number of elements otherwise
+  */
+-int vs_vector_size(const VSVector *V);
++VS_API int vs_vector_size(const VSVector *V);
+ 
+ 
+ /**
+@@ -111,26 +112,26 @@ int vs_vector_size(const VSVector *V);
+  *     VS_OK on success,
+  *     VS_ERROR on error.
+  */
+-int vs_vector_append(VSVector *V, void *data);
++VS_API int vs_vector_append(VSVector *V, void *data);
+ 
+ /**
+  * vs_vector_append_dup:
+  *  like vs_vector_append but copies data
+  */
+-int vs_vector_append_dup(VSVector *V, void *data, int data_size);
++VS_API int vs_vector_append_dup(VSVector *V, void *data, int data_size);
+ 
+ 
+ /* vs_vector_set:
+  *      the newly inserted element BECOMES the position `pos' in the vector.
+  *      and the old item is returned
+  */
+-void* vs_vector_set(VSVector *V, int pos, void *data);
++VS_API void* vs_vector_set(VSVector *V, int pos, void *data);
+ 
+ /* vs_vector_set_dup:
+  *      the newly inserted element is copied and BECOMES the position `pos' in the vector
+  *      and the old item is returned
+  */
+-void* vs_vector_set_dup(VSVector *V, int pos, void *data, int data_size);
++VS_API void* vs_vector_set_dup(VSVector *V, int pos, void *data, int data_size);
+ 
+ /*
+  * vs_vector_get:
+@@ -143,57 +144,57 @@ void* vs_vector_set_dup(VSVector *V, int pos, void *data, int data_size);
+  *     NULL on error (requested element doesn't exist)
+  *     a pointer to the data belonging to the requested vector item.
+  */
+-void *vs_vector_get(const VSVector *V, int pos);
++VS_API void *vs_vector_get(const VSVector *V, int pos);
+ 
+ /*
+  * vs_vector_filter:
+  *      returns a new vector with elements that fulfill predicate
+  *      pred(param, elem)
+  */
+-VSVector vs_vector_filter(const VSVector *V, short (*pred)(void*, void*), void* param);
++VS_API VSVector vs_vector_filter(const VSVector *V, short (*pred)(void*, void*), void* param);
+ 
+ /*
+  * vs_vector_concat:
+  *      returns a new vector with elements of vector V1 and V2 after another
+  */
+-VSVector vs_vector_concat(const VSVector *V1, const VSVector *V2);
++VS_API VSVector vs_vector_concat(const VSVector *V1, const VSVector *V2);
+ 
+ 
+ /**
+    A simple fixed-size double vector
+ */
+ typedef struct vsarray_ VSArray;
+-struct vsarray_ {
++struct VS_API vsarray_ {
+   double* dat;
+   int len;
+ };
+ 
+ /** creates an VSArray from a double array */
+-VSArray vs_array(double vals[], int len);
++VS_API VSArray vs_array(double vals[], int len);
+ 
+ /** allocates a new (zero initialized) double array */
+-VSArray vs_array_new(int len);
++VS_API VSArray vs_array_new(int len);
+ 
+ /** adds two vectors ands stores results into c (if zero length then allocated) */
+-VSArray* vs_array_plus(VSArray* c, VSArray a, VSArray b);
++VS_API VSArray* vs_array_plus(VSArray* c, VSArray a, VSArray b);
+ 
+ /** scales a vector by a factor and stores results into c (if zero length then allocated) */
+-VSArray* vs_array_scale(VSArray* c, VSArray a, double f);
++VS_API VSArray* vs_array_scale(VSArray* c, VSArray a, double f);
+ 
+ /** create a new deep copy of the vector */
+-VSArray vs_array_copy(VSArray a);
++VS_API VSArray vs_array_copy(VSArray a);
+ 
+ /** sets all elements of the vector to 0.0 */
+-void vs_array_zero(VSArray* a);
++VS_API void vs_array_zero(VSArray* a);
+ 
+ /** swaps the content of the two arrays */
+-void vs_array_swap(VSArray* a, VSArray* b);
++VS_API void vs_array_swap(VSArray* a, VSArray* b);
+ 
+ /** free data */
+-void vs_array_free(VSArray a);
++VS_API void vs_array_free(VSArray a);
+ 
+ /** print array to file */
+-void vs_array_print(VSArray a, FILE* f);
++VS_API void vs_array_print(VSArray a, FILE* f);
+ 
+ #endif /* VSVECTOR_H */
+ 
+diff --git a/transcode/CMakeLists.txt b/transcode/CMakeLists.txt
+index 3d4a129..8255952 100644
+--- a/transcode/CMakeLists.txt
++++ b/transcode/CMakeLists.txt
+@@ -10,14 +10,17 @@ set(TRANSCODE_ROOT ../../transcode)
+ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+   set(CMAKE_BUILD_TYPE "Release")
+ endif()
++if (NOT MSVC)
++	add_definitions(-Wall -Wno-pointer-sign -DTRANSCODE -std=gnu99)
++	if(SSE2_FOUND)
++		add_definitions( -DUSE_SSE2 -msse2 -ffast-math )
++	endif()
++endif ()
+ 
+-add_definitions(-Wall -Wno-pointer-sign -DTRANSCODE -std=gnu99)
+ 
+ # here we should check for SSE2
+ # our  -DUSE_SSE2_ASM code does not work with fpic
+-if(SSE2_FOUND)
+-add_definitions( -DUSE_SSE2 -msse2 -ffast-math )
+-endif()
++
+ 
+ # Make sure the compiler can find include files from transcode
+ include_directories (../src ${TRANSCODE_ROOT}/src ${TRANSCODE_ROOT}/ )
+-- 
+2.30.2
+
