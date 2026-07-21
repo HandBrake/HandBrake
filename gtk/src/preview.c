@@ -29,6 +29,9 @@
 #include "values.h"
 
 #include <unistd.h>
+#ifdef __GLIBC__
+#include <malloc.h>
+#endif
 
 enum {
     PREVIEW_STATE_STOPPED = 0,
@@ -480,6 +483,10 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
         ud->preview->encoded[ud->preview->encode_frame] = FALSE;
         live_preview_set_state(PREVIEW_STATE_STOPPED);
     }
+
+#ifdef __GLIBC__
+    malloc_trim(0);
+#endif
 }
 
 G_MODULE_EXPORT gboolean

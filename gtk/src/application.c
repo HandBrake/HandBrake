@@ -44,6 +44,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#ifdef __GLIBC__
+#include <malloc.h>
+#endif
 
 #ifdef _WIN32
 #include <windows.h>
@@ -807,6 +810,11 @@ ghb_application_activate (GApplication *app)
     textview = GTK_TEXT_VIEW(ghb_builder_widget("MetaLongDescription"));
     buffer = gtk_text_view_get_buffer(textview);
     g_signal_connect(buffer, "changed", G_CALLBACK(plot_changed_cb), ud);
+
+#ifdef __GLIBC__
+    mallopt(M_MMAP_THRESHOLD, 1024 * 1024);
+    mallopt(M_TRIM_THRESHOLD, 1024 * 1024);
+#endif
 
     // Initialize HB internal tables etc.
     hb_global_init();
