@@ -35,7 +35,8 @@ typedef enum {
 } FaceStyleFlag;
 
 #define MAX_MARKUP_LEN 40
-#define SSA_PREAMBLE_LEN 24
+/* Maximum SSA prefix length, including the NUL terminator. */
+#define SSA_PREAMBLE_LEN 30
 
 typedef struct {
     uint16_t startChar;       // NOTE: indices in terms of *character* (not: byte) positions
@@ -161,7 +162,9 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
     /*
      * Copy text to output buffer, and add HTML markup for the style records
      */
-    int maxOutputSize = textLength + SSA_PREAMBLE_LEN + (numStyleRecords * MAX_MARKUP_LEN);
+    // Newlines expand to two bytes.
+    int maxOutputSize = textLength * 2 + SSA_PREAMBLE_LEN +
+                        (numStyleRecords * MAX_MARKUP_LEN);
     out = hb_buffer_init( maxOutputSize );
     if ( out == NULL )
         goto fail;
