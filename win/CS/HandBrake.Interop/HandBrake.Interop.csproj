@@ -4,6 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <FileVersion>1.11.0.0</FileVersion>
     <Version>1.11.0</Version>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <Authors>HandBrake Team</Authors>
     <Description>HandBrake is an open-source, GPL-licensed, multiplatform,video transcoder.</Description>
     <Copyright>Copyright © 2003-2026 HandBrake Team</Copyright>
