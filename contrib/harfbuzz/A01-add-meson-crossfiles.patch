@@ -1,0 +1,250 @@
+diff -ruN harfbuzz-14.0.0/package/crossfiles/aarch64-w64-mingw32.meson harfbuzz-14.0.0-patched/package/crossfiles/aarch64-w64-mingw32.meson
+--- harfbuzz-14.0.0/package/crossfiles/aarch64-w64-mingw32.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/aarch64-w64-mingw32.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,16 @@
++[binaries]
++c = 'aarch64-w64-mingw32-clang'
++cpp = 'aarch64-w64-mingw32-clang++'
++ar = 'aarch64-w64-mingw32-ar'
++strip = 'aarch64-w64-mingw32-strip'
++windres = 'aarch64-w64-mingw32-windres'
++pkg-config = 'pkg-config'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++
++[host_machine]
++system = 'windows'
++cpu_family = 'aarch64'
++cpu = 'aarch64'
++endian = 'little'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/aarch64-w64-mingw32uwp.meson harfbuzz-14.0.0-patched/package/crossfiles/aarch64-w64-mingw32uwp.meson
+--- harfbuzz-14.0.0/package/crossfiles/aarch64-w64-mingw32uwp.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/aarch64-w64-mingw32uwp.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,17 @@
++[binaries]
++c = 'aarch64-w64-mingw32uwp-clang'
++cpp = 'aarch64-w64-mingw32uwp-clang++'
++ar = 'aarch64-w64-mingw32uwp-ar'
++strip = 'aarch64-w64-mingw32uwp-strip'
++windres = 'aarch64-w64-mingw32uwp-windres'
++pkg-config = 'pkg-config'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++c_args = ['-DWINAPI_FAMILY=WINAPI_FAMILY_APP', '-D__MSVCRT_VERSION__=0xE00', '-D_UCRT']
++
++[host_machine]
++system = 'windows'
++cpu_family = 'aarch64'
++cpu = 'aarch64'
++endian = 'little'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/arm-linux-gnueabihf.meson harfbuzz-14.0.0-patched/package/crossfiles/arm-linux-gnueabihf.meson
+--- harfbuzz-14.0.0/package/crossfiles/arm-linux-gnueabihf.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/arm-linux-gnueabihf.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,15 @@
++[binaries]
++c = 'arm-linux-gnueabihf-gcc'
++cpp = 'arm-linux-gnueabihf-gcc++'
++ar = 'arm-linux-gnueabihf-ar'
++strip = 'arm-linux-gnueabihf-strip'
++pkg-config = 'pkg-config'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++
++[host_machine]
++system = 'linux'
++cpu_family = 'arm'
++cpu = 'arm'
++endian = 'little'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/arm64-darwin-gcc.meson harfbuzz-14.0.0-patched/package/crossfiles/arm64-darwin-gcc.meson
+--- harfbuzz-14.0.0/package/crossfiles/arm64-darwin-gcc.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/arm64-darwin-gcc.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,15 @@
++[binaries]
++c = 'clang'
++cpp = 'clang++'
++ar = 'ar'
++strip = 'strip'
++pkgconfig = 'pkg-config'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++
++[host_machine]
++system = 'MACOSX'
++cpu_family = 'aarch64'
++cpu = 'aarch64'
++endian = 'little'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/armv7-w64-mingw32.meson harfbuzz-14.0.0-patched/package/crossfiles/armv7-w64-mingw32.meson
+--- harfbuzz-14.0.0/package/crossfiles/armv7-w64-mingw32.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/armv7-w64-mingw32.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,16 @@
++[binaries]
++c = 'armv7-w64-mingw32-clang'
++cpp = 'armv7-w64-mingw32-clang++'
++ar = 'armv7-w64-mingw32-ar'
++strip = 'armv7-w64-mingw32-strip'
++windres = 'armv7-w64-mingw32-windres'
++pkg-config = 'pkg-config'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++
++[host_machine]
++system = 'windows'
++cpu_family = 'arm'
++cpu = 'armv7'
++endian = 'little'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/armv7-w64-mingw32uwp.meson harfbuzz-14.0.0-patched/package/crossfiles/armv7-w64-mingw32uwp.meson
+--- harfbuzz-14.0.0/package/crossfiles/armv7-w64-mingw32uwp.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/armv7-w64-mingw32uwp.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,17 @@
++[binaries]
++c = 'armv7-w64-mingw32uwp-clang'
++cpp = 'armv7-w64-mingw32uwp-clang++'
++ar = 'armv7-w64-mingw32uwp-ar'
++strip = 'armv7-w64-mingw32uwp-strip'
++windres = 'armv7-w64-mingw32uwp-windres'
++pkg-config = 'pkg-config'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++c_args = ['-DWINAPI_FAMILY=WINAPI_FAMILY_APP', '-D__MSVCRT_VERSION__=0xE00', '-D_UCRT']
++
++[host_machine]
++system = 'windows'
++cpu_family = 'arm'
++cpu = 'armv7'
++endian = 'little'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/i686-w64-mingw32.meson harfbuzz-14.0.0-patched/package/crossfiles/i686-w64-mingw32.meson
+--- harfbuzz-14.0.0/package/crossfiles/i686-w64-mingw32.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/i686-w64-mingw32.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,17 @@
++[binaries]
++c = 'i686-w64-mingw32-gcc'
++cpp = 'i686-w64-mingw32-g++'
++ar = 'i686-w64-mingw32-ar'
++strip = 'i686-w64-mingw32-strip'
++windres = 'i686-w64-mingw32-windres'
++pkg-config = 'i686-w64-mingw32-pkg-config'
++exe_wrapper = 'wine'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++
++[host_machine]
++system = 'windows'
++cpu_family = 'x86'
++cpu = 'i686'
++endian = 'little'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/i686-w64-mingw32uwp.meson harfbuzz-14.0.0-patched/package/crossfiles/i686-w64-mingw32uwp.meson
+--- harfbuzz-14.0.0/package/crossfiles/i686-w64-mingw32uwp.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/i686-w64-mingw32uwp.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,18 @@
++[binaries]
++c = 'i686-w64-mingw32uwp-gcc'
++cpp = 'i686-w64-mingw32uwp-g++'
++ar = 'i686-w64-mingw32uwp-ar'
++strip = 'i686-w64-mingw32uwp-strip'
++windres = 'i686-w64-mingw32uwp-windres'
++pkg-config = 'i686-w64-mingw32uwp-pkg-config'
++exe_wrapper = 'wine'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++c_args = ['-DWINAPI_FAMILY=WINAPI_FAMILY_APP', '-D__MSVCRT_VERSION__=0xE00', '-D_UCRT']
++
++[host_machine]
++system = 'windows'
++cpu_family = 'x86'
++cpu = 'i686'
++endian = 'little'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/wasm-unknown-emscripten.meson harfbuzz-14.0.0-patched/package/crossfiles/wasm-unknown-emscripten.meson
+--- harfbuzz-14.0.0/package/crossfiles/wasm-unknown-emscripten.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/wasm-unknown-emscripten.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,21 @@
++# The Emscripten SDK cache needs to be specified as an `EM_CACHE` environment
++# variable. It can be retrieved with `em-config CACHE`.
++[binaries]
++c = 'emcc'
++cpp = 'em++'
++ar = 'emar'
++ranlib = 'emranlib'
++strip = 'strip'
++pkg-config = 'pkg-config'
++
++[host_machine]
++system = 'emscripten'
++cpu_family = 'wasm32'
++endian = 'little'
++cpu = 'wasm32'
++
++[built-in options]
++default_library = 'static'
++
++[properties]
++sys_root = '$EM_CACHE/sysroot'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/x86_64-darwin-gcc.meson harfbuzz-14.0.0-patched/package/crossfiles/x86_64-darwin-gcc.meson
+--- harfbuzz-14.0.0/package/crossfiles/x86_64-darwin-gcc.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/x86_64-darwin-gcc.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,15 @@
++[binaries]
++c = 'clang'
++cpp = 'clang++'
++ar = 'ar'
++strip = 'strip'
++pkgconfig = 'pkg-config'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++
++[host_machine]
++system = 'MACOSX'
++cpu_family = 'aarch64'
++cpu = 'aarch64'
++endian = 'little'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/x86_64-w64-mingw32.meson harfbuzz-14.0.0-patched/package/crossfiles/x86_64-w64-mingw32.meson
+--- harfbuzz-14.0.0/package/crossfiles/x86_64-w64-mingw32.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/x86_64-w64-mingw32.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,17 @@
++[binaries]
++c = 'x86_64-w64-mingw32-gcc'
++cpp = 'x86_64-w64-mingw32-g++'
++ar = 'x86_64-w64-mingw32-ar'
++strip = 'x86_64-w64-mingw32-strip'
++windres = 'x86_64-w64-mingw32-windres'
++pkg-config = 'pkg-config'
++exe_wrapper = 'wine'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++
++[host_machine]
++system = 'windows'
++cpu_family = 'x86_64'
++cpu = 'x86_64'
++endian = 'little'
+diff -ruN harfbuzz-14.0.0/package/crossfiles/x86_64-w64-mingw32uwp.meson harfbuzz-14.0.0-patched/package/crossfiles/x86_64-w64-mingw32uwp.meson
+--- harfbuzz-14.0.0/package/crossfiles/x86_64-w64-mingw32uwp.meson	1970-01-01 01:00:00.000000000 +0100
++++ harfbuzz-14.0.0-patched/package/crossfiles/x86_64-w64-mingw32uwp.meson	2026-04-01 19:26:34.000000000 +0100
+@@ -0,0 +1,18 @@
++[binaries]
++c = 'x86_64-w64-mingw32-gcc'
++cpp = 'x86_64-w64-mingw32-g++'
++ar = 'x86_64-w64-mingw32-ar'
++strip = 'x86_64-w64-mingw32-strip'
++windres = 'x86_64-w64-mingw32-windres'
++pkg-config = 'x86_64-w64-mingw32-pkg-config'
++exe_wrapper = 'wine'
++
++[built-in options]
++c_link_args = ['-static-libgcc']
++c_args = ['-DWINAPI_FAMILY=WINAPI_FAMILY_APP', '-D__MSVCRT_VERSION__=0xE00', '-D_UCRT']
++
++[host_machine]
++system = 'windows'
++cpu_family = 'x86_64'
++cpu = 'x86_64'
++endian = 'little'
