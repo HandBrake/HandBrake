@@ -582,7 +582,13 @@ namespace HandBrake.Interop.Interop
                 layoutptr = InteropUtilities.ToUtf8PtrFromString(layout);
             }
             int defaultMixdown = HBFunctions.hb_mixdown_get_default_s((uint)encoder.Id, layoutptr);
-            return Mixdowns.Single(m => m.Id == defaultMixdown);
+            var result = Mixdowns.SingleOrDefault(m => m.Id == defaultMixdown);
+            if (result == null)
+            {
+                throw new Exception($"No default mixdown found for encoder {encoder.ShortName} and layout {layout}. defaultMixdown: {defaultMixdown}, Mixdown count: {Mixdowns.Count}");
+            }
+
+            return result;
         }
 
         /// <summary>
