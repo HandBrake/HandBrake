@@ -4124,6 +4124,24 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("Options_TitleCase", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Auto-increment zero-padding is.
+        /// </summary>
+        public static string Options_AutoIncrementPadding {
+            get {
+                return ResourceManager.GetString("Options_AutoIncrementPadding", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to digits.
+        /// </summary>
+        public static string Options_AutoIncrementDigits {
+            get {
+                return ResourceManager.GetString("Options_AutoIncrementDigits", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to User Interface Behaviour.

@@ -14,6 +14,7 @@
 #import "HBPresetsMenuBuilder.h"
 
 #import "HBPreferencesController.h"
+#import "HBPreferencesKeys.h"
 #import "HBQueueController.h"
 #import "HBQueueDockTileController.h"
 #import "HBOutputPanelController.h"
@@ -21,6 +22,8 @@
 
 #define PRESET_FILE @"UserPresets.json"
 #define QUEUE_FILE @"Queue.hbqueue"
+
+static void *HBAppDelegateContext = &HBAppDelegateContext;
 
 @interface HBAppDelegate () <NSMenuItemValidation>
 
@@ -68,8 +71,31 @@
         _queueController.delegate = self;
         _queueDockTileController = [[HBQueueDockTileController alloc] initWithQueue:_queue dockTile:NSApplication.sharedApplication.dockTile image:NSApplication.sharedApplication.applicationIconImage];
         _mainController = [[HBController alloc] initWithDelegate:self queue:_queue presetsManager:_presetsManager];
+
+        // A new naming format starts a new {Auto-Increment} sequence,
+        // e.g. a new TV series
+        [NSUserDefaultsController.sharedUserDefaultsController addObserver:self
+                                                                forKeyPath:@"values.HBAutoNamingFormat"
+                                                                   options:0
+                                                                   context:HBAppDelegateContext];
     }
     return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBAppDelegateContext)
+    {
+        NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
+        if ([ud integerForKey:HBAutoNamingAutoIncrementNext] != 1)
+        {
+            [ud setInteger:1 forKey:HBAutoNamingAutoIncrementNext];
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 #pragma mark - NSApplicationDelegate
