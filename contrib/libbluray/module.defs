@@ -1,9 +1,11 @@
-$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray))
+__deps__ := LIBUDFREAD
+
+$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
-LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libbluray-1.4.1.tar.xz
-LIBBLURAY.FETCH.url    += https://download.videolan.org/pub/videolan/libbluray/1.4.1/libbluray-1.4.1.tar.xz
-LIBBLURAY.FETCH.sha256  = 76b5dc40097f28dca4ebb009c98ed51321b2927453f75cc72cf74acd09b9f449
+LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libbluray-1.5.0.tar.bz2
+LIBBLURAY.FETCH.url    += https://code.videolan.org/videolan/libbluray/-/archive/1.5.0/libbluray-1.5.0.tar.bz2
+LIBBLURAY.FETCH.sha256  = 0a70f8c63aa1c64c0d3fc743d0a0e7071ac6c68f69b49e596505a3f64c71cf0a
 
 LIBBLURAY.build_dir             = build/
 LIBBLURAY.CONFIGURE.exe         = $(MESON.exe) setup
@@ -13,10 +15,11 @@ LIBBLURAY.CONFIGURE.shared      =
 LIBBLURAY.CONFIGURE.host        =
 LIBBLURAY.CONFIGURE.build       =
 LIBBLURAY.CONFIGURE.static      = -Ddefault_library=static
-LIBBLURAY.CONFIGURE.extra       = --libdir=$(call fn.ABSOLUTE,$(LIBBLURAY.prefix/))contrib/lib/ --force-fallback-for=libudfread \
+LIBBLURAY.CONFIGURE.extra       = --libdir=$(call fn.ABSOLUTE,$(LIBBLURAY.prefix/))contrib/lib/ \
                                   -Denable_tools=false -Dbdj_jar=disabled -Dfontconfig=disabled -Dfreetype=disabled -Dlibxml2=disabled \
                                   -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,LIBBLURAY.GCC,*archs *sysroot *minver ?extra)" \
-                                  -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,LIBBLURAY.GCC,*archs *sysroot *minver ?extra.exe)"
+                                  -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,LIBBLURAY.GCC,*archs *sysroot *minver ?extra.exe)" \
+                                  -Dpkg_config_path=$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/pkgconfig)
 LIBBLURAY.CONFIGURE.env         =
 
 ifneq (none,$(LIBBLURAY.GCC.g))
@@ -32,11 +35,11 @@ else
 endif
 
 ifeq (darwin,$(HOST.system))
-        LIBBLURAY.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(SRC/))make/cross/$(HOST.machine)-darwin-gcc.meson
+    LIBBLURAY.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBBLURAY.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-darwin-gcc.meson
 endif
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
-    LIBBLURAY.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(SRC/))make/cross/$(HOST.machine)-w64-mingw32.meson
+    LIBBLURAY.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBBLURAY.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-w64-mingw32.meson
 endif
 
 LIBBLURAY.BUILD.make       = $(NINJA.exe)
