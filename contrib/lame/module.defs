@@ -1,11 +1,11 @@
 $(eval $(call import.MODULE.defs,LAME,lame,LIBICONV))
 $(eval $(call import.CONTRIB.defs,LAME))
 
-LAME.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/lame-3.100.tar.gz
-LAME.FETCH.url    += https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
-LAME.FETCH.sha256  = ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
+LAME.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/lame-4.0.tar.gz
+LAME.FETCH.url    += https://sourceforge.net/projects/lame/files/lame/4.0/lame-4.0.tar.gz
+LAME.FETCH.sha256  = 3df5124d5ad3a98312ffd7ba6a9b36230e4f8a3e66d3ce0f425e336c32d216eb
 
-LAME.CONFIGURE.extra += --disable-frontend
+LAME.CONFIGURE.extra += --disable-frontend --disable-decoder
 ifneq (none,$(LAME.GCC.g))
 	LAME.CONFIGURE.extra += --enable-debug
 endif
