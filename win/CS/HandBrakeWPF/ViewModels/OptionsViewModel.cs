@@ -1872,15 +1872,24 @@ namespace HandBrakeWPF.ViewModels
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);
 
-            // A new naming format starts a new {auto-increment} sequence, e.g. a new TV series
             string previousAutonameFormat = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
+            int previousAutoIncrementPadding = this.userSettingService.GetUserSetting<int>(UserSettingConstants.AutoNameAutoIncrementPadding);
+
+            // Store the format before the counter below, so that the main window regenerates the destination against the new format.
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameFormat, this.AutonameFormat);
+
+            // A new naming format starts a new {auto-increment} sequence, e.g. a new TV series
             if (!string.Equals(previousAutonameFormat, this.AutonameFormat, StringComparison.Ordinal))
             {
                 this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameAutoIncrementNext, 1);
             }
 
-            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameFormat, this.AutonameFormat);
-            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameAutoIncrementPadding, this.AutoIncrementPadding);
+            // Only store the padding when it changes, so that saving the options doesn't discard a manually entered destination.
+            if (this.AutoIncrementPadding != previousAutoIncrementPadding)
+            {
+                this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameAutoIncrementPadding, this.AutoIncrementPadding);
+            }
+
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNamePath, this.AutoNameDefaultPath);
             this.userSettingService.SetUserSetting(UserSettingConstants.UseM4v, (int)this.SelectedMp4Extension);
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameRemoveUnderscore, this.RemoveUnderscores);
