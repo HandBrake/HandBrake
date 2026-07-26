@@ -1124,11 +1124,11 @@ namespace HandBrakeWPF.ViewModels
 
                 if (AutoNameHelper.IsAutoIncrementUsed())
                 {
-                    // Advance the {auto-increment} counter and show the next
-                    // number in the destination. Batch adds regenerate the
-                    // destination per title, numbering them consecutively.
+                    // Advance the {auto-increment} counter. The destination is
+                    // refreshed to show the next number by the setting changed
+                    // handler. Batch adds regenerate the destination per title,
+                    // numbering them consecutively.
                     AutoNameHelper.AdvanceAutoIncrement();
-                    this.ReGenerateAutoName();
                 }
             }
             else
@@ -2577,6 +2577,19 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.ShowAddSelectionToQueue);
                     this.NotifyOfPropertyChange(() => this.ShowAddAllMenuName);
                     this.NotifyOfPropertyChange(() => this.ShowAddSelectionMenuName);
+                    break;
+
+                case UserSettingConstants.AutoNameAutoIncrementNext:
+                case UserSettingConstants.AutoNameAutoIncrementPadding:
+                    // Show the current number in the destination, e.g. after a new
+                    // naming format has restarted the sequence, or a queued job has
+                    // advanced it. Without this, the first job queued after the token
+                    // is added to the format would keep the previous destination.
+                    if (AutoNameHelper.IsAutoIncrementUsed())
+                    {
+                        this.ReGenerateAutoName();
+                    }
+
                     break;
 
                 case UserSettingConstants.PresetUiType:
