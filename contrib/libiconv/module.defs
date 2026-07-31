@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBICONV,libiconv))
 $(eval $(call import.CONTRIB.defs,LIBICONV))
 
-LIBICONV.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libiconv-1.18.tar.gz
-LIBICONV.FETCH.url    += https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.18.tar.gz
-LIBICONV.FETCH.sha256  = 3b08f5f4f9b4eb82f151a7040bfd6fe6c6fb922efe4b1659c66ea933276965e8
+LIBICONV.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libiconv-1.19.tar.gz
+LIBICONV.FETCH.url    += https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.19.tar.gz
+LIBICONV.FETCH.sha256  = 88dd96a8c0464eca144fc791ae60cd31cd8ee78321e67397e25fc095c4a19aa6
 
 LIBICONV.GCC.args.extra += $(LIBICONV.GCC.args.O.$(LIBICONV.GCC.O))
 
