@@ -32,7 +32,9 @@ ifeq (1,$(HOST.cross))
                                  -Dicu=disabled \
                                  -Dgdi=disabled \
                                  -Draster=disabled \
-                                 -Dvector=disabled
+                                 -Dvector=disabled \
+                                 -Dgpu=disabled \
+                                 -Dgpu_demo=disabled
 endif
 
 ifeq ($(HOST.system),darwin)
