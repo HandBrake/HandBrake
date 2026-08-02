@@ -1242,7 +1242,7 @@ filter_param_get_entry(hb_filter_param_t *table, const char *name, int count)
  * strength does something appropriate for the material:
  * none  - general use; fine for movies and other mixed content
  * voice - podcasts and other spoken word; tighter, faster leveling
- * music - music-dominant content; mastering-style, "tweak not crush"
+ * music - music-dominant content; mastering-style,
  *         (ratios stay gentle and knee stays soft even at strong)
  *
  * Night Mode is a dedicated use-case preset and ignores the tune.
@@ -1290,7 +1290,12 @@ static hb_dict_t * generate_acompressor_settings(const char *preset,
     {
         /* Faster attack to catch plosives, shorter release and harder
          * knee for tighter, more consistent dialogue leveling, with more
-         * makeup gain to bring speech up. */
+         * makeup gain to bring speech up. Makeup gain is hump-shaped
+         * (light -> moderate -> strong): it peaks at moderate and pulls
+         * back at strong to the same level as light, so the most
+         * aggressive rung relies on its tighter ratio/threshold rather
+         * than extra gain, matching the None tune's rung shape and
+         * avoiding a hot, clipping-prone output after lossy re-encoding. */
         if (!strcasecmp(preset, "light"))
             settings = "level-in=1:mode=0:threshold=0.125:ratio=2:attack=10:"
                        "release=200:makeup=1.41:knee=2:link=0:detection=1:"
@@ -1301,7 +1306,7 @@ static hb_dict_t * generate_acompressor_settings(const char *preset,
                        "level-sc=1:mix=1";
         else if (!strcasecmp(preset, "strong"))
             settings = "level-in=1:mode=0:threshold=0.063:ratio=4:attack=5:"
-                       "release=150:makeup=2.5:knee=1.5:link=0:detection=1:"
+                       "release=150:makeup=1.41:knee=1.5:link=0:detection=1:"
                        "level-sc=1:mix=1";
         else /* default */
             settings = "level-in=1:mode=0:threshold=0.1:ratio=2.5:attack=8:"
@@ -1312,7 +1317,10 @@ static hb_dict_t * generate_acompressor_settings(const char *preset,
     {
         /* Mastering-style: gentle ratios capped low even at strong, slow
          * attack to preserve transients/punch, slow release and a soft
-         * knee. Tweak, don't crush. */
+         * knee. Makeup gain is hump-shaped like the voice tune:
+         * it peaks at moderate and pulls back to light's level
+         * at strong, since a mastering-style glue compressor should not
+         * push the mix hotter as it gets more aggressive. */
         if (!strcasecmp(preset, "light"))
             settings = "level-in=1:mode=0:threshold=0.25:ratio=1.5:attack=30:"
                        "release=300:makeup=1:knee=4:link=0:detection=1:"
@@ -1323,11 +1331,11 @@ static hb_dict_t * generate_acompressor_settings(const char *preset,
                        "level-sc=1:mix=1";
         else if (!strcasecmp(preset, "strong"))
             settings = "level-in=1:mode=0:threshold=0.125:ratio=2.5:attack=20:"
-                       "release=250:makeup=1.41:knee=4:link=0:detection=1:"
+                       "release=250:makeup=1:knee=4:link=0:detection=1:"
                        "level-sc=1:mix=1";
         else /* default */
-            settings = "level-in=1:mode=0:threshold=0.177:ratio=2:attack=25:"
-                       "release=300:makeup=1.2:knee=4:link=0:detection=1:"
+            settings = "level-in=1:mode=0:threshold=0.177:ratio=1.75:attack=27:"
+                       "release=300:makeup=1.1:knee=4:link=0:detection=1:"
                        "level-sc=1:mix=1";
     }
     else
