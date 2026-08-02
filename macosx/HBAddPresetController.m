@@ -178,15 +178,15 @@
     HBAudioDefaults *defaults = [[HBAudioDefaults alloc] init];
     [defaults applyPreset:self.mutablePreset error:NULL];
 
-    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
-
-    [self.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
-        if (returnCode == NSModalResponseOK)
-        {
-            [defaults writeToPreset:self.mutablePreset];
-        }
-        self.defaultsController = nil;
-    }];
+//    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
+//
+//    [self.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
+//        if (returnCode == NSModalResponseOK)
+//        {
+//            [defaults writeToPreset:self.mutablePreset];
+//        }
+//        self.defaultsController = nil;
+//    }];
 }
 
 - (IBAction)showSubtitlesSettingsSheet:(id)sender

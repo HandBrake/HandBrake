@@ -14,6 +14,9 @@ extern NSString * const HBFiltersChangedNotification;
 
 @interface HBFilterGroup : NSObject
 
+- (instancetype)initWithFilterID:(int)filterID;
+- (instancetype)initWithFilters:(NSArray<NSNumber *> *)filters groupName:(NSString *)name;
+
 @property (nonatomic, readonly, nullable) NSString *name;
 @property (nonatomic, readonly) NSArray<NSNumber *> *filters;
 
@@ -37,8 +40,8 @@ extern NSString * const HBFiltersChangedNotification;
 
 - (void)removeAll;
 
-@property (class, nonatomic, readonly) NSArray<NSNumber *> *availableFilters;
-@property (class, nonatomic, readonly) NSArray<HBFilterGroup *> *availableFilterGroups;
+@property (nonatomic, readonly) NSArray<NSNumber *> *availableFilters;
+@property (nonatomic, readonly) NSArray<HBFilterGroup *> *availableFilterGroups;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
@@ -47,6 +50,13 @@ extern NSString * const HBFiltersChangedNotification;
 - (void)insertObject:(HBFilter *)filter inFiltersAtIndex:(NSUInteger)index;
 - (void)removeObjectFromFiltersAtIndex:(NSUInteger)index;
 - (void)removeFiltersAtIndexes:(NSIndexSet *)indexes;
+
+@end
+
+@interface HBFilters (HBFiltersPrivate)
+
+@property (nonatomic, readwrite, getter=areNotificationsEnabled) BOOL notificationsEnabled;
+- (void)postChangedNotification;
 
 @end
 

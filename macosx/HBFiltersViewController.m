@@ -9,52 +9,6 @@
 
 @import HandBrakeKit;
 
-@interface HBFiltersCellView : NSTableCellView
-
-@property (nonatomic, weak) IBOutlet NSPopUpButton *presetsPopUpButton;
-@property (nonatomic, weak) IBOutlet NSPopUpButton *tunesPopUpButton;
-
-- (IBAction)remove:(id)sender;
-
-@end
-
-@implementation HBFiltersCellView
-
-- (void)setObjectValue:(id)objectValue
-{
-    [super setObjectValue:objectValue];
-
-    [self didChangeValueForKey:@"objectValue"];
-
-    if ([objectValue isKindOfClass:[HBFilter class]])
-    {
-        HBFilter *filter = (HBFilter *)objectValue;
-
-        HBFilterPresetTransformer *presetsTransformer = [[HBFilterPresetTransformer alloc] initWithWithFilterID:filter.filterID];
-        HBFilterTuneTransformer   *tunesTransformer = [[HBFilterTuneTransformer alloc] initWithWithFilterID:filter.filterID];
-
-        [self.presetsPopUpButton bind:@"selectedValue" toObject:self
-                          withKeyPath:@"objectValue.preset"
-                              options:@{NSValueTransformerBindingOption: presetsTransformer}];
-
-        [self.tunesPopUpButton bind:@"selectedValue" toObject:self
-                        withKeyPath:@"objectValue.tune"
-                            options:@{NSValueTransformerBindingOption: tunesTransformer}];
-    }
-}
-
-- (IBAction)remove:(id)sender
-{
-    if ([self.objectValue isKindOfClass:[HBFilter class]])
-    {
-        HBFilter *filter = (HBFilter *)self.objectValue;
-        [filter.delegate removeFilter:filter];
-    }
-}
-
-@end
-
-
 @interface HBFiltersViewController ()
 
 @property (nonatomic, readwrite) NSColor *labelColor;
@@ -78,7 +32,7 @@
 - (NSMenuItem *)menuItemForFilterID:(int)filterID
 {
     NSMenuItem *item = [[NSMenuItem alloc] init];
-    item.title = [HBFilter localizedNameForFilterID:filterID];;
+    item.title = [HBFilter localizedNameForFilterID:filterID];
     item.tag = filterID;
     item.action = @selector(toggleFilter:);
     item.target = self;
@@ -87,7 +41,9 @@
 
 - (void)viewDidLoad
 {
-    for (HBFilterGroup *group in HBFilters.availableFilterGroups.reverseObjectEnumerator)
+    HBFilters *filters = [[HBVideoFilters alloc] init];
+
+    for (HBFilterGroup *group in filters.availableFilterGroups.reverseObjectEnumerator)
     {
         if (group.name.length)
         {
@@ -111,7 +67,7 @@
     }
 }
 
-- (void)setFilters:(HBFilters *)filters
+- (void)setFilters:(HBVideoFilters *)filters
 {
     _filters = filters;
 

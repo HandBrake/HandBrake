@@ -10,9 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HBAudioDefaultsController : NSWindowController
+@protocol HBAudioDefaultsControllerDelegate <NSObject>
 
-- (instancetype)initWithSettings:(HBAudioDefaults *)settings;
+- (void)audioControllerDidEnd:(HBAudioDefaults *)settings returnCode:(NSModalResponse)returnCode;
+
+@end
+
+@interface HBAudioDefaultsController : NSViewController
+
+- (instancetype)initWithSettings:(HBAudioDefaults *)settings delegate:(id<HBAudioDefaultsControllerDelegate>)delegate;
 
 @end
 

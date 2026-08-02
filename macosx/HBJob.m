@@ -66,7 +66,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _range = [[HBRange alloc] initWithTitle:title];
         _video = [[HBVideo alloc] initWithJob:self];
         _picture = [[HBPicture alloc] initWithTitle:title];
-        _filters = [[HBFilters alloc] init];
+        _filters = [[HBVideoFilters alloc] init];
 
         _audio = [[HBAudio alloc] initWithJob:self];
         _subtitles = [[HBSubtitles alloc] initWithJob:self];
@@ -440,9 +440,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     return YES;
 }
 
+#define HB_JOB_VERSION 7
+
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:6 forKey:@"HBJobVersion"];
+    [coder encodeInt:HB_JOB_VERSION forKey:@"HBJobVersion"];
 
     encodeObject(_name);
     encodeObject(_presetName);
@@ -500,7 +502,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 {
     int version = [decoder decodeIntForKey:@"HBJobVersion"];
 
-    if (version == 6 && (self = [super init]))
+    if (version == HB_JOB_VERSION && (self = [super init]))
     {
         decodeObjectOrFail(_name, NSString);
         decodeObjectOrFail(_presetName, NSString);
@@ -524,7 +526,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeObjectOrFail(_range, HBRange);
         decodeObjectOrFail(_video, HBVideo);
         decodeObjectOrFail(_picture, HBPicture);
-        decodeObjectOrFail(_filters, HBFilters);
+        decodeObjectOrFail(_filters, HBVideoFilters);
 
         _video.job = self;
 

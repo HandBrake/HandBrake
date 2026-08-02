@@ -1,4 +1,4 @@
-/*  HBTrackTitleViewController.h
+/*  HBAudioFiltersViewController.h
 
 This file is part of the HandBrake source code.
 Homepage: <http://handbrake.fr/>.
@@ -8,7 +8,7 @@ It may be used under the terms of the GNU General Public License. */
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HBTrackTitleViewController : NSViewController
+@interface HBAudioFiltersViewController : NSViewController
 
 @property (nonatomic) id track;
 

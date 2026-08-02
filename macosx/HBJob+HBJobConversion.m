@@ -19,7 +19,8 @@
 #import "HBRange.h"
 #import "HBVideo.h"
 #import "HBPicture.h"
-#import "HBFilters.h"
+#import "HBVideoFilters.h"
+#import "HBAudioFilters.h"
 #import "HBFilter.h"
 #import "HBAudio.h"
 #import "HBSubtitles.h"
@@ -480,6 +481,18 @@
             {
                 // source isn't AC3 or output is passthru - the DRC dial is disabled so don't apply its value
                 audio.out.dynamic_range_compression = 0;
+            }
+
+            hb_list_t *filter_list = audio.out.list_filter;
+            for (HBFilter *f in audioTrack.filters.filters)
+            {
+                hb_dict_t *filter_dict = hb_generate_filter_settings(f.filterID,
+                                                                     f.preset.UTF8String,
+                                                                     f.tune.UTF8String,
+                                                                     f.custom.UTF8String);
+                hb_filter_object_t *filter = hb_filter_init(f.filterID);
+                hb_add_filter_dict(filter_list, filter, filter_dict);
+                hb_value_free(&filter_dict);
             }
 
             hb_audio_add(job, &audio);

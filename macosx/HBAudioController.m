@@ -10,7 +10,7 @@
 
 @import HandBrakeKit;
 
-@interface HBAudioController ()
+@interface HBAudioController () <HBAudioDefaultsControllerDelegate>
 
 @property (nonatomic, readwrite, strong) HBAudioDefaultsController *defaultsController;
 @property (nonatomic, weak) IBOutlet NSTableView *table;
@@ -47,7 +47,11 @@
     if (index != -1)
     {
         controller.track = [self.audio objectInTracksAtIndex:index];
-        [self presentViewController:controller asPopoverRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSRectEdgeMinX behavior:NSPopoverBehaviorSemitransient];
+        [self presentViewController:controller
+            asPopoverRelativeToRect:[sender bounds]
+                             ofView:sender
+                      preferredEdge:NSRectEdgeMaxY
+                           behavior:NSPopoverBehaviorSemitransient];
     }
 }
 
@@ -55,21 +59,21 @@
 
 - (IBAction)showSettingsSheet:(id)sender
 {
-    HBAudioDefaults *defaults = [self.audio.defaults copy];
-    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
-
-    [self.view.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
-        if (returnCode == NSModalResponseOK)
-        {
-            self.audio.defaults = defaults;
-        }
-        self.defaultsController = nil;
-    }];
+    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:[self.audio.defaults copy] delegate:self];
+    [self presentViewControllerAsSheet:self.defaultsController];
 }
 
 - (IBAction)reloadDefaults:(id)sender
 {
     [self.audio reloadDefaults];
+}
+
+- (void)audioControllerDidEnd:(nonnull HBAudioDefaults *)settings returnCode:(NSModalResponse)returnCode
+{
+    if (returnCode == NSModalResponseOK)
+    {
+        self.audio.defaults = settings;
+    }
 }
 
 @end

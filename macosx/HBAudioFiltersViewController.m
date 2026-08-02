@@ -1,22 +1,22 @@
-/*  HBTrackTitleViewController.m
+/*  HBAudioFiltersViewController.m
 
 This file is part of the HandBrake source code.
 Homepage: <http://handbrake.fr/>.
 It may be used under the terms of the GNU General Public License. */
 
-#import "HBTrackTitleViewController.h"
+#import "HBAudioFiltersViewController.h"
 #import "HBTableView.h"
 
 @import HandBrakeKit;
 
-@interface HBTrackTitleViewController ()
+@interface HBAudioFiltersViewController ()
 
 @property (nonatomic, weak) IBOutlet NSPopUpButton *pullDown;
 @property (nonatomic, weak) IBOutlet HBTableView *tableView;
 
 @end
 
-@implementation HBTrackTitleViewController
+@implementation HBAudioFiltersViewController
 
 - (void)viewDidLoad
 {
