@@ -33,6 +33,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface HBFilter (Private)
+
+- (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings;
+
+@property (nonatomic, readwrite, getter=areNotificationsEnabled) BOOL notificationsEnabled;
+
+@end
+
 @interface HBAudio (Private)
 
 - (instancetype)initWithJob:(HBJob *)job;

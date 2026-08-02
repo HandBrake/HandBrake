@@ -15,9 +15,38 @@ Download available from Microsoft:
 
 ### All platforms
 
+#### Video
+
+- Added video filters:
+    - Deband
+    - BM3D
+- Stereo 3D and spherical video mapping metadata are now preserved
+- Fixed FFV1 SAR in bitstream
+
 #### Audio
 
+- Added audio filters:
+    - Gate
+    - Compressor
+- Added 3.0, 4.0, and quadrophonic mixdowns
 - Renamed "7.1 (5F/2R/LFE)" mixdown to "7.1 (SDDS)" (speaker layout used by Sony Dynamic Digital Sound)
+
+#### Third-party libraries
+
+- Updated libraries
+  - AMF 1.5.2 (AMD VCN video encoding)
+  - FFmpeg 8.1.2 (decoding and filters)
+  - FreeType 2.14.3 (subtitles)
+  - HarfBuzz 14.3.0 (subtitles)
+  - libbluray 1.5.0 (Blu-ray decoding)
+  - libdav1d 1.5.4 (AV1 decoding)
+  - libdvdread 7.1.1 (DVD decoding)
+  - libiconv 1.19 (character encoding support)
+  - libjpeg-turbo 3.2.0 (preview image compression)
+  - nv-codec-headers 13.1.15.0 (Nvidia NVENC encoding)
+  - oneVPL 2.17.0 (Intel QSV video encoding/decoding)
+  - SVT-AV1 4.2.0 (AV1 video encoding)
+  - x265 4.3 (H.265/HEVC video encoding)
 
 
 ## HandBrake 1.11.2
@@ -27,6 +56,7 @@ Download available from Microsoft:
 #### Video
 
 - Fixed a crash that happened when doing a 2-pass lossless x265 encode
+- Fixed a memory leak that happened when doing a 2-pass MPEG-4/MPEG-2/VP9/FFV1 encode
 
 #### Audio
 
@@ -50,15 +80,16 @@ Download available from Microsoft:
 ### Linux
 
 - Added WebM MIME type to the list of the supported formats
-  
+
 ### Mac
 
 - Improved handling of unsupported presets
+- Updated Sparkle automatic update library
 
 ### Windows
 
 - Improved handling of unsupported presets
-- Improved queue low space behaviour
+- Improved queue low space pause behaviour
 - Fixed the automatic audio track name generation
 - Fixed the summary description of HDR video
 

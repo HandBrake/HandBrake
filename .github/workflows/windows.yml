@@ -11,11 +11,11 @@ jobs:
     name: CLI / LibHB (ARM)
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Cargo-C Toolchain Cache
       id: windows-arm-cargo-c-toolchain
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           ~/.cargo/bin/cargo-capi
@@ -76,11 +76,11 @@ jobs:
     name: CLI / LibHB
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Cargo-C Toolchain Cache
       id: windows-cargo-c-toolchain
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           ~/.cargo/bin/cargo-capi
@@ -145,7 +145,7 @@ jobs:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Download LibHandBrake
       uses: actions/download-artifact@v8
@@ -166,7 +166,7 @@ jobs:
         }
 
     - name: Setup .NET 10
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: "10.0.x"
 
@@ -225,7 +225,7 @@ jobs:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Download LibHandBrake_ARM64
       uses: actions/download-artifact@v8
@@ -246,7 +246,7 @@ jobs:
         }
 
     - name: Setup .NET 10
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: "10.0.x"
 

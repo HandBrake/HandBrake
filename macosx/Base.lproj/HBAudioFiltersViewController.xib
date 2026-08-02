@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HBAudioFiltersViewController">
+            <connections>
+                <outlet property="pullDown" destination="CI7-Ad-qWj" id="uJ8-56-jXf"/>
+                <outlet property="tableView" destination="ars-Tz-UZN" id="Okc-Jd-OJK"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView misplaced="YES" id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="459" height="315"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nNR-jx-7j9">
+                    <rect key="frame" x="407" y="9" width="42" height="17"/>
+                    <buttonCell key="cell" type="roundRect" title="Done" bezelStyle="roundedRect" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vzr-yd-VKe">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="dismissController:" target="-2" id="RzZ-kU-0HW"/>
+                    </connections>
+                </button>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="50" horizontalPageScroll="10" verticalLineScroll="50" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VkD-7i-VS6">
+                    <rect key="frame" x="10" y="34" width="439" height="264"/>
+                    <clipView key="contentView" id="zJm-Ba-wxe">
+                        <rect key="frame" x="1" y="1" width="437" height="262"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" autosaveColumns="NO" rowHeight="50" usesAutomaticRowHeights="YES" viewBased="YES" id="ars-Tz-UZN" customClass="HBTableView">
+                                <rect key="frame" x="0.0" y="0.0" width="437" height="262"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <size key="intercellSpacing" width="17" height="0.0"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                <tableColumns>
+                                    <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="425" minWidth="40" maxWidth="1000" id="IcJ-t4-MLA">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="Kyv-Vm-7RC">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <tableCellView misplaced="YES" id="0lf-Xv-bVU" customClass="HBFiltersCellView">
+                                                <rect key="frame" x="8" y="0.0" width="420" height="97"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="IBX-d3-4Oi">
+                                                        <rect key="frame" x="0.0" y="83" width="34" height="14"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Filter" id="cqc-si-0CR">
+                                                            <font key="font" metaFont="smallSystemBold"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="0lf-Xv-bVU" name="value" keyPath="objectValue.localizedName" id="c7m-fE-Jw0"/>
+                                                        </connections>
+                                                    </textField>
+                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QBU-us-C2Z">
+                                                        <rect key="frame" x="402" y="82" width="16" height="16"/>
+                                                        <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Delete" imagePosition="only" alignment="center" alternateImage="DeleteHighlightPressed" id="WBm-ib-LuM">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="16" id="PJC-Qg-yi0"/>
+                                                            <constraint firstAttribute="width" constant="16" id="QgB-gM-0D7"/>
+                                                        </constraints>
+                                                        <connections>
+                                                            <action selector="remove:" target="0lf-Xv-bVU" id="QnN-Kp-iYY"/>
+                                                        </connections>
+                                                    </button>
+                                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="7" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4wS-HT-gsi">
+                                                        <rect key="frame" x="16" y="8" width="388" height="67"/>
+                                                        <subviews>
+                                                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hr5-jr-xxb">
+                                                                <rect key="frame" x="0.0" y="0.0" width="352" height="67"/>
+                                                                <subviews>
+                                                                    <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dJk-go-Snk">
+                                                                        <rect key="frame" x="0.0" y="51" width="182" height="16"/>
+                                                                        <subviews>
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="svO-EX-X77">
+                                                                                <rect key="frame" x="-2" y="1" width="48" height="14"/>
+                                                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Preset:" id="Nj1-Lv-TBY">
+                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                </textFieldCell>
+                                                                            </textField>
+                                                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sBt-Ym-8Ek">
+                                                                                <rect key="frame" x="48" y="-4" width="138" height="22"/>
+                                                                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="iWn-Sd-QHM">
+                                                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                    <menu key="menu" id="6UP-Eb-ldy"/>
+                                                                                </popUpButtonCell>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="d5S-Ik-6yU"/>
+                                                                                </constraints>
+                                                                                <connections>
+                                                                                    <binding destination="0lf-Xv-bVU" name="content" keyPath="objectValue.presets" id="fKZ-7n-cS9"/>
+                                                                                </connections>
+                                                                            </popUpButton>
+                                                                        </subviews>
+                                                                        <visibilityPriorities>
+                                                                            <integer value="1000"/>
+                                                                            <integer value="1000"/>
+                                                                        </visibilityPriorities>
+                                                                        <customSpacing>
+                                                                            <real value="3.4028234663852886e+38"/>
+                                                                            <real value="3.4028234663852886e+38"/>
+                                                                        </customSpacing>
+                                                                    </stackView>
+                                                                    <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G6Y-F9-L9Q">
+                                                                        <rect key="frame" x="0.0" y="27" width="182" height="16"/>
+                                                                        <subviews>
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UM4-oi-aC9">
+                                                                                <rect key="frame" x="-2" y="1" width="48" height="14"/>
+                                                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Tune:" id="czd-P0-8ai">
+                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                </textFieldCell>
+                                                                                <connections>
+                                                                                    <binding destination="0lf-Xv-bVU" name="hidden" keyPath="objectValue.tunesAvailable" id="QIg-3T-bUU">
+                                                                                        <dictionary key="options">
+                                                                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                                        </dictionary>
+                                                                                    </binding>
+                                                                                </connections>
+                                                                            </textField>
+                                                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="umN-YL-zGv">
+                                                                                <rect key="frame" x="48" y="-4" width="138" height="22"/>
+                                                                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="hxj-4O-mnr">
+                                                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                    <menu key="menu" id="F6H-J5-hfk"/>
+                                                                                </popUpButtonCell>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="QCy-Pm-LWi"/>
+                                                                                </constraints>
+                                                                                <connections>
+                                                                                    <binding destination="0lf-Xv-bVU" name="content" keyPath="objectValue.tunes" id="ZOq-ft-ogQ"/>
+                                                                                    <binding destination="0lf-Xv-bVU" name="hidden" keyPath="objectValue.tunesAvailable" id="XbR-ia-HQ2">
+                                                                                        <dictionary key="options">
+                                                                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                                        </dictionary>
+                                                                                    </binding>
+                                                                                </connections>
+                                                                            </popUpButton>
+                                                                        </subviews>
+                                                                        <visibilityPriorities>
+                                                                            <integer value="1000"/>
+                                                                            <integer value="1000"/>
+                                                                        </visibilityPriorities>
+                                                                        <customSpacing>
+                                                                            <real value="3.4028234663852886e+38"/>
+                                                                            <real value="3.4028234663852886e+38"/>
+                                                                        </customSpacing>
+                                                                    </stackView>
+                                                                    <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hgx-MK-MCS">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="352" height="19"/>
+                                                                        <subviews>
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aSQ-BV-oTu">
+                                                                                <rect key="frame" x="-2" y="2" width="48" height="14"/>
+                                                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Custom:" id="0Ut-zg-zW0">
+                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                </textFieldCell>
+                                                                            </textField>
+                                                                            <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="P8k-HO-ueV">
+                                                                                <rect key="frame" x="52" y="0.0" width="300" height="19"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" constant="300" id="3LH-Zl-iNm"/>
+                                                                                </constraints>
+                                                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="J4a-nJ-GFM">
+                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                </textFieldCell>
+                                                                                <connections>
+                                                                                    <binding destination="0lf-Xv-bVU" name="value" keyPath="objectValue.custom" id="ge9-um-E5V">
+                                                                                        <dictionary key="options">
+                                                                                            <bool key="NSValidatesImmediately" value="YES"/>
+                                                                                        </dictionary>
+                                                                                    </binding>
+                                                                                </connections>
+                                                                            </textField>
+                                                                        </subviews>
+                                                                        <visibilityPriorities>
+                                                                            <integer value="1000"/>
+                                                                            <integer value="1000"/>
+                                                                        </visibilityPriorities>
+                                                                        <customSpacing>
+                                                                            <real value="3.4028234663852886e+38"/>
+                                                                            <real value="3.4028234663852886e+38"/>
+                                                                        </customSpacing>
+                                                                        <connections>
+                                                                            <binding destination="0lf-Xv-bVU" name="hidden" keyPath="objectValue.customSelected" id="7nP-XX-LFk">
+                                                                                <dictionary key="options">
+                                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                                </dictionary>
+                                                                            </binding>
+                                                                        </connections>
+                                                                    </stackView>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="svO-EX-X77" firstAttribute="width" secondItem="UM4-oi-aC9" secondAttribute="width" id="7vA-ZB-Vlw"/>
+                                                                    <constraint firstItem="UM4-oi-aC9" firstAttribute="width" secondItem="aSQ-BV-oTu" secondAttribute="width" id="zzr-qe-OGB"/>
+                                                                </constraints>
+                                                                <visibilityPriorities>
+                                                                    <integer value="1000"/>
+                                                                    <integer value="1000"/>
+                                                                    <integer value="1000"/>
+                                                                </visibilityPriorities>
+                                                                <customSpacing>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                </customSpacing>
+                                                            </stackView>
+                                                        </subviews>
+                                                        <visibilityPriorities>
+                                                            <integer value="1000"/>
+                                                        </visibilityPriorities>
+                                                        <customSpacing>
+                                                            <real value="3.4028234663852886e+38"/>
+                                                        </customSpacing>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="IBX-d3-4Oi" firstAttribute="top" secondItem="0lf-Xv-bVU" secondAttribute="top" constant="4" id="75i-sp-dD1"/>
+                                                    <constraint firstItem="4wS-HT-gsi" firstAttribute="leading" secondItem="0lf-Xv-bVU" secondAttribute="leading" constant="16" id="Jef-A1-aNJ"/>
+                                                    <constraint firstItem="4wS-HT-gsi" firstAttribute="top" secondItem="IBX-d3-4Oi" secondAttribute="bottom" constant="8" symbolic="YES" id="JsB-jc-svb"/>
+                                                    <constraint firstItem="QBU-us-C2Z" firstAttribute="centerY" secondItem="IBX-d3-4Oi" secondAttribute="centerY" id="W1y-CL-aOt"/>
+                                                    <constraint firstAttribute="trailing" secondItem="4wS-HT-gsi" secondAttribute="trailing" constant="16" id="aX5-Gk-qLC"/>
+                                                    <constraint firstAttribute="trailing" secondItem="QBU-us-C2Z" secondAttribute="trailing" constant="2" id="aYp-PB-NAr"/>
+                                                    <constraint firstAttribute="bottom" secondItem="4wS-HT-gsi" secondAttribute="bottom" constant="8" id="drE-H2-cvW"/>
+                                                    <constraint firstItem="IBX-d3-4Oi" firstAttribute="leading" secondItem="0lf-Xv-bVU" secondAttribute="leading" constant="2" id="hit-pU-YZL"/>
+                                                    <constraint firstItem="QBU-us-C2Z" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="IBX-d3-4Oi" secondAttribute="trailing" constant="8" symbolic="YES" id="ttI-tx-WwX"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outlet property="presetsPopUpButton" destination="sBt-Ym-8Ek" id="n4b-7Q-myR"/>
+                                                    <outlet property="textField" destination="IBX-d3-4Oi" id="o49-wY-IWd"/>
+                                                    <outlet property="tunesPopUpButton" destination="umN-YL-zGv" id="59g-pl-rAA"/>
+                                                </connections>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                </tableColumns>
+                                <accessibility description="Filters"/>
+                                <connections>
+                                    <binding destination="FDF-35-TzO" name="content" keyPath="arrangedObjects" id="X6s-65-Sgr"/>
+                                    <binding destination="-2" name="enabled" keyPath="self.track.filters" id="Eyc-xK-qe3">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNotNil</string>
+                                        </dictionary>
+                                    </binding>
+                                    <outlet property="menu" destination="Vh0-Bw-DOV" id="fB0-H0-Q08"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="OIG-wn-Gyb">
+                        <rect key="frame" x="1" y="239" width="437" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="XdF-FL-xDw">
+                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CI7-Ad-qWj">
+                    <rect key="frame" x="6" y="302" width="90" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Filters" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="mXM-Vc-HkU" id="bjN-oQ-Pgw">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="fYc-1F-uiv">
+                            <items>
+                                <menuItem title="Filters" state="on" hidden="YES" id="mXM-Vc-HkU"/>
+                                <menuItem isSeparatorItem="YES" id="No2-Ef-IJW"/>
+                                <menuItem title="Remove All" id="jDU-Mj-R1Y">
+                                    <connections>
+                                        <action selector="removeAll:" target="-2" id="hFJ-3n-ajj"/>
+                                    </connections>
+                                </menuItem>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="82" id="vTR-ig-goy"/>
+                    </constraints>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="nNR-jx-7j9" secondAttribute="trailing" constant="10" id="C28-Wh-Zzq"/>
+                <constraint firstAttribute="bottom" secondItem="nNR-jx-7j9" secondAttribute="bottom" constant="10" id="Owq-7k-9Kt"/>
+                <constraint firstItem="CI7-Ad-qWj" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="RTB-ng-GGw"/>
+                <constraint firstItem="nNR-jx-7j9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="YFL-Cj-0O9"/>
+                <constraint firstItem="CI7-Ad-qWj" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="10" id="aNs-Vx-plG"/>
+                <constraint firstItem="VkD-7i-VS6" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="e3H-Mv-IlL"/>
+                <constraint firstAttribute="trailing" secondItem="VkD-7i-VS6" secondAttribute="trailing" constant="10" id="hS0-TC-peW"/>
+                <constraint firstItem="VkD-7i-VS6" firstAttribute="top" secondItem="CI7-Ad-qWj" secondAttribute="bottom" constant="8" symbolic="YES" id="mD9-wD-cWK"/>
+                <constraint firstItem="nNR-jx-7j9" firstAttribute="top" secondItem="VkD-7i-VS6" secondAttribute="bottom" constant="8" symbolic="YES" id="nf9-fw-Ghv"/>
+            </constraints>
+            <point key="canvasLocation" x="-88.5" y="-128.5"/>
+        </customView>
+        <menu id="Vh0-Bw-DOV">
+            <items>
+                <menuItem title="Remove" id="IGd-NX-U1l">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="remove:" target="-2" id="kEo-AC-2p6"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="CQF-kN-XNP"/>
+                <menuItem title="Remove all" id="4yK-81-w0w">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="removeAll:" target="-2" id="SYc-Y6-fiY"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="283" y="-8"/>
+        </menu>
+        <arrayController objectClassName="HBFilter" id="FDF-35-TzO">
+            <classReference key="objectClass" className="HBFilter"/>
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.track.filters.filters" id="Ptl-Gd-phf"/>
+            </connections>
+        </arrayController>
+    </objects>
+    <resources>
+        <image name="Delete" width="16" height="16"/>
+        <image name="DeleteHighlightPressed" width="16" height="16"/>
+    </resources>
+</document>

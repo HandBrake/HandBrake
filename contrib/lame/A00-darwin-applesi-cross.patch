@@ -1,8 +1,7 @@
 diff --git a/config.sub b/config.sub
-index 3580aaf..4a81e12 100755
 --- a/config.sub
-+++ b/config.sub
-@@ -248,7 +248,7 @@ case $basic_machine in
++++ b/config.sub				
+@@ -568,7 +568,7 @@
  	# Some are omitted here because they have special meanings below.
  	1750a | 580 \
  	| a29k \
@@ -11,7 +10,7 @@ index 3580aaf..4a81e12 100755
  	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
  	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
  	| am33_2.0 \
-@@ -370,7 +370,7 @@ case $basic_machine in
+@@ -691,7 +691,7 @@
  	# Recognize the basic CPU types with company name.
  	580-* \
  	| a29k-* \

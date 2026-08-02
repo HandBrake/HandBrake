@@ -58,7 +58,5 @@ namespace HandBrakeWPF.Model
         /// Gets or sets the expected RSA 4096bit SHA256 Signature
         /// </summary>
         public string Signature { get; set; }
-
-        public bool UseLargerKey { get; set; }
     }
 }

@@ -141,7 +141,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="public.4096.key" />
-    <EmbeddedResource Include="public.key" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12308,6 +12308,8 @@ const char hb_builtin_presets_json[] =
 "            \"PictureCombDetectPreset\": \"off\",\n"
 "            \"PictureCropMode\": 0,\n"
 "            \"PictureDARWidth\": 0,\n"
+"            \"PictureDebandCustom\": \"\",\n"
+"            \"PictureDebandPreset\": \"off\",\n"
 "            \"PictureDeblockCustom\": \"strength=strong:thresh=20:blocksize=8\",\n"
 "            \"PictureDeblockPreset\": \"off\",\n"
 "            \"PictureDeblockTune\": \"medium\",\n"

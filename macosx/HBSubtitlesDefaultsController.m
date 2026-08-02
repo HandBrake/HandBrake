@@ -34,6 +34,11 @@ static void *HBSubtitlesDefaultsContext = &HBSubtitlesDefaultsContext;
     return self;
 }
 
+- (void)windowDidLoad
+{
+    self.window.preventsApplicationTerminationWhenModal = NO;
+}
+
 - (IBAction)ok:(id)sender
 {
     self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];

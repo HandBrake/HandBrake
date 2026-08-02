@@ -1,0 +1,34 @@
+$(eval $(call import.MODULE.defs,LIBUDFREAD,libudfread))
+$(eval $(call import.CONTRIB.defs,LIBUDFREAD))
+
+LIBUDFREAD.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libudfread-1.2.0.tar.xz
+LIBUDFREAD.FETCH.url    += https://download.videolan.org/pub/videolan/libudfread/libudfread-1.2.0.tar.xz
+LIBUDFREAD.FETCH.sha256  = bb477cbd4cfbfc7787d9d05b71ee5e70430f5cfebf1297497f7e83547958050f
+
+LIBUDFREAD.build_dir             = build/
+LIBUDFREAD.CONFIGURE.exe         = $(MESON.exe) setup
+LIBUDFREAD.prefix                = $(call fn.ABSOLUTE,$(LIBUDFREAD.prefix/))contrib/
+LIBUDFREAD.CONFIGURE.deps        =
+LIBUDFREAD.CONFIGURE.shared      =
+LIBUDFREAD.CONFIGURE.host        =
+LIBUDFREAD.CONFIGURE.build       =
+LIBUDFREAD.CONFIGURE.static      = -Ddefault_library=static
+LIBUDFREAD.CONFIGURE.extra       = --libdir=$(call fn.ABSOLUTE,$(LIBUDFREAD.prefix/))contrib/lib/ \
+                                  -Dc_args="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,LIBUDFREAD.GCC,*archs *sysroot *minver ?extra)" \
+                                  -Dc_link_args="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,LIBUDFREAD.GCC,*archs *sysroot *minver ?extra.exe)" \
+                                  -Dpkg_config_path=$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/pkgconfig)
+LIBUDFREAD.CONFIGURE.env         =
+
+ifeq (darwin,$(HOST.system))
+        LIBUDFREAD.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(SRC/))make/cross/$(HOST.machine)-darwin-gcc.meson
+endif
+
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
+    LIBUDFREAD.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBUDFREAD.EXTRACT.dir/))package/crossfiles/$(HOST.machine)-w64-mingw32.meson
+endif
+
+LIBUDFREAD.BUILD.make       = $(NINJA.exe)
+LIBUDFREAD.BUILD.extra      = -v
+LIBUDFREAD.INSTALL.make     = $(NINJA.exe)
+LIBUDFREAD.CLEAN.make       = $(NINJA.exe)
+LIBUDFREAD.UNINSTALL.make   = $(NINJA.exe)

@@ -48,6 +48,7 @@ static hb_filter_param_t bm3d_presets[] =
 
 static hb_filter_param_t deband_presets[] =
 {
+    { 0, "Off",     "off",     NULL },
     { 1, "Custom",  "custom",  NULL },
     { 2, "Default", "default",
       "1thr=0.02:2thr=0.02:3thr=0.02:4thr=0.02:range=16:blur=1" },
@@ -245,6 +246,13 @@ static hb_filter_param_t bwdif_presets[] =
     { 0,  NULL,                NULL,           NULL             },
 };
 
+static hb_filter_param_t grayscale_presets[] =
+{
+    { 0, "Off",      "off",      NULL },
+    { 1, "Default",  "default",  "cb=0:cr=0:size=1:high=0" },
+    { 0, NULL,        NULL,      NULL }
+};
+
 /* Strength presets; settings are produced by generate_acompressor_settings()
  * so each strength can be tailored per content tune. */
 static hb_filter_param_t acompressor_presets[] =
@@ -341,7 +349,10 @@ static filter_param_map_t param_map[] =
 
     { HB_FILTER_DEBAND, deband_presets, NULL,
       sizeof(deband_presets) / sizeof(hb_filter_param_t),      0, },
-
+  
+    { HB_FILTER_GRAYSCALE, grayscale_presets, NULL,
+      sizeof(grayscale_presets) / sizeof(hb_filter_param_t),   0, },
+  
     { HB_AUDIO_FILTER_ACOMPRESSOR, acompressor_presets, acompressor_tunes,
       sizeof(acompressor_presets) / sizeof(hb_filter_param_t),
       sizeof(acompressor_tunes)   / sizeof(hb_filter_param_t), },
@@ -1608,6 +1619,17 @@ const char * hb_filter_param_get_default_preset(int filter_id)
             return "angle=180:hflip=0";
         default:
             return "default";
+    }
+}
+
+const char * hb_filter_param_get_default_tune(int filter_id)
+{
+    switch (filter_id)
+    {
+        case HB_FILTER_DEBLOCK:
+            return "medium";
+        default:
+            return "none";
     }
 }
 

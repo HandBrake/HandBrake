@@ -31,11 +31,10 @@
 
 - (void)windowDidLoad
 {
-    [super windowDidLoad];
-
     [NSNotificationCenter.defaultCenter addObserver:self
                                            selector:@selector(controlTextDidChange:)
                                                name:NSControlTextDidChangeNotification object:self.name];
+    self.window.preventsApplicationTerminationWhenModal = NO;
 }
 
 - (void)dealloc

@@ -1501,6 +1501,8 @@ size_t hb_getline(char ** lineptr, size_t * n, FILE * fp)
         if ((p - bufptr) >= (size - 1))
         {
             char * tmp;
+            size_t offset = p - bufptr;
+
             size = size + 128;
             tmp = realloc(bufptr, size);
             if (tmp == NULL)
@@ -1508,7 +1510,7 @@ size_t hb_getline(char ** lineptr, size_t * n, FILE * fp)
                 free(bufptr);
                 return -1;
             }
-            p = tmp + (p - bufptr);
+            p = tmp + offset;
             bufptr = tmp;
         }
         *p++ = c;

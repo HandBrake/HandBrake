@@ -951,6 +951,9 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
 
                                 hb_dict_t *filter_dict = hb_dict_init();
                                 hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
+                                hb_dict_set_string(filter_dict, "Name", name);
+                                hb_dict_set_string(filter_dict, "Preset", preset);
+                                hb_dict_set_string(filter_dict, "Custom", custom ? custom : "");
                                 hb_dict_set(filter_dict, "Settings", filter_settings);
                                 hb_add_filter2(filter_list, filter_dict);
                             }
@@ -1973,7 +1976,8 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     // Deband
     const char * deband_preset = hb_value_get_string(
                                 hb_dict_get(preset, "PictureDebandPreset"));
-    if (deband_preset != NULL)
+    if (deband_preset != NULL &&
+        strcasecmp(deband_preset, "off"))
     {
         const char * deband_custom = hb_value_get_string(
                                 hb_dict_get(preset, "PictureDebandCustom"));

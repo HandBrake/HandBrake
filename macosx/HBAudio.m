@@ -238,6 +238,18 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
             track.encoder = hb_audio_encoder_get_from_name([trackDict[@"Encoder"] UTF8String]);
             track.title = trackDict[@"Name"];
 
+            for (NSDictionary *filter in trackDict[@"FilterList"])
+            {
+                HBFilter *newFilter = [[HBFilter alloc] initWithFilter:filter[@"Name"]
+                                                                preset:filter[@"Preset"]
+                                                                  tune:nil
+                                                                custom:filter[@"Custom"]];
+                if (newFilter)
+                {
+                    [track.filters insertObject:newFilter inFiltersAtIndex:track.filters.countOfFilters];
+                }
+            }
+
             [tracks addObject:track];
         }
     }

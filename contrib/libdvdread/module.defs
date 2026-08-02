@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread))
 $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 
-LIBDVDREAD.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libdvdread-7.0.1.tar.bz2
-LIBDVDREAD.FETCH.url    += https://code.videolan.org/videolan/libdvdread/-/archive/7.0.1/libdvdread-7.0.1.tar.bz2
-LIBDVDREAD.FETCH.sha256  = b69f74d9ceea1ed173b579deba99f669c2cb42f3fd06d7d23b33ff222aa63763
+LIBDVDREAD.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libdvdread-7.1.1.tar.bz2
+LIBDVDREAD.FETCH.url    += https://code.videolan.org/videolan/libdvdread/-/archive/7.1.1/libdvdread-7.1.1.tar.bz2
+LIBDVDREAD.FETCH.sha256  = 6dec544f502d7af70c5a8f8f19a49ffe2daca60dbd8fc0b4ffe3597fa791c24c
 
 LIBDVDREAD.build_dir             = build/
 LIBDVDREAD.CONFIGURE.exe         = $(MESON.exe) setup

@@ -2,6 +2,7 @@
 win/CS/*/bin
 win/CS/*/obj
 win/CS/.vs
+.vs/**/*
 win/CS/**/*.suo
 win/CS/*.VC.opendb
 win/CS/*.VC.db

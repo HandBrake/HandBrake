@@ -60,8 +60,6 @@
 
 - (void)windowDidLoad
 {
-    [super windowDidLoad];
-
     // Build the categories menu, and select the last used or the first
     [self buildCategoriesMenu];
     if ([self.categories indexOfItemWithTag:2] == -1)
@@ -118,6 +116,8 @@
     [self.picWidth setIntValue:self.width];
     [self.picHeight setIntValue:self.height];
     [self addPresetPicDropdownChanged:nil];
+
+    self.window.preventsApplicationTerminationWhenModal = NO;
 }
 
 /**
@@ -178,15 +178,15 @@
     HBAudioDefaults *defaults = [[HBAudioDefaults alloc] init];
     [defaults applyPreset:self.mutablePreset error:NULL];
 
-    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
-
-    [self.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
-        if (returnCode == NSModalResponseOK)
-        {
-            [defaults writeToPreset:self.mutablePreset];
-        }
-        self.defaultsController = nil;
-    }];
+//    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
+//
+//    [self.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
+//        if (returnCode == NSModalResponseOK)
+//        {
+//            [defaults writeToPreset:self.mutablePreset];
+//        }
+//        self.defaultsController = nil;
+//    }];
 }
 
 - (IBAction)showSubtitlesSettingsSheet:(id)sender

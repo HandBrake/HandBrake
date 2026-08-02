@@ -244,6 +244,7 @@ static void *HBSummaryViewControllerPreferencesContext = &HBSummaryViewControlle
     if (self.filtersReloadInQueue == NO)
     {
         [NSRunLoop.mainRunLoop performSelector:@selector(updateFiltersLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        [NSRunLoop.mainRunLoop performSelector:@selector(update) target:self.previewViewController argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
         self.filtersReloadInQueue = YES;
     }
 }
@@ -255,6 +256,7 @@ static void *HBSummaryViewControllerPreferencesContext = &HBSummaryViewControlle
     if (self.pictureReloadInQueue == NO)
     {
         [NSRunLoop.mainRunLoop performSelector:@selector(updatePictureLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        [NSRunLoop.mainRunLoop performSelector:@selector(update) target:self.previewViewController argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
         self.pictureReloadInQueue = YES;
     }
 }
@@ -285,7 +287,6 @@ static void *HBSummaryViewControllerPreferencesContext = &HBSummaryViewControlle
 {
     self.pictureReloadInQueue = NO;
     self.dimensionLabel.stringValue = self.job.picture.shortInfo;
-    [self.previewViewController update];
 }
 
 @end
