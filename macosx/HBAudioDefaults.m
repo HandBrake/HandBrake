@@ -408,6 +408,7 @@
                                                                 preset:filterPreset
                                                                   tune:filterTune
                                                                 custom:filterCustom];
+                newFilter.delegate = newTrack.filters;
                 if (newFilter)
                 {
                     [newTrack.filters insertObject:newFilter inFiltersAtIndex:newTrack.filters.countOfFilters];

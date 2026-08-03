@@ -245,6 +245,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
                                                                   tune:filter[@"Tune"]
                                                                 custom:filter[@"Custom"]];
                 newFilter.undo = track.undo;
+                newFilter.delegate = track.filters;
                 if (newFilter)
                 {
                     [track.filters insertObject:newFilter inFiltersAtIndex:track.filters.countOfFilters];
