@@ -926,10 +926,11 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                     {
                         hb_dict_t *filter_dict = hb_value_array_get(preset_filter_list, jj);
 
-                        const char *name = NULL, *preset = NULL, *custom = NULL;
+                        const char *name = NULL, *preset = NULL, *tune = NULL, *custom = NULL;
 
                         name = hb_dict_get_string(filter_dict, "AudioFilterName");
                         preset = hb_dict_get_string(filter_dict, "AudioFilterPreset");
+                        tune = hb_dict_get_string(filter_dict, "AudioFilterTune");
                         custom = hb_dict_get_string(filter_dict, "AudioFilterCustom");
 
                         if (name != NULL && preset != NULL)
@@ -940,7 +941,7 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                                 filter_id <= HB_AUDIO_FILTER_LAST)
                             {
                                 hb_dict_t *filter_settings = hb_generate_filter_settings(
-                                                           filter_id, preset, NULL, custom);
+                                                           filter_id, preset, tune, custom);
 
                                 if (filter_settings == NULL)
                                 {
@@ -953,6 +954,7 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                                 hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
                                 hb_dict_set_string(filter_dict, "Name", name);
                                 hb_dict_set_string(filter_dict, "Preset", preset);
+                                hb_dict_set_string(filter_dict, "Tune", tune ? tune : "none");
                                 hb_dict_set_string(filter_dict, "Custom", custom ? custom : "");
                                 hb_dict_set(filter_dict, "Settings", filter_settings);
                                 hb_add_filter2(filter_list, filter_dict);

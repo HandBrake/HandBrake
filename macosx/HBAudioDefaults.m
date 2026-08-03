@@ -395,17 +395,18 @@
 
         for (NSDictionary *filter in track[@"AudioFilterList"])
         {
-            NSString *filterName = filter[@"AudioFilterName"];
+            NSString *filterName   = filter[@"AudioFilterName"];
             NSString *filterPreset = filter[@"AudioFilterPreset"];
+            NSString *filterTune   = filter[@"AudioFilterTune"] ? filter[@"AudioFilterTune"] : @"none";
             NSString *filterCustom = filter[@"AudioFilterCustom"] ? filter[@"AudioFilterCustom"] : @"";
 
             if ([filterName isKindOfClass:[NSString class]] && filterName.length &&
                 [filterPreset isKindOfClass:[NSString class]] && filterPreset.length &&
-                [filterCustom isKindOfClass:[NSString class]])
+                [filterTune isKindOfClass:[NSString class]] && [filterCustom isKindOfClass:[NSString class]])
             {
                 HBFilter *newFilter = [[HBFilter alloc] initWithFilter:filterName
                                                                 preset:filterPreset
-                                                                  tune:nil
+                                                                  tune:filterTune
                                                                 custom:filterCustom];
                 if (newFilter)
                 {
@@ -534,6 +535,7 @@
             {
                 NSDictionary *filterDict = @{@"AudioFilterName": @(hb_filter_get_short_name(filter.filterID)),
                                              @"AudioFilterPreset": filter.preset,
+                                             @"AudioFilterTune": filter.tune,
                                              @"AudioFilterCustom": filter.custom};
 
                 [filters addObject:filterDict];

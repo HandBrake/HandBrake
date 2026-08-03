@@ -242,8 +242,9 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
             {
                 HBFilter *newFilter = [[HBFilter alloc] initWithFilter:filter[@"Name"]
                                                                 preset:filter[@"Preset"]
-                                                                  tune:nil
+                                                                  tune:filter[@"Tune"]
                                                                 custom:filter[@"Custom"]];
+                newFilter.undo = track.undo;
                 if (newFilter)
                 {
                     [track.filters insertObject:newFilter inFiltersAtIndex:track.filters.countOfFilters];
