@@ -1,7 +1,7 @@
-From d9869798a86094e5eaa8b6454bae1093f67e1058 Mon Sep 17 00:00:00 2001
+From fc23705b16a3c7c0e66284abbc368ae46cb7bf18 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Fri, 12 Apr 2024 10:06:24 -0600
-Subject: [PATCH 05/22] avformat/mov: add support audio fallback track ref
+Subject: [PATCH 05/20] avformat/mov: add support audio fallback track ref
 
 ---
  libavformat/isom.h |  3 +++
@@ -9,10 +9,10 @@ Subject: [PATCH 05/22] avformat/mov: add support audio fallback track ref
  2 files changed, 37 insertions(+)
 
 diff --git a/libavformat/isom.h b/libavformat/isom.h
-index 94c9c65989..41e4b66f32 100644
+index e02af09aaa..c798a94f6f 100644
 --- a/libavformat/isom.h
 +++ b/libavformat/isom.h
-@@ -282,6 +282,9 @@ typedef struct MOVStreamContext {
+@@ -286,6 +286,9 @@ typedef struct MOVStreamContext {
          MOVEncryptionIndex *encryption_index;
      } cenc;
  
@@ -23,10 +23,10 @@ index 94c9c65989..41e4b66f32 100644
      int iamf_stream_offset;
  } MOVStreamContext;
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index eb067c756c..d419e5457e 100644
+index 790255d910..ec3a5b548a 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -9421,6 +9421,22 @@ fail:
+@@ -9834,6 +9834,22 @@ fail:
      return ret;
  }
  
@@ -49,7 +49,7 @@ index eb067c756c..d419e5457e 100644
  static const MOVParseTableEntry mov_default_parse_table[] = {
  { MKTAG('A','C','L','R'), mov_read_aclr },
  { MKTAG('A','P','R','G'), mov_read_avid },
-@@ -9523,6 +9539,7 @@ static const MOVParseTableEntry mov_default_parse_table[] = {
+@@ -9937,6 +9953,7 @@ static const MOVParseTableEntry mov_default_parse_table[] = {
  { MKTAG('v','p','c','C'), mov_read_vpcc },
  { MKTAG('m','d','c','v'), mov_read_mdcv },
  { MKTAG('c','l','l','i'), mov_read_clli },
@@ -57,7 +57,7 @@ index eb067c756c..d419e5457e 100644
  { MKTAG('d','v','c','C'), mov_read_dvcc_dvvc },
  { MKTAG('d','v','v','C'), mov_read_dvcc_dvvc },
  { MKTAG('d','v','w','C'), mov_read_dvcc_dvvc },
-@@ -10868,6 +10885,23 @@ static int mov_read_header(AVFormatContext *s)
+@@ -11527,6 +11544,23 @@ static int mov_read_header(AVFormatContext *s)
              err = ff_replaygain_export(st, s->metadata);
              if (err < 0)
                  return err;
@@ -82,5 +82,5 @@ index eb067c756c..d419e5457e 100644
          case AVMEDIA_TYPE_VIDEO:
              if (sc->display_matrix) {
 -- 
-2.39.5 (Apple Git-154)
+2.50.1 (Apple Git-155)
 

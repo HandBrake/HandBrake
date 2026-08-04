@@ -1,7 +1,7 @@
-From 26491abb53d313e01fbcea48a9b3b4ff13a8a150 Mon Sep 17 00:00:00 2001
+From d33eafabbdfe13d1acb80856931ef1c5f91bb8e9 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 20 Mar 2024 09:11:09 +0100
-Subject: [PATCH 08/22] dvdsubdec: fix processing of partial packets
+Subject: [PATCH 07/20] dvdsubdec: fix processing of partial packets
 
 Wait for a complete dvd subtitle before processing.
 
@@ -11,7 +11,7 @@ If the input packet is large enough to start processing, but does not contain co
  1 file changed, 16 insertions(+), 7 deletions(-)
 
 diff --git a/libavcodec/dvdsubdec.c b/libavcodec/dvdsubdec.c
-index 78658f7d2f..1207aff88e 100644
+index 9f9845bf8e..34fd7e8641 100644
 --- a/libavcodec/dvdsubdec.c
 +++ b/libavcodec/dvdsubdec.c
 @@ -230,7 +230,10 @@ static int decode_dvd_subtitles(void *logctx, DVDSubContext *ctx,
@@ -55,5 +55,5 @@ index 78658f7d2f..1207aff88e 100644
  
      while (cmd_pos > 0 && cmd_pos < buf_size - 2 - offset_size) {
 -- 
-2.39.5 (Apple Git-154)
+2.50.1 (Apple Git-155)
 
