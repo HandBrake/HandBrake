@@ -13,13 +13,13 @@ namespace HandBrakeWPF.Services.Encode.Model
     using System.Collections.ObjectModel;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-    using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Json.Shared;
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Services.Encode.Model.Models;
+    using HandBrakeWPF.Services.Encode.Model.Models.Filters;
 
     using AudioTrack = Models.AudioTrack;
     using ChapterMarker = Models.ChapterMarker;
@@ -38,6 +38,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         public EncodeTask()
         {
             this.Cropping = new Cropping();
+            this.VideoFilters = new ObservableCollection<VideoFilter>();
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
@@ -58,6 +59,9 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.Angle = task.Angle;
             this.EndPoint = task.EndPoint;
             this.PointToPointMode = task.PointToPointMode;
+
+            /* Destination */
+            this.Destination = task.Destination;
 
             /* Audio */
             this.AudioFallbackEncoder = task.AudioFallbackEncoder;
@@ -91,31 +95,11 @@ namespace HandBrakeWPF.Services.Encode.Model
             }
 
             /* Filter Settings */
-            this.CustomDeinterlaceSettings = task.CustomDeinterlaceSettings;
-            this.CustomDenoise = task.CustomDenoise;
-            this.CustomDetelecine = task.CustomDetelecine;
-            this.CustomCombDetect = task.CustomCombDetect;
-            this.CombDetect = task.CombDetect;
-            this.DeblockPreset = task.DeblockPreset;
-            this.DeblockTune = task.DeblockTune;
-            this.CustomDeblock = task.CustomDeblock;
-            this.DeinterlacePreset = task.DeinterlacePreset;
-            this.DeinterlaceFilter = task.DeinterlaceFilter;
-            this.Denoise = task.Denoise;
-            this.DenoisePreset = task.DenoisePreset;
-            this.DenoiseTune = task.DenoiseTune;
-            this.Destination = task.Destination;
-            this.Detelecine = task.Detelecine;
-            this.Sharpen = task.Sharpen;
-            this.SharpenPreset = task.SharpenPreset;
-            this.SharpenTune = task.SharpenTune;
-            this.SharpenCustom = task.SharpenCustom;
-            this.Colourspace = task.Colourspace;
-            this.CustomColourspace = task.CustomColourspace;
-            this.ChromaSmooth = task.ChromaSmooth;
-            this.ChromaSmoothTune = task.ChromaSmoothTune;
-            this.CustomChromaSmooth = task.CustomChromaSmooth;
-            this.Grayscale = task.Grayscale;
+            this.VideoFilters = new ObservableCollection<VideoFilter>();
+            foreach (VideoFilter filter in task.VideoFilters)
+            {
+                this.VideoFilters.Add(filter);
+            }
 
             /* Picture Settings*/
             this.DisplayWidth = task.DisplayWidth;
@@ -161,6 +145,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.MetaData = new ObservableCollection<MetaDataValue>(task.MetaData);
             this.CoverArts = new ObservableCollection<CoverArt>(task.CoverArts);
         }
+        
 
         /* Source */
 
@@ -218,62 +203,16 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public bool OptimalSize { get; set; }
 
-        /* Filters */
-
-        public DeinterlaceFilter DeinterlaceFilter { get; set; }
-
-        public HBPresetTune DeinterlacePreset { get; set; }
-
-        public CombDetect CombDetect { get; set; }
-
-        public string CustomDeinterlaceSettings { get; set; }
-
-        public string CustomCombDetect { get; set; }
-
-        public Detelecine Detelecine { get; set; }
-
-        public string CustomDetelecine { get; set; }
-
-        public Denoise Denoise { get; set; }
-
-        public HBPresetTune DenoisePreset { get; set; }
-
-        public HBPresetTune DenoiseTune { get; set; }
-
-        public string CustomDenoise { get; set; }
-
-        public bool Grayscale { get; set; }
-
         public int Rotation { get; set; }
 
         public bool FlipVideo { get; set; }
 
-        public Sharpen Sharpen { get; set; }
-
-        public FilterPreset SharpenPreset { get; set; }
-
-        public FilterTune SharpenTune { get; set; }
-
-        public string SharpenCustom { get; set; }
-
-        public FilterPreset DeblockPreset { get; set; }
-
-        public FilterTune DeblockTune { get; set; }
-
-        public string CustomDeblock { get; set; }
-
         public PaddingFilter Padding { get; set; }
 
-        public FilterPreset Colourspace { get; set; }
+        /* Filters */
+        public ObservableCollection<VideoFilter> VideoFilters { get; set; }
 
-        public string CustomColourspace { get; set; }
-
-        public FilterPreset ChromaSmooth { get; set; }
-
-        public FilterTune ChromaSmoothTune { get; set; }
-
-        public string CustomChromaSmooth { get; set; }
-
+        
         /* Video */
 
         public VideoEncodeRateType VideoEncodeRateType { get; set; }

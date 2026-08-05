@@ -19,7 +19,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-    using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Interfaces.Model.Presets;
     using HandBrake.Interop.Interop.Json.Presets;
@@ -29,6 +28,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Services.Encode.Model.Models;
+    using HandBrakeWPF.Services.Encode.Model.Models.Filters;
     using HandBrakeWPF.Services.Presets.Model;
 
     using AudioTrack = Encode.Model.Models.AudioTrack;
@@ -90,179 +90,149 @@ namespace HandBrakeWPF.Services.Presets.Factories
             }
 
             /* Filter Settings */
-            preset.Task.Grayscale = importedPreset.VideoGrayScale;
-
-            if (!string.IsNullOrEmpty(importedPreset.PictureColorspacePreset))
+            preset.Task.VideoFilters = new ObservableCollection<VideoFilter>();
+            
+            if (importedPreset.VideoGrayScale)
             {
-                preset.Task.Colourspace = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_COLORSPACE).FirstOrDefault(s => s.ShortName == importedPreset.PictureColorspacePreset));
-                preset.Task.CustomColourspace = importedPreset.PictureColorspaceCustom;
+                preset.Task.VideoFilters.Add(new VideoFilter((int)hb_filter_ids.HB_FILTER_GRAYSCALE));
             }
-            else
+
+            if (!string.IsNullOrEmpty(importedPreset.PictureColorspacePreset) && importedPreset.PictureColorspacePreset != "off")
             {
-                preset.Task.Colourspace = new FilterPreset("Off", "off");
+                VideoFilter filter = new VideoFilter(
+                    (int)hb_filter_ids.HB_FILTER_COLORSPACE,
+                    new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_COLORSPACE).FirstOrDefault(s => s.ShortName == importedPreset.PictureColorspacePreset)),
+                    null,
+                    importedPreset.PictureColorspaceCustom);
+                
+                preset.Task.VideoFilters.Add(filter);
             }
             
-            if (!string.IsNullOrEmpty(importedPreset.PictureChromaSmoothPreset))
+            if (!string.IsNullOrEmpty(importedPreset.PictureChromaSmoothPreset) && importedPreset.PictureChromaSmoothPreset != "off")
             {
-                preset.Task.ChromaSmooth = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH).FirstOrDefault(s => s.ShortName == importedPreset.PictureChromaSmoothPreset));
-                preset.Task.ChromaSmoothTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH).FirstOrDefault(s => s.ShortName == importedPreset.PictureChromaSmoothTune));
-                preset.Task.CustomChromaSmooth = importedPreset.PictureChromaSmoothCustom;
-            }
-            else
-            {
-                preset.Task.ChromaSmooth = new FilterPreset("Off", "off");
+                VideoFilter filter = new VideoFilter(
+                    (int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH,
+                    new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH).FirstOrDefault(s => s.ShortName == importedPreset.PictureChromaSmoothPreset)),
+                    new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH).FirstOrDefault(s => s.ShortName == importedPreset.PictureChromaSmoothTune)),
+                    importedPreset.PictureChromaSmoothCustom);
+
+                preset.Task.VideoFilters.Add(filter);
             }
 
-            if (!string.IsNullOrEmpty(importedPreset.PictureDeblockPreset))
-            {
-                preset.Task.DeblockPreset = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockPreset));
-            }
-            else
-            {
-                preset.Task.DeblockPreset = new FilterPreset("Off", "off");
-            }
 
-            if (!string.IsNullOrEmpty(importedPreset.PictureDeblockTune))
+            if (!string.IsNullOrEmpty(importedPreset.PictureDeblockPreset) && importedPreset.PictureDeblockPreset != "off")
             {
-                preset.Task.DeblockTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockTune));
+                VideoFilter filter = new VideoFilter(
+                    (int)hb_filter_ids.HB_FILTER_DEBLOCK,
+                    new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockPreset)),
+                    new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockTune)),
+                    importedPreset.PictureDeblockCustom);
+                
+                preset.Task.VideoFilters.Add(filter);
             }
-            else
-            {
-                preset.Task.DeblockTune = new FilterTune("Off", "off");
-            }
-           
-            preset.Task.CustomDeblock = importedPreset.PictureDeblockCustom;
 
             if (importedPreset.PictureSharpenFilter != null)
             {
-                preset.Task.Sharpen = EnumHelper<Sharpen>.GetValue(importedPreset.PictureSharpenFilter);
-                hb_filter_ids filterId = hb_filter_ids.HB_FILTER_INVALID;
-                switch (preset.Task.Sharpen)
+                int filterId = 0;
+                switch (importedPreset.PictureSharpenFilter)
                 {
-                    case Sharpen.LapSharp:
-                        filterId = hb_filter_ids.HB_FILTER_LAPSHARP;
+                    case "lapsharp":
+                        filterId = (int)hb_filter_ids.HB_FILTER_LAPSHARP;
                         break;
-                    case Sharpen.UnSharp:
-                        filterId = hb_filter_ids.HB_FILTER_UNSHARP;
+                    
+                    case "unsharp":
+                        filterId = (int)hb_filter_ids.HB_FILTER_UNSHARP;
                         break;
                 }
-
-                if (filterId != hb_filter_ids.HB_FILTER_INVALID)
+                
+                if (filterId != 0)
                 {
-                    preset.Task.SharpenPreset = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureSharpenPreset));
-                    preset.Task.SharpenTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureSharpenTune));
-                    preset.Task.SharpenCustom = importedPreset.PictureSharpenCustom;
-                }
-                else
-                {
-                    // Default Values.
-                    preset.Task.SharpenPreset = new FilterPreset("Medium", "medium");
-                    preset.Task.SharpenTune = new FilterTune("None", "none");
-                    preset.Task.SharpenCustom = string.Empty;
+                    VideoFilter filter = new VideoFilter(
+                        filterId,
+                        new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets(filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureSharpenPreset)),
+                        new FilterTune(HandBrakeFilterHelpers.GetFilterTunes(filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureSharpenTune)),
+                        importedPreset.PictureSharpenCustom);
+                    preset.Task.VideoFilters.Add(filter);
                 }
             }
 
-            switch (importedPreset.PictureDeinterlaceFilter)
+            if (importedPreset.PictureDeinterlaceFilter != null)
             {
-                case "decomb":
-                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Decomb;
-                    break;
-                case "yadif":
-                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Yadif;
-                    break;
-                case "bwdif":
-                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Bwdif;
-                    break;
-                default:
-                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Off;
-                    break;
-            }
-
-            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb)
-            {
-                List<HBPresetTune> filterPresets = HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DECOMB);
-                HBPresetTune presetTune = filterPresets.FirstOrDefault(f => f.ShortName == importedPreset.PictureDeinterlacePreset);
-                preset.Task.DeinterlacePreset = presetTune ?? new HBPresetTune("Default", "default");
-                preset.Task.CustomDeinterlaceSettings = importedPreset.PictureDeinterlaceCustom;
-            }
-
-            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif)
-            {
-                List<HBPresetTune> filterPresets = HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_YADIF);
-                HBPresetTune presetTune = filterPresets.FirstOrDefault(f => f.ShortName == importedPreset.PictureDeinterlacePreset);
-                preset.Task.DeinterlacePreset = presetTune ?? new HBPresetTune("Default", "default");
-                preset.Task.CustomDeinterlaceSettings = importedPreset.PictureDeinterlaceCustom;
-            }
-
-            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Bwdif)
-            {
-                List<HBPresetTune> filterPresets = HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_BWDIF);
-                HBPresetTune presetTune = filterPresets.FirstOrDefault(f => f.ShortName == importedPreset.PictureDeinterlacePreset);
-                preset.Task.DeinterlacePreset = presetTune ?? new HBPresetTune("Default", "default");
-                preset.Task.CustomDeinterlaceSettings = importedPreset.PictureDeinterlaceCustom;
-            }
-
-            if (preset.Task.DeinterlaceFilter != DeinterlaceFilter.Off)
-            {
-                switch (importedPreset.PictureCombDetectPreset)
+                int filterId = 0;
+                switch (importedPreset.PictureDeinterlaceFilter)
                 {
-                    case "off":
-                        preset.Task.CombDetect = CombDetect.Off;
+                    case "yadif":
+                        filterId = (int)hb_filter_ids.HB_FILTER_YADIF;
                         break;
-                    case "custom":
-                        preset.Task.CombDetect = CombDetect.Custom;
+
+                    case "decomb":
+                        filterId = (int)hb_filter_ids.HB_FILTER_DECOMB;
                         break;
-                    case "default":
-                        preset.Task.CombDetect = CombDetect.Default;
+
+                    case "bwdif":
+                        filterId = (int)hb_filter_ids.HB_FILTER_BWDIF;
                         break;
-                    case "permissive":
-                        preset.Task.CombDetect = CombDetect.LessSensitive;
-                        break;
-                    case "fast":
-                        preset.Task.CombDetect = CombDetect.Fast;
-                        break;
-                    default:
-                        preset.Task.CombDetect = CombDetect.Off;
-                        break;
+                }
+
+                if (filterId != 0)
+                {
+                    VideoFilter filter = new VideoFilter(
+                        filterId,
+                        new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets(filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeinterlacePreset)),
+                        null,
+                        importedPreset.PictureDeinterlaceCustom);
+                    preset.Task.VideoFilters.Add(filter);
                 }
             }
 
-            preset.Task.CustomDenoise = importedPreset.PictureDenoiseCustom;
-            preset.Task.CustomDetelecine = importedPreset.PictureDetelecineCustom;
-            preset.Task.CustomCombDetect = importedPreset.PictureCombDetectCustom;
-
-            switch (importedPreset.PictureDetelecine)
+            if (!string.IsNullOrEmpty(importedPreset.PictureCombDetectPreset) && importedPreset.PictureCombDetectPreset != "off")
             {
-                case "custom":
-                    preset.Task.Detelecine = Detelecine.Custom;
-                    break;
-                case "default":
-                    preset.Task.Detelecine = Detelecine.Default;
-                    break;
-                default:
-                    preset.Task.Detelecine = Detelecine.Off;
-                    break;
+                VideoFilter filter = new VideoFilter(
+                    (int)hb_filter_ids.HB_FILTER_COMB_DETECT,
+                    new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_COMB_DETECT).FirstOrDefault(s => s.ShortName == importedPreset.PictureCombDetectPreset)),
+                    null,
+                    importedPreset.PictureCombDetectCustom);
+
+                preset.Task.VideoFilters.Add(filter);
             }
 
-            int denoiseFilterId = 0;
-            switch (importedPreset.PictureDenoiseFilter)
+            if (importedPreset.PictureDenoiseFilter != null)
             {
-                case "nlmeans":
-                    denoiseFilterId = (int)hb_filter_ids.HB_FILTER_NLMEANS;
-                    preset.Task.Denoise = Denoise.NLMeans;
-                    break;
-                case "hqdn3d":
-                    denoiseFilterId = (int)hb_filter_ids.HB_FILTER_HQDN3D;
-                    preset.Task.Denoise = Denoise.hqdn3d;
-                    break;
-                default:
-                    preset.Task.Denoise = Denoise.Off;
-                    break;
+                int filterId = 0;
+                switch (importedPreset.PictureDenoiseFilter)
+                {
+                    case "hqdn3d":
+                        filterId = (int)hb_filter_ids.HB_FILTER_HQDN3D;
+                        break;
+
+                    case "nlmeans":
+                        filterId = (int)hb_filter_ids.HB_FILTER_NLMEANS;
+                        break;
+                }
+
+                if (filterId != 0)
+                {
+                    VideoFilter filter = new VideoFilter(
+                        filterId,
+                        new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets(filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureDenoisePreset)),
+                        new FilterTune(HandBrakeFilterHelpers.GetFilterTunes(filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureDenoiseTune)),
+                        importedPreset.PictureDenoiseCustom);
+                    preset.Task.VideoFilters.Add(filter);
+                }
             }
 
-            preset.Task.DenoisePreset = HandBrakeFilterHelpers.GetPreset(denoiseFilterId, importedPreset.PictureDenoisePreset);
-            preset.Task.DenoiseTune = HandBrakeFilterHelpers.GetTune(denoiseFilterId, importedPreset.PictureDenoiseTune);
-            
+
+            if (importedPreset.PictureDetelecine != null && importedPreset.PictureDetelecine != "off")
+            {
+                VideoFilter filter = new VideoFilter(
+                    (int)hb_filter_ids.HB_FILTER_DETELECINE,
+                    new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DETELECINE).FirstOrDefault(s => s.ShortName == importedPreset.PictureDetelecine)),
+                    null,
+                    importedPreset.PictureDetelecineCustom);
+
+                preset.Task.VideoFilters.Add(filter);
+            }
+
             // Rotation and Flip
             if (!string.IsNullOrEmpty(importedPreset.PictureRotate))
             {
@@ -272,7 +242,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     int rotate;
                     if (int.TryParse(rotation[0], out rotate))
                     {
-                        preset.Task.Rotation = int.Parse(rotation[0]);
+                        preset.Task.Rotation = rotate;
                         preset.Task.FlipVideo = rotation[1] == "1";
                     }
                 }
@@ -301,7 +271,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             }
 
             preset.Task.ExtraAdvancedArguments = importedPreset.VideoOptionExtra;
-            preset.Task.Quality = double.Parse(importedPreset.VideoQualitySlider.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+            preset.Task.Quality = importedPreset.VideoQualitySlider;
             preset.Task.VideoEncodeRateType = (VideoEncodeRateType)importedPreset.VideoQualityType;
             preset.Task.VideoLevel = new VideoLevel(importedPreset.VideoLevel, importedPreset.VideoLevel);
             preset.Task.VideoPreset = new VideoPreset(importedPreset.VideoPreset, importedPreset.VideoPreset);
@@ -444,22 +414,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             /* Chapter Marker Settings */
             preset.Task.IncludeChapterMarkers = importedPreset.ChapterMarkers;
-
-            /* Not Supported Yet */
-            // public int VideoColorMatrixCode { get; set; }
-            // public bool VideoQSVDecode { get; set; }
-            // public int VideoQSVAsyncDepth { get; set; }
-            // public bool SubtitleAddForeignAudioSubtitle { get; set; }
-            // public bool SubtitleBurnBDSub { get; set; }
-            // public bool SubtitleBurnDVDSub { get; set; }
-            // public bool PictureItuPAR { get; set; }
-            // public bool PictureLooseCrop { get; set; }
-            // public int PicturePARWidth { get; set; }
-            // public int PicturePARHeight { get; set; }
-            // public int PictureForceHeight { get; set; }
-            // public int PictureForceWidth { get; set; }
-            // public List<object> ChildrenArray { get; set; }
-            // public int Type { get; set; }
 
             return preset;
         }
@@ -612,45 +566,110 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureRightCrop = export.Task.Cropping.Right;
 
             // Filters
-            preset.PictureDeblockPreset = export.Task.DeblockPreset?.Key;
-            preset.PictureDeblockTune = export.Task.DeblockTune?.Key;
-            preset.PictureDeblockCustom = export.Task.CustomDeblock;
+            preset.VideoGrayScale = export.Task.VideoFilters.Any(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_GRAYSCALE);
 
-            preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb ? "decomb"
-                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? "yadif"
-                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Bwdif ? "bwdif" : "off";
-            preset.PictureDeinterlacePreset = export.Task.DeinterlacePreset?.ShortName;
-            preset.PictureDeinterlaceCustom = export.Task.CustomDeinterlaceSettings;
+            VideoFilter deblock = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_DEBLOCK);
+            if (deblock != null)
+            {
+                preset.PictureDeblockPreset = deblock.Preset?.Key;
+                preset.PictureDeblockTune = deblock.Tune?.Key;
+                preset.PictureDeblockCustom = deblock.CustomOptions;
+            }
 
-            preset.PictureCombDetectPreset = EnumHelper<CombDetect>.GetShortName(export.Task.CombDetect);
-            preset.PictureCombDetectCustom = export.Task.CustomCombDetect;
+            VideoFilter yadif = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_YADIF);
+            if (yadif != null)
+            {
+                preset.PictureDeinterlaceFilter = "yadif";
+                preset.PictureDeinterlacePreset = yadif.Preset?.Key;
+                preset.PictureDeinterlaceCustom = yadif.CustomOptions;
+            }
 
-            preset.PictureDenoiseCustom = export.Task.CustomDenoise;
-            preset.PictureDenoiseFilter = EnumHelper<Denoise>.GetShortName(export.Task.Denoise);
-            preset.PictureDenoisePreset = export.Task.DenoisePreset?.ShortName;
-            preset.PictureDenoiseTune = export.Task.DenoiseTune?.ShortName;
-            preset.PictureDetelecine = EnumHelper<Detelecine>.GetShortName(export.Task.Detelecine);
+            VideoFilter bwdif = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_BWDIF);
+            if (bwdif != null)
+            {
+                preset.PictureDeinterlaceFilter = "bwdif";
+                preset.PictureDeinterlacePreset = bwdif.Preset?.Key;
+                preset.PictureDeinterlaceCustom = bwdif.CustomOptions;
+            }
 
-            preset.PictureDetelecineCustom = export.Task.CustomDetelecine;
+            VideoFilter decomb = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_DECOMB);
+            if (decomb != null)
+            {
+                preset.PictureDeinterlaceFilter = "decomb";
+                preset.PictureDeinterlacePreset = decomb.Preset?.Key;
+                preset.PictureDeinterlaceCustom = decomb.CustomOptions;
+            }
 
-            preset.PictureSharpenFilter = EnumHelper<Sharpen>.GetShortName(export.Task.Sharpen);
-            preset.PictureSharpenPreset = export.Task.SharpenPreset != null ? export.Task.SharpenPreset.Key : string.Empty; 
-            preset.PictureSharpenTune = export.Task.SharpenTune != null ? export.Task.SharpenTune.Key : string.Empty;
-            preset.PictureSharpenCustom = export.Task.SharpenCustom;
+            VideoFilter combDetect = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_COMB_DETECT);
+            if (combDetect != null)
+            {
+                preset.PictureCombDetectPreset = combDetect.Preset?.Key;
+                preset.PictureCombDetectCustom = combDetect.CustomOptions;
+            }
 
-            preset.PictureColorspacePreset = export.Task.Colourspace?.Key;
-            preset.PictureColorspaceCustom = export.Task.CustomColourspace;
+            VideoFilter hqdn3d = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_HQDN3D);
+            if (hqdn3d != null)
+            {
+                preset.PictureDenoiseFilter = "hqdn3d";
+                preset.PictureDenoisePreset = hqdn3d.Preset?.Key;
+                preset.PictureDenoiseTune = hqdn3d.Tune?.Key;
+                preset.PictureDenoiseCustom = hqdn3d.CustomOptions;
+            }
 
-            preset.PictureChromaSmoothPreset = export.Task.ChromaSmooth?.Key;
-            preset.PictureChromaSmoothTune = export.Task.ChromaSmoothTune?.Key;
-            preset.PictureChromaSmoothCustom = export.Task.CustomChromaSmooth;
-            
+            VideoFilter nlmeans = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_NLMEANS);
+            if (nlmeans != null)
+            {
+                preset.PictureDenoiseFilter = "nlmeans";
+                preset.PictureDenoisePreset = nlmeans.Preset?.Key;
+                preset.PictureDenoiseTune = nlmeans.Tune?.Key;
+                preset.PictureDenoiseCustom = nlmeans.CustomOptions;
+            }
+
+            VideoFilter detelecine = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_DETELECINE);
+            if (detelecine != null)
+            {
+                preset.PictureDetelecine = detelecine.Preset?.Key ?? "default";
+                preset.PictureDetelecineCustom = detelecine.CustomOptions;
+            }
+
+            VideoFilter lapsharp = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_LAPSHARP);
+            if (lapsharp != null)
+            {
+                preset.PictureSharpenFilter = "lapsharp";
+                preset.PictureSharpenPreset = lapsharp.Preset?.Key;
+                preset.PictureSharpenTune = lapsharp.Tune?.Key;
+                preset.PictureSharpenCustom = lapsharp.CustomOptions;
+            }
+
+            VideoFilter unsharp = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_UNSHARP);
+            if (unsharp != null)
+            {
+                preset.PictureSharpenFilter = "unsharp";
+                preset.PictureSharpenPreset = unsharp.Preset?.Key;
+                preset.PictureSharpenTune = unsharp.Tune?.Key;
+                preset.PictureSharpenCustom = unsharp.CustomOptions;
+            }
+
+            VideoFilter colorspace = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_COLORSPACE);
+            if (colorspace != null)
+            {
+                preset.PictureColorspacePreset = colorspace.Preset?.Key;
+                preset.PictureColorspaceCustom = colorspace.CustomOptions;
+            }
+
+            VideoFilter chromaSmooth = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH);
+            if (chromaSmooth != null)
+            {
+                preset.PictureChromaSmoothPreset = chromaSmooth.Preset?.Key;
+                preset.PictureChromaSmoothTune = chromaSmooth.Tune?.Key;
+                preset.PictureChromaSmoothCustom = chromaSmooth.CustomOptions;
+            }
+
             // Video
             preset.VideoEncoder = export.Task.VideoEncoder?.ShortName;
             preset.VideoFramerate = export.Task.Framerate.HasValue ? export.Task.Framerate.ToString() : null;
             preset.VideoFramerateMode = EnumHelper<FramerateMode>.GetShortName(export.Task.FramerateMode);
             preset.VideoColorRange = EnumHelper<VideoColourRange>.GetShortName(export.Task.VideoColourRange);
-            preset.VideoGrayScale = export.Task.Grayscale;
             preset.VideoLevel = export.Task.VideoLevel != null ? export.Task.VideoLevel.ShortName : null;
             preset.VideoOptionExtra = export.Task.ExtraAdvancedArguments;
             preset.VideoPreset = export.Task.VideoPreset != null ? export.Task.VideoPreset.ShortName : null;

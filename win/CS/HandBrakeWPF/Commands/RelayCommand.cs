@@ -85,6 +85,34 @@ namespace HandBrakeWPF.Commands
                     }
                 }
             }
+            else if (parameter != null)
+            {
+                // Handle non-string object parameters
+                Type paramType = parameter.GetType();
+                MethodInfo[] methods = type.GetMethods();
+
+                foreach (MethodInfo method in methods)
+                {
+                    ParameterInfo[] methodParams = method.GetParameters();
+                    if (methodParams.Length == 1 && methodParams[0].ParameterType.IsAssignableFrom(paramType))
+                    {
+                        try
+                        {
+                            method.Invoke(viewModel, new object[] { parameter });
+                            return;
+                        }
+                        catch (Exception e)
+                        {
+                            if (e.InnerException != null && e.InnerException.GetType() == typeof(GeneralApplicationException))
+                            {
+                                throw e.InnerException;
+                            }
+
+                            throw;
+                        }
+                    }
+                }
+            }
         }
 
         public event EventHandler CanExecuteChanged;

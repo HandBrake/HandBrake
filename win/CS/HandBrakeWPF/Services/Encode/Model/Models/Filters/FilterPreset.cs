@@ -1,38 +1,40 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FilterTune.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="FilterPreset.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Preset Tune
+//   Preset Filter
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model.Filters
+namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
 {
+    using HandBrake.App.Core.Extensions;
     using HandBrake.Interop.Interop.Interfaces.Model.Filters;
 
-    public class FilterTune
+    public class FilterPreset
     {
-        public FilterTune()
+        public FilterPreset()
         {
         }
 
-        public FilterTune(string displayName, string key)
+        public FilterPreset(string displayName, string key)
         {
-            this.DisplayName = displayName;
+            this.DisplayName = displayName?.ToTitleCase();
             this.Key = key;
         }
 
-        public FilterTune(HBPresetTune presetTune)
+        public FilterPreset(HBPresetTune presetTune)
         {
             this.DisplayName = presetTune?.Name;
             this.Key = presetTune?.ShortName;
         }
 
         public string DisplayName { get; set; }
+        
         public string Key { get; set; }
 
-        protected bool Equals(FilterTune other)
+        protected bool Equals(FilterPreset other)
         {
             return string.Equals(this.Key, other.Key);
         }
@@ -42,12 +44,12 @@ namespace HandBrakeWPF.Model.Filters
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((FilterTune)obj);
+            return Equals((FilterPreset)obj);
         }
 
         public override int GetHashCode()
         {
-            return this.Key != null ? this.Key.GetHashCode() : 0;
+            return (this.Key != null ? this.Key.GetHashCode() : 0);
         }
     }
 }
