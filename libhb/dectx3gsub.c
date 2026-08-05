@@ -93,26 +93,51 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
      *
      * Look for a single StyleBox ('styl') and read all contained StyleRecords.
      * Ignore all other box types.
-     *
-     * NOTE: Buffer overflows on read are not checked.
      */
+    if (in->size < 2)
+    {
+        goto fail;
+    }
+
     uint16_t textLength = READ_U16();
+
+    if (in->size < textLength + 2)
+    {
+        goto fail;
+    }
+
     uint8_t *text = READ_ARRAY(textLength);
     while ( pos < end )
     {
         /*
          * Read TextSampleModifierBox
          */
+        if (end - pos < 4)
+        {
+            goto fail;
+        }
+
         uint32_t size = READ_U32();
+
+        if (size > end - pos + 4)
+        {
+            goto fail;
+        }
         if ( size == 0 )
         {
-            size = pos - end;   // extends to end of packet
+            size = end - pos;   // extends to end of packet
         }
         if ( size == 1 )
         {
             hb_log( "dectx3gsub: TextSampleModifierBox has unsupported large size" );
             break;
         }
+
+        if (end - pos < 4)
+        {
+            goto fail;
+        }
+
         uint32_t type = READ_U32();
         if (type == FOURCC("uuid"))
         {
@@ -131,6 +156,11 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
                 continue;
             }
 
+            if (end - pos < 2)
+            {
+                goto fail;
+            }
+
             numStyleRecords = READ_U16();
             if (numStyleRecords > 0)
             {
@@ -139,6 +169,11 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
                 {
                     goto fail;
                 }
+            }
+
+            if (end - pos < numStyleRecords * 12)
+            {
+                goto fail;
             }
 
             int i;
@@ -234,9 +269,12 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
     out->s.stop         = in->s.stop;
     out->s.scr_sequence = in->s.scr_sequence;
 
-fail:
     free(styleRecords);
+    return out;
 
+fail:
+    hb_log("dectx3gsub: failed to decode packet");
+    free(styleRecords);
     return out;
 }
 
