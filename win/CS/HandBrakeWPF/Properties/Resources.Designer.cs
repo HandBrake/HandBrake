@@ -1412,6 +1412,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deband.
+        /// </summary>
+        public static string Filter_deband {
+            get {
+                return ResourceManager.GetString("Filter_deband", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deblock.
         /// </summary>
         public static string Filter_deblock {

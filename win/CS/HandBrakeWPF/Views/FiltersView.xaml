@@ -129,7 +129,7 @@
                     <GridViewColumn Header="{x:Static Properties:Resources.FilterView_Filter}" Width="150" />
                     <GridViewColumn Header="{x:Static Properties:Resources.FilterView_Preset}" Width="150" />
                     <GridViewColumn Header="{x:Static Properties:Resources.FilterView_Tune}" Width="150" />
-                    <GridViewColumn Header="{x:Static Properties:Resources.FilterView_Custom}" Width="250" />
+                    <GridViewColumn Header="{x:Static Properties:Resources.FilterView_Custom}" Width="400" />
                 </GridView>
             </ListView.View>
 
@@ -166,7 +166,7 @@
                                 <ColumnDefinition Width="150"/> <!-- Filter -->
                                 <ColumnDefinition Width="150" /> <!-- Preset -->
                                 <ColumnDefinition Width="150" /> <!-- Tune -->
-                                <ColumnDefinition Width="250" /> <!-- Custom -->
+                                <ColumnDefinition Width="400" /> <!-- Custom -->
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>

@@ -126,8 +126,22 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
                 {
                     return;
                 }
+                
+                bool isCurrentlyCustom = this.Preset != null && this.Preset.Key == "custom";
 
                 field = value;
+
+                
+                if (!isCurrentlyCustom && Preset?.Key == "custom" && this.FilterId != 0 && string.IsNullOrEmpty(this.CustomOptions))
+                {
+                    this.CustomOptions = HandBrakeFilterHelpers.GetDefaultCustomSettingsStr(this.FilterId);
+                } 
+                else if (isCurrentlyCustom && Preset?.Key != "custom")
+                {
+                    this.CustomOptions = string.Empty;
+                }
+                
+                
                 this.NotifyOfPropertyChange(() => this.Preset);
                 this.NotifyOfPropertyChange(() => this.CanSetTune);
                 this.NotifyOfPropertyChange(() => this.AllowsCustomOptions);

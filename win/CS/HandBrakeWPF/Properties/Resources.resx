@@ -3107,4 +3107,7 @@ Do you wish to proceed?</value>
   <data name="FilterView_AddFilter" xml:space="preserve">
     <value>Add Filter</value>
   </data>
+  <data name="Filter_deband" xml:space="preserve">
+    <value>Deband</value>
+  </data>
 </root>
