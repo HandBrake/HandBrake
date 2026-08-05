@@ -35,5 +35,14 @@ namespace HandBrakeWPF.Views
                 button.ContextMenu.IsOpen = true;
             }
         }
+
+        private void ListViewItem_PreviewMouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ListViewItem item = sender as ListViewItem;
+            if (item != null && !item.IsSelected)
+            {
+                item.IsSelected = true;
+            }
+        }
     }
 }

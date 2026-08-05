@@ -1718,6 +1718,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Filter.
+        /// </summary>
+        public static string FilterView_AddFilter {
+            get {
+                return ResourceManager.GetString("FilterView_AddFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string FilterView_Custom {

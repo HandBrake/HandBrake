@@ -51,6 +51,8 @@ namespace HandBrakeWPF.ViewModels
 
         public SimpleRelayCommand<VideoFilter> RemoveCommand { get; set; }
 
+        public ListboxDeleteCommand DeleteCommand => new ListboxDeleteCommand();
+
         public EncodeTask CurrentTask { get; private set; }
 
         public BindingList<HandBrakeFilter> AvailableFilters { get; private set; }
@@ -141,16 +143,6 @@ namespace HandBrakeWPF.ViewModels
         private void BuildAvailableFiltersMenu()
         {
             this.AvailableFiltersMenu.Clear();
-
-            // Group filters by category
-            var categorizedFilters = this.AvailableFilters
-                .Where(f => !string.IsNullOrEmpty(f.Category))
-                .GroupBy(f => f.Category)
-                .ToList();
-
-            var uncategorizedFilters = this.AvailableFilters
-                .Where(f => string.IsNullOrEmpty(f.Category))
-                .ToList();
 
             // Track category nodes by category name
             Dictionary<string, FilterMenuItem> categoryNodes = new Dictionary<string, FilterMenuItem>();

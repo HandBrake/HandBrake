@@ -40,12 +40,13 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="filterOptionsButton" FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0" Click="OptionsButton_OnClick">
+                <Button x:Name="filterOptionsButton" FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0" Click="OptionsButton_OnClick"
+                        AutomationProperties.Name="{x:Static Properties:Resources.FilterView_AddFilter}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="0,0,5,0" Padding="0"
                                        VerticalAlignment="Center"
-                                       Text="{x:Static Properties:Resources.Shared_AddTrack}" />
+                                       Text="{x:Static Properties:Resources.FilterView_AddFilter}" />
 
                             <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
@@ -70,7 +71,8 @@
                 <Button MinWidth="65" Grid.Column="4"
                         Margin="0,0,0,0"
                         Command="{Binding RelayCommand}" CommandParameter="Clear"
-                        Content="{x:Static Properties:Resources.Generic_Clear}" />
+                        Content="{x:Static Properties:Resources.Generic_Clear}"
+                        AutomationProperties.Name="{x:Static Properties:Resources.Generic_Clear}" />
             </Grid>
         </Grid>
 
@@ -100,6 +102,27 @@
                 </Style>
             </ListView.Resources>
 
+            <ListView.ContextMenu>
+                <ContextMenu>
+
+                    <MenuItem Header="{x:Static Properties:Resources.FilterView_AddFilter}" ItemsSource="{Binding AvailableFiltersMenu}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{Binding Header}" />
+                                <Setter Property="ItemsSource" Value="{Binding Children}" />
+                                <Setter Property="Command" Value="{Binding DataContext.RelayCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                <Setter Property="CommandParameter" Value="{Binding Filter}" />
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="{x:Static Properties:Resources.QueueView_Delete}" Command="{Binding DeleteCommand}"
+               CommandParameter="{Binding PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                    <Separator/>
+                    <MenuItem Header="{x:Static Properties:Resources.Generic_Clear}"  Command="{Binding RelayCommand}" CommandParameter="Clear" />
+                </ContextMenu>
+            </ListView.ContextMenu>
+
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn Header="" Width="28" />
@@ -118,6 +141,7 @@
                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="0,0,0,1" />
+                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="ListViewItem_PreviewMouseRightButtonDown" />
                 </Style>
             </ListView.ItemContainerStyle>
 
@@ -155,20 +179,24 @@
                             <TextBlock Text="{Binding DisplayName}" Grid.Column="1" Margin="5,0,0,0" />
 
                             <ComboBox Grid.Column="2"  Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="Presets for this filter." DisplayMemberPath="DisplayName"
-                                      ItemsSource="{Binding AvailablePresets}" SelectedItem="{Binding Preset}" Visibility="{Binding CanSetPreset, Converter={StaticResource boolToVisConverter}}" />
+                                      ItemsSource="{Binding AvailablePresets}" SelectedItem="{Binding Preset}" Visibility="{Binding CanSetPreset, Converter={StaticResource boolToVisConverter}}"
+                                      AutomationProperties.Name="{x:Static Properties:Resources.FilterView_Preset}" />
 
                             <ComboBox Grid.Column="3"  Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="Tunes for this filter." DisplayMemberPath="DisplayName"
-                                      ItemsSource="{Binding AvailableTunes}" SelectedItem="{Binding Tune}" Visibility="{Binding CanSetTune, Converter={StaticResource boolToVisConverter}}" />
+                                      ItemsSource="{Binding AvailableTunes}" SelectedItem="{Binding Tune}" Visibility="{Binding CanSetTune, Converter={StaticResource boolToVisConverter}}"
+                                      AutomationProperties.Name="{x:Static Properties:Resources.FilterView_Tune}" />
 
                             <TextBox Text="{Binding CustomOptions}" Grid.Column="4" Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="Custom options for this filter."
-                                     Visibility="{Binding AllowsCustomOptions, Converter={StaticResource boolToVisConverter}}" />
+                                     Visibility="{Binding AllowsCustomOptions, Converter={StaticResource boolToVisConverter}}"
+                                     AutomationProperties.Name="{x:Static Properties:Resources.FilterView_Custom}" />
                         </Grid>
 
                         <!--  Delete  -->
                         <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">
 
                             <Button Style="{StaticResource TransparentButtonStyle}" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"          
-                                    CommandParameter="{Binding}">
+                                    CommandParameter="{Binding}"
+                                    AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Delete}">
                                 <Button.Content>
                                     <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png" />
                                 </Button.Content>

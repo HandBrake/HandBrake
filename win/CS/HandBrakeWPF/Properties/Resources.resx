@@ -3104,4 +3104,7 @@ Do you wish to proceed?</value>
   <data name="FiltersView_Tune" xml:space="preserve">
     <value>Tune</value>
   </data>
+  <data name="FilterView_AddFilter" xml:space="preserve">
+    <value>Add Filter</value>
+  </data>
 </root>
