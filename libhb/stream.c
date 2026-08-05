@@ -1457,9 +1457,9 @@ static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid,
 
             case 0x30: // adaptation
                 adapt_len = buf[4] + 1;
-                if (adapt_len > 184)
+                if (adapt_len > 181)
                 {
-                    hb_log("hb_ts_stream_getPEStype: invalid adaptation field length %d for PID 0x%x", buf[4], pid);
+                    hb_log("hb_ts_stream_getPEStype: insufficient payload after adaptation field for PID 0x%x", pid);
                     continue;
                 }
                 break;
@@ -2837,7 +2837,7 @@ static int build_program_map(const uint8_t *buf, hb_stream_t *stream)
             adapt_len = 184;
     else if (adaption == 0x3)
             adapt_len = buf[4] + 1;
-    if (adapt_len > 184)
+    if (adapt_len >= 184)
             return 0;
 
     // Get payload start indicator
@@ -2850,6 +2850,11 @@ static int build_program_map(const uint8_t *buf, hb_stream_t *stream)
     if (start)
     {
         pointer_len = buf[4 + adapt_len] + 1;
+        if (pointer_len > 184 - adapt_len)
+        {
+            hb_log("build_program_map - Invalid pointer field");
+            return 0;
+        }
         stream->pmt_info.tablepos = 0;
     }
     // Get Continuity Counter
@@ -2913,15 +2918,24 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
             adapt_len = 184;
     else if (adaption == 0x3)
             adapt_len = buf[4] + 1;
-    if (adapt_len > 184)
+    if (adapt_len >= 184)
             return 0;
-
-    // Get pointer length
-    int pointer_len = buf[4 + adapt_len] + 1;
 
     // Get payload start indicator
     int start;
     start = (buf[1] & 0x40) != 0;
+
+    // The pointer field is present only at the start of a section.
+    int pointer_len = 0;
+    if (start)
+    {
+        pointer_len = buf[4 + adapt_len] + 1;
+        if (pointer_len > 184 - adapt_len)
+        {
+            hb_log("decode_PAT - Invalid pointer field");
+            return 0;
+        }
+    }
 
     if (start)
             reading = 1;
@@ -2942,6 +2956,10 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
     {
             memcpy(tablebuf + tablepos, buf + 4 + adapt_len + 1, pointer_len - 1);
 
+            if (tablepos < 12)
+            {
+                return 0;
+            }
 
             unsigned int pos = 0;
             //while (pos < tablepos)
@@ -2952,6 +2970,11 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
                     unsigned char section_id    = bits_get(&bb, 8);
                     bits_get(&bb, 4);
                     unsigned int section_len    = bits_get(&bb, 12);
+                    if (section_len < 9 || section_len + 3 > tablepos)
+                    {
+                        hb_log("decode_PAT - Invalid program section length");
+                        return 0;
+                    }
                     bits_get(&bb, 16); // transport_id
                     bits_get(&bb, 2);
                     bits_get(&bb, 5);  // version_num
