@@ -12,7 +12,7 @@
         MinWidth="750"
         Width="750"
         Height="600"
-        MinHeight="600"
+        MinHeight="500"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
         mc:Ignorable="d">
