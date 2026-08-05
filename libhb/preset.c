@@ -253,9 +253,9 @@ static int presets_do(preset_do_f do_func, hb_value_t *preset,
         // Then perform preset action on the children of the folder
         if (ctx->path.depth >= HB_MAX_PRESET_FOLDER_DEPTH)
         {
-            // Children cannot be represented by the fixed-size path.
-            hb_dict_set(preset, "ChildrenArray", hb_value_array_init());
-            return PRESET_DO_NEXT;
+            hb_log("Discarding preset folder nested deeper than %d levels\n",
+                   HB_MAX_PRESET_FOLDER_DEPTH - 1);
+            return PRESET_DO_DELETE;
         }
         ctx->path.depth++;
         next = hb_dict_get(preset, "ChildrenArray");
