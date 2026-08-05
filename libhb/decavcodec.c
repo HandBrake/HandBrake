@@ -1662,6 +1662,15 @@ static void filter_video(hb_work_private_t *pv)
         pv->frame->color_range     = pv->title->color_range;
     }
 
+    // FIXME: AVCOL_SPC_IPT_C2 is not well supported
+    // by filter graph link negotiation yet
+    if (pv->frame->colorspace == AVCOL_SPC_IPT_C2)
+    {
+        pv->frame->color_primaries = AVCOL_PRI_UNSPECIFIED;
+        pv->frame->color_trc       = AVCOL_TRC_UNSPECIFIED;
+        pv->frame->colorspace      = AVCOL_SPC_UNSPECIFIED;
+    }
+
     // J pixel formats are mostly deprecated, however
     // they are still set by decoders, breaking some filters
     sanitize_deprecated_pix_fmts(pv->frame);
