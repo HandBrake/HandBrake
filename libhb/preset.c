@@ -251,6 +251,12 @@ static int presets_do(preset_do_f do_func, hb_value_t *preset,
             return result;
 
         // Then perform preset action on the children of the folder
+        if (ctx->path.depth >= HB_MAX_PRESET_FOLDER_DEPTH)
+        {
+            hb_log("Discarding preset folder nested deeper than %d levels\n",
+                   HB_MAX_PRESET_FOLDER_DEPTH - 1);
+            return PRESET_DO_DELETE;
+        }
         ctx->path.depth++;
         next = hb_dict_get(preset, "ChildrenArray");
         result = presets_do(do_func, next, ctx);
