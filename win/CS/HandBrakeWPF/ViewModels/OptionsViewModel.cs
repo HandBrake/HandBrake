@@ -54,6 +54,7 @@ namespace HandBrakeWPF.ViewModels
         private string autoNameDefaultPath;
         private bool automaticallyNameFiles;
         private string autonameFormat;
+        private int autoIncrementPadding;
         private bool changeToTitleCase;
         private bool checkForUpdates;
         private UpdateCheck checkForUpdatesFrequency;
@@ -543,6 +544,23 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public int AutoIncrementPadding
+        {
+            get => this.autoIncrementPadding;
+
+            set
+            {
+                value = Math.Clamp(value, AutoNameHelper.AutoIncrementPadMin, AutoNameHelper.AutoIncrementPadMax);
+                if (value == this.autoIncrementPadding)
+                {
+                    return;
+                }
+
+                this.autoIncrementPadding = value;
+                this.NotifyOfPropertyChange(() => this.AutoIncrementPadding);
+            }
+        }
+
         public bool ChangeToTitleCase
         {
             get => this.changeToTitleCase;
@@ -683,6 +701,7 @@ namespace HandBrakeWPF.ViewModels
                     new PlaceHolderBucket { Name = Constants.StorageHeight },
                     new PlaceHolderBucket { Name = Constants.Codec },
                     new PlaceHolderBucket { Name = Constants.Encoder },
+                    new PlaceHolderBucket { Name = Constants.AutoIncrement },
                 };
             }
         }
@@ -1583,6 +1602,9 @@ namespace HandBrakeWPF.ViewModels
             string anf = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) ?? string.Empty;
             this.AutonameFormat = this.IsValidAutonameFormat(anf, true) ? anf : "{source}-{title}";
 
+            // Auto-increment zero-padding
+            this.AutoIncrementPadding = this.userSettingService.GetUserSetting<int>(UserSettingConstants.AutoNameAutoIncrementPadding);
+
             // Use iPod/iTunes friendly .m4v extension for MP4 files.
             this.SelectedMp4Extension = (Mp4Behaviour)this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v);
 
@@ -1849,7 +1871,25 @@ namespace HandBrakeWPF.ViewModels
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);
+
+            string previousAutonameFormat = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
+            int previousAutoIncrementPadding = this.userSettingService.GetUserSetting<int>(UserSettingConstants.AutoNameAutoIncrementPadding);
+
+            // Store the format before the counter below, so that the main window regenerates the destination against the new format.
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameFormat, this.AutonameFormat);
+
+            // A new naming format starts a new {auto-increment} sequence, e.g. a new TV series
+            if (!string.Equals(previousAutonameFormat, this.AutonameFormat, StringComparison.Ordinal))
+            {
+                this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameAutoIncrementNext, 1);
+            }
+
+            // Only store the padding when it changes, so that saving the options doesn't discard a manually entered destination.
+            if (this.AutoIncrementPadding != previousAutoIncrementPadding)
+            {
+                this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameAutoIncrementPadding, this.AutoIncrementPadding);
+            }
+
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNamePath, this.AutoNameDefaultPath);
             this.userSettingService.SetUserSetting(UserSettingConstants.UseM4v, (int)this.SelectedMp4Extension);
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameRemoveUnderscore, this.RemoveUnderscores);
