@@ -21,8 +21,6 @@ namespace HandBrake.Interop.Interop
         private static bool? isNvencH265Available;
         private static bool? isNVDecAvailable;
 
-        private static bool? isVcnH264Available;
-
         private static int? qsvHardwareGeneration;
         private static bool? isQsvAvailable;
 
@@ -261,14 +259,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    if (isVcnH264Available != null)
-                    {
-                        return isVcnH264Available.Value;
-                    }
-
-                    isVcnH264Available = HBFunctions.hb_vce_h264_available() > 0;
-
-                    return isVcnH264Available.Value;
+                    return HBFunctions.hb_vce_h264_available() > 0;
                 }
                 catch (Exception)
                 {
@@ -289,6 +280,38 @@ namespace HandBrake.Interop.Interop
                 catch (Exception)
                 {
                     // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+
+        public static bool IsVceAV1Available
+        {
+            get
+            {
+                try
+                {
+                    return HBFunctions.hb_vce_av1_available() > 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-vce
+                    return false;
+                }
+            }
+        }
+
+        public static bool IsAMFDecAvailable
+        {
+            get
+            {
+                try
+                {
+                    return HBFunctions.hb_check_amfdec_available() > 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-amfdec
                     return false;
                 }
             }
