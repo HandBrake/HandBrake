@@ -1,7 +1,7 @@
-From 33bf92742274132429d43b8a91e7a3124ca83a0d Mon Sep 17 00:00:00 2001
+From df8b177ccb14a408b90b559f7482298916d5607c Mon Sep 17 00:00:00 2001
 From: galinart <artem.galin@intel.com>
 Date: Tue, 12 Nov 2024 15:50:06 +0000
-Subject: [PATCH 17/22] qsv: enable av1 scc
+Subject: [PATCH 15/20] qsv: enable av1 scc
 
 ---
  libavcodec/qsvenc.c     | 42 +++++++++++++++++++++++++++++++++++++++++
@@ -10,10 +10,10 @@ Subject: [PATCH 17/22] qsv: enable av1 scc
  3 files changed, 53 insertions(+), 1 deletion(-)
 
 diff --git a/libavcodec/qsvenc.c b/libavcodec/qsvenc.c
-index 039a108aae..95b0950fb8 100644
+index 98556e07ab..730b1b0ff5 100644
 --- a/libavcodec/qsvenc.c
 +++ b/libavcodec/qsvenc.c
-@@ -494,6 +494,9 @@ static void dump_video_av1_param(AVCodecContext *avctx, QSVEncContext *q,
+@@ -492,6 +492,9 @@ static void dump_video_av1_param(AVCodecContext *avctx, QSVEncContext *q,
      mfxExtAV1BitstreamParam *av1_bs_param = (mfxExtAV1BitstreamParam *)coding_opts[1];
      mfxExtCodingOption2 *co2 = (mfxExtCodingOption2*)coding_opts[2];
      mfxExtCodingOption3 *co3 = (mfxExtCodingOption3*)coding_opts[3];
@@ -23,7 +23,7 @@ index 039a108aae..95b0950fb8 100644
  
      av_log(avctx, AV_LOG_VERBOSE, "profile: %s; level: %"PRIu16"\n",
             print_profile(avctx->codec_id, info->CodecProfile), info->CodecLevel);
-@@ -566,6 +569,13 @@ static void dump_video_av1_param(AVCodecContext *avctx, QSVEncContext *q,
+@@ -564,6 +567,13 @@ static void dump_video_av1_param(AVCodecContext *avctx, QSVEncContext *q,
             print_threestate(av1_bs_param->WriteIVFHeaders));
      av_log(avctx, AV_LOG_VERBOSE, "LowDelayBRC: %s\n", print_threestate(co3->LowDelayBRC));
      av_log(avctx, AV_LOG_VERBOSE, "MaxFrameSize: %d;\n", co2->MaxFrameSize);
@@ -37,7 +37,7 @@ index 039a108aae..95b0950fb8 100644
  }
  #endif
  
-@@ -1282,6 +1292,28 @@ static int init_video_param(AVCodecContext *avctx, QSVEncContext *q)
+@@ -1284,6 +1294,28 @@ static int init_video_param(AVCodecContext *avctx, QSVEncContext *q)
      }
  #endif
  
@@ -66,7 +66,7 @@ index 039a108aae..95b0950fb8 100644
      if (!check_enc_param(avctx,q)) {
          av_log(avctx, AV_LOG_ERROR,
                 "some encoding parameters are not supported by the QSV "
-@@ -1389,11 +1421,21 @@ static int qsv_retrieve_enc_av1_params(AVCodecContext *avctx, QSVEncContext *q)
+@@ -1391,11 +1423,21 @@ static int qsv_retrieve_enc_av1_params(AVCodecContext *avctx, QSVEncContext *q)
          .Header.BufferSz = sizeof(co3),
      };
  
@@ -140,5 +140,5 @@ index c7aa6e58d5..5edb5f3112 100644
  };
  
 -- 
-2.39.5 (Apple Git-154)
+2.50.1 (Apple Git-155)
 

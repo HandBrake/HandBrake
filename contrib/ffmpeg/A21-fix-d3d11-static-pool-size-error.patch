@@ -1,5 +1,5 @@
 diff --git a/libavutil/hwcontext_d3d11va.c b/libavutil/hwcontext_d3d11va.c
-index 9831f530c1..dac659ea9a 100644
+index 834c2ce3dd..926bde3d86 100644
 --- a/libavutil/hwcontext_d3d11va.c
 +++ b/libavutil/hwcontext_d3d11va.c
 @@ -85,6 +85,9 @@ typedef struct D3D11VAFramesContext {
@@ -12,20 +12,18 @@ index 9831f530c1..dac659ea9a 100644
      DXGI_FORMAT format;
  
      ID3D11Texture2D *staging_texture;
-@@ -260,8 +263,10 @@ static AVBufferRef *d3d11va_pool_alloc(void *opaque, size_t size)
+@@ -261,7 +264,9 @@ static AVBufferRef *d3d11va_pool_alloc(void *opaque, size_t size)
      ID3D11Texture2D_GetDesc(hwctx->texture, &texDesc);
  
      if (s->nb_surfaces_used >= texDesc.ArraySize) {
 -        av_log(ctx, AV_LOG_ERROR, "Static surface pool size exceeded.\n");
--        return NULL;
 +        if (s->retries >= s->max_retries) {
 +            av_log(ctx, AV_LOG_ERROR, "Static surface pool size exceeded.\n");
 +        }
-+        return NULL;
+         return NULL;
      }
  
-     ID3D11Texture2D_AddRef(hwctx->texture);
-@@ -343,20 +348,34 @@ static int d3d11va_frames_init(AVHWFramesContext *ctx)
+@@ -347,20 +352,34 @@ static int d3d11va_frames_init(AVHWFramesContext *ctx)
  static int d3d11va_get_buffer(AVHWFramesContext *ctx, AVFrame *frame)
  {
      AVD3D11FrameDescriptor *desc;

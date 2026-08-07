@@ -1,7 +1,7 @@
-From b2fea2782b6aef1120e6038c67dbd75c82ad8ee5 Mon Sep 17 00:00:00 2001
+From 804f6e45eadc32e226e6539e87da2fa633a97a44 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Wed, 20 Mar 2024 09:17:17 +0100
-Subject: [PATCH 19/22] videotoolbox: disable H.264 10-bit on Intel macOS, it's
+Subject: [PATCH 18/20] videotoolbox: disable H.264 10-bit on Intel macOS, it's
  not decoded properly. Disable H.264 level 6.1 and 6.2 too, seems to have
  issue in some specific cases.
 
@@ -10,10 +10,10 @@ Subject: [PATCH 19/22] videotoolbox: disable H.264 10-bit on Intel macOS, it's
  1 file changed, 17 insertions(+)
 
 diff --git a/libavcodec/videotoolbox.c b/libavcodec/videotoolbox.c
-index ccba249140..0f8eea5baf 100644
+index 8df8a3214c..6da9f6df28 100644
 --- a/libavcodec/videotoolbox.c
 +++ b/libavcodec/videotoolbox.c
-@@ -956,6 +956,23 @@ static int videotoolbox_start(AVCodecContext *avctx)
+@@ -964,6 +964,23 @@ static int videotoolbox_start(AVCodecContext *avctx)
          break;
      }
  
@@ -35,8 +35,8 @@ index ccba249140..0f8eea5baf 100644
 +    }
 +
  #if defined(MAC_OS_X_VERSION_10_9) && !TARGET_OS_IPHONE && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9) && AV_HAS_BUILTIN(__builtin_available)
-     if (avctx->codec_id == AV_CODEC_ID_PRORES) {
+     if (avctx->codec_id == AV_CODEC_ID_PRORES || avctx->codec_id == AV_CODEC_ID_PRORES_RAW) {
          if (__builtin_available(macOS 10.9, *)) {
 -- 
-2.39.5 (Apple Git-154)
+2.50.1 (Apple Git-155)
 

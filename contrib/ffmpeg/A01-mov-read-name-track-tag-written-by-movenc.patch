@@ -1,17 +1,17 @@
-From a6e134197eaf4c448f47327309c030d14df13172 Mon Sep 17 00:00:00 2001
+From bf8e08fe23074844747febdb7bf919f1de426c6e Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Fri, 29 Aug 2025 09:52:13 +0200
-Subject: [PATCH 01/22] mov: read 'name' track tag written by movenc
+Subject: [PATCH 01/20] mov: read 'name' track tag written by movenc
 
 ---
- libavformat/mov.c | 1 +
- 1 file changed, 1 insertion(+)
+ libavformat/mov.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index b29c41a6b6..6ce554ad07 100644
+index 5c4c33c60d..ee35861620 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -392,6 +392,6 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -393,7 +393,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
          return mov_metadata_loci(c, pb, atom.size);
      case MKTAG( 'm','a','n','u'): key = "make"; break;
      case MKTAG( 'm','o','d','l'): key = "model"; break;
@@ -21,5 +21,5 @@ index b29c41a6b6..6ce554ad07 100644
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'p','g','a','p'): key = "gapless_playback";
 -- 
-2.39.5 (Apple Git-154)
+2.50.1 (Apple Git-155)
 
