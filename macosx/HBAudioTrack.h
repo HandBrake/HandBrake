@@ -8,6 +8,7 @@
 
 @class HBAudioTrack;
 @class HBTitleAudioTrack;
+@class HBAudioFilters;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -46,6 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readwrite) double gain;
 @property (nonatomic, readwrite) double drc;
+
+@property (nonatomic, readonly) HBAudioFilters *filters;
 
 @property (nonatomic, readwrite, nullable) NSString *title;
 

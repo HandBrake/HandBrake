@@ -586,35 +586,19 @@ namespace HandBrakeWPF.ViewModels
 
             List<string> filters = new List<string>();
 
-            if (this.Task.Detelecine != Detelecine.Off)
+
+            foreach (var filter in this.Task.VideoFilters)
             {
-                filters.Add(Resources.SummaryView_Detelecine);
+                filters.Add(filter.DisplayName);
             }
 
-            if (this.Task.DeinterlaceFilter != DeinterlaceFilter.Off)
-            {
-                filters.Add(EnumHelper<DeinterlaceFilter>.GetShortName(this.task.DeinterlaceFilter));
-            }
+            // TODO remove Resources
+            /*
+             * SummaryView_Detelecine
+             *SummaryView_Grayscale
+             *SummaryView_Deblock
+             */
 
-            if (this.Task.Denoise != Denoise.Off)
-            {
-                filters.Add(this.Task.Denoise.ToString());
-            }
-
-            if (this.Task.Sharpen != Sharpen.Off)
-            {
-                filters.Add(this.Task.Sharpen.ToString());
-            }
-
-            if (this.Task.DeblockPreset != null && this.Task.DeblockPreset.Key != DeblockFilter.Off)
-            {
-                filters.Add(Resources.SummaryView_Deblock);
-            }
-
-            if (this.Task.Grayscale)
-            {
-                filters.Add(Resources.SummaryView_Grayscale);
-            }
 
             if (this.Task.Rotation != 0 || this.task.FlipVideo)
             {

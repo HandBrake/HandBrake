@@ -42,6 +42,9 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <time.h>
+#ifdef __GLIBC__
+#include <malloc.h>
+#endif
 
 #if defined( __FreeBSD__ ) || defined(__OpenBSD__)
 #include <sys/socket.h>
@@ -4749,6 +4752,11 @@ ghb_backend_events(signal_user_data_t *ud)
         ghb_queue_progress_set_fraction(ud, index, 1.0);
 
         ghb_clear_queue_state(GHB_STATE_WORKDONE);
+
+#ifdef __GLIBC__
+        malloc_trim(0);
+#endif
+
         if (ud->job_activity_log)
             g_io_channel_unref(ud->job_activity_log);
         ud->job_activity_log = NULL;

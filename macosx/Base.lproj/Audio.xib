@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -57,9 +57,6 @@
                 </button>
                 <popUpButton verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jrP-M5-2Rq">
                     <rect key="frame" x="16" y="148" width="90" height="22"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="82" id="VHA-F2-mvU"/>
-                    </constraints>
                     <popUpButtonCell key="cell" type="push" title="Tracks" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="AoT-G9-aA4">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -80,6 +77,9 @@
                             </items>
                         </menu>
                     </popUpButtonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="82" id="VHA-F2-mvU"/>
+                    </constraints>
                     <connections>
                         <binding destination="-2" name="enabled" keyPath="self.audio" id="vyM-YV-Yqi">
                             <dictionary key="options">
@@ -364,7 +364,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                 <rect key="frame" x="701" y="1" width="63" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField toolTip="Audio gain in decibels (dB). Increases or decreases audio volume." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2c7-G5-4KL">
+                                                    <textField toolTip="Audio gain in decibels (dB). Increases or decreases audio volume." focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2c7-G5-4KL">
                                                         <rect key="frame" x="25" y="6" width="37" height="14"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="0" id="Q4T-80-wxf">
                                                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="uNn-5A-2RM"/>
@@ -396,7 +396,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="12" id="2JB-4G-Xta"/>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="18" id="F1c-4e-dD1"/>
                                                         </constraints>
-                                                        <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="BBQ-FP-aQN">
+                                                        <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25000000000000022" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="BBQ-FP-aQN">
                                                             <accessibility description="Gain"/>
                                                         </sliderCell>
                                                         <connections>
@@ -475,7 +475,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                                                             <binding destination="RMf-U7-5Td" name="enabled" keyPath="objectValue.isEnabled" id="UGi-Kk-MwK"/>
                                                         </connections>
                                                     </slider>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yPh-4R-HRQ">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yPh-4R-HRQ">
                                                         <rect key="frame" x="25" y="6" width="34" height="14"/>
                                                         <string key="toolTip">Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.
 
@@ -627,6 +627,6 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
         </menu>
     </objects>
     <resources>
-        <image name="NSActionTemplate" width="15" height="15"/>
+        <image name="NSActionTemplate" width="20" height="20"/>
     </resources>
 </document>

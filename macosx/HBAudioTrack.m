@@ -9,6 +9,7 @@
 #import "HBJob.h"
 #import "HBCodingUtilities.h"
 #import "HBTitle.h"
+#import "HBAudioFilters.h"
 #import "handbrake/handbrake.h"
 
 @interface HBAudioTrack ()
@@ -28,6 +29,7 @@
         _sampleRate = 0;
         _bitRate = 160;
         _mixdown = HB_AMIXDOWN_STEREO;
+        _filters = [[HBAudioFilters alloc] init];
     }
     return self;
 }
@@ -43,6 +45,7 @@
         _dataSource = dataSource;
         _sourceTrackIdx = index;
         _container = container;
+        _filters = [[HBAudioFilters alloc] init];
 
         [self validateSettings];
 
@@ -133,6 +136,7 @@
         self.sampleRate = [self sanitizeSamplerateValue:self.sampleRate];
         self.bitRate = [self sanitizeBitrateValue:self.bitRate];
         self.title = [self sanitizeTrackNameValue:self.title];
+        [self sanitizeFilters:encoder];
         [self.delegate encoderChanged];
         self.validating = NO;
     }
@@ -228,6 +232,12 @@
     _title = title;
 }
 
+- (void)setUndo:(NSUndoManager *)undo
+{
+    _undo = undo;
+    self.filters.undo = undo;
+}
+
 #pragma mark - Validation
 
 - (int)sanitizeEncoderValue:(int)proposedEncoder
@@ -320,6 +330,14 @@
     }
 
     return proposedTrackName;
+}
+
+- (void)sanitizeFilters:(int)encoder
+{
+    if (encoder & HB_ACODEC_PASS_FLAG)
+    {
+        [self.filters removeAll];
+    }
 }
 
 #pragma mark - Options
@@ -551,6 +569,7 @@
 
         copy->_gain = _gain;
         copy->_drc = _drc;
+        copy->_filters = [_filters copy];
 
         copy->_title = [_title copy];
     }
@@ -579,6 +598,7 @@
 
     encodeDouble(_gain);
     encodeDouble(_drc);
+    encodeObject(_filters);
 
     encodeObject(_title);
 }
@@ -597,6 +617,11 @@
 
     decodeDouble(_gain);
     decodeDouble(_drc);
+    decodeObject(_filters, HBAudioFilters);
+    if (_filters == nil)
+    {
+        _filters = [[HBAudioFilters alloc] init];
+    }
 
     decodeObject(_title, NSString);
 

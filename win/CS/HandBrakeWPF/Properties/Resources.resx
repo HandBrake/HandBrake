@@ -899,8 +899,8 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
     <value>Sharpen Tune</value>
   </data>
-  <data name="FiltersView_Tune" xml:space="preserve">
-    <value>Tune:</value>
+  <data name="FilterView_Tune" xml:space="preserve">
+    <value>Tune</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
     <value>Add</value>
@@ -3040,5 +3040,74 @@ Do you wish to proceed?</value>
   </data>
   <data name="VideoView_SameAsSource" xml:space="preserve">
     <value>Same as source</value>
+  </data>
+  <data name="FilterView_Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="FilterView_Preset" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="FilterView_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Filter_Category_Deinterlace" xml:space="preserve">
+    <value>Deinterlace</value>
+  </data>
+  <data name="Filter_Category_Denoise" xml:space="preserve">
+    <value>Denoise</value>
+  </data>
+  <data name="Filter_Category_Sharpen" xml:space="preserve">
+    <value>Sharpen</value>
+  </data>
+  <data name="Filter_detelecine" xml:space="preserve">
+    <value>Detelecine</value>
+  </data>
+  <data name="Filter_combdetect" xml:space="preserve">
+    <value>Comb Detect</value>
+  </data>
+  <data name="Filter_decomb" xml:space="preserve">
+    <value>Decomb</value>
+  </data>
+  <data name="Filter_yadif" xml:space="preserve">
+    <value>Yadif</value>
+  </data>
+  <data name="Filter_bwdif" xml:space="preserve">
+    <value>Bwdif</value>
+  </data>
+  <data name="Filter_deblock" xml:space="preserve">
+    <value>Deblock</value>
+  </data>
+  <data name="Filter_bm3d" xml:space="preserve">
+    <value>BM3D</value>
+  </data>
+  <data name="Filter_nlmeans" xml:space="preserve">
+    <value>NLMeans</value>
+  </data>
+  <data name="Filter_hqdn3d" xml:space="preserve">
+    <value>HQDN3D</value>
+  </data>
+  <data name="Filter_chromasmooth" xml:space="preserve">
+    <value>Chroma Smooth</value>
+  </data>
+  <data name="Filter_lapsharp" xml:space="preserve">
+    <value>Lapsharp</value>
+  </data>
+  <data name="Filter_unsharp" xml:space="preserve">
+    <value>Unsharp</value>
+  </data>
+  <data name="Filter_grayscale" xml:space="preserve">
+    <value>Grayscale</value>
+  </data>
+  <data name="Filter_colourspace" xml:space="preserve">
+    <value>Colourspace</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Tune</value>
+  </data>
+  <data name="FilterView_AddFilter" xml:space="preserve">
+    <value>Add Filter</value>
+  </data>
+  <data name="Filter_deband" xml:space="preserve">
+    <value>Deband</value>
   </data>
 </root>

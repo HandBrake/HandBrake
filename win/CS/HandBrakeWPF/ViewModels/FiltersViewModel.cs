@@ -9,15 +9,23 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System;
-
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Services.Encode.Model.Models.Filters;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.ViewModelItems.Filters;
+    using HandBrakeWPF.ViewModelItems;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+
+    using HandBrakeWPF.Commands;
 
     using EncodeTask = Services.Encode.Model.EncodeTask;
 
@@ -26,126 +34,154 @@ namespace HandBrakeWPF.ViewModels
         public FiltersViewModel(IUserSettingService userSettingService)
         {
             this.CurrentTask = new EncodeTask();
-   
-            this.SharpenFilter = new SharpenItem(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
-            this.DenoiseFilter = new DenoiseItem(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
-            this.DetelecineFilter = new DetelecineItem(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
-            this.DeinterlaceFilter = new DeinterlaceFilterItem(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
-            this.DeblockFilter = new DeblockFilter(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
-            this.GrayscaleFilter = new GrayscaleFilter(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
-            this.ColourSpaceFilter = new ColourSpaceFilter(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
-            this.ChromaSmoothFilter = new ChromaSmoothFilter(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
+            this.AvailableFilters = new BindingList<HandBrakeFilter>();
+            this.AvailableFiltersMenu = new ObservableCollection<FilterMenuItem>();
+            this.RemoveCommand = new SimpleRelayCommand<VideoFilter>(this.Remove);
+
+
+            foreach (HBFilter filter in HandBrakeFilterHelpers.GetHandBrakeFilters())
+            {
+                this.AvailableFilters.Add(new HandBrakeFilter(filter));
+            }
+
+            this.BuildAvailableFiltersMenu();
         }
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
+        public SimpleRelayCommand<VideoFilter> RemoveCommand { get; set; }
+
+        public ListboxDeleteCommand DeleteCommand => new ListboxDeleteCommand();
+
         public EncodeTask CurrentTask { get; private set; }
 
-        public DenoiseItem DenoiseFilter { get; set; }
+        public BindingList<HandBrakeFilter> AvailableFilters { get; private set; }
 
-        public SharpenItem SharpenFilter { get; set; }
+        public ObservableCollection<FilterMenuItem> AvailableFiltersMenu { get; private set; }
 
-        public DetelecineItem DetelecineFilter { get; set; }
+        public ObservableCollection<VideoFilter> VideoFilters
+        {
+            get
+            {
 
-        public DeinterlaceFilterItem DeinterlaceFilter { get; set; }
+                return this.CurrentTask.VideoFilters;
+            }
+        }
 
-        public DeblockFilter DeblockFilter { get; set; }
+        public void AddTrack(HandBrakeFilter hbFilter)
+        {
+            if (!string.IsNullOrEmpty(hbFilter.Category))
+            {
+                var filtersToRemove = this.VideoFilters
+                    .Where(f => f.HandBrakeFilterChoice?.Category == hbFilter.Category)
+                    .ToList();
 
-        public ColourSpaceFilter ColourSpaceFilter { get; set; }
+                foreach (var filter in filtersToRemove)
+                {
+                    this.VideoFilters.Remove(filter);
+                }
+            }
 
-        public GrayscaleFilter GrayscaleFilter { get; set; }
+            VideoFilter newFilter  = new VideoFilter(hbFilter, null, null, null, ChangeTrigger);
+            this.VideoFilters.Add(newFilter);
 
-        public ChromaSmoothFilter ChromaSmoothFilter { get; set; }
+            ChangeTrigger();
+        }
+
+        private void ChangeTrigger()
+        {
+            this.TabStatusChanged?.Invoke(this, new TabStatusEventArgs(null));
+        }
+
+        public void Clear()
+        {
+            this.VideoFilters.Clear();
+        }
         
+        private void Remove(VideoFilter obj)
+        {
+            this.VideoFilters.Remove(obj);
+        }
+        
+
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.CurrentTask = task;
+            this.VideoFilters.Clear();
 
-            this.SharpenFilter.SetPreset(preset, task);
-            this.DenoiseFilter.SetPreset(preset, task);
-            this.DetelecineFilter.SetPreset(preset, task);
-            this.DeinterlaceFilter.SetPreset(preset, task);
-            this.DeblockFilter.SetPreset(preset, task);
-            this.ColourSpaceFilter.SetPreset(preset, task);
-            this.ChromaSmoothFilter.SetPreset(preset, task);
-            this.GrayscaleFilter.SetPreset(preset, task);
+            foreach (VideoFilter filter in preset.Task.VideoFilters)
+            {
+                this.VideoFilters.Add(new VideoFilter(filter, ChangeTrigger)); // Decouple Copy from preset.
+            }
+
+            this.NotifyOfPropertyChange(() => this.VideoFilters);
         }
 
         public void UpdateTask(EncodeTask task)
         {
             this.CurrentTask = task;
-
-            this.SharpenFilter.UpdateTask(task);
-            this.DenoiseFilter.UpdateTask(task);
-            this.DetelecineFilter.UpdateTask(task);
-            this.DeinterlaceFilter.UpdateTask(task);
-            this.DeblockFilter.UpdateTask(task);
-            this.GrayscaleFilter.UpdateTask(task);
-            this.ColourSpaceFilter.UpdateTask(task);
-            this.ChromaSmoothFilter.UpdateTask(task);
+            this.NotifyOfPropertyChange(() => this.VideoFilters);
         }
 
         public bool MatchesPreset(Preset preset)
         {
-            if (!this.DenoiseFilter.MatchesPreset(preset))
+            if (this.VideoFilters.Count != preset.Task.VideoFilters.Count)
             {
                 return false;
             }
 
-            if (!this.SharpenFilter.MatchesPreset(preset))
-            {
-                return false;
-            }
-
-            if (!this.DetelecineFilter.MatchesPreset(preset))
-            {
-                return false;
-            }
-
-            if (!this.DeinterlaceFilter.MatchesPreset(preset))
-            {
-                return false;
-            }
-
-            if (!this.DeblockFilter.MatchesPreset(preset))
-            {
-                return false;
-            }
-
-            if (!this.GrayscaleFilter.MatchesPreset(preset))
-            {
-                return false;
-            }
-
-            if (!this.ColourSpaceFilter.MatchesPreset(preset))
-            {
-                return false;
-            }
-
-            if (!this.ChromaSmoothFilter.MatchesPreset(preset))
-            {
-                return false;
-            }
-
-            return true;
+            return this.VideoFilters.All(f => preset.Task.VideoFilters.Contains(f)) 
+                   && preset.Task.VideoFilters.All(f => this.VideoFilters.Contains(f));
         }
 
         public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
         {
             this.CurrentTask = task;
-            this.SharpenFilter.SetSource(source, title, preset, task);
-            this.DenoiseFilter.SetSource(source, title, preset, task);
-            this.DetelecineFilter.SetSource(source, title, preset, task);
-            this.DeinterlaceFilter.SetSource(source, title, preset, task);
-            this.DeblockFilter.SetSource(source, title, preset, task);
-            this.GrayscaleFilter.SetSource(source, title, preset, task);
-            this.ColourSpaceFilter.SetSource(source, title, preset, task);
-            this.ChromaSmoothFilter.SetSource(source, title, preset, task);
+            this.NotifyOfPropertyChange(() => this.VideoFilters);
         }
 
-        protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
+        private void BuildAvailableFiltersMenu()
         {
-            this.TabStatusChanged?.Invoke(this, e);
+            this.AvailableFiltersMenu.Clear();
+
+            // Track category nodes by category name
+            Dictionary<string, FilterMenuItem> categoryNodes = new Dictionary<string, FilterMenuItem>();
+
+            // Process all filters in original order
+            foreach (HandBrakeFilter filter in this.AvailableFilters)
+            {
+                if (string.IsNullOrEmpty(filter.Category))
+                {
+                    // Add uncategorized filter directly to top level
+                    this.AvailableFiltersMenu.Add(new FilterMenuItem
+                    {
+                        Header = filter.DisplayName,
+                        Filter = filter
+                    });
+                }
+                else
+                {
+                    // Add categorized filter under its category node
+                    if (!categoryNodes.ContainsKey(filter.Category))
+                    {
+                        // Create new category node at current position
+                        var categoryNode = new FilterMenuItem
+                        {
+                            Header = filter.Category,
+                            Filter = null
+                        };
+                        categoryNodes[filter.Category] = categoryNode;
+                        this.AvailableFiltersMenu.Add(categoryNode);
+                    }
+
+                    // Add filter as child of category node
+                    categoryNodes[filter.Category].Children.Add(new FilterMenuItem
+                    {
+                        Header = filter.DisplayName,
+                        Filter = filter
+                    });
+                }
+            }
         }
     }
 }

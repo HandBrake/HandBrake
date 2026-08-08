@@ -8,6 +8,7 @@
 #import "HBAudioTrackPreset.h"
 #import "HBCodingUtilities.h"
 #import "HBMutablePreset.h"
+#import "HBAudioFilters.h"
 
 #import "handbrake/handbrake.h"
 #import "handbrake/lang.h"
@@ -391,6 +392,29 @@
         newTrack.drc = [track[@"AudioTrackDRCSlider"] doubleValue];
         newTrack.gain = [track[@"AudioTrackGainSlider"] doubleValue];
         [self insertObject:newTrack inTracksArrayAtIndex:[self countOfTracksArray]];
+
+        for (NSDictionary *filter in track[@"AudioFilterList"])
+        {
+            NSString *filterName   = filter[@"AudioFilterName"];
+            NSString *filterPreset = filter[@"AudioFilterPreset"];
+            NSString *filterTune   = filter[@"AudioFilterTune"] ? filter[@"AudioFilterTune"] : @"none";
+            NSString *filterCustom = filter[@"AudioFilterCustom"] ? filter[@"AudioFilterCustom"] : @"";
+
+            if ([filterName isKindOfClass:[NSString class]] && filterName.length &&
+                [filterPreset isKindOfClass:[NSString class]] && filterPreset.length &&
+                [filterTune isKindOfClass:[NSString class]] && [filterCustom isKindOfClass:[NSString class]])
+            {
+                HBFilter *newFilter = [[HBFilter alloc] initWithFilter:filterName
+                                                                preset:filterPreset
+                                                                  tune:filterTune
+                                                                custom:filterCustom];
+                newFilter.delegate = newTrack.filters;
+                if (newFilter)
+                {
+                    [newTrack.filters insertObject:newFilter inFiltersAtIndex:newTrack.filters.countOfFilters];
+                }
+            }
+        }
     }
 
     return YES;
@@ -507,12 +531,24 @@
         const char *mixdownShortName = hb_mixdown_get_short_name(track.mixdown);
         if (encoderShortName && mixdownShortName)
         {
+            NSMutableArray *filters = [[NSMutableArray alloc] init];
+            for (HBFilter *filter in track.filters.filters)
+            {
+                NSDictionary *filterDict = @{@"AudioFilterName": @(hb_filter_get_short_name(filter.filterID)),
+                                             @"AudioFilterPreset": filter.preset,
+                                             @"AudioFilterTune": filter.tune,
+                                             @"AudioFilterCustom": filter.custom};
+
+                [filters addObject:filterDict];
+            }
+
             NSDictionary *newTrack = @{@"AudioEncoder": @(encoderShortName),
                                        @"AudioMixdown": @(mixdownShortName),
                                        @"AudioSamplerate": sampleRate,
                                        @"AudioBitrate": @(track.bitRate),
                                        @"AudioTrackDRCSlider": @(track.drc),
-                                       @"AudioTrackGainSlider": @(track.gain)};
+                                       @"AudioTrackGainSlider": @(track.gain),
+                                       @"AudioFilterList": filters};
 
             [audioList addObject:newTrack];
         }

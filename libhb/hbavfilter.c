@@ -69,8 +69,14 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     avfilter_graph_set_auto_convert(graph->avgraph, AVFILTER_AUTO_CONVERT_NONE);
 #endif
 
-    // Build filter input
+    // FIXME: AVCOL_SPC_IPT_C2 is not well supported
+    // by filter graph link negotiation yet
+    if (init->color_matrix == AVCOL_SPC_IPT_C2)
+    {
+        init->color_matrix = AVCOL_SPC_UNSPECIFIED;
+    }
 
+    // Build filter input
     if (init->hw_pix_fmt != AV_PIX_FMT_NONE)
     {
         par = av_buffersrc_parameters_alloc();
@@ -176,7 +182,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         goto fail;
     }
 
-#if HB_DEBUG_GRAPHHB_DEBUG_GRAPH
+#if HB_DEBUG_GRAPH
     char *dump = avfilter_graph_dump(graph->avgraph, NULL);
     hb_log("\n%s", dump);
     free(dump);

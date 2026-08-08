@@ -1,17 +1,17 @@
-From c671e7006e811d5440747d30619f01428bb202f3 Mon Sep 17 00:00:00 2001
+From b1a6d5b8069d29ed7f8fac293d24500f8cdef942 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 20 Mar 2024 09:09:41 +0100
-Subject: [PATCH 03/22] mov: read 3gpp udta tags.
+Subject: [PATCH] mov: read 3gpp udta tags.
 
 ---
  libavformat/mov.c | 101 ++++++++++++++++++++++++++++++++++++++++++++--
  1 file changed, 98 insertions(+), 3 deletions(-)
 
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index 6ce554ad07..eb067c756c 100644
+index ee35861620..827c8aa98a 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -56,6 +56,7 @@
+@@ -58,6 +58,7 @@
  #include "libavcodec/mpegaudiodecheader.h"
  #include "libavcodec/mlp_parse.h"
  #include "avformat.h"
@@ -19,7 +19,7 @@ index 6ce554ad07..eb067c756c 100644
  #include "internal.h"
  #include "avio_internal.h"
  #include "demux.h"
-@@ -341,6 +342,73 @@ static int mov_metadata_hmmt(MOVContext *c, AVIOContext *pb, unsigned len)
+@@ -343,6 +344,73 @@ static int mov_metadata_hmmt(MOVContext *c, AVIOContext *pb, unsigned len)
      return 0;
  }
  
@@ -46,7 +46,7 @@ index 6ce554ad07..eb067c756c 100644
 +    }
 +    version = avio_rb32(pb); // version + flags
 +    if (version != 0)
-+        av_log(c->fc, AV_LOG_WARNING, "udta %s unknown version number: %u\n", str, version);
++        av_log(c->fc, AV_LOG_WARNING, "udta %s unknown version number: %u\n", key, version);
 +    if (MKTAG( 'y','r','r','c') == atom.type) {
 +        int year;
 +        year = avio_rb16(pb);
@@ -60,7 +60,7 @@ index 6ce554ad07..eb067c756c 100644
 +        ff_mov_lang_to_iso639(langcode, language);
 +        tmp = ff_convert_lang_to(language, AV_LANG_ISO639_2_BIBL);
 +        if (!tmp)
-+           av_log(c->fc, AV_LOG_WARNING, "udta %s unknown language code: %u\n", str, langcode);
++           av_log(c->fc, AV_LOG_WARNING, "udta %s unknown language code: %u\n", key, langcode);
 +        str_size = atom.size - 6;
 +        if (str_size <= 0 || str_size >= INT_MAX/2)
 +            return AVERROR_INVALIDDATA;
@@ -93,7 +93,7 @@ index 6ce554ad07..eb067c756c 100644
  static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
  {
      char tmp_key[AV_FOURCC_MAX_STRING_SIZE] = {0};
-@@ -372,15 +440,33 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -374,15 +442,33 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG( 'c','a','t','g'): key = "category"; break;
      case MKTAG( 'c','p','i','l'): key = "compilation";
          parse = mov_metadata_int8_no_padding; break;
@@ -130,7 +130,7 @@ index 6ce554ad07..eb067c756c 100644
      case MKTAG( 'h','d','v','d'): key = "hd_video";
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'H','M','M','T'):
-@@ -451,6 +537,15 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -453,6 +539,15 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG(0xa9,'w','r','n'): key = "warning";   break;
      case MKTAG(0xa9,'w','r','t'): key = "composer";  break;
      case MKTAG(0xa9,'x','y','z'): key = "location";  break;
@@ -147,5 +147,5 @@ index 6ce554ad07..eb067c756c 100644
  retry:
      if (c->itunes_metadata && atom.size > 8) {
 -- 
-2.39.5 (Apple Git-154)
+2.50.1 (Apple Git-155)
 

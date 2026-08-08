@@ -6,13 +6,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class HBFilters;
+@class HBVideoFilters;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HBFiltersViewController : NSViewController
 
-@property (nonatomic, readwrite, weak) HBFilters *filters;
+@property (nonatomic, readwrite, weak) HBVideoFilters *filters;
 
 @end
 

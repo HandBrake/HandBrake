@@ -6,6 +6,7 @@
 
 #import "HBAudioDefaultsController.h"
 #import "HBLanguagesSelection.h"
+#import "HBAudioFiltersViewController.h"
 
 @import HandBrakeKit;
 
@@ -21,31 +22,38 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 
 @property (nonatomic, unsafe_unretained) IBOutlet NSArrayController *tracksController;
 @property (nonatomic, weak) IBOutlet NSSegmentedControl *tracksControl;
+@property (nonatomic, weak) IBOutlet NSTableView *table;
+
+@property (nonatomic, weak) id<HBAudioDefaultsControllerDelegate> delegate;
 
 @end
 
 @implementation HBAudioDefaultsController
 
-- (instancetype)initWithSettings:(HBAudioDefaults *)settings
+- (instancetype)initWithSettings:(HBAudioDefaults *)settings delegate:(id<HBAudioDefaultsControllerDelegate>)delegate
 {
-    self = [super initWithWindowNibName:@"AudioDefaults"];
+    self = [super initWithNibName:@"AudioDefaults" bundle:nil];
     if (self)
     {
         _settings = settings;
         _languagesList = [[HBLanguagesSelection alloc] initWithLanguages:_settings.trackSelectionLanguages];
-        _settings.undo = self.window.undoManager;
-        _languagesList.undo = self.window.undoManager;
+        _delegate = delegate;
     }
     return self;
 }
 
-- (void)windowDidLoad
+- (void)viewDidLoad
 {
     [self.tracksController addObserver:self
                             forKeyPath:@"selectedObjects"
                                options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                                context:HBAudioDefaultsContext];
-    self.window.preventsApplicationTerminationWhenModal = NO;
+}
+
+- (void)viewWillAppear
+{
+    self.settings.undo = self.view.window.undoManager;
+    self.languagesList.undo = self.view.window.undoManager;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -70,7 +78,7 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
     {
         if ([self.tracksController.arrangedObjects count] && self.tracksController.selectionIndex != NSNotFound)
         {
-            [self.tracksController removeObjectAtArrangedObjectIndex:self.tracksController.selectionIndex];
+            [self.tracksController removeObjectsAtArrangedObjectIndexes:self.tracksController.selectionIndexes];
         }
     }
     else
@@ -79,15 +87,32 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
     }
 }
 
+- (IBAction)showFiltersPopOver:(id)sender
+{
+    HBAudioFiltersViewController *controller = [[HBAudioFiltersViewController alloc] init];
+    NSInteger index = [self.table rowForView:sender];
+    if (index != -1)
+    {
+        controller.track = self.settings.tracksArray[index];
+        [self presentViewController:controller
+            asPopoverRelativeToRect:[sender bounds]
+                             ofView:sender
+                      preferredEdge:NSRectEdgeMaxY
+                           behavior:NSPopoverBehaviorSemitransient];
+    }
+}
+
 - (IBAction)ok:(id)sender
 {
     self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
-    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
+    [self.delegate audioControllerDidEnd:self.settings returnCode:NSModalResponseOK];
+    [self dismissViewController:self];
 }
 
 - (IBAction)cancel:(id)sender
 {
-    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
+    [self.delegate audioControllerDidEnd:self.settings returnCode:NSModalResponseCancel];
+    [self dismissViewController:self];
 }
 
 - (IBAction)openUserGuide:(id)sender

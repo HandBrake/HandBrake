@@ -6,6 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class HBAudioFilters;
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -30,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readwrite) double gain;
 @property (nonatomic, readwrite) double drc;
+
+@property (nonatomic, readonly) HBAudioFilters *filters;
 
 /**
  *  Arrays of possible options for the track properties.

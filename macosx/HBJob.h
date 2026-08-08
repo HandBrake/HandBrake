@@ -11,7 +11,7 @@
 @class HBVideo;
 @class HBRange;
 @class HBPicture;
-@class HBFilters;
+@class HBVideoFilters;
 @class HBAudio;
 @class HBSubtitles;
 @class HBChapter;
@@ -71,7 +71,7 @@ typedef NS_ENUM(NSUInteger, HBJobHardwareDecoderUsage) {
 @property (nonatomic, readonly) HBRange *range;
 @property (nonatomic, readonly) HBVideo *video;
 @property (nonatomic, readonly) HBPicture *picture;
-@property (nonatomic, readonly) HBFilters *filters;
+@property (nonatomic, readonly) HBVideoFilters *filters;
 
 @property (nonatomic, readonly) HBAudio *audio;
 @property (nonatomic, readonly) HBSubtitles *subtitles;

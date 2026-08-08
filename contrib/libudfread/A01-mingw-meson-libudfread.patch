@@ -1,0 +1,12 @@
+diff --git a/package/crossfiles/x86_64-w64-mingw32.meson b/package/crossfiles/x86_64-w64-mingw32.meson
+--- a/package/crossfiles/x86_64-w64-mingw32.meson	2025-08-11 22:17:53.000000000 +0200
++++ b/package/crossfiles/x86_64-w64-mingw32.meson	2025-09-27 01:16:42.490574544 +0200
+@@ -4,7 +4,7 @@
+ ar = 'x86_64-w64-mingw32-ar'
+ strip = 'x86_64-w64-mingw32-strip'
+ windres = 'x86_64-w64-mingw32-windres'
+-pkgconfig = 'x86_64-w64-mingw32-pkg-config'
++pkg-config = 'pkg-config'
+ exe_wrapper = 'wine'
+ 
+ [built-in options]

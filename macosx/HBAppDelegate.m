@@ -20,7 +20,7 @@
 #import "HBController.h"
 
 #define PRESET_FILE @"UserPresets.json"
-#define QUEUE_FILE @"Queue.hbqueue"
+#define QUEUE_FILE @"QueueV2.hbqueue"
 
 @interface HBAppDelegate () <NSMenuItemValidation>
 
