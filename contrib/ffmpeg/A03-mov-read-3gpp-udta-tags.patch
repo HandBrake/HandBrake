@@ -1,14 +1,14 @@
-From 6be07e6b1f2fbd69e8b7ef72880d59a82c185218 Mon Sep 17 00:00:00 2001
+From b1a6d5b8069d29ed7f8fac293d24500f8cdef942 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 20 Mar 2024 09:09:41 +0100
-Subject: [PATCH 03/20] mov: read 3gpp udta tags.
+Subject: [PATCH] mov: read 3gpp udta tags.
 
 ---
  libavformat/mov.c | 101 ++++++++++++++++++++++++++++++++++++++++++++--
  1 file changed, 98 insertions(+), 3 deletions(-)
 
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index ee35861620..790255d910 100644
+index ee35861620..827c8aa98a 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
 @@ -58,6 +58,7 @@
@@ -46,7 +46,7 @@ index ee35861620..790255d910 100644
 +    }
 +    version = avio_rb32(pb); // version + flags
 +    if (version != 0)
-+        av_log(c->fc, AV_LOG_WARNING, "udta %s unknown version number: %u\n", str, version);
++        av_log(c->fc, AV_LOG_WARNING, "udta %s unknown version number: %u\n", key, version);
 +    if (MKTAG( 'y','r','r','c') == atom.type) {
 +        int year;
 +        year = avio_rb16(pb);
@@ -60,7 +60,7 @@ index ee35861620..790255d910 100644
 +        ff_mov_lang_to_iso639(langcode, language);
 +        tmp = ff_convert_lang_to(language, AV_LANG_ISO639_2_BIBL);
 +        if (!tmp)
-+           av_log(c->fc, AV_LOG_WARNING, "udta %s unknown language code: %u\n", str, langcode);
++           av_log(c->fc, AV_LOG_WARNING, "udta %s unknown language code: %u\n", key, langcode);
 +        str_size = atom.size - 6;
 +        if (str_size <= 0 || str_size >= INT_MAX/2)
 +            return AVERROR_INVALIDDATA;
