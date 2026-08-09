@@ -217,12 +217,10 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t ** buf_in
     hb_buffer_t      * buf = NULL, * next = NULL;
 
     hb_avfilter_add_buf(pv->graph, buf_in);
-    buf = hb_avfilter_get_buf(pv->graph);
 
-    while (buf != NULL)
+    while ((buf = hb_avfilter_get_buf(pv->graph)) != NULL)
     {
         hb_buffer_list_append(&pv->list, buf);
-        buf = hb_avfilter_get_buf(pv->graph);
     }
     // Delay one frame so we can set the stop time of the output buffer
     hb_buffer_list_clear(&list);
@@ -295,6 +293,7 @@ static int avfilter_audio_init(hb_filter_object_t *filter, hb_filter_init_t *ini
     pv->graph = hb_avfilter_audio_graph_init(filter->settings, init);
     if (pv->graph == NULL)
     {
+        hb_error("avfilter_audio_init: initialization failure");
         goto fail;
     }
 
@@ -329,6 +328,7 @@ static int avfilter_audio_post_init(hb_filter_object_t *filter, hb_job_t *job)
     pv->graph = hb_avfilter_audio_graph_init(filter->settings, &pv->input);
     if (pv->graph == NULL)
     {
+        hb_error("avfilter_audio_post_init: initialization failure");
         goto fail;
     }
 
