@@ -112,10 +112,10 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
         case HB_AUDIO_FILTER_ACOMPRESSOR:
             return HBKitLocalizedString(@"Compressor", @"Compressor filter");
         case HB_AUDIO_FILTER_AGATE:
-            return HBKitLocalizedString(@"Gate", @"Gate filter");
+            return HBKitLocalizedString(@"Noise Gate", @"Gate filter");
         case HB_FILTER_INVALID:
         default:
-            return HBKitLocalizedString(@"Invalid", @"Detelecine filter");
+            return @(hb_filter_get_name(filterID));
     }
 }
 

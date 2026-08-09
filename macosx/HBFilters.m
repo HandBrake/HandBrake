@@ -216,6 +216,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         for (HBFilter *filter in _filters)
         {
             HBFilter *filterCopy = [filter copy];
+            filterCopy.delegate = copy;
             [copy->_filters addObject:filterCopy];
         }
     }
