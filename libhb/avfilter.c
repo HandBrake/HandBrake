@@ -353,12 +353,10 @@ static hb_buffer_t * filterAudioFrame(hb_filter_private_t *pv, hb_buffer_t **buf
     hb_buffer_t      *buf = NULL, *next = NULL;
 
     hb_audio_avfilter_add_buf(pv->graph, buf_in);
-    buf = hb_audio_avfilter_get_buf(pv->graph);
 
-    while (buf != NULL)
+    while ((buf = hb_audio_avfilter_get_buf(pv->graph)) != NULL)
     {
         hb_buffer_list_append(&pv->list, buf);
-        buf = hb_avfilter_get_buf(pv->graph);
     }
     // Delay one frame so we can set the stop time of the output buffer
     hb_buffer_list_clear(&list);
