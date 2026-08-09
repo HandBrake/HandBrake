@@ -5865,6 +5865,17 @@ int hb_filter_get_from_name(const char *name)
     return filter != NULL ? filter->id : HB_FILTER_INVALID;
 }
 
+const char * hb_filter_get_name(int filter_id)
+{
+    hb_filter_object_t *filter = hb_filter_get(filter_id);
+    if (filter)
+    {
+        return filter->name;
+    }
+
+    return "invalid";
+}
+
 const char * hb_filter_get_short_name(int filter_id)
 {
     hb_filter_object_t *filter = hb_filter_get(filter_id);
