@@ -1,0 +1,26 @@
+From 5c0bcaa82017956e058d6a819be98c5ce292f7a2 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Tue, 11 Aug 2026 08:43:43 +0200
+Subject: [PATCH] swresample: do not fail layout check if some channels are set
+ to AV_CHAN_UNUSED
+
+---
+ libswresample/rematrix.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libswresample/rematrix.c b/libswresample/rematrix.c
+index a4911a2922..18d03f0355 100644
+--- a/libswresample/rematrix.c
++++ b/libswresample/rematrix.c
+@@ -110,7 +110,7 @@ static int sane_layout(AVChannelLayout *ch_layout) {
+         return 0;
+     if(ch_layout->order == AV_CHANNEL_ORDER_CUSTOM)
+         for (int i = 0; i < ch_layout->nb_channels; i++) {
+-            if (ch_layout->u.map[i].id >= 64)
++            if (ch_layout->u.map[i].id >= 64 && ch_layout->u.map[i].id != AV_CHAN_UNUSED)
+                 return 0;
+         }
+     else if (ch_layout->order != AV_CHANNEL_ORDER_NATIVE)
+-- 
+2.50.1 (Apple Git-155)
+
