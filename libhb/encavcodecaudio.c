@@ -105,17 +105,19 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                     profile = AV_PROFILE_AAC_LOW;
                     break;
             }
-            // FFmpeg's libfdk-aac wrapper expects back channels for 5.1
-            // audio, and will error out unless we translate the layout
+            // FFmpeg's libfdk-aac wrapper expects back channels for 5.1, 6.1
+            if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1) == 0)
+                av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1_BACK);
             if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1) == 0)
                 av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
             break;
 
         case HB_ACODEC_FFAAC:
             codec_name = "aac";
-            // Use 5.1 back for AAC because 5.1 side uses a
-            // not-so-universally supported feature to signal the
-            // non-standard layout
+            // use back channels for AAC otherwise the encoder will signal the
+            // layout via a PCE instead of a standard channel configuration index
+            if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1) == 0)
+                av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1_BACK);
             if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1) == 0)
                 av_channel_layout_copy(&out_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK);
             if (av_channel_layout_compare(&in_ch_layout, &(AVChannelLayout)AV_CHANNEL_LAYOUT_2_2) == 0)

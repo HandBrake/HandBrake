@@ -2775,6 +2775,7 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
                     (mixdown == HB_AMIXDOWN_3POINT0)   ||
                     (mixdown == HB_AMIXDOWN_4POINT0)   ||
                     (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_6POINT1)   ||
                     (mixdown == HB_AMIXDOWN_7POINT1));
 
         case HB_ACODEC_FFAAC:
@@ -2782,7 +2783,9 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
                     (mixdown == HB_AMIXDOWN_3POINT0)   ||
                     (mixdown == HB_AMIXDOWN_4POINT0)   ||
                     (mixdown == HB_AMIXDOWN_QUAD)      ||
-                    (mixdown == HB_AMIXDOWN_5POINT1));
+                    (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_6POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_7POINT1));
 
         case HB_ACODEC_FFALAC:
         case HB_ACODEC_FFALAC24:
