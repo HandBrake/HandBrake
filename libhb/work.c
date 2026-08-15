@@ -1233,6 +1233,15 @@ static int sanitize_audio(hb_job_t *job)
             audio->config.out.samplerate = audio->config.in.samplerate;
 
             av_channel_layout_copy(audio->config.out.ch_layout, audio->config.in.ch_layout);
+
+            // Remove unneeded filters.
+            hb_filter_object_t *filter = NULL;
+            while ((filter = hb_list_item(audio->config.out.list_filter, 0)))
+            {
+                hb_list_rem(audio->config.out.list_filter, filter);
+                hb_filter_close(&filter);
+            }
+
             continue;
         }
 

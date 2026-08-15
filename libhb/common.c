@@ -2775,6 +2775,7 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
                     (mixdown == HB_AMIXDOWN_3POINT0)   ||
                     (mixdown == HB_AMIXDOWN_4POINT0)   ||
                     (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_6POINT1)   ||
                     (mixdown == HB_AMIXDOWN_7POINT1));
 
         case HB_ACODEC_FFAAC:
@@ -2782,7 +2783,9 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
                     (mixdown == HB_AMIXDOWN_3POINT0)   ||
                     (mixdown == HB_AMIXDOWN_4POINT0)   ||
                     (mixdown == HB_AMIXDOWN_QUAD)      ||
-                    (mixdown == HB_AMIXDOWN_5POINT1));
+                    (mixdown == HB_AMIXDOWN_5POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_6POINT1)   ||
+                    (mixdown == HB_AMIXDOWN_7POINT1));
 
         case HB_ACODEC_FFALAC:
         case HB_ACODEC_FFALAC24:
@@ -5863,6 +5866,17 @@ int hb_filter_get_from_name(const char *name)
     }
 
     return filter != NULL ? filter->id : HB_FILTER_INVALID;
+}
+
+const char * hb_filter_get_name(int filter_id)
+{
+    hb_filter_object_t *filter = hb_filter_get(filter_id);
+    if (filter)
+    {
+        return filter->name;
+    }
+
+    return "invalid";
 }
 
 const char * hb_filter_get_short_name(int filter_id)

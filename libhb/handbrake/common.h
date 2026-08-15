@@ -1794,6 +1794,7 @@ char               * hb_filter_settings_string_json(int filter_id,
                                                     const char * json);
 
 int                  hb_filter_get_from_name(const char *name);
+const char *         hb_filter_get_name(int filter_id);
 const char *         hb_filter_get_short_name(int filter_id);
 struct hb_motion_metric_object_s
 {
