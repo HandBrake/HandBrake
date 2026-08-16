@@ -8,10 +8,13 @@
 
 @import HandBrakeKit.HBUtilities;
 
+#define HB_OUTPUT_MAX 1000000
+
 @implementation HBOutputFileWriter
 {
     FILE *f;
     NSDateFormatter *_formatter;
+    uint32_t _count;
 }
 
 - (nullable instancetype)initWithFileURL:(NSURL *)url
@@ -49,6 +52,7 @@
         _formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
         _formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
         _formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+        _count = 0;
 
         [self writeHeaderForReason:@"Session"];
     }
@@ -76,8 +80,17 @@
         return;
     }
 
+    if (_count > HB_OUTPUT_MAX)
+    {
+        // Avoid creating enormous log files
+        // in case of repeated errors
+        [self clear];
+    }
+
     fprintf(f, "%s", text.UTF8String);
     fflush(f);
+
+    _count += 1;
 }
 
 - (void)redirect:(NSString *)text type:(HBRedirectType)type
@@ -87,6 +100,8 @@
 
 - (void)clear
 {
+    _count = 0;
+
     if (f == NULL)
     {
         return;
