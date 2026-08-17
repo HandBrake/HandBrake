@@ -1461,7 +1461,7 @@ def createCLI( cross = None ):
     grp.add_argument( '--disable-amfdec', dest="enable_amfdec", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
     h = IfHost( 'libdovi', '*-*-*', none=argparse.SUPPRESS ).value
-    grp.add_argument( '--enable-libdovi', dest="enable_libdovi", default=not Tools.cargo.fail and not Tools.cargoc.fail, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--enable-libdovi', dest="enable_libdovi", default=not Tools.cargo.fail, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-libdovi', dest="enable_libdovi", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
 
@@ -1699,7 +1699,6 @@ try:
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
         ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
         cargo      = ToolProbe( 'CARGO.exe',      'cargo',        'cargo', abort=False )
-        cargoc     = ToolProbe( 'CARGO-C.exe',    'cargo-cbuild', 'cargo-cbuild', abort=False )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=(True if (not xcode_opts['disabled'] and (build_tuple.match('*-*-darwin*') and cross is None)) else False), versionopt='-version', minversion=[10,3,0] )
 
@@ -1799,6 +1798,17 @@ try:
     options.enable_amfdec     = options.enable_amfdec if vce_supported else False
     options.enable_gtk        = options.enable_gtk if gtk_supported else False
     options.enable_vaapi      = options.enable_vaapi if vaapi_supported else False
+
+    # cargo-c is required for building libdovi
+    # ToolProbe only checks for discrete commands. cargo-cbuild is not a discrete command
+    # on some cargo-c installations, but all installations should include cbuild as a
+    # subcommand of cargo and mention cargo-cbuild in the list of installed cargo packages.
+    # Check for both possibilities, which also covers binaries not in the package index.
+    if Tools.cargo.fail is False:
+        cargo_cbuild_check_command = 'command -v cargo-cbuild >/dev/null 2>&1 || %s install --list | grep -E "^ *cargo-cbuild$" >/dev/null 2>&1' % Tools.cargo.pathname
+        cargo_cbuild_check = ShellProbe('checking for cargo-cbuild', '%s' % cargo_cbuild_check_command)
+        cargo_cbuild_check.run()
+        options.enable_libdovi = options.enable_libdovi if not cargo_cbuild_check.fail else False
 
     #####################################
     ## Additional library and tool checks
