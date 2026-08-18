@@ -54,7 +54,7 @@ jobs:
       run: |
         export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64/bin:${PATH}"
         export PATH=/usr/bin:$PATH
-        ./configure --cross=aarch64-w64-mingw32 --enable-mf --launch-jobs=0 --launch
+        ./configure --cross=aarch64-w64-mingw32 --launch-jobs=0 --launch
         cd build
         make pkg.create.zip
         cd libhb
