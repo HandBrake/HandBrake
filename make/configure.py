@@ -1433,7 +1433,7 @@ def createCLI( cross = None ):
     grp.add_argument( '--disable-ffmpeg-prores', dest="enable_ffmpeg_prores", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
     h = 'MediaFoundation video encoder' if mf_supported else argparse.SUPPRESS
-    grp.add_argument( '--enable-mf', dest="enable_mf", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--enable-mf', dest="enable_mf", default=IfHost(True, "aarch64-w64-mingw32*", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-mf', dest="enable_mf", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
     h = 'Nvidia NVENC video encoder' if nvenc_supported else argparse.SUPPRESS
