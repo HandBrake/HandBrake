@@ -1445,7 +1445,7 @@ def createCLI( cross = None ):
     grp.add_argument( '--disable-nvdec', dest="enable_nvdec", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
     h = 'VAAPI video encoder/decoder' if vaapi_supported else argparse.SUPPRESS
-    grp.add_argument( '--enable-vaapi', dest="enable_vaapi", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--enable-vaapi', dest="enable_vaapi", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-vaapi', dest="enable_vaapi", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
     h = 'Intel QSV video encoder/decoder' if qsv_supported else argparse.SUPPRESS
