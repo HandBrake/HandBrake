@@ -643,17 +643,12 @@ void hb_get_user_config_directory( char path[512] )
 
     if ((p = getenv("XDG_CONFIG_HOME")) != NULL)
     {
-        strncpy(path, p, 511);
-        path[511] = 0;
+        snprintf(path, 512, "%s", p);
         return;
     }
     else if ((p = getenv("HOME")) != NULL)
     {
-        strncpy(path, p, 511);
-        path[511] = 0;
-        int len = strlen(path);
-        strncpy(path + len, "/.config", 511 - len - 1);
-        path[511] = 0;
+        snprintf(path, 512, "%s/.config", p);
         return;
     }
 #elif defined( __APPLE__ )
