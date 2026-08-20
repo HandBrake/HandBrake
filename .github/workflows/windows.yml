@@ -30,16 +30,16 @@ jobs:
 
     - name: Setup Toolchain
       run: |
-        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz
-        SHA=$(sha1sum llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz)
-        EXPECTED="a80747aeaeb2714da2482f1359dab5aa8587fff9  llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz"
+        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/llvm-mingw-20260324-ucrt-ubuntu-22.04-x86_64.tar.xz
+        SHA=$(sha1sum llvm-mingw-20260324-ucrt-ubuntu-22.04-x86_64.tar.xz)
+        EXPECTED="efd3a915c7e7a1ee1a66b0ecddebc0a1b0251309  llvm-mingw-20260324-ucrt-ubuntu-22.04-x86_64.tar.xz"
         if [ "$SHA" == "$EXPECTED" ];
         then
             echo "Toolchain Verified. Extracting ..."
             mkdir toolchains
-            mv llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz toolchains
+            mv llvm-mingw-20260324-ucrt-ubuntu-22.04-x86_64.tar.xz toolchains
             cd toolchains
-            tar xvf llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz
+            tar xvf llvm-mingw-20260324-ucrt-ubuntu-22.04-x86_64.tar.xz
         else
             echo "Toolchain Verification FAILED. Exiting!"
             return -1
@@ -52,7 +52,7 @@ jobs:
 
     - name: Build CLI and LibHB
       run: |
-        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64/bin:${PATH}"
+        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/llvm-mingw-20260324-ucrt-ubuntu-22.04-x86_64/bin:${PATH}"
         export PATH=/usr/bin:$PATH
         ./configure --cross=aarch64-w64-mingw32 --launch-jobs=0 --launch
         cd build
