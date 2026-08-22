@@ -116,7 +116,7 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        ass avformat avfilter avcodec avutil swresample dvdnav dvdread \
+        ass avformat avfilter avcodec avutil swresample vidstab dvdnav dvdread \
         freetype mp3lame swscale vpx theora vorbis vorbisenc ogg x264 \
         bluray jansson harfbuzz opus speex dav1d turbojpeg zimg SvtAv1Enc udfread, \
         $(CONTRIB.build/)lib/lib$(n).a )
@@ -183,6 +183,9 @@ LIBHB.dll.libs += $(CONTRIB.build/)lib/liblzma.a
 else
     LIBHB.GCC.l += lzma
 endif
+
+LIBHB.GCC.f += openmp
+LIBHB.GCC.L += $(if $(wildcard $(CONTRIB.build/)lib/libomp.a),$(CONTRIB.build/)lib)
 
 LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
 LIBHB.GCC.l += bcrypt ws2_32 uuid ole32 gdi32 userenv ntdll
