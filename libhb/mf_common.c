@@ -242,6 +242,8 @@ int hb_mf_are_filters_supported(hb_list_t *filters)
 
         switch (filter->id)
         {
+            case HB_FILTER_ADAPTER:
+                break;
             case HB_FILTER_CROP_SCALE:
                 hb_log("D3D11: Scaling filter supported");
                 break;
