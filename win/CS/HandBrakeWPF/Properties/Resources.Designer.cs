@@ -1770,7 +1770,34 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("FilterView_Custom", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Presets for this filter..
+        /// </summary>
+        public static string AVFilterView_PresetTooltip {
+            get {
+                return ResourceManager.GetString("AVFilterView_PresetTooltip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Tunes for this filter..
+        /// </summary>
+        public static string AVFilterView_TuneTooltip {
+            get {
+                return ResourceManager.GetString("AVFilterView_TuneTooltip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Custom options for this filter..
+        /// </summary>
+        public static string AVFilterView_CustomOptionsTooltip {
+            get {
+                return ResourceManager.GetString("AVFilterView_CustomOptionsTooltip", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Filter.
         /// </summary>

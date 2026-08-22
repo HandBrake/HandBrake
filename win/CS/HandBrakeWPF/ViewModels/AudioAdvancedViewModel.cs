@@ -117,7 +117,12 @@ namespace HandBrakeWPF.ViewModels
         {
             this.AudioFilters.Remove(obj);
         }
-        
+
+        public void Save()
+        {
+            this.TryClose(true);
+        }
+
 
         //public void SetPreset(Preset preset, AudioTrack task)
         //{

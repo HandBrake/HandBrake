@@ -23,6 +23,15 @@ namespace HandBrakeWPF.Views
         public AudioAdvancedView()
         {
             InitializeComponent();
+            this.KeyDown += this.AudioAdvancedView_KeyDown;
+        }
+
+        private void AudioAdvancedView_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Escape)
+            {
+                this.Close();
+            }
         }
 
         private void OptionsButton_OnClick(object sender, RoutedEventArgs e)

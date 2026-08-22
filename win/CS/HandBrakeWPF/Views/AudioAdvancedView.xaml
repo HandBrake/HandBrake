@@ -9,12 +9,13 @@
              xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
              mc:Ignorable="d" 
              Title="{Binding Title}"
+             WindowStartupLocation="CenterScreen"
+             TextOptions.TextFormattingMode="Display"
              Width="800"
              Height="400">
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
-        <Converters:EnumComboConverter x:Key="boolComboConverter" />
         <Converters:ThemeImageConverter x:Key="themeConverter" />
     </Window.Resources>
 
@@ -24,6 +25,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -193,15 +195,15 @@
                             <!--  Row 1  -->
                             <TextBlock Text="{Binding DisplayName}" Grid.Column="1" Margin="5,0,0,0" />
 
-                            <ComboBox Grid.Column="2"  Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="Presets for this filter." DisplayMemberPath="DisplayName"
+                            <ComboBox Grid.Column="2"  Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="{x:Static Properties:Resources.AVFilterView_PresetTooltip}" DisplayMemberPath="DisplayName"
                                       ItemsSource="{Binding AvailablePresets}" SelectedItem="{Binding Preset}" Visibility="{Binding CanSetPreset, Converter={StaticResource boolToVisConverter}}"
                                       AutomationProperties.Name="{x:Static Properties:Resources.FilterView_Preset}" />
 
-                            <ComboBox Grid.Column="3"  Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="Tunes for this filter." DisplayMemberPath="DisplayName"
+                            <ComboBox Grid.Column="3"  Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="{x:Static Properties:Resources.AVFilterView_TuneTooltip}" DisplayMemberPath="DisplayName"
                                       ItemsSource="{Binding AvailableTunes}" SelectedItem="{Binding Tune}" Visibility="{Binding CanSetTune, Converter={StaticResource boolToVisConverter}}"
                                       AutomationProperties.Name="{x:Static Properties:Resources.FilterView_Tune}" />
 
-                            <TextBox Text="{Binding CustomOptions}" Grid.Column="4" Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="Custom options for this filter."
+                            <TextBox Text="{Binding CustomOptions}" Grid.Column="4" Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="{x:Static Properties:Resources.AVFilterView_CustomOptionsTooltip}"
                                      Visibility="{Binding AllowsCustomOptions, Converter={StaticResource boolToVisConverter}}"
                                      AutomationProperties.Name="{x:Static Properties:Resources.FilterView_Custom}" />
                         </Grid>
@@ -222,6 +224,22 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" SnapsToDevicePixels="True" Grid.Row="4" Grid.ColumnSpan="2" Margin="10,15,5,10" >
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="2"
+                        Command="{Binding RelayCommand}" CommandParameter="Save"
+                        Content="{x:Static Properties:Resources.Generic_Save}"
+                        IsDefault="True"
+                        Padding="8,2" />
+            </Grid>
+        </Border>
 
     </Grid>
 
