@@ -9,23 +9,21 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Services.Encode.Model.Models.Filters;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
-
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
     using AudioTrack = Services.Encode.Model.Models.AudioTrack;
     using EncodeTask = Services.Encode.Model.EncodeTask;
     using OutputFormat = Services.Encode.Model.Models.OutputFormat;
@@ -35,6 +33,8 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class AudioViewModel : ViewModelBase, IAudioViewModel
     {
+        private readonly IAudioAdvancedViewModel audioAdvancedViewModel;
+
         private IEnumerable<Audio> sourceTracks;
 
         #region Constructors and Destructors
@@ -48,8 +48,9 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public AudioViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        public AudioViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IAudioAdvancedViewModel audioAdvancedViewModel)
         {
+            this.audioAdvancedViewModel = audioAdvancedViewModel;
             this.Task = new EncodeTask();
             this.AudioDefaultsViewModel = new AudioDefaultsViewModel(windowManager);
 
@@ -62,9 +63,12 @@ namespace HandBrakeWPF.ViewModels
             this.AudioEncoders = HandBrakeEncoderHelpers.AudioEncoders.ToList();
             this.SourceTracks = new List<Audio>();
             this.RemoveCommand = new SimpleRelayCommand<AudioTrack>(this.Remove);
+            this.ShowAudioAdvancedSettingsCommand = new SimpleRelayCommand<AudioTrack>(this.ShowAudioAdvancedSettings);
         }
 
         public SimpleRelayCommand<AudioTrack> RemoveCommand { get; set; }
+
+        public SimpleRelayCommand<AudioTrack> ShowAudioAdvancedSettingsCommand { get; set; }
 
         #endregion
 
@@ -223,20 +227,10 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public void ExpandAllTracks()
+        public void ShowAudioAdvancedSettings(AudioTrack track)
         {
-            foreach (var track in this.Task.AudioTracks)
-            {
-                track.IsExpandedTrackView = true;
-            }
-        }
-
-        public void CollapseAllTracks()
-        {
-            foreach (var track in this.Task.AudioTracks)
-            {
-                track.IsExpandedTrackView = false;
-            }
+            this.audioAdvancedViewModel.UpdateTask(track);
+            this.audioAdvancedViewModel.ShowDialog();
         }
 
         #endregion

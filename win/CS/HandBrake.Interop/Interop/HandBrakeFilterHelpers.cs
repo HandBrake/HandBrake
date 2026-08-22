@@ -50,6 +50,18 @@ namespace HandBrake.Interop.Interop
 
             return filters;
         }
+
+
+        public static List<HBFilter> GetHandBrakeAudioFilters()
+        {
+            // Note, it would be nice to get this from LibHB at some point.
+            List<HBFilter> filters = new List<HBFilter>();
+
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_ACOMPRESSOR, "compressor"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_AGATE, "agate"));
+
+            return filters;
+        }
         
         /// <summary>
         /// The get filter presets.

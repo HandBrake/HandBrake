@@ -3113,4 +3113,13 @@ Do you wish to proceed?</value>
   <data name="Filter_deband" xml:space="preserve">
     <value>Deband</value>
   </data>
+  <data name="Filter_agate" xml:space="preserve">
+    <value>Noise Gate</value>
+  </data>
+  <data name="Filter_compressor" xml:space="preserve">
+    <value>Compressor</value>
+  </data>
+  <data name="AudioAdvancedView_Title" xml:space="preserve">
+    <value>Track Settings</value>
+  </data>
 </root>

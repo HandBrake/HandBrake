@@ -311,6 +311,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Track Settings.
+        /// </summary>
+        public static string AudioAdvancedView_Title {
+            get {
+                return ResourceManager.GetString("AudioAdvancedView_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Matching Selected Languages.
         /// </summary>
         public static string AudioBehaviourModes_AllMatching {
@@ -1340,6 +1349,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Noise Gate.
+        /// </summary>
+        public static string Filter_agate {
+            get {
+                return ResourceManager.GetString("Filter_agate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BM3D.
         /// </summary>
         public static string Filter_bm3d {
@@ -1408,6 +1426,15 @@ namespace HandBrakeWPF.Properties {
         public static string Filter_combdetect {
             get {
                 return ResourceManager.GetString("Filter_combdetect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compressor.
+        /// </summary>
+        public static string Filter_compressor {
+            get {
+                return ResourceManager.GetString("Filter_compressor", resourceCulture);
             }
         }
         
