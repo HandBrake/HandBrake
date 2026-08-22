@@ -79,6 +79,12 @@ namespace HandBrakeWPF.ViewModels
 
         public void AddTrack(HandBrakeFilter hbFilter)
         {
+            bool alreadyExists = this.AudioFilters.Any(f => f.HandBrakeFilterChoice?.FilterId == hbFilter.FilterId);
+            if (alreadyExists)
+            {
+                return;
+            }
+            
             if (!string.IsNullOrEmpty(hbFilter.Category))
             {
                 var filtersToRemove = this.AudioFilters

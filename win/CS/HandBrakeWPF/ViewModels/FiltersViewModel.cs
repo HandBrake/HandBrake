@@ -28,11 +28,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Commands;
 
     using EncodeTask = Services.Encode.Model.EncodeTask;
-
-    /*
-     * TODO:  Don't allow duplicate filters to be added.
-     * 
-     */
     
     public class FiltersViewModel : ViewModelBase, IFiltersViewModel
     {
@@ -75,6 +70,12 @@ namespace HandBrakeWPF.ViewModels
 
         public void AddTrack(HandBrakeFilter hbFilter)
         {
+            bool alreadyExists = this.VideoFilters.Any(f => f.HandBrakeFilterChoice?.FilterId == hbFilter.FilterId);
+            if (alreadyExists)
+            {
+                return;
+            }
+
             if (!string.IsNullOrEmpty(hbFilter.Category))
             {
                 var filtersToRemove = this.VideoFilters
