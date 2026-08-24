@@ -19,12 +19,12 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
     using HandBrakeWPF.ViewModelItems;
     using HandBrakeWPF.ViewModels;
 
-    public class VideoFilter : PropertyChangedBase
+    public class AudioVideoFilter : PropertyChangedBase
     {
         private readonly Action changeTrigger;
 
 
-        public VideoFilter(int hbFilter, FilterPreset preset = null, FilterTune tune = null, string custom = null, Action changeTrigger = null)
+        public AudioVideoFilter(int hbFilter, FilterPreset preset = null, FilterTune tune = null, string custom = null, Action changeTrigger = null)
         {
             this.changeTrigger = changeTrigger;
 
@@ -49,7 +49,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
             }
         }
         
-        public VideoFilter(HandBrakeFilter hbFilter, FilterPreset preset = null, FilterTune tune = null, string custom = null, Action changeTrigger = null)
+        public AudioVideoFilter(HandBrakeFilter hbFilter, FilterPreset preset = null, FilterTune tune = null, string custom = null, Action changeTrigger = null)
         {
             this.changeTrigger = changeTrigger;
             this.HandBrakeFilterChoice = hbFilter;
@@ -68,7 +68,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
             }
         }
 
-        public VideoFilter(VideoFilter filter, Action changeTrigger)
+        public AudioVideoFilter(AudioVideoFilter filter, Action changeTrigger)
         {
             if (filter == null)
             {
@@ -183,7 +183,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
             }
         }
 
-        protected bool Equals(VideoFilter other)
+        protected bool Equals(AudioVideoFilter other)
         {
             return this.FilterId == other.FilterId 
                    && Equals(this.Preset, other.Preset) 
@@ -196,7 +196,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((VideoFilter)obj);
+            return Equals((AudioVideoFilter)obj);
         }
 
         public override int GetHashCode()

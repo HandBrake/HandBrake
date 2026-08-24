@@ -9,20 +9,20 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
+    using HandBrake.App.Core.Utilities;
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
+    using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Services.Encode.Model.Models.Filters;
+    using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.ViewModels;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
     using System.Text.Json.Serialization;
-
-    using HandBrake.App.Core.Utilities;
-    using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-
-    using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.ViewModels;
 
     public class AudioTrack : PropertyChangedBase
     {
@@ -42,8 +42,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         private double? quality;
         private string trackName;
 
-        private bool isExpandedTrackView;
-
         public AudioTrack()
         {
             // Default Values
@@ -54,6 +52,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.DRC = 0;
             this.ScannedTrack = new Audio();
             this.TrackName = string.Empty;
+            this.AudioFilters = new ObservableCollection<AudioVideoFilter>();
 
             // Setup Backing Properties
             this.EncoderRateType = AudioEncoderRateType.Bitrate;
@@ -87,6 +86,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
 
             this.Quality = track.Quality;
+
+            this.AudioFilters = track.AudioFilters;
 
             // Setup Backing Properties
             this.encoderRateType = track.EncoderRateType;
@@ -152,6 +153,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
             this.SetupLimits();
             this.AutoNameTrack();
+            
+            
+            // TODO : Figure out how the behaviour tracks are hooked up into this
+            this.AudioFilters = new ObservableCollection<AudioVideoFilter>();
         }
 
         /* Audio Track Properties */
@@ -347,6 +352,21 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
+        public ObservableCollection<AudioVideoFilter> AudioFilters
+        {
+            get;
+            set
+            {
+                if (Equals(value, field))
+                {
+                    return;
+                }
+
+                field = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         [JsonIgnore]
         public string AudioEncoderDisplayValue
         {
@@ -476,18 +496,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         public AudioTrack TrackReference
         {
             get { return this; }
-        }
-
-        [JsonIgnore]
-        public bool IsExpandedTrackView
-        {
-            get => this.isExpandedTrackView;
-            set
-            {
-                if (value == this.isExpandedTrackView) return;
-                this.isExpandedTrackView = value;
-                this.NotifyOfPropertyChange(() => this.IsExpandedTrackView);
-            }
         }
 
         [JsonIgnore]

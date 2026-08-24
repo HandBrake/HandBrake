@@ -180,7 +180,7 @@
                                 <ColumnDefinition Width="85" /> <!-- Samplerate -->
                                 <ColumnDefinition Width="55" /> <!-- Gain -->
                                 <ColumnDefinition Width="55" /> <!-- DRC -->
-                                <ColumnDefinition Width="20" /> <!-- Adv -->
+                                <ColumnDefinition Width="35" /> <!-- Adv -->
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
@@ -264,23 +264,10 @@
                                                 Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                                 Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
 
-                            <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="8" Grid.Row="0" Margin="5,0,0,0" HorizontalAlignment="Stretch"
-                                           Padding="3,0" Background="Transparent" IsChecked="{Binding IsExpandedTrackView}" >
-                                <ToggleButton.Style>
-                                    <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
-                                        <Setter Property="Content" Value="Show"/>
-                                        <Setter Property="FontWeight" Value="Bold" />
-                                        <Style.Triggers>
-                                            <Trigger Property="IsChecked" Value="True">
-                                                <Setter Property="Content" Value="˄"/>
-                                            </Trigger>
-                                            <Trigger Property="IsChecked" Value="False">
-                                                <Setter Property="Content" Value="˅" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ToggleButton.Style>
-                            </ToggleButton>
+
+                            <Button Content="..." Grid.Column="8" Grid.Row="0" Margin="5,0,0,0"
+                                    Command="{Binding DataContext.ShowAudioAdvancedSettingsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"          
+                                    CommandParameter="{Binding}" />
 
                         </Grid>
 
@@ -295,14 +282,6 @@
                             </Button>                                                        
                         </StackPanel>
 
-                        <!-- Hidden Row -->
-                        <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Visibility="{Binding IsExpandedTrackView, Converter={StaticResource boolToVisConverter}}">
-                            <StackPanel Orientation="Horizontal" Margin="22,5,0,5" >
-                                <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackName}" Style="{StaticResource sectionHeader}"  VerticalAlignment="Center" Margin="0,0,5,0" />
-                                <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="250" MaxWidth="761" behaviours:TextBoxBehavior.TripleClickSelectAll="True"
-                                         AutomationProperties.Name="{x:Static Properties:Resources.AudioView_AudioTrackName}"/>                                                                
-                            </StackPanel>
-                        </Grid>
                     </Grid>
 
                 </DataTemplate>

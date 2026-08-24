@@ -376,8 +376,19 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     NormalizeMixLevel = false,
                     Samplerate = sampleRate != null ? sampleRate.Rate : 0,
                     Name = !string.IsNullOrEmpty(item.TrackName) ? item.TrackName : null,
+                    FilterList = new List<Filter>()
                 };
 
+                foreach (var filter in item.AudioFilters)
+                {
+                    Filter hbFilter = CreateFilter(
+                        filter.FilterId,
+                        filter.Preset?.Key,
+                        filter.Tune?.Key,
+                        filter.CustomOptions);
+                    audioTrack.FilterList.Add(hbFilter);
+                }
+                
                 if (!item.IsPassthru)
                 {
                     if (item.EncoderRateType == AudioEncoderRateType.Quality)
@@ -390,7 +401,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                         audioTrack.Bitrate = item.Bitrate;
                     }
                 }
-
+                
                 audio.AudioList.Add(audioTrack);
             }
 
@@ -418,7 +429,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             };
 
             // Note, order is important.
-            foreach (VideoFilter taskFilter in job.VideoFilters)
+            foreach (AudioVideoFilter taskFilter in job.VideoFilters)
             {
                 Filter filterItem = CreateFilter(taskFilter.FilterId, taskFilter.Preset?.Key, taskFilter.Tune?.Key, taskFilter.CustomOptions);
                 filter.FilterList.Add(filterItem);

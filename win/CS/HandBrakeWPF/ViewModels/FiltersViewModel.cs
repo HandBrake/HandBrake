@@ -28,7 +28,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Commands;
 
     using EncodeTask = Services.Encode.Model.EncodeTask;
-
+    
     public class FiltersViewModel : ViewModelBase, IFiltersViewModel
     {
         public FiltersViewModel(IUserSettingService userSettingService)
@@ -36,7 +36,7 @@ namespace HandBrakeWPF.ViewModels
             this.CurrentTask = new EncodeTask();
             this.AvailableFilters = new BindingList<HandBrakeFilter>();
             this.AvailableFiltersMenu = new ObservableCollection<FilterMenuItem>();
-            this.RemoveCommand = new SimpleRelayCommand<VideoFilter>(this.Remove);
+            this.RemoveCommand = new SimpleRelayCommand<AudioVideoFilter>(this.Remove);
 
 
             foreach (HBFilter filter in HandBrakeFilterHelpers.GetHandBrakeFilters())
@@ -49,7 +49,7 @@ namespace HandBrakeWPF.ViewModels
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
-        public SimpleRelayCommand<VideoFilter> RemoveCommand { get; set; }
+        public SimpleRelayCommand<AudioVideoFilter> RemoveCommand { get; set; }
 
         public ListboxDeleteCommand DeleteCommand => new ListboxDeleteCommand();
 
@@ -59,7 +59,7 @@ namespace HandBrakeWPF.ViewModels
 
         public ObservableCollection<FilterMenuItem> AvailableFiltersMenu { get; private set; }
 
-        public ObservableCollection<VideoFilter> VideoFilters
+        public ObservableCollection<AudioVideoFilter> VideoFilters
         {
             get
             {
@@ -70,6 +70,12 @@ namespace HandBrakeWPF.ViewModels
 
         public void AddTrack(HandBrakeFilter hbFilter)
         {
+            bool alreadyExists = this.VideoFilters.Any(f => f.HandBrakeFilterChoice?.FilterId == hbFilter.FilterId);
+            if (alreadyExists)
+            {
+                return;
+            }
+
             if (!string.IsNullOrEmpty(hbFilter.Category))
             {
                 var filtersToRemove = this.VideoFilters
@@ -82,7 +88,7 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
-            VideoFilter newFilter  = new VideoFilter(hbFilter, null, null, null, ChangeTrigger);
+            AudioVideoFilter newFilter  = new AudioVideoFilter(hbFilter, null, null, null, ChangeTrigger);
             this.VideoFilters.Add(newFilter);
 
             ChangeTrigger();
@@ -98,7 +104,7 @@ namespace HandBrakeWPF.ViewModels
             this.VideoFilters.Clear();
         }
         
-        private void Remove(VideoFilter obj)
+        private void Remove(AudioVideoFilter obj)
         {
             this.VideoFilters.Remove(obj);
         }
@@ -109,9 +115,9 @@ namespace HandBrakeWPF.ViewModels
             this.CurrentTask = task;
             this.VideoFilters.Clear();
 
-            foreach (VideoFilter filter in preset.Task.VideoFilters)
+            foreach (AudioVideoFilter filter in preset.Task.VideoFilters)
             {
-                this.VideoFilters.Add(new VideoFilter(filter, ChangeTrigger)); // Decouple Copy from preset.
+                this.VideoFilters.Add(new AudioVideoFilter(filter, ChangeTrigger)); // Decouple Copy from preset.
             }
 
             this.NotifyOfPropertyChange(() => this.VideoFilters);

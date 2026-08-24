@@ -3053,6 +3053,15 @@ Do you wish to proceed?</value>
   <data name="FilterView_Custom" xml:space="preserve">
     <value>Custom</value>
   </data>
+  <data name="AVFilterView_PresetTooltip" xml:space="preserve">
+    <value>Presets for this filter.</value>
+  </data>
+  <data name="AVFilterView_TuneTooltip" xml:space="preserve">
+    <value>Tunes for this filter.</value>
+  </data>
+  <data name="AVFilterView_CustomOptionsTooltip" xml:space="preserve">
+    <value>Custom options for this filter.</value>
+  </data>
   <data name="Filter_Category_Deinterlace" xml:space="preserve">
     <value>Deinterlace</value>
   </data>
@@ -3112,5 +3121,14 @@ Do you wish to proceed?</value>
   </data>
   <data name="Filter_deband" xml:space="preserve">
     <value>Deband</value>
+  </data>
+  <data name="Filter_agate" xml:space="preserve">
+    <value>Noise Gate</value>
+  </data>
+  <data name="Filter_compressor" xml:space="preserve">
+    <value>Compressor</value>
+  </data>
+  <data name="AudioAdvancedView_Title" xml:space="preserve">
+    <value>Track Settings</value>
   </data>
 </root>

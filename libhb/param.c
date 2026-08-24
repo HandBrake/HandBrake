@@ -135,7 +135,7 @@ static hb_filter_param_t colorspace_presets[] =
 {
     { 0, "Off",             "off",          NULL        },
     { 1, "Custom",          "custom",       NULL        },
-    { 2, "BT.2020",         "bt2020",       "primaries=bt2020:transfer=bt2020-10:matrix=bt2020ncl:tonemap=hable:desat=0" },
+    { 2, "BT.2020",         "bt2020",       "primaries=bt2020:transfer=bt2020-10:matrix=bt2020nc:tonemap=hable:desat=0"  },
     { 3, "BT.709",          "bt709",        "primaries=bt709:transfer=bt709:matrix=bt709:tonemap=hable:desat=0"          },
     { 4, "BT.601 SMPTE-C",  "bt601-6-525",  "primaries=smpte170m:transfer=bt709:matrix=smpte170m:tonemap=hable:desat=0"  },
     { 5, "BT.601 EBU",      "bt601-6-625",  "primaries=bt470bg:transfer=bt709:matrix=smpte170m:tonemap=hable:desat=0"    },

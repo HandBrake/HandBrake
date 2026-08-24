@@ -38,4 +38,4 @@ jobs:
 
     - name: Build HandBrake Linux
       run: |
-         ./configure --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --launch-jobs=0 --launch
+         ./configure --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --enable-vaapi --launch-jobs=0 --launch

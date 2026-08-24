@@ -7,8 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+
+
 namespace HandBrake.Interop.Interop.Json.Encode
 {
+    using System.Collections.Generic;
+    
     /// <summary>
     /// Represents an audio track to encode.
     /// </summary>
@@ -73,5 +77,7 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// Gets or sets the dither method.
         /// </summary>
         public int DitherMethod { get; set; }
+
+        public List<Filter> FilterList { get; set; }
     }
 }

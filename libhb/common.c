@@ -5138,7 +5138,7 @@ void hb_job_close( hb_job_t ** _j )
     {
         job_clean(*_j);
         free( *_j );
-        _j = NULL;
+        *_j = NULL;
     }
 }
 

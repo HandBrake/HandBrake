@@ -90,16 +90,16 @@ namespace HandBrakeWPF.Services.Presets.Factories
             }
 
             /* Filter Settings */
-            preset.Task.VideoFilters = new ObservableCollection<VideoFilter>();
+            preset.Task.VideoFilters = new ObservableCollection<AudioVideoFilter>();
             
             if (importedPreset.VideoGrayScale)
             {
-                preset.Task.VideoFilters.Add(new VideoFilter((int)hb_filter_ids.HB_FILTER_GRAYSCALE));
+                preset.Task.VideoFilters.Add(new AudioVideoFilter((int)hb_filter_ids.HB_FILTER_GRAYSCALE));
             }
 
             if (!string.IsNullOrEmpty(importedPreset.PictureColorspacePreset) && importedPreset.PictureColorspacePreset != "off")
             {
-                VideoFilter filter = new VideoFilter(
+                AudioVideoFilter filter = new AudioVideoFilter(
                     (int)hb_filter_ids.HB_FILTER_COLORSPACE,
                     new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_COLORSPACE).FirstOrDefault(s => s.ShortName == importedPreset.PictureColorspacePreset)),
                     null,
@@ -110,7 +110,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             
             if (!string.IsNullOrEmpty(importedPreset.PictureChromaSmoothPreset) && importedPreset.PictureChromaSmoothPreset != "off")
             {
-                VideoFilter filter = new VideoFilter(
+                AudioVideoFilter filter = new AudioVideoFilter(
                     (int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH,
                     new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH).FirstOrDefault(s => s.ShortName == importedPreset.PictureChromaSmoothPreset)),
                     new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH).FirstOrDefault(s => s.ShortName == importedPreset.PictureChromaSmoothTune)),
@@ -122,7 +122,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (!string.IsNullOrEmpty(importedPreset.PictureDeblockPreset) && importedPreset.PictureDeblockPreset != "off")
             {
-                VideoFilter filter = new VideoFilter(
+                AudioVideoFilter filter = new AudioVideoFilter(
                     (int)hb_filter_ids.HB_FILTER_DEBLOCK,
                     new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockPreset)),
                     new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockTune)),
@@ -147,7 +147,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 
                 if (filterId != 0)
                 {
-                    VideoFilter filter = new VideoFilter(
+                    AudioVideoFilter filter = new AudioVideoFilter(
                         filterId,
                         new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets(filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureSharpenPreset)),
                         new FilterTune(HandBrakeFilterHelpers.GetFilterTunes(filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureSharpenTune)),
@@ -176,7 +176,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
                 if (filterId != 0)
                 {
-                    VideoFilter filter = new VideoFilter(
+                    AudioVideoFilter filter = new AudioVideoFilter(
                         filterId,
                         new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets(filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeinterlacePreset)),
                         null,
@@ -187,7 +187,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (!string.IsNullOrEmpty(importedPreset.PictureCombDetectPreset) && importedPreset.PictureCombDetectPreset != "off")
             {
-                VideoFilter filter = new VideoFilter(
+                AudioVideoFilter filter = new AudioVideoFilter(
                     (int)hb_filter_ids.HB_FILTER_COMB_DETECT,
                     new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_COMB_DETECT).FirstOrDefault(s => s.ShortName == importedPreset.PictureCombDetectPreset)),
                     null,
@@ -212,7 +212,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
                 if (filterId != 0)
                 {
-                    VideoFilter filter = new VideoFilter(
+                    AudioVideoFilter filter = new AudioVideoFilter(
                         filterId,
                         new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets(filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureDenoisePreset)),
                         new FilterTune(HandBrakeFilterHelpers.GetFilterTunes(filterId).FirstOrDefault(s => s.ShortName == importedPreset.PictureDenoiseTune)),
@@ -224,7 +224,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (importedPreset.PictureDetelecine != null && importedPreset.PictureDetelecine != "off")
             {
-                VideoFilter filter = new VideoFilter(
+                AudioVideoFilter filter = new AudioVideoFilter(
                     (int)hb_filter_ids.HB_FILTER_DETELECINE,
                     new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DETELECINE).FirstOrDefault(s => s.ShortName == importedPreset.PictureDetelecine)),
                     null,
@@ -568,7 +568,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // Filters
             preset.VideoGrayScale = export.Task.VideoFilters.Any(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_GRAYSCALE);
 
-            VideoFilter deblock = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_DEBLOCK);
+            AudioVideoFilter deblock = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_DEBLOCK);
             if (deblock != null)
             {
                 preset.PictureDeblockPreset = deblock.Preset?.Key;
@@ -576,7 +576,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.PictureDeblockCustom = deblock.CustomOptions;
             }
 
-            VideoFilter yadif = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_YADIF);
+            AudioVideoFilter yadif = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_YADIF);
             if (yadif != null)
             {
                 preset.PictureDeinterlaceFilter = "yadif";
@@ -584,7 +584,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.PictureDeinterlaceCustom = yadif.CustomOptions;
             }
 
-            VideoFilter bwdif = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_BWDIF);
+            AudioVideoFilter bwdif = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_BWDIF);
             if (bwdif != null)
             {
                 preset.PictureDeinterlaceFilter = "bwdif";
@@ -592,7 +592,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.PictureDeinterlaceCustom = bwdif.CustomOptions;
             }
 
-            VideoFilter decomb = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_DECOMB);
+            AudioVideoFilter decomb = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_DECOMB);
             if (decomb != null)
             {
                 preset.PictureDeinterlaceFilter = "decomb";
@@ -600,14 +600,14 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.PictureDeinterlaceCustom = decomb.CustomOptions;
             }
 
-            VideoFilter combDetect = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_COMB_DETECT);
+            AudioVideoFilter combDetect = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_COMB_DETECT);
             if (combDetect != null)
             {
                 preset.PictureCombDetectPreset = combDetect.Preset?.Key;
                 preset.PictureCombDetectCustom = combDetect.CustomOptions;
             }
 
-            VideoFilter hqdn3d = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_HQDN3D);
+            AudioVideoFilter hqdn3d = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_HQDN3D);
             if (hqdn3d != null)
             {
                 preset.PictureDenoiseFilter = "hqdn3d";
@@ -616,7 +616,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.PictureDenoiseCustom = hqdn3d.CustomOptions;
             }
 
-            VideoFilter nlmeans = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_NLMEANS);
+            AudioVideoFilter nlmeans = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_NLMEANS);
             if (nlmeans != null)
             {
                 preset.PictureDenoiseFilter = "nlmeans";
@@ -625,14 +625,14 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.PictureDenoiseCustom = nlmeans.CustomOptions;
             }
 
-            VideoFilter detelecine = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_DETELECINE);
+            AudioVideoFilter detelecine = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_DETELECINE);
             if (detelecine != null)
             {
                 preset.PictureDetelecine = detelecine.Preset?.Key ?? "default";
                 preset.PictureDetelecineCustom = detelecine.CustomOptions;
             }
 
-            VideoFilter lapsharp = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_LAPSHARP);
+            AudioVideoFilter lapsharp = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_LAPSHARP);
             if (lapsharp != null)
             {
                 preset.PictureSharpenFilter = "lapsharp";
@@ -641,7 +641,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.PictureSharpenCustom = lapsharp.CustomOptions;
             }
 
-            VideoFilter unsharp = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_UNSHARP);
+            AudioVideoFilter unsharp = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_UNSHARP);
             if (unsharp != null)
             {
                 preset.PictureSharpenFilter = "unsharp";
@@ -650,14 +650,14 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.PictureSharpenCustom = unsharp.CustomOptions;
             }
 
-            VideoFilter colorspace = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_COLORSPACE);
+            AudioVideoFilter colorspace = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_COLORSPACE);
             if (colorspace != null)
             {
                 preset.PictureColorspacePreset = colorspace.Preset?.Key;
                 preset.PictureColorspaceCustom = colorspace.CustomOptions;
             }
 
-            VideoFilter chromaSmooth = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH);
+            AudioVideoFilter chromaSmooth = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH);
             if (chromaSmooth != null)
             {
                 preset.PictureChromaSmoothPreset = chromaSmooth.Preset?.Key;

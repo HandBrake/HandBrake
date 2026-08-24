@@ -38,7 +38,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         public EncodeTask()
         {
             this.Cropping = new Cropping();
-            this.VideoFilters = new ObservableCollection<VideoFilter>();
+            this.VideoFilters = new ObservableCollection<AudioVideoFilter>();
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
@@ -95,8 +95,8 @@ namespace HandBrakeWPF.Services.Encode.Model
             }
 
             /* Filter Settings */
-            this.VideoFilters = new ObservableCollection<VideoFilter>();
-            foreach (VideoFilter filter in task.VideoFilters)
+            this.VideoFilters = new ObservableCollection<AudioVideoFilter>();
+            foreach (AudioVideoFilter filter in task.VideoFilters)
             {
                 this.VideoFilters.Add(filter);
             }
@@ -210,7 +210,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         public PaddingFilter Padding { get; set; }
 
         /* Filters */
-        public ObservableCollection<VideoFilter> VideoFilters { get; set; }
+        public ObservableCollection<AudioVideoFilter> VideoFilters { get; set; }
 
         
         /* Video */
