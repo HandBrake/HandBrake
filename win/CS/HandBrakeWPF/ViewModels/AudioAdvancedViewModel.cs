@@ -24,6 +24,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
 
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Views;
 
@@ -54,6 +55,7 @@ namespace HandBrakeWPF.ViewModels
 
         public SimpleRelayCommand<AudioVideoFilter> RemoveCommand { get; set; }
 
+        public bool IsAudioBehaviourView { get; set; }
 
         public ListboxDeleteCommand DeleteCommand => new ListboxDeleteCommand();
 
@@ -65,11 +67,8 @@ namespace HandBrakeWPF.ViewModels
 
         public ObservableCollection<AudioVideoFilter> AudioFilters
         {
-            get
-            {
-
-                return this.AudioTrack.AudioFilters;
-            }
+            get;
+            set;
         }
 
         public bool? ShowDialog()
@@ -139,7 +138,17 @@ namespace HandBrakeWPF.ViewModels
 
         public void UpdateTask(AudioTrack task)
         {
+            this.IsAudioBehaviourView = false;
             this.AudioTrack = task;
+            this.AudioFilters = task.AudioFilters; // Reference the same collection to ensure changes are reflected in the UI
+            this.NotifyOfPropertyChange(() => this.AudioFilters);
+        }
+
+        public void UpdateTask(AudioBehaviourTrack task)
+        {
+            this.IsAudioBehaviourView = true;
+            this.AudioTrack = null;
+            this.AudioFilters = task.AudioFilters; // Reference the same collection to ensure changes are reflected in the UI
             this.NotifyOfPropertyChange(() => this.AudioFilters);
         }
 

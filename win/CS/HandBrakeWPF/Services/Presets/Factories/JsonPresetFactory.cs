@@ -402,6 +402,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                             {
                                 AudioVideoFilter audioFilter = new AudioVideoFilter(
                                     filterId,
+                                    true,
                                     new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets(filterId).FirstOrDefault(s => s.ShortName == filter.AudioFilterPreset)),
                                     new FilterTune(HandBrakeFilterHelpers.GetFilterTunes(filterId).FirstOrDefault(s => s.ShortName == filter.AudioFilterTune)),
                                     filter.AudioFilterCustom);

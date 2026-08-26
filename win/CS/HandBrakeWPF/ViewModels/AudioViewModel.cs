@@ -52,7 +52,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.audioAdvancedViewModel = audioAdvancedViewModel;
             this.Task = new EncodeTask();
-            this.AudioDefaultsViewModel = new AudioDefaultsViewModel(windowManager);
+            this.AudioDefaultsViewModel = new AudioDefaultsViewModel(windowManager, audioAdvancedViewModel);
 
             this.SampleRates = new ObservableCollection<string> { "Auto" };
             foreach (var item in HandBrakeEncoderHelpers.AudioSampleRates)

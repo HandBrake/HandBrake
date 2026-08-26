@@ -258,6 +258,7 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
                                 <Grid.RowDefinitions>
@@ -362,7 +363,13 @@
                                         </MultiBinding>
                                     </controls:NumberBox.Visibility>
                                 </controls:NumberBox>
+
+                                <Button Content="..." Grid.Column="14" Grid.Row="0" Margin="5,0,0,0"
+                                        Command="{Binding DataContext.ShowAudioAdvancedSettingsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"          
+                                        CommandParameter="{Binding}" />
                             </Grid>
+
+
 
                             <!--  Delete  -->
                             <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">
