@@ -391,6 +391,26 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     track.Gain = (int)audioTrack.AudioTrackGainSlider;
                     track.DRC = audioTrack.AudioTrackDRCSlider;
 
+                    if (audioTrack.AudioFilterList != null)
+                    {
+                        foreach (var filter in audioTrack.AudioFilterList)
+                        {
+                            int filterId = HandBrakeFilterHelpers.GetHandBrakeAudioFilters()
+                                .FirstOrDefault(f => f.ShortName == filter.AudioFilterName)?.FilterId ?? 0;
+
+                            if (filterId != 0)
+                            {
+                                AudioVideoFilter audioFilter = new AudioVideoFilter(
+                                    filterId,
+                                    new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets(filterId).FirstOrDefault(s => s.ShortName == filter.AudioFilterPreset)),
+                                    new FilterTune(HandBrakeFilterHelpers.GetFilterTunes(filterId).FirstOrDefault(s => s.ShortName == filter.AudioFilterTune)),
+                                    filter.AudioFilterCustom);
+
+                                track.AudioFilters.Add(audioFilter);
+                            }
+                        }
+                    }
+
                     preset.AudioTrackBehaviours.BehaviourTracks.Add(track);
                 }
             }
@@ -504,7 +524,14 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     AudioTrackDRCSlider = item.DRC,
                     AudioTrackGainSlider = item.Gain,
                     AudioTrackQuality = item.Quality ?? 0,
-                    AudioTrackQualityEnable = item.Quality.HasValue && item.IsQualityVisible
+                    AudioTrackQualityEnable = item.Quality.HasValue && item.IsQualityVisible,
+                    AudioFilterList = item.AudioFilters?.Select(f => new AudioFilter
+                                          {
+                                              AudioFilterName = HandBrakeFilterHelpers.GetHandBrakeAudioFilters().FirstOrDefault(af => af.FilterId == f.FilterId)?.ShortName,
+                                              AudioFilterPreset = f.Preset?.Key,
+                                              AudioFilterTune = f.Tune?.Key,
+                                              AudioFilterCustom = f.CustomOptions
+                                          }).ToList() ?? new List<AudioFilter>()
                 };
 
                 preset.AudioList.Add(track);
