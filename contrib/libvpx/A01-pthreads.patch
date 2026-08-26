@@ -1,9 +1,6 @@
-Only in libvpx-1.8.0: .DS_Store
-Only in libvpx-1.8.0/build: .DS_Store
-diff -ur libvpx-1.8.0.orig/libs.mk libvpx-1.8.0/libs.mk
---- libvpx-1.8.0.orig/libs.mk	2019-02-04 12:02:33.000000000 -0500
-+++ libvpx-1.8.0/libs.mk	2019-02-28 10:43:03.000000000 -0500
-@@ -401,11 +401,10 @@
+--- libvpx-1.17.0.orig/libs.mk 2026-08-20 21:06:35.000000000 +0200
++++ libvpx-1.17.0/libs.mk 2026-08-26 10:32:10.910705389 +0200
+@@ -400,11 +400,10 @@
  	$(qexec)echo 'Version: $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)' >> $@
  	$(qexec)echo 'Requires:' >> $@
  	$(qexec)echo 'Conflicts:' >> $@
