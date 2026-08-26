@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Views
 {
     using System;
     using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media.Imaging;
 
@@ -19,14 +20,12 @@ namespace HandBrakeWPF.Views
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    /// <summary>
-    /// Interaction logic for StaticPreviewView.xaml
-    /// </summary>
     public partial class StaticPreviewView : Window
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StaticPreviewView"/> class.
-        /// </summary>
+        private bool isDraggingCropBorder;
+        private Point cropBorderDragStartPoint;
+        private bool hasUserPositionedCropBorder;
+        
         public StaticPreviewView()
         {
             this.InitializeComponent();
@@ -43,6 +42,102 @@ namespace HandBrakeWPF.Views
         {
             base.OnSourceInitialized(e);
             WindowHelper.SetDarkMode(this);
+        }
+
+
+        private void CropSettingsBorder_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            this.CenterCropSettingsBorder();
+            this.cropSettingsBorder.IsVisibleChanged += this.CropSettingsBorder_OnIsVisibleChanged;
+        }
+
+        private void CropSettingsBorder_OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.cropSettingsBorder.IsVisible)
+            {
+                this.CenterCropSettingsBorder();
+            }
+        }
+
+        private void CropSettingsBorder_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.CenterCropSettingsBorder();
+        }
+
+        private void DragCanvas_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.CenterCropSettingsBorder();
+        }
+
+        private void CenterCropSettingsBorder()
+        {
+            if (this.hasUserPositionedCropBorder)
+            {
+                return;
+            }
+
+            if (this.dragCanvas.ActualWidth > 0 && this.cropSettingsBorder.ActualWidth > 0)
+            {
+                double left = (this.dragCanvas.ActualWidth - this.cropSettingsBorder.ActualWidth) / 2;
+                double top = (this.dragCanvas.ActualHeight - this.cropSettingsBorder.ActualHeight) / 2;
+
+                Canvas.SetLeft(this.cropSettingsBorder, Math.Max(0, left));
+                Canvas.SetTop(this.cropSettingsBorder, Math.Max(0, top));
+            }
+        }
+
+        private void CropSettingsBorder_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.isDraggingCropBorder = true;
+            this.cropBorderDragStartPoint = e.GetPosition(this.dragCanvas);
+            this.cropSettingsBorder.CaptureMouse();
+        }
+
+        private void CropSettingsBorder_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            this.isDraggingCropBorder = false;
+            this.cropSettingsBorder.ReleaseMouseCapture();
+        }
+
+        private void CropSettingsBorder_OnMouseMove(object sender, MouseEventArgs e)
+        {
+            if (!this.isDraggingCropBorder || e.LeftButton != MouseButtonState.Pressed)
+            {
+                return;
+            }
+
+            this.hasUserPositionedCropBorder = true;
+
+            Point currentPosition = e.GetPosition(this.dragCanvas);
+            double deltaX = currentPosition.X - this.cropBorderDragStartPoint.X;
+            double deltaY = currentPosition.Y - this.cropBorderDragStartPoint.Y;
+
+            double newLeft = Canvas.GetLeft(this.cropSettingsBorder);
+            double newTop = Canvas.GetTop(this.cropSettingsBorder);
+
+            if (double.IsNaN(newLeft))
+            {
+                newLeft = 0;
+            }
+
+            if (double.IsNaN(newTop))
+            {
+                newTop = 0;
+            }
+
+            newLeft += deltaX;
+            newTop += deltaY;
+
+            double maxLeft = Math.Max(0, this.dragCanvas.ActualWidth - this.cropSettingsBorder.ActualWidth);
+            double maxTop = Math.Max(0, this.dragCanvas.ActualHeight - this.cropSettingsBorder.ActualHeight);
+
+            newLeft = Math.Min(Math.Max(0, newLeft), maxLeft);
+            newTop = Math.Min(Math.Max(0, newTop), maxTop);
+
+            Canvas.SetLeft(this.cropSettingsBorder, newLeft);
+            Canvas.SetTop(this.cropSettingsBorder, newTop);
+
+            this.cropBorderDragStartPoint = currentPosition;
         }
 
         private void VideoPlayer_MediaFailed(object sender, ExceptionRoutedEventArgs e)
