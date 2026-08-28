@@ -198,6 +198,10 @@ int hb_hwaccel_is_available(hb_hwaccel_t *hwaccel, int codec_id)
     }
 
     const AVCodec *codec = hwaccel->find_decoder(codec_id);
+    if (codec == NULL)
+    {
+        return 0;
+    }
     const AVCodecHWConfig *config = get_hw_config(codec, hwaccel->type);
 
     return config != NULL;
