@@ -124,6 +124,21 @@ static const char * const h26x_nvenc_preset_names[] =
     "fastest", "faster", "fast", "medium", "slow", "slower", "slowest", NULL
 };
 
+static const char * const h264_nvenc_tune_names[] =
+{
+    "none", "lossless", "hq", "ll", "ull", NULL
+};
+
+static const char * const h265_nvenc_tune_names[] =
+{
+    "none", "hq", "ll", NULL
+};
+
+static const char * const av1_nvenc_tune_names[] =
+{
+    "none", "uhq", "hq", "ll", NULL
+};
+
 static const char * const ffv1_preset_names[] =
 {
     "default", "preservation", NULL
@@ -2077,6 +2092,16 @@ static int apply_vp9_tune(AVDictionary ** av_opts, const char * tune)
     return 0;
 }
 
+static int apply_nvenc_tune(AVDictionary ** av_opts, const char * tune)
+{
+    if (tune == NULL || tune[0] == 0 || !strcasecmp(tune, "none"))
+    {
+        return 0;
+    }
+    av_dict_set(av_opts, "tune", tune, 0);
+    return 0;
+}
+
 static int apply_encoder_tune(int vcodec, AVDictionary ** av_opts,
                                 const char * tune)
 {
@@ -2085,6 +2110,13 @@ static int apply_encoder_tune(int vcodec, AVDictionary ** av_opts,
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
             return apply_vp9_tune(av_opts, tune);
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+        case HB_VCODEC_FFMPEG_NVENC_H264_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
+            return apply_nvenc_tune(av_opts, tune);
         default:
             break;
     }
@@ -2256,6 +2288,15 @@ const char* const* hb_av_tune_get_names(int encoder)
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
             return vp9_tune_names;
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+        case HB_VCODEC_FFMPEG_NVENC_H264_10BIT:
+            return h264_nvenc_tune_names;
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+            return h265_nvenc_tune_names;
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
+            return av1_nvenc_tune_names;
         default:
             return empty_tune_names;
     }
