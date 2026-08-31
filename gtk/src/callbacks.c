@@ -54,9 +54,11 @@
 #include <dbt.h>
 #include <winsock2.h>
 #else
+#include <gio/gunixfdlist.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <poll.h>
+#include <unistd.h>
 #endif
 
 static void add_video_file_filters(GtkFileChooser *chooser);
@@ -268,18 +270,109 @@ shutdown_logind (void)
 }
 
 static guint suspend_cookie = 0;
+static int suspend_inhibit_fd = -1;
+
+#if !defined(_WIN32)
+static gboolean
+inhibit_logind (void)
+{
+    GDBusProxy  *proxy;
+    GError      *error = NULL;
+    GUnixFDList *fd_list = NULL;
+    GVariant    *res;
+    gint32       handle = -1;
+    int          fd = -1;
+
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
+                            DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
+    if (proxy == NULL)
+        return FALSE;
+
+    res = g_dbus_proxy_call_with_unix_fd_list_sync(proxy, "Inhibit",
+            g_variant_new("(ssss)", "idle:sleep", "HandBrake",
+                          _("An encode is in progress."), "block"),
+            G_DBUS_CALL_FLAGS_NONE, 5000, NULL, &fd_list, NULL, &error);
+    if (res != NULL)
+    {
+        g_variant_get(res, "(h)", &handle);
+        fd = fd_list != NULL ? g_unix_fd_list_get(fd_list, handle, &error) : -1;
+        if (fd >= 0)
+        {
+            suspend_inhibit_fd = fd;
+        }
+    }
+    if (res == NULL || fd < 0)
+    {
+        if (error != NULL)
+        {
+            g_warning("logind Inhibit failed: %s", error->message);
+            g_error_free(error);
+        }
+        else
+            g_warning("logind Inhibit failed");
+    }
+    if (fd_list != NULL)
+        g_object_unref(fd_list);
+    if (res != NULL)
+        g_variant_unref(res);
+    g_object_unref(G_OBJECT(proxy));
+    return fd >= 0;
+}
+#endif
 
 static void
 inhibit_suspend (void)
 {
-    if (suspend_cookie)
+    if (suspend_cookie || suspend_inhibit_fd >= 0)
     {
         // Already inhibited
         return;
     }
+#if !defined(_WIN32)
+    if (g_file_test("/.flatpak-info", G_FILE_TEST_EXISTS))
+    {
+        // Sandboxed: the portal is the sanctioned inhibit path and also
+        // drives desktop integration (e.g. GNOME).  However portals may
+        // report success while their backend later rejects the inhibit
+        // (e.g. KDE/Wayland "Inhibiting other than idle not supported"),
+        // so also take a logind inhibitor, which is synchronous, when
+        // the sandbox permits it.
+        suspend_cookie = gtk_application_inhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
+                NULL, GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
+                _("An encode is in progress."));
+        if (suspend_cookie)
+        {
+            g_message("Suspend inhibit requested via portal");
+        }
+        if (inhibit_logind())
+        {
+            g_message("Suspend inhibited via logind");
+        }
+        if (!suspend_cookie && suspend_inhibit_fd < 0)
+        {
+            g_warning("Failed to inhibit suspend, the system may suspend during encode");
+        }
+        return;
+    }
+    // Native: prefer a direct logind inhibitor which is synchronous and
+    // reliable, falling back to the GTK/portal path.
+    if (inhibit_logind())
+    {
+        g_message("Suspend inhibited via logind");
+        return;
+    }
+#endif
     suspend_cookie = gtk_application_inhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
             NULL, GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
             _("An encode is in progress."));
+    if (suspend_cookie)
+    {
+        g_message("Suspend inhibited via GTK application");
+        return;
+    }
+#if !defined(_WIN32)
+    g_warning("Failed to inhibit suspend, the system may suspend during encode");
+#endif
 }
 
 static void
@@ -291,6 +384,13 @@ uninhibit_suspend (void)
                                   suspend_cookie);
         suspend_cookie = 0;
     }
+#if !defined(_WIN32)
+    if (suspend_inhibit_fd >= 0)
+    {
+        close(suspend_inhibit_fd);
+        suspend_inhibit_fd = -1;
+    }
+#endif
 }
 
 // This is a dependency map used for greying widgets
