@@ -2266,9 +2266,9 @@ static int InitSubtitle( sync_common_t * common, int index )
     memset(&pv->stream->subtitle.sanitizer, 0,
            sizeof(pv->stream->subtitle.sanitizer));
     if (subtitle->format == TEXTSUB && subtitle->config.dest == PASSTHRUSUB &&
-        (common->job->mux & HB_MUX_MASK_MP4))
+        (common->job->mux & HB_MUX_MASK_ISOBFF_FAMILY))
     {
-        // Merge overlapping subtitles since mpv tx3g does not support them
+        // Merge overlapping subtitles since tx3g does not support them
         pv->stream->subtitle.sanitizer.merge = 1;
     }
     // PGS & DVB subtitles don't need to be linked because there are explicit

@@ -43,11 +43,14 @@ namespace HandBrakeWPF.ViewModels
 
         private PictureSettingsResLimitModes selectedPictureSettingsResLimitMode;
 
-        public AddPresetViewModel(IPresetService presetService, IErrorService errorService, IWindowManager windowManager)
+        private readonly IAudioAdvancedViewModel audioAdvancedViewModel;
+
+        public AddPresetViewModel(IPresetService presetService, IErrorService errorService, IWindowManager windowManager, IAudioAdvancedViewModel audioAdvancedViewModel)
         {
             this.presetService = presetService;
             this.errorService = errorService;
             this.windowManager = windowManager;
+            this.audioAdvancedViewModel = audioAdvancedViewModel;
             this.Title = Resources.AddPresetView_AddPreset;
             this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCategoryName };
             this.PresetCategories = presetService.GetPresetCategories(true).Union(new List<PresetDisplayCategory> { addNewCategory }).ToList();
@@ -181,7 +184,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Preset.Name = name;
             }
            
-            this.audioDefaultsViewModel = new AudioDefaultsViewModel(this.windowManager);
+            this.audioDefaultsViewModel = new AudioDefaultsViewModel(this.windowManager, this.audioAdvancedViewModel);
             this.audioDefaultsViewModel.Setup(audioBehaviours, task.OutputFormat);
 
             this.subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel(this.windowManager);

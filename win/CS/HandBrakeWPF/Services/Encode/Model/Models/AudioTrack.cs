@@ -153,10 +153,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
             this.SetupLimits();
             this.AutoNameTrack();
-            
-            
-            // TODO : Figure out how the behaviour tracks are hooked up into this
-            this.AudioFilters = new ObservableCollection<AudioVideoFilter>();
+
+
+            this.AudioFilters = track.AudioFilters != null
+                ? new ObservableCollection<AudioVideoFilter>(track.AudioFilters.Select(f => new AudioVideoFilter(f, null)))
+                : new ObservableCollection<AudioVideoFilter>();
         }
 
         /* Audio Track Properties */

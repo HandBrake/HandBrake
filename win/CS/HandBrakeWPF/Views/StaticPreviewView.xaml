@@ -39,11 +39,19 @@
         </Grid>
  
 
-        <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="6" Padding="5,0,5,0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20" MinWidth="180" Background="Black" Opacity="0.8"
-                Visibility="{Binding ShowPictureSettingControls, Converter={StaticResource booleanToVisibilityConverter}}">
+        <Canvas x:Name="dragCanvas" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="True"
+                SizeChanged="DragCanvas_OnSizeChanged">
+            <Border x:Name="cropSettingsBorder" BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="6" Padding="5,0,5,0" MinWidth="180" Background="Black" Opacity="0.8"
+                    Visibility="{Binding ShowPictureSettingControls, Converter={StaticResource booleanToVisibilityConverter}}"
+                    MouseLeftButtonDown="CropSettingsBorder_OnMouseLeftButtonDown"
+                    MouseLeftButtonUp="CropSettingsBorder_OnMouseLeftButtonUp"
+                    MouseMove="CropSettingsBorder_OnMouseMove"
+                    Loaded="CropSettingsBorder_OnLoaded"
+                    SizeChanged="CropSettingsBorder_OnSizeChanged">
 
-            <standalone:CropPanelView DataContext="{Binding PictureSettingsViewModel}" />
-        </Border>
+                <standalone:CropPanelView DataContext="{Binding PictureSettingsViewModel}" />
+            </Border>
+        </Canvas>
 
         <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" Padding="8"
                 VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20" MinWidth="500" MinHeight="100" Background="Black" Opacity="0.8">

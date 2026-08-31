@@ -352,9 +352,9 @@ int hb_vce_are_filters_supported(hb_list_t *filters)
 
 #endif // HB_PROJECT_FEATURE_VCE
 
-static const char * hb_vce_decode_get_codec_name(enum AVCodecID codec_id)
-{
 #if HB_PROJECT_FEATURE_AMFDEC
+static const char * vce_decode_get_codec_name(enum AVCodecID codec_id)
+{
     switch (codec_id)
     {
         case AV_CODEC_ID_H264:
@@ -366,22 +366,27 @@ static const char * hb_vce_decode_get_codec_name(enum AVCodecID codec_id)
         case AV_CODEC_ID_AV1:
             return "av1_amf";
 
+#if defined(_WIN32)
+        case AV_CODEC_ID_VP9:
+            return "vp9_amf";
+#endif
         default:
             return NULL;
     }
     return NULL;
-#else
-    return NULL;
-#endif
 }
+#endif
 
 static void * find_decoder(int codec_param)
 {
+#if HB_PROJECT_FEATURE_AMFDEC
     if (!hb_check_amfdec_available())
         return NULL;
 
-    const char *codec_name = hb_vce_decode_get_codec_name(codec_param);
-    return (void *)avcodec_find_decoder_by_name(codec_name);
+    const char *codec_name = vce_decode_get_codec_name(codec_param);
+    return codec_name != NULL ? (void *)avcodec_find_decoder_by_name(codec_name) : NULL;
+#endif
+    return NULL;
 }
 
 static const int vce_encoders[] =

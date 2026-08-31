@@ -23,6 +23,30 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
     {
         private readonly Action changeTrigger;
 
+        public AudioVideoFilter(int hbFilter, bool isAudioFilter, FilterPreset preset = null, FilterTune tune = null, string custom = null, Action changeTrigger = null)
+        {
+            this.changeTrigger = changeTrigger;
+
+            HBFilter filter = HandBrakeFilterHelpers.GetHandBrakeAudioFilters().FirstOrDefault(f => f.FilterId == hbFilter);
+            if (filter != null)
+            {
+                this.HandBrakeFilterChoice = new HandBrakeFilter(filter);
+            }
+
+            this.Preset = preset;
+            this.Tune = tune;
+            this.CustomOptions = custom;
+
+            if (preset == null)
+            {
+                this.Preset = this.AvailablePresets.FirstOrDefault(s => s.Key != "custom" && s.Key != "off");
+            }
+
+            if (tune == null)
+            {
+                this.Tune = this.AvailableTunes.FirstOrDefault(s => s.Key != "custom" && s.Key != "off");
+            }
+        }
 
         public AudioVideoFilter(int hbFilter, FilterPreset preset = null, FilterTune tune = null, string custom = null, Action changeTrigger = null)
         {

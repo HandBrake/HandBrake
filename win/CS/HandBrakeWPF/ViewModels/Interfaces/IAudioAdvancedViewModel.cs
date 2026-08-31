@@ -9,11 +9,13 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Encode.Model.Models;
 
     public interface IAudioAdvancedViewModel
     {
         void UpdateTask(AudioTrack task);
+        void UpdateTask(AudioBehaviourTrack task);
         bool? ShowDialog();
     }
 }

@@ -40,15 +40,15 @@ namespace HandBrakeWPF.ViewModels
     {
         private readonly IWindowManager windowManager;
 
+        private readonly IAudioAdvancedViewModel audioAdvancedViewModel;
+
         private BindingList<Language> availableLanguages;
         private AudioBehaviours audioBehaviours;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AudioDefaultsViewModel"/> class.
-        /// </summary>
-        public AudioDefaultsViewModel(IWindowManager windowManager)
+        public AudioDefaultsViewModel(IWindowManager windowManager, IAudioAdvancedViewModel audioAdvancedViewModel)
         {
             this.windowManager = windowManager;
+            this.audioAdvancedViewModel = audioAdvancedViewModel;
             this.AudioBehaviours = new AudioBehaviours();
             this.SelectedAvailableToMove = new BindingList<Language>();
             this.SelectedLanguagesToMove = new BindingList<Language>();
@@ -72,7 +72,10 @@ namespace HandBrakeWPF.ViewModels
             this.PassthruEncoders = data;
 
             this.RemoveTrackCommand = new SimpleRelayCommand<AudioBehaviourTrack>(this.RemoveTrack, null);
+            this.ShowAudioAdvancedSettingsCommand = new SimpleRelayCommand<AudioBehaviourTrack>(this.ShowAudioAdvancedSettings);
         }
+
+        public SimpleRelayCommand<AudioBehaviourTrack> ShowAudioAdvancedSettingsCommand { get; set; }
 
         #region Properties
 
@@ -299,6 +302,12 @@ namespace HandBrakeWPF.ViewModels
         {
             this.AudioBehaviours.SelectedLanguages.Clear();
             this.UpdateAvailableLanguages();
+        }
+
+        public void ShowAudioAdvancedSettings(AudioBehaviourTrack track)
+        {
+            this.audioAdvancedViewModel.UpdateTask(track);
+            this.audioAdvancedViewModel.ShowDialog();
         }
 
         #endregion

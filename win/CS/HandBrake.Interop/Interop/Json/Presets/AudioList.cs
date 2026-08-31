@@ -9,6 +9,8 @@
 
 namespace HandBrake.Interop.Interop.Json.Presets
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// The audio list.
     /// </summary>
@@ -18,6 +20,11 @@ namespace HandBrake.Interop.Interop.Json.Presets
         /// Gets or sets the audio bitrate.
         /// </summary>
         public int AudioBitrate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the audio filter list.
+        /// </summary>
+        public List<AudioFilter> AudioFilterList { get; set; }
 
         /// <summary>
         /// Gets or sets the audio compression level.
