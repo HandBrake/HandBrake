@@ -1458,7 +1458,7 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
             hb_avfilter_append_dict(filters, "scale_cuda", settings);
         }
-        else if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_D3D11)
+        else if (pv->frame->hw_frames_ctx && pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_D3D11)
         {
             hb_dict_set(settings, "width", hb_value_int(orig_width));
             hb_dict_set(settings, "height", hb_value_int(orig_height));

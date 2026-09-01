@@ -2556,6 +2556,69 @@ static void syncVideoClose( hb_work_object_t * w )
     w->private_data = NULL;
 }
 
+static char * strchr_n(char *s, int c, int count)
+{
+    for (int i = 0; i < count; i++)
+    {
+        s = strchr(s, c);
+        if (s == NULL)
+        {
+            break;
+        }
+        s++;
+    }
+
+    return s;
+}
+
+static int strcmp_len(char *a, size_t len_a, char *b, size_t len_b)
+{
+    if (len_a != len_b)
+    {
+        return 1;
+    }
+
+    size_t len = MIN(len_a, len_b);
+    for (int i = 0; i < len; i++)
+    {
+        if (a[i] != b[i])
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+static char * next_style_if_different(char *a, char *b)
+{
+    char *start_a = NULL, *end_a = NULL;
+    char *start_b = NULL, *end_b = NULL;
+
+    start_a = strchr_n(a, ',', 2);
+    end_a   = strchr_n(a, ',', 3);
+
+    start_b = strchr_n(b, ',', 2);
+    end_b   = strchr_n(b, ',', 3);
+
+    if (start_a == NULL || end_a == NULL ||
+        start_b == NULL || end_b == NULL)
+    {
+        return NULL;
+    }
+
+    size_t style_a_len = end_a - start_a - 1;
+    size_t style_b_len = end_b - start_b - 1;
+
+    if (strcmp_len(start_a, style_a_len,
+                   start_b, style_b_len))
+    {
+        return hb_strndup(start_b, style_b_len);
+    }
+
+    return NULL;
+}
+
 static hb_buffer_t * merge_ssa(hb_buffer_t *a, hb_buffer_t *b)
 {
     int len, ii;
@@ -2575,7 +2638,10 @@ static hb_buffer_t * merge_ssa(hb_buffer_t *a, hb_buffer_t *b)
         return hb_buffer_dup(a);
     }
 
-    buf = hb_buffer_init(a->size + b->size);
+    char *style = next_style_if_different((char *)a->data, (char *)b->data);
+    size_t style_len = style ? strlen(style) : 0;
+
+    buf = hb_buffer_init(a->size + b->size + style_len);
     buf->s = a->s;
 
     // Find the text in the second SSA sub
@@ -2602,7 +2668,15 @@ static hb_buffer_t * merge_ssa(hb_buffer_t *a, hb_buffer_t *b)
         }
         // Text subtitles are SSA internally.  Use SSA newline code
         // and force style reset at beginning of new line.
-        len = snprintf((char*)buf->data, buf->size, "%s\\N{\\r}%s", a->data, text);
+        if (style_len)
+        {
+            len = snprintf((char*)buf->data, buf->size, "%s\\N{\\r%s}%s", a->data, style, text);
+        }
+        else
+        {
+            len = snprintf((char*)buf->data, buf->size, "%s\\N{\\r}%s", a->data, text);
+        }
+
         if (len >= 0)
             buf->size = len + 1;
     }
@@ -2611,6 +2685,8 @@ static hb_buffer_t * merge_ssa(hb_buffer_t *a, hb_buffer_t *b)
         memcpy(buf->data, a->data, a->size);
         buf->size = a->size;
     }
+
+    free(style);
 
     return buf;
 }
