@@ -561,6 +561,10 @@ Bitrate will vary source to source.</value>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Dash (-), Period (.) and Comma (,)</value>
   </data>
+  <data name="Options_AutoIncrementPadding" xml:space="preserve">
+    <value>{auto-increment} adds an increasing number to automatically named files.
+Numbering restarts at 1 when the filename format is changed, and rolls over to 1 again after the highest number that fits in the selected padding.</value>
+  </data>
   <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
     <value>Use highest resolution permitted by above settings</value>
   </data>
