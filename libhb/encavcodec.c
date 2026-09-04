@@ -627,6 +627,16 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         goto done;
     }
 
+    // NVENC HEVC/AV1 support ffmpeg's split_encode_mode option, which lets
+    // GPUs with more than one NVENC engine (e.g. RTX 4090/4080, RTX
+    // 50-series) split a single encode across engines instead of leaving
+    // extra engines idle. It is intentionally not defaulted on here: it can
+    // conflict with HandBrake's batch encode queue running multiple jobs on
+    // the same GPU concurrently, and NVIDIA advises against forcing it at
+    // lower resolutions, where it can affect quality rather than just
+    // speed. Users who want it can still set it themselves, for example
+    // -x split_encode_mode=forced (not available for H.264 NVENC).
+
     if (apply_encoder_options(job, context, &av_opts))
     {
         av_free( context );
