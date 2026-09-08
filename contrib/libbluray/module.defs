@@ -3,9 +3,9 @@ __deps__ := LIBUDFREAD
 $(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
-LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libbluray-1.5.0.tar.bz2
-LIBBLURAY.FETCH.url    += https://code.videolan.org/videolan/libbluray/-/archive/1.5.0/libbluray-1.5.0.tar.bz2
-LIBBLURAY.FETCH.sha256  = 0a70f8c63aa1c64c0d3fc743d0a0e7071ac6c68f69b49e596505a3f64c71cf0a
+LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libbluray-1.5.1.tar.bz2
+LIBBLURAY.FETCH.url    += https://code.videolan.org/videolan/libbluray/-/archive/1.5.1/libbluray-1.5.1.tar.bz2
+LIBBLURAY.FETCH.sha256  = 0f415b559d7f074ba78db259f61c3c61458057263a0181aaafdee1856b0fb17f
 
 LIBBLURAY.build_dir             = build/
 LIBBLURAY.CONFIGURE.exe         = $(MESON.exe) setup
