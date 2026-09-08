@@ -4632,6 +4632,13 @@ Overrides all other settings.</property>
     <property name="step-increment">5</property>
     <property name="page-increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="auto_increment_padding_adj">
+    <property name="lower">2</property>
+    <property name="upper">5</property>
+    <property name="value">2</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
+  </object>
   <object class="GtkDialog" id="subtitle_defaults_dialog">
     <property name="title" translatable="yes">Subtitle Selection Behavior</property>
     <property name="transient-for">hb_window</property>
@@ -5603,14 +5610,48 @@ Each selected source track will be encoded with all selected encoders.</property
                               <object class="GtkEntry" id="auto_name_template">
                                 <property name="focusable">1</property>
                                 <property name="secondary-icon-name">help-about-symbolic</property>
-                                <property name="secondary-icon-tooltip-text" translatable="yes">Available Options: {source-path} {source} {title} {preset} {chapters} {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {codec} {bit-depth} {quality} {bitrate} {width} {height}</property>
+                                <property name="secondary-icon-tooltip-text" translatable="yes">Available Options: {source-path} {source} {title} {preset} {chapters} {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {codec} {bit-depth} {quality} {bitrate} {width} {height} {auto-increment}</property>
                                 <property name="activates-default">1</property>
                                 <property name="width-chars">30</property>
                                 <property name="truncate-multiline">1</property>
-                                <signal name="changed" handler="pref_changed_cb" swapped="no"/>
+                                <signal name="changed" handler="auto_name_template_changed_cb" swapped="no"/>
                                 <accessibility>
                                   <relation name="labelled-by">auto_name_template_label</relation>
                                 </accessibility>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="auto_increment_box">
+                            <property name="margin-start">18</property>
+                            <property name="margin-end">8</property>
+                            <property name="spacing">4</property>
+                            <property name="tooltip-text" translatable="yes">{auto-increment} adds an increasing number to automatically named files.
+Numbering restarts at 1 when the Auto-Name Template is changed, and rolls
+over to 1 again after the highest number that fits in the selected padding.</property>
+                            <child>
+                              <object class="GtkLabel" id="auto_increment_padding_label">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Auto-Increment zero-padding is</property>
+                                <property name="use-markup">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="AutoIncrementPadding">
+                                <property name="focusable">1</property>
+                                <property name="width-chars">4</property>
+                                <property name="adjustment">auto_increment_padding_adj</property>
+                                <property name="numeric">1</property>
+                                <signal name="value-changed" handler="auto_increment_padding_changed_cb" swapped="no"/>
+                                <accessibility>
+                                  <relation name="labelled-by">auto_increment_padding_label</relation>
+                                </accessibility>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="auto_increment_padding_digits_label">
+                                <property name="label" translatable="yes">digits</property>
                               </object>
                             </child>
                           </object>

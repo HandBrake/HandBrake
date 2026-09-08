@@ -13,6 +13,34 @@ static NSDateFormatter *_dateFormatter = nil;
 static NSDateFormatter *_dateISOFormatter = nil;
 static NSDateFormatter *_releaseDateFormatter = nil;
 
+static NSUInteger autoIncrementPadding(void)
+{
+    NSInteger padding = [NSUserDefaults.standardUserDefaults integerForKey:HBAutoNamingAutoIncrementPadding];
+    return MAX(HB_AUTO_INCREMENT_PAD_MIN, MIN(HB_AUTO_INCREMENT_PAD_MAX, padding));
+}
+
+// Highest value that fits in the configured padding, e.g. 99 for 2 digits
+static NSUInteger autoIncrementMax(NSUInteger padding)
+{
+    NSUInteger max = 1;
+    while (padding-- > 0)
+    {
+        max *= 10;
+    }
+    return max - 1;
+}
+
+static NSUInteger autoIncrementValue(NSUInteger offset)
+{
+    NSUInteger max = autoIncrementMax(autoIncrementPadding());
+    NSInteger next = [NSUserDefaults.standardUserDefaults integerForKey:HBAutoNamingAutoIncrementNext];
+    if (next < 1 || next > max)
+    {
+        next = 1;
+    }
+    return (next - 1 + offset) % max + 1;
+}
+
 @implementation HBJob (HBAdditions)
 
 + (void)initialize
@@ -35,7 +63,32 @@ static NSDateFormatter *_releaseDateFormatter = nil;
     }
 }
 
++ (BOOL)autoIncrementEnabled
+{
+    NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
+    return [ud boolForKey:HBDefaultAutoNaming] &&
+           [[ud arrayForKey:HBAutoNamingFormat] containsObject:@"{Auto-Increment}"];
+}
+
++ (void)advanceAutoIncrementBy:(NSUInteger)count
+{
+    if (count == 0 || ![self autoIncrementEnabled])
+    {
+        return;
+    }
+
+    NSUInteger max  = autoIncrementMax(autoIncrementPadding());
+    NSUInteger used = autoIncrementValue(count - 1);
+    [NSUserDefaults.standardUserDefaults setInteger:used % max + 1
+                                             forKey:HBAutoNamingAutoIncrementNext];
+}
+
 - (NSString *)automaticName
+{
+    return [self automaticNameWithAutoIncrementOffset:0];
+}
+
+- (NSString *)automaticNameWithAutoIncrementOffset:(NSUInteger)offset
 {
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
     NSMutableString *name = [[NSMutableString alloc] init];
@@ -210,6 +263,10 @@ static NSDateFormatter *_releaseDateFormatter = nil;
                 [name appendString:dateString];
             }
         }
+        else if ([formatKey isEqualToString:@"{Auto-Increment}"])
+        {
+            [name appendFormat:@"%0*lu", (int)autoIncrementPadding(), (unsigned long)autoIncrementValue(offset)];
+        }
         else if ([formatKey isEqualToString:@"{Modification-Time}"])
         {
             NSDate *modificationDate = nil;
@@ -253,12 +310,17 @@ static NSDateFormatter *_releaseDateFormatter = nil;
 
 - (NSString *)defaultName
 {
+    return [self defaultNameWithAutoIncrementOffset:0];
+}
+
+- (NSString *)defaultNameWithAutoIncrementOffset:(NSUInteger)offset
+{
     NSString *fileName = self.title.name;
 
     // Create an output filename by using the format set in the preferences
     if ([NSUserDefaults.standardUserDefaults boolForKey:HBDefaultAutoNaming])
     {
-        fileName = self.automaticName;
+        fileName = [self automaticNameWithAutoIncrementOffset:offset];
     }
 
     // Automatic name can be empty if the format is empty

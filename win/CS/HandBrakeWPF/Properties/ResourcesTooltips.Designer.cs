@@ -534,6 +534,15 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("Options_RemovePunctuation", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {auto-increment} adds an increasing number to automatically named files..
+        /// </summary>
+        public static string Options_AutoIncrementPadding {
+            get {
+                return ResourceManager.GetString("Options_AutoIncrementPadding", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to When enabled the auto name system will always use the default path. 

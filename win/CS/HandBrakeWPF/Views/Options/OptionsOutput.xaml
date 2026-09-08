@@ -129,6 +129,15 @@
 
                     <CheckBox Content="{x:Static Properties:Resources.OptionsView_IsoDateFormat}" Grid.Column="1" Grid.Row="8" IsChecked="{Binding UseIsoDateFormat}" />
 
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="9" Margin="0,5,0,0"
+                                ToolTip="{x:Static Properties:ResourcesTooltips.Options_AutoIncrementPadding}">
+                        <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_AutoIncrementPadding}" />
+                        <TextBox Name="autoIncrementPadding" Width="30" MaxLength="1" HorizontalContentAlignment="Right"
+                                 Text="{Binding AutoIncrementPadding, UpdateSourceTrigger=PropertyChanged}"
+                                 PreviewTextInput="AutoIncrementPadding_OnPreviewTextInput" />
+                        <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_AutoIncrementDigits}" Margin="5,0,0,0" />
+                    </StackPanel>
+
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" Margin="0,15,0,0">

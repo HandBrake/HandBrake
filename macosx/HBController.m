@@ -1355,6 +1355,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 - (void)doAddToQueue
 {
     [_queue addJob:[self.job copy]];
+    [HBJob advanceAutoIncrementBy:1];
 }
 
 /**
@@ -1455,7 +1456,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             [job applySelectionRange:range];
             [job setDestinationFolderURL:self.destinationFolderURL
                             sameAsSource:useSourceFolderDestination];
-            job.destinationFileName = job.defaultName;
+            // Number the titles consecutively when {Auto-Increment} is in use
+            job.destinationFileName = [job defaultNameWithAutoIncrementOffset:jobs.count];
             job.title = nil;
 
             [jobs addObject:job];
@@ -1515,12 +1517,14 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             if (returnCode == NSAlertSecondButtonReturn)
             {
                 [self->_queue addJobs:jobs];
+                [HBJob advanceAutoIncrementBy:jobs.count];
             }
         }];
     }
     else
     {
         [_queue addJobs:jobs];
+        [HBJob advanceAutoIncrementBy:jobs.count];
     }
 }
 
