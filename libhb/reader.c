@@ -517,6 +517,12 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     while ((buf = hb_buffer_list_rem_head(&list)) != NULL)
     {
+        // During a filter scan pass, discard any buffers that are not video.
+        if (r->job->filter_scan && buf->s.id != r->job->title->video_id)
+        {
+            hb_buffer_close(&buf);
+            continue;
+        }
         fifos = GetFifoForId( r, buf->s.id );
         if (fifos && r->stream && !r->start_found)
         {
