@@ -13,149 +13,151 @@
         <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </UserControl.Resources>
 
-    <Grid Margin="10,5,0,5">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <!-- Column 1 -->
-        <Grid Grid.Column="0" MinWidth="325" MaxWidth="400" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <Grid.Resources>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                    <Setter Property="Margin" Value="0,3,0,3" />
-                </Style>
-            </Grid.Resources>
-
-
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Format}" Style="{StaticResource sectionHeader}" Grid.Row="0" />
-            <ComboBox Name="Container" Width="100" HorizontalAlignment="Left"  Grid.Row="0" Grid.Column="1"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}" VerticalAlignment="Center"
-                              ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
-                              SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}" 
-                              AutomationProperties.Name="{x:Static Properties:Resources.MainView_Format}" >
-                <ComboBox.ItemContainerStyle>
-                    <Style TargetType="ComboBoxItem">
-                        <Setter Property="AutomationProperties.Name" Value="{Binding DisplayName}" />
-                    </Style>
-                </ComboBox.ItemContainerStyle>
-            </ComboBox>
-
-            <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="1">
-                <CheckBox Name="WebOptimized" VerticalAlignment="Center" HorizontalAlignment="Left" 
-                          Content="{x:Static Properties:Resources.MainView_WebOptimized}"
-                          IsChecked="{Binding Path=Optimize}"
-                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Optimise}"
-                          Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                <CheckBox Name="AlignAVStart" VerticalAlignment="Center" HorizontalAlignment="Left" 
-                          Content="{x:Static Properties:Resources.MainView_AlignAVStart}"
-                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AlignAVStart}"
-                          IsChecked="{Binding Path=AlignAVStart}"
-                          Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                <CheckBox Name="iPod5G" VerticalAlignment="Center" HorizontalAlignment="Left" 
-                          Content="{x:Static Properties:Resources.MainView_iPod5G}"
-                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_IpodAtom}"
-                          IsChecked="{Binding Path=IPod5GSupport}"
-                          Visibility="{Binding IsIpodAtomVisible, Converter={StaticResource boolToVisConverter}}" />
-                <CheckBox Name="Metadata" VerticalAlignment="Center"  HorizontalAlignment="Left"  IsChecked="{Binding Path=MetadataPassthru}"
-                          Content="{x:Static Properties:Resources.SummaryView_MetadataPassthru}"/>
-
-            </StackPanel>
-
-
-
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Tracks}" Style="{StaticResource sectionHeader}" Grid.Row="5" Grid.Column="0" />
-            <TextBlock Text="{Binding VideoTrackInfo}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" />
-            <TextBlock Text="{Binding AudioTrackInfo}" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" />
-            <TextBlock Text="{Binding SubtitleTrackInfo}" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" />
-            <TextBlock Text="{Binding ChapterInfo}" Grid.Row="8" Grid.Column="1" />
-
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Filters}" Style="{StaticResource sectionHeader}" Grid.Row="10" Grid.Column="0"  />
-            <TextBlock Text="{Binding FiltersInfo}" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
-
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Size}" Style="{StaticResource sectionHeader}" Grid.Row="12" Grid.Column="0" />
-            <TextBlock Text="{Binding DimensionInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="12" Grid.Column="1" />
-
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Aspect}" Style="{StaticResource sectionHeader}" Grid.Row="13" Grid.Column="0" Visibility="Collapsed" />
-            <TextBlock Text="{Binding AspectInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="13" Grid.Column="1" Margin="5,0,0,0" Visibility="Collapsed" />
-        </Grid>
-
-        <!-- Column 2 -->
-        <Grid Grid.Column="1"
-              Margin="10,0,0,5"
-              Visibility="{Binding ShowPreview, Converter={StaticResource boolToVisConverter}}">
+    <ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid Margin="10,5,0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent">
+            <!-- Column 1 -->
+            <Grid Grid.Column="0" MinWidth="325" MaxWidth="400" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
+                <Grid.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Setter Property="Margin" Value="0,3,0,3" />
+                    </Style>
+                </Grid.Resources>
+
+
+                <TextBlock Text="{x:Static Properties:Resources.MainView_Format}" Style="{StaticResource sectionHeader}" Grid.Row="0" />
+                <ComboBox Name="Container" Width="100" HorizontalAlignment="Left"  Grid.Row="0" Grid.Column="1"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}" VerticalAlignment="Center"
+                              ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
+                              SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}" 
+                              AutomationProperties.Name="{x:Static Properties:Resources.MainView_Format}" >
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="AutomationProperties.Name" Value="{Binding DisplayName}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+
+                <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="1">
+                    <CheckBox Name="WebOptimized" VerticalAlignment="Center" HorizontalAlignment="Left" 
+                          Content="{x:Static Properties:Resources.MainView_WebOptimized}"
+                          IsChecked="{Binding Path=Optimize}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Optimise}"
+                          Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                    <CheckBox Name="AlignAVStart" VerticalAlignment="Center" HorizontalAlignment="Left" 
+                          Content="{x:Static Properties:Resources.MainView_AlignAVStart}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AlignAVStart}"
+                          IsChecked="{Binding Path=AlignAVStart}"
+                          Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                    <CheckBox Name="iPod5G" VerticalAlignment="Center" HorizontalAlignment="Left" 
+                          Content="{x:Static Properties:Resources.MainView_iPod5G}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_IpodAtom}"
+                          IsChecked="{Binding Path=IPod5GSupport}"
+                          Visibility="{Binding IsIpodAtomVisible, Converter={StaticResource boolToVisConverter}}" />
+                    <CheckBox Name="Metadata" VerticalAlignment="Center"  HorizontalAlignment="Left"  IsChecked="{Binding Path=MetadataPassthru}"
+                          Content="{x:Static Properties:Resources.SummaryView_MetadataPassthru}"/>
+
+                </StackPanel>
+
+
+
+                <TextBlock Text="{x:Static Properties:Resources.MainView_Tracks}" Style="{StaticResource sectionHeader}" Grid.Row="5" Grid.Column="0" />
+                <TextBlock Text="{Binding VideoTrackInfo}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding AudioTrackInfo}" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding SubtitleTrackInfo}" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding ChapterInfo}" Grid.Row="8" Grid.Column="1" />
+
+                <TextBlock Text="{x:Static Properties:Resources.MainView_Filters}" Style="{StaticResource sectionHeader}" Grid.Row="10" Grid.Column="0"  />
+                <TextBlock Text="{Binding FiltersInfo}" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
+
+                <TextBlock Text="{x:Static Properties:Resources.MainView_Size}" Style="{StaticResource sectionHeader}" Grid.Row="12" Grid.Column="0" />
+                <TextBlock Text="{Binding DimensionInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="12" Grid.Column="1" />
+
+                <TextBlock Text="{x:Static Properties:Resources.MainView_Aspect}" Style="{StaticResource sectionHeader}" Grid.Row="13" Grid.Column="0" Visibility="Collapsed" />
+                <TextBlock Text="{Binding AspectInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="13" Grid.Column="1" Margin="5,0,0,0" Visibility="Collapsed" />
+            </Grid>
+
+            <!-- Column 2 -->
+            <Grid Grid.Column="1"
+              Margin="10,0,0,5"
+              Visibility="{Binding ShowPreview, Converter={StaticResource boolToVisConverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <TextBlock Text="{x:Static Properties:Resources.SummaryView_SourcePreview}" Style="{StaticResource sectionHeader}" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" />
+                <Grid Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent">
 
-                <Image Source="{Binding PreviewImage}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,10,0" x:Name="previewImage" Grid.Row="1" Panel.ZIndex="0" Grid.ColumnSpan="2"
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="{x:Static Properties:Resources.SummaryView_SourcePreview}" Style="{StaticResource sectionHeader}" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" />
+
+                    <Image Source="{Binding PreviewImage}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,10,0" x:Name="previewImage" Grid.Row="1" Panel.ZIndex="0" Grid.ColumnSpan="2"
                        MaxWidth="{Binding MaxWidth}" MaxHeight="{Binding MaxHeight}" MouseWheel="PreviewImage_OnMouseWheel" />
 
-                <Border Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Black" BorderBrush="White"  CornerRadius="5" BorderThickness="1" Opacity="0.75" Margin="0,5,0,5">
-                    <TextBlock Text="{Binding PreviewInfo}" Foreground="White" Padding="12,6" TextAlignment="Center" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}" />
-                </Border>
+                    <Border Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Black" BorderBrush="White"  CornerRadius="5" BorderThickness="1" Opacity="0.75" Margin="0,5,0,5">
+                        <TextBlock Text="{Binding PreviewInfo}" Foreground="White" Padding="12,6" TextAlignment="Center" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}" />
+                    </Border>
 
-                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center" Margin="0,3,0,0" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="42" />
-                        <ColumnDefinition Width="42" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <Border x:Name="previous" BorderThickness="1,1,1,1" CornerRadius="4,0,0,4" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MouseDown="Previous_OnMouseDown"
+                    <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center" Margin="0,3,0,0" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="42" />
+                            <ColumnDefinition Width="42" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border x:Name="previous" BorderThickness="1,1,1,1" CornerRadius="4,0,0,4" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MouseDown="Previous_OnMouseDown"
                             Visibility="{Binding IsPreviousPreviewControlVisible,Converter={StaticResource boolToVisConverter}}"
                             Background="Black" Opacity="0.5" Margin="0,0,0,0" >
-                        <TextBlock Text="&lt;" FontSize="16" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="16,1" Margin="0,0,0,4" />
-                    </Border>
+                            <TextBlock Text="&lt;" FontSize="16" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="16,1" Margin="0,0,0,4" />
+                        </Border>
 
-                    <Border x:Name="next" BorderThickness="1,1,1,1" CornerRadius="0,4,4,0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" MouseDown="Next_OnMouseDown"
+                        <Border x:Name="next" BorderThickness="1,1,1,1" CornerRadius="0,4,4,0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" MouseDown="Next_OnMouseDown"
                             Background="Black" Opacity="0.5" Margin="0,0,0,0" 
                             Visibility="{Binding IsNextPreviewControlVisible,Converter={StaticResource boolToVisConverter}}" >
-                        <TextBlock Text="&gt;" FontSize="16" Foreground="White" Padding="16,1" VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,0,4" />
-                    </Border>
+                            <TextBlock Text="&gt;" FontSize="16" Foreground="White" Padding="16,1" VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,0,4" />
+                        </Border>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>
-    </Grid>
+    </ScrollViewer>
 </UserControl>
