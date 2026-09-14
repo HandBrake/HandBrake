@@ -13,6 +13,7 @@
                 <outlet property="excludedExtensionsControl" destination="HzZ-UL-arV" id="XwM-8E-OYr"/>
                 <outlet property="excludedExtensionsController" destination="9jP-eU-0ii" id="Aoe-oq-ifz"/>
                 <outlet property="excludedExtensionsTableView" destination="ax0-hR-WPq" id="ayQ-KO-Wc8"/>
+                <outlet property="autoIncrementPaddingField" destination="aIn-cr-Txf" id="aIn-cr-Ot1"/>
                 <outlet property="fileNameView" destination="0GP-nk-F0d" id="E56-ce-nCX"/>
                 <outlet property="formatTokenField" destination="GwY-X2-I2h" id="zv2-bk-RaK"/>
                 <outlet property="generalView" destination="233" id="Gwx-aW-6BL"/>
@@ -699,6 +700,64 @@
                                                 <binding destination="61" name="value" keyPath="values.HBAutoNamingTitleCase" id="Kee-0d-0TS"/>
                                             </connections>
                                         </button>
+                                        <stackView toolTip="Auto-Increment adds an increasing number to automatically named files. Numbering restarts at 1 when the Format is changed, and rolls over to 1 again after the highest number that fits in the selected padding." distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aIn-cr-Stk">
+                                            <rect key="frame" x="0.0" y="-26" width="253" height="19"/>
+                                            <subviews>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aIn-cr-Lb1">
+                                                    <rect key="frame" x="-2" y="2" width="172" height="14"/>
+                                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Auto-Increment zero-padding is" id="aIn-cr-Lc1">
+                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField verticalHuggingPriority="1000" verticalCompressionResistancePriority="751" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aIn-cr-Txf">
+                                                    <rect key="frame" x="174" y="0.0" width="26" height="22"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="26" id="aIn-cr-Cn1"/>
+                                                        <constraint firstAttribute="height" constant="22" id="aIn-cr-Cn2"/>
+                                                    </constraints>
+                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="2" drawsBackground="YES" id="aIn-cr-Txc">
+                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <connections>
+                                                        <binding destination="61" name="enabled" keyPath="values.DefaultAutoNaming" id="aIn-cr-Bn1"/>
+                                                        <binding destination="61" name="value" keyPath="values.HBAutoNamingAutoIncrementPadding" id="aIn-cr-Bn2"/>
+                                                    </connections>
+                                                </textField>
+                                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aIn-cr-Stp">
+                                                    <rect key="frame" x="201" y="-3" width="15" height="22"/>
+                                                    <stepperCell key="cell" continuous="YES" alignment="left" controlSize="small" minValue="2" maxValue="5" doubleValue="2" id="aIn-cr-Stc"/>
+                                                    <connections>
+                                                        <accessibilityConnection property="title" destination="aIn-cr-Lb1" id="aIn-cr-Ax1"/>
+                                                        <binding destination="61" name="enabled" keyPath="values.DefaultAutoNaming" id="aIn-cr-Bn3"/>
+                                                        <binding destination="61" name="value" keyPath="values.HBAutoNamingAutoIncrementPadding" id="aIn-cr-Bn4"/>
+                                                    </connections>
+                                                </stepper>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aIn-cr-Lb2">
+                                                    <rect key="frame" x="218" y="2" width="35" height="14"/>
+                                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="digits" id="aIn-cr-Lc2">
+                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                            </subviews>
+                                            <visibilityPriorities>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                            </visibilityPriorities>
+                                            <customSpacing>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                            </customSpacing>
+                                        </stackView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Zvg-MF-RQF" firstAttribute="leading" secondItem="GwY-X2-I2h" secondAttribute="leading" id="RN6-xE-fhD"/>
@@ -713,8 +772,10 @@
                                         <integer value="1000"/>
                                         <integer value="1000"/>
                                         <integer value="1000"/>
+                                        <integer value="1000"/>
                                     </visibilityPriorities>
                                     <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
