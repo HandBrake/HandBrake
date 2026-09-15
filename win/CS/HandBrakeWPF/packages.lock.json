@@ -4,9 +4,9 @@
     "net10.0-windows10.0.17763": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[9.0.0, )",
-        "resolved": "9.0.0",
-        "contentHash": "G8TpUMVIq1pEAMuAao8h5MKduY91SotjgK93wQb5LaxbJUVE0/XjCA6t2SOp+AkPC3GB/C2MAiF2D7krYjraFw=="
+        "requested": "[9.3.2, )",
+        "resolved": "9.3.2",
+        "contentHash": "an3dLpmXWvb2aBP5qyA7GVEcXhoG+W/EtFRa3sBYzJdXSNDnB0aoeo4MgOQru0G5sjNDGYM3D3CnBzNFXEVOOA=="
       },
       "gong-wpf-dragdrop": {
         "type": "Direct",
@@ -22,15 +22,15 @@
       },
       "Microsoft.Xaml.Behaviors.Wpf": {
         "type": "Direct",
-        "requested": "[1.1.135, )",
-        "resolved": "1.1.135",
-        "contentHash": "r8qBEXmQfORso2+MVHnt8PSH4761zJ0SIxgQTSEDVLU97EN2FZdG6/ZCYUPhQy+OrPKgnpYBCAs3PS6Bs7wRsg=="
+        "requested": "[1.1.161, )",
+        "resolved": "1.1.161",
+        "contentHash": "V20pH5zYDm6RPjqASdDiidUckWreGntPwDx1YUEMXiRqMVSHvypAiwSeET3ZwoJbFLMTsXXxqsoyhkNOB3Vp4Q=="
       },
       "System.Management": {
         "type": "Direct",
-        "requested": "[10.0.0, )",
-        "resolved": "10.0.0",
-        "contentHash": "LE3rDZoPzulou78Tsq+3ALhUs4vatQ03v2QWbYVIenVPneUH/+LTUmHyyl098OxIFLQI6sNkZs8YHbUnT/sm3A=="
+        "requested": "[10.0.12, )",
+        "resolved": "10.0.12",
+        "contentHash": "ApUsYmsNG8aPiMxsO6ROGZnqJwSZY8zeMlAQcuQg+ilPFUcIyBUC0BL8qA6wmPLNVsvL4nyhUrhhxh6qn0cx0Q=="
       },
       "handbrake.app.core": {
         "type": "Project",

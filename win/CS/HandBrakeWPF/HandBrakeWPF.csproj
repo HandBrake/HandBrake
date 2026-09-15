@@ -61,11 +61,11 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Autofac" Version="9.0.0" />
+	<PackageReference Include="Autofac" Version="9.3.2" />
     <PackageReference Include="gong-wpf-dragdrop" Version="4.0.0" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-    <PackageReference Include="System.Management" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.161" />
+    <PackageReference Include="System.Management" Version="10.0.12" />
   </ItemGroup>
 
   <ItemGroup>
