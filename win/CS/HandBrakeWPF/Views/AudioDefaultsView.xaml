@@ -18,6 +18,7 @@
              MinWidth="900"
              Width="900"
              mc:Ignorable="d"
+             KeyDown="AudioDefaultsView_OnKeyDown"
              Title="{Binding Title}">
 
     <Window.Resources>
@@ -415,7 +416,6 @@
                 <Button Grid.Column="1"
                         Command="{Binding RelayCommand}" CommandParameter="Cancel"
                         Content="{x:Static Properties:Resources.Generic_Cancel}"
-                        IsCancel="True"
                         Padding="8,2"
                         Margin="0,0,5,0"/>
 

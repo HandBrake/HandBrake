@@ -30,5 +30,13 @@ namespace HandBrakeWPF.Views
             base.OnSourceInitialized(e);
             WindowHelper.SetDarkMode(this);
         }
+
+        private void AudioDefaultsView_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Escape)
+            {
+                this.Close();
+            }
+        }
     }
 }

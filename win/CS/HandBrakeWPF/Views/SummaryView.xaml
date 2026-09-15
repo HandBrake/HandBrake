@@ -116,7 +116,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent">
+                <Grid Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" MaxHeight="340">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
