@@ -128,7 +128,7 @@ T temporal_predictor(T A, T B, T C, T D, T E, T F,
     T tdiff1 = (abs(A - F) + abs(B - G)) / 2;
     T tdiff2 = (abs(K - F) + abs(G - L)) / 2;
 
-    T diff = max3(tdiff0, tdiff1, tdiff2);
+    T diff = max3(tdiff0 / 2, tdiff1, tdiff2);
 
     if (!skip_check) {
         T maxi = max3(p2 - p3, p2 - p1, min(p0 - p1, p4 - p3));
