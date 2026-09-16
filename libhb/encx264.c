@@ -401,6 +401,18 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         param.vui.i_chroma_loc = job->chroma_location - 1;
     }
 
+    /* Stereoscopic 3D: signal the frame packing arrangement in the
+     * elementary stream, so players that rely on the SEI (payload type 45)
+     * rather than on container level metadata can detect the layout. */
+    if (job->stereo_3d.type == HB_STEREO3D_SIDEBYSIDE)
+    {
+        param.i_frame_packing = 3;
+    }
+    else if (job->stereo_3d.type == HB_STEREO3D_TOPBOTTOM)
+    {
+        param.i_frame_packing = 4;
+    }
+
 #if X264_BUILD >= 163
     /* HDR10 Static metadata */
     if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
