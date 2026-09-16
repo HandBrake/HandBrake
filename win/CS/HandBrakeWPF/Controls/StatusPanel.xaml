@@ -13,7 +13,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Background="{StaticResource Ui.BackgroundDark}" Opacity="{Binding Source={x:Static themes:ThemeLoader.ThemeOpacity}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <StackPanel Grid.Row="0" Background="{DynamicResource Ui.BackgroundDark}" Opacity="{Binding Source={x:Static themes:ThemeLoader.ThemeOpacity}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
         <Border VerticalAlignment="Center" Grid.Row="0" Width="400" CornerRadius="4" Height="150"
                 BorderBrush="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
