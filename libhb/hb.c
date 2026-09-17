@@ -864,6 +864,8 @@ hb_image_t * hb_get_preview(hb_handle_t * h, hb_dict_t * job_dict,
             case HB_FILTER_RENDER_SUB:
             case HB_FILTER_NLMEANS:
             case HB_FILTER_CHROMA_SMOOTH:
+            case HB_FILTER_VIDSTABDETECT:
+            case HB_FILTER_VIDSTABTRANSFORM:
             case HB_FILTER_LAPSHARP:
             case HB_FILTER_UNSHARP:
             case HB_FILTER_DEBLOCK:
@@ -958,7 +960,7 @@ hb_image_t * hb_get_preview(hb_handle_t * h, hb_dict_t * job_dict,
         }
     }
 
-    hb_avfilter_combine(list_filter);
+    hb_avfilter_combine(list_filter, job->filter_scan);
 
     for( ii = 0; ii < hb_list_count( list_filter ); )
     {
@@ -1954,6 +1956,13 @@ void hb_job_setup_passes(hb_handle_t * h, hb_job_t * job, hb_list_t * list_pass)
         job->pass_id = HB_PASS_SUBTITLE;
         hb_add_internal(h, job, list_pass);
         job->indepth_scan = 0;
+    }
+    if (job->filter_scan)
+    {
+        hb_deep_log(2, "Adding filter scan pass");
+        job->pass_id = HB_PASS_FILTER_ANALYSIS;
+        hb_add_internal(h, job, list_pass);
+        job->filter_scan = 0;
     }
     if (job->multipass)
     {
