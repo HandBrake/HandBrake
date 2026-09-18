@@ -13,10 +13,18 @@
 //#define HB_DEBUG_CFR_DROPS 1
 #define MAX_FRAME_ANALYSIS_DEPTH 10
 
+typedef enum
+{
+    HB_FRAME_DROP_MODE_AUTO            = 0,
+    HB_FRAME_DROP_MODE_NEAREST         = 1,
+    HB_FRAME_DROP_MODE_MOTION_ANALYSIS = 2,
+} hb_frame_drop_mode_t;
+
 struct hb_filter_private_s
 {
     hb_job_t      * job;
     int             cfr;
+    hb_frame_drop_mode_t frame_drop_mode;
     hb_rational_t   input_vrate;
     hb_rational_t   vrate;
     hb_fifo_t     * delay_queue;
@@ -57,7 +65,7 @@ static void hb_vfr_close( hb_filter_object_t * filter );
 static hb_filter_info_t * hb_vfr_info( hb_filter_object_t * filter );
 
 static const char hb_vfr_template[] =
-    "mode=^([012])$:rate=^"HB_RATIONAL_REG"$";
+    "mode=^([012])$:rate=^"HB_RATIONAL_REG"$:frame-drop-mode=^([012])$";
 
 hb_filter_object_t hb_filter_vfr =
 {
@@ -237,7 +245,14 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
         penultimate = hb_list_item(pv->frame_rate_list, count - 2);
         ultimate    = hb_list_item(pv->frame_rate_list, count - 1);
 
-        pv->frame_metric[count - 1] = pv->metric->work(pv->metric, penultimate, ultimate);
+        if (pv->frame_drop_mode == HB_FRAME_DROP_MODE_MOTION_ANALYSIS)
+        {
+            pv->frame_metric[count - 1] = pv->metric->work(pv->metric, penultimate, ultimate);
+        }
+        else
+        {
+            pv->frame_metric[count - 1] = 1;
+        }
 
         if (count < pv->frame_analysis_depth)
         {
@@ -375,7 +390,28 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     hb_dict_extract_int(&pv->cfr, filter->settings, "mode");
     hb_dict_extract_rational(&pv->vrate, filter->settings, "rate");
 
-    if (pv->cfr)
+    int frame_drop_mode = 0;
+    hb_dict_extract_int(&frame_drop_mode, filter->settings, "frame-drop-mode");
+    if (frame_drop_mode >= HB_FRAME_DROP_MODE_AUTO &&
+        frame_drop_mode <= HB_FRAME_DROP_MODE_MOTION_ANALYSIS)
+    {
+        pv->frame_drop_mode = (hb_frame_drop_mode_t)frame_drop_mode;
+    }
+
+    if (pv->frame_drop_mode == HB_FRAME_DROP_MODE_AUTO)
+    {
+        hb_geometry_t geometry = init->geometry;
+        if (geometry.width <= 720 && geometry.height <= 576)
+        {
+            pv->frame_drop_mode = HB_FRAME_DROP_MODE_MOTION_ANALYSIS;
+        }
+        else
+        {
+            pv->frame_drop_mode = HB_FRAME_DROP_MODE_NEAREST;
+        }
+    }
+
+    if (pv->cfr && pv->frame_drop_mode == HB_FRAME_DROP_MODE_MOTION_ANALYSIS)
     {
         pv->metric = hb_motion_metric_init(init);
         if (pv->metric == NULL)
