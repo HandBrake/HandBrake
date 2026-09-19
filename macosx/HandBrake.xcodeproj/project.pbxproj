@@ -2359,7 +2359,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = HB;
-				LastUpgradeCheck = 2630;
+				LastUpgradeCheck = 2700;
 				ORGANIZATIONNAME = HandBrake;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
@@ -3697,6 +3697,7 @@
 				);
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";
+				__DIAGNOSE_INVALID_DEPLOYMENT_TARGET_AS_ERROR = NO;
 			};
 			name = debug;
 		};
@@ -3788,6 +3789,7 @@
 				);
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";
+				__DIAGNOSE_INVALID_DEPLOYMENT_TARGET_AS_ERROR = NO;
 			};
 			name = release;
 		};
@@ -5262,6 +5264,7 @@
 				);
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";
+				__DIAGNOSE_INVALID_DEPLOYMENT_TARGET_AS_ERROR = NO;
 			};
 			name = "debug-sandbox";
 		};
@@ -5547,6 +5550,7 @@
 				);
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";
+				__DIAGNOSE_INVALID_DEPLOYMENT_TARGET_AS_ERROR = NO;
 			};
 			name = "release-sandbox";
 		};
