@@ -1715,8 +1715,17 @@ enum
     HB_AUDIO_FILTER_INVALID = 0,
     HB_AUDIO_FILTER_FIRST = 10001,
 
-    HB_AUDIO_FILTER_ACOMPRESSOR,
+    HB_AUDIO_FILTER_ADECLICK,
+    HB_AUDIO_FILTER_ADECLIP,
+    HB_AUDIO_FILTER_AFFTDN,
+    HB_AUDIO_FILTER_ANLMDN,
     HB_AUDIO_FILTER_AGATE,
+    HB_AUDIO_FILTER_ACOMPRESSOR,
+    HB_AUDIO_FILTER_ALIMITER,
+    HB_AUDIO_FILTER_DIALOGUENHANCE,
+    HB_AUDIO_FILTER_CROSSFEED,
+    HB_AUDIO_FILTER_STEREOWIDEN,
+    HB_AUDIO_FILTER_LOUDNORM,
 
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters
@@ -1884,9 +1893,9 @@ int hb_get_color_range(int color_range);
 int hb_get_chroma_sub_sample(int format, int *h_shift, int *v_shift);
 int hb_get_best_pix_fmt(hb_job_t * job);
 
-#define HB_NEG_FLOAT_REG "(([-])?(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
+#define HB_NEG_FLOAT_REG "((-?[0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
 #define HB_FLOAT_REG     "(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
-#define HB_NEG_INT_REG   "(([-]?[0-9]+)"
+#define HB_NEG_INT_REG   "((-?[0-9]+)"
 #define HB_INT_REG       "([0-9]+)"
 #define HB_RATIONAL_REG  "([0-9]+/[0-9]+)"
 #define HB_BOOL_REG      "(yes|no|true|false|[01])"
