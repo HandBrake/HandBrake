@@ -1918,6 +1918,7 @@ ghb_settings_to_preset(GhbValue *settings)
             g_string_append_printf(str, "%s%s", sep, "zerolatency");
         }
     }
+
     char *tunes;
     tunes = g_string_free(str, FALSE);
     ghb_dict_set_string(preset, "VideoTune", tunes);
