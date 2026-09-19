@@ -253,6 +253,106 @@ static hb_filter_param_t grayscale_presets[] =
     { 0, NULL,        NULL,      NULL }
 };
 
+static hb_filter_param_t adeclick_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL                },
+    { 3, "Default",            "default",
+        "window=55:overlap=75:arorder=2:threshold=2:burst=2"
+                                                                   },
+    { 0,  NULL,                NULL,           NULL                },
+};
+
+static hb_filter_param_t adeclip_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL                },
+    { 3, "Default",            "default",
+        "window=55:overlap=75:arorder=8:threshold=10"
+                                                                   },
+    { 0,  NULL,                NULL,           NULL                },
+};
+
+static hb_filter_param_t afftdn_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL                },
+    { 3, "Default",            "default",
+        "noise_reduction=12:noise_floor=-50"
+                                                                   },
+    { 0,  NULL,                NULL,           NULL                },
+};
+
+static hb_filter_param_t anlmdn_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL                },
+    { 3, "Default",            "default",
+        "strength=0.00001:patch=0.002:research=0.006"
+                                                                   },
+    { 0,  NULL,                NULL,           NULL                },
+};
+
+static hb_filter_param_t agate_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL             },
+    { 3, "Default",            "default",
+         "level_in=1:mode=0:range=0.06125:threshold=0.125:ratio=2:attack=20:"
+         "release=250:makeup=1:knee=2.82843:detection=1:link=0:level_sc=1"  },
+    { 4, "Light",              "light",
+         "level_in=1:mode=0:range=0.125:threshold=0.016:ratio=2:attack=20:"
+         "release=400:makeup=1:knee=2.82843:detection=1:link=0:level_sc=1"  },
+    { 5, "Moderate",           "moderate",
+         "level_in=1:mode=0:range=0.063:threshold=0.032:ratio=2:attack=15:"
+         "release=300:makeup=1:knee=2.82843:detection=1:link=0:level_sc=1"  },
+    { 6, "Strong",             "strong",
+         "level_in=1:mode=0:range=0.032:threshold=0.063:ratio=2:attack=10:"
+         "release=250:makeup=1:knee=2.82843:detection=1:link=0:level_sc=1"  },
+    { 0,  NULL,                NULL,           NULL             },
+};
+
+static hb_filter_param_t alimiter_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL                },
+    { 3, "Default",            "default",
+        "level_in=1:level_out=1:limit=1:attack=5:release=50:asc=0:"
+        "asc_level=0.5:level=1:latency=0"
+                                                                   },
+    { 0,  NULL,                NULL,           NULL                },
+};
+
+static hb_filter_param_t dialoguenhance_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL                },
+    { 3, "Default",            "default",
+        "original=1:enhance=1:voice=2"
+                                                                   },
+    { 0,  NULL,                NULL,           NULL                },
+};
+
+static hb_filter_param_t crossfeed_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL                },
+    { 3, "Default",            "default",
+        "strength=0.2:range=0.5:slope=0.5"
+                                                                   },
+    { 0,  NULL,                NULL,           NULL                },
+};
+
+static hb_filter_param_t stereowiden_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL                },
+    { 3, "Default",            "default",
+        "delay=20:feedback=0.3:crossfeed=0.3:drymix=0.8"
+                                                                   },
+    { 0,  NULL,                NULL,           NULL                },
+};
+
+static hb_filter_param_t loudnorm_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL                },
+    { 3, "Default",            "default",
+        "i=-24.0:lra=7.0:tp=-2.0"
+                                                                   },
+    { 0,  NULL,                NULL,           NULL                },
+};
+
 /* Strength presets; settings are produced by generate_acompressor_settings()
  * so each strength can be tailored per content tune. */
 static hb_filter_param_t acompressor_presets[] =
@@ -272,24 +372,6 @@ static hb_filter_param_t acompressor_tunes[] =
     { 1, "Voice",              "voice",        NULL             },
     { 2, "Music",              "music",        NULL             },
     { 0, NULL,                 NULL,           NULL             },
-};
-
-static hb_filter_param_t agate_presets[] =
-{
-    { 1, "Custom",             "custom",       NULL             },
-    { 3, "Default",            "default",
-         "level-in=1:mode=0:range=0.06125:threshold=0.125:ratio=2:attack=20:"
-         "release=250:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
-    { 4, "Light",              "light",
-         "level-in=1:mode=0:range=0.125:threshold=0.016:ratio=2:attack=20:"
-         "release=400:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
-    { 5, "Moderate",           "moderate",
-         "level-in=1:mode=0:range=0.063:threshold=0.032:ratio=2:attack=15:"
-         "release=300:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
-    { 6, "Strong",             "strong",
-         "level-in=1:mode=0:range=0.032:threshold=0.063:ratio=2:attack=10:"
-         "release=250:makeup=1:knee=2.82843:detection=1:link=0:level-sc=1"  },
-    { 0,  NULL,                NULL,           NULL             },
 };
 
 typedef struct
@@ -352,13 +434,40 @@ static filter_param_map_t param_map[] =
   
     { HB_FILTER_GRAYSCALE, grayscale_presets, NULL,
       sizeof(grayscale_presets) / sizeof(hb_filter_param_t),   0, },
-  
+
+    { HB_AUDIO_FILTER_ADECLICK, adeclick_presets, NULL,
+      sizeof(adeclick_presets) / sizeof(hb_filter_param_t),      0, },
+
+    { HB_AUDIO_FILTER_ADECLIP, adeclip_presets, NULL,
+      sizeof(adeclip_presets) / sizeof(hb_filter_param_t),      0, },
+
+    { HB_AUDIO_FILTER_AFFTDN, afftdn_presets, NULL,
+      sizeof(afftdn_presets) / sizeof(hb_filter_param_t),      0, },
+
+    { HB_AUDIO_FILTER_ANLMDN, anlmdn_presets, NULL,
+      sizeof(anlmdn_presets) / sizeof(hb_filter_param_t),      0, },
+
+    { HB_AUDIO_FILTER_AGATE, agate_presets, NULL,
+      sizeof(agate_presets) / sizeof(hb_filter_param_t),       0, },
+
     { HB_AUDIO_FILTER_ACOMPRESSOR, acompressor_presets, acompressor_tunes,
       sizeof(acompressor_presets) / sizeof(hb_filter_param_t),
       sizeof(acompressor_tunes)   / sizeof(hb_filter_param_t), },
 
-    { HB_AUDIO_FILTER_AGATE, agate_presets, NULL,
-      sizeof(agate_presets) / sizeof(hb_filter_param_t),       0, },
+    { HB_AUDIO_FILTER_ALIMITER, alimiter_presets, NULL,
+      sizeof(alimiter_presets) / sizeof(hb_filter_param_t),    0, },
+
+    { HB_AUDIO_FILTER_DIALOGUENHANCE, dialoguenhance_presets, NULL,
+      sizeof(dialoguenhance_presets) / sizeof(hb_filter_param_t), 0, },
+
+    { HB_AUDIO_FILTER_CROSSFEED, crossfeed_presets, NULL,
+      sizeof(crossfeed_presets) / sizeof(hb_filter_param_t),   0, },
+
+    { HB_AUDIO_FILTER_STEREOWIDEN, stereowiden_presets, NULL,
+      sizeof(stereowiden_presets) / sizeof(hb_filter_param_t), 0, },
+
+    { HB_AUDIO_FILTER_LOUDNORM, loudnorm_presets, NULL,
+      sizeof(loudnorm_presets) / sizeof(hb_filter_param_t),    0, },
 
     { HB_FILTER_INVALID,     NULL,                NULL,     0, 0, },
 };
@@ -1274,28 +1383,28 @@ static hb_dict_t * generate_acompressor_settings(const char *preset,
 
     if (!strcasecmp(preset, "nightmode"))
     {
-        settings = "level-in=1:mode=0:threshold=0.063:ratio=4:attack=10:"
+        settings = "level_in=1:mode=0:threshold=0.063:ratio=4:attack=10:"
                    "release=200:makeup=2.2:knee=2.82843:link=0:detection=1:"
-                   "level-sc=1:mix=1";
+                   "level_sc=1:mix=1";
     }
     else if (tune == NULL || !strcasecmp(tune, "none"))
     {
         if (!strcasecmp(preset, "light"))
-            settings = "level-in=1:mode=0:threshold=0.177:ratio=1.5:attack=20:"
+            settings = "level_in=1:mode=0:threshold=0.177:ratio=1.5:attack=20:"
                        "release=250:makeup=1:knee=2.82843:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
         else if (!strcasecmp(preset, "moderate"))
-            settings = "level-in=1:mode=0:threshold=0.125:ratio=3:attack=20:"
+            settings = "level_in=1:mode=0:threshold=0.125:ratio=3:attack=20:"
                        "release=250:makeup=1.41:knee=2.82843:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
         else if (!strcasecmp(preset, "strong"))
-            settings = "level-in=1:mode=0:threshold=0.063:ratio=4:attack=10:"
+            settings = "level_in=1:mode=0:threshold=0.063:ratio=4:attack=10:"
                        "release=250:makeup=1:knee=2.82843:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
         else /* default */
-            settings = "level-in=1:mode=0:threshold=0.125:ratio=2:attack=20:"
+            settings = "level_in=1:mode=0:threshold=0.125:ratio=2:attack=20:"
                        "release=250:makeup=1:knee=2.82843:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
     }
     else if (!strcasecmp(tune, "voice"))
     {
@@ -1308,21 +1417,21 @@ static hb_dict_t * generate_acompressor_settings(const char *preset,
          * than extra gain, matching the None tune's rung shape and
          * avoiding a hot, clipping-prone output after lossy re-encoding. */
         if (!strcasecmp(preset, "light"))
-            settings = "level-in=1:mode=0:threshold=0.125:ratio=2:attack=10:"
+            settings = "level_in=1:mode=0:threshold=0.125:ratio=2:attack=10:"
                        "release=200:makeup=1.41:knee=2:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
         else if (!strcasecmp(preset, "moderate"))
-            settings = "level-in=1:mode=0:threshold=0.089:ratio=3:attack=7:"
+            settings = "level_in=1:mode=0:threshold=0.089:ratio=3:attack=7:"
                        "release=180:makeup=2:knee=2:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
         else if (!strcasecmp(preset, "strong"))
-            settings = "level-in=1:mode=0:threshold=0.063:ratio=4:attack=5:"
+            settings = "level_in=1:mode=0:threshold=0.063:ratio=4:attack=5:"
                        "release=150:makeup=1.41:knee=1.5:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
         else /* default */
-            settings = "level-in=1:mode=0:threshold=0.1:ratio=2.5:attack=8:"
+            settings = "level_in=1:mode=0:threshold=0.1:ratio=2.5:attack=8:"
                        "release=180:makeup=1.7:knee=2:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
     }
     else if (!strcasecmp(tune, "music"))
     {
@@ -1333,21 +1442,21 @@ static hb_dict_t * generate_acompressor_settings(const char *preset,
          * at strong, since a mastering-style glue compressor should not
          * push the mix hotter as it gets more aggressive. */
         if (!strcasecmp(preset, "light"))
-            settings = "level-in=1:mode=0:threshold=0.25:ratio=1.5:attack=30:"
+            settings = "level_in=1:mode=0:threshold=0.25:ratio=1.5:attack=30:"
                        "release=300:makeup=1:knee=4:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
         else if (!strcasecmp(preset, "moderate"))
-            settings = "level-in=1:mode=0:threshold=0.177:ratio=2:attack=25:"
+            settings = "level_in=1:mode=0:threshold=0.177:ratio=2:attack=25:"
                        "release=300:makeup=1.2:knee=4:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
         else if (!strcasecmp(preset, "strong"))
-            settings = "level-in=1:mode=0:threshold=0.125:ratio=2.5:attack=20:"
+            settings = "level_in=1:mode=0:threshold=0.125:ratio=2.5:attack=20:"
                        "release=250:makeup=1:knee=4:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
         else /* default */
-            settings = "level-in=1:mode=0:threshold=0.177:ratio=1.75:attack=27:"
+            settings = "level_in=1:mode=0:threshold=0.177:ratio=1.75:attack=27:"
                        "release=300:makeup=1.1:knee=4:link=0:detection=1:"
-                       "level-sc=1:mix=1";
+                       "level_sc=1:mix=1";
     }
     else
     {
@@ -1465,7 +1574,16 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_YADIF:
         case HB_FILTER_BWDIF:
         case HB_FILTER_COLORSPACE:
+        case HB_AUDIO_FILTER_ADECLICK:
+        case HB_AUDIO_FILTER_ADECLIP:
+        case HB_AUDIO_FILTER_AFFTDN:
+        case HB_AUDIO_FILTER_ANLMDN:
         case HB_AUDIO_FILTER_AGATE:
+        case HB_AUDIO_FILTER_ALIMITER:
+        case HB_AUDIO_FILTER_DIALOGUENHANCE:
+        case HB_AUDIO_FILTER_CROSSFEED:
+        case HB_AUDIO_FILTER_STEREOWIDEN:
+        case HB_AUDIO_FILTER_LOUDNORM:
             settings = generate_generic_settings(filter_id, preset,
                                                  tune, custom);
             break;

@@ -240,17 +240,17 @@ hb_avfilter_audio_graph_init(hb_value_t *settings, hb_filter_init_t *init)
         goto fail;
     }
 
-    // Build abuffer source filter args using AVChannelLayout API (FFmpeg 8+)
-    char ch_layout_str[64];
-    hb_layout_get_name(&init->ch_layout, ch_layout_str, sizeof(ch_layout_str));
-
-    // Append aformat to ensure output matches what HB expects:
-    // packed float, and optionally constrain the channel layout
-    full_settings = hb_strdup_printf("%s,aformat=sample_fmts=flt",
-                                    graph->settings);
+    // Append aformat to ensure output matches what HB expects
+    full_settings = hb_strdup_printf("%s,aformat=sample_fmts=flt:sample_rates=%d",
+                                    graph->settings, init->samplerate);
 
     free(graph->settings);
     graph->settings = strdup(full_settings);
+
+
+    // Build abuffer source filter args using AVChannelLayout API (FFmpeg 8+)
+    char ch_layout_str[64];
+    hb_layout_get_name(&init->ch_layout, ch_layout_str, sizeof(ch_layout_str));
 
     filter_args = hb_strdup_printf(
                                    "sample_rate=%d:sample_fmt=%s:channel_layout=%s"
@@ -632,8 +632,17 @@ void hb_avfilter_audio_combine(hb_list_t *list)
         hb_filter_private_t *pv = filter->private_data;
         switch (filter->id)
         {
-            case HB_AUDIO_FILTER_ACOMPRESSOR:
+            case HB_AUDIO_FILTER_ADECLICK:
+            case HB_AUDIO_FILTER_ADECLIP:
+            case HB_AUDIO_FILTER_AFFTDN:
+            case HB_AUDIO_FILTER_ANLMDN:
+            case HB_AUDIO_FILTER_DIALOGUENHANCE:
+            case HB_AUDIO_FILTER_CROSSFEED:
+            case HB_AUDIO_FILTER_STEREOWIDEN:
+            case HB_AUDIO_FILTER_LOUDNORM:
             case HB_AUDIO_FILTER_AGATE:
+            case HB_AUDIO_FILTER_ACOMPRESSOR:
+            case HB_AUDIO_FILTER_ALIMITER:
             {
                 settings = pv->avfilters;
             } break;
