@@ -110,7 +110,7 @@ T filter_temp(T cur_prefs3, T cur_prefs, T cur_mrefs, T cur_mrefs3,
         if (abs(c - e) > temporal_diff0) {
             interpol = (((coef_hf[0] * (prev2_0 + next2_0)
                 - coef_hf[1] * (prev2_mrefs2 + next2_mrefs2 + prev2_prefs2 + next2_prefs2)
-                + coef_hf[2] * (prev2_mrefs4 + next2_mrefs4 + prev2_prefs4 + next2_mrefs4)) / 4)
+                + coef_hf[2] * (prev2_mrefs4 + next2_mrefs4 + prev2_prefs4 + next2_prefs4)) / 4)
                 + coef_lf[0] * (c + e) - coef_lf[1] * (cur_mrefs3 + cur_prefs3)) / (1 << 13);
         } else {
             interpol = (coef_sp[0] * (c + e) - coef_sp[1] * (cur_mrefs3 + cur_prefs3)) / (1 << 13);
@@ -151,10 +151,10 @@ T bwdif_single(texture2d<float, access::write> dst,
     }
 
     // Calculate temporal prediction
-    texture2d<float, accesstype> prev2 = prev;
-    texture2d<float, accesstype> prev1 = is_second_field ? cur : prev;
-    texture2d<float, accesstype> next1 = is_second_field ? next : cur;
-    texture2d<float, accesstype> next2 = next;
+    texture2d<float, accesstype> prev2 = is_second_field ? cur : prev;
+    texture2d<float, accesstype> prev1 = prev;
+    texture2d<float, accesstype> next1 = next;
+    texture2d<float, accesstype> next2 = is_second_field ? next : cur;
 
     T prev2_prefs4 = tex2D<T>(prev2, pos.x, pos.y+ 4);
     T prev2_prefs2 = tex2D<T>(prev2, pos.x, pos.y + 2);
@@ -204,10 +204,10 @@ T bwdif_double(texture2d<float, access::write> dst,
     }
 
     // Calculate temporal prediction
-    texture2d<float, accesstype> prev2 = prev;
-    texture2d<float, accesstype> prev1 = is_second_field ? cur : prev;
-    texture2d<float, accesstype> next1 = is_second_field ? next : cur;
-    texture2d<float, accesstype> next2 = next;
+    texture2d<float, accesstype> prev2 = is_second_field ? cur : prev;
+    texture2d<float, accesstype> prev1 = prev;
+    texture2d<float, accesstype> next1 = next;
+    texture2d<float, accesstype> next2 = is_second_field ? next : cur;
 
     T prev2_prefs4 = tex2D<T>(prev2, pos.x, pos.y+ 4);
     T prev2_prefs2 = tex2D<T>(prev2, pos.x, pos.y + 2);

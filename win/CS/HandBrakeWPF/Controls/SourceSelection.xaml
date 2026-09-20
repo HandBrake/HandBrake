@@ -19,7 +19,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid VerticalAlignment="Stretch" Grid.Column="0" Width="300" Background="{StaticResource Ui.Background}">
+        <Grid VerticalAlignment="Stretch" Grid.Column="0" Width="300" Background="{DynamicResource Ui.Background}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />

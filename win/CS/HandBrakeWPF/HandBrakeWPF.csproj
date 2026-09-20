@@ -5,6 +5,7 @@
     <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <PackageId>HandBrake</PackageId>
     <Authors>HandBrake Team</Authors>
     <Company>HandBrake Team</Company>
@@ -60,11 +61,11 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Autofac" Version="9.0.0" />
+	<PackageReference Include="Autofac" Version="9.3.2" />
     <PackageReference Include="gong-wpf-dragdrop" Version="4.0.0" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-    <PackageReference Include="System.Management" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.161" />
+    <PackageReference Include="System.Management" Version="10.0.12" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,12 @@
+diff -u libdvdread-7.1.1.orig/src/dvdread/dvd_filesystem.h libdvdread-7.1.1/dvd_filesystem.h
+--- libdvdread-7.1.1.orig/src/dvdread/dvd_filesystem.h	2026-08-21 16:59:14.321948267 +0000
++++ libdvdread-7.1.1/src/dvdread/dvd_filesystem.h	2026-08-21 16:59:14.321948267 +0000
+@@ -37,7 +37,7 @@
+ #elif defined(__GLIBC__)
+ /* sys/types.h may have been included before _LARGEFILE64_SOURCE was defined. */
+ typedef __off64_t off64_t;
+-#elif defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
++#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
+ /* off_t is already 64 bit here so off64_t is not provided. */
+ typedef off_t off64_t;
+ #endif

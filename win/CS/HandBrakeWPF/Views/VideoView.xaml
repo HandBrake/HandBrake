@@ -15,14 +15,11 @@
         <Video:VideoColourRangeConverter x:Key="videoColourRangeConverter" />
     </UserControl.Resources>
 
-    <Grid Margin="10,5,0,0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
 
 
-        <Grid Grid.Row="1">
+
+            <Grid Grid.Row="1" Margin="10,5,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="4*" />
@@ -221,5 +218,5 @@
                 </Grid>
             </Grid>
         </Grid>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

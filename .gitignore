@@ -16,6 +16,7 @@ win/CS/HandBrakeAppX/AppPackages/**/*
 win/CS/HandBrakeAppX/BundleArtifacts/**/*
 *.ide
 win/CS/*.DotSettings
+win/CS/*.props
 
 # Xcode
 macosx/**/xcuserdata

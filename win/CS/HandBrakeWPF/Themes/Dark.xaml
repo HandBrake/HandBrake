@@ -15,6 +15,7 @@
     <SolidColorBrush x:Key="Ui.Light2" Color="#464646" />
     <SolidColorBrush x:Key="Ui.Ultralight" Color="#606060" />
     <SolidColorBrush x:Key="Ui.UltraLight2" Color="#acacac" />
+    <SolidColorBrush x:Key="Ui.UltraLight3" Color="#E3E3E3" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
     <SolidColorBrush x:Key="Ui.WhiteSmoke" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="Ui.ListBoxSelect" Color="#606060" />
@@ -40,6 +41,36 @@
     <Style TargetType="ListBox">
         <Setter Property="Background" Value="{DynamicResource Ui.Dark}" />
         <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2" SnapsToDevicePixels="True">
+                        <ScrollViewer Focusable="False" Padding="{TemplateBinding Padding}">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ListView -->
+    <Style TargetType="ListView">
+        <Setter Property="Background" Value="{DynamicResource Ui.Dark}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListView}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2" SnapsToDevicePixels="True">
+                        <ScrollViewer Focusable="False" Padding="{TemplateBinding Padding}">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- Tooltip -->
@@ -81,18 +112,41 @@
     <!-- Tab Control -->
     <Style TargetType="{x:Type TabControl}">
         <Setter Property="Background" Value="{DynamicResource Ui.Mid}"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid ClipToBounds="True" SnapsToDevicePixels="True" KeyboardNavigation.TabNavigation="Local">
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                            <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TabPanel x:Name="HeaderPanel" Grid.Row="0" Panel.ZIndex="1" Margin="2,2,2,0" IsItemsHost="True" KeyboardNavigation.TabIndex="1" Background="Transparent"/>
+                        <Border x:Name="ContentPanel" Grid.Row="1" CornerRadius="2,4,4,4"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                KeyboardNavigation.TabIndex="2"
+                                KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="TabItem">
         <Setter Property="Background" Value="{DynamicResource Ui.Mid}" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
-                    <Grid Name="Panel">
+                    <Border Name="Panel" CornerRadius="4,4,0,0"  BorderBrush="{DynamicResource Ui.ListBoxSelect}"  BorderThickness="1,1,1,0" Margin="0,0,1,0">
                         <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="10,6"/>
-                    </Grid>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Panel" Property="Background" Value="{DynamicResource Ui.Mid}" />

@@ -15,8 +15,12 @@ namespace HandBrakeWPF.Themes
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Utilities;
 
+    using Microsoft.Win32;
+
     public class ThemeLoader
     {
+        private static bool isSystemEventsSubscribed;
+
         public static decimal ThemeOpacity { get; private set; }
 
         public static void LoadAppTheme(IUserSettingService userSettingService)
@@ -72,7 +76,12 @@ namespace HandBrakeWPF.Themes
                     // This theme is not ready for use.
                     ThemeOpacity = 1m;
                     Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.xaml", UriKind.RelativeOrAbsolute) });
+                    Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Modern.xaml", UriKind.Relative) });
                     loadBaseStyle = false;
+
+                    ApplyModernBackgroundColors();
+                    SubscribeToSystemThemeChanges();
+
                     break;
             }
 
@@ -86,6 +95,39 @@ namespace HandBrakeWPF.Themes
             {
                 Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Views/Styles/ThemedStyles.xaml", UriKind.Relative) });
             }
+        }
+
+        private static void ApplyModernBackgroundColors()
+        {
+            if (SystemInfo.IsAppsUsingDarkTheme())
+            {
+                Application.Current.Resources["Ui.Background"] = new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20));
+                Application.Current.Resources["Ui.BackgroundLight"] = new SolidColorBrush(Color.FromRgb(0x2c, 0x2c, 0x2c));
+                Application.Current.Resources["Ui.BackgroundDark"] = new SolidColorBrush(Colors.Black);
+            }
+            else
+            {
+                Application.Current.Resources["Ui.Background"] = new SolidColorBrush(Colors.White);
+                Application.Current.Resources["Ui.BackgroundLight"] = new SolidColorBrush(Colors.White);
+                Application.Current.Resources["Ui.BackgroundDark"] = new SolidColorBrush(Colors.Black);
+            }
+        }
+
+        private static void SubscribeToSystemThemeChanges()
+        {
+            if (isSystemEventsSubscribed)
+            {
+                return;
+            }
+
+            isSystemEventsSubscribed = true;
+            SystemEvents.UserPreferenceChanged += (sender, args) =>
+            {
+                if (args.Category == UserPreferenceCategory.General)
+                {
+                    Application.Current?.Dispatcher.Invoke(ApplyModernBackgroundColors);
+                }
+            };
         }
     }
 }

@@ -20,6 +20,7 @@ Download available from Microsoft:
 - Added video filters:
     - Deband
     - BM3D
+- Added H.264 10-bit (High10) encoder for Nvidia Blackwell GPUs 
 - Stereo 3D and spherical video mapping metadata are now preserved
 - Fixed FFV1 SAR in bitstream
 
@@ -30,19 +31,32 @@ Download available from Microsoft:
     - Compressor
 - Added 3.0, 4.0, and quadrophonic mixdowns
 - Renamed "7.1 (5F/2R/LFE)" mixdown to "7.1 (SDDS)" (speaker layout used by Sony Dynamic Digital Sound)
+- Enabled 6.1/7.1 mixdowns for FFmpeg AAC audio encoder and 6.1 for fdk-aac
+- Fixed an issue when converting audio with channels set to "Unused"
+
+#### Subtitles
+
+- Improved the tx3g decoder
+- Fixed the SSA to tx3g conversion styles when subtitles lines overlaps
+
+#### Build system
+
+- Enabled NVENC and NVDEC on Windows on Arm
 
 #### Third-party libraries
 
 - Updated libraries
   - AMF 1.5.2 (AMD VCN video encoding)
-  - FFmpeg 8.1.2 (decoding and filters)
+  - FFmpeg 9.0.1 (decoding and filters)
   - FreeType 2.14.3 (subtitles)
   - HarfBuzz 14.3.0 (subtitles)
-  - libbluray 1.5.0 (Blu-ray decoding)
+  - libbluray 1.5.1 (Blu-ray decoding)
   - libdav1d 1.5.4 (AV1 decoding)
   - libdvdread 7.1.1 (DVD decoding)
   - libiconv 1.19 (character encoding support)
+  - liblzma (xz) 5.8.4 (LZMA video decoding, e.g. TIFF)
   - libjpeg-turbo 3.2.0 (preview image compression)
+  - libvpx 1.17.0 (VP8/VP9 video encoding)
   - nv-codec-headers 13.1.15.0 (Nvidia NVENC encoding)
   - oneVPL 2.17.0 (Intel QSV video encoding/decoding)
   - SVT-AV1 4.2.0 (AV1 video encoding)

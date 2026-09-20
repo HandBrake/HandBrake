@@ -7,6 +7,7 @@
     <SolidColorBrush x:Key="Ui.Light2" Color="#f2f2f2" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
     <SolidColorBrush x:Key="Ui.UltraLight2" Color="AliceBlue" />
+    <SolidColorBrush x:Key="Ui.UltraLight3" Color="#D3D3D3" />
     <SolidColorBrush x:Key="Ui.Ultralight" Color="AliceBlue" />
     <SolidColorBrush x:Key="Ui.Arrow" Color="#252525" />
     <SolidColorBrush x:Key="Ui.ListBoxSelect" Color="#D8D8D8" />
@@ -23,15 +24,106 @@
         <Setter Property="Background" Value="{DynamicResource Ui.Light}" />
     </Style>
 
+    <!-- ListBox -->
+    <Style TargetType="ListBox">
+        <Setter Property="Background" Value="{DynamicResource Ui.Background}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2" SnapsToDevicePixels="True">
+                        <ScrollViewer Focusable="False" Padding="{TemplateBinding Padding}">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ListView -->
+    <Style TargetType="ListView">
+        <Setter Property="Background" Value="{DynamicResource Ui.Background}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListView}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2" SnapsToDevicePixels="True">
+                        <ScrollViewer Focusable="False" Padding="{TemplateBinding Padding}">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Tab Control -->
+    <Style TargetType="{x:Type TabControl}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid ClipToBounds="True" SnapsToDevicePixels="True" KeyboardNavigation.TabNavigation="Local">
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                            <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TabPanel x:Name="HeaderPanel" Grid.Row="0" Panel.ZIndex="1" Margin="2,2,2,0" IsItemsHost="True" KeyboardNavigation.TabIndex="1" Background="Transparent"/>
+                        <Border x:Name="ContentPanel" Grid.Row="1" CornerRadius="2,4,4,4"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                KeyboardNavigation.TabIndex="2"
+                                KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="TabItem">
+        <Setter Property="Background" Value="{DynamicResource Ui.Light}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border Name="Panel" CornerRadius="4,4,0,0" BorderBrush="{DynamicResource Ui.ListBoxSelect}"  BorderThickness="1,1,1,0" Margin="0,0,1,0">
+                        <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="10,6"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Panel" Property="Background" Value="{DynamicResource Ui.Light2}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="Panel" Property="Background" Value="{DynamicResource Ui.UltraLight3}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- TextBlock -->
     <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- ComboBox-->
+    <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBoxBaseStyle}">
+        <Setter Property="MinHeight" Value="22"/>
+        <Setter Property="Margin" Value="0,2,0,2" />
+        <Setter Property="ToolTipService.ShowDuration" Value="20000" />
     </Style>
 
     <!-- Glyph -->
     <SolidColorBrush x:Key="ButtonGlyphBrush" Color="#444"/>
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Controls/ComboBoxLight.xaml" />
         <ResourceDictionary Source="Controls/ToolbarLight.xaml" />
         <ResourceDictionary Source="Controls/ContextMenuLight.xaml" />
         <ResourceDictionary Source="Controls/ProgressBarBoth.xaml" />

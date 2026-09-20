@@ -2361,8 +2361,6 @@ namespace HandBrakeWPF.ViewModels
 
         private void ScanCompleted(object sender, ScanCompletedEventArgs e)
         {
-            this.ShowStatusWindow = false;
-
             if (e.ScannedSource != null && !e.Cancelled)
             {
                 this.ScannedSource = new Source(e.ScannedSource);
@@ -2374,6 +2372,8 @@ namespace HandBrakeWPF.ViewModels
 
             ThreadHelper.OnUIThread(() =>
             {
+                this.ShowStatusWindow = false;
+
                 if (e.Successful && this.ScannedSource != null)
                 {
                     this.NotifyOfPropertyChange(() => this.ScannedSource);
