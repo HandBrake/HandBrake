@@ -233,6 +233,12 @@
                         <action selector="resetJobState:" target="-2" id="nsj-r6-Vd4"/>
                     </connections>
                 </menuItem>
+                <menuItem title="Export…" id="qEx-Sl-Ctx">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="exportSelectedQueueItems:" target="-2" id="aEx-Sl-Ct1"/>
+                    </connections>
+                </menuItem>
                 <menuItem isSeparatorItem="YES" id="ozr-b8-nig"/>
                 <menuItem title="Remove All Jobs" id="5AR-we-iHC">
                     <modifierMask key="keyEquivalentModifierMask"/>

@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)tableViewEditItem:(HBQueueJobItem *)item;
 - (void)tableViewResetItemsAtIndexes:(NSIndexSet *)indexes;
 - (void)tableViewRemoveItemsAtIndexes:(NSIndexSet *)indexes;
+- (void)tableViewExportItemsAtIndexes:(NSIndexSet *)indexes;
 
 @end
 
