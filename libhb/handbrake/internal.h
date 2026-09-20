@@ -477,8 +477,17 @@ extern hb_filter_object_t hb_filter_lapsharp_vt;
 extern hb_filter_object_t hb_filter_unsharp_vt;
 #endif
 
-extern hb_filter_object_t hb_filter_acompressor;
+extern hb_filter_object_t hb_filter_adeclick;
+extern hb_filter_object_t hb_filter_adeclip;
+extern hb_filter_object_t hb_filter_afftdn;
+extern hb_filter_object_t hb_filter_anlmdn;
 extern hb_filter_object_t hb_filter_agate;
+extern hb_filter_object_t hb_filter_acompressor;
+extern hb_filter_object_t hb_filter_alimiter;
+extern hb_filter_object_t hb_filter_dialoguenhance;
+extern hb_filter_object_t hb_filter_crossfeed;
+extern hb_filter_object_t hb_filter_stereowiden;
+extern hb_filter_object_t hb_filter_loudnorm;
 extern hb_filter_object_t hb_filter_avfilter_audio;
 
 extern hb_motion_metric_object_t hb_motion_metric;
