@@ -118,6 +118,18 @@
                                     <action selector="addAllTitlesToQueue:" target="-1" id="zTW-SV-C4n"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Import Queue…" id="qIm-Pt-Qu1">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="importQueue:" target="-1" id="aIm-Qu-e01"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export Queue…" id="qEx-Pt-Qu2">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportQueue:" target="-1" id="aEx-Qu-e02"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="Kee-pg-bfk">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>

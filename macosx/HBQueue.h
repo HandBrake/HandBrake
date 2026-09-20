@@ -32,6 +32,15 @@ extern NSString * const HBQueueDidStartItemNotification;
 extern NSString * const HBQueueDidCompleteItemNotification;
 extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueJobItem
 
+/// The file extension of an exported queue.
+extern NSString * const HBQueueFileExtension;
+
+extern NSString * const HBQueueErrorDomain;
+
+typedef NS_ENUM(NSInteger, HBQueueError) {
+    HBQueueErrorUnreadableFile = 1
+};
+
 @interface HBQueue : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
@@ -67,6 +76,12 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueJ
 - (void)resetItemsAtIndexes:(NSIndexSet *)indexes;
 - (void)resetAllItems;
 - (void)resetFailedItems;
+
+/// Writes the given items to a queue file.
+- (BOOL)exportItems:(NSArray<id<HBQueueItem>> *)items toURL:(NSURL *)url error:(NSError **)outError;
+
+/// Appends the content of a queue file to the queue, and returns how many items were added.
+- (NSUInteger)importItemsFromURL:(NSURL *)url error:(NSError **)outError;
 
 @property (nonatomic, readonly) BOOL canEncode;
 @property (nonatomic, readonly) BOOL isEncoding;
