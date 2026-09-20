@@ -545,6 +545,7 @@ namespace HandBrakeWPF.ViewModels
 
                     // Setup the tab controls
                     this.SetupTabs();
+                    this.SubtitleViewModel.ImportForCurrentTitle(this.GetSubtitleFilesForTitle(this.SelectedTitle.SourcePath));
                 }
             }
         }
@@ -1678,6 +1679,24 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        private string[] GetSubtitleFilesForTitle(string sourcePath)
+        {
+            if (string.IsNullOrEmpty(sourcePath))
+            {
+                return Array.Empty<string>();
+            }
+
+            if (this.pendingSubtitleFiles.Length > 0)
+            {
+                string sourceName = Path.GetFileNameWithoutExtension(sourcePath);
+                return this.pendingSubtitleFiles
+                    .Where(file => string.Equals(Path.GetFileNameWithoutExtension(file), sourceName, StringComparison.OrdinalIgnoreCase))
+                    .ToArray();
+            }
+
+            return this.FindSubtitleFilesForSource(sourcePath);
+        }
+
         public void SwitchTab(int i)
         {
             this.SelectedTab = i;
@@ -2053,6 +2072,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (filePaths != null && filePaths.Count > 0)
             {
+                this.SubtitleViewModel.ResetImportLanguage();
                 ShowSourceSelection = false;
                 this.scanService.Scan(filePaths, title, null);
             }
@@ -2451,15 +2471,6 @@ namespace HandBrakeWPF.ViewModels
 
                 if (e.Successful)
                 {
-                    string[] subtitleFiles = this.pendingSubtitleFiles.Length > 0
-                        ? this.pendingSubtitleFiles
-                        : this.FindSubtitleFilesForSource(this.SelectedTitle?.SourcePath);
-
-                    if (subtitleFiles.Length > 0)
-                    {
-                        this.SubtitleViewModel.Import(subtitleFiles);
-                    }
-
                     this.pendingSubtitleFiles = Array.Empty<string>();
                     this.SourceLabel = this.SelectedTitle?.DisplaySourceName;
                     this.StatusLabel = Resources.Main_ScanCompleted;
