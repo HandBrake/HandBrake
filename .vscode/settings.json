@@ -1,0 +1,13 @@
+{
+    "cppbuild.isEnabled": false,
+    "chat.tools.terminal.autoApprove": {
+        "/^cd \"C:\\\\Users\\\\kol19\\\\Documents\\\\GitHub\\\\HandBrake\\\\win\\\\CS\"; dotnet clean HandBrake\\.sln$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"C:\\\\Users\\\\kol19\\\\Documents\\\\GitHub\\\\HandBrake\\\\win\\\\CS\"; dotnet build HandBrake\\.sln -c Release 2>&1 \\| Tee-Object -Variable buildOutput; \\$buildOutput\\[-50\\.\\.-1\\] -join \"`n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

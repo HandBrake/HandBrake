@@ -97,6 +97,7 @@ namespace HandBrakeWPF.ViewModels
         private bool updateAvailable;
         private bool isNavigationEnabled;
         private double progressAmount;
+        private string[] pendingSubtitleFiles;
 
         public MainViewModel(
             IUserSettingService userSettingService,
@@ -150,6 +151,7 @@ namespace HandBrakeWPF.ViewModels
             this.ScannedSource = new Source();
             this.HasSource = false;
             this.IsNavigationEnabled = true;
+            this.pendingSubtitleFiles = Array.Empty<string>();
 
             // Setup Events
             this.scanService.ScanStarted += this.ScanStared;
@@ -1357,7 +1359,18 @@ namespace HandBrakeWPF.ViewModels
                     this.SetMru(Constants.FileScanMru, Path.GetDirectoryName(dialog.FileName));
                 }
 
-                this.StartScan(dialog.FileNames.ToList(), this.TitleSpecificScan);
+                List<string> videoFiles = dialog.FileNames.Where(f => !IsSubtitleFile(f)).ToList();
+                string[] subtitleFiles = dialog.FileNames.Where(IsSubtitleFile).ToArray();
+                if (videoFiles.Count > 0)
+                {
+                    this.pendingSubtitleFiles = subtitleFiles;
+                    this.StartScan(videoFiles, this.TitleSpecificScan);
+                }
+                else if (subtitleFiles.Length > 0)
+                {
+                    this.SwitchTab(5);
+                    this.SubtitleViewModel.Import(subtitleFiles);
+                }
             }
         }
 
@@ -1582,28 +1595,33 @@ namespace HandBrakeWPF.ViewModels
                 string[] fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
                 if (fileNames != null && fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])))
                 {
-                    List<string> videoContent = fileNames.Where(f => Path.GetExtension(f)?.ToLower() != ".srt" && Path.GetExtension(f)?.ToLower() != ".ssa" && Path.GetExtension(f)?.ToLower() != ".ass").ToList();
+                    List<string> videoContent = fileNames.Where(f => !IsSubtitleFile(f)).ToList();
+                    string[] subtitleFiles = fileNames.Where(IsSubtitleFile).ToArray();
 
-                    if (videoContent.Count == 1 && Directory.Exists(videoContent[0]))
+                    if (videoContent.Count >= 1)
                     {
-                        // Is a directory.
-                        if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RecursiveFolderScan) && !FileHelper.IsDvdOrBluray(videoContent[0]))
+                        this.pendingSubtitleFiles = subtitleFiles;
+
+                        if (videoContent.Count == 1 && Directory.Exists(videoContent[0]))
                         {
-                            this.StartScan(FileHelper.FileList(videoContent[0], true, this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions)), this.TitleSpecificScan);
+                            // Is a directory.
+                            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RecursiveFolderScan) && !FileHelper.IsDvdOrBluray(videoContent[0]))
+                            {
+                                this.StartScan(FileHelper.FileList(videoContent[0], true, this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions)), this.TitleSpecificScan);
+                            }
+                            else
+                            {
+                                this.StartScan(videoContent, 0);
+                            }
                         }
                         else
                         {
                             this.StartScan(videoContent, 0);
                         }
-                    } 
-                    else if (videoContent.Count >= 1)
-                    {
-                        this.StartScan(videoContent, 0);
+
                         return;
                     }
 
-                    // StartScan is not synchronous, so for now we don't support adding both srt and video file at the same time. 
-                    string[] subtitleFiles = fileNames.Where(f => Path.GetExtension(f)?.ToLower() == ".srt" || Path.GetExtension(f)?.ToLower() == ".ssa" || Path.GetExtension(f)?.ToLower() == ".ass").ToArray();
                     if (subtitleFiles.Any())
                     {
                         this.SwitchTab(5);
@@ -1613,6 +1631,51 @@ namespace HandBrakeWPF.ViewModels
             }
 
             e.Handled = true;
+        }
+
+        private static bool IsSubtitleFile(string fileName)
+        {
+            string extension = Path.GetExtension(fileName);
+            return extension.Equals(".srt", StringComparison.OrdinalIgnoreCase)
+                || extension.Equals(".ssa", StringComparison.OrdinalIgnoreCase)
+                || extension.Equals(".ass", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private string[] FindSubtitleFilesForSource(string sourcePath)
+        {
+            if (string.IsNullOrEmpty(sourcePath) || !File.Exists(sourcePath))
+            {
+                return Array.Empty<string>();
+            }
+
+            try
+            {
+                string sourceDirectory = Path.GetDirectoryName(sourcePath);
+                string sourceNameWithoutExtension = Path.GetFileNameWithoutExtension(sourcePath);
+
+                if (string.IsNullOrEmpty(sourceDirectory) || string.IsNullOrEmpty(sourceNameWithoutExtension))
+                {
+                    return Array.Empty<string>();
+                }
+
+                string[] subtitleExtensions = { ".srt", ".ssa", ".ass" };
+                List<string> matchingSubtitles = new List<string>();
+
+                foreach (string subtitleExt in subtitleExtensions)
+                {
+                    string subtitlePath = Path.Combine(sourceDirectory, sourceNameWithoutExtension + subtitleExt);
+                    if (File.Exists(subtitlePath))
+                    {
+                        matchingSubtitles.Add(subtitlePath);
+                    }
+                }
+
+                return matchingSubtitles.ToArray();
+            }
+            catch
+            {
+                return Array.Empty<string>();
+            }
         }
 
         public void SwitchTab(int i)
@@ -2388,18 +2451,32 @@ namespace HandBrakeWPF.ViewModels
 
                 if (e.Successful)
                 {
+                    string[] subtitleFiles = this.pendingSubtitleFiles.Length > 0
+                        ? this.pendingSubtitleFiles
+                        : this.FindSubtitleFilesForSource(this.SelectedTitle?.SourcePath);
+
+                    if (subtitleFiles.Length > 0)
+                    {
+                        this.SubtitleViewModel.Import(subtitleFiles);
+                    }
+
+                    this.pendingSubtitleFiles = Array.Empty<string>();
                     this.SourceLabel = this.SelectedTitle?.DisplaySourceName;
                     this.StatusLabel = Resources.Main_ScanCompleted;
                 }
-                else if (e.Cancelled)
-                {
-                    this.SourceLabel = Resources.Main_ScanCancelled;
-                    this.StatusLabel = Resources.Main_ScanCancelled;
-                }
                 else
                 {
-                    this.SourceLabel = Resources.Main_ScanFailed_CheckLog;
-                    this.StatusLabel = Resources.Main_ScanFailed_CheckLog;
+                    this.pendingSubtitleFiles = Array.Empty<string>();
+                    if (e.Cancelled)
+                    {
+                        this.SourceLabel = Resources.Main_ScanCancelled;
+                        this.StatusLabel = Resources.Main_ScanCancelled;
+                    }
+                    else
+                    {
+                        this.SourceLabel = Resources.Main_ScanFailed_CheckLog;
+                        this.StatusLabel = Resources.Main_ScanFailed_CheckLog;
+                    }
                 }
             });
         }
