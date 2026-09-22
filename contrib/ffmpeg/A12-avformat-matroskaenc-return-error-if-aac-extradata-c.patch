@@ -14,7 +14,7 @@ diff --git a/libavformat/matroskaenc.c b/libavformat/matroskaenc.c
 index 97d66558f8..e2f1e73e81 100644
 --- a/libavformat/matroskaenc.c
 +++ b/libavformat/matroskaenc.c
-@@ -3066,6 +3066,16 @@ static int mkv_check_new_extra_data(AVFormatContext *s, const AVPacket *pkt)
+@@ -3065,6 +3065,16 @@
      case AV_CODEC_ID_AAC:
          if (side_data_size && mkv->track.bc) {
              int output_sample_rate = 0;
