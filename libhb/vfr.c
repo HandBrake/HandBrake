@@ -387,12 +387,13 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
 
     pv->cfr              = init->cfr;
     pv->input_vrate = pv->vrate = init->vrate;
+    pv->frame_drop_mode = HB_FRAME_DROP_MODE_NEAREST;
     hb_dict_extract_int(&pv->cfr, filter->settings, "mode");
     hb_dict_extract_rational(&pv->vrate, filter->settings, "rate");
 
     int frame_drop_mode = 0;
-    hb_dict_extract_int(&frame_drop_mode, filter->settings, "frame-drop-mode");
-    if (frame_drop_mode >= HB_FRAME_DROP_MODE_AUTO &&
+    if (hb_dict_extract_int(&frame_drop_mode, filter->settings, "frame-drop-mode") &&
+        frame_drop_mode >= HB_FRAME_DROP_MODE_AUTO &&
         frame_drop_mode <= HB_FRAME_DROP_MODE_MOTION_ANALYSIS)
     {
         pv->frame_drop_mode = (hb_frame_drop_mode_t)frame_drop_mode;
