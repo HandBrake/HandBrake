@@ -17,7 +17,7 @@ diff --git a/libavformat/movenc.c b/libavformat/movenc.c
 index 1d2c62c932..8c866c7fab 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -7844,6 +7844,7 @@ static int mov_create_chapter_track(AVFormatContext *s, int tracknum)
+@@ -7846,6 +7846,7 @@
      track->tag = MKTAG('t','e','x','t');
      track->timescale = mov->movie_timescale;
      track->par = avcodec_parameters_alloc();
