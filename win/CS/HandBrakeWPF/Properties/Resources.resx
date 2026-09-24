@@ -2064,6 +2064,9 @@ Where supported, any user presets will have been imported.</value>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
     <value>Foreign Audio Search</value>
   </data>
+  <data name="SubtitleViewModel_ImportLanguage" xml:space="preserve">
+    <value>Subtitle language</value>
+  </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
     <value>Foreign Audio Scan</value>
   </data>

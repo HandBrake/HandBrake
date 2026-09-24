@@ -40,9 +40,11 @@ namespace HandBrakeWPF.ViewModels
     public class SubtitlesViewModel : ViewModelBase, ISubtitlesViewModel
     {
         private readonly IErrorService errorService;
+        private readonly IWindowManager windowManager;
 
         private readonly Subtitle foreignAudioSearchTrack;
         private IList<Subtitle> sourceTracks;
+        private Language importedSubtitleLanguage;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="HandBrakeWPF.ViewModels.SubtitlesViewModel"/> class.
@@ -56,6 +58,7 @@ namespace HandBrakeWPF.ViewModels
         public SubtitlesViewModel(IErrorService errorService, IWindowManager windowManager)
         {
             this.errorService = errorService;
+            this.windowManager = windowManager;
             this.SubtitleBehaviours = new SubtitleBehaviours();
             this.SubtitleDefaultsViewModel = new SubtitlesDefaultsViewModel(windowManager);
             this.Task = new EncodeTask();
@@ -273,7 +276,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialog.FileNames != null)
             {
-                this.AddInputSubtitles(dialog.FileNames);
+                this.Import(dialog.FileNames);
             }
         }
 
@@ -281,8 +284,43 @@ namespace HandBrakeWPF.ViewModels
         {
             if (subtitleFiles != null && subtitleFiles.Any())
             {
-                this.AddInputSubtitles(subtitleFiles);
+                Language language = this.PromptForImportLanguage();
+                if (language != null)
+                {
+                    this.importedSubtitleLanguage = language;
+                    this.AddInputSubtitles(subtitleFiles, language);
+                }
             }        
+        }
+
+        public void ImportWithoutPrompt(string[] subtitleFiles)
+        {
+            if (subtitleFiles != null && subtitleFiles.Any() && this.importedSubtitleLanguage != null)
+            {
+                this.AddInputSubtitles(subtitleFiles, this.importedSubtitleLanguage);
+            }
+        }
+
+        public void ImportForCurrentTitle(string[] subtitleFiles)
+        {
+            if (subtitleFiles == null || !subtitleFiles.Any())
+            {
+                return;
+            }
+
+            if (this.importedSubtitleLanguage == null)
+            {
+                this.Import(subtitleFiles);
+            }
+            else
+            {
+                this.ImportWithoutPrompt(subtitleFiles);
+            }
+        }
+
+        public void ResetImportLanguage()
+        {
+            this.importedSubtitleLanguage = null;
         }
 
         /// <summary>
@@ -774,7 +812,7 @@ namespace HandBrakeWPF.ViewModels
                        : this.SourceTracks.Where(subtitle => !this.Task.SubtitleTracks.Any(track => Equals(track.SourceTrack, subtitle))).ToList();
         }
 
-        private void AddInputSubtitles(string[] filenames)
+        private void AddInputSubtitles(string[] filenames, Language language = null)
         {
             foreach (var srtFile in filenames)
             {
@@ -791,13 +829,20 @@ namespace HandBrakeWPF.ViewModels
                     SrtFileName = Path.GetFileNameWithoutExtension(srtFile),
                     SrtOffset = 0,
                     SrtCharCode = "UTF-8",
-                    SrtLang = HandBrakeLanguagesHelper.GetByName("English"),
+                    SrtLang = language ?? HandBrakeLanguagesHelper.GetByName("English"),
                     SubtitleType = extension.Contains("ass", StringComparison.InvariantCultureIgnoreCase) ? SubtitleType.IMPORTSSA : SubtitleType.IMPORTSRT,
                     SrtPath = srtFile,
 
                 };
                 this.Task.SubtitleTracks.Add(track);
             }
+        }
+
+        private Language PromptForImportLanguage()
+        {
+            SubtitleLanguageViewModel languageViewModel = new SubtitleLanguageViewModel(this.Languages, this.GetPreferredSubtitleTrackLanguage());
+            bool? result = this.windowManager.ShowDialog<Views.SubtitleLanguageView>(languageViewModel);
+            return result == true ? languageViewModel.SelectedLanguage : null;
         }
 
         private void CheckAddState(int before)
