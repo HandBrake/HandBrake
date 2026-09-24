@@ -262,6 +262,10 @@
     {
         return self.queue.completedItemsCount > 0;
     }
+    else if (action == @selector(exportQueue:))
+    {
+        return self.queue.items.count > 0;
+    }
 
     return YES;
 }
@@ -833,6 +837,11 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
     [self resetQueueItemsAtIndexes:indexes];
 }
 
+- (void)tableViewExportItemsAtIndexes:(nonnull NSIndexSet *)indexes
+{
+    [self exportQueueItemsAtIndexes:indexes];
+}
+
 - (void)detailsViewEditItem:(nonnull id<HBQueueItem>)item
 {
     if ([item isKindOfClass:[HBQueueJobItem class]])
@@ -868,6 +877,99 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
 - (IBAction)removeCompleted:(id)sender
 {
     [self.queue removeCompletedItems];
+}
+
+#pragma mark - Import and export
+
+- (NSURL *)lastQueueDirectoryURL
+{
+    NSURL *lastQueueDirectoryURL = [NSUserDefaults.standardUserDefaults URLForKey:@"LastQueueDirectoryURL"];
+    return lastQueueDirectoryURL ? lastQueueDirectoryURL : [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop" isDirectory:YES];
+}
+
+/// The save panel appends the extension itself, so this is the name without one.
+- (NSString *)fileNameForItems:(NSArray<id<HBQueueItem>> *)items
+{
+    if (items.count == 1)
+    {
+        NSString *title = items.firstObject.title.stringByDeletingPathExtension;
+        if (title.length)
+        {
+            return title;
+        }
+    }
+
+    return NSLocalizedString(@"Queue", @"Export queue default file name");
+}
+
+- (void)exportQueueItemsAtIndexes:(NSIndexSet *)indexes
+{
+    if (indexes.count == 0)
+    {
+        return;
+    }
+
+    NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:indexes];
+
+    NSSavePanel *panel = [NSSavePanel savePanel];
+    panel.title = NSLocalizedString(@"Export queue", @"Export queue save panel title");
+    panel.directoryURL = self.lastQueueDirectoryURL;
+    panel.nameFieldStringValue = [self fileNameForItems:items];
+    panel.allowedFileTypes = @[HBQueueFileExtension];
+
+    [panel beginWithCompletionHandler:^(NSInteger result)
+    {
+        if (result == NSModalResponseOK)
+        {
+            [NSUserDefaults.standardUserDefaults setURL:panel.URL.URLByDeletingLastPathComponent forKey:@"LastQueueDirectoryURL"];
+
+            NSError *error = nil;
+            if ([self.queue exportItems:items toURL:panel.URL error:&error] == NO && error)
+            {
+                [self presentError:error];
+            }
+        }
+    }];
+}
+
+- (IBAction)exportQueue:(id)sender
+{
+    [self exportQueueItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.queue.items.count)]];
+}
+
+- (IBAction)importQueue:(id)sender
+{
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.title = NSLocalizedString(@"Import queue", @"Import queue open panel title");
+    panel.directoryURL = self.lastQueueDirectoryURL;
+    panel.allowsMultipleSelection = YES;
+    panel.canChooseFiles = YES;
+    panel.canChooseDirectories = NO;
+    panel.allowedFileTypes = @[HBQueueFileExtension];
+
+    [panel beginWithCompletionHandler:^(NSInteger result)
+    {
+        if (result == NSModalResponseOK)
+        {
+            [NSUserDefaults.standardUserDefaults setURL:panel.directoryURL forKey:@"LastQueueDirectoryURL"];
+
+            for (NSURL *url in panel.URLs)
+            {
+                NSError *error = nil;
+                if ([self.queue importItemsFromURL:url error:&error] == 0 && error)
+                {
+                    [self presentError:error];
+                }
+            }
+
+            [self showWindow:self];
+        }
+
+        for (NSURL *url in panel.URLs)
+        {
+            [url stopAccessingSecurityScopedResource];
+        }
+    }];
 }
 
 @end

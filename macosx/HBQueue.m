@@ -37,6 +37,10 @@ NSString * const HBQueueDidStartItemNotification = @"HBQueueDidStartItemNotifica
 NSString * const HBQueueDidCompleteItemNotification = @"HBQueueDidCompleteItemNotification";
 NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemKey";
 
+NSString * const HBQueueFileExtension = @"hbqueue";
+
+NSString * const HBQueueErrorDomain = @"HBQueueErrorDomain";
+
 @interface HBQueue ()
 
 @property (nonatomic, readonly) NSURL *fileURL;
@@ -185,6 +189,23 @@ static void powerSourceCallback(void *context)
 
 #pragma mark - Load and save
 
+/**
+ *  The archive the queue is stored as, both in the application support folder
+ *  and in the files the user exports. Keep the two identical, so a queue file
+ *  can always be read back by the same version that wrote it.
+ */
++ (nullable NSData *)archivedDataWithItems:(NSArray<id<HBQueueItem>> *)items error:(NSError **)outError
+{
+    return [NSKeyedArchiver archivedDataWithRootObject:items requiringSecureCoding:YES error:outError];
+}
+
++ (nullable NSArray<id<HBQueueItem>> *)itemsFromArchivedData:(NSData *)data error:(NSError **)outError
+{
+    NSSet *objectClasses = [NSSet setWithObjects:[NSArray class], [NSMutableArray class],
+                            [HBQueueJobItem class], [HBQueueActionStopItem class], nil];
+    return [NSKeyedUnarchiver unarchivedObjectOfClasses:objectClasses fromData:data error:outError];
+}
+
 - (NSMutableArray *)load
 {
     NSError *error;
@@ -193,8 +214,7 @@ static void powerSourceCallback(void *context)
     NSData *data = [NSData dataWithContentsOfURL:self.fileURL];
     if (data)
     {
-        NSSet *objectClasses = [NSSet setWithObjects:[NSMutableArray class], [HBQueueJobItem class], [HBQueueActionStopItem class], nil];
-        loadedItems = [NSKeyedUnarchiver unarchivedObjectOfClasses:objectClasses fromData:data error:&error];
+        loadedItems = [HBQueue itemsFromArchivedData:data error:&error];
 
         if (loadedItems == nil && error)
         {
@@ -208,7 +228,7 @@ static void powerSourceCallback(void *context)
 - (void)save
 {
     NSError *error = nil;
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.itemsInternal requiringSecureCoding:YES error:&error];
+    NSData *data = [HBQueue archivedDataWithItems:self.itemsInternal error:&error];
     if (data == nil)
     {
         [HBUtilities writeToActivityLog:"Failed to archive the queue"];
@@ -220,6 +240,78 @@ static void powerSourceCallback(void *context)
     {
         [HBUtilities writeToActivityLog:"Failed to write the queue to disk"];
     }
+}
+
+#pragma mark - Import and export
+
+- (BOOL)exportItems:(NSArray<id<HBQueueItem>> *)items toURL:(NSURL *)url error:(NSError **)outError
+{
+    NSParameterAssert(items);
+    NSParameterAssert(url);
+
+    NSData *data = [HBQueue archivedDataWithItems:items error:outError];
+    if (data == nil)
+    {
+        return NO;
+    }
+
+    return [data writeToURL:url options:NSDataWritingAtomic error:outError];
+}
+
+- (NSUInteger)importItemsFromURL:(NSURL *)url error:(NSError **)outError
+{
+    NSParameterAssert(url);
+
+    NSData *data = [NSData dataWithContentsOfURL:url options:0 error:outError];
+    if (data == nil)
+    {
+        return 0;
+    }
+
+    NSError *unarchiveError = nil;
+    NSArray<id<HBQueueItem>> *items = [HBQueue itemsFromArchivedData:data error:&unarchiveError];
+
+    // A queue written by a different version of HandBrake decodes to nil, or to
+    // nothing at all when every item in it failed the version check.
+    if (items.count == 0)
+    {
+        if (unarchiveError)
+        {
+            [HBUtilities writeErrorToActivityLog:unarchiveError];
+        }
+
+        if (outError)
+        {
+            NSString *description = NSLocalizedString(@"The queue could not be imported.", @"Queue import error description");
+            NSString *recovery = NSLocalizedString(@"The file is not a queue, or it was created by a different version of HandBrake.", @"Queue import error recovery suggestion");
+            *outError = [NSError errorWithDomain:HBQueueErrorDomain
+                                            code:HBQueueErrorUnreadableFile
+                                        userInfo:@{NSLocalizedDescriptionKey: description,
+                                                   NSLocalizedRecoverySuggestionErrorKey: recovery,
+                                                   NSURLErrorKey: url}];
+        }
+        return 0;
+    }
+
+    // Whatever an item was doing when it was exported, it has not been encoded
+    // by this queue, so it comes in ready to go, like the Reset command does.
+    for (id<HBQueueItem> item in items)
+    {
+        if (item.state != HBQueueItemStateReady)
+        {
+            item.state = HBQueueItemStateReady;
+        }
+    }
+
+    NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.itemsInternal.count, items.count)];
+    [self addItems:items atIndexes:indexes];
+
+    if (self.undoManager.isUndoing == NO)
+    {
+        [self.undoManager setActionName:NSLocalizedString(@"Import Queue", @"Queue undo action name")];
+    }
+
+    return items.count;
 }
 
 #pragma mark - Public methods
