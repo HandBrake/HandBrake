@@ -143,12 +143,30 @@ static char ** normalize_mix_level       = NULL;
 static char ** audio_dither              = NULL;
 static char ** dynamic_range_compression = NULL;
 static char ** audio_gain                = NULL;
+static char ** adeclicks                 = NULL;
+static int     adeclick_disable          = 0;
+static char ** adeclips                  = NULL;
+static int     adeclip_disable           = 0;
+static char ** afftdns                   = NULL;
+static int     afftdn_disable            = 0;
+static char ** anlmeans                  = NULL;
+static int     anlmeans_disable          = 0;
+static char ** agates                    = NULL;
+static int     agate_disable             = 0;
 static char ** acompressions             = NULL;
 static char ** acompressors              = NULL;
 static char ** acompressor_tunes         = NULL;
 static int     acompressor_disable       = 0;
-static char ** agates                    = NULL;
-static int     agate_disable             = 0;
+static char ** alimiters                 = NULL;
+static int     alimiter_disable          = 0;
+static char ** adialoguenhances          = NULL;
+static int     adialoguenhance_disable   = 0;
+static char ** acrossfeeds               = NULL;
+static int     acrossfeed_disable        = 0;
+static char ** astereowidens             = NULL;
+static int     astereowiden_disable      = 0;
+static char ** aloudnorms                = NULL;
+static int     aloudnorm_disable         = 0;
 static char *  acodec_fallback           = NULL;
 static char ** anames                    = NULL;
 static char ** subtitle_lang_list        = NULL;
@@ -648,9 +666,18 @@ cleanup:
     hb_str_vfree(audio_lang_list);
     hb_str_vfree(audio_gain);
     hb_str_vfree(dynamic_range_compression);
+    hb_str_vfree(adeclicks);
+    hb_str_vfree(adeclips);
+    hb_str_vfree(afftdns);
+    hb_str_vfree(anlmeans);
+    hb_str_vfree(agates);
     hb_str_vfree(acompressors);
     hb_str_vfree(acompressor_tunes);
-    hb_str_vfree(agates);
+    hb_str_vfree(alimiters);
+    hb_str_vfree(adialoguenhances);
+    hb_str_vfree(acrossfeeds);
+    hb_str_vfree(astereowidens);
+    hb_str_vfree(aloudnorms);
     hb_str_vfree(mixdowns);
     hb_str_vfree(subtitle_lang_list);
     hb_str_vfree(subtracks);
@@ -1257,8 +1284,17 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_COMB_DETECT:
         case HB_FILTER_DEBLOCK:
         case HB_FILTER_DEBAND:
-        case HB_AUDIO_FILTER_ACOMPRESSOR:
+        case HB_AUDIO_FILTER_ADECLICK:
+        case HB_AUDIO_FILTER_ADECLIP:
+        case HB_AUDIO_FILTER_AFFTDN:
+        case HB_AUDIO_FILTER_ANLMDN:
         case HB_AUDIO_FILTER_AGATE:
+        case HB_AUDIO_FILTER_ACOMPRESSOR:
+        case HB_AUDIO_FILTER_ALIMITER:
+        case HB_AUDIO_FILTER_DIALOGUENHANCE:
+        case HB_AUDIO_FILTER_CROSSFEED:
+        case HB_AUDIO_FILTER_STEREOWIDEN:
+        case HB_AUDIO_FILTER_LOUDNORM:
         {
             hb_dict_t * settings;
             settings = hb_generate_filter_settings(filter_id, preset,
@@ -1461,10 +1497,28 @@ typedef struct
 
 static const audio_filter_cli_t audio_filter_cli[] =
 {
-    { HB_AUDIO_FILTER_ACOMPRESSOR, "acompressor", "audio compressor",
+    { HB_AUDIO_FILTER_ADECLICK,       "adeclick",       "audio declick",
+      &adeclicks,    NULL,               &adeclick_disable },
+    { HB_AUDIO_FILTER_ADECLIP,        "adeclip",        "audio declip",
+      &adeclips,     NULL,               &adeclip_disable  },
+    { HB_AUDIO_FILTER_AFFTDN,         "afftdn",         "audio FFT denoise",
+      &afftdns,      NULL,               &afftdn_disable   },
+    { HB_AUDIO_FILTER_ANLMDN,         "anlmdn",         "audio NLMeans denoise",
+      &anlmeans,     NULL,               &anlmeans_disable },
+    { HB_AUDIO_FILTER_AGATE,          "agate",          "audio noise gate",
+      &agates,       NULL,               &agate_disable    },
+    { HB_AUDIO_FILTER_ACOMPRESSOR,    "acompressor",    "audio compressor",
       &acompressors, &acompressor_tunes, &acompressor_disable },
-    { HB_AUDIO_FILTER_AGATE,       "agate",       "audio noise gate",
-      &agates,       NULL,               &agate_disable },
+    { HB_AUDIO_FILTER_ALIMITER,       "alimiter",       "audio limiter",
+      &alimiters,    NULL,               &alimiter_disable  },
+    { HB_AUDIO_FILTER_DIALOGUENHANCE, "dialoguenhance", "audio dialogue enhance",
+      &adialoguenhances, NULL,           &adialoguenhance_disable },
+    { HB_AUDIO_FILTER_CROSSFEED,      "crossfeed",      "audio headphone crossfeed",
+      &acrossfeeds,   NULL,              &acrossfeed_disable },
+    { HB_AUDIO_FILTER_STEREOWIDEN,    "stereowiden",    "audio stereo widen",
+      &astereowidens, NULL,              &astereowiden_disable },
+    { HB_AUDIO_FILTER_LOUDNORM,       "loudnorm",    "audio loudness normalization",
+      &aloudnorms,    NULL,              &aloudnorm_disable },
 };
 #define AUDIO_FILTER_CLI_COUNT \
     (sizeof(audio_filter_cli) / sizeof(audio_filter_cli[0]))
@@ -2020,6 +2074,51 @@ static void ShowHelp(void)
 "\n"
 "Audio Filters Options --------------------------------------------------------\n"
 "\n"
+"       --adeclick[=string] Apply a declick filter to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_ADECLICK);
+    showFilterKeys(out, HB_AUDIO_FILTER_ADECLICK);
+    showFilterDefault(out, HB_AUDIO_FILTER_ADECLICK);
+    fprintf(out,
+"       --no-adeclick       Disable preset audio declick filter.\n"
+
+"       --adeclip[=string]  Apply a declip filter to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_ADECLIP);
+    showFilterKeys(out, HB_AUDIO_FILTER_ADECLIP);
+    showFilterDefault(out, HB_AUDIO_FILTER_ADECLIP);
+    fprintf(out,
+"       --no-adeclip        Disable preset audio declip filter.\n"
+
+"       --afftdn[=string]   Apply a FFT denoise filter to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_AFFTDN);
+    showFilterKeys(out, HB_AUDIO_FILTER_AFFTDN);
+    showFilterDefault(out, HB_AUDIO_FILTER_AFFTDN);
+    fprintf(out,
+"       --no-afftdn         Disable preset audio FFT denoise filter.\n"
+
+"       --anlmeans[=string] Apply a NLMeans denoise filter to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_ANLMDN);
+    showFilterKeys(out, HB_AUDIO_FILTER_ANLMDN);
+    showFilterDefault(out, HB_AUDIO_FILTER_ANLMDN);
+    fprintf(out,
+"       --no-anlmeans       Disable preset audio NLMeans filter.\n"
+
+"       --agate[=string]    Apply a noise gate to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_AGATE);
+    showFilterKeys(out, HB_AUDIO_FILTER_AGATE);
+    showFilterDefault(out, HB_AUDIO_FILTER_AGATE);
+    fprintf(out,
+"       --no-agate          Disable the preset audio noise gate filter.\n"
+
 "       --acompressor[=string]\n"
 "                           Apply a dynamic range compressor to audio.\n"
 "                           Separate tracks by commas. An empty entry leaves\n"
@@ -2028,7 +2127,7 @@ static void ShowHelp(void)
     showFilterKeys(out, HB_AUDIO_FILTER_ACOMPRESSOR);
     showFilterDefault(out, HB_AUDIO_FILTER_ACOMPRESSOR);
     fprintf(out,
-"       --no-acompressor    Disable the audio compressor.\n"
+"       --no-acompressor    Disable the preset audio compressor filter.\n"
 "       --acompressor-tune <string>\n"
 "                           Tune the audio compressor to content type.\n"
 "                           Separate tracks by commas, or give a single value\n"
@@ -2036,14 +2135,56 @@ static void ShowHelp(void)
 "                           presets only (does not affect custom settings).\n");
     showFilterTunes(out, HB_AUDIO_FILTER_ACOMPRESSOR);
     fprintf(out,
-"       --agate[=string]    Apply a noise gate to audio.\n"
+
+"       --alimiter[=string] Apply a limiter to audio.\n"
 "                           Separate tracks by commas. An empty entry leaves\n"
 "                           the track unaffected.\n");
-    showFilterPresets(out, HB_AUDIO_FILTER_AGATE);
-    showFilterKeys(out, HB_AUDIO_FILTER_AGATE);
-    showFilterDefault(out, HB_AUDIO_FILTER_AGATE);
+    showFilterPresets(out, HB_AUDIO_FILTER_ALIMITER);
+    showFilterKeys(out, HB_AUDIO_FILTER_ALIMITER);
+    showFilterDefault(out, HB_AUDIO_FILTER_ALIMITER);
     fprintf(out,
-"       --no-agate          Disable the audio noise gate.\n"
+"       --no-alimiter       Disable the preset audio limiter filter.\n"
+
+"       --dialoguenhance[=string]\n"
+"                           Apply a dialogue enhance in stereo to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_DIALOGUENHANCE);
+    showFilterKeys(out, HB_AUDIO_FILTER_DIALOGUENHANCE);
+    showFilterDefault(out, HB_AUDIO_FILTER_DIALOGUENHANCE);
+    fprintf(out,
+"       --no-dialoguenhance Disable the preset dialogue enhance filter.\n"
+
+"       --crossfeed[=string]\n"
+"                           Apply a headphone crossfeed filter to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_CROSSFEED);
+    showFilterKeys(out, HB_AUDIO_FILTER_CROSSFEED);
+    showFilterDefault(out, HB_AUDIO_FILTER_CROSSFEED);
+    fprintf(out,
+"       --no-crossfeed      Disable the preset headphone crossfeed filter.\n"
+
+"       --stereowiden[=string]\n"
+"                           Apply a stereo widen filter to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_STEREOWIDEN);
+    showFilterKeys(out, HB_AUDIO_FILTER_STEREOWIDEN);
+    showFilterDefault(out, HB_AUDIO_FILTER_STEREOWIDEN);
+    fprintf(out,
+"       --no-stereowiden    Disable the preset stereo widen filter.\n"
+
+"       --loudnorm[=string]\n"
+"                           Apply a EBU R128 loudness normalization filter to audio.\n"
+"                           Separate tracks by commas. An empty entry leaves\n"
+"                           the track unaffected.\n");
+    showFilterPresets(out, HB_AUDIO_FILTER_LOUDNORM);
+    showFilterKeys(out, HB_AUDIO_FILTER_LOUDNORM);
+    showFilterDefault(out, HB_AUDIO_FILTER_LOUDNORM);
+    fprintf(out,
+"       --no-loudnorm       Disable the preset loudness normalization filter.\n"
+
 "\n"
 "\n"
 "Picture Options --------------------------------------------------------------\n"
@@ -2643,9 +2784,19 @@ static int ParseOptions( int argc, char ** argv )
     #define COLOR_RANGE                   336
     #define FILTER_BM3D                   337
     #define FILTER_DEBAND                 338
-    #define AUDIO_COMPRESSOR              339
-    #define AUDIO_GATE                    340
-    #define AUDIO_COMPRESSOR_TUNE         341
+
+    #define AUDIO_DECLICK                 339
+    #define AUDIO_DECLIP                  340
+    #define AUDIO_FFTDN                   341
+    #define AUDIO_NLMDN                   342
+    #define AUDIO_GATE                    343
+    #define AUDIO_COMPRESSOR              344
+    #define AUDIO_COMPRESSOR_TUNE         345
+    #define AUDIO_LIMITER                 346
+    #define AUDIO_DIALOGUENHANCE          347
+    #define AUDIO_CROSSFEED               348
+    #define AUDIO_STEREOWIDEN             349
+    #define AUDIO_LOUDNORM                350
 
     for( ;; )
     {
@@ -2704,11 +2855,29 @@ static int ParseOptions( int argc, char ** argv )
             { "drc",         required_argument, NULL,    'D' },
             { "gain",        required_argument, NULL,    AUDIO_GAIN },
             { "adither",     required_argument, NULL,    AUDIO_DITHER },
+            { "adeclick",        optional_argument, NULL, AUDIO_DECLICK },
+            { "no-adeclick",     no_argument,       &adeclick_disable, 1 },
+            { "adeclip",         optional_argument, NULL, AUDIO_DECLIP },
+            { "no-adeclip",      no_argument,       &adeclip_disable, 1 },
+            { "afftdn",          optional_argument, NULL, AUDIO_FFTDN },
+            { "no-afftdn",       no_argument,       &afftdn_disable, 1 },
+            { "anlmeans",        optional_argument, NULL, AUDIO_NLMDN },
+            { "no-anlmeans",     no_argument,       &anlmeans_disable, 1 },
+            { "agate",           optional_argument, NULL, AUDIO_GATE },
+            { "no-agate",        no_argument,       &agate_disable, 1 },
             { "acompressor",     optional_argument, NULL, AUDIO_COMPRESSOR },
             { "no-acompressor",  no_argument,       &acompressor_disable, 1 },
             { "acompressor-tune",required_argument, NULL, AUDIO_COMPRESSOR_TUNE },
-            { "agate",           optional_argument, NULL, AUDIO_GATE },
-            { "no-agate",        no_argument,       &agate_disable, 1 },
+            { "alimiter",          optional_argument, NULL, AUDIO_LIMITER },
+            { "no-alimiter",       no_argument,       &alimiter_disable, 1 },
+            { "dialoguenhance",    optional_argument, NULL, AUDIO_DIALOGUENHANCE },
+            { "no-dialoguenhance", no_argument,       &adialoguenhance_disable, 1 },
+            { "crossfeed",         optional_argument, NULL, AUDIO_CROSSFEED },
+            { "no-crossfeed",      no_argument,       &acrossfeed_disable, 1 },
+            { "stereowiden",       optional_argument, NULL, AUDIO_STEREOWIDEN },
+            { "no-stereowiden",    no_argument,       &astereowiden_disable, 1 },
+            { "loudnorm",          optional_argument, NULL, AUDIO_LOUDNORM },
+            { "no-loudnorm",       no_argument,       &aloudnorm_disable, 1 },
             { "subtitle-lang-list", required_argument, NULL, SUBTITLE_LANG_LIST },
             { "all-subtitles", no_argument,     &subtitle_all, 1 },
             { "first-subtitle", no_argument,    &subtitle_all, 0 },
@@ -3059,6 +3228,26 @@ static int ParseOptions( int argc, char ** argv )
                     audio_dither = hb_str_vsplit(optarg, ',');
                 }
                 break;
+            case AUDIO_DECLICK:
+                adeclicks = hb_str_vsplit(
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_ADECLICK), ',');
+                break;
+            case AUDIO_DECLIP:
+                adeclips = hb_str_vsplit(
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_ADECLIP), ',');
+                break;
+            case AUDIO_FFTDN:
+                afftdns = hb_str_vsplit(
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_AFFTDN), ',');
+                break;
+            case AUDIO_NLMDN:
+                anlmeans = hb_str_vsplit(
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_ANLMDN), ',');
+                break;
+            case AUDIO_GATE:
+                agates = hb_str_vsplit(
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_AGATE), ',');
+                break;
             case AUDIO_COMPRESSOR:
                 acompressors = hb_str_vsplit(
                     optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_ACOMPRESSOR), ',');
@@ -3066,9 +3255,25 @@ static int ParseOptions( int argc, char ** argv )
             case AUDIO_COMPRESSOR_TUNE:
                 acompressor_tunes = hb_str_vsplit(optarg, ',');
                 break;
-            case AUDIO_GATE:
-                agates = hb_str_vsplit(
-                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_AGATE), ',');
+            case AUDIO_LIMITER:
+                alimiters = hb_str_vsplit(
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_ADECLICK), ',');
+                break;
+            case AUDIO_DIALOGUENHANCE:
+                adialoguenhances = hb_str_vsplit(
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_DIALOGUENHANCE), ',');
+                break;
+            case AUDIO_CROSSFEED:
+                acrossfeeds = hb_str_vsplit(
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_CROSSFEED), ',');
+                break;
+            case AUDIO_STEREOWIDEN:
+                astereowidens = hb_str_vsplit(
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_STEREOWIDEN), ',');
+                break;
+            case AUDIO_LOUDNORM:
+                aloudnorms = hb_str_vsplit(
+                    optarg ? optarg : hb_filter_param_get_default_preset(HB_AUDIO_FILTER_LOUDNORM), ',');
                 break;
             case NORMALIZE_MIX:
                 normalize_mix_level = hb_str_vsplit(optarg, ',');
@@ -4549,9 +4754,18 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         dynamic_range_compression != NULL ||
         audio_gain                != NULL ||
         aqualities                != NULL ||
+        adeclicks                 != NULL ||
+        adeclips                  != NULL ||
+        afftdns                   != NULL ||
+        anlmeans                  != NULL ||
+        agates                    != NULL ||
         acompressions             != NULL ||
         acompressors              != NULL ||
-        agates                    != NULL ||
+        alimiters                 != NULL ||
+        adialoguenhances          != NULL ||
+        acrossfeeds               != NULL ||
+        astereowidens             != NULL ||
+        aloudnorms                != NULL ||
         anames                    != NULL))
     {
         // No explicit audio tracks, but track settings modified.
@@ -4574,11 +4788,22 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     MAX(hb_str_vlen(arates),
                     MAX(hb_str_vlen(abitrates),
                     MAX(hb_str_vlen(aqualities),
-                    MAX(hb_str_vlen(acompressions),
-                    MAX(hb_str_vlen(acompressors),
-                    MAX(hb_str_vlen(agates),
                     MAX(hb_str_vlen(acodecs),
-                        hb_str_vlen(anames)))))))))))));
+                        hb_str_vlen(anames))))))))));
+
+        count = MAX(count,
+                MAX(hb_str_vlen(adeclicks),
+                MAX(hb_str_vlen(adeclips),
+                MAX(hb_str_vlen(afftdns),
+                MAX(hb_str_vlen(anlmeans),
+                MAX(hb_str_vlen(agates),
+                MAX(hb_str_vlen(acompressions),
+                MAX(hb_str_vlen(acompressors),
+                MAX(hb_str_vlen(alimiters),
+                MAX(hb_str_vlen(adialoguenhances),
+                MAX(hb_str_vlen(acrossfeeds),
+                MAX(hb_str_vlen(astereowidens),
+                    hb_str_vlen(aloudnorms)))))))))))));
 
         if (list_len < count)
         {

@@ -862,6 +862,10 @@ void hb_display_job_info(hb_job_t *job)
 
                 hb_display_filters_info(audio->config.out.list_filter, "     ");
             }
+            char channel_layout_name[256];
+            hb_layout_get_name(audio->config.out.ch_layout,
+                               channel_layout_name, sizeof(channel_layout_name));
+            hb_log("     + ch layout: %s", channel_layout_name);
         }
     }
 }
