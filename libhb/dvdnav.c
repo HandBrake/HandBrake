@@ -397,6 +397,7 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
                                    HB_SUBTITLE_ATTR_CHILDREN;
             strcat(subtitle->lang, " Director's Commentary, Children");
             name = "Commentary, Children";
+            break;
         default:
             subtitle->attributes = HB_SUBTITLE_ATTR_UNKNOWN;
             break;
