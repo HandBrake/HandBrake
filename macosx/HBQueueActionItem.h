@@ -9,7 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HBQueueActionStopItem : NSObject<HBQueueItem>
+@protocol HBQueueActionItem <HBQueueItem>
+@end
+
+@interface HBQueueActionStopItem : NSObject<HBQueueActionItem>
 
 /// Current state of the item.
 @property (nonatomic) HBQueueItemState state;

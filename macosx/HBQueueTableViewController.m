@@ -238,6 +238,14 @@
     [self.queue removeCompletedItems];
 }
 
+- (IBAction)insertStopAction:(id)sender
+{
+    NSInteger index = self.tableView.targetedRowIndexes.count ?
+    self.tableView.targetedRowIndexes.lastIndex + 1 : self.tableView.numberOfRows;
+    HBQueueActionStopItem *stopAction = [[HBQueueActionStopItem alloc] init];
+    [self.delegate tableViewAddAction:stopAction atIndex:index];
+}
+
 #pragma mark - UI Validation
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
