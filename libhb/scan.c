@@ -106,7 +106,15 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
     data->max_title_duration = max_duration;
-     
+
+    // Discard previews if user disables them.
+    if (data->preview_count == 0)
+        data->store_previews = 0;
+
+    // Do at least 3 previews for any case.
+    if (data->preview_count < 3)
+        data->preview_count = 3;
+
     data->crop_threshold_frames = crop_threshold_frames;
     data->crop_threshold_pixels = crop_threshold_pixels;
     data->exclude_extensions    = hb_string_list_copy(exclude_extensions);
@@ -826,9 +834,32 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 
         int packets = 0;
         vid_decoder->frame_count = 0;
-        while (vid_decoder->frame_count < PREVIEW_READ_THRESH ||
-              (!AllAudioOK(title) && packets < 10000))
+        while (vid_decoder->frame_count < PREVIEW_READ_THRESH && packets < 10000)
         {
+            if ( *data->die )
+            {
+                if ( buf_es )
+                    hb_buffer_close( &buf_es );
+
+                hb_buffer_list_close(&list_es);
+
+                if (vid_buf == NULL)
+                {
+                    vid_buf = last_vid_buf;
+                    last_vid_buf = NULL;
+                }
+                hb_buffer_close(&last_vid_buf);
+                hb_buffer_close(&vid_buf);
+
+                free( info_list );
+                crop_record_free( crops );
+                vid_decoder->close( vid_decoder );
+                free( vid_decoder );
+                hb_stream_close(&stream);
+                hb_hwaccel_hw_device_ctx_close(&hw_device_ctx);
+                return 0;
+            }
+
             if ((buf = read_buf(data, stream)) == NULL)
             {
                 // If we reach EOF and no audio, don't continue looking for
