@@ -1710,6 +1710,8 @@ struct hb_filter_object_s
 #endif
 };
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_audio_filter_ids.cs when changing this enum
+// HandBrakeFilterHelpers.GetHandBrakeAudioFilters() along with the Resources (for translations) must also be updated. 
 enum
 {
     HB_AUDIO_FILTER_INVALID = 0,
