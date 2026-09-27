@@ -39,6 +39,12 @@ static void hb_avfilter_apply_settings(hb_filter_object_t *filter, hb_dict_t *de
         {
             char *param;
             param = hb_value_get_string_xform(hb_dict_get(settings, key));
+            if (param == NULL)
+            {
+                hb_log("Missing filter value for key %s filter %s",
+                        key, filter->name);
+                continue;
+            }
             if (hb_validate_param_string(regex_pattern, param) != 0)
             {
                 hb_log("Invalid filter value (%s) for key %s filter %s",
@@ -79,6 +85,7 @@ static void hb_avfilter_apply_settings(hb_filter_object_t *filter, hb_dict_t *de
                 if (hb_dict_extract_string(&string_val, settings, key))
                 {
                     hb_dict_set(dest, key, hb_value_string(string_val));
+                    free(string_val);
                 }
             }
 
@@ -166,9 +173,9 @@ FFMPEG_AUDIO_FILTER(HB_AUDIO_FILTER_AFFTDN,
                     "FFT Denoiser",
                     afftdn,
                     "noise_reduction=^"HB_FLOAT_REG"$:noise_floor=^"HB_NEG_FLOAT_REG"$:noise_type=^"HB_INT_REG"$:"
-                    "band_noise=^"HB_ALL_REG"$:residual_floor=^"HB_FLOAT_REG"$:track_noise=^"HB_FLOAT_REG"$:"
+                    "band_noise=^"HB_FLOAT_REG"$:residual_floor=^"HB_NEG_FLOAT_REG"$:track_noise=^"HB_FLOAT_REG"$:"
                     "track_residual=^"HB_FLOAT_REG"$:output_mode=^"HB_INT_REG"$:adaptivity=^"HB_FLOAT_REG"$:"
-                    "floor_offset=^"HB_FLOAT_REG"$:noise_link=^"HB_INT_REG"$:band_multiplier=^"HB_FLOAT_REG"$:"
+                    "floor_offset=^"HB_NEG_FLOAT_REG"$:noise_link=^"HB_INT_REG"$:band_multiplier=^"HB_FLOAT_REG"$:"
                     "sample_noise=^"HB_INT_REG"$:gain_smooth=^"HB_INT_REG"$",
                     0);
 
@@ -228,7 +235,7 @@ FFMPEG_AUDIO_FILTER(HB_AUDIO_FILTER_LOUDNORM,
                     "Loudness Normalization",
                     loudnorm,
                     "i=^"HB_NEG_FLOAT_REG"$:lra=^"HB_FLOAT_REG"$:tp=^"HB_NEG_FLOAT_REG"$:"
-                    "measured_i=^"HB_FLOAT_REG"$:measured_lra=^"HB_FLOAT_REG"$:measured_tp=^"HB_FLOAT_REG"$:"
-                    "measured_thresh=^"HB_FLOAT_REG"$:offset=^"HB_FLOAT_REG"$:linear=^"HB_BOOL_REG"$:"
+                    "measured_i=^"HB_NEG_FLOAT_REG"$:measured_lra=^"HB_FLOAT_REG"$:measured_tp=^"HB_NEG_FLOAT_REG"$:"
+                    "measured_thresh=^"HB_NEG_FLOAT_REG"$:offset=^"HB_NEG_FLOAT_REG"$:linear=^"HB_BOOL_REG"$:"
                     "dual_mono=^"HB_BOOL_REG"$:print_format=^"HB_INT_REG"$",
                     0);

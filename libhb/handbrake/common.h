@@ -1897,7 +1897,7 @@ int hb_get_best_pix_fmt(hb_job_t * job);
 
 #define HB_NEG_FLOAT_REG "((-?[0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
 #define HB_FLOAT_REG     "(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
-#define HB_NEG_INT_REG   "((-?[0-9]+)"
+#define HB_NEG_INT_REG   "(-?[0-9]+)"
 #define HB_INT_REG       "([0-9]+)"
 #define HB_RATIONAL_REG  "([0-9]+/[0-9]+)"
 #define HB_BOOL_REG      "(yes|no|true|false|[01])"
