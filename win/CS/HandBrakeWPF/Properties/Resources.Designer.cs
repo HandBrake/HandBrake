@@ -716,6 +716,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom options for this filter..
+        /// </summary>
+        public static string AVFilterView_CustomOptionsTooltip {
+            get {
+                return ResourceManager.GetString("AVFilterView_CustomOptionsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Presets for this filter..
+        /// </summary>
+        public static string AVFilterView_PresetTooltip {
+            get {
+                return ResourceManager.GetString("AVFilterView_PresetTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tunes for this filter..
+        /// </summary>
+        public static string AVFilterView_TuneTooltip {
+            get {
+                return ResourceManager.GetString("AVFilterView_TuneTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse.
         /// </summary>
         public static string Browse {
@@ -1349,11 +1376,65 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compressor.
+        /// </summary>
+        public static string Filter_acompressor {
+            get {
+                return ResourceManager.GetString("Filter_acompressor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Declick.
+        /// </summary>
+        public static string Filter_adeclick {
+            get {
+                return ResourceManager.GetString("Filter_adeclick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Declip.
+        /// </summary>
+        public static string Filter_adeclip {
+            get {
+                return ResourceManager.GetString("Filter_adeclip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FFT Denoiser.
+        /// </summary>
+        public static string Filter_afftdn {
+            get {
+                return ResourceManager.GetString("Filter_afftdn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Noise Gate.
         /// </summary>
         public static string Filter_agate {
             get {
                 return ResourceManager.GetString("Filter_agate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limiter.
+        /// </summary>
+        public static string Filter_alimiter {
+            get {
+                return ResourceManager.GetString("Filter_alimiter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NLMeans Denoiser.
+        /// </summary>
+        public static string Filter_anlmdn {
+            get {
+                return ResourceManager.GetString("Filter_anlmdn", resourceCulture);
             }
         }
         
@@ -1439,6 +1520,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Headphone Crossfeed.
+        /// </summary>
+        public static string Filter_crossfeed {
+            get {
+                return ResourceManager.GetString("Filter_crossfeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deband.
         /// </summary>
         public static string Filter_deband {
@@ -1475,6 +1565,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dialogue Enhance.
+        /// </summary>
+        public static string Filter_dialoguenhance {
+            get {
+                return ResourceManager.GetString("Filter_dialoguenhance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grayscale.
         /// </summary>
         public static string Filter_grayscale {
@@ -1502,11 +1601,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loudness Normalization.
+        /// </summary>
+        public static string Filter_loudnorm {
+            get {
+                return ResourceManager.GetString("Filter_loudnorm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NLMeans.
         /// </summary>
         public static string Filter_nlmeans {
             get {
                 return ResourceManager.GetString("Filter_nlmeans", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stereo Widen.
+        /// </summary>
+        public static string Filter_stereowiden {
+            get {
+                return ResourceManager.GetString("Filter_stereowiden", resourceCulture);
             }
         }
         
@@ -1770,34 +1887,7 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("FilterView_Custom", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Presets for this filter..
-        /// </summary>
-        public static string AVFilterView_PresetTooltip {
-            get {
-                return ResourceManager.GetString("AVFilterView_PresetTooltip", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Tunes for this filter..
-        /// </summary>
-        public static string AVFilterView_TuneTooltip {
-            get {
-                return ResourceManager.GetString("AVFilterView_TuneTooltip", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Custom options for this filter..
-        /// </summary>
-        public static string AVFilterView_CustomOptionsTooltip {
-            get {
-                return ResourceManager.GetString("AVFilterView_CustomOptionsTooltip", resourceCulture);
-            }
-        }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Filter.
         /// </summary>
@@ -4604,14 +4694,14 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefer use of AMD AMFDec for decoding video when using the AMFEnc encoder and the hardware is available for use..
+        ///   Looks up a localized string similar to Prefer use of AMF AMFDec for decoding video when using the AMFEnc encoder and the hardware is available for use..
         /// </summary>
         public static string OptionsView_EnableAmfDecSupport {
             get {
                 return ResourceManager.GetString("OptionsView_EnableAmfDecSupport", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Allow use of DirectX Decoding.
         /// </summary>

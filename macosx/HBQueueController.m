@@ -833,6 +833,12 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
     [self resetQueueItemsAtIndexes:indexes];
 }
 
+- (void)tableViewAddAction:(id<HBQueueActionItem>)action atIndex:(NSInteger)index
+{
+    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:index];
+    [self.queue addItems:@[action] atIndexes:indexSet];
+}
+
 - (void)detailsViewEditItem:(nonnull id<HBQueueItem>)item
 {
     if ([item isKindOfClass:[HBQueueJobItem class]])

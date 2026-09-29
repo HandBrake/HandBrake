@@ -56,6 +56,11 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
     self.languagesList.undo = self.view.window.undoManager;
 }
 
+- (void)viewDidAppear
+{
+    self.view.window.preventsApplicationTerminationWhenModal = NO;
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (context == HBAudioDefaultsContext)

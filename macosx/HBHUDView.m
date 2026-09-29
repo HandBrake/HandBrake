@@ -18,7 +18,11 @@
         {
             glassView.cornerRadius = 20;
             glassView.style = NSGlassEffectViewStyleRegular;
-            if (frame.size.width < 200)
+            if (@available(macOS 27.0, *))
+            {
+                // Glass views behave better, no need for a workaround
+            }
+            else if (frame.size.width < 200)
             {
                 // Add a tint color to work around the wrong decisions of the glass view,
                 // for some reasons it decides to draw a clear glass if the background

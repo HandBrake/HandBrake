@@ -57,8 +57,17 @@ namespace HandBrake.Interop.Interop
             // Note, it would be nice to get this from LibHB at some point.
             List<HBFilter> filters = new List<HBFilter>();
 
-            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_ACOMPRESSOR, "compressor"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_ADECLICK, "adeclick"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_ADECLIP, "adeclip"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_AFFTDN, "afftdn"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_ANLMDN, "anlmdn"));
             filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_AGATE, "agate"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_ACOMPRESSOR, "acompressor"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_ALIMITER, "alimiter"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_DIALOGUENHANCE, "dialoguenhance"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_CROSSFEED, "crossfeed"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_STEREOWIDEN, "stereowiden"));
+            filters.Add(new HBFilter((int)hb_audio_filter_ids.HB_AUDIO_FILTER_LOUDNORM, "loudnorm"));
 
             return filters;
         }

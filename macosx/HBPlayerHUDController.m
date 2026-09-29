@@ -99,6 +99,14 @@
 
         self.volumeButton.image = [NSImage imageWithSystemSymbolName:@"speaker.wave.3.fill" accessibilityDescription:nil];
     }
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 160000
+    if (@available(macOS 26, *))
+    {
+        self.slider.trackFillColor = NSColor.lightGrayColor;
+        self.volumeSlider.trackFillColor = NSColor.lightGrayColor;
+    }
+#endif
 }
 
 - (void)dealloc

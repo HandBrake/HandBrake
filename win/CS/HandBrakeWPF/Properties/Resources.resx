@@ -3131,4 +3131,34 @@ Do you wish to proceed?</value>
   <data name="AudioAdvancedView_Title" xml:space="preserve">
     <value>Track Settings</value>
   </data>
+  <data name="Filter_adeclick" xml:space="preserve">
+    <value>Declick</value>
+  </data>
+  <data name="Filter_adeclip" xml:space="preserve">
+    <value>Declip</value>
+  </data>
+  <data name="Filter_afftdn" xml:space="preserve">
+    <value>FFT Denoiser</value>
+  </data>
+  <data name="Filter_anlmdn" xml:space="preserve">
+    <value>NLMeans Denoiser</value>
+  </data>
+  <data name="Filter_acompressor" xml:space="preserve">
+    <value>Compressor</value>
+  </data>
+  <data name="Filter_alimiter" xml:space="preserve">
+    <value>Limiter</value>
+  </data>
+  <data name="Filter_dialoguenhance" xml:space="preserve">
+    <value>Dialogue Enhance</value>
+  </data>
+  <data name="Filter_crossfeed" xml:space="preserve">
+    <value>Headphone Crossfeed</value>
+  </data>
+  <data name="Filter_stereowiden" xml:space="preserve">
+    <value>Stereo Widen</value>
+  </data>
+  <data name="Filter_loudnorm" xml:space="preserve">
+    <value>Loudness Normalization</value>
+  </data>
 </root>
