@@ -79,9 +79,6 @@
         <!-- Row 1 -->
         <ListView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
                   Margin="10,10,10,10"
-                  dd:DragDrop.DropHandler="{Binding}"
-                  dd:DragDrop.IsDragSource="True"
-                  dd:DragDrop.IsDropTarget="True"
                   Background="Transparent"
                   ItemsSource="{Binding VideoFilters}"
                   BorderBrush="{StaticResource Ui.ContrastLight}"
