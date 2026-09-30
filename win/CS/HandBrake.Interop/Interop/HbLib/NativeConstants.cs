@@ -61,7 +61,7 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_VCODEC_FFMPEG_QSV_H265 = (0x00000061 | HB_VCODEC_QSV_MASK | HB_VCODEC_H265_MASK);
         public const uint HB_VCODEC_FFMPEG_QSV_H265_10BIT = (0x00000062 | HB_VCODEC_QSV_MASK | HB_VCODEC_H265_MASK);
         public const uint HB_VCODEC_FFMPEG_QSV_AV1 = (0x00000070 | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK);
-        public const uint HB_VCODEC_FFMPEG_QSV_AV1_10BIT = (0x08000071 | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK);
+        public const uint HB_VCODEC_FFMPEG_QSV_AV1_10BIT = (0x00000071 | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK);
 
         // Muxers
         public const uint HB_MUX_MASK_MP4 = 0x030000;
