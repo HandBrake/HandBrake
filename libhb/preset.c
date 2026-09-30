@@ -3036,7 +3036,7 @@ static hb_value_t * import_hierarchy_29_0_0(hb_value_t *presets)
         {
             int          pos = hb_value_array_len(new_list);
             const char * name = hb_dict_get_string(item, "PresetName");
-            if (strcmp(name, "My Presets"))
+            if (name == NULL || strcmp(name, "My Presets"))
             {
                 continue;
             }
@@ -3119,7 +3119,7 @@ static void und_to_any(hb_value_array_t * list)
     {
         const char *lang;
         lang = hb_value_get_string(hb_value_array_get(list, ii));
-        if (!strcasecmp(lang, "und"))
+        if (lang != NULL && !strcasecmp(lang, "und"))
         {
             hb_value_array_set(list, ii, hb_value_string("any"));
         }
