@@ -216,6 +216,10 @@ hb_filter_object_t hb_filter_nlmeans =
 #include "templates/nlmeans_template.c"
 #undef BIT_DEPTH
 
+#define BIT_DEPTH 12
+#include "templates/nlmeans_template.c"
+#undef BIT_DEPTH
+
 #define BIT_DEPTH 16
 #include "templates/nlmeans_template.c"
 #undef BIT_DEPTH
@@ -250,6 +254,15 @@ static int nlmeans_init(hb_filter_object_t *filter,
         #if defined(ARCH_X86)
             nlmeans_init_x86(functions);
         #endif
+            break;
+
+        case 10:
+        case 12:
+            functions->build_integral = build_integral_scalar_12;
+            pv->nlmeans_alloc         = nlmeans_alloc_12;
+            pv->nlmeans_prefilter     = nlmeans_prefilter_12;
+            pv->nlmeans_deborder      = nlmeans_deborder_12;
+            pv->nlmeans_plane         = nlmeans_plane_12;
             break;
 
         case 16:
@@ -340,7 +353,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
         if (pv->max_frames < pv->nframes[c]) pv->max_frames = pv->nframes[c];
 
         // Scale strength with bit depth
-        pv->strength[c] *= pv->depth > 8 ? (pv->depth - 8) * (pv->depth - 8) : 1;
+        pv->strength[c] *= pv->depth > 8 ? 1 << (pv->depth - 8) : 1;
 
         // Precompute exponential table
         float *exptable = &pv->exptable[c][0];
