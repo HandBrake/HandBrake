@@ -6,7 +6,7 @@
 
 #import "HBSubtitlesController.h"
 #import "HBSubtitlesDefaultsController.h"
-#import "HBTrackTitleViewController.h"
+#import "HBSubsTrackAdditionalViewController.h"
 
 @import HandBrakeKit;
 
@@ -80,12 +80,16 @@
 
 - (IBAction)showAdditionalSettingsPopOver:(id)sender
 {
-    HBTrackTitleViewController *controller = [[HBTrackTitleViewController alloc] init];
+    HBSubsTrackAdditionalViewController *controller = [[HBSubsTrackAdditionalViewController alloc] init];
     NSInteger index = [self.table rowForView:sender];
     if (index != -1)
     {
         controller.track = [self.subtitles objectInTracksAtIndex:index];
-        [self presentViewController:controller asPopoverRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSRectEdgeMinX behavior:NSPopoverBehaviorSemitransient];
+        [self presentViewController:controller
+            asPopoverRelativeToRect:[sender bounds]
+                             ofView:sender
+                      preferredEdge:NSRectEdgeMaxY
+                           behavior:NSPopoverBehaviorSemitransient];
     }
 }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,11 +21,11 @@
             </connections>
         </arrayController>
         <view misplaced="YES" id="LOv-5G-86T">
-            <rect key="frame" x="0.0" y="0.0" width="902" height="184"/>
+            <rect key="frame" x="0.0" y="0.0" width="902" height="164"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFP-nq-IQg">
-                    <rect key="frame" x="109" y="145" width="134" height="27"/>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vFP-nq-IQg">
+                    <rect key="frame" x="115" y="128" width="126" height="20"/>
                     <string key="toolTip">Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track.</string>
                     <buttonCell key="cell" type="push" title="Selection Behavior…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aYF-d5-Ya6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -40,8 +40,8 @@
                         </binding>
                     </connections>
                 </button>
-                <button toolTip="Reload the audio tracks list using the configured Selection Behavior." verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wcL-rL-aYS">
-                    <rect key="frame" x="239" y="145" width="64" height="27"/>
+                <button toolTip="Reload the audio tracks list using the configured Selection Behavior." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wcL-rL-aYS">
+                    <rect key="frame" x="249" y="128" width="56" height="20"/>
                     <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="q2P-Tg-cBJ">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -55,8 +55,8 @@
                         </binding>
                     </connections>
                 </button>
-                <popUpButton verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jrP-M5-2Rq">
-                    <rect key="frame" x="16" y="148" width="90" height="22"/>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jrP-M5-2Rq">
+                    <rect key="frame" x="20" y="128" width="82" height="20"/>
                     <popUpButtonCell key="cell" type="push" title="Tracks" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="AoT-G9-aA4">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -88,15 +88,15 @@
                         </binding>
                     </connections>
                 </popUpButton>
-                <scrollView wantsLayer="YES" misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yzu-Rk-hTv">
-                    <rect key="frame" x="20" y="20" width="862" height="122"/>
+                <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yzu-Rk-hTv">
+                    <rect key="frame" x="20" y="20" width="862" height="98"/>
                     <string key="toolTip">Audio tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the audio Selection Behavior dialog.</string>
                     <clipView key="contentView" id="2VK-QX-oZ0">
-                        <rect key="frame" x="1" y="1" width="860" height="120"/>
+                        <rect key="frame" x="1" y="1" width="860" height="96"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" tableStyle="plain" multipleSelection="NO" autosaveColumns="NO" rowHeight="25" rowSizeStyle="automatic" headerView="jdT-w6-s4n" viewBased="YES" id="yix-PF-sqH">
-                                <rect key="frame" x="0.0" y="0.0" width="860" height="97"/>
+                                <rect key="frame" x="0.0" y="0.0" width="860" height="73"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -119,7 +119,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Audio language and type." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6iN-2G-JDF">
-                                                        <rect key="frame" x="-1" y="1" width="291" height="22"/>
+                                                        <rect key="frame" x="3" y="3" width="283" height="20"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="ExA-Sd-3dO">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -157,7 +157,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Audio encoder." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tYY-w7-ZIq">
-                                                        <rect key="frame" x="-1" y="1" width="127" height="22"/>
+                                                        <rect key="frame" x="3" y="3" width="119" height="20"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="eIX-Zp-DHh">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -203,7 +203,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LLW-KN-65P">
-                                                        <rect key="frame" x="-1" y="1" width="112" height="22"/>
+                                                        <rect key="frame" x="3" y="3" width="104" height="20"/>
                                                         <string key="toolTip">Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.
 
 Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility.</string>
@@ -261,7 +261,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Audio sample rate in kilohertz (kHz). Auto is recommended." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QA9-1y-Pyj">
-                                                        <rect key="frame" x="-1" y="1" width="84" height="22"/>
+                                                        <rect key="frame" x="3" y="3" width="76" height="20"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="ewo-F6-Dcj">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -313,7 +313,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qg1-iw-07b">
-                                                        <rect key="frame" x="-1" y="1" width="81" height="22"/>
+                                                        <rect key="frame" x="3" y="3" width="73" height="20"/>
                                                         <string key="toolTip">Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible.</string>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="HcR-KC-NJF">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -365,7 +365,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField toolTip="Audio gain in decibels (dB). Increases or decreases audio volume." focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2c7-G5-4KL">
-                                                        <rect key="frame" x="25" y="6" width="37" height="14"/>
+                                                        <rect key="frame" x="23" y="6" width="39" height="14"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="0" id="Q4T-80-wxf">
                                                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="uNn-5A-2RM"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -391,7 +391,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                         </connections>
                                                     </textField>
                                                     <slider toolTip="Audio gain in decibels (dB). Increases or decreases audio volume." horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="gtC-MM-esd">
-                                                        <rect key="frame" x="3" y="2" width="22" height="22"/>
+                                                        <rect key="frame" x="3" y="3" width="20" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="12" id="2JB-4G-Xta"/>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="18" id="F1c-4e-dD1"/>
@@ -444,7 +444,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="o3M-fP-6Ps">
-                                                        <rect key="frame" x="3" y="2" width="22" height="22"/>
+                                                        <rect key="frame" x="3" y="3" width="20" height="20"/>
                                                         <string key="toolTip">Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.
 
 0: Do not apply DRC.
@@ -476,7 +476,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                                                         </connections>
                                                     </slider>
                                                     <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yPh-4R-HRQ">
-                                                        <rect key="frame" x="25" y="6" width="34" height="14"/>
+                                                        <rect key="frame" x="23" y="6" width="36" height="14"/>
                                                         <string key="toolTip">Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.
 
 0: Do not apply DRC.
@@ -530,12 +530,12 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView misplaced="YES" id="x5p-AD-24B">
+                                            <tableCellView misplaced="YES" id="x5p-AD-24B" customClass="HBActionCellView">
                                                 <rect key="frame" x="830" y="1" width="28" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wec-NB-vnQ">
-                                                        <rect key="frame" x="-4" y="-2" width="37" height="27"/>
+                                                        <rect key="frame" x="2" y="3" width="33" height="20"/>
                                                         <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSActionTemplate" imagePosition="only" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SiM-VW-aCt">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -551,6 +551,9 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                                                     <constraint firstItem="wec-NB-vnQ" firstAttribute="centerY" secondItem="x5p-AD-24B" secondAttribute="centerY" id="EUB-rb-1As"/>
                                                     <constraint firstAttribute="trailing" secondItem="wec-NB-vnQ" secondAttribute="trailing" constant="2" id="Fe3-yD-Crz"/>
                                                 </constraints>
+                                                <connections>
+                                                    <outlet property="button" destination="wec-NB-vnQ" id="Hvn-Mu-VYq"/>
+                                                </connections>
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
@@ -596,7 +599,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="wcL-rL-aYS" secondAttribute="trailing" constant="20" symbolic="YES" id="vyK-Mq-fbl"/>
                 <constraint firstItem="jrP-M5-2Rq" firstAttribute="baseline" secondItem="vFP-nq-IQg" secondAttribute="baseline" id="y3i-kl-lge"/>
             </constraints>
-            <point key="canvasLocation" x="208" y="127"/>
+            <point key="canvasLocation" x="341" y="-47"/>
         </view>
         <menu id="hyy-qd-qpe">
             <items>
