@@ -16,21 +16,27 @@
 #ifdef integral_pixel
 #   undef integral_pixel
 #endif
+#ifdef pixel_diff
+#   undef pixel_diff
+#endif
 
 #if BIT_DEPTH > 12
 #   define pixel   uint16_t
 #   define pixel_2 uint32_t
 #   define integral_pixel uint64_t
+#   define pixel_diff int32_t
 #   define FUNC(name) name##_##16
 #elif BIT_DEPTH > 8
 #   define pixel   uint16_t
 #   define pixel_2 uint32_t
 #   define integral_pixel uint32_t
+#   define pixel_diff int32_t
 #   define FUNC(name) name##_##12
 #else
 #   define pixel   uint8_t
 #   define pixel_2 uint16_t
 #   define integral_pixel uint32_t
+#   define pixel_diff int16_t
 #   define FUNC(name) name##_##8
 #endif
 
@@ -587,8 +593,8 @@ static void FUNC(build_integral_scalar)(void *integral,
 
         for (int x = 0; x < dst_w + n; x++)
         {
-            int diff = *p1 - *p2;
-            *out = *(out-1) + diff * diff;
+            pixel_diff diff = (pixel_diff)(*p1) - (pixel_diff)(*p2);
+            *out = *(out-1) + (integral_pixel)(diff * diff);
             out++;
             p1++;
             p2++;
