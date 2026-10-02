@@ -20,18 +20,12 @@
 #   undef pixel_diff
 #endif
 
-#if BIT_DEPTH > 12
+#if BIT_DEPTH > 8
 #   define pixel   uint16_t
 #   define pixel_2 uint32_t
 #   define integral_pixel uint64_t
 #   define pixel_diff int32_t
 #   define FUNC(name) name##_##16
-#elif BIT_DEPTH > 8
-#   define pixel   uint16_t
-#   define pixel_2 uint32_t
-#   define integral_pixel uint32_t
-#   define pixel_diff int32_t
-#   define FUNC(name) name##_##12
 #else
 #   define pixel   uint8_t
 #   define pixel_2 uint16_t
