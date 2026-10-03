@@ -255,6 +255,16 @@ static int nlmeans_init(hb_filter_object_t *filter,
         case 10:
         case 12:
         case 16:
+            functions->build_integral = build_integral_scalar_16;
+            pv->nlmeans_alloc         = nlmeans_alloc_16;
+            pv->nlmeans_prefilter     = nlmeans_prefilter_16;
+            pv->nlmeans_deborder      = nlmeans_deborder_16;
+            pv->nlmeans_plane         = nlmeans_plane_16;
+        #if defined(ARCH_X86)
+            nlmeans_init_x86(functions, 16);
+        #endif
+            break;
+
         default:
             functions->build_integral = build_integral_scalar_16;
             pv->nlmeans_alloc         = nlmeans_alloc_16;
