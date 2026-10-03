@@ -17,6 +17,7 @@
 #include "libavutil/cpu.h"
 #include "handbrake/nlmeans.h"
 
+ATTR_TARGET_SSE2
 static void build_integral_sse2(void *integral,
                                 int       integral_stride,
                           const void  *in_src,

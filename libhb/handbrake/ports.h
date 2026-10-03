@@ -12,6 +12,11 @@
 
 #if ARCH_X86_64 || ARCH_X86_32
 #define ARCH_X86
+#if defined(__GNUC__) || defined(__clang__)
+    #define ATTR_TARGET_SSE2 __attribute__((target("sse2")))
+#else
+    #define ATTR_TARGET_SSE2
+#endif
 #endif
 
 #if defined(_WIN32)
