@@ -24,6 +24,7 @@
 #include "callbacks.h"
 #include "ghb-file-button.h"
 #include "handbrake/handbrake.h"
+#include "hb-backend.h"
 #include "hb-dvd.h"
 #include "jobdict.h"
 #include "presets.h"
@@ -165,9 +166,25 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
 void ghb_finalize_job (GhbValue *settings)
 {
     GhbValue *preset, *job;
+    int encoder;
+    int hw_decode = 0;
 
     preset = ghb_settings_to_preset(settings);
     job    = ghb_dict_get(settings, "Job");
+    encoder = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
+
+    if (encoder > 0 &&
+        (encoder & (HB_VCODEC_FFMPEG_VCE_H264 |
+                    HB_VCODEC_FFMPEG_VCE_H265 |
+                    HB_VCODEC_FFMPEG_VCE_H265_10BIT |
+                    HB_VCODEC_FFMPEG_VCE_AV1)))
+    {
+        if (ghb_dict_get_bool(ghb_ud()->prefs, "AmfHwDecode"))
+        {
+            hw_decode = HB_DECODE_AMFDEC | HB_DECODE_FORCE_HW;
+        }
+        ghb_dict_set_int(preset, "VideoHWDecode", hw_decode);
+    }
 
     // Add scale filter since the above does not
     GhbValue *filter_settings, *filter_list, *filter_dict;
