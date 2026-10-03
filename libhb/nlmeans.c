@@ -248,7 +248,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
             pv->nlmeans_deborder      = nlmeans_deborder_8;
             pv->nlmeans_plane         = nlmeans_plane_8;
         #if defined(ARCH_X86)
-            nlmeans_init_x86(functions);
+            nlmeans_init_x86(functions, 8);
         #endif
             break;
 

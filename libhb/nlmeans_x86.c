@@ -18,7 +18,7 @@
 #include "handbrake/nlmeans.h"
 
 ATTR_TARGET_SSE2
-static void build_integral_sse2(void *integral,
+static void build_integral_8_sse2(void *integral,
                                 int       integral_stride,
                           const void  *in_src,
                           const void  *in_src_pre,
@@ -149,12 +149,20 @@ static void build_integral_sse2(void *integral,
     }
 }
 
-void nlmeans_init_x86(NLMeansFunctions *functions)
+void nlmeans_init_x86(NLMeansFunctions *functions,
+                             const int  depth)
 {
-    if (av_get_cpu_flags() & AV_CPU_FLAG_SSE2)
+    switch (depth)
     {
-        functions->build_integral = build_integral_sse2;
-        hb_log("NLMeans using SSE2 optimizations");
+        case 8:
+            if (av_get_cpu_flags() & AV_CPU_FLAG_SSE2)
+            {
+                functions->build_integral = build_integral_8_sse2;
+                hb_log("NLMeans using SSE2 optimizations (depth %d)", depth);
+            }
+            break;
+        default:
+            break;
     }
 }
 
