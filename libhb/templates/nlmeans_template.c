@@ -7,13 +7,30 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#ifdef pixel
+#   undef pixel
+#endif
+#ifdef pixel_2
+#   undef pixel_2
+#endif
+#ifdef integral_pixel
+#   undef integral_pixel
+#endif
+#ifdef pixel_diff
+#   undef pixel_diff
+#endif
+
 #if BIT_DEPTH > 8
 #   define pixel   uint16_t
 #   define pixel_2 uint32_t
+#   define integral_pixel uint64_t
+#   define pixel_diff int32_t
 #   define FUNC(name) name##_##16
 #else
 #   define pixel   uint8_t
 #   define pixel_2 uint16_t
+#   define integral_pixel uint32_t
+#   define pixel_diff int16_t
 #   define FUNC(name) name##_##8
 #endif
 
@@ -542,7 +559,7 @@ static void FUNC(nlmeans_prefilter)(BorderedPlane *src,
     hb_unlock(src->mutex);
 }
 
-static void FUNC(build_integral_scalar)(uint32_t *integral,
+static void FUNC(build_integral_scalar)(void *integral,
                                         int       integral_stride,
                                   const void  *in_src,
                                   const void  *in_src_pre,
@@ -566,12 +583,12 @@ static void FUNC(build_integral_scalar)(uint32_t *integral,
     {
         const pixel *p1 = src_pre     + (y-n_half   )*bw - n_half;
         const pixel *p2 = compare_pre + (y-n_half+dy)*bw - n_half + dx;
-        uint32_t *out = integral + (y*integral_stride);
+        integral_pixel *out = (integral_pixel *)(integral) + (y*integral_stride);
 
         for (int x = 0; x < dst_w + n; x++)
         {
-            int diff = *p1 - *p2;
-            *out = *(out-1) + diff * diff;
+            pixel_diff diff = (pixel_diff)(*p1) - (pixel_diff)(*p2);
+            *out = *(out-1) + (integral_pixel)(diff * diff);
             out++;
             p1++;
             p2++;
@@ -579,7 +596,7 @@ static void FUNC(build_integral_scalar)(uint32_t *integral,
 
         if (y > 0)
         {
-            out = integral + y*integral_stride;
+            out = (integral_pixel *)(integral) + y*integral_stride;
 
             for (int x = 0; x < dst_w + n; x++)
             {
@@ -622,8 +639,8 @@ static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
 
     // Allocate integral image
     const int integral_stride    = ((dst_w + n + 15) / 16 * 16) + 2 * 16;
-    uint32_t* const integral_mem = calloc(integral_stride * (dst_h + n + 1), sizeof(uint32_t));
-    uint32_t* const integral     = integral_mem + integral_stride + 16;
+    integral_pixel* const integral_mem = calloc(integral_stride * (dst_h + n + 1), sizeof(integral_pixel));
+    integral_pixel* const integral     = integral_mem + integral_stride + 16;
 
     // Iterate through available frames
     for (int f = 0; f < nframes; f++)
@@ -672,19 +689,19 @@ static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
                 // Average displacement
                 for (int y = 0; y < dst_h; y++)
                 {
-                    const uint32_t *integral_ptr1 = integral + (y  -1)*integral_stride - 1;
-                    const uint32_t *integral_ptr2 = integral + (y+n-1)*integral_stride - 1;
+                    const integral_pixel *integral_ptr1 = integral + (y  -1)*integral_stride - 1;
+                    const integral_pixel *integral_ptr2 = integral + (y+n-1)*integral_stride - 1;
 
                     for (int x = 0; x < dst_w; x++)
                     {
 
                         // Difference between patches
-                        const int diff = (uint32_t)(integral_ptr2[n] - integral_ptr2[0] - integral_ptr1[n] + integral_ptr1[0]);
+                        const integral_pixel diff = (integral_pixel)(integral_ptr2[n] - integral_ptr2[0] - integral_ptr1[n] + integral_ptr1[0]);
 
                         // Sum pixel with weight
                         if (diff < diff_max)
                         {
-                            const int diffidx = diff * weight_fact_table;
+                            const int diffidx = (int)(diff * weight_fact_table);
 
                             //float weight = exp(-diff*weightFact);
                             const float weight = exptable[diffidx];

@@ -6,7 +6,7 @@
 
 #import "HBAudioController.h"
 #import "HBAudioDefaultsController.h"
-#import "HBTrackTitleViewController.h"
+#import "HBAudioTrackAdditionalViewController.h"
 
 @import HandBrakeKit;
 
@@ -42,7 +42,7 @@
 
 - (IBAction)showAdditionalSettingsPopOver:(id)sender
 {
-    HBTrackTitleViewController *controller = [[HBTrackTitleViewController alloc] init];
+    HBAudioTrackAdditionalViewController *controller = [[HBAudioTrackAdditionalViewController alloc] init];
     NSInteger index = [self.table rowForView:sender];
     if (index != -1)
     {
