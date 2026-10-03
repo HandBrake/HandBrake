@@ -252,6 +252,8 @@ static int nlmeans_init(hb_filter_object_t *filter,
         #endif
             break;
 
+        case 10:
+        case 12:
         case 16:
         default:
             functions->build_integral = build_integral_scalar_16;
@@ -340,7 +342,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
         if (pv->max_frames < pv->nframes[c]) pv->max_frames = pv->nframes[c];
 
         // Scale strength with bit depth
-        pv->strength[c] *= pv->depth > 8 ? (pv->depth - 8) * (pv->depth - 8) : 1;
+        pv->strength[c] *= pv->depth > 8 ? 1 << (pv->depth - 8) : 1;
 
         // Precompute exponential table
         float *exptable = &pv->exptable[c][0];

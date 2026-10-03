@@ -17,7 +17,7 @@
 #include "libavutil/cpu.h"
 #include "handbrake/nlmeans.h"
 
-static void build_integral_sse2(uint32_t *integral,
+static void build_integral_sse2(void *integral,
                                 int       integral_stride,
                           const void  *in_src,
                           const void  *in_src_pre,
@@ -44,7 +44,7 @@ static void build_integral_sse2(uint32_t *integral,
 
         const uint8_t *p1 = src_pre     + (y-n_half   )*bw - n_half;
         const uint8_t *p2 = compare_pre + (y-n_half+dy)*bw - n_half + dx;
-        uint32_t *out = integral + (y*integral_stride);
+        uint32_t *out = (uint32_t *)(integral) + (y*integral_stride);
 
         for (int x = 0; x < dst_w + n; x += 16)
         {
@@ -126,7 +126,7 @@ static void build_integral_sse2(uint32_t *integral,
 
         if (y > 0)
         {
-            out = integral + y*integral_stride;
+            out = (uint32_t *)(integral) + y*integral_stride;
 
             for (int x = 0; x < dst_w + n; x += 16)
             {

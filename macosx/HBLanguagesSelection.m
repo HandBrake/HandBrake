@@ -170,6 +170,7 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
 	[self.tableView registerForDraggedTypes:@[tableViewIndex]];
 	self.isDraggingEnabled = YES;
 }
