@@ -383,18 +383,20 @@ static void build_integral_16_sse4(void *integral,
 void nlmeans_init_x86(NLMeansFunctions *functions,
                              const int  depth)
 {
+    const char *opt = NULL;
+
     switch (depth)
     {
         case 8:
             if (av_get_cpu_flags() & AV_CPU_FLAG_SSE4)
             {
                 functions->build_integral = build_integral_8_sse4;
-                hb_log("NLMeans using SSE4.1 optimizations (depth %d)", depth);
+                opt = "SSE4.1";
             }
             else if (av_get_cpu_flags() & AV_CPU_FLAG_SSE2)
             {
                 functions->build_integral = build_integral_8_sse2;
-                hb_log("NLMeans using SSE2 optimizations (depth %d)", depth);
+                opt = "SSE2";
             }
             break;
         case 10:
@@ -403,11 +405,16 @@ void nlmeans_init_x86(NLMeansFunctions *functions,
             if (av_get_cpu_flags() & AV_CPU_FLAG_SSE4)
             {
                 functions->build_integral = build_integral_16_sse4;
-                hb_log("NLMeans using SSE4.1 optimizations (depth %d)", depth);
+                opt = "SSE4.1";
             }
             break;
         default:
             break;
+    }
+
+    if (opt != NULL)
+    {
+        hb_log("NLMeans using %s optimizations (depth %d)", opt, depth);
     }
 }
 
