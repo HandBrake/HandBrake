@@ -43,11 +43,11 @@
             </connections>
         </arrayController>
         <view id="0Px-bA-wNU">
-            <rect key="frame" x="0.0" y="0.0" width="862" height="519"/>
+            <rect key="frame" x="0.0" y="0.0" width="864" height="519"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jf0-yX-hmx">
-                    <rect key="frame" x="786" y="20" width="56" height="20"/>
+                    <rect key="frame" x="788" y="20" width="56" height="20"/>
                     <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5ri-Kt-dt3">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu" size="11"/>
@@ -394,19 +394,19 @@ DQ
                     </connections>
                 </segmentedControl>
                 <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="29" horizontalPageScroll="10" verticalLineScroll="29" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4at-7w-jCl">
-                    <rect key="frame" x="20" y="83" width="822" height="140"/>
+                    <rect key="frame" x="20" y="83" width="824" height="140"/>
                     <clipView key="contentView" id="40T-O4-jpz">
-                        <rect key="frame" x="1" y="1" width="820" height="138"/>
+                        <rect key="frame" x="1" y="1" width="822" height="138"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" tableStyle="plain" autosaveColumns="NO" rowHeight="27" headerView="mmB-nl-Vj3" viewBased="YES" id="02m-aL-aDY">
-                                <rect key="frame" x="0.0" y="0.0" width="820" height="110"/>
+                                <rect key="frame" x="0.0" y="0.0" width="822" height="110"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn width="278.5" minWidth="143" maxWidth="1000" id="2GC-LO-FbX">
+                                    <tableColumn width="280.5" minWidth="143" maxWidth="1000" id="2GC-LO-FbX">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Codec">
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -419,11 +419,11 @@ DQ
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="L3m-SQ-hX3">
-                                                <rect key="frame" x="1" y="1" width="279" height="47"/>
+                                                <rect key="frame" x="1" y="1" width="281" height="47"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Audio encoder." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qc7-is-l0B">
-                                                        <rect key="frame" x="3" y="14" width="273" height="20"/>
+                                                        <rect key="frame" x="3" y="14" width="275" height="20"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="R1N-ZT-Of2">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="menu" size="11"/>
@@ -461,7 +461,7 @@ DQ
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="pqf-yt-sC7">
-                                                <rect key="frame" x="282.5" y="1" width="149" height="47"/>
+                                                <rect key="frame" x="284.5" y="1" width="149" height="47"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gOj-B9-Hs2">
@@ -511,7 +511,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="Ikd-eN-Wfw">
-                                                <rect key="frame" x="435" y="1" width="110" height="47"/>
+                                                <rect key="frame" x="437" y="1" width="110" height="47"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Audio sample rate in kilohertz (kHz). Auto is recommended." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O4j-65-8L5">
@@ -543,7 +543,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                         </prototypeCellViews>
                                     </tableColumn>
                                     <tableColumn width="95.5" minWidth="74" maxWidth="3.4028234663852886e+38" id="zio-Ye-VIi">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Bitrate">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Quality">
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </tableHeaderCell>
@@ -554,8 +554,8 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView id="qIR-oF-hdR">
-                                                <rect key="frame" x="547.5" y="1" width="95" height="47"/>
+                                            <tableCellView id="qIR-oF-hdR" customClass="HBAudioQualityCell">
+                                                <rect key="frame" x="549.5" y="1" width="95" height="47"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="llP-AX-bbA">
@@ -568,12 +568,6 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                         </popUpButtonCell>
                                                         <accessibility description="Bitrate"/>
                                                         <connections>
-                                                            <binding destination="qIR-oF-hdR" name="selectedValue" keyPath="objectValue.bitRate" previousBinding="oVo-NQ-Zzz" id="bap-PX-cFb">
-                                                                <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">HBIntegerTransformer</string>
-                                                                </dictionary>
-                                                            </binding>
-                                                            <binding destination="qIR-oF-hdR" name="content" keyPath="objectValue.bitRates" id="oVo-NQ-Zzz"/>
                                                             <binding destination="qIR-oF-hdR" name="enabled" keyPath="objectValue.bitrateEnabled" id="e9o-2O-pEt"/>
                                                         </connections>
                                                     </popUpButton>
@@ -583,6 +577,9 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                     <constraint firstItem="llP-AX-bbA" firstAttribute="centerY" secondItem="qIR-oF-hdR" secondAttribute="centerY" id="kR7-Tx-mce"/>
                                                     <constraint firstItem="llP-AX-bbA" firstAttribute="leading" secondItem="qIR-oF-hdR" secondAttribute="leading" constant="3" id="nGU-vK-6nw"/>
                                                 </constraints>
+                                                <connections>
+                                                    <outlet property="popUp" destination="llP-AX-bbA" id="xwu-JT-oxC"/>
+                                                </connections>
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
@@ -599,7 +596,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="Kgg-jr-Lmc">
-                                                <rect key="frame" x="646" y="1" width="54" height="51"/>
+                                                <rect key="frame" x="648" y="1" width="54" height="51"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField toolTip="Audio gain in decibels (dB). Increases or decreases audio volume." focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lgP-xp-VXQ">
@@ -649,7 +646,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="GN9-Da-sOU">
-                                                <rect key="frame" x="703" y="1" width="54" height="50"/>
+                                                <rect key="frame" x="705" y="1" width="54" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9SH-sO-MKm">
@@ -711,7 +708,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="TfV-sB-Ep5">
-                                                <rect key="frame" x="760" y="1" width="58" height="50"/>
+                                                <rect key="frame" x="762" y="1" width="58" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X3W-Kp-l42">
@@ -755,7 +752,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" wantsLayer="YES" id="mmB-nl-Vj3">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="28"/>
+                        <rect key="frame" x="0.0" y="0.0" width="822" height="28"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </tableHeaderView>
                 </scrollView>
@@ -771,7 +768,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6nC-dK-NSM">
-                    <rect key="frame" x="722" y="20" width="56" height="20"/>
+                    <rect key="frame" x="724" y="20" width="56" height="20"/>
                     <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d9e-qs-0Zf">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu" size="11"/>

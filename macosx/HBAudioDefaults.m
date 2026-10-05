@@ -387,7 +387,17 @@
                 newTrack.sampleRate = 0;
             }
         }
-        newTrack.bitRate = [track[@"AudioBitrate"] intValue];
+
+        if ([track[@"AudioTrackQualityEnable"] boolValue])
+        {
+            newTrack.quality = [track[@"AudioTrackQuality"] doubleValue];
+            newTrack.mode = HBAudioPresetEncoderModeQuality;
+        }
+        else
+        {
+            newTrack.bitRate = [track[@"AudioBitrate"] intValue];
+            newTrack.mode = HBAudioPresetEncoderModeABR;
+        }
 
         newTrack.drc = [track[@"AudioTrackDRCSlider"] doubleValue];
         newTrack.gain = [track[@"AudioTrackGainSlider"] doubleValue];
@@ -545,6 +555,8 @@
             NSDictionary *newTrack = @{@"AudioEncoder": @(encoderShortName),
                                        @"AudioMixdown": @(mixdownShortName),
                                        @"AudioSamplerate": sampleRate,
+                                       @"AudioTrackQualityEnable": @(track.mode == HBAudioPresetEncoderModeQuality),
+                                       @"AudioTrackQuality": @(track.quality),
                                        @"AudioBitrate": @(track.bitRate),
                                        @"AudioTrackDRCSlider": @(track.drc),
                                        @"AudioTrackGainSlider": @(track.gain),

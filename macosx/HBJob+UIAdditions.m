@@ -509,10 +509,20 @@ static HBMixdownTransformer    *mixdownTransformer;
                 NSString *mixdown = [mixdownTransformer transformedValue:@(audioTrack.mixdown)];
 
                 [detailString appendString:@", "];
-                [detailString appendFormat:HBKitLocalizedString(@"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps", @"Audio description"),
+                [detailString appendFormat:HBKitLocalizedString(@"Mixdown: %@, Samplerate: %@", @"Audio description"),
                                             mixdown,
-                                            audioTrack.sampleRate ? [NSString stringWithFormat:@"%@ khz", @(hb_audio_samplerate_get_name(audioTrack.sampleRate))] : @"Auto",
-                                            audioTrack.bitRate];
+                                            audioTrack.sampleRate ? [NSString stringWithFormat:@"%@ khz", @(hb_audio_samplerate_get_name(audioTrack.sampleRate))] : @"Auto"];
+
+                if (audioTrack.mode == HBAudioEncoderModeABR)
+                {
+                    [detailString appendFormat:HBKitLocalizedString(@", Bitrate: %d kbps", @"Audio description"),
+                                                audioTrack.bitRate];
+                }
+                else
+                {
+                    [detailString appendFormat:HBKitLocalizedString(@", Quality: %@ CQ", @"Audio description"),
+                                                @(audioTrack.quality)];
+                }
 
                 if (0.0 < audioTrack.drc)
                 {
