@@ -162,6 +162,19 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     [self.vidQualitySlider bind:@"value" toObject:self
                     withKeyPath:@"self.video.quality"
                         options:@{NSValueTransformerBindingOption: transformer}];
+
+    NSMutableString *tooltip = [[NSMutableString alloc] init];
+    [tooltip appendString:NSLocalizedString(@"Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.", "Video -> Quality slider tooltip")];
+
+    if (minValue != maxValue)
+    {
+        int defaultValue = self.video.defaultQualityValue;
+        [tooltip appendString:@"\n\n"];
+        [tooltip appendFormat:NSLocalizedString(@"Recommended values are %d-%d. Higher quality settings may produce extremely large files.", "Video -> Quality slider tooltip"),
+         defaultValue - 2, defaultValue + 10];
+    }
+
+    self.vidQualitySlider.toolTip = [tooltip copy];
 }
 
 #pragma mark - Presets

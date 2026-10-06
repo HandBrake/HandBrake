@@ -139,6 +139,11 @@
     return hb_video_quality_is_supported(self.encoder);
 }
 
+- (double)defaultQualityValue
+{
+    return hb_video_quality_get_default(self.encoder);
+}
+
 + (NSSet<NSString *> *)keyPathsForValuesAffectingIsAverageBitrateSupported
 {
     return [NSSet setWithObjects:@"encoder", nil];
