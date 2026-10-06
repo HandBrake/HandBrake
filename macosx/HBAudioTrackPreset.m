@@ -85,13 +85,13 @@
     }
 }
 
-- (void)setSelectedEncoder:(int)fallbackEncoder
+- (void)setSelectedEncoder:(int)selectedEncoder
 {
-    if (fallbackEncoder != _selectedEncoder)
+    if (selectedEncoder != _selectedEncoder)
     {
-        [[self.undo prepareWithInvocationTarget:self] setSelectedEncoder:_fallbackEncoder];
+        [[self.undo prepareWithInvocationTarget:self] setSelectedEncoder:_selectedEncoder];
     }
-    _selectedEncoder = fallbackEncoder;
+    _selectedEncoder = selectedEncoder;
 
     if (!(self.undo.isUndoing || self.undo.isRedoing))
     {

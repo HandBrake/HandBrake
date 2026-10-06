@@ -10,8 +10,7 @@
 #define HB_INVALID_AUDIO_QUALITY (-3.)
 
 static void *HBAudioQualityCellContext = &HBAudioQualityCellContext;
-static void *HBAudioQualityCellBitrateContext = &HBAudioQualityCellBitrateContext;
-static void *HBAudioQualityCellQualityContext = &HBAudioQualityCellQualityContext;
+static void *HBAudioQualityCellItemContext = &HBAudioQualityCellItemContext;
 
 @interface HBAudioQualityCell ()
 @property (nonatomic, readwrite) NSArray<NSNumber *> *bitRates;
@@ -23,8 +22,9 @@ static void *HBAudioQualityCellQualityContext = &HBAudioQualityCellQualityContex
 - (void)setObjectValue:(id)objectValue
 {
     [self.objectValue removeObserver:self forKeyPath:@"bitRates" context:HBAudioQualityCellContext];
-    [self.objectValue removeObserver:self forKeyPath:@"bitRate" context:HBAudioQualityCellBitrateContext];
-    [self.objectValue removeObserver:self forKeyPath:@"quality" context:HBAudioQualityCellQualityContext];
+    [self.objectValue removeObserver:self forKeyPath:@"bitRate" context:HBAudioQualityCellItemContext];
+    [self.objectValue removeObserver:self forKeyPath:@"quality" context:HBAudioQualityCellItemContext];
+    [self.objectValue removeObserver:self forKeyPath:@"mode" context:HBAudioQualityCellItemContext];
 
     [super setObjectValue:objectValue];
 
@@ -38,12 +38,18 @@ static void *HBAudioQualityCellQualityContext = &HBAudioQualityCellQualityContex
     [objectValue addObserver:self
                   forKeyPath:@"bitRate"
                      options:0
-                     context:HBAudioQualityCellBitrateContext];
+                     context:HBAudioQualityCellItemContext];
 
     [objectValue addObserver:self
                   forKeyPath:@"quality"
                      options:0
-                     context:HBAudioQualityCellQualityContext];
+                     context:HBAudioQualityCellItemContext];
+
+    [objectValue addObserver:self
+                  forKeyPath:@"mode"
+                     options:0
+                     context:HBAudioQualityCellItemContext];
+
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -52,8 +58,7 @@ static void *HBAudioQualityCellQualityContext = &HBAudioQualityCellQualityContex
     {
         [self buildMenu];
     }
-    else if (context == HBAudioQualityCellBitrateContext ||
-             context == HBAudioQualityCellQualityContext)
+    else if (context == HBAudioQualityCellItemContext)
     {
         [self setSelectedItem];
     }
@@ -143,33 +148,24 @@ static void *HBAudioQualityCellQualityContext = &HBAudioQualityCellQualityContex
 
 - (void)setSelectedItem
 {
-    if (self.objectValue != nil)
+    if ((int)[self.objectValue mode] == (int)HBAudioEncoderModeABR)
     {
-        if ((int)[self.objectValue mode] == (int)HBAudioEncoderModeABR)
-        {
-            [self.popUp selectItemWithTag:[self.objectValue bitRate]];
-        }
-        else
-        {
-            [self.popUp selectItemWithTag:[self.objectValue quality] * 1000];
-        }
+        [self.popUp selectItemWithTag:[self.objectValue bitRate]];
+    }
+    else
+    {
+        [self.popUp selectItemWithTag:[self.objectValue quality] * 1000];
     }
 }
 
 - (IBAction)setTrackBitrate:(NSMenuItem *)sender
 {
-    if (self.objectValue != nil)
-    {
-        [self.objectValue setBitRate:(int)sender.tag];
-    }
+    [self.objectValue setBitRate:(int)sender.tag];
 }
 
 - (IBAction)setTrackQuality:(NSMenuItem *)sender
 {
-    if (self.objectValue != nil)
-    {
-        [self.objectValue setQuality:(double)sender.title.doubleValue];
-    }
+    [self.objectValue setQuality:(double)sender.title.doubleValue];
 }
 
 @end
