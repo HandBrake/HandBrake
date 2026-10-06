@@ -544,7 +544,7 @@
     encodeInt(_mixdown);
     encodeInt(_sampleRate);
     encodeInt(_bitRate);
-    encodeInt(_quality);
+    encodeDouble(_quality);
     encodeInteger(_mode);
 
     encodeDouble(_gain);
@@ -563,7 +563,7 @@
     decodeInt(_mixdown); if (_mixdown < 0) { goto fail; }
     decodeInt(_sampleRate); if (_sampleRate < 0) { goto fail; }
     decodeInt(_bitRate); if (_bitRate < -1) { goto fail; }
-    decodeInt(_quality);
+    decodeDouble(_quality);
     decodeInteger(_mode); if (_mode < HBAudioPresetEncoderModeABR || _mode > HBAudioPresetEncoderModeQuality) { goto fail; }
 
     decodeDouble(_gain);
