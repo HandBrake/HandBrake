@@ -388,6 +388,7 @@ hb_filter_object_t hb_filter_adapter =
     .id                = HB_FILTER_ADAPTER,
     .enforce_order     = 1,
     .name              = "Adapter",
+    .short_name        = "adapter",
     .settings          = NULL,
     .init              = adapter_init,
     .work              = adapter_work,

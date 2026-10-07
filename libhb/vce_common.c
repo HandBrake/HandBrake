@@ -269,6 +269,7 @@ int hb_vce_are_filters_supported(hb_list_t *filters)
         switch (filter->id)
         {
             // AMF VPP-capable filters.
+            case HB_FILTER_ADAPTER:
             case HB_FILTER_FORMAT:
             case HB_FILTER_CROP_SCALE:
                 break;
