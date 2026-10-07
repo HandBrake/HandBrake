@@ -1837,6 +1837,7 @@ static void do_job(hb_job_t *job)
                                                   &job->hw_device_ctx);
             if (result)
             {
+                hb_log("Failure to initialise hwaccel");
                 job->hw_accel = NULL;
                 job->hw_pix_fmt = AV_PIX_FMT_NONE;
             }
