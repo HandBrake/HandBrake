@@ -1782,9 +1782,11 @@ static void do_job(hb_job_t *job)
 
     // Allow the usage of the hardware decoder
     // only if it was marked as supported in the scan
+    hb_deep_log(2, "Requested HW decoder %d", job->hw_decode);
     if ((title->video_decode_support & job->hw_decode) == 0)
     {
         job->hw_decode = 0;
+        hb_deep_log(2, "HW decoder not available");
     }
     if (job->hw_decode & HB_DECODE_QSV)
     {
@@ -1837,9 +1839,9 @@ static void do_job(hb_job_t *job)
                                                   &job->hw_device_ctx);
             if (result)
             {
-                hb_log("Failure to initialise hwaccel");
                 job->hw_accel = NULL;
                 job->hw_pix_fmt = AV_PIX_FMT_NONE;
+                hb_log("Failure to initialise hwaccel");
             }
         }
 

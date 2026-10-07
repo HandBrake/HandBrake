@@ -2156,9 +2156,11 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     }
 #endif
 
+    hb_deep_log(2, "decavcodec: context pix format %s", av_get_pix_fmt_name(pv->context->pix_fmt));
     hb_hwaccel_t *hwaccel = hb_get_hwaccel_from_pix_fmt(pv->context->pix_fmt);
     if (hwaccel != NULL)
     {
+        hb_deep_log(2, "decavcodec: found hwaccel %d", hwaccel->id);
         info->video_decode_support |= hwaccel->id;
     }
 
