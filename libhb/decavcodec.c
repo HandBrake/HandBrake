@@ -2145,6 +2145,22 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 
     info->video_decode_support = HB_DECODE_SW;
 
+    hb_hwaccel_t *hwaccel = hb_get_hwaccel_from_pix_fmt(pv->context->pix_fmt);
+    if (hwaccel != NULL)
+    {
+        hb_deep_log(2, "decavcodec: found hwaccel %d", hwaccel->id);
+        info->video_decode_support |= hwaccel->id;
+    }
+
+    // Check for stand-alone hardware decoders
+    // that don't set an hardware pixel format
+    if (w->hw_accel->id == HB_DECODE_AMFDEC ||
+        w->hw_accel->id == HB_DECODE_QSV)
+    {
+        info->video_decode_support |= HB_DECODE_AMFDEC;
+        hb_deep_log(2, "decavcodec: found hwaccel %d", w->hw_accel->id);
+    }
+
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_available())
     {
@@ -2155,14 +2171,6 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         }
     }
 #endif
-
-    hb_deep_log(2, "decavcodec: context pix format %s", av_get_pix_fmt_name(pv->context->pix_fmt));
-    hb_hwaccel_t *hwaccel = hb_get_hwaccel_from_pix_fmt(pv->context->pix_fmt);
-    if (hwaccel != NULL)
-    {
-        hb_deep_log(2, "decavcodec: found hwaccel %d", hwaccel->id);
-        info->video_decode_support |= hwaccel->id;
-    }
 
     return 1;
 }
