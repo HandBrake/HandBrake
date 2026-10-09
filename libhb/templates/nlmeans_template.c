@@ -19,18 +19,23 @@
 #ifdef pixel_diff
 #   undef pixel_diff
 #endif
+#ifdef pixel_diff_2
+#   undef pixel_diff_2
+#endif
 
 #if BIT_DEPTH > 8
 #   define pixel   uint16_t
 #   define pixel_2 uint32_t
 #   define integral_pixel uint64_t
 #   define pixel_diff int32_t
+#   define pixel_diff_2 int64_t
 #   define FUNC(name) name##_##16
 #else
 #   define pixel   uint8_t
 #   define pixel_2 uint16_t
 #   define integral_pixel uint32_t
 #   define pixel_diff int16_t
+#   define pixel_diff_2 int32_t
 #   define FUNC(name) name##_##8
 #endif
 
@@ -588,7 +593,7 @@ static void FUNC(build_integral_scalar)(void *integral,
         for (int x = 0; x < dst_w + n; x++)
         {
             pixel_diff diff = (pixel_diff)(*p1) - (pixel_diff)(*p2);
-            *out = *(out-1) + (integral_pixel)(diff * diff);
+            *out = *(out-1) + (integral_pixel)((pixel_diff_2)(diff) * diff);
             out++;
             p1++;
             p2++;
@@ -622,7 +627,7 @@ static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
                                 int r,
                           const float *exptable,
                           const float  weight_fact_table,
-                          const int    diff_max)
+                          const uint64_t diff_max)
 {
     pixel *dst = in_dst;
     const int r_half = (r-1) /2;
@@ -703,11 +708,14 @@ static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
                         {
                             const int diffidx = (int)(diff * weight_fact_table);
 
-                            //float weight = exp(-diff*weightFact);
-                            const float weight = exptable[diffidx];
+                            if (diffidx < NLMEANS_EXPSIZE)
+                            {
+                                //float weight = exp(-diff*weightFact);
+                                const float weight = exptable[diffidx];
 
-                            tmp_data[y*dst_w + x].weight_sum += weight;
-                            tmp_data[y*dst_w + x].pixel_sum  += weight * compare[(y+dy)*bw + x + dx];
+                                tmp_data[y*dst_w + x].weight_sum += weight;
+                                tmp_data[y*dst_w + x].pixel_sum  += weight * compare[(y+dy)*bw + x + dx];
+                            }
                         }
 
                         integral_ptr1++;

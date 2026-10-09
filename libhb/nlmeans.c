@@ -138,7 +138,7 @@ struct hb_filter_private_s
 
     float  exptable[3][NLMEANS_EXPSIZE];
     float  weight_fact_table[3];
-    int    diff_max[3];
+    uint64_t diff_max[3];
 
     NLMeansFunctions functions;
 
@@ -166,7 +166,7 @@ struct hb_filter_private_s
                                     int r,
                               const float *exptable,
                               const float  weight_fact_table,
-                              const int    diff_max);
+                              const uint64_t diff_max);
 
     Frame      *frame;
     int         next_frame;
@@ -357,12 +357,13 @@ static int nlmeans_init(hb_filter_object_t *filter,
         // Precompute exponential table
         float *exptable = &pv->exptable[c][0];
         float *weight_fact_table = &pv->weight_fact_table[c];
-        int   *diff_max = &pv->diff_max[c];
+        uint64_t *diff_max = &pv->diff_max[c];
         const float weight_factor        = 1.0/pv->patch_size[c]/pv->patch_size[c] / (pv->strength[c] * pv->strength[c]);
         const float min_weight_in_table  = 0.0005;
         const float stretch              = NLMEANS_EXPSIZE / (-log(min_weight_in_table));
         *(weight_fact_table)             = weight_factor * stretch;
-        *(diff_max)                      = NLMEANS_EXPSIZE / *(weight_fact_table);
+        const double diff_max_d          = NLMEANS_EXPSIZE / (double)(*weight_fact_table);
+        *(diff_max)                      = diff_max_d >= (double)(UINT64_MAX) ? UINT64_MAX : (uint64_t)(diff_max_d);
         for (int i = 0; i < NLMEANS_EXPSIZE; i++)
         {
             exptable[i] = exp(-i/stretch);
