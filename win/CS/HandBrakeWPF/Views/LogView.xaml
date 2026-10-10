@@ -23,35 +23,30 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-                       
-            <ToolBar Grid.Row="0"
-                     ToolBar.OverflowMode="Never" 
-                     ToolBarTray.IsLocked="True"
-                     Loaded="ToolBarLoaded"
-                     >
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static Properties:Resources.LogView_ChooseLogFile}" Margin="5,0,5,0"></TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="0,5,5,5">
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="{x:Static Properties:Resources.LogView_ChooseLogFile}" Margin="5,0,5,0" Style="{StaticResource subHeader}" />
                     <ComboBox ItemsSource="{Binding LogFiles}" SelectedItem="{Binding SelectedLogFile}" DisplayMemberPath="FileDisplayName" Width="250" MaxWidth="300" />
                 </StackPanel>
 
-                <Button Command="{Binding RelayCommand}" CommandParameter="CopyLog" Margin="10,0,0,0" 
+                <Button Command="{Binding RelayCommand}" CommandParameter="CopyLog" Margin="10,0,0,0" VerticalAlignment="Center"
                         AutomationProperties.Name="{x:Static Properties:Resources.LogView_CopyClipboard}" >
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Copy.png'}" />
                         <TextBlock Margin="2,0,0,0" Text="{x:Static Properties:Resources.LogView_CopyClipboard}" />
                     </StackPanel>
                 </Button>
-                <Button Margin="5,0,0,0" Command="{Binding RelayCommand}" CommandParameter="OpenLogDirectory"
+                <Button Margin="5,0,0,0" Command="{Binding RelayCommand}" CommandParameter="OpenLogDirectory" VerticalAlignment="Center"
                         AutomationProperties.Name="{x:Static Properties:Resources.LogView_OpenLogDir}" >
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" >
                         <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Folder.png'}" />
                         <TextBlock Margin="2,0,0,0" Text="{x:Static Properties:Resources.LogView_OpenLogDir}" />
                     </StackPanel>
                 </Button>
 
-            </ToolBar>
-
+            </StackPanel>
+      
             <TextBox Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" x:Name="logText" VerticalContentAlignment="Top" IsReadOnly="True">
 
                 <TextBox.ContextMenu>
@@ -77,3 +72,5 @@
 
     </Grid>
 </Window>
+
+    

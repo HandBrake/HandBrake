@@ -2080,7 +2080,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose log file :.
+        ///   Looks up a localized string similar to Log file:.
         /// </summary>
         public static string LogView_ChooseLogFile {
             get {

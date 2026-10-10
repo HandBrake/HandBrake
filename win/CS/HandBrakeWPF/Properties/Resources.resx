@@ -2959,7 +2959,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Add to Queue - Quality Sweep</value>
   </data>
   <data name="LogView_ChooseLogFile" xml:space="preserve">
-    <value>Choose log file :</value>
+    <value>Log file:</value>
   </data>
   <data name="LogView_AutoScrolling" xml:space="preserve">
     <value>Auto Scroll</value>
