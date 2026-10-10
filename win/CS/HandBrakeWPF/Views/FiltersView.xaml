@@ -170,8 +170,6 @@
                                 <RowDefinition Height="28" />
                             </Grid.RowDefinitions>
 
-                            <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Reorder.png'}" />
-
                             <!--  Row 1  -->
                             <TextBlock Text="{Binding DisplayName}" Grid.Column="1" Margin="5,0,0,0" />
 
