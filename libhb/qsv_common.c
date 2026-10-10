@@ -2293,6 +2293,7 @@ static int are_filters_supported(hb_list_t *filters)
         hb_filter_object_t *filter = hb_list_item(filters, i);
         switch (filter->id)
         {
+            case HB_FILTER_ADAPTER:
             // pixel format conversion is done via VPP filter
             case HB_FILTER_FORMAT:
             // cropping and scaling always done via VPP filter
@@ -2302,8 +2303,8 @@ static int are_filters_supported(hb_list_t *filters)
                 break;
             case HB_FILTER_VFR:
             {
-                // Mode 0 doesn't require access to the frame data
-                int mode = hb_dict_get_int(filter->settings, "mode");
+                // Frame drop mode 0 doesn't require access to the frame data
+                int mode = hb_dict_get_int(filter->settings, "frame-drop-mode");
                 if (mode == 0)
                 {
                     break;
@@ -3833,7 +3834,7 @@ hb_qsv_context_t * hb_qsv_context_init()
     {
         return 0;
     }
-  
+
     hb_qsv_context_t *ctx = av_mallocz(sizeof(hb_qsv_context_t));
     if (!ctx)
     {

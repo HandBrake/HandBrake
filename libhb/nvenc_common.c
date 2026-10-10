@@ -297,9 +297,10 @@ static int hb_nvenc_are_filters_supported(hb_list_t *filters)
 
         switch (filter->id)
         {
+            case HB_FILTER_ADAPTER:
             case HB_FILTER_VFR:
                 // Mode 0 doesn't require access to the frame data
-                supported = hb_dict_get_int(filter->settings, "mode") == 0;
+                supported = hb_dict_get_int(filter->settings, "frame-drop-mode") == 0;
                 break;
             case HB_FILTER_FORMAT:
             case HB_FILTER_AVFILTER:

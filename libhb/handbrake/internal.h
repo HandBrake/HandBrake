@@ -438,6 +438,7 @@ enum
     WORK_ENCAVSUB
 };
 
+extern hb_filter_object_t hb_filter_adapter;
 extern hb_filter_object_t hb_filter_detelecine;
 extern hb_filter_object_t hb_filter_comb_detect;
 extern hb_filter_object_t hb_filter_decomb;
