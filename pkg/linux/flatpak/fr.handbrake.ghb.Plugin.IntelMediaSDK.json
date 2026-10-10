@@ -3,7 +3,7 @@
     "branch": "1",
     "runtime": "fr.handbrake.ghb",
     "runtime-version": "development",
-    "sdk": "org.gnome.Sdk//49",
+    "sdk": "org.gnome.Sdk//51",
     "build-extension": true,
     "separate-locales": false,
     "modules": [
@@ -12,8 +12,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.8.2.tar.gz",
-                    "sha256": "2e43e538a002574f45d480a24e02297c960963dc7914b7328791d9836832ff43"
+                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.10.2.tar.gz",
+                    "sha256": "94d0038ef92bb65b86d08f004197c56f8d81f82f9ac7a25c202a88afd653a30b"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -39,8 +39,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva/archive/refs/tags/2.22.0.tar.gz",
-                    "sha256": "467c418c2640a178c6baad5be2e00d569842123763b80507721ab87eb7af8735"
+                    "url": "https://github.com/intel/libva/releases/download/2.24.1/libva-2.24.1.tar.bz2",
+                    "sha256": "eec6050b52876f229bd35e9df17cd31a06785e18e6f7990c445b584628483d67"
                 }
             ],
             "no-autogen": false,
@@ -55,8 +55,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.22.0.tar.gz",
-                    "sha256": "7b57615c130427ec134bb5d2b80af516ce5bb19a40e89b1dab46a0d59760d96c"
+                    "url": "https://github.com/intel/libva-utils/releases/download/2.24.0/libva-utils-2.24.0.tar.bz2",
+                    "sha256": "7f066b33f369bdfb5d8f7644d623b4263acc230a438ee380473450d687e3faa8"
                 }
             ],
             "no-autogen": false,
@@ -71,8 +71,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-25.3.4.tar.gz",
-                    "sha256": "ef9a7a0881b250d23df7d4676341a3729b28887bcf404a74d48db5f44ffa0220"
+                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-26.2.4.tar.gz",
+                    "sha256": "a23185fca05c8fa8bdec09ea9ee8a20361163c87035ec978de4e2bb048a55534"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -145,7 +145,7 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/vpl-gpu-rt/archive/refs/tags/intel-onevpl-25.2.6.tar.gz",
+                    "url": "https://github.com/intel/vpl-gpu-rt/archive/refs/tags/intel-onevpl-26.2.4.tar.gz",
                     "sha256": "d236ede2ab87063d0d8d52932779ff446a885b8dc4ef840d1a756c6776ef6fef"
                 },
                 {
