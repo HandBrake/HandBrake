@@ -84,6 +84,8 @@
 #define NLMEANS_SORT(a,b) { if (a > b) NLMEANS_SWAP(a, b); }
 #define NLMEANS_SWAP(a,b) { a = (a ^ b); b = (a ^ b); a = (b ^ a); }
 
+#define NLMEANS_STRENGTH_MAX 63
+#define NLMEANS_PATCH_SIZE_MAX 15
 #define NLMEANS_FRAMES_MAX  32
 #define NLMEANS_EXPSIZE     128
 
@@ -339,10 +341,12 @@ static int nlmeans_init(hb_filter_object_t *filter,
 
         // Sanitize
         if (pv->strength[c] < 0)        { pv->strength[c] = 0; }
+        if (pv->strength[c] > NLMEANS_STRENGTH_MAX) { pv->strength[c] = NLMEANS_STRENGTH_MAX; }
         if (pv->origin_tune[c] < 0.01)  { pv->origin_tune[c] = 0.01; } // avoid black artifacts
         if (pv->origin_tune[c] > 1)     { pv->origin_tune[c] = 1; }
         if (pv->patch_size[c] % 2 == 0) { pv->patch_size[c]--; }
         if (pv->patch_size[c] < 1)      { pv->patch_size[c] = 1; }
+        if (pv->patch_size[c] > NLMEANS_PATCH_SIZE_MAX) { pv->patch_size[c] = NLMEANS_PATCH_SIZE_MAX; }
         if (pv->range[c] % 2 == 0)      { pv->range[c]--; }
         if (pv->range[c] < 1)           { pv->range[c] = 1; }
         if (pv->nframes[c] < 1)         { pv->nframes[c] = 1; }
