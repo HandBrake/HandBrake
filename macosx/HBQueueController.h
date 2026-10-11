@@ -30,7 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (IBAction)removeAll:(id)sender;
 - (IBAction)removeCompleted:(id)sender;
 
+- (IBAction)relinkQueue:(id)sender;
+
 @end
 
 NS_ASSUME_NONNULL_END
-
