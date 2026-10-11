@@ -204,7 +204,7 @@
     SEL action = menuItem.action;
 
     if (action == @selector(toggleStartCancel:) || action == @selector(togglePauseResume:) ||
-        action == @selector(exportQueue:))
+        action == @selector(exportQueue:) || action == @selector(relinkQueue:))
     {
         // Delegate the validation to the queue controller
         return [self.queueController validateMenuItem:menuItem];
@@ -311,6 +311,11 @@
 - (IBAction)exportQueue:(id)sender
 {
     [self.queueController exportQueue:sender];
+}
+
+- (IBAction)relinkQueue:(id)sender
+{
+    [self.queueController relinkQueue:sender];
 }
 
 #pragma mark - Presets Menu actions

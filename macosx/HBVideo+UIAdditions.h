@@ -31,6 +31,7 @@
 @property (nonatomic, readonly) double qualityMinValue;
 @property (nonatomic, readonly) double qualityMaxValue;
 @property (nonatomic, readonly) BOOL isConstantQualitySupported;
+@property (nonatomic, readonly) double defaultQualityValue;
 
 @end
 

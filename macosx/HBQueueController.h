@@ -32,8 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (IBAction)importQueue:(id)sender;
 - (IBAction)exportQueue:(id)sender;
+- (IBAction)relinkQueue:(id)sender;
 
 @end
 
 NS_ASSUME_NONNULL_END
-

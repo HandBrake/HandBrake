@@ -14,6 +14,7 @@
 #import "HBQueueDetailsViewController.h"
 #import "HBQueueInfoViewController.h"
 #import "HBQueueMultiSelectionViewController.h"
+#import "HBQueueRelinkWindowController.h"
 
 #import "HBQueueToolbarDelegate.h"
 
@@ -31,6 +32,7 @@
 @property (nonatomic) NSViewController *containerViewController;
 @property (nonatomic) HBQueueInfoViewController *infoViewController;
 @property (nonatomic) HBQueueMultiSelectionViewController *multiSelectionViewController;
+@property (nonatomic) HBQueueRelinkWindowController *relinkWindowController;
 
 @property (nonatomic) HBQueueToolbarDelegate *toolbarDelegate;
 
@@ -214,6 +216,10 @@
 
     if (action == @selector(toggleStartCancel:))
     {
+        if (self.relinkWindowController)
+        {
+            return NO;
+        }
         if (self.queue.isEncoding)
         {
             menuItem.title = NSLocalizedString(@"Stop Encoding", @"Queue -> start/stop menu");
@@ -266,6 +272,10 @@
     {
         return self.queue.items.count > 0;
     }
+    else if (action == @selector(relinkQueue:))
+    {
+        return self.canRelinkQueue;
+    }
 
     return YES;
 }
@@ -274,7 +284,7 @@
 {
     if (action == @selector(toggleStartCancel:) || action == @selector(_touchBar_toggleStartCancel:))
     {
-        return self.queue.isEncoding || self.queue.canEncode;
+        return !self.relinkWindowController && (self.queue.isEncoding || self.queue.canEncode);
     }
     else if (action == @selector(togglePauseResume:))
     {
@@ -688,6 +698,11 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
  */
 - (IBAction)toggleStartCancel:(id)sender
 {
+    if (self.relinkWindowController)
+    {
+        [self showWindow:sender];
+        return;
+    }
     // Rip or Cancel ?
     if (self.queue.isEncoding)
     {
@@ -976,6 +991,55 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
             [url stopAccessingSecurityScopedResource];
         }
     }];
+
+#pragma mark - Relinking
+
+- (BOOL)canRelinkQueue
+{
+    if (self.relinkWindowController || self.queue.isEncoding || (self.isWindowLoaded && self.window.attachedSheet))
+    {
+        return NO;
+    }
+    BOOL hasJobs = NO;
+    for (id<HBQueueItem> item in self.queue.items)
+    {
+        if (item.state == HBQueueItemStateRescanning)
+        {
+            return NO;
+        }
+        hasJobs |= [item isKindOfClass:HBQueueJobItem.class];
+    }
+    return hasJobs;
+}
+
+- (IBAction)relinkQueue:(id)sender
+{
+    if (!self.canRelinkQueue)
+    {
+        return;
+    }
+    NSMutableArray<HBQueueJobItem *> *items = [NSMutableArray array];
+    NSMutableArray<HBJob *> *jobs = [NSMutableArray array];
+    for (HBQueueJobItem *item in self.queue.items)
+    {
+        if ([item isKindOfClass:HBQueueJobItem.class])
+        {
+            [items addObject:item];
+            [jobs addObject:item.job];
+        }
+    }
+    [self showWindow:sender];
+    self.relinkWindowController = [[HBQueueRelinkWindowController alloc] initWithJobs:jobs];
+    [self.relinkWindowController beginSheetForWindow:self.window completionHandler:^(NSModalResponse response) {
+        NSError *error = nil;
+        if (response == NSModalResponseOK && ![self.queue replaceJobs:self.relinkWindowController.jobs forItems:items error:&error])
+        {
+            [self presentError:error];
+        }
+        self.relinkWindowController = nil;
+        [self updateUI];
+    }];
+    [self updateUI];
 }
 
 @end

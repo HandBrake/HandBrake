@@ -242,6 +242,20 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     return [self.destinationFolderURL URLByAppendingPathComponent:self.destinationFileName isDirectory:NO];
 }
 
+- (void)relinkSourceToURL:(NSURL *)sourceURL
+{
+    NSParameterAssert(sourceURL);
+
+    _fileURL = [sourceURL copy];
+    _title = nil;
+    self.range.title = nil;
+
+#ifdef __SANDBOX_ENABLED__
+    // Re-selecting the same path can grant new sandbox access too.
+    _fileURLBookmark = nil;
+#endif
+}
+
 - (void)setContainer:(int)container
 {
     if (container != _container)

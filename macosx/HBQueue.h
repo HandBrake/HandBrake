@@ -68,6 +68,9 @@ typedef NS_ENUM(NSInteger, HBQueueError) {
 
 - (void)prepareItemForEditingAtIndex:(NSUInteger)index;
 
+/// Replaces settings of inactive items, notifies observers, and saves the queue.
+- (BOOL)replaceJobs:(NSArray<HBJob *> *)jobs forItems:(NSArray<HBQueueJobItem *> *)items error:(NSError **)error;
+
 - (void)removeAllItems;
 - (void)removeCompletedAndCancelledItems;
 - (void)removeNotWorkingItems;

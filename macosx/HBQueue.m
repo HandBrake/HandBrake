@@ -424,6 +424,80 @@ static void powerSourceCallback(void *context)
     [self updateStats];
 }
 
+- (BOOL)replaceJobs:(NSArray<HBJob *> *)jobs forItems:(NSArray<HBQueueJobItem *> *)items error:(NSError **)error
+{
+    NSParameterAssert(jobs.count == items.count);
+    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+    NSMutableArray<HBJob *> *previousJobs = [NSMutableArray array];
+    for (HBQueueJobItem *item in items)
+    {
+        NSUInteger index = [self.itemsInternal indexOfObjectIdenticalTo:item];
+        if (index == NSNotFound || item.state == HBQueueItemStateWorking || item.state == HBQueueItemStateRescanning)
+        {
+            if (error)
+            {
+                *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:@{
+                    NSLocalizedDescriptionKey: NSLocalizedString(@"The queue changed while relinking. Please try again.", @"Queue relink error")}];
+            }
+            return NO;
+        }
+        [indexes addIndex:index];
+        [previousJobs addObject:item.job];
+    }
+
+    // Check the resulting queue, including jobs added while the relink sheet was open.
+    NSMapTable<HBQueueJobItem *, HBJob *> *replacements = [NSMapTable strongToStrongObjectsMapTable];
+    for (NSUInteger index = 0; index < items.count; index++)
+    {
+        [replacements setObject:jobs[index] forKey:items[index]];
+    }
+    NSMutableSet<NSString *> *sources = [NSMutableSet set];
+    NSCountedSet<NSString *> *destinations = [[NSCountedSet alloc] init];
+    for (HBQueueJobItem *item in self.itemsInternal)
+    {
+        if ([item isKindOfClass:HBQueueJobItem.class])
+        {
+            HBJob *job = [replacements objectForKey:item] ?: item.job;
+            [sources addObject:job.fileURL.URLByResolvingSymlinksInPath.path];
+            if (job.destinationURL)
+            {
+                [destinations addObject:job.destinationURL.URLByResolvingSymlinksInPath.path];
+            }
+        }
+    }
+    for (NSUInteger index = 0; index < jobs.count; index++)
+    {
+        NSURL *destination = jobs[index].destinationURL;
+        NSString *path = destination.URLByResolvingSymlinksInPath.path;
+        BOOL destinationChanged = ![destination isEqual:items[index].destinationURL];
+        if (path && ([sources containsObject:path] ||
+                     (destinationChanged && ([destinations countForObject:path] > 1 ||
+                                             [NSFileManager.defaultManager fileExistsAtPath:destination.path]))))
+        {
+            if (error)
+            {
+                *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileWriteFileExistsError userInfo:@{
+                    NSLocalizedDescriptionKey: NSLocalizedString(@"Relinking would overwrite a source, an existing file, or another job's destination. Choose a different destination folder.", @"Queue relink destination conflict"),
+                    NSURLErrorKey: destination}];
+            }
+            return NO;
+        }
+    }
+    for (NSUInteger index = 0; index < items.count; index++)
+    {
+        [items[index] replaceJob:jobs[index]];
+    }
+    [[self.undoManager prepareWithInvocationTarget:self] replaceJobs:previousJobs forItems:items error:NULL];
+    if (!self.undoManager.isUndoing)
+    {
+        [self.undoManager setActionName:NSLocalizedString(@"Relink Queue Items", @"Queue undo action name")];
+    }
+    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeItemNotification object:self
+                                                  userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
+    [self save];
+    return YES;
+}
+
 - (void)removeItemsAtIndexes:(NSIndexSet *)indexes
 {
     NSParameterAssert(indexes);

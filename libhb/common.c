@@ -1872,6 +1872,87 @@ const char* hb_video_quality_get_name(uint32_t codec)
     }
 }
 
+float hb_video_quality_get_default(uint32_t codec)
+{
+    switch (codec)
+    {
+        case HB_VCODEC_X264_8BIT:
+        case HB_VCODEC_X264_10BIT:
+        case HB_VCODEC_X265_8BIT:
+        case HB_VCODEC_X265_10BIT:
+        case HB_VCODEC_X265_12BIT:
+        case HB_VCODEC_X265_16BIT:
+            return 18.;
+
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return 30.;
+
+        case HB_VCODEC_FFMPEG_VP8:
+            return 14.;
+
+        case HB_VCODEC_FFMPEG_VP9:
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
+            return 26.;
+
+        case HB_VCODEC_FFMPEG_MPEG2:
+        case HB_VCODEC_FFMPEG_MPEG4:
+            return 3.;
+
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+        case HB_VCODEC_FFMPEG_NVENC_H264_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
+            return 27.;
+
+        case HB_VCODEC_FFMPEG_VCE_H264:
+        case HB_VCODEC_FFMPEG_VCE_H265:
+        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
+        case HB_VCODEC_FFMPEG_VCE_AV1:
+        case HB_VCODEC_FFMPEG_VCE_AV1_10BIT:
+            return 25.;
+
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            return 60.;
+
+        case HB_VCODEC_FFMPEG_DNXHR:
+        case HB_VCODEC_FFMPEG_DNXHR_10BIT:
+        case HB_VCODEC_FFMPEG_FFV1:
+        case HB_VCODEC_FFMPEG_PRORES:
+        case HB_VCODEC_VT_PRORES:
+            return 0.;
+
+        case HB_VCODEC_FFMPEG_MF_H264:
+        case HB_VCODEC_FFMPEG_MF_H265:
+        case HB_VCODEC_FFMPEG_MF_AV1:
+            return 22.;
+
+        case HB_VCODEC_FFMPEG_QSV_H264:
+        case HB_VCODEC_FFMPEG_QSV_H265:
+        case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
+        case HB_VCODEC_FFMPEG_QSV_AV1:
+        case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
+            return 25.;
+
+        case HB_VCODEC_FFMPEG_VAAPI_VP8:
+        case HB_VCODEC_FFMPEG_VAAPI_VP9:
+        case HB_VCODEC_FFMPEG_VAAPI_H264:
+        case HB_VCODEC_FFMPEG_VAAPI_H265:
+        case HB_VCODEC_FFMPEG_VAAPI_AV1:
+            return 25.;
+
+        case HB_VCODEC_THEORA:
+            return 50.;
+
+        default:
+            return HB_INVALID_VIDEO_QUALITY;
+    }
+}
+
 int hb_video_quality_is_supported(uint32_t codec)
 {
     switch (codec)

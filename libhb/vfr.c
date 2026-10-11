@@ -38,6 +38,7 @@ struct hb_filter_private_s
     int             count_frames;       // frames output so far
     double          frame_duration;     // 90KHz ticks per frame (for CFR/PFR)
     double          out_last_stop;      // where last frame ended (for CFR/PFR)
+    double          cfr_stop;           // where a frame would have ended if CFR
     int             drops;              // frames dropped (for CFR/PFR)
     int             dups;               // frames duped (for CFR/PFR)
 
@@ -251,7 +252,14 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
         }
         else
         {
-            pv->frame_metric[count - 1] = 1;
+            // Compute a simpler metric, the difference between where
+            // a timestamp would be if the frame rate were costant
+            // and where it's currently is.
+            while (penultimate->s.start > pv->cfr_stop)
+            {
+                pv->cfr_stop += pv->frame_duration;
+            }
+            pv->frame_metric[count - 2] = penultimate->s.start - pv->cfr_stop;
         }
 
         if (count < pv->frame_analysis_depth)
@@ -285,7 +293,7 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
         out = hb_list_item(pv->frame_rate_list, drop_frame);
 
 #if defined(HB_DEBUG_CFR_DROPS)
-        hb_log("CFR Drop: %ld metric %d", out->s.pcr, (int)pv->frame_metric[drop_frame]);
+        hb_log("CFR Drop: %"PRId64" metric %d", out->s.pcr, (int)pv->frame_metric[drop_frame]);
         int jj;
         for (jj = 0; jj < count; jj++)
         {
@@ -312,7 +320,7 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
 
 #if defined(HB_DEBUG_CFR_DROPS)
     static int64_t lastpass = 0;
-    hb_log("CFR Pass: %ld ~ %ld metric %d", out->s.pcr, out->s.pcr - lastpass, (int)pv->frame_metric[0]);
+    hb_log("CFR Pass: %"PRId64"~ %"PRId64" metric %d", out->s.pcr, out->s.pcr - lastpass, (int)pv->frame_metric[0]);
     lastpass = out->s.pcr;
 #endif
 
@@ -494,6 +502,7 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     }
     pv->frame_duration = (double)pv->vrate.den * 90000. / pv->vrate.num;
     pv->out_last_stop  = (int64_t)AV_NOPTS_VALUE;
+    pv->cfr_stop       = 0;
     init->cfr          = pv->cfr;
 
     return 0;
