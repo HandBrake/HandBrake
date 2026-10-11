@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) HBJob *job;
 
+- (void)replaceJob:(HBJob *)job;
+
 /// Current state of the job.
 @property (nonatomic) HBQueueItemState state;
 

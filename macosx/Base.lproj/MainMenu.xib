@@ -118,6 +118,12 @@
                                     <action selector="addAllTitlesToQueue:" target="-1" id="zTW-SV-C4n"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Relink Queue Items…" id="qRl-Pt-Qu3">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="relinkQueue:" target="-1" id="aRl-Qu-e03"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="Kee-pg-bfk">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
