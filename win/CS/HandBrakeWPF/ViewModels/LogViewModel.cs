@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
@@ -132,6 +133,24 @@ namespace HandBrakeWPF.ViewModels
             catch (Exception exc)
             {
                 this.errorService.ShowError(Resources.Clipboard_Unavailable, Resources.Clipboard_Unavailable_Solution, exc);
+            }
+        }
+
+        public void ClearCompleted()
+        {
+            List<LogFile> localCopy = this.LogFiles.ToList();
+
+            foreach (var checkLog in localCopy)
+            {
+                if (checkLog.IsComplete)
+                {
+                    this.LogFiles.Remove(checkLog);
+                }
+            }
+
+            if (this.SelectedLogFile == null && this.LogFiles.Any())
+            {
+                this.SelectedLogFile = this.LogFiles.LastOrDefault();
             }
         }
 
@@ -287,6 +306,8 @@ namespace HandBrakeWPF.ViewModels
         {
             lock (readLockObject)
             {
+                this.SelectedLogFile = null; // Fix for the ComboBox resetting this later as we have to rebuild the collection here.
+
                 BindingList<string> activeLogs = new BindingList<string>(this.logInstanceManager.GetLogFiles());
                 BindingList<LogFile> logfiles = new BindingList<LogFile>();
 

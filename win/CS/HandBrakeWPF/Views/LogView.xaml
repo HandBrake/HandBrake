@@ -95,6 +95,7 @@
                                            Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Folder.png'}" />
                                 </MenuItem.Icon>
                             </MenuItem>
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ClearCompleted" Header="{x:Static Properties:Resources.LogView_ClearCompletedLogs}" />
   
                         </ContextMenu>
                     </Button.ContextMenu>
