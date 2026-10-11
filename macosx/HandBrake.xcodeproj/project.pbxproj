@@ -210,6 +210,7 @@
 		A939DD8B1FC8826A00135F2A /* HBPresetsMenuBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */; };
 		A93CD3172C47CAFC00B11335 /* HBTitleSelectionRange.m in Sources */ = {isa = PBXBuildFile; fileRef = A93CD3162C47CAFC00B11335 /* HBTitleSelectionRange.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
+		A94006BA3073FE7900A6E0C3 /* HBAudioQualityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A94006B93073FE7900A6E0C3 /* HBAudioQualityCell.m */; };
 		A942B66D250BB1FE00049203 /* HBQueueActionItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A942B66C250BB1FE00049203 /* HBQueueActionItem.m */; };
 		A94339262BA49E3600C4493F /* HBComboView.m in Sources */ = {isa = PBXBuildFile; fileRef = A94339252BA49E3600C4493F /* HBComboView.m */; };
 		A943874122ED911B005F701B /* HBJob+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A943874022ED911B005F701B /* HBJob+HBAdditions.m */; };
@@ -675,6 +676,8 @@
 		A93E0ED11972957000FD67FB /* HBVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBVideoController.m; sourceTree = "<group>"; };
 		A93FD4731A62ABE800A6AC43 /* HBAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudio.h; sourceTree = "<group>"; };
 		A93FD4741A62ABE800A6AC43 /* HBAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudio.m; sourceTree = "<group>"; };
+		A94006B83073FE7900A6E0C3 /* HBAudioQualityCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAudioQualityCell.h; sourceTree = "<group>"; };
+		A94006B93073FE7900A6E0C3 /* HBAudioQualityCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBAudioQualityCell.m; sourceTree = "<group>"; };
 		A941ACB91CD75B4E0029D06A /* HBHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBHUD.h; sourceTree = "<group>"; };
 		A942B668250BA70400049203 /* HBQueueItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueItem.h; sourceTree = "<group>"; };
 		A942B66B250BB1FE00049203 /* HBQueueActionItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueActionItem.h; sourceTree = "<group>"; };
@@ -2108,6 +2111,8 @@
 				A9B06AB23013B79700DD5627 /* HBFiltersCellView.m */,
 				A9DCE81D306FAC3C008AD20D /* HBActionCellView.h */,
 				A9DCE81E306FAC45008AD20D /* HBActionCellView.m */,
+				A94006B83073FE7900A6E0C3 /* HBAudioQualityCell.h */,
+				A94006B93073FE7900A6E0C3 /* HBAudioQualityCell.m */,
 			);
 			name = "UI Views";
 			sourceTree = "<group>";
@@ -2599,6 +2604,7 @@
 				A954010322FF397000F83A5F /* HBRedirect.m in Sources */,
 				A916C99B1C844A0800C7B560 /* HBTableView.m in Sources */,
 				A916C9991C8449E200C7B560 /* main.m in Sources */,
+				A94006BA3073FE7900A6E0C3 /* HBAudioQualityCell.m in Sources */,
 				A95140932B8F6B1600B446C1 /* HBToolbarItem.m in Sources */,
 				A9C1722B2B8F4E890047C49D /* HBControllerToolbarDelegate.m in Sources */,
 				A942B66D250BB1FE00049203 /* HBQueueActionItem.m in Sources */,

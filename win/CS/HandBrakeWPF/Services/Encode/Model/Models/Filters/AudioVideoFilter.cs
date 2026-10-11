@@ -23,6 +23,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
     {
         private readonly Action changeTrigger;
 
+        public AudioVideoFilter()
+        {
+        }
+
         public AudioVideoFilter(int hbFilter, bool isAudioFilter, FilterPreset preset = null, FilterTune tune = null, string custom = null, Action changeTrigger = null)
         {
             this.changeTrigger = changeTrigger;
@@ -106,7 +110,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
             this.changeTrigger = changeTrigger;
         }
 
-
         public int FilterId => HandBrakeFilterChoice?.FilterId ?? 0;
         
         public HandBrakeFilter HandBrakeFilterChoice { get; set; }
@@ -137,9 +140,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
 
         public bool CanSetPreset => this.AvailablePresets != null && this.AvailablePresets.Any();
         
-        public bool CanSetTune => this.AvailableTunes != null && this.AvailableTunes.Any();
+        public bool CanSetTune => this.AvailableTunes != null && this.AvailableTunes.Any() && !this.IsPresetCustom;
 
         public bool AllowsCustomOptions => this.Preset?.Key?.Contains("custom") ?? false;
+
+        public bool IsPresetCustom => this.Preset?.Key == "custom";
 
         public FilterPreset Preset
         {
@@ -155,7 +160,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
 
                 field = value;
 
-                
                 if (!isCurrentlyCustom && Preset?.Key == "custom" && this.FilterId != 0 && string.IsNullOrEmpty(this.CustomOptions))
                 {
                     this.CustomOptions = HandBrakeFilterHelpers.GetDefaultCustomSettingsStr(this.FilterId);
@@ -164,7 +168,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Filters
                 {
                     this.CustomOptions = string.Empty;
                 }
-                
                 
                 this.NotifyOfPropertyChange(() => this.Preset);
                 this.NotifyOfPropertyChange(() => this.CanSetTune);

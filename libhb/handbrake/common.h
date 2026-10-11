@@ -540,6 +540,7 @@ const char * hb_audio_name_generate_s(const char *name,
 
 void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 const char* hb_video_quality_get_name(uint32_t codec);
+float       hb_video_quality_get_default(uint32_t codec);
 
 int         hb_video_quality_is_supported(uint32_t codec);
 int         hb_video_bitrate_is_supported(uint32_t codec);

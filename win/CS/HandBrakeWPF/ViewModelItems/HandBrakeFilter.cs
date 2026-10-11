@@ -16,7 +16,10 @@ namespace HandBrakeWPF.ViewModelItems
 
     public class HandBrakeFilter
     {
-        
+        public HandBrakeFilter()
+        {
+        }
+
         public HandBrakeFilter(HBFilter filter)
         {
             FilterId = filter.FilterId;
@@ -32,12 +35,12 @@ namespace HandBrakeWPF.ViewModelItems
 
         }
         
-        public int FilterId { get; private set; }
-        
-        public string ShortName { get; private set; }
+        public int FilterId { get; set; }
 
-        public string DisplayName { get; private set; }
-        
-        public string Category { get; private set; }
+        public string ShortName { get; set; }
+
+        public string DisplayName { get; set; }
+
+        public string Category { get; set; }
     }
 }

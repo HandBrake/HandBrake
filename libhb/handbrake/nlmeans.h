@@ -28,6 +28,7 @@ typedef struct
                            int    n);
 } NLMeansFunctions;
 
-void nlmeans_init_x86(NLMeansFunctions *functions);
+void nlmeans_init_x86(NLMeansFunctions *functions,
+                             const int  depth);
 
 #endif // HANDBRAKE_NLMEANS_H

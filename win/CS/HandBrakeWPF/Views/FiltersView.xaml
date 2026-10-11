@@ -170,8 +170,6 @@
                                 <RowDefinition Height="28" />
                             </Grid.RowDefinitions>
 
-                            <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Reorder.png'}" />
-
                             <!--  Row 1  -->
                             <TextBlock Text="{Binding DisplayName}" Grid.Column="1" Margin="5,0,0,0" />
 
@@ -183,7 +181,7 @@
                                       ItemsSource="{Binding AvailableTunes}" SelectedItem="{Binding Tune}" Visibility="{Binding CanSetTune, Converter={StaticResource boolToVisConverter}}"
                                       AutomationProperties.Name="{x:Static Properties:Resources.FilterView_Tune}" />
 
-                            <TextBox Text="{Binding CustomOptions}" Grid.Column="4" Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="{x:Static Properties:Resources.AVFilterView_CustomOptionsTooltip}"
+                            <TextBox Text="{Binding CustomOptions}" Grid.Column="4" Margin="5,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" ToolTip="{x:Static Properties:Resources.AVFilterView_CustomOptionsTooltip}"
                                      Visibility="{Binding AllowsCustomOptions, Converter={StaticResource boolToVisConverter}}"
                                      AutomationProperties.Name="{x:Static Properties:Resources.FilterView_Custom}" />
                         </Grid>

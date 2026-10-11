@@ -915,7 +915,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Close</value>
   </data>
   <data name="Generic_CopyToClipboard" xml:space="preserve">
-    <value>Copy to Clipboard</value>
+    <value>Copy</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
     <value>Move Left</value>
@@ -927,7 +927,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Save</value>
   </data>
   <data name="LogView_CopyClipboard" xml:space="preserve">
-    <value>Copy to clipboard</value>
+    <value>Copy</value>
   </data>
   <data name="LogView_EncodeLog" xml:space="preserve">
     <value>Encode Log</value>
@@ -2959,7 +2959,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Add to Queue - Quality Sweep</value>
   </data>
   <data name="LogView_ChooseLogFile" xml:space="preserve">
-    <value>Choose log file :</value>
+    <value>Log file:</value>
   </data>
   <data name="LogView_AutoScrolling" xml:space="preserve">
     <value>Auto Scroll</value>
