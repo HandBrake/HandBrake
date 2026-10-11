@@ -56,7 +56,42 @@ namespace HandBrakeWPF.ViewModels
 
         public event EventHandler LogResetEvent;
 
+        private string searchText = string.Empty;
+
         public string ActivityLog => this.log.ToString();
+
+        public string SearchText
+        {
+            get => this.searchText;
+            set
+            {
+                if (value == this.searchText)
+                {
+                    return;
+                }
+
+                this.searchText = value;
+                this.NotifyOfPropertyChange(() => this.SearchText);
+            }
+        }
+
+        public bool MatchesFilter(string line)
+        {
+            string filter = this.SearchText;
+            return string.IsNullOrEmpty(filter) || (line != null && line.Contains(filter, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public string GetFilteredLog()
+        {
+            string full = this.ActivityLog.TrimStart();
+            if (string.IsNullOrEmpty(this.SearchText))
+            {
+                return full;
+            }
+
+            var lines = full.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).Where(this.MatchesFilter);
+            return string.Join(Environment.NewLine, lines) + Environment.NewLine;
+        }
 
         public BindingList<LogFile> LogFiles { get; private set; }
 
