@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -897,9 +897,6 @@ Sugestie: Comportamentul de suprascriere a fișierelor poate fi controlat în pr
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
     <value>Claritatea tonului</value>
-  </data>
-  <data name="FiltersView_Tune" xml:space="preserve">
-    <value>Tonul:</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
     <value>Adaugă</value>
@@ -2294,7 +2291,7 @@ Te rugăm să alegi o altă presetare.</value>
     <value>Oprește</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Numele categoriei introdus există deja. Te rugăm să alegi un alt nume.</value>
@@ -2719,9 +2716,6 @@ Alternativ, bifează caseta de selectare „Utilizează un player extern” de m
   <data name="QueueStats_ShortOutputStats" xml:space="preserve">
     <value>Ieșire: {0}, avg (media) {1} fps/(de) fps-uri</value>
   </data>
-  <data name="PresetPane_Desc" xml:space="preserve">
-    <value>Descrierea presetării:</value>
-  </data>
   <data name="PresetPane_HidePresetDesc" xml:space="preserve">
     <value>Ascunde descrierea presetării</value>
   </data>
@@ -2864,16 +2858,16 @@ Pentru a permite mai multe codări simultane, activează „Izolarea proceselor�
     <value>Deschide fereastra jurnalului</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Personalizat</value>
@@ -3042,5 +3036,8 @@ Dorești să continui?</value>
   </data>
   <data name="VideoView_SameAsSource" xml:space="preserve">
     <value>Aceeași ca sursa</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Tonul:</value>
   </data>
 </root>

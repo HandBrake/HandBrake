@@ -70,6 +70,11 @@
         <Setter Property="FontSize" Value="11" />
     </Style>
 
+    <Style x:Key="subTextSmallest" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontWeight" Value="UltraLight" />
+        <Setter Property="FontSize" Value="11" />
+    </Style>
+
     <Style x:Key="sectionHeader" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontSize" Value="12" />

@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -898,9 +898,6 @@ Tips: Beteendet för filöverskrivning kan styras i inställningarna.</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
     <value>Justera sharpen</value>
-  </data>
-  <data name="FiltersView_Tune" xml:space="preserve">
-    <value>Justering:</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
     <value>Lägg till</value>
@@ -2295,7 +2292,7 @@ Välj ett annat förval.</value>
     <value>Stoppa</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Kategorinamnet du angav finns redan. Välj ett annat namn.</value>
@@ -2718,9 +2715,6 @@ Alternativt, välj kryssrutan 'Använd extern uppspelare' nedan.</value>
   <data name="QueueStats_ShortOutputStats" xml:space="preserve">
     <value>Utdata: {0}, genomsnitt {1} bilder/s</value>
   </data>
-  <data name="PresetPane_Desc" xml:space="preserve">
-    <value>Förvalsbeskrivning:</value>
-  </data>
   <data name="PresetPane_HidePresetDesc" xml:space="preserve">
     <value>Dölj beskrivning av förval</value>
   </data>
@@ -2863,16 +2857,16 @@ För att tillåta flera samtidiga kodningar, aktivera "Processisolering" i Verkt
     <value>Öppna loggfönstret</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Anpassad</value>
@@ -3040,5 +3034,8 @@ Vill du fortsätta?</value>
   </data>
   <data name="VideoView_SameAsSource" xml:space="preserve">
     <value>Samma som källa</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Justering:</value>
   </data>
 </root>
