@@ -333,6 +333,12 @@ fail:
         preset[@"PictureSharpenTune"]   = self.tune;
         preset[@"PictureSharpenCustom"] = self.custom;
     }
+    else if (self.filterID == HB_FILTER_DLSSNR)
+    {
+        preset[@"PictureDLSSNRPreset"] = self.preset;
+        preset[@"PictureDLSSNRTune"]   = self.tune;
+        preset[@"PictureDLSSNRCustom"] = self.custom;
+    }
     else if (self.filterID == HB_FILTER_DEBLOCK)
     {
         preset[@"PictureDeblockPreset"] = self.preset;

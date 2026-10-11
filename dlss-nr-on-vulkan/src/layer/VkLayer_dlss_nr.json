@@ -1,0 +1,17 @@
+{
+    "file_format_version": "1.2.1",
+    "layer": {
+        "name": "VK_LAYER_dlssnr_intel",
+        "type": "GLOBAL",
+        "library_path": "LIBRARY_PATH_PLACEHOLDER",
+        "library_arch": "64",
+        "api_version": "1.3.0",
+        "implementation_version": "1",
+        "description": "DLSS-NR on Intel Xe2: captures the presented frame",
+        "functions": {
+            "vkNegotiateLoaderLayerInterfaceVersion": "vkNegotiateLoaderLayerInterfaceVersion"
+        },
+        "enable_environment": { "ENABLE_NR_LAYER": "1" },
+        "disable_environment": { "DISABLE_NR_LAYER": "1" }
+    }
+}

@@ -1,0 +1,191 @@
+#!/usr/bin/env python3
+"""nr-toggle — one switch for the neural rendering, made to live on a key.
+
+`nr-ctl` is a console: it needs a terminal, and a terminal needs the game to lose focus.
+This is the other half — a single flip with a desktop notification for an answer, small
+enough and fast enough to bind to a key that works while the game is fullscreen.
+
+    src/layer/nr-toggle                 flip the effect
+    src/layer/nr-toggle on | off        set it, for a script
+    src/layer/nr-toggle temporal        flip the temporal path, to see the flicker
+    src/layer/nr-toggle status
+    src/layer/nr-toggle install         show the two commands and open the key settings
+
+On Wayland an application cannot grab a key for itself, and reading `/dev/input`
+directly needs the `input` group. The compositor is the only thing that sees a key while
+a fullscreen game has focus, so the binding has to be a desktop global shortcut — and it
+has to be made by the desktop's own settings, not by this script. See `install`: doing it
+from here crashed KWin, and the crash is worth reading about before anyone tries again.
+"""
+import os
+import pathlib
+import subprocess
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import nr_paths                                                        # noqa: E402
+
+HERE = pathlib.Path(__file__).resolve()
+DESKTOPS = pathlib.Path(os.environ.get("XDG_DATA_HOME", pathlib.Path.home() / ".local/share")) / "applications"
+SHORTCUTS = (
+    # argument to this script, a key worth suggesting, what to call it
+    ("", "Meta+N", "Neural rendering on/off"),
+    ("temporal", "Meta+Shift+N", "Neural rendering: temporal path"),
+)
+
+
+def notify(title, body):
+    """Say it where it can be seen. A fullscreen game covers a terminal; it does not
+    cover the compositor's own notification."""
+    print(f"{title} — {body}")
+    try:
+        subprocess.run(
+            ["notify-send", "-a", "neural rendering", "-t", "1600",
+             # both spellings: the hint that replaces the previous notification in place
+             # rather than stacking one per keypress is server-specific
+             "-h", "string:x-canonical-private-synchronous:nr-toggle",
+             "-h", "string:x-kde-display-appname:neural rendering",
+             title, body],
+            check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=3)
+    except (OSError, subprocess.SubprocessError):
+        pass                                    # a terminal is still an answer
+
+
+def daemon_note():
+    if nr_paths.alive():
+        values = nr_paths.read()
+        scale = values.get("render_scale")
+        history = "" if values.get("temporal", 1) else ", history off"
+        return f"scale {scale}{history}" if scale else f"daemon ready{history}"
+    return "no daemon — start nr_daemon.py"
+
+
+def effect(state=None):
+    if state is None:
+        state = not nr_paths.TRIGGER.exists()
+    if state:
+        nr_paths.TRIGGER.parent.mkdir(parents=True, exist_ok=True)
+        nr_paths.TRIGGER.touch()
+        if not nr_paths.alive():
+            notify("Neural rendering ON", "starting the model...")
+            trouble = nr_paths.start_daemon()
+            if trouble:
+                notify("Neural rendering ON", trouble)
+                return 0
+    else:
+        nr_paths.TRIGGER.unlink(missing_ok=True)
+    notify("Neural rendering ON" if state else "Neural rendering off", daemon_note())
+    return 0
+
+
+def temporal():
+    values = nr_paths.read()
+    # Absent means the daemon's own default, which is on. Flipping an absent knob has to
+    # mean "off", or the first press would look like it did nothing.
+    now = float(values.get("temporal", 1.0)) > 0
+    values["temporal"] = 0.0 if now else 1.0
+    nr_paths.write(values)
+    notify("Temporal path off" if now else "Temporal path ON",
+           "the picture will flicker again" if now
+           else "previous frame carried forward, gated per pixel")
+    return 0
+
+
+def status():
+    values = nr_paths.read()
+    print(f"  effect     {'ON' if nr_paths.TRIGGER.exists() else 'off'}  ({nr_paths.TRIGGER})")
+    print(f"  daemon     {'listening' if nr_paths.alive() else 'not answering'}  ({nr_paths.SOCKET})")
+    print(f"  temporal   {values.get('temporal', '(daemon default: 1)')}")
+    print(f"  hold       {values.get('hold', '(daemon default: 1)')}")
+    print(f"  scale      {values.get('render_scale', '(daemon default)')}")
+    for argument, _key, name in SHORTCUTS:
+        bound = bound_key(argument)
+        print(f"  key        {bound or 'not bound'}  ->  {name}")
+    return 0
+
+
+# --------------------------------------------------------------------------
+# binding it to a key, which on Wayland only the compositor can do
+# --------------------------------------------------------------------------
+def launcher_command(argument):
+    return f"{HERE} {argument}".rstrip()
+
+
+def bound_key(argument):
+    """Whichever key the user gave this command, found the way it was actually stored.
+
+    System Settings writes its own launcher into `~/.local/share/applications` and names
+    the shortcut after that file, so the only reliable link back is the `Exec` line.
+    """
+    want = launcher_command(argument)
+    for entry in sorted(DESKTOPS.glob("*.desktop")):
+        try:
+            text = entry.read_text()
+        except OSError:
+            continue
+        if f"Exec={want}\n" not in text and not text.rstrip().endswith(f"Exec={want}"):
+            continue
+        for tool in ("kreadconfig6", "kreadconfig5"):
+            try:
+                got = subprocess.run([tool, "--file", "kglobalshortcutsrc", "--group", "services",
+                                      "--group", entry.name, "--key", "_launch"],
+                                     capture_output=True, text=True, timeout=5)
+            except (OSError, subprocess.SubprocessError):
+                continue
+            if got.returncode == 0 and got.stdout.strip():
+                return got.stdout.strip().split(",")[0]
+    return None
+
+
+def install(_keys=None):
+    """Hand the user the two commands and open the page that binds them.
+
+    This used to register the shortcut itself, over kglobalaccel's D-Bus interface, and
+    **it crashed the compositor**. In Plasma 6.7 the shortcut registry lives *inside*
+    KWin — `org.kde.kglobalaccel` is owned by `kwin_wayland` and
+    `plasma-kglobalaccel.service` is not even running — so a tool that edits
+    `kglobalshortcutsrc`, deletes the launcher and restarts that unit is working behind
+    the back of the live registry. It kept the component, the file under it was gone, and
+    the next keypress went
+
+        Component::uniqueName()  ->  GlobalShortcutsRegistry::processKey  ->  SIGSEGV
+
+    taking the session with it. The registry surviving that is KDE's business; handing it
+    an unsupported lifecycle was ours. `notes/phase55`.
+
+    So: no registration from here. System Settings does it through the path KDE supports,
+    it takes half a minute once, and nothing here can take the desktop down.
+    """
+    print("  Bind these two commands to keys, in System Settings -> Shortcuts -> Add -> Command:\n")
+    for argument, key, name in SHORTCUTS:
+        print(f"    {launcher_command(argument)}")
+        print(f"      {name}   (suggested {key})\n")
+    for settings in ("systemsettings", "systemsettings5"):
+        if subprocess.run(["which", settings], capture_output=True).returncode == 0:
+            subprocess.Popen([settings, "kcm_keys"], stdout=subprocess.DEVNULL,
+                             stderr=subprocess.DEVNULL, start_new_session=True)
+            print("  opening that page now.")
+            break
+    print("  `nr-toggle status` will show the keys once they are set.")
+    return 0
+
+
+def main(argv):
+    words = argv[1:]
+    head = words[0] if words else "toggle"
+    if head in ("toggle", "flip", "effect"):
+        return effect()
+    if head in ("on", "off"):
+        return effect(head == "on")
+    if head in ("temporal", "history", "t"):
+        return temporal()
+    if head == "status":
+        return status()
+    if head in ("install", "keys", "bind"):
+        return install()
+    print(__doc__.strip())
+    return 0 if head in ("help", "-h", "--help") else 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv))

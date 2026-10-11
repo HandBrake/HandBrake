@@ -1,0 +1,1684 @@
+Unknown exception
+bad array new length
+string too long
+bad cast
+bad locale name
+__NGX_ENABLE_OVERRIDE_LOG_PATH
+__NGX_LOG_PATH_OVERRIDE
+App logging hooks successfully initialized
+NGXInitLog
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/common/nvsdk_ngx_common.cpp
+38718415
+Build v%d.%d.%d CL %s
+default
+Built with APP_NAME = %s
+Loaded from path "%ls/%ls"
+Could not determine library path
+unordered_map/set too long
+vector too long
+invalid hash bucket count
+iostream
+iostream stream error
+false
+true
+ios_base::badbit set
+ios_base::failbit set
+ios_base::eofbit set
+invalid string position
+map/set too long
+__NGX_LOG_LEVEL
+Logging to requested file (%S) enabled successfully
+util::setLogFilename
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/common/util-log.cpp
+Warning: Log file directory (%S) appears unwritable.  Logging to file is disabled
+Warning: Log file (%S) exists but is unwritable.  Trying renamed file for logging.
+Warning: Logging to renamed logging file (%S)
+Warning: Could not open any log file in given directory (%S).  Logging to file is disabled
+[%Y-%m-%d %H:%M:%S] 
+WStrToUTF8Str
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/common/util-str_windows.cpp
+UTF8StrToWStr : MultiByteToWideChar failed
+UTF8StrToWStr
+\mfpmp.exe
+SHGetFolderPathW
+OpenSCManagerW
+OpenServiceW
+QueryServiceStatus
+CloseServiceHandle
+CertGetNameStringA
+CryptDecodeObjectEx
+CertFreeCertificateContext
+CertFindCertificateInStore
+CertGetIssuerCertificateFromStore
+CryptMsgGetParam
+CryptQueryObject
+CryptMsgClose
+CertCloseStore
+WinVerifyTrust
+WTHelperProvDataFromStateData
+WTHelperGetProvCertFromChain
+WTHelperGetProvSignerFromChain
+NVIDIA 
+RegQueryValueExW
+RegOpenKeyExW
+RegCloseKey
+Loaded NGXCore from path (%ls)
+NGXLoadLibrary
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/common/nvngx_libmgr_windows.cpp
+Error: Unable to determine calling module
+NVSDK_NGX_D3D11_Init_Ext
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/features/dlssnr/ngx_d3d11.cpp
+Error: Not called from NGX runtime - %S
+NVSDK_NGX_D3D11_Shutdown
+NVSDK_NGX_D3D11_Shutdown1
+NVSDK_NGX_D3D11_CreateFeature
+NVSDK_NGX_D3D11_ReleaseFeature
+NVSDK_NGX_D3D11_EvaluateFeature
+NVSDK_NGX_D3D11_GetScratchBufferSize
+NVSDK_NGX_D3D11_GetFeatureRequirements
+NVSDK_NGX_D3D11_PopulateParameters_Impl
+DLSSNRGetStatsCallback
+DLSSNRComputeScalingRatioCallback
+Error: multiple active Devices present and CreateFeature() didn't specify wanted Device
+CreateFeatureCommon
+C:\dvs\p4\build\sw\devrel\libdev\NGX\snippets\rel_310_8\source\features\dlssnr\ngx_templates.h
+Error: no active Device present; CreateFeature() called before Init()
+Error: Device present but CG2R instance was not initialized
+Error: invalid handle
+ReleaseFeatureCommon
+Error: Device was nullptr
+EvaluateFeatureCommon
+Error: params pointer was null
+GetStatsCommon
+Error: couldn't find initialized instance
+SizeInBytes
+ComputeScalingRatioCommon
+PerfQualityValue
+Error: missing PerfQualityValue for DLSSNR scaling ratio computation
+Error: unsupported PerfQualityValue %u for DLSSNR scaling ratio computation
+DLSSNR.ScalingRatio
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/features/dlssnr/ngx_d3d12.cpp
+NVSDK_NGX_D3D12_Shutdown
+NVSDK_NGX_D3D12_Shutdown1
+NVSDK_NGX_D3D12_CreateFeature
+NVSDK_NGX_D3D12_ReleaseFeature
+NVSDK_NGX_D3D12_EvaluateFeature
+NVSDK_NGX_D3D12_GetScratchBufferSize
+NVSDK_NGX_D3D12_GetFeatureRequirements
+NVSDK_NGX_D3D12_PopulateParameters_Impl
+Error: Device pointer was nullptr
+InitCommon
+m_pDevice: 0x%p->0x%p
+DLSSNR.Style
+config/control-state init
+control change
+DLSSNR: reset temporal history for %s after %s
+`anonymous-namespace'::CG2R_ResetTemporalHistoryOnControlChange
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/features/dlssnr/cg2r.cpp
+dlssnr_prev_output
+DLSSNR: CreateTexture2DResourceCubinFormat(dlssnr_prev_output %ux%u RGBA16F) failed NvAPI_Status=%d
+`anonymous-namespace'::CG2R_CreatePrevOutput
+dlssnr_network_output_scratch
+DLSSNR: CreateTexture2DResourceCubinFormat(dlssnr_network_output_scratch %ux%u RGBA16F) failed NvAPI_Status=%d
+`anonymous-namespace'::CG2R_CreateNetworkOutputScratch
+DLSSNR.Color
+DLSSNR.ColorSubrectBaseX
+DLSSNR.ColorSubrectBaseY
+DLSSNR.ColorSubrectWidth
+DLSSNR.ColorSubrectHeight
+DLSSNR.MVec
+DLSSNR.MVecSubrectBaseX
+DLSSNR.MVecSubrectBaseY
+DLSSNR.MVecSubrectWidth
+DLSSNR.MVecSubrectHeight
+DLSSNR.Depth
+DLSSNR.DepthSubrectBaseX
+DLSSNR.DepthSubrectBaseY
+DLSSNR.DepthSubrectWidth
+DLSSNR.DepthSubrectHeight
+DLSSNR.Output
+DLSSNR.OutputSubrectBaseX
+DLSSNR.OutputSubrectBaseY
+DLSSNR.OutputSubrectWidth
+DLSSNR.OutputSubrectHeight
+DLSSNR.ControlMask
+DLSSNR.ControlMaskSubrectBaseX
+DLSSNR.ControlMaskSubrectBaseY
+DLSSNR.ControlMaskSubrectWidth
+DLSSNR.ControlMaskSubrectHeight
+DLSSNR.UI
+DLSSNR.UISubrectBaseX
+DLSSNR.UISubrectBaseY
+DLSSNR.UISubrectWidth
+DLSSNR.UISubrectHeight
+DLSSNR.UIAlpha
+DLSSNR.UIAlphaSubrectBaseX
+DLSSNR.UIAlphaSubrectBaseY
+DLSSNR.UIAlphaSubrectWidth
+DLSSNR.UIAlphaSubrectHeight
+DLSSNR.Backbuffer
+DLSSNR.BackbufferSubrectBaseX
+DLSSNR.BackbufferSubrectBaseY
+DLSSNR.BackbufferSubrectWidth
+DLSSNR.BackbufferSubrectHeight
+DLSSNR.BidirectionalDistortionField
+DLSSNR.BidirectionalDistortionFieldSubrectBaseX
+DLSSNR.BidirectionalDistortionFieldSubrectBaseY
+DLSSNR.BidirectionalDistortionFieldSubrectWidth
+DLSSNR.BidirectionalDistortionFieldSubrectHeight
+DLSSNR.MVecScaleX
+DLSSNR.MVecScaleY
+DLSSNR.Intensity
+DLSSNR.LocalToneStrength
+DLSSNR.LocalStructureStrength
+DLSSNR.UseAutoMask
+DLSSNR.SkinStructureStrength
+DLSSNR.Reset
+DLSSNR.DepthInverted
+DLSSNR.Enabled
+DLSSNR.UICorrection
+DLSS.Indicator.Invert.X.Axis
+DLSS.Indicator.Invert.Y.Axis
+DLSSNR: PollRuntimeParams - callback is NULL (core did not set it)
+NGXCG2R::PollRuntimeParams
+DLSSNR: PollRuntimeParams - callback returned false
+DLSSNR: Cubin Init failed NvAPI_Status=%d
+NGXCG2R::Init
+DLSSNR: Unsupported GPU architecture 0x%x, minimum required 0x%x
+NGXCG2R::CreateFeature
+CreationNodeMask
+VisibilityNodeMask
+DLSSNR.Width
+DLSSNR.Height
+DLSSNR.Hint.Render.Preset
+DLSSNR: CreateFeature begin requested resolution %ux%u (network %ux%u)
+DLSSNR: Cubin CreateFeature failed NvAPI_Status=%d
+DLSSNR: Failed to set DLSSNR resolution for %ux%u
+DLSSNR: Failed to initialize DLSSNR kernels
+DLSSNR: Created feature %u (output %ux%u, network %ux%u, preset=%d -> %s)
+DLSSNR: DestroyFeature(forceFree) failed after final feature release (status=%d)
+NGXCG2R::ReleaseFeature
+DLSSNR: Released network resources after final feature release
+DLSSNR: Released feature %u
+DLSSNR: EvaluateFeature feature %u has no network manager
+NGXCG2R::EvaluateFeature
+DLSSNR: EvaluateFeature Color=%p MVec=%p Depth=%p Output=%p intensity=%.2f reset=%d
+DLSSNR:   color (%d,%d %dx%d) mvec (%d,%d %dx%d) scale (%.2f,%.2f)
+DLSSNR: Skip feature evaluate: Missing Color or Output parameter
+DLSSNR: enabled=%d localTone=%.3f localStructure=%.3f intensity=%.3f
+DLSSNR: Skip feature evaluate: Invalid Color/Output rect configuration Color=%p subrect=(%u,%u %ux%u) Output=%p subrect=(%u,%u %ux%u)
+DLSSNR: Skip feature evaluate: Invalid network dimensions %ux%u from output %ux%u scale %.3f
+DLSSNR: WARNING: Network size grew past feature size for feature %u (%ux%u -> %ux%u); resizing internal capacity. App should recreate DLSSNR at the new scaling ratio for optimal VRAM use.
+DLSSNR: Failed to resize DLSSNR network for %ux%u
+DLSSNR: WARNING: Network size changed for feature %u within feature capacity (%ux%u active -> %ux%u active, capacity %ux%u). Recreate DLSSNR at the new scaling ratio for optimal VRAM use.
+DLSSNR: Skip feature evaluate: Invalid Backbuffer/active Output rect configuration Backbuffer=%p subrect=(%u,%u %ux%u) Output=%p activeRect=(%u,%u %ux%u)
+dlssnr_original_color
+DLSSNR: Failed to create RGBA16F original color snapshot (%ux%u status=%d)
+DLSSNR: Created RGBA16F original color snapshot (%ux%u)
+weights: %s
+DLSSNR v%d.%d.%d (%s) %s | active %ux%u alloc %ux%u
+DLSSNR v%d.%d.%d (%s) %s | %ux%u
+PostProcess
+cg2r_post_process_kernel
+Copy
+cg2r_copy_kernel
+DLSSNR: loaded kernel [%d] %s (%u bytes, block %ux%ux%u)
+CG2RKernelManager::Init
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/features/dlssnr/cg2r_kernel_manager.cpp
+OBFusedPreBlock
+BSFusedPreBlock
+BSTinlayoutPreBlock
+BSTinlayoutFusedPreBlockFFN
+OBFusedPostBlock
+BSFusedPostBlock
+CCTinlayoutFusedPostBlockSwin1H
+bs_vit_block
+bs_tinlayout_vit_block
+cc_vit_block
+cc_vit_1d_block
+BSUpsampleSkip
+SubtiledSkipBlend
+SubtiledUpsample
+BSTinlayoutUpsampleSkip
+BSTinlayoutGroupedFfnFusedWithUpsample
+BSTinlayoutConvFfnWithUpsample
+CCDecInputUpsample
+BSDownsample
+SubtiledDownsample
+BSFusedConvBlock
+BSGroupedConvBlock
+FusedSubtiledConvBlock
+OBSwinAttention
+none
+DLSSNR: unable to classify timing block '%s' (layer '%s')
+`anonymous-namespace'::BuildTimedBlockRanges
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/features/dlssnr/cg2r_network_manager.cpp
+CG2RNetworkManager::CreateNetwork
+DLSSNR: no network descriptors have embedded weights
+DLSSNR: %zu config(s) available:
+DLSSNR:   [%zu] %s (backbone: %s)
+DLSSNR: weight '%s' (arch_variant '%s') not claimed by any network factory -- check the tag against the dispatch table in cc_network.cpp
+DLSSNR: CG2RFindWeightByPreset(%d) returned null; using descriptor [0] '%s' as last-resort fallback
+CG2RNetworkManager::ResolvePresetToDescriptor
+DLSSNR: weight registry pointed at config '%s' but no matching descriptor was found among %zu; using descriptor [0] '%s' as last-resort fallback
+network
+DLSSNR: %s buffer pool bind requested with no network
+CG2RNetworkManager::EnsureBufferPool
+DLSSNR: %s buffer pool exceeds 4GB (%zu bytes)
+CG2RPool
+DLSSNR: failed to allocate %s buffer pool (%zu bytes, status=%d)
+DLSSNR: failed to clear %s buffer pool (status=%d)
+DLSSNR: failed to get %s buffer pool VA (status=%d)
+DLSSNR: failed to bind %s buffer pool (%zu required, %zu bound): %s
+DLSSNR: BuildActiveNetwork: invalid config index %zu (have %zu descriptors)
+CG2RNetworkManager::BuildActiveNetwork
+DLSSNR: BindSharedState failed in BuildActiveNetwork
+DLSSNR: BuildActiveNetwork config=%s N=%d W=%d H=%d
+DLSSNR: No network factory accepted config '%s'
+DLSSNR: LoadWeights failed for config '%s'
+DLSSNR: Weight heap request raw_tensors=%zu copied_tensors_pending total_aligned=%zu bytes (%.1f MB)
+CG2R: Weight heap size out of range (%zu bytes)
+CG2RWeightHeap
+DLSSNR: CreateBufferResource(CG2RWeightHeap, %zu bytes) failed NvAPI_Status=%d
+CG2RWeightUpload
+DLSSNR: CreateBufferResource(CG2RWeightUpload, %zu bytes) failed NvAPI_Status=%d
+DLSSNR: GetInputBufferVirtualAddress(CG2RWeightHeap) failed NvAPI_Status=%d
+DLSSNR: CopyHostToDeviceBuffer weight '%s' size=%zu offset=%zu failed NvAPI_Status=%d
+DLSSNR: init() failed: %s
+initial
+DLSSNR: init_kernels() failed: %s
+DLSSNR: ResizeNetwork called before network creation
+CG2RNetworkManager::ResizeNetwork
+DLSSNR: BindSharedState failed in ResizeNetwork
+DLSSNR: ResizeNetwork falling back to full rebuild for non-CC config
+DLSSNR: ResizeNetwork failed to probe capacity for config '%s'
+DLSSNR: resize capacity probe (%d,%d) failed: %s
+DLSSNR: resized buffer pool exceeds 4GB (%zu bytes)
+DLSSNR: resize_capacity(%d,%d) failed: %s
+DLSSNR: resized buffer pool probe mismatch (%zu required, %zu probed); using actual size
+resize
+DLSSNR: No embedded weights for config '%s'
+CG2RNetworkManager::LoadWeights
+DLSSNR: Evaluate called but network not ready
+CG2RNetworkManager::Evaluate
+DLSSNR: CC active resize to %dx%d failed: %s
+cc active resize
+error: CUBIN API failed %d
+CC_Control_History_Blend_Quantize_With_Teacher_honest_tench_2026_07_04_22_30_weights
+WEIGHTS_HT
+CC_SILVER_AARDWOLD
+<missing>
+DLSSNR: preset %d is not available in this DLL build; falling back to shipping default preset %d ('%s')
+CG2RFindWeightByPreset
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/features/dlssnr/cg2r_weights.cpp
+DLSSNR: FindResource failed for '%s'
+CG2RLoadWeightBlob
+DLSSNR: Embedded weights data not available for config '%s'
+NVSDK_NGX_VULKAN_Init_Ext
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/features/dlssnr/ngx_vulkan.cpp
+NVSDK_NGX_VULKAN_Init_Ext2
+NVSDK_NGX_VULKAN_Shutdown
+NVSDK_NGX_VULKAN_Shutdown1
+NVSDK_NGX_VULKAN_CreateFeature
+NVSDK_NGX_VULKAN_CreateFeature1
+NVSDK_NGX_VULKAN_ReleaseFeature
+NVSDK_NGX_VULKAN_GetScratchBufferSize
+NVSDK_NGX_VULKAN_GetFeatureRequirements
+NVSDK_NGX_VULKAN_PopulateParameters_Impl
+NVSDK_NGX_CUDA_Init1
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/features/dlssnr/ngx_cuda.cpp
+NVSDK_NGX_CUDA_Init_Ext1
+NVSDK_NGX_CUDA_Shutdown
+NVSDK_NGX_CUDA_Shutdown1
+NVSDK_NGX_CUDA_CreateFeature
+NVSDK_NGX_CUDA_CreateFeature1
+Input1
+error: could not find %s parameter
+Input2
+NVSDK_NGX_CUDA_ReleaseFeature
+NVSDK_NGX_CUDA_EvaluateFeature
+NVSDK_NGX_CUDA_GetScratchBufferSize
+NVSDK_NGX_CUDA_GetFeatureRequirements
+NVSDK_NGX_CUDA_PopulateParameters_Impl
+Network has no blocks
+Network::forward_range: invalid block range
+ intermediate buffers)
+ (have 
+Invalid input_blocks src_idx: 
+ network inputs provided
+ but only 
+Invalid network_inputs index: 
+block
+Block::allocate_buffer() requires TEST_HARNESS_BUILD
+Block has no layers
+Block requires at least one output
+ inputs)
+Invalid input_blocks index: 
+ buffers)
+Invalid input_layers index: 
+Invalid completion_input_layers index: 
+completion_input_layer_outputs out of range for src layer 
+ entries
+ cross-block CBs but block_inputs has only 
+completion_input_blocks declared 
+ out of range (block declares 
+completion_input_blocks index 
+layer
+cc_tinlayout_pre_block
+cc_tinlayout_fused_pre_block_swin_1h
+cc_tinlayout_fused_post_block_swin_1h
+cc_tinlayout_fused_swin_1h
+cc_tinlayout_fused_swin_2h
+cc_tinlayout_fused_swin_4h
+cc_tinlayout_fused_swin_8h
+cc_split_swin_16h
+cc_vit_
+cc_dec_input_upsample
+cc_cb_clear
+CCMultiCubinBackend: no cubin module for kernel '
+CCMultiCubinBackend::load_module: use add_module
+CCMultiCubinBackend: module missing for kernel '
+cc_tinlayout_fused_swin_1h_block
+cc_tinlayout_fused_swin_2h_block
+cc_tinlayout_fused_swin_4h_block
+cc_tinlayout_avg_pool_proj_block
+cc_tinlayout_upsample_skip_block
+cc_tinlayout_post_block
+' is part of the skeleton but no layer wrapper has been ported yet.  See .cursor/rules/crazy-cuckoo.mdc TODOs.
+CCNetwork::build_blocks: block type '
+cc_split_swin_16h_block
+CCTinlayoutFusedSwin8H
+upsample
+CCTinlayoutFusedSwin4H
+CCTinlayoutFusedSwin2H
+CCTinlayoutFusedSwin1H
+_outview
+CCNetwork has no blocks
+CCNetwork::forward_range: invalid block range
+CCTinlayoutPreBlock
+CCTinlayoutFusedPreBlockSwin1H
+CCNetwork::forward_range: pre-block requires rgb input
+input_block_outputs out of range for source block
+CCNetwork::resize_capacity: invalid dimensions
+CCNetwork::set_stream: call init_kernels() first
+CCNetwork::set_buffer_pool: null pool
+CCNetwork::set_buffer_pool: pool too small
+ out of range (have 
+completion_input_blocks: src block 
+ CBs)
+ last layer (declares 
+ out of range for src block 
+completion_input_block_outputs[
+_rgb
+CCNetwork
+crazy-cuckoo
+layer0.dw_weight
+layer0.conv_weight
+layer0.sin
+layer0.
+input_adapter_weight
+weight1
+weight2
+ffn_cos_skip
+qkv_weight
+attn_scale
+attn_bias
+projection_weight
+attn_cos_skip
+weight0
+conv_weight
+dw_weight
+inp_upsample_input_scale
+inp_upsample_sin
+out_gain
+out_conv_weight
+blend_scale
+hnet-vigilant-squid
+single_layer_block
+_fp8
+CCSingleLayerBlock expects name 'single_layer_block', got: 
+CCSingleLayerBlock expects 1 layer, got: 
+CCSingleLayerBlock: Unknown layer type: 
+CCSplitSwin16HBlock expects name 'cc_split_swin_16h_block', got: 
+CCSplitSwin16HFfwd
+CCSplitSwin16HFfwdProj
+CCSplitSwin16HQKVAttn
+CCSplitSwin16HProj
+CCSplitSwin16HProjPool
+CCSplitSwin16HFinalHead
+CCSplitSwin16HBlock: unknown layer type: 
+layer0.weight0
+layer0.weight1
+layer0.weight2
+layer1.weight3
+layer1.ffn_cos_skip
+layer2.qkv_weight
+layer2.attn_scale
+layer2.attn_bias
+layer3.projection_weight
+layer3.attn_cos_skip
+layer4.dw_weight
+layer4.weight
+CCVitBlock expects name 'cc_vit_block', got: 
+CCVitFfnExpand
+CCVitFfnContract
+CCVitQKV
+CCVitAttention
+CCVitProjection
+CCVitBlock: unknown layer type: 
+layer0.weight
+layer1.weight
+layer4.projection_weight
+layer4.attn_cos_skip
+CCVit1DBlock expects name 'cc_vit_1d_block', got: 
+CCVit1DBlock expects five layer descriptors
+CCVit1DFfnExpand
+CCVit1DFfnContract
+CCVit1DQKV
+CCVit1DAttention
+CCVit1DProjection
+CCVit1DBlock: unknown layer type: 
+' failed (NvAPI_Status=
+CubinBackendNGX::get_kernel '
+CubinBackendNGX::launch BindKernel failed (NvAPI_Status=
+CubinBackendNGX::launch Dispatch failed (NvAPI_Status=
+create_cubin_backend: NGX build requires non-null context (NGXCubin*)
+Error: Buffer too small to deserialize weight info
+Error: Total size of serialized weight info must match the size of the buffer
+Error: Size of data must be greater than 0 bytes in weight info
+Error: Device must be either CPU or None in weight info for deserialization
+Error: Offset does not match total size in weight info deserialization
+Error in deserialize_weight_map: Failed to deserialize weight 
+Error in deserialize_weight_map: Weight buffer size does not match weight info size
+Error in deserialize_weight_map: Offset does not match total size
+NGXCubinFormat_INVALID
+NGXCubinFormat_RGBA32F
+NGXCubinFormat_RGBA16F
+NGXCubinFormat_RGB32F
+NGXCubinFormat_RGB16F
+NGXCubinFormat_RG16F
+NGXCubinFormat_R16F
+NGXCubinFormat_R16UINT
+NGXCubinFormat_RG32F
+NGXCubinFormat_R32F
+NGXCubinFormat_R8UN
+NGXCubinFormat_E5M3
+NGXCubinFormat_sE4M3
+NGXCubinFormat_R16F_HWC16
+NGXCubinFormat_sE4M3_HWC32
+NGXCubinFormat_RGB11F
+NGXCubinFormat_RGBA8UN
+NGXCubinFormat_BGRA8UN
+NGXCubinFormat_RGBA16UN
+NGXCubinFormat_RGBA16SN
+NGXCubinFormat_RGB10A2UN
+NGXCubinFormat_R32UI
+NGXCubinFormat_RG8UN
+NGXCubinFormat_RG16SI
+NGXCubinFormat_RG16_S10_5_NV
+NGXCubinFormat_R5G6B5
+NGXCubinFormat_RGBA8SN
+NGXCubinFormat_R8SN
+NGXCubinFormat_RG8SN
+<unnamed>
+supported
+not supported
+Fast UAV clear: %s
+NGXCubinGeneric::genericPostInit
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/frameworks/cubin/ngx_cubin_generic.cpp
+error: failed to open registry key SOFTWARE\NVIDIA Corporation\Global\NGXCore
+NGXCubinGeneric::Init
+__NGX_SHOW_INDICATOR
+__NGX_CUBIN_DISABLE_RESOURCE_CACHE
+Delayed destroy resource list count %llu
+NGXCubinGeneric::Shutdown
+m_CubinKernelMap.InitCubins() failed with error: %d
+NGXCubinGeneric::SetGPUArch
+SetGPUArch:: GetLUIDFromDevice failed with error: %d
+SetGPUArch:: Gpu count = %d, luid: 0x%x
+SetGPUArch:: NvAPI_GetLogicalGPUFromPhysicalGPU failed with error: %d
+SetGPUArch:: NvAPI_GPU_GetLogicalGpuInfo failed with error: %d
+SetGPUArch:: NvAPI_GPU_GetArchInfo failed with error: %d
+SetGPUArch:: NvAPI_EnumPhysicalGPUs failed with error: %d
+m_gpuArch = 0x%x
+sm120
+nv.ngx.dlssnr.
+dlssnr
+ProductionResourceName: '%s'
+ResourceName::getPublicName
+Recycling Buffer Resource 0x%llx size in Bytes (%u) %s -> %s
+NGXCubinGeneric::RecycleBuffer
+CUBIN 1D alloc (%s), m_allocCount=%d, currentSize %.1lf MB, totalSize %.1lf MB
+NGXCubinGeneric::CreateBufferResource
+Warning: Resource '%s' is visible on GPU nodes where it was not created (CreationMask=0x%x, VisibilityMask=0x%x). This may cause cross-node accesses and degrade multi-GPU performance, especially on systems with 4+ GPUs.
+Recycling Texture2D resource 0x%llx fmt %s size (%u,%u) %s -> %s
+NGXCubinGeneric::CreateTexture2DResourceShared
+CUBIN 2D alloc (%s), m_allocCount=%d, currentSize %.1lf MB, totalSize %.1lf MB
+error: CreateFeatureImpl() failed - nvapi status %d
+NGXCubinGeneric::CreateFeature
+CollectGarbage(0.0) completed
+NGXCubinGeneric::DestroyFeature
+error: ClearCache failed - nvapi status %d
+Scheduled to destroy 0x%llx
+NGXCubinGeneric::PushToDestroy
+Scheduled to destroy IUnknown 0x%llx
+NGXCubinGeneric::PushToDestroyIUnknown
+Releasing resource 0x%llx (%s)
+NGXCubinGeneric::CollectGarbage
+Unknown
+error: CopyHostToDeviceBuffer called with null InTargetBuffer or null InUploadResource
+NGXCubinGeneric::CopyHostToDeviceBuffer
+error: CopyHostToDeviceBuffer requires an NGX internal InUploadResource to work
+cuda_font_kernel
+FontTexture
+DynamicText
+DynamicTextUpload
+NGXCubinKernelMap::InitCubins
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/frameworks/cubin/ngx_cubin_kernel_map.cpp
+error: %ls could not be loaded
+NGXCubinVulkan::LoadVkEntrypoints
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/frameworks/cubin/ngx_cubin_vulkan.cpp
+vkGetDeviceProcAddr
+vkGetInstanceProcAddr
+vkEnumerateDeviceExtensionProperties
+Failed to load VK instance function: %s
+vkGetPhysicalDeviceProperties2
+vkGetPhysicalDeviceMemoryProperties
+vkGetPhysicalDeviceImageFormatProperties2
+vkAllocateMemory
+Failed to load VK device function: %s
+vkFreeMemory
+vkMapMemory
+vkUnmapMemory
+vkBindBufferMemory
+vkBindImageMemory
+vkGetBufferMemoryRequirements
+vkGetImageMemoryRequirements
+vkCreateBuffer
+vkDestroyBuffer
+vkCreateImage
+vkDestroyImage
+vkCreateImageView
+vkDestroyImageView
+vkCreateShaderModule
+vkDestroyShaderModule
+vkCreateComputePipelines
+vkDestroyPipeline
+vkCreatePipelineLayout
+vkDestroyPipelineLayout
+vkCreateSampler
+vkCreateDescriptorSetLayout
+vkDestroyDescriptorSetLayout
+vkCmdBindPipeline
+vkCmdDispatch
+vkCmdCopyBuffer
+vkCmdCopyImage
+vkCmdPipelineBarrier
+vkCmdPushConstants
+vkDestroySampler
+vkCmdClearColorImage
+vkCmdFillBuffer
+vkCreateCuModuleNVX
+vkCreateCuFunctionNVX
+vkDestroyCuModuleNVX
+vkDestroyCuFunctionNVX
+vkCmdCuLaunchKernelNVX
+vkGetImageViewHandleNVX
+vkGetImageViewHandle64NVX
+vkGetImageViewAddressNVX
+vkCmdPushDescriptorSetKHR
+vkCreateQueryPool
+vkGetQueryPoolResults
+vkDestroyQueryPool
+vkCmdResetQueryPool
+vkCmdWriteTimestamp
+vkGetBufferDeviceAddress
+vkGetBufferDeviceAddressKHR
+vkGetBufferDeviceAddressEXT
+Error: vkGetBufferDeviceAddressXXX() function is not available. Request VK_KHR_buffer_device_address or VK_EXT_buffer_device_address extension
+vkSetDebugUtilsObjectNameEXT
+vkCmdBeginDebugUtilsLabelEXT
+vkCmdEndDebugUtilsLabelEXT
+VK_NVX_binary_import
+VK_NVX_image_view_handle
+Enabling texmode_raw
+NGXCubinVulkan::Init
+main
+error: SetGPUArch failed - nvapi status %d
+texmode_raw functionality is required for running this feature on sm90+ hardware!
+Error: vkCreateCuModuleNVX() and/or vkCreateCuFunctionNVX() functions are not available. Request VK_NVX_binary_import extension
+NGXCubinVulkan::CreateKernel
+Error: vkCreateCuModuleNVX() for %s failed %d
+Error: vkCreateCuFunctionNVX(%s) failed %d
+Error: vkGetImageViewHandle64NVX() function not available. Request VK_NVX_image_view_handle extension
+NGXCubinVulkan::GetInputTextureViewHandle64
+Error: vkGetImageViewHandleNVX() function not available. Request VK_NVX_image_view_handle extension
+NGXCubinVulkan::GetInputSurfaceViewHandle64
+Error: Vulkan image format is not exportable!
+NGXCubinVulkan::CreateTexture2DResourceSharedImpl
+error: InResource is NULL!
+NGXCubinVulkan::GetResourceDeviceMemoryHandle
+error: VkImage handle in VK resource $p is NULL
+error: image (%p) not found in m_imageMemoryMap!
+error: Unsupported Resource Type: %d
+  Vulkan Adapter Description: %S
+NGXCubinVulkan::GetAdapterDescription
+error: Unable to fetch LUID for Vulkan device
+NGXCubinVulkan::GetLUIDFromDevice
+VK_EXT_debug_utils may not have been enabled, hence no resource name set!
+NGXCubinVulkan::SetResourceName
+Vulkan SetResourceName: %s
+Error: Unsupported Resource Type: %d! No resource name set!
+NGX-managed
+NGX client-managed
+, wide
+, narrow
+nv.ngxclient
+, no NGX client resource name set
+error: deferred contexts are not supported by the NGX D3D11 backend
+IsValidCubinCmdList
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/frameworks/cubin/ngx_cubin_d3d11.cpp
+NGXCubinD3D11::Init
+ID3D11Device::GetCreationFlags() = 0x%X
+error: NvAPI_D3D11_CreateSamplerState failed - nvapi status %d
+NvAPI_D3D_GetCurrentSLIState failed
+error: NvAPI_D3D11_DestroyCubinComputeShader failed - nvapi status %d
+NGXCubinD3D11::Shutdown
+error: NvAPI_D3D11_CreateCubinComputeShaderExV2 failed - nvapi status %d
+NGXCubinD3D11::CreateKernel
+error: NvAPI_D3D11_CreateCubinComputeShaderEx failed - nvapi status %d
+error: NvAPI_D3D11_CreateCubinComputeShader failed - nvapi status %d
+NGXCubinD3D11::DestroyKernel
+error: NvAPI_D3D11_GetCudaMergedTextureSamplerObject failed - nvapi status %d
+NGXCubinD3D11::GetInputTextureViewHandle64
+error: NvAPI_D3D11_CreateShaderResourceView failed - nvapi status %d
+error: NvAPI_D3D11_GetCudaTextureObject failed - nvapi status %d
+error: NvAPI_D3D11_GetResourceHandle failed - nvapi status %d
+error: SetPrivateData failed
+error: too many read resources %d - max %d
+error: too many read and write resources are bound %d - max %d
+error: NvAPI_D3D11_GetCudaIndependentViewObject failed - nvapi status %d
+NGXCubinD3D11::CreateOrRetrieveSurfaceData
+error: NvAPI_D3D11_CreateUnorderedAccessView failed - nvapi status %d
+NvAPI_D3D11_GetResourceGPUVirtualAddressEx() isn't implemented by the driver, so suballocation will be disabled
+error: UAV SetPrivateData failed
+error: too many write resources %d - max %d
+NGXCubinD3D11::GetInputSurfaceViewHandle64
+NGXCubinD3D11::GetInOutBufferVirtualAddress
+error: NvAPI_D3D11_GetResourceGPUVirtualAddress failed - nvapi status %d
+error: Buffer SetPrivateData failed
+NGXCubinD3D11::MarkBufferResourceAsAccessReadD3D11
+NGXCubinD3D11::MarkBufferResourceAsAccessWrittenD3D11
+error: NvAPI_D3D11_LaunchCubinShader failed - device 0x%llx - immediate ctx 0x%llx on device 0x%llx nvapi status %d
+NGXCubinD3D11::Dispatch
+error: format %u is unsupported - hres %lu flags %d
+NGXCubinD3D11::IsSupportedFormat
+error: CreateBuffer failed
+NGXCubinD3D11::CreateBufferResourceImpl
+error: CreateTexture2DResource failed
+NGXCubinD3D11::CreateTexture2DResourceSharedImpl
+D3D11 SetResourceName: %s
+NGXCubinD3D11::SetResourceName
+Erasing cache helper for resource 0x%p
+NGXCubinFeatureD3D11::collectGarbageAndIncrementFrame
+error: failed to map buffer - error %lu
+NGXCubinD3D11::CopyHostToDeviceBufferImpl
+registering buffer allocation callback
+NGXCubinD3D11::ProcessParameters
+Tex2DAllocCallback
+registering tex2D allocation callback
+ResourceReleaseCallback
+registering resource release callback
+Resources managed by host: %s
+error: unable to clone resource
+NGXCubinD3D11::CloneResource
+NGXCubinD3D11::GetAdapterDescription
+  DX11 Adapter Description: %S
+NGXCubinD3D11::GetLUIDFromDevice
+error: Can't find or load dxgi.dll
+NGXCubinD3D12::Init
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/frameworks/cubin/ngx_cubin_d3d12.cpp
+CreateDXGIFactory2
+error: dxgi.dll doesn't export CreateDXGIFactory2, are we running on Windows 8.1 or above ?
+error: too many GPU nodes
+error: CheckFeatureSupport() call did not succeed or the driver did not report CastingFullyTypedFormatSupported. Windows 10 RS2 or higher was expected. hr=%d
+Enabling CuModule kernel path (load fatbin once, resolve entry points)
+Build - PRODUCTION
+GPU nodes %u - visible node mask %u
+error: failed to create descriptor heap, hr=%d
+error: failed to destroy cufunction - nvapi status %d
+NGXCubinD3D12::Shutdown
+error: failed to destroy cubin - nvapi status %d
+error: failed to destroy cumodule - nvapi status %d
+error: NGXCubinD3D12::CreateKernel NvAPI_D3D12_CreateCuModule failed - nvapi status %d
+NGXCubinD3D12::CreateKernel
+error: NGXCubinD3D12::CreateKernel NvAPI_D3D12_CreateCuFunction('%s') failed - nvapi status %d
+error: NGXCubinD3D12::CreateKernel failed - nvapi status %d
+error: NvAPI_D3D12_DestroyCuFunction failed - nvapi status %d
+NGXCubinD3D12::DestroyKernel
+error: NvAPI_D3D12_DestroyCuModule failed - nvapi status %d
+error: NvAPI_D3D12_DestroyCubinComputeShader failed - nvapi status %d
+D3D12 Descriptor heap wrap around. Clearing all cache and reallocating from scratch again.
+NGXCubinD3D12::GetNewAndIncreaseDescIndex
+error: NvAPI_D3D12_GetCudaMergedTextureSamplerObject failed - nvapi status %d
+NGXCubinD3D12::GetInputTextureViewHandle64
+error: NvAPI_D3D12_GetCudaTextureObject failed - nvapi status %d
+error: SRV SetPrivateData failed
+error: NvAPI_D3D12_GetCudaIndependentDescriptorObject failed - nvapi status %d
+NGXCubinD3D12::CreateOrRetrieveSurfaceData
+error: NvAPI_D3D12_GetCudaSurfaceObject failed - nvapi status %d
+error: NvAPI_D3D12_LaunchCuKernelChain failed - nvapi status %d
+NGXCubinD3D12::Dispatch
+error: NvAPI_D3D12_LaunchCubinShader failed - nvapi status %d
+NGXCubinD3D12::IsSupportedFormat
+NGXCubinD3D12::CreateTexture2DResourceSharedImpl
+NGXCubinD3D12::CreateBufferResourceImpl
+D3D12 SetResourceName: %s
+NGXCubinD3D12::SetResourceName
+error: failed to map buffer - error 0x%lx
+NGXCubinD3D12::CopyHostToDeviceBufferImpl
+ResourceAllocCallback
+Registering resource allocation callback
+NGXCubinD3D12::ProcessParameters
+Registering resource release callback
+NGXCubinD3D12::CloneResource
+Cloning (%d,%d) Format %d Mips %d
+NGXCubinD3D12::GetAdapterDescription
+cuDeviceGetLuid
+GetFeatureRequirements error: input is nullptr
+GetFeatureRequirements_Internal
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/frameworks/cubin/featureReq.cpp
+GetFeatureRequirements error: incompatible feature
+10.0.0
+GetFeatureRequirements error: getDeviceID(Adapter) has failed (%d)
+GetFeatureRequirements error: getDeviceID(Instance) has failed (%d)
+GetFeatureRequirements error: getDeviceID(CudaDevice) has failed (%d)
+GetFeatureRequirements error: NvAPI_EnumPhysicalGPUs failed with error: %d
+GetFeatureRequirements error: NvAPI_GetLogicalGPUFromPhysicalGPU failed with error: %d
+GetFeatureRequirements error: NvAPI_GPU_GetLogicalGpuInfo failed with error: %d
+GetFeatureRequirements error: NvAPI_GPU_GetArchInfo failed with error: %d
+kernel32.dll
+RtlGetVersion
+GetFeatureRequirements error: could not get OS version from ntdll
+GetFeatureRequirements error: could not get OS version from kernel32
+Application running in compatibility mode - version %s
+Feature not supported: OS version is %s
+' has null data pointer
+': weight '
+Layer '
+' has no metadata. Skipping validation.
+Warning: layer '
+) does not match shape*dtype (
+' size_bytes (
+CCTinlayoutFusedPreBlockSwin1HLayer expects type 'CCTinlayoutFusedPreBlockSwin1H', got: 
+CCTinlayoutFusedPreBlockSwin1HLayer::init_kernels: backend is required
+cc_tinlayout_fused_pre_block_swin_1h_32_1_ds_fp8
+cc_tinlayout_fused_pre_block_swin_1h_32_1_ds
+cc_tinlayout_fused_pre_block_swin_1h_32_1_fp8
+cc_tinlayout_fused_pre_block_swin_1h_32_1
+CCTinlayoutFusedPreBlockSwin1HLayer requires rgb texture input
+CCTinlayoutFusedPreBlockSwin1HLayer requires 1 output
+CCTinlayoutFusedPreBlockSwin1HLayer (_ds) requires 2 outputs (pool=chain at index 0, swin at index 1)
+cc_tinlayout_fused_pre_block_swin_1h_32
+ones_like
+detach
+convolution
+clamp
+rsub
+linalg_vector_norm
+clamp_min
+stack
+_softmax
+cc_tinlayout_fused_pre_block_swin_1h_32_ds
+invalid map<K, T> key
+CCTinlayoutFusedSwin1HLayer expects type 'CCTinlayoutFusedSwin1H', got: 
+CCTinlayoutFusedSwin1HLayer is specialized for Cin=32, got: 
+cc_tinlayout_fused_swin_1h_32_1_upsample_fp8
+cc_tinlayout_fused_swin_1h_32_1_upsample
+cc_tinlayout_fused_swin_1h_32_1_ds_fp8
+cc_tinlayout_fused_swin_1h_32_1_ds
+_inpview
+cc_tinlayout_fused_swin_1h_32_1_inpview_fp8
+cc_tinlayout_fused_swin_1h_32_1_inpview
+cc_tinlayout_fused_swin_1h_32_1_outview_fp8
+cc_tinlayout_fused_swin_1h_32_1_outview
+cc_tinlayout_fused_swin_1h_32_1_fp8
+cc_tinlayout_fused_swin_1h_32_1
+cc_tinlayout_fused_swin_1h_32_1_tilesync_fp8
+cc_tinlayout_fused_swin_1h_32_1_tilesync
+cc_tinlayout_fused_swin_1h_32_1_wait_fp8
+cc_tinlayout_fused_swin_1h_32_1_wait
+cc_tinlayout_fused_swin_1h_32_1_chained_fp8
+cc_tinlayout_fused_swin_1h_32_1_chained
+CCTinlayoutFusedSwin1HLayer::init_kernels: backend is required
+cc_tinlayout_fused_swin_1h_32_1_inpview_tilesync_fp8
+cc_tinlayout_fused_swin_1h_32_1_inpview_tilesync
+cc_tinlayout_fused_swin_1h_32_1_upsample_tilesync_fp8
+cc_tinlayout_fused_swin_1h_32_1_upsample_tilesync
+cc_tinlayout_fused_swin_1h_32_1_ds_wait_fp8
+cc_tinlayout_fused_swin_1h_32_1_ds_wait
+cc_tinlayout_fused_swin_1h_32_1_outview_wait_fp8
+cc_tinlayout_fused_swin_1h_32_1_outview_wait
+CCTinlayoutFusedSwin1HLayer requires 1 input
+CCTinlayoutFusedSwin1HLayer requires 1 output
+CCTinlayoutFusedSwin1HLayer (_ds) requires 2 outputs (pool + swin)
+CCTinlayoutFusedSwin1HLayer (upsample) requires 2 inputs (main + skip)
+cc_tinlayout_fused_swin_1h_outview_shifted_
+cc_tinlayout_fused_swin_1h_outview_
+cc_tinlayout_fused_swin_1h_inpview_shifted_
+cc_tinlayout_fused_swin_1h_inpview_
+cc_tinlayout_fused_swin_1h_shifted_
+cc_tinlayout_fused_swin_1h_
+constant_pad_nd
+cc_tinlayout_fused_swin_1h_ds_shifted_
+cc_tinlayout_fused_swin_1h_ds_
+cc_tinlayout_fused_swin_1h_upsample_shifted_
+cc_tinlayout_fused_swin_1h_upsample_
+alias
+CCTinlayoutFusedSwin2HLayer expects type 'CCTinlayoutFusedSwin2H', got: 
+CCTinlayoutFusedSwin2HLayer is specialized for Cin=64, got: 
+cc_tinlayout_fused_swin_2h_64_2_upsample_fp8
+cc_tinlayout_fused_swin_2h_64_2_upsample
+cc_tinlayout_fused_swin_2h_64_2_ds_fp8
+cc_tinlayout_fused_swin_2h_64_2_ds
+cc_tinlayout_fused_swin_2h_64_2_inpview_fp8
+cc_tinlayout_fused_swin_2h_64_2_inpview
+cc_tinlayout_fused_swin_2h_64_2_outview_fp8
+cc_tinlayout_fused_swin_2h_64_2_outview
+cc_tinlayout_fused_swin_2h_64_2_fp8
+cc_tinlayout_fused_swin_2h_64_2
+cc_tinlayout_fused_swin_2h_64_2_tilesync_fp8
+cc_tinlayout_fused_swin_2h_64_2_tilesync
+cc_tinlayout_fused_swin_2h_64_2_wait_fp8
+cc_tinlayout_fused_swin_2h_64_2_wait
+cc_tinlayout_fused_swin_2h_64_2_chained_fp8
+cc_tinlayout_fused_swin_2h_64_2_chained
+CCTinlayoutFusedSwin2HLayer::init_kernels: backend is required
+cc_tinlayout_fused_swin_2h_64_2_inpview_tilesync_fp8
+cc_tinlayout_fused_swin_2h_64_2_inpview_tilesync
+cc_tinlayout_fused_swin_2h_64_2_upsample_tilesync_fp8
+cc_tinlayout_fused_swin_2h_64_2_upsample_tilesync
+cc_tinlayout_fused_swin_2h_64_2_ds_wait_fp8
+cc_tinlayout_fused_swin_2h_64_2_ds_wait
+cc_tinlayout_fused_swin_2h_64_2_outview_wait_fp8
+cc_tinlayout_fused_swin_2h_64_2_outview_wait
+CCTinlayoutFusedSwin2HLayer requires 1 input
+CCTinlayoutFusedSwin2HLayer requires 1 output
+CCTinlayoutFusedSwin2HLayer (_ds) requires 2 outputs (pool + swin)
+CCTinlayoutFusedSwin2HLayer (upsample) requires 2 inputs (main + skip)
+cc_tinlayout_fused_swin_2h_outview_shifted_
+cc_tinlayout_fused_swin_2h_outview_
+cc_tinlayout_fused_swin_2h_inpview_shifted_
+cc_tinlayout_fused_swin_2h_inpview_
+cc_tinlayout_fused_swin_2h_shifted_
+cc_tinlayout_fused_swin_2h_
+cc_tinlayout_fused_swin_2h_ds_shifted_
+cc_tinlayout_fused_swin_2h_ds_
+cc_tinlayout_fused_swin_2h_upsample_shifted_
+cc_tinlayout_fused_swin_2h_upsample_
+CCTinlayoutFusedSwin4HLayer expects type 'CCTinlayoutFusedSwin4H', got: 
+CCTinlayoutFusedSwin4HLayer is specialized for Cin=128, got: 
+cc_tinlayout_fused_swin_4h_128_4_upsample_fp8
+cc_tinlayout_fused_swin_4h_128_4_upsample
+cc_tinlayout_fused_swin_4h_128_4_ds_fp8
+cc_tinlayout_fused_swin_4h_128_4_ds
+cc_tinlayout_fused_swin_4h_128_4_inpview_fp8
+cc_tinlayout_fused_swin_4h_128_4_inpview
+cc_tinlayout_fused_swin_4h_128_4_outview_fp8
+cc_tinlayout_fused_swin_4h_128_4_outview
+cc_tinlayout_fused_swin_4h_128_4_fp8
+cc_tinlayout_fused_swin_4h_128_4
+cc_tinlayout_fused_swin_4h_128_4_tilesync_fp8
+cc_tinlayout_fused_swin_4h_128_4_tilesync
+cc_tinlayout_fused_swin_4h_128_4_wait_fp8
+cc_tinlayout_fused_swin_4h_128_4_wait
+cc_tinlayout_fused_swin_4h_128_4_chained_fp8
+cc_tinlayout_fused_swin_4h_128_4_chained
+CCTinlayoutFusedSwin4HLayer::init_kernels: backend is required
+cc_tinlayout_fused_swin_4h_128_4_inpview_tilesync_fp8
+cc_tinlayout_fused_swin_4h_128_4_inpview_tilesync
+cc_tinlayout_fused_swin_4h_128_4_upsample_tilesync_fp8
+cc_tinlayout_fused_swin_4h_128_4_upsample_tilesync
+cc_tinlayout_fused_swin_4h_128_4_ds_wait_fp8
+cc_tinlayout_fused_swin_4h_128_4_ds_wait
+cc_tinlayout_fused_swin_4h_128_4_outview_wait_fp8
+cc_tinlayout_fused_swin_4h_128_4_outview_wait
+CCTinlayoutFusedSwin4HLayer requires 1 input
+CCTinlayoutFusedSwin4HLayer requires 1 output
+CCTinlayoutFusedSwin4HLayer (_ds) requires 2 outputs (pool + swin)
+CCTinlayoutFusedSwin4HLayer (upsample) requires 2 inputs (main + skip)
+cc_tinlayout_fused_swin_4h_outview_shifted_
+cc_tinlayout_fused_swin_4h_outview_
+cc_tinlayout_fused_swin_4h_inpview_shifted_
+cc_tinlayout_fused_swin_4h_inpview_
+cc_tinlayout_fused_swin_4h_shifted_
+cc_tinlayout_fused_swin_4h_
+cc_tinlayout_fused_swin_4h_ds_shifted_
+cc_tinlayout_fused_swin_4h_ds_
+cc_tinlayout_fused_swin_4h_upsample_shifted_
+cc_tinlayout_fused_swin_4h_upsample_
+CCTinlayoutFusedSwin8HLayer expects type 'CCTinlayoutFusedSwin8H', got: 
+CCTinlayoutFusedSwin8HLayer is specialized for Cin=256, got: 
+cc_tinlayout_fused_swin_8h_256_8_upsample_fp8
+cc_tinlayout_fused_swin_8h_256_8_upsample
+cc_tinlayout_fused_swin_8h_256_8_ds_fp8
+cc_tinlayout_fused_swin_8h_256_8_ds
+cc_tinlayout_fused_swin_8h_256_8_inpview_fp8
+cc_tinlayout_fused_swin_8h_256_8_inpview
+cc_tinlayout_fused_swin_8h_256_8_outview_fp8
+cc_tinlayout_fused_swin_8h_256_8_outview
+cc_tinlayout_fused_swin_8h_256_8_fp8
+cc_tinlayout_fused_swin_8h_256_8
+cc_tinlayout_fused_swin_8h_256_8_tilesync_fp8
+cc_tinlayout_fused_swin_8h_256_8_tilesync
+cc_tinlayout_fused_swin_8h_256_8_wait_fp8
+cc_tinlayout_fused_swin_8h_256_8_wait
+cc_tinlayout_fused_swin_8h_256_8_chained_fp8
+cc_tinlayout_fused_swin_8h_256_8_chained
+CCTinlayoutFusedSwin8HLayer::init_kernels: backend is required
+cc_tinlayout_fused_swin_8h_256_8_inpview_tilesync_fp8
+cc_tinlayout_fused_swin_8h_256_8_inpview_tilesync
+cc_tinlayout_fused_swin_8h_256_8_upsample_tilesync_fp8
+cc_tinlayout_fused_swin_8h_256_8_upsample_tilesync
+cc_tinlayout_fused_swin_8h_256_8_ds_wait_fp8
+cc_tinlayout_fused_swin_8h_256_8_ds_wait
+cc_tinlayout_fused_swin_8h_256_8_outview_wait_fp8
+cc_tinlayout_fused_swin_8h_256_8_outview_wait
+CCTinlayoutFusedSwin8HLayer requires 1 input
+CCTinlayoutFusedSwin8HLayer requires 1 output
+CCTinlayoutFusedSwin8HLayer (_ds) requires 2 outputs (pool + swin)
+CCTinlayoutFusedSwin8HLayer (upsample) requires 2 inputs (main + skip)
+cc_tinlayout_fused_swin_8h_outview_shifted_
+cc_tinlayout_fused_swin_8h_outview_
+cc_tinlayout_fused_swin_8h_inpview_shifted_
+cc_tinlayout_fused_swin_8h_inpview_
+cc_tinlayout_fused_swin_8h_shifted_
+cc_tinlayout_fused_swin_8h_
+cc_tinlayout_fused_swin_8h_ds_shifted_
+cc_tinlayout_fused_swin_8h_ds_
+cc_tinlayout_fused_swin_8h_upsample_shifted_
+cc_tinlayout_fused_swin_8h_upsample_
+CCSplitSwin16HFfwdLayer specialized for Cin=512
+CCSplitSwin16HFfwdLayer::init_kernels: backend required
+cc_split_swin_16h_ffwd_inpview_512_fp8
+cc_split_swin_16h_ffwd_inpview_512
+cc_split_swin_16h_ffwd_512_fp8
+cc_split_swin_16h_ffwd_512
+cc_split_swin_16h_ffwd_inpview_512_tilesync_fp8
+cc_split_swin_16h_ffwd_inpview_512_tilesync
+cc_split_swin_16h_ffwd_512_wait_fp8
+cc_split_swin_16h_ffwd_512_wait
+cc_split_swin_16h_ffwd_512_tilesync_fp8
+cc_split_swin_16h_ffwd_512_tilesync
+cc_split_swin_16h_ffwd_512_chained_fp8
+cc_split_swin_16h_ffwd_512_chained
+CCSplitSwin16HFfwdLayer requires 1 input + 1 output
+cc_split_swin_16h_ffwd_inpview_
+cc_split_swin_16h_ffwd_
+CCSplitSwin16HFfwdProjLayer specialized for Cin=512
+CCSplitSwin16HFfwdProjLayer::init_kernels: backend required
+cc_split_swin_16h_ffwd_proj_inpview_512_fp8
+cc_split_swin_16h_ffwd_proj_inpview_512
+cc_split_swin_16h_ffwd_proj_512_fp8
+cc_split_swin_16h_ffwd_proj_512
+cc_split_swin_16h_ffwd_proj_inpview_512_chained_fp8
+cc_split_swin_16h_ffwd_proj_inpview_512_chained
+cc_split_swin_16h_ffwd_proj_512_wait_fp8
+cc_split_swin_16h_ffwd_proj_512_wait
+cc_split_swin_16h_ffwd_proj_512_chained_fp8
+cc_split_swin_16h_ffwd_proj_512_chained
+CCSplitSwin16HFfwdProjLayer requires 2 inputs (skip, src) + 1 output
+cc_split_swin_16h_ffwd_proj_inpview_
+cc_split_swin_16h_ffwd_proj_
+CCSplitSwin16HQKVAttnLayer specialized for Cin=512
+CCSplitSwin16HQKVAttnLayer::init_kernels: backend required
+cc_split_swin_16h_qkv_512_fp8
+cc_split_swin_16h_qkv_512
+cc_split_swin_16h_qkv_512_chained_fp8
+cc_split_swin_16h_qkv_512_chained
+CCSplitSwin16HQKVAttnLayer requires 1 input + 1 output
+cc_split_swin_16h_qkv_shifted_
+cc_split_swin_16h_qkv_
+CCSplitSwin16HProjLayer specialized for Cin=512
+CCSplitSwin16HProjLayer::init_kernels: backend required
+cc_split_swin_16h_proj_512_outview_fp8
+cc_split_swin_16h_proj_512_outview
+cc_split_swin_16h_proj_512_fp8
+cc_split_swin_16h_proj_512
+cc_split_swin_16h_proj_512_outview_wait_fp8
+cc_split_swin_16h_proj_512_outview_wait
+cc_split_swin_16h_proj_512_tilesync_fp8
+cc_split_swin_16h_proj_512_tilesync
+cc_split_swin_16h_proj_512_wait_fp8
+cc_split_swin_16h_proj_512_wait
+cc_split_swin_16h_proj_512_chained_fp8
+cc_split_swin_16h_proj_512_chained
+CCSplitSwin16HProjLayer requires 2 inputs (src, skip) + 1 output
+cc_split_swin_16h_proj_outview_
+cc_split_swin_16h_proj_
+CCSplitSwin16HProjPoolLayer specialized for Cin=512
+CCSplitSwin16HProjPoolLayer::init_kernels: backend required
+cc_split_swin_16h_proj_pool_512_fp8
+cc_split_swin_16h_proj_pool_512
+cc_split_swin_16h_proj_pool_512_chained_fp8
+cc_split_swin_16h_proj_pool_512_chained
+CCSplitSwin16HProjPoolLayer requires 2 inputs + 2 outputs
+cc_split_swin_16h_proj_pool_
+CCSplitSwin16HFinalHeadLayer specialized for Cin=512
+CCSplitSwin16HFinalHeadLayer::init_kernels: backend required
+cc_split_swin_16h_final_head_512_fp8
+cc_split_swin_16h_final_head_512
+cc_split_swin_16h_final_head_512_wait_fp8
+cc_split_swin_16h_final_head_512_wait
+CCSplitSwin16HFinalHeadLayer requires 1 input + 1 output
+cc_split_swin_16h_final_head_
+CCVitFfnExpandLayer specialized for Cin=1024
+CCVitFfnExpandLayer::init_kernels: backend required
+cc_vit_ffn_expand_fp8
+cc_vit_ffn_expand
+cc_vit_ffn_expand_tilesync_fp8
+cc_vit_ffn_expand_tilesync
+cc_vit_ffn_expand_wait_fp8
+cc_vit_ffn_expand_wait
+cc_vit_ffn_expand_chained_fp8
+cc_vit_ffn_expand_chained
+CCVitFfnExpandLayer requires 1 input + 1 output
+CCVitFfnContractLayer specialized for Cin=4096
+CCVitFfnContractLayer::init_kernels: backend required
+cc_vit_ffn_contract_fp8
+cc_vit_ffn_contract
+cc_vit_ffn_contract_chained_fp8
+cc_vit_ffn_contract_chained
+CCVitFfnContractLayer requires 2 inputs (skip, src) + dst + reduce CB
+CCVitQKVLayer specialized for Cin=1024
+CCVitQKVLayer::init_kernels: backend required
+cc_vit_qkv_fp8
+cc_vit_qkv
+cc_vit_qkv_wait_fp8
+cc_vit_qkv_wait
+cc_vit_qkv_chained_fp8
+cc_vit_qkv_chained
+CCVitQKVLayer requires 1 input + 3 outputs (qry,key,val) + reduce CB
+CCVitAttentionLayer specialized for Cin=1024
+CCVitAttentionLayer::init_kernels: backend required
+cc_vit_attention_fp8
+cc_vit_attention
+cc_vit_attention_tilesync_fp8
+cc_vit_attention_tilesync
+cc_vit_attention_wait_fp8
+cc_vit_attention_wait
+cc_vit_attention_chained_fp8
+cc_vit_attention_chained
+CCVitAttentionLayer requires 3 inputs (qry,key,val) + 1 output
+bitwise_and
+__lshift__
+reciprocal
+CCVitProjectionLayer specialized for Cin=1024
+CCVitProjectionLayer::init_kernels: backend required
+cc_vit_projection_fp8
+cc_vit_projection
+cc_vit_projection_tilesync_fp8
+cc_vit_projection_tilesync
+cc_vit_projection_wait_fp8
+cc_vit_projection_wait
+cc_vit_projection_chained_fp8
+cc_vit_projection_chained
+CCVitProjectionLayer requires 2 inputs (src, skip) + dst + reduce CB
+CCVit1DFfnExpandLayer requires 1024->4096 channels
+CCVit1DFfnExpandLayer requires backend
+cc_vit_1d_ffn_expand_fp8
+cc_vit_1d_ffn_expand
+cc_vit_1d_ffn_expand_publish_fp8
+cc_vit_1d_ffn_expand_publish
+cc_vit_1d_ffn_expand_chained_fp8
+cc_vit_1d_ffn_expand_chained
+cc_vit_1d_repack_2d_to_1d_fp8
+cc_vit_1d_repack_2d_to_1d
+CCVit1DFfnExpandLayer missing tensor/CB buffers
+CCVit1DFfnExpandLayer repack requires exposed token source
+cc_vit_1d_ffn_expand_repack_input
+CCVit1DFfnContractLayer requires 4096->1024 channels
+CCVit1DFfnContractLayer requires backend
+cc_vit_1d_ffn_contract_fp8
+cc_vit_1d_ffn_contract
+cc_vit_1d_ffn_contract_chained_fp8
+cc_vit_1d_ffn_contract_chained
+CCVit1DFfnContractLayer requires skip/src/input-CB and dst/reduce/output-CB
+CCVit1DQKVLayer requires 1024 channels
+CCVit1DQKVLayer requires backend
+cc_vit_1d_qkv_fp8
+cc_vit_1d_qkv
+cc_vit_1d_qkv_chained_fp8
+cc_vit_1d_qkv_chained
+CCVit1DQKVLayer requires src/input-CB and Q/K/V/reduce/output-CB
+CCVit1DAttentionLayer requires 1024 channels
+CCVit1DAttentionLayer requires backend
+cc_vit_1d_attention_fp8
+cc_vit_1d_attention
+cc_vit_1d_attention_chained_fp8
+cc_vit_1d_attention_chained
+CCVit1DAttentionLayer requires Q/K/V/input-CB and dst/output-CB
+CCVit1DProjectionLayer requires 1024 channels
+CCVit1DProjectionLayer requires backend
+cc_vit_1d_projection_fp8
+cc_vit_1d_projection
+cc_vit_1d_projection_wait_fp8
+cc_vit_1d_projection_wait
+cc_vit_1d_projection_chained_fp8
+cc_vit_1d_projection_chained
+cc_vit_1d_repack_1d_to_2d_fp8
+cc_vit_1d_repack_1d_to_2d
+CCVit1DProjectionLayer requires src/skip/input-CB and dst/reduce-CB
+CCVit1DProjectionLayer missing scratch buffers
+cc_vit_1d_projection_repack_output
+CCDecInputUpsampleLayer expects type 'CCDecInputUpsample', got: 
+CCDecInputUpsampleLayer currently specialized for 1024->512 (dec5)
+CCDecInputUpsampleLayer::init_kernels: backend required
+cc_dec_input_upsample_1024_512_fp8
+cc_dec_input_upsample_1024_512
+cc_dec_input_upsample_1024_512_tilesync_fp8
+cc_dec_input_upsample_1024_512_tilesync
+CCDecInputUpsampleLayer requires 2 inputs (main, skip)
+CCDecInputUpsampleLayer requires outputs = {tensor, reduce_cb, overlap_cb, conv_tap}
+cc_dec_input_upsample_
+CCTinlayoutFusedPostBlockSwin1HLayer expects type 'CCTinlayoutFusedPostBlockSwin1H', got: 
+CCTinlayoutFusedPostBlockSwin1HLayer::init_kernels: backend is required
+cc_tinlayout_fused_post_block_swin_1h_32_fp8
+cc_tinlayout_fused_post_block_swin_1h_32
+cc_tinlayout_fused_post_block_swin_1h_32_fp8_simple_blend
+cc_tinlayout_fused_post_block_swin_1h_32_simple_blend
+cc_tinlayout_fused_post_block_swin_1h_32_fp8_simple_blend_full_rect
+cc_tinlayout_fused_post_block_swin_1h_32_simple_blend_full_rect
+cc_tinlayout_fused_post_block_swin_1h_32_fp8_control_mask
+cc_tinlayout_fused_post_block_swin_1h_32_control_mask
+cc_tinlayout_fused_post_block_swin_1h_32_fp8_control_mask_full_rect
+cc_tinlayout_fused_post_block_swin_1h_32_control_mask_full_rect
+CCTinlayoutFusedPostBlockSwin1HLayer requires 2 inputs (main + enc0 skip)
+CCTinlayoutFusedPostBlockSwin1HLayer requires 1 output (CudaSurface)
+output-composite mode requested before kernel initialization
+cc_tinlayout_fused_post_block_swin_1h_32_rgb
+error: LoadCUDAFunctionTable - failed to load cuda DLL
+LoadCUDAFunctionTable
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/frameworks/cubin/ngx_cubin_cuda.cpp
+cuGetProcAddress
+error: LoadCUDAFunctionTable - failed to load cuGetProcAddress
+cuArrayCreate
+error: LoadCUDAFunctionTable - failed to load cuArrayCreate
+cuArrayDestroy
+error: LoadCUDAFunctionTable - failed to load cuArrayDestroy
+cuArrayGetDescriptor
+error: LoadCUDAFunctionTable - failed to load cuArrayGetDescriptor
+cuCtxGetDevice
+error: LoadCUDAFunctionTable - failed to load cuCtxGetDevice
+cuCtxSetCurrent
+error: LoadCUDAFunctionTable - failed to load cuCtxSetCurrent
+cuCtxSynchronize
+error: LoadCUDAFunctionTable - failed to load cuCtxSynchronize
+cuDestroyExternalMemory
+error: LoadCUDAFunctionTable - failed to load cuDestroyExternalMemory
+cuDeviceGetAttribute
+error: LoadCUDAFunctionTable - failed to load cuDeviceGetAttribute
+error: LoadCUDAFunctionTable - failed to load cuDeviceGetLuid
+cuDeviceGetUuid
+error: LoadCUDAFunctionTable - failed to load cuDeviceGetUuid
+cuFuncSetAttribute
+error: LoadCUDAFunctionTable - failed to load cuFuncSetAttribute
+cuGetErrorString
+error: LoadCUDAFunctionTable - failed to load cuGetErrorString
+cuLaunchKernel
+error: LoadCUDAFunctionTable - failed to load cuLaunchKernel
+cuMemAlloc
+error: LoadCUDAFunctionTable - failed to load cuMemAlloc
+cuMemAllocHost
+error: LoadCUDAFunctionTable - failed to load cuMemAllocHost
+cuMemFree
+error: LoadCUDAFunctionTable - failed to load cuMemFree
+cuMemFreeHost
+error: LoadCUDAFunctionTable - failed to load cuMemFreeHost
+cuMemcpy2D
+error: LoadCUDAFunctionTable - failed to load cuMemcpy2D
+cuMemcpyHtoDAsync
+error: LoadCUDAFunctionTable - failed to load cuMemcpyHtoDAsync
+cuMemsetD32Async
+error: LoadCUDAFunctionTable - failed to load cuMemsetD32Async
+cuMipmappedArrayDestroy
+error: LoadCUDAFunctionTable - failed to load cuMipmappedArrayDestroy
+cuModuleGetFunction
+error: LoadCUDAFunctionTable - failed to load cuModuleGetFunction
+cuModuleLoadData
+error: LoadCUDAFunctionTable - failed to load cuModuleLoadData
+cuModuleUnload
+error: LoadCUDAFunctionTable - failed to load cuModuleUnload
+cuSurfObjectCreate
+error: LoadCUDAFunctionTable - failed to load cuSurfObjectCreate
+cuSurfObjectDestroy
+error: LoadCUDAFunctionTable - failed to load cuSurfObjectDestroy
+cuSurfObjectGetResourceDesc
+error: LoadCUDAFunctionTable - failed to load cuSurfObjectGetResourceDesc
+cuTexObjectCreate
+error: LoadCUDAFunctionTable - failed to load cuTexObjectCreate
+cuTexObjectDestroy
+error: LoadCUDAFunctionTable - failed to load cuTexObjectDestroy
+cuTexObjectGetResourceDesc
+error: LoadCUDAFunctionTable - failed to load cuTexObjectGetResourceDesc
+NGXCubinCUDA::CreateBufferResourceImpl
+error: NGXCubinCUDA::CreateTexture2DResourceSharedImpl failed - NativeFormat case not implemented
+NGXCubinCUDA::CreateTexture2DResourceSharedImpl
+error: NGXCubinCUDA::CreateTexture2DResourceSharedImpl failed - CubinFormat unimplemented
+NGXCubinCUDA::CopyHostToDeviceBufferImpl
+error: In TCC mode. Must have valid GPUArch from Core
+NGXCubinCUDA::Init
+error: NGXCubinCUDA::Shutdown - nvapi status %d
+NGXCubinCUDA::Shutdown
+error: cuModuleLoadData failed %s
+NGXCubinCUDA::CreateKernel
+error: cuModuleGetFunction failed %s
+error: cuFuncSetAttribute failed %s
+error: NGXCubinCUDA::DestroyKernel failed %s
+NGXCubinCUDA::DestroyKernel
+NGXCubinCUDA::GetInputSurfaceViewHandle64
+NGXCubinCUDA::Dispatch
+cuda_clear_view_kernel
+NGXCubinCUDA::ClearBuffer
+error: NGXCubinCUDA::CopyResource failed - could not get dst array
+NGXCubinCUDA::CopyResource
+error: NGXCubinCUDA::CopyResource failed - could not get src array
+error: NGXCubinCUDA::CopyResource wxh failed - not implemented
+error: NGXCubinCUDA::CloneResource failed - not implemented
+NGXCubinCUDA::CloneResource
+error: NGXCubinCUDA::CopyBufferRegion failed - does not support textures
+NGXCubinCUDA::CopyBufferRegion
+error: NGXCubinCUDA::CopyBufferRegion failed - requires BytesToCopy
+error: NGXCubinCUDA::CreateTexture2DResourceSharedImpl failed - CubinFormat case not implemented
+NGXCubinCUDA::GetCUDAChannelCountAndArrayFormat
+error: NGXCubinCUDA::GetCUDABytesInArrayFormat failed - CubinFormat case not implemented
+NGXCubinCUDA::GetCUDABytesInArrayFormat
+error: could not allocate memory for CUDA InsertResource...
+NGXCubinCUDA::InsertResource
+NGXCubinCUDA::DestroyCudaResource
+NGXCubinCUDA::SetCUcontextCurrent
+NGXCubinCUDA::GetTexture2DResourceMaximumSize
+cuda.cuCtxGetDevice(&device)
+C:/dvs/p4/build/sw/devrel/libdev/NGX/snippets/rel_310_8/source/frameworks/cubin/ngx_cubin_cuda_pure.cpp
+CUDA Error At Line : %s:%d : %s at '%s'
+GetLUIDFromDevice_Pure
+cuda.cuDeviceGetLuid(luid, &deviceNodeMask, device)
+cuda.cuCtxSynchronize()
+TransitionResourceImpl_Pure
+nvapi_Direct_GetMethod
+nvapi_QueryInterface
+wine_get_version
+\mfpmp.exe
+SHGetFolderPathW
+CloseServiceHandle
+OpenServiceW
+OpenSCManagerW
+RegQueryValueExW
+RegCloseKey
+RegOpenKeyExW
+SetupDiDestroyDeviceInfoList
+SetupDiGetDeviceInterfaceDetailW
+SetupDiGetDeviceRegistryPropertyW
+SetupDiEnumDeviceInfo
+SetupDiGetClassDevsW
+QueryServiceConfigW
+RegEnumValueW
+D3DKMTEnumAdapters3
+D3DKMTQueryAdapterInfo
+D3DKMTEnumAdapters2
+SetupGetInfDriverStoreLocationW
+SetupDiGetDevicePropertyW
+bad allocation
+device or resource busy
+invalid argument
+no such process
+not enough memory
+operation not permitted
+resource deadlock would occur
+resource unavailable try again
+generic
+address family not supported
+address in use
+address not available
+already connected
+argument list too long
+argument out of domain
+bad address
+bad file descriptor
+bad message
+broken pipe
+connection aborted
+connection already in progress
+connection refused
+connection reset
+cross device link
+destination address required
+directory not empty
+executable format error
+file exists
+file too large
+filename too long
+function not supported
+host unreachable
+identifier removed
+illegal byte sequence
+inappropriate io control operation
+interrupted
+invalid seek
+io error
+is a directory
+message size
+network down
+network reset
+network unreachable
+no buffer space
+no child process
+no link
+no lock available
+no message available
+no message
+no protocol option
+no space on device
+no stream resources
+no such device or address
+no such device
+no such file or directory
+not a directory
+not a socket
+not a stream
+not connected
+operation canceled
+operation in progress
+operation not supported
+operation would block
+owner dead
+permission denied
+protocol error
+protocol not supported
+read only file system
+result out of range
+state not recoverable
+stream timeout
+text file busy
+timed out
+too many files open in system
+too many files open
+too many links
+too many symbolic link levels
+value too large
+wrong protocol type
+unknown error
+FlsAlloc
+FlsFree
+FlsGetValue
+FlsSetValue
+InitializeCriticalSectionEx
+InitOnceExecuteOnce
+CreateEventExW
+CreateSemaphoreW
+CreateSemaphoreExW
+CreateThreadpoolTimer
+SetThreadpoolTimer
+WaitForThreadpoolTimerCallbacks
+CloseThreadpoolTimer
+CreateThreadpoolWait
+SetThreadpoolWait
+CloseThreadpoolWait
+FlushProcessWriteBuffers
+FreeLibraryWhenCallbackReturns
+GetCurrentProcessorNumber
+CreateSymbolicLinkW
+GetCurrentPackageId
+GetTickCount64
+GetFileInformationByHandleEx
+SetFileInformationByHandle
+GetSystemTimePreciseAsFileTime
+InitializeConditionVariable
+WakeConditionVariable
+WakeAllConditionVariable
+SleepConditionVariableCS
+InitializeSRWLock
+AcquireSRWLockExclusive
+TryAcquireSRWLockExclusive
+ReleaseSRWLockExclusive
+SleepConditionVariableSRW
+CreateThreadpoolWork
+SubmitThreadpoolWork
+CloseThreadpoolWork
+CompareStringEx
+GetLocaleInfoEx
+LCMapStringEx
+0123456789abcdefghijklmnopqrstuvwxyz
+0123456789abcdefghijklmnopqrstuvwxyz
+Access violation - no RTTI data!
+Bad dynamic_cast!
+bad exception
+__based(
+__cdecl
+__pascal
+__stdcall
+__thiscall
+__fastcall
+__vectorcall
+__clrcall
+__eabi
+__swift_1
+__swift_2
+__swift_3
+__ptr64
+__restrict
+__unaligned
+restrict(
+ new
+ delete
+operator
+`vftable'
+`vbtable'
+`vcall'
+`typeof'
+`local static guard'
+`string'
+`vbase destructor'
+`vector deleting destructor'
+`default constructor closure'
+`scalar deleting destructor'
+`vector constructor iterator'
+`vector destructor iterator'
+`vector vbase constructor iterator'
+`virtual displacement map'
+`eh vector constructor iterator'
+`eh vector destructor iterator'
+`eh vector vbase constructor iterator'
+`copy constructor closure'
+`udt returning'
+`RTTI
+`local vftable'
+`local vftable constructor closure'
+ new[]
+ delete[]
+`omni callsig'
+`placement delete closure'
+`placement delete[] closure'
+`managed vector constructor iterator'
+`managed vector destructor iterator'
+`eh vector copy constructor iterator'
+`eh vector vbase copy constructor iterator'
+`dynamic initializer for '
+`dynamic atexit destructor for '
+`vector copy constructor iterator'
+`vector vbase copy constructor iterator'
+`managed vector copy constructor iterator'
+`local static thread guard'
+operator "" 
+operator co_await
+operator<=>
+ Type Descriptor'
+ Base Class Descriptor at (
+ Base Class Array'
+ Class Hierarchy Descriptor'
+ Complete Object Locator'
+`anonymous namespace'
+(null)
+CorExitProcess
+C.V@
+Sunday
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Saturday
+January
+February
+March
+April
+June
+July
+August
+September
+October
+November
+December
+MM/dd/yy
+dddd, MMMM dd, yyyy
+HH:mm:ss
+NAN(SNAN)
+nan(snan)
+NAN(IND)
+nan(ind)
+e+000
+AreFileApisANSI
+EnumSystemLocalesEx
+GetDateFormatEx
+GetTimeFormatEx
+GetUserDefaultLocaleName
+IsValidLocaleName
+LCIDToLocaleName
+LocaleNameToLCID
+AppPolicyGetProcessTerminationMethod
+log10
+1#INF
+1#QNAN
+1#SNAN
+1#IND
+C:\dvs\p4\build\sw\devrel\libdev\NGX\snippets\rel_310_8\source\features\dlssnr\_out\wddm_amd64_release\default\nvngx_dlssnr.pdb
+.text
+.text$di
+.text$mn
+.text$mn$00
+.text$x
+.text$yd
+.idata$5
+.00cfg
+.CRT$XCA
+.CRT$XCC
+.CRT$XCL
+.CRT$XCU
+.CRT$XCZ
+.CRT$XIA
+.CRT$XIC
+.CRT$XIZ
+.CRT$XLA
+.CRT$XLZ
+.CRT$XPA
+.CRT$XPX
+.CRT$XPXA
+.CRT$XPZ
+.CRT$XTA
+.CRT$XTZ
+.gfids
+.giats
+.rdata
+.rdata$T
+.rdata$r
+.rdata$voltmd
+.rdata$zzzdbg
+.rtc$IAA
+.rtc$IZZ
+.rtc$TAA
+.rtc$TZZ
+.tls
+.tls$
+.tls$ZZZ
+.xdata
+.xdata$x
+.edata
+.idata$2
+.idata$3
+.idata$4
+.idata$6
+.data$r
+.data$rs
+.bss
+.pdata
+_RDATA
+.rsrc$01
+nvngx_dlssnr.dll
+NVSDK_NGX_CUDA_CreateFeature
+NVSDK_NGX_CUDA_CreateFeature1
+NVSDK_NGX_CUDA_EvaluateFeature
+NVSDK_NGX_CUDA_GetFeatureRequirements
+NVSDK_NGX_CUDA_GetScratchBufferSize
+NVSDK_NGX_CUDA_Init
+NVSDK_NGX_CUDA_Init1
+NVSDK_NGX_CUDA_Init_Ext
+NVSDK_NGX_CUDA_Init_Ext1
+NVSDK_NGX_CUDA_PopulateParameters_Impl
+NVSDK_NGX_CUDA_ReleaseFeature
+NVSDK_NGX_CUDA_Shutdown
+NVSDK_NGX_CUDA_Shutdown1
+NVSDK_NGX_D3D11_CreateFeature
+NVSDK_NGX_D3D11_EvaluateFeature
+NVSDK_NGX_D3D11_GetFeatureRequirements
+NVSDK_NGX_D3D11_GetScratchBufferSize
+NVSDK_NGX_D3D11_Init
+NVSDK_NGX_D3D11_Init_Ext
+NVSDK_NGX_D3D11_PopulateParameters_Impl
+NVSDK_NGX_D3D11_ReleaseFeature
+NVSDK_NGX_D3D11_Shutdown
+NVSDK_NGX_D3D11_Shutdown1
+NVSDK_NGX_D3D12_CreateFeature
+NVSDK_NGX_D3D12_EvaluateFeature
+NVSDK_NGX_D3D12_GetFeatureRequirements
+NVSDK_NGX_D3D12_GetScratchBufferSize
+NVSDK_NGX_D3D12_Init
+NVSDK_NGX_D3D12_Init_Ext
+NVSDK_NGX_D3D12_PopulateParameters_Impl
+NVSDK_NGX_D3D12_ReleaseFeature
+NVSDK_NGX_D3D12_Shutdown
+NVSDK_NGX_D3D12_Shutdown1
+NVSDK_NGX_GetAPIVersion
+NVSDK_NGX_GetApplicationId
+NVSDK_NGX_GetDriverVersionEx
+NVSDK_NGX_GetGPUArchitecture
+NVSDK_NGX_GetSnippetVersion
+NVSDK_NGX_SetOverrideStatusCallback
+NVSDK_NGX_SetRuntimeParamsCallback
+NVSDK_NGX_SetTelemetryEvaluateCallback
+NVSDK_NGX_VULKAN_CreateFeature
+NVSDK_NGX_VULKAN_CreateFeature1
+NVSDK_NGX_VULKAN_EvaluateFeature
+NVSDK_NGX_VULKAN_GetFeatureDeviceExtensionRequirements
+NVSDK_NGX_VULKAN_GetFeatureInstanceExtensionRequirements
+NVSDK_NGX_VULKAN_GetFeatureRequirements
+NVSDK_NGX_VULKAN_GetScratchBufferSize
+NVSDK_NGX_VULKAN_Init
+NVSDK_NGX_VULKAN_Init_Ext
+NVSDK_NGX_VULKAN_Init_Ext2
+NVSDK_NGX_VULKAN_PopulateParameters_Impl
+NVSDK_NGX_VULKAN_ReleaseFeature
+NVSDK_NGX_VULKAN_Shutdown
+NVSDK_NGX_VULKAN_Shutdown1
+GetFileVersionInfoSizeA
+GetFileVersionInfoA
+VerQueryValueA
+VERSION.dll
+ADVAPI32.dll
+USER32.dll
+CloseHandle
+CreateFileW
+AllocConsole
+AcquireSRWLockExclusive
+CreateEventW
+KERNEL32.dll
+CompareStringW

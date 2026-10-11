@@ -40,6 +40,7 @@ namespace HandBrake.Interop.Interop.HbLib
         HB_FILTER_LAPSHARP_VT,
         HB_FILTER_UNSHARP,
         HB_FILTER_UNSHARP_VT,
+        HB_FILTER_DLSSNR,
         HB_FILTER_GRAYSCALE,
         HB_FILTER_GRAYSCALE_VT,
         HB_FILTER_PAD,

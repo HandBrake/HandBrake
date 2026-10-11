@@ -1,0 +1,122 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * gemm_staged_int8 — the staged GEMM on the integer path, for the eight global blocks.
+ *
+ * Cooperative-matrix configuration 4 (notes/hw-coopmat.md): sint8 x sint8 -> sint32,
+ * M=8 N=16 K=32. A multiply-add covers twice the K of the float configuration in the
+ * same time, so the same 64x32 block takes a 64-deep K step and moves the same bytes per
+ * step as `gemm_staged.comp` does per 32 — half the trips round the loop for the same
+ * work. That loop, not memory, is what the bottleneck's GEMMs wait on
+ * (notes/improve-b.md).
+ *
+ * The weights are stored transposed, N x K, so that a B fragment is read by column —
+ * four consecutive K bytes to a word, the order the matrix unit consumes — and the
+ * accumulator is exact. The scales come back in the epilogue:
+ * C[r][c] = acc[r][c] * a_scale[r] * b_scale[c], one per row of A and one per column of
+ * B, which is what makes int8 activations usable at all (`src/gpu/int8_quant.py`).
+ *
+ * Operands, in the resident push block: a the activations (int8, M x K), b the weights
+ * (int8, N x K), c the output (float32, M x N), d the row scales, residual_cos the
+ * column scales.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int32 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int8 : require
+#extension GL_KHR_memory_scope_semantics : require
+#extension GL_KHR_cooperative_matrix : require
+#extension GL_KHR_shader_subgroup_basic : require
+#extension GL_EXT_shared_memory_block : require
+
+const uint TM = 8, TN = 16, TK = 32;
+const uint WARPS = 4;
+const uint BM = 64, BN = 32, BK = 64;     // the block, and a K step of two multiply-adds
+const uint WM = BM / WARPS, RM = WM / TM, RN = BN / TN;
+/* Sixteen bytes of pad keep successive rows off the same banks and every row 16-byte
+ * aligned for the vector stores that fill the tiles. */
+const uint SA = BK + 16, SB = BK + 16;
+
+layout(local_size_x = 32 * WARPS) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer Uvec4Buf { uvec4 v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer Vec4Buf  { vec4  v[]; };
+
+layout(push_constant, scalar) uniform Push {
+    Uvec4Buf a, b; FloatBuf c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    uint lda, ldb, ldc, spare;
+    uint64_t residual_cos;                     // the weights' per-column scales
+    uint image_h, image_w, window_cols, window_pad;
+    uint64_t qkv_scale;
+} pc;
+
+/* The tiles as bytes for the matrix loads, as 16-byte words for the fills, and the
+ * int32 output stage: all the same 8 KB, never live at once. */
+layout(scalar) shared Operands  { int8_t buf_a[BM * SA]; int8_t buf_b[BN * SB]; };
+layout(scalar) shared OperandsU { uvec4 wa[BM * SA / 16u]; uvec4 wb[BN * SB / 16u]; };
+layout(scalar) shared Staging   { int32_t stage[BM * BN]; };
+
+void main() {
+    uint row = gl_WorkGroupID.y * BM, col = gl_WorkGroupID.x * BN;
+    uint last = pc.m - 1u;
+    uint thread = gl_LocalInvocationID.x, warp = thread / 32u;
+    /* A: 64 rows of 64 bytes, a thread two words of one row. B: 32 columns of 64 bytes,
+     * a thread one word of one column. */
+    uint ar = thread / 2u, ah = (thread % 2u) * 2u;
+    uint bn = thread / 4u, bh = thread % 4u;
+
+    coopmat<int32_t, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> acc[RM][RN];
+    for (uint i = 0; i < RM; i++)
+        for (uint j = 0; j < RN; j++)
+            acc[i][j] = coopmat<int32_t, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(0);
+    coopmat<int8_t, gl_ScopeSubgroup, TM, TK, gl_MatrixUseA> fa[RM];
+    coopmat<int8_t, gl_ScopeSubgroup, TK, TN, gl_MatrixUseB> fb[RN];
+
+    uint words = pc.k / 16u;                   // a row of A or a column of B, in words
+    for (uint k0 = 0; k0 < pc.k; k0 += BK) {
+        barrier();
+        uint at = min(row + ar, last) * words + k0 / 16u + ah;
+        uvec4 a0 = pc.a.v[at], a1 = pc.a.v[at + 1u];
+        uvec4 b0 = pc.b.v[(col + bn) * words + k0 / 16u + bh];
+        wa[(ar * SA) / 16u + ah] = a0;
+        wa[(ar * SA) / 16u + ah + 1u] = a1;
+        wb[(bn * SB) / 16u + bh] = b0;
+        barrier();
+        for (uint kk = 0; kk < BK; kk += TK) {
+            for (uint i = 0; i < RM; i++)
+                coopMatLoad(fa[i], buf_a, (warp * WM + i * TM) * SA + kk, SA,
+                            gl_CooperativeMatrixLayoutRowMajor);
+            for (uint j = 0; j < RN; j++)
+                coopMatLoad(fb[j], buf_b, (j * TN) * SB + kk, SB,
+                            gl_CooperativeMatrixLayoutColumnMajor);
+            for (uint i = 0; i < RM; i++)
+                for (uint j = 0; j < RN; j++)
+                    acc[i][j] = coopMatMulAdd(fa[i], fb[j], acc[i][j]);
+        }
+    }
+
+    barrier();
+    for (uint i = 0; i < RM; i++)
+        for (uint j = 0; j < RN; j++)
+            coopMatStore(acc[i][j], stage, (warp * WM + i * TM) * BN + j * TN, BN,
+                         gl_CooperativeMatrixLayoutRowMajor);
+    barrier();
+    FloatBuf row_scale = pc.d, column_scale = FloatBuf(pc.residual_cos);
+    for (uint e = thread * 4u; e < BM * BN; e += 32u * WARPS * 4u) {
+        uint r = row + e / BN;
+        if (r > last) continue;
+        uint c = col + e % BN;
+        float scale = row_scale.v[r];
+        vec4 column = Vec4Buf(pc.residual_cos).v[c >> 2];
+        vec4 out4;
+        for (uint q = 0; q < 4u; q++)
+            out4[q] = float(stage[e + q]) * scale * column[q];
+        Vec4Buf(uint64_t(pc.c)).v[(r * pc.n + c) >> 2] = out4;
+    }
+}

@@ -866,6 +866,7 @@ hb_image_t * hb_get_preview(hb_handle_t * h, hb_dict_t * job_dict,
             case HB_FILTER_CHROMA_SMOOTH:
             case HB_FILTER_LAPSHARP:
             case HB_FILTER_UNSHARP:
+            case HB_FILTER_DLSSNR:
             case HB_FILTER_DEBLOCK:
             case HB_FILTER_COMB_DETECT:
             case HB_FILTER_HQDN3D:

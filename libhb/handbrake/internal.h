@@ -458,6 +458,7 @@ extern hb_filter_object_t hb_filter_grayscale;
 extern hb_filter_object_t hb_filter_pad;
 extern hb_filter_object_t hb_filter_lapsharp;
 extern hb_filter_object_t hb_filter_unsharp;
+extern hb_filter_object_t hb_filter_dlssnr;
 extern hb_filter_object_t hb_filter_avfilter;
 extern hb_filter_object_t hb_filter_mt_frame;
 extern hb_filter_object_t hb_filter_colorspace;

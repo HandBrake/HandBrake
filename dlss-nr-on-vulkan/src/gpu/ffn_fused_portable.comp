@@ -1,0 +1,260 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * ffn_fused_portable — `ffn_fused.comp` without the cooperative matrix.
+ *
+ * A feed-forward in one pass with the hidden layer kept in shared memory, on a device with
+ * no matrix units (MoltenVK, the phones, Xe2 under XMX_PORTABLE=1). Same push block and
+ * flags, one group per row of the grid; libxmx dispatches it with 128 rows a workgroup
+ * where the matrix kernel takes 256.
+ *
+ * Eight 16-row blocks share a 256-lane workgroup, one to each 32-lane slice, and for the
+ * narrow blocks' shape (32 channels, 128 hidden; flag 0x800000) both 8 KB weight matrices
+ * arrive in its shared memory once, a 16-byte load a lane, instead of once for every 16
+ * rows — the matrix kernel's change, at half its row count so the whole is 24 KB: 16 KB of
+ * weights and a kilobyte of hidden chunk a slice. Other shapes read their weights from
+ * device memory as before. Every barrier is the workgroup's (a phone's subgroup may be
+ * narrower than a slice), so a surplus slice past M idles through them rather than
+ * returning.
+ *
+ * It must equal *this path's* two-GEMM reference bit for bit (`src/gpu/test_ffn_fused.py`):
+ * the expand through `gemm_portable` with the gate and E4M3 publish into a half hidden
+ * buffer, then the projection through `gemm_portable` with the residual in its epilogue.
+ * So both products are the portable GEMM's arithmetic in its order — the tiled build's
+ * lane layout (row r and r+8 of a 16-row block, four consecutive columns cq and cq+16),
+ * vec4 accumulators taking one K term at a time from zero, written in the same expression
+ * shape — and the projection's accumulator runs across the hidden chunks in order, which
+ * is the order the reference sums the whole hidden width in. The publish and the residual
+ * are `publish.glsl`'s and `residual_epilogue.glsl`'s.
+ *
+ * Block 70's input can be made here too (flag 0x1000000, the staged shape with the
+ * residual), as `ffn_fused.comp` makes it: the level above upsampled 2x times the sin
+ * plus the skip times the cos, `UPSAMPLE_MERGE`'s expression, which this path's reference
+ * stored as float32 for the residual and as half for the expand. Each lane makes the
+ * sixty-four half values of A it reads — rows r and r + 8, all 32 channels — once, into
+ * registers, and each merged value again where its residual needs it. And block 0's
+ * stem (flag 0x2000000): the features times the adapter, the tiled portable GEMM's sixteen
+ * multiply-adds from zero four columns at a time, made the same two ways. a is then the
+ * level above (half) or the features (half, rows x 16), d the skip (half), `aux` the sin
+ * then cos or the adapter (16 x 32), lda the width and ldb the level above's.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+
+#include "publish.glsl"
+
+layout(local_size_x = 256) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf  { float16_t v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float     v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 8)  buffer Half4Buf { f16vec4   v4[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer Uvec4Buf { uvec4     u4[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer Vec4Buf  { vec4      v4[]; };
+
+layout(push_constant, scalar) uniform Push {
+    HalfBuf a, b; FloatBuf c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    uint64_t aux;                              // offset 64: the merge's sin then cos,
+                                               // or the stem's adapter
+    float p2, p3;
+    uint lda, ldb, ldc, spare;
+    uint64_t residual_cos;                     // per-channel cosine of the skip
+    uint image_h, image_w, window_cols, window_pad;
+    uint64_t projection;                       // offset 120: hidden x 32 per group
+} pc;
+
+#include "specialize.glsl"
+#include "residual_epilogue.glsl"   /* needs operation_flags() from above */
+
+const uint ROWS = 16u, CHUNK = 32u, OUT = 32u, TM = 8u, TN = 16u, SLICES = 8u;
+const uint EPI_GATE_E4M3 = 3u;             // the expand GEMM's publish
+
+/* the staged shape's weights as words, two halves each: the expand's 32 x 128 at 0, the
+ * projection's 128 x 32 at 2048 */
+shared uint weights[4096];
+const uint PROJECTION = 2048u;
+/* each slice's chunk of the gated hidden layer, as the half buffer the reference writes
+ * holds it */
+shared float16_t hidden[SLICES * ROWS * CHUNK];
+
+/* Flag 0x800000: one group of 32 channels and 128 hidden, its weights in shared memory. */
+bool staged() { return (operation_flags() & 0x800000u) != 0u; }
+
+/* Flag 0x1000000: the input is block 70's merge, made here; 0x2000000: block 0's stem. */
+bool merging() { return (operation_flags() & 0x1000000u) != 0u; }
+bool stemming() { return (operation_flags() & 0x2000000u) != 0u; }
+
+/* Four channels of the merge at one pixel, as `UPSAMPLE_MERGE` makes each: the scale its
+ * own rounded product, then the skip's fused multiply-add. `c` is a multiple of four. */
+vec4 merged4(uint pixel, uint c) {
+    uint x = pixel % pc.lda, y = pixel / pc.lda;
+    uint above = ((y / 2u) * pc.ldb + x / 2u) * 32u + c;
+    vec4 sine = Vec4Buf(pc.aux).v4[c >> 2], cosine = Vec4Buf(pc.aux).v4[(32u + c) >> 2];
+    vec4 out4;
+    for (uint e = 0u; e < 4u; e++) {
+        float scaled = float(pc.a.v[above + e]) * sine[e];
+        out4[e] = fma(float(HalfBuf(uint64_t(pc.d)).v[pixel * 32u + c + e]), cosine[e], scaled);
+    }
+    return out4;
+}
+
+/* Four channels of the stem at one pixel, as the tiled portable GEMM sums them. */
+vec4 stem4(uint pixel, uint c) {
+    HalfBuf adapter = HalfBuf(pc.aux);
+    vec4 acc = vec4(0.0);
+    for (uint k = 0u; k < 16u; k++) {
+        uint at = k * 32u + c;
+        vec4 bv = vec4(float(adapter.v[at]), float(adapter.v[at + 1u]),
+                       float(adapter.v[at + 2u]), float(adapter.v[at + 3u]));
+        float av = float(pc.a.v[pixel * 16u + k]);
+        acc += av * bv;
+    }
+    return acc;
+}
+
+vec4 made4(uint pixel, uint c) { return merging() ? merged4(pixel, c) : stem4(pixel, c); }
+
+/* four consecutive staged weights from an even index: two words */
+vec4 staged4(uint at) {
+    return vec4(unpackHalf2x16(weights[at >> 1u]), unpackHalf2x16(weights[(at >> 1u) + 1u]));
+}
+
+void main() {
+    uint group = gl_WorkGroupID.y;
+    uint expand_base = group * pc.sa, project_base = group * pc.sb;
+    HalfBuf projection = HalfBuf(pc.projection);
+    uint index = gl_LocalInvocationIndex;
+    if (staged()) {
+        uvec4 e[2], q[2];
+        for (uint t = 0u; t < 2u; t++) {
+            e[t] = Uvec4Buf(uint64_t(pc.b) + uint64_t(expand_base) * 2ul).u4[index + t * 256u];
+            q[t] = Uvec4Buf(pc.projection + uint64_t(project_base) * 2ul).u4[index + t * 256u];
+        }
+        for (uint t = 0u; t < 2u; t++)
+            for (uint w = 0u; w < 4u; w++) {
+                weights[(index + t * 256u) * 4u + w] = e[t][w];
+                weights[PROJECTION + (index + t * 256u) * 4u + w] = q[t][w];
+            }
+    }
+    memoryBarrierShared();
+    barrier();
+
+    uint slice = index >> 5u, lane = index & 31u;
+    uint row = gl_WorkGroupID.x * (ROWS * SLICES) + slice * ROWS;
+    bool live_rows = row < pc.m;                  // uniform across the slice, not the workgroup
+    // the staged shape as constants, so a specialised pipeline unrolls both K loops
+    uint cin = staged() ? 32u : pc.n, width = staged() ? 128u : pc.k;
+    uint ldc = pc.ldc != 0u ? pc.ldc : OUT;
+    uint r = lane >> 2u, cq = (lane & 3u) * 4u;
+    uint mine = slice * ROWS * CHUNK;          // this slice's hidden chunk
+
+    vec4 result[2][2];
+    for (uint i = 0; i < 2u; i++)
+        for (uint j = 0; j < 2u; j++)
+            result[i][j] = vec4(0.0);
+
+    /* an input made here: this lane's rows of A, published to E4M3 as every feed-forward
+     * GEMM reads its input (the residual takes it raw, made again), two to a word */
+    bool made = merging() || stemming();
+    uint held[2][16];
+    if (made && live_rows) {
+        for (uint i = 0; i < 2u; i++)
+            for (uint c = 0; c < 32u; c += 4u) {
+                vec4 v = made4(row + r + i * TM, c);
+                for (uint e = 0u; e < 4u; e++) v[e] = e4m3(v[e]);
+                held[i][c / 2u] = packHalf2x16(v.xy);
+                held[i][c / 2u + 1u] = packHalf2x16(v.zw);
+            }
+    }
+
+    for (uint chunk = 0u; chunk < width; chunk += CHUNK) {
+        if (live_rows) {
+            /* the expand's 16x32 block for these hidden columns, as the tiled portable
+             * GEMM computes it (B row-major, `width` wide, one group's slab) */
+            vec4 h[2][2];
+            for (uint i = 0; i < 2u; i++)
+                for (uint j = 0; j < 2u; j++)
+                    h[i][j] = vec4(0.0);
+            for (uint k = 0; k < cin; k++) {
+                vec4 bv[2];
+                for (uint j = 0; j < 2u; j++) {
+                    if (staged()) {
+                        bv[j] = staged4(k * width + chunk + cq + j * TN);
+                    } else {
+                        uint at = expand_base + k * width + chunk + cq + j * TN;
+                        bv[j] = vec4(float(pc.b.v[at]), float(pc.b.v[at + 1u]),
+                                     float(pc.b.v[at + 2u]), float(pc.b.v[at + 3u]));
+                    }
+                }
+                for (uint i = 0; i < 2u; i++) {
+                    float av = made ? unpackHalf2x16(held[i][k >> 1u])[k & 1u]
+                                    : float(pc.a.v[(row + r + i * TM) * cin + k]);
+                    for (uint j = 0; j < 2u; j++)
+                        h[i][j] += av * bv[j];
+                }
+            }
+            for (uint i = 0; i < 2u; i++)
+                for (uint j = 0; j < 2u; j++)
+                    for (uint e = 0; e < 4u; e++)
+                        hidden[mine + (r + i * TM) * CHUNK + cq + j * TN + e] =
+                            float16_t(publish(EPI_GATE_E4M3, h[i][j][e]));
+        }
+        memoryBarrierShared();
+        barrier();
+        if (live_rows) {
+            /* the projection over these 32 hidden rows, continuing the accumulator */
+            for (uint kk = 0; kk < CHUNK; kk++) {
+                vec4 bv[2];
+                for (uint j = 0; j < 2u; j++) {
+                    if (staged()) {
+                        bv[j] = staged4(PROJECTION * 2u + (chunk + kk) * OUT + cq + j * TN);
+                    } else {
+                        uint at = project_base + (chunk + kk) * OUT + cq + j * TN;
+                        bv[j] = vec4(float(projection.v[at]), float(projection.v[at + 1u]),
+                                     float(projection.v[at + 2u]), float(projection.v[at + 3u]));
+                    }
+                }
+                for (uint i = 0; i < 2u; i++) {
+                    float av = float(hidden[mine + (r + i * TM) * CHUNK + kk]);
+                    for (uint j = 0; j < 2u; j++)
+                        result[i][j] += av * bv[j];
+                }
+            }
+        }
+        memoryBarrierShared();                  // the next chunk overwrites the hidden chunk
+        barrier();
+    }
+    if (!live_rows) return;                       // no barrier follows
+
+    uint epilogue = (operation_flags() >> 8) & 0xFu;
+    bool narrow_out = (operation_flags() & 0x1000u) != 0u;
+    uint64_t base_c = uint64_t(pc.c);
+    for (uint i = 0; i < 2u; i++)
+        for (uint j = 0; j < 2u; j++) {
+            vec4 v = result[i][j];
+            uint at = (row + r + i * TM) * ldc + group * OUT + cq + j * TN;
+            if (made) {
+                /* the made input again as the residual's float32 skip, and the residual as
+                 * the fused multiply-add `add_gemm_residual` compiles to — written out, as
+                 * ffn_fused.comp and window_block_portable.comp write it, since left to the
+                 * compiler this form was contracted differently and missed by an ulp */
+                vec4 skip = made4(row + r + i * TM, cq + j * TN);
+                for (uint e = 0; e < 4u; e++)
+                    v[e] = publish(epilogue, fma(skip[e], FloatBuf(pc.residual_cos).v[cq + j * TN + e], v[e]));
+            } else {
+                for (uint e = 0; e < 4u; e++)
+                    v[e] = publish(epilogue, add_gemm_residual(v[e], at + e));
+            }
+            if (!narrow_out) {
+                for (uint e = 0; e < 4u; e++) pc.c.v[at + e] = v[e];
+            } else if ((at & 3u) == 0u && (uint(base_c) & 7u) == 0u) {
+                Half4Buf(base_c).v4[at >> 2] = f16vec4(v);
+            } else {
+                for (uint e = 0; e < 4u; e++) HalfBuf(base_c).v[at + e] = float16_t(v[e]);
+            }
+        }
+}

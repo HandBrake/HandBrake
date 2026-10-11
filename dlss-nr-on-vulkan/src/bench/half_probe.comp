@@ -1,0 +1,32 @@
+#version 450
+/* Does the hardware float16 conversion survive the compiler, and does it round the
+ * way the bit-twiddled version does — including subnormals and overflow? */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+layout(local_size_x = 256) in;
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float v[]; };
+layout(push_constant, scalar) uniform Push { FloatBuf a, b, c, d; uint m, n, k, batch;
+    uint sa, sb, sc, flags; float p0, p1, p2, p3; } pc;
+
+float bit_round(float x) {
+    float magnitude = abs(x);
+    if (magnitude >= 65520.0) return x < 0.0 ? -1.0 / 0.0 : 1.0 / 0.0;
+    if (magnitude < 6.103515625e-05) return roundEven(x * 16777216.0) * 5.9604644775390625e-08;
+    int bits = floatBitsToInt(x);
+    bits = (bits + (0x0FFF + ((bits >> 13) & 1))) & ~0x1FFF;
+    return intBitsToFloat(bits);
+}
+float pack_round(float x) { return unpackHalf2x16(packHalf2x16(vec2(x, 0.0))).x; }
+float cast_round(float x) { return float(float16_t(x)); }
+
+void main() {
+    uint i = gl_GlobalInvocationID.x;
+    if (i >= pc.m) return;
+    float x = pc.a.v[i];
+    pc.b.v[i] = bit_round(x);
+    pc.c.v[i] = pack_round(x);
+    pc.d.v[i] = cast_round(x);
+}

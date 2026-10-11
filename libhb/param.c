@@ -187,6 +187,29 @@ static hb_filter_param_t lapsharp_tunes[] =
     { 0, NULL,          NULL,         NULL              }
 };
 
+static hb_filter_param_t dlssnr_presets[] =
+{
+    { 1, "Custom",      "custom",     NULL              },
+    { 2, "Ultralight",  "ultralight", NULL              },
+    { 3, "Light",       "light",      NULL              },
+    { 4, "Medium",      "medium",     NULL              },
+    { 5, "Strong",      "strong",     NULL              },
+    { 6, "Stronger",    "stronger",   NULL              },
+    { 7, "Very Strong", "verystrong", NULL              },
+    { 0, NULL,          NULL,         NULL              }
+};
+
+// the vendor's profiles (nr_frame --profile); "none" is standard
+static hb_filter_param_t dlssnr_tunes[] =
+{
+    { 0, "None",        "none",       NULL              },
+    { 1, "Natural",     "natural",    NULL              },
+    { 2, "Cinematic",   "cinematic",  NULL              },
+    { 3, "Neutral",     "neutral",    NULL              },
+    { 4, "Vendor",      "vendor",     NULL              },
+    { 0, NULL,          NULL,         NULL              }
+};
+
 static hb_filter_param_t detelecine_presets[] =
 {
     { 0, "Off",         "off",        "disable=1"       },
@@ -406,6 +429,10 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_LAPSHARP,    lapsharp_presets,    lapsharp_tunes,
       sizeof(lapsharp_presets) / sizeof(hb_filter_param_t),
       sizeof(lapsharp_tunes)   / sizeof(hb_filter_param_t),       },
+
+    { HB_FILTER_DLSSNR,      dlssnr_presets,      dlssnr_tunes,
+      sizeof(dlssnr_presets)   / sizeof(hb_filter_param_t),
+      sizeof(dlssnr_tunes)     / sizeof(hb_filter_param_t),       },
 
     { HB_FILTER_DETELECINE,  detelecine_presets,  NULL,
       sizeof(detelecine_presets) / sizeof(hb_filter_param_t),  0, },
@@ -1188,6 +1215,87 @@ static hb_dict_t * generate_lapsharp_settings(const char *preset,
     return settings;
 }
 
+static hb_dict_t * generate_dlssnr_settings(const char *preset,
+                                            const char *tune,
+                                            const char *custom)
+{
+    hb_dict_t * settings;
+
+    if (preset == NULL)
+        return NULL;
+
+    if (!strcasecmp(preset, "custom"))
+    {
+        return hb_parse_filter_settings(custom);
+    }
+    if (!strcasecmp(preset, "ultralight") ||
+        !strcasecmp(preset, "light") ||
+        !strcasecmp(preset, "medium") ||
+        !strcasecmp(preset, "strong") ||
+        !strcasecmp(preset, "stronger") ||
+        !strcasecmp(preset, "verystrong"))
+    {
+        // the intensity: the blend of the model's picture against the source,
+        // 1 the model's own answer, above 1 extrapolated
+        double       intensity = 1.0;
+        const char * profile   = "standard";
+
+        if (!strcasecmp(preset, "ultralight"))
+        {
+            intensity = 0.25;
+        }
+        else if (!strcasecmp(preset, "light"))
+        {
+            intensity = 0.5;
+        }
+        else if (!strcasecmp(preset, "strong"))
+        {
+            intensity = 1.25;
+        }
+        else if (!strcasecmp(preset, "stronger"))
+        {
+            intensity = 1.5;
+        }
+        else if (!strcasecmp(preset, "verystrong"))
+        {
+            intensity = 2.0;
+        }
+
+        if (tune == NULL || !strcasecmp(tune, "none") ||
+            !strcasecmp(tune, "standard"))
+        {
+            profile = "standard";
+        }
+        else if (!strcasecmp(tune, "natural")   ||
+                 !strcasecmp(tune, "cinematic") ||
+                 !strcasecmp(tune, "neutral")   ||
+                 !strcasecmp(tune, "vendor"))
+        {
+            profile = tune;
+        }
+        else
+        {
+            fprintf(stderr, "Unrecognized dlssnr tune (%s).\n", tune);
+            return NULL;
+        }
+
+        settings = hb_dict_init();
+        hb_dict_set(settings, "intensity", hb_value_double(intensity));
+        hb_dict_set(settings, "profile",   hb_value_string(profile));
+        hb_dict_set(settings, "history",   hb_value_int(1));
+    }
+    else
+    {
+        settings = hb_parse_filter_settings(preset);
+        if (tune != NULL)
+        {
+            fprintf(stderr, "Custom dlssnr parameters specified; ignoring dlssnr tune (%s).\n", tune);
+        }
+    }
+
+    return settings;
+}
+
 int hb_validate_param_string(const char *regex_pattern, const char *param_string)
 {
     regex_t regex_temp;
@@ -1564,6 +1672,9 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_UNSHARP:
             settings = generate_unsharp_settings(preset, tune, custom);
             break;
+        case HB_FILTER_DLSSNR:
+            settings = generate_dlssnr_settings(preset, tune, custom);
+            break;
         case HB_FILTER_DEBLOCK:
         case HB_FILTER_BM3D:
         case HB_FILTER_DEBAND:
@@ -1726,6 +1837,7 @@ const char * hb_filter_param_get_default_preset(int filter_id)
     {
         case HB_FILTER_UNSHARP:
         case HB_FILTER_LAPSHARP:
+        case HB_FILTER_DLSSNR:
         case HB_FILTER_CHROMA_SMOOTH:
         case HB_FILTER_NLMEANS:
         case HB_FILTER_HQDN3D:

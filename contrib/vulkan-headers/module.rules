@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,VULKANHEADERS))
+$(eval $(call import.CONTRIB.rules,VULKANHEADERS))

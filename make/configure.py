@@ -1464,6 +1464,10 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-libdovi', dest="enable_libdovi", default=not Tools.cargo.fail, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-libdovi', dest="enable_libdovi", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
+    h = 'DLSS Neural Rendering filter (dlss-nr-on-vulkan; needs glslangValidator)' if dlssnr_supported else argparse.SUPPRESS
+    grp.add_argument( '--enable-dlssnr', dest="enable_dlssnr", default=(dlssnr_supported and not Tools.glslang.fail), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-dlssnr', dest="enable_dlssnr", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
+
 
     cli.add_argument_group( grp )
 
@@ -1699,6 +1703,7 @@ try:
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
         ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
         cargo      = ToolProbe( 'CARGO.exe',      'cargo',        'cargo', abort=False )
+        glslang    = ToolProbe( 'GLSLANG.exe',    'glslang',    'glslangValidator', 'glslang', abort=False )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=(True if (not xcode_opts['disabled'] and (build_tuple.match('*-*-darwin*') and cross is None)) else False), versionopt='-version', minversion=[10,3,0] )
 
@@ -1750,6 +1755,9 @@ try:
     vce_supported   = host_tuple.match( '*-*-linux*', 'x86_64-w64-mingw32*' )
     mf_supported    = host_tuple.match( 'aarch64-w64-mingw32*' )
     vaapi_supported = host_tuple.match( '*-*-linux*', '*-*-freebsd*' )
+    # the Metal archive on macOS, the Vulkan archive (vulkan-1.dll at run time) on Windows
+    dlssnr_supported = host_tuple.match( '*-*-darwin*', 'x86_64-w64-mingw32*',
+                                         'aarch64-w64-mingw32*' )
 
     # create CLI and parse
     cli = createCLI( cross )
@@ -1799,6 +1807,16 @@ try:
     options.enable_amfdec     = options.enable_amfdec if vce_supported else False
     options.enable_gtk        = options.enable_gtk if gtk_supported else False
     options.enable_vaapi      = options.enable_vaapi if vaapi_supported else False
+    # dlss-nr-on-vulkan compiles its shaders with glslangValidator at configure time
+    if options.enable_dlssnr and (not dlssnr_supported or Tools.glslang.fail):
+        if dlssnr_supported and Tools.glslang.fail:
+            print( print_blue('Note:'), 'DLSS-NR disabled: glslangValidator not found (install the Vulkan SDK or glslang)' )
+        options.enable_dlssnr = False
+    if options.enable_dlssnr and host_tuple.match( '*-*-darwin*' ):
+        metal_check = ShellProbe( 'checking for the Metal compiler', 'xcrun -sdk macosx -f metal' )
+        metal_check.run()
+        if metal_check.fail:
+            print( print_blue('Note:'), 'no Metal compiler: libdlssnr will carry the Vulkan runtime, which needs a Vulkan loader in the process; install it with `xcodebuild -downloadComponent MetalToolchain`' )
 
     # cargo-c is required for building libdovi
     # ToolProbe only checks for discrete commands. cargo-cbuild is not a discrete command
@@ -2128,6 +2146,7 @@ int main()
     doc.add( 'FEATURE.x265',          int( options.enable_x265 ))
     doc.add( 'FEATURE.numa',          int( options.enable_numa ))
     doc.add( 'FEATURE.libdovi',       int( options.enable_libdovi ))
+    doc.add( 'FEATURE.dlssnr',        int( options.enable_dlssnr ))
 
     if build_tuple.match( '*-*-darwin*' ) and options.cross is None:
         doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
@@ -2256,6 +2275,7 @@ int main()
     print(f'Enable VCE:            {options.enable_vce}' + ('' if vce_supported else note_unsupported))
     print(f'Enable AMFDEC:         {options.enable_amfdec}' + ('' if vce_supported else note_unsupported))
     print(f'Enable libdovi:        {options.enable_libdovi}')
+    print(f'Enable DLSS-NR:        {options.enable_dlssnr}' + ('' if dlssnr_supported else note_unsupported))
     print(f'Enable GTK GUI:        {options.enable_gtk}' + ('' if gtk_supported else note_unsupported))
 
     if len(targets) > 0:

@@ -1,0 +1,335 @@
+#!/usr/bin/env python3
+"""nr-panel — every knob on one screen, live, while the game runs.
+
+    src/layer/nr-panel
+
+Arrow keys pick a knob and change it; the daemon re-reads the settings file between
+frames, so nothing reloads and nothing pauses. The bottom of the screen is what the
+daemon is actually doing — extent, milliseconds, the history gate, how much of the frame
+it is holding still — read from its log rather than guessed.
+
+Curses, not a toolkit: it needs nothing that is not in the standard library, and it works
+the same over ssh as it does on the machine. `nr-ctl` is the one-shot form of the same
+thing and `nr-toggle` is the on/off on a key.
+"""
+import collections
+import curses
+import pathlib
+import re
+import sys
+import textwrap
+import time
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import nr_knobs                                                        # noqa: E402
+import nr_paths                                                        # noqa: E402
+
+# `1024x768 B8G8R8A8_UNORM in 0.21s  change 0.07385  gate 0.429, held 65%, cut 0.0204
+#  interface 12% left alone  letterbox 192px of rows and 0px of columns skipped`
+FIELDS = {
+    "extent": re.compile(r"^(\d+x\d+)\b"),
+    "seconds": re.compile(r"\bin ([\d.]+)s"),
+    "change": re.compile(r"\bchange ([\d.]+)"),
+    "gate": re.compile(r"\bgate ([\d.]+)"),
+    "held": re.compile(r"\bheld (\d+)%"),
+    "interface": re.compile(r"\binterface (\d+)%"),
+    "letterbox": re.compile(r"\bletterbox (\d+)px"),
+    "history": re.compile(r"\b(no history)\b"),
+}
+
+
+class Log:
+    """The tail of the daemon's own output, for a readout that is measured, not modelled."""
+
+    def __init__(self, path, keep=30):
+        self.path = path
+        self.position = None
+        self.seconds = collections.deque(maxlen=keep)
+        self.last = {}
+        self.lines = 0
+
+    def poll(self):
+        try:
+            size = self.path.stat().st_size
+        except OSError:
+            return
+        if self.position is None:
+            self.position = max(0, size - (1 << 16))   # enough for a rate, not a history
+        if size < self.position:
+            self.position = 0                          # restarted, or truncated
+        try:
+            with self.path.open(errors="replace") as handle:
+                handle.seek(self.position)
+                fresh = handle.read()
+                self.position = handle.tell()
+        except OSError:
+            return
+        for line in fresh.splitlines():
+            # Both, not just the seconds: `model ready in 0.3s` is also "in ... s", and it
+            # was being averaged into the frame rate, so the readout lied for the first
+            # half-minute after every daemon start. A frame line begins with its extent.
+            if not (FIELDS["extent"].search(line) and FIELDS["seconds"].search(line)):
+                continue
+            found = {}
+            for name, pattern in FIELDS.items():
+                match = pattern.search(line)
+                if match:
+                    found[name] = match.group(1)
+            self.last = found
+            self.lines += 1
+            try:
+                self.seconds.append(float(found["seconds"]))
+            except (KeyError, ValueError):
+                pass
+
+    def rate(self):
+        if not self.seconds:
+            return None
+        mean = sum(self.seconds) / len(self.seconds)
+        return (1000 * mean, 1 / mean) if mean > 0 else None
+
+
+class Panel:
+    def __init__(self):
+        self.knobs = nr_knobs.KNOBS
+        self.cursor = 0
+        self.values = {}
+        self.stamp = None
+        self.log = Log(nr_paths.LOG)
+        self.message = ""
+        self.message_until = 0.0
+        self.reload(force=True)
+
+    # ---- the settings file, which anything else may also be writing ----
+    def reload(self, force=False):
+        try:
+            stamp = nr_paths.SETTINGS.stat().st_mtime_ns
+        except OSError:
+            stamp = None
+        if force or stamp != self.stamp:
+            self.stamp = stamp
+            self.values = nr_paths.read()
+
+    def value(self, knob):
+        """What the daemon is using, and whether it was chosen or fallen back to."""
+        if knob.name in self.values:
+            return self.values[knob.name], True
+        return knob.default, False
+
+    def store(self, knob, value):
+        self.values[knob.name] = value
+        nr_paths.write(self.values)
+        try:
+            self.stamp = nr_paths.SETTINGS.stat().st_mtime_ns
+        except OSError:
+            self.stamp = None
+
+    def adjust(self, step):
+        knob = self.knobs[self.cursor]
+        current, _explicit = self.value(knob)
+        if knob.kind == "choice":
+            order = nr_knobs.PROFILES
+            index = order.index(current) if current in order else 0
+            self.store(knob, order[(index + (1 if step > 0 else -1)) % len(order)])
+            return
+        try:
+            number = float(current)
+        except (TypeError, ValueError):
+            number = knob.default
+        self.store(knob, nr_knobs.clamp(knob, number + step * knob.step))
+
+    def to_default(self):
+        knob = self.knobs[self.cursor]
+        if self.values.pop(knob.name, None) is not None:
+            nr_paths.write(self.values)
+            self.say(f"{knob.label} back to the daemon's own {knob.default}")
+        else:
+            self.say(f"{knob.label} was already the daemon's own {knob.default}")
+
+    def say(self, text, seconds=4.0):
+        self.message, self.message_until = text, time.monotonic() + seconds
+
+    def toggle_effect(self):
+        if nr_paths.TRIGGER.exists():
+            nr_paths.TRIGGER.unlink(missing_ok=True)
+            self.say("effect off - the game keeps its own frames")
+            return
+        nr_paths.TRIGGER.parent.mkdir(parents=True, exist_ok=True)
+        nr_paths.TRIGGER.touch()
+        if not nr_paths.alive():
+            self.say("starting the model...", 30)
+            return "start"
+        self.say("effect on")
+        return None
+
+
+# --------------------------------------------------------------------------
+# drawing
+# --------------------------------------------------------------------------
+def put(window, row, column, text, attribute=0):
+    """addstr that never raises: a panel must survive a small terminal."""
+    height, width = window.getmaxyx()
+    if row < 0 or row >= height or column < 0 or column >= width:
+        return
+    text = text[:width - column - (1 if row == height - 1 else 0)]
+    if not text:
+        return
+    try:
+        window.addstr(row, column, text, attribute)
+    except curses.error:
+        pass
+
+
+def shown(knob, value):
+    if knob.kind == "choice":
+        return str(value)
+    try:
+        return f"{float(value):.2f}"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def draw(window, panel):
+    window.erase()
+    height, width = window.getmaxyx()
+    bold, dim, pick = curses.A_BOLD, curses.A_DIM, curses.A_REVERSE
+
+    on = nr_paths.TRIGGER.exists()
+    live = nr_paths.alive()
+    put(window, 0, 1, "neural rendering", bold)
+    header = f"effect {'ON ' if on else 'off'}   daemon {'listening' if live else 'not answering'}"
+    rate = panel.log.rate()
+    if rate:
+        header += f"   {rate[0]:.0f} ms, {rate[1]:.1f} fps"
+    put(window, 0, max(19, width - len(header) - 2), header, bold if on else dim)
+
+    top = 2
+    column = 21
+    for index, knob in enumerate(panel.knobs):
+        row = top + index
+        if row >= height - 2:              # never write over the two footer lines
+            break
+        value, explicit = panel.value(knob)
+        selected = index == panel.cursor
+        put(window, row, 1, ">" if selected else " ", bold)
+        put(window, row, 3, knob.label, bold if selected else 0)
+        put(window, row, column, f"{shown(knob, value):<10}",
+            pick if selected else (0 if explicit else dim))
+        note = knob.summary
+        put(window, row, column + 12, note, dim)
+
+    # Laid out from what there is, not from a fixed picture: the knob list and the two
+    # footer lines come first, and the explanation gets whatever is left. In a short
+    # window the explanation goes rather than the knobs, and if even the knobs will not
+    # fit the footer says so instead of the list quietly ending early.
+    status_row, keys_row = height - 2, height - 1
+    detail_top = top + len(panel.knobs) + 1
+    room = status_row - detail_top - 2
+    if room >= 2:
+        put(window, detail_top, 1, "-" * max(0, width - 2), dim)
+        body = textwrap.wrap(panel.knobs[panel.cursor].detail.replace("*", ""),
+                             max(20, width - 4))
+        for offset, line in enumerate(body[:room]):
+            put(window, detail_top + 1 + offset, 2, line)
+        if len(body) > room:
+            put(window, detail_top + room, 2, "...", dim)
+
+    last = panel.log.last
+    if last:
+        parts = [last.get("extent", ""),
+                 f"{1000 * float(last['seconds']):.0f} ms" if "seconds" in last else ""]
+        for label, key, suffix in (("change", "change", ""), ("gate", "gate", ""),
+                                   ("held", "held", "%"), ("interface", "interface", "%"),
+                                   ("letterbox", "letterbox", "px")):
+            if key in last:
+                parts.append(f"{label} {last[key]}{suffix}")
+        if "history" in last:
+            parts.append("no history")
+        put(window, status_row, 2, "last frame   " + "   ".join(p for p in parts if p))
+    elif live:
+        put(window, status_row, 2, f"daemon is up; no frames in {nr_paths.LOG} yet", dim)
+    else:
+        put(window, status_row, 2, "no daemon - press space to start one", dim)
+
+    if height < top + len(panel.knobs) + 2:
+        put(window, keys_row, 2,
+            f"window too short: {len(panel.knobs) + 4} rows needed, {height} here", bold)
+    elif panel.message and time.monotonic() < panel.message_until:
+        put(window, keys_row, 2, panel.message[:max(0, width - 4)], bold)
+    else:
+        put(window, keys_row, 2,
+            "up/down pick    left/right change    space effect on/off    "
+            "d daemon default    q quit", dim)
+    window.noutrefresh()
+    curses.doupdate()
+
+
+def run(window):
+    curses.curs_set(0)
+    # `halfdelay`, not `nodelay`: with no delay at all ncurses hands back the bare ESC of
+    # an arrow key before the rest of the sequence has arrived, so every arrow arrived as
+    # ESC — and ESC was bound to quit. The panel closed the moment anyone tried to use it.
+    curses.halfdelay(2)
+    # Explicitly, rather than trusting `curses.wrapper` to have done it: without keypad
+    # translation an arrow key arrives as the three bytes ESC [ D, and the trailing D was
+    # being read as a command. Every arrow silently did something else.
+    window.keypad(True)
+    panel = Panel()
+    pending_start = False
+    while True:
+        panel.reload()
+        panel.log.poll()
+        if pending_start:
+            trouble = nr_paths.start_daemon(wait=0.5)
+            if trouble is None:
+                panel.say("effect on")
+                pending_start = False
+            elif not trouble.startswith("started"):
+                panel.say(trouble, 8)
+                pending_start = False
+        draw(window, panel)
+        key = window.getch()
+        if key == -1:                           # halfdelay expired: just redraw
+            continue
+        if key in (ord("q"), ord("Q")):
+            return
+        if key in (curses.KEY_UP, ord("k")):
+            panel.cursor = (panel.cursor - 1) % len(panel.knobs)
+        elif key in (curses.KEY_DOWN, ord("j")):
+            panel.cursor = (panel.cursor + 1) % len(panel.knobs)
+        elif key in (curses.KEY_LEFT, ord("h")):
+            panel.adjust(-1)
+        elif key in (curses.KEY_RIGHT, ord("l")):
+            panel.adjust(+1)
+        elif key == curses.KEY_PPAGE:
+            for _ in range(5):
+                panel.adjust(+1)
+        elif key == curses.KEY_NPAGE:
+            for _ in range(5):
+                panel.adjust(-1)
+        elif key == ord(" "):
+            pending_start = panel.toggle_effect() == "start"
+        elif key == ord("d"):
+            # lower case only: `D` is the tail of the left arrow's escape sequence, and
+            # binding both is how that bug hid
+            panel.to_default()
+        elif key == curses.KEY_RESIZE:
+            continue
+
+
+def main():
+    if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help", "help"):
+        print(__doc__.strip())
+        return 0
+    if not sys.stdout.isatty():
+        print("nr-panel needs a terminal; `nr-ctl status` is the readable-anywhere form.")
+        return 2
+    try:
+        curses.wrapper(run)
+    except KeyboardInterrupt:
+        pass
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

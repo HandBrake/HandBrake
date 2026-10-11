@@ -1,0 +1,172 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * window_attention_portable — `window_attention.comp` without the cooperative matrix.
+ *
+ * QK^T, the bit-affine softmax and PV for one 8x8 window in one dispatch, on a device
+ * with no matrix units: MoltenVK, the phones, or Xe2 under XMX_PORTABLE=1. Same push
+ * block, same dispatch (8 groups of 32 lanes per window-head on x, the batch on y and z),
+ * same specialisation constant for the merged output, same profile kind, so libxmx and
+ * the callers do not know which one they got.
+ *
+ * What it must equal, bit for bit, is *this path's* three-pass reference — the batched
+ * `gemm_portable` for QK^T, the row softmax, the batched `gemm_portable` for PV — which
+ * is what `src/gpu/test_window_attention.py` checks. So the two products are the portable
+ * GEMM's arithmetic in the portable GEMM's order: one lane owns one query row and four
+ * consecutive columns, its float32 accumulator takes the K terms one at a time from
+ * k = 0 — the transposed-B form for QK^T (a key is a row of K) and the plain form for PV —
+ * and nothing is regrouped. The softmax is `window_attention.comp`'s, whose weights and
+ * sums are already the row pass's to the bit. The scores do not have to fit 2 KB here
+ * (that was a Xe2 occupancy measurement), so all 64 keys' logits are staged at once and
+ * the row reciprocals go through shared memory rather than a subgroup shuffle — a
+ * phone's subgroup may be narrower than the workgroup — which changes no value and no
+ * order.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+#extension GL_KHR_shader_subgroup_basic : require
+
+#include "publish.glsl"
+
+layout(local_size_x = 32) in;
+layout(constant_id = 0) const bool MERGED_OUTPUT = false;
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf { float16_t v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 8) buffer Half4Buf { f16vec4 v[]; };
+layout(push_constant, scalar) uniform Push {
+    HalfBuf q, k; FloatBuf output_data; HalfBuf v;
+    uint m, heads, unused, batches;
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    uint lda, ldb, ldc, spare;
+    FloatBuf bias;
+} pc;
+
+/* 8 query rows x 64 keys: the logits, then in place their weights, then the
+ * probabilities. Halves held as floats, which is exact; the reference PV reads them
+ * back as `float(half)`, the same value. */
+shared float scores[8 * 64];
+shared float reciprocal[8];
+
+/* Same coupled half-pair transform as attention.comp and window_attention.comp, with the
+ * FP32 bias addition before half rounding. The logits come in as values, not as indices
+ * into `scores`: read inside this function, the `precise` below would mark every store
+ * into `scores` — the QK^T loop with them — NoContraction (see probability()). */
+vec2 weights(float l0, float l1) {
+    vec2 affine;
+    for (uint j = 0u; j < 2u; j++) {
+        float logit = j == 0u ? l0 : l1;
+        precise float scaled = half_round(logit) * 0.044921875;
+        scaled += 1.30078125;
+        affine[j] = clamp(scaled, 1.03125, 1.5693359375);
+    }
+    return unpackHalf2x16((packHalf2x16(affine) << 5) + 0x7ff88000u);
+}
+
+void sync() { memoryBarrierShared(); barrier(); }
+
+/* The weight scaled by its row's reciprocal, then published, as the row pass does it. A
+ * function on purpose: glslang propagates `precise` backwards at the object level, so
+ * `precise float product = scores[at] * reciprocal[..]` written in main marks every store
+ * into `scores` — the QK^T loop included — NoContraction, which SPIRV-Cross
+ * spells as `[[clang::optnone]]` helpers (23 decorations against 4). A parameter is a
+ * fresh object, so the qualifier stays on the one multiply it is for.
+ * notes/improve-portable-precise.md. */
+float probability(float weight, float reciprocal_norm) {
+    precise float product = weight * reciprocal_norm;
+    return e4m3(half_round(product));
+}
+
+void main() {
+    uint batch = gl_WorkGroupID.y + gl_WorkGroupID.z * 65535u;
+    if (batch >= pc.batches) return; // uniform across the whole workgroup
+    uint row = gl_WorkGroupID.x * 8u;
+    uint offset = batch * 64u * 32u;
+    uint local = gl_LocalInvocationID.x;
+    uint head_bias = (batch % pc.heads) * 4096u + row * 64u;
+    /* the portable GEMM's lane: row r of the 8-row block, four consecutive columns cq.. */
+    uint r = local >> 2u, cq = (local & 3u) * 4u;
+
+    /* QK^T as the transposed-B portable GEMM computes it: for each of the four 16-key
+     * column tiles, acc[key] += q[row][c] * k[key][c] over c = 0..31 in order. */
+    {
+        vec4 acc[4];
+        for (uint j = 0u; j < 4u; j++) acc[j] = vec4(0.0);
+        uint qrow = offset + (row + r) * 32u;
+        for (uint c = 0u; c < 32u; c++) {
+            vec4 kv[4];
+            for (uint j = 0u; j < 4u; j++) {
+                uint at = offset + (cq + j * 16u) * 32u + c;
+                kv[j] = vec4(float(pc.k.v[at]), float(pc.k.v[at + 32u]),
+                             float(pc.k.v[at + 64u]), float(pc.k.v[at + 96u]));
+            }
+            float qv = float(pc.q.v[qrow + c]);
+            for (uint j = 0u; j < 4u; j++)
+                acc[j] += qv * kv[j];
+        }
+        for (uint j = 0u; j < 4u; j++)
+            for (uint e = 0u; e < 4u; e++)
+                scores[r * 64u + cq + j * 16u + e] = acc[j][e];
+    }
+    sync();
+    /* every pair of keys becomes its weight in place: two adjacent keys a lane, the
+     * vendor's pairs never straddling, since every pair starts on an even key */
+    for (uint at = local * 2u; at < 8u * 64u; at += 64u) {
+        uint rr = at / 64u, key = at % 64u;
+        float l0 = scores[at], l1 = scores[at + 1u];
+        if (pc.flags != 0u) {
+            l0 += pc.bias.v[head_bias + at];
+            l1 += pc.bias.v[head_bias + at + 1u];
+        }
+        vec2 w = weights(l0, l1);
+        scores[at] = w.x;                                  // exact: a half value
+        scores[at + 1u] = w.y;
+    }
+    sync();
+    /* the row's denominator in float32, in key order, as the row pass sums it */
+    if (local < 8u) {
+        float total = 0.0;
+        for (uint i = 0u; i < 64u; i += 2u) {
+            total += scores[local * 64u + i];
+            total += scores[local * 64u + i + 1u];
+        }
+        reciprocal[local] = half_round(1.0 / half_round(total));
+    }
+    sync();
+    for (uint at = local; at < 8u * 64u; at += 32u)
+        scores[at] = probability(scores[at], reciprocal[at / 64u]);
+    sync();
+    /* PV as the plain portable GEMM computes it: acc[col] += p[row][key] * v[key][col]
+     * over key = 0..63 in order, four consecutive columns a lane, two 16-column tiles. */
+    vec4 acc[2];
+    for (uint j = 0u; j < 2u; j++) acc[j] = vec4(0.0);
+    for (uint key = 0u; key < 64u; key++) {
+        vec4 vv[2];
+        for (uint j = 0u; j < 2u; j++) {
+            uint at = offset + key * 32u + cq + j * 16u;
+            vv[j] = vec4(float(pc.v.v[at]), float(pc.v.v[at + 1u]),
+                         float(pc.v.v[at + 2u]), float(pc.v.v[at + 3u]));
+        }
+        float p = scores[r * 64u + key];
+        for (uint j = 0u; j < 2u; j++)
+            acc[j] += p * vv[j];
+    }
+    if (MERGED_OUTPUT) {
+        /* the head merge's work as well: E4M3 in (window, token, C) order, as
+         * merge_heads(..., EPI_E4M3, narrow) writes it */
+        for (uint j = 0u; j < 2u; j++) {
+            uint target = ((batch / pc.heads) * 64u + row + r) * pc.heads * 32u
+                        + (batch % pc.heads) * 32u + cq + j * 16u;
+            vec4 values;
+            for (uint e = 0u; e < 4u; e++) values[e] = e4m3(acc[j][e]);
+            Half4Buf(uint64_t(pc.output_data)).v[target / 4u] = f16vec4(values);
+        }
+    } else {
+        for (uint j = 0u; j < 2u; j++)
+            for (uint e = 0u; e < 4u; e++)
+                pc.output_data.v[offset + (row + r) * 32u + cq + j * 16u + e] = acc[j][e];
+    }
+}

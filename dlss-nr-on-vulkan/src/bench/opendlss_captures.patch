@@ -1,0 +1,115 @@
+diff --git a/ports/browser-webgpu/src/graph.js b/ports/browser-webgpu/src/graph.js
+index b714bc5..fce8d9b 100644
+--- a/ports/browser-webgpu/src/graph.js
++++ b/ports/browser-webgpu/src/graph.js
+@@ -204,16 +204,20 @@ export class Graph {
+       });
+     }
+ 
++    const inner = [0, 1, 5, 9, 15, 48, 66, 70].includes(block);
++    if (inner) { this.capture(`x-${block}-ffn-e4`, temps.ffnQuantized); this.capture(`x-${block}-ffn-f16`, temps.ffnResidual); }
+     this.gemm({
+       input: temps.ffnQuantized, weights: model.fp8Matrix(tensor, layout.qkv, channels, channels * 3),
+       outputF16: temps.qkv, rows, k: channels, n: channels * 3, label: `${label} qkv`,
+     });
++    if (inner) this.capture(`x-${block}-qkv`, temps.qkv);
+     this.windowAttention({
+       qkv: temps.qkv, attended: temps.attended,
+       prior: model.relativeBias(tensor, layout.relative, layout.heads),
+       scales: model.headScales(tensor, layout.scale, layout.heads),
+       width, height, heads: layout.heads, phase, label,
+     });
++    if (inner) this.capture(`x-${block}-attended`, temps.attended);
+ 
+     // The attention skip: the E4M3 publication of the FFN for the expert blocks, the raw half for the others.
+     this.gemm({
+@@ -264,10 +268,12 @@ export class Graph {
+       residual: state, aux: model.auxOffset(contract, channels * channels, channels),
+       label: `${label} split merge`,
+     });
++    if (block === 23) this.capture('x-23-ffn-e4', temps.ffnResidual);
+     this.gemm({
+       input: temps.ffnResidual, weights: model.fp8Matrix(qkvTensor, 0, channels, channels * 3),
+       outputF16: temps.qkv, rows, k: channels, n: channels * 3, label: `${label} qkv`,
+     });
++    if (block === 23) this.capture('x-23-qkv', temps.qkv);
+     this.windowAttention({
+       qkv: temps.qkv, attended: temps.attended,
+       prior: model.relativeBias(qkvTensor, qkvRelative, heads),
+@@ -317,6 +323,10 @@ export class Graph {
+                          params, grid1d(tokens * heads * 8), `${label} normalize`);
+       this.recorder.pass('vit_attend', { 4: normalized.buffer, 6: attended.buffer },
+                          params, [heads, tokens, 1], `${label} attend`);
++      if (block === 31 || block === 32) {
++        this.capture(`x-${block}-ffn-e4`, ffnResidual); this.capture(`x-${block}-qkv`, qkv);
++        this.capture(`x-${block}-normalized`, normalized); this.capture(`x-${block}-attended`, attended);
++      }
+       this.gemm({ input: attended, weights: model.fp8Matrix(projection, 0, channels, channels),
+                   output: state, rows: tokens, k: channels, n: channels, partition: 256,
+                   residual: ffnResidual, aux: model.auxOffset(projection, channels * channels, channels),
+@@ -380,6 +390,8 @@ export class Graph {
+                  tensor: preTensor, temps: fullTemps, state: adapterE4, output: block0, outputF16: block0Raw,
+                  ffnSkipOverride: adapterF16, phase: this.phases.take(6) });
+     this.capture('block-0', block0);
++    this.capture('x-adapter-e4', adapterE4); this.capture('x-adapter-f16', adapterF16);
++    this.capture('x-block-0-raw', block0Raw);
+ 
+     // ---- Down to level 0 and the four 32-channel blocks there.
+     const rows0 = d0.rows;
+@@ -400,6 +412,7 @@ export class Graph {
+       this.capture(`block-${block}`, state);
+     }
+     const skip32 = state;
++    this.capture('x-block-4-raw', level0Raw);
+ 
+     // ---- Encoder stages 64 / 128 / 256, each ending in a pool and a widening transition.
+     const pooled32 = this.tensorFor('pool 4', d1.rows, 32, 'e4');
+@@ -435,6 +448,7 @@ export class Graph {
+         this.capture(`block-${block}`, st);
+       }
+       skips.push(st);
++      this.capture(`x-block-${stage.last}-raw`, raw);
+       const pooled = this.tensorFor(`${label} pooled`, stage.next.rows, stage.channels, 'e4');
+       this.op('downsample', { count: stage.next.rows * stage.channels, channels: stage.channels,
+                               inWidth: stage.level.width, inHeight: stage.level.height,
+@@ -467,14 +481,17 @@ export class Graph {
+         this.capture(`block-${block}`, st);
+       }
+       skip512 = st;
++      this.capture('x-block-30-raw', raw);
+       const tokens = g.vitTokens;
+       const pooled = this.tensorFor('vit pooled', tokens, 512, 'e4');
+       this.op('downsample', { count: tokens * 512, channels: 512, inWidth: d4.width, inHeight: d4.height,
+                               outWidth: d5.width, outHeight: d5.height, inF16: raw, outE4: pooled,
+                               label: 'pool 30' });
+       const vitState = this.tensorFor('vit state', tokens, 1024, 'e4');
++      this.capture('x-vit-pooled', pooled);
+       this.gemm({ input: pooled, weights: model.fp8Matrix(model.tensor(30, 4), 0, 512, 1024),
+                   output: vitState, rows: tokens, k: 512, n: 1024, label: 'transition 30-31' });
++      this.capture('x-vit-entry', vitState);
+       this.vit(vitState, tokens);
+ 
+       // ---- Decoder 512: the ViT output projected, doubled, and merged onto the encoder skip.
+@@ -534,6 +551,8 @@ export class Graph {
+         outE4: merged, outF16: mergedRaw, label: `block ${stage.first} merge`,
+       });
+ 
++      this.capture(`x-merge-${stage.first}`, merged);
++      if (mergedRaw) this.capture(`x-merge-${stage.first}-raw`, mergedRaw);
+       let st = merged;
+       let sc = this.tensorFor(`${label} state`, rows, stage.channels, 'e4');
+       const temps = this.temporaries(label, rows, stage.channels, layout);
+@@ -565,11 +584,13 @@ export class Graph {
+         aux: model.auxPair(tensor, layout.inputScale, layout.adapterScale, 32),
+         outE4: merged, outF16: mergedRaw, label: 'post blend',
+       });
++      this.capture('x-post-merge', merged); this.capture('x-post-merge-raw', mergedRaw);
+       const blockRaw = this.tensorFor('post block raw', fullRows, 32, 'f16');
+       const postTemps = this.temporaries('post', fullRows, 32, layout);
+       this.block({ block: 70, channels: 32, width: g.fullWidth, height: g.fullHeight, layout, tensor,
+                    temps: postTemps, state: merged, output: null, outputF16: blockRaw,
+                    ffnSkipOverride: mergedRaw, phase: this.phases.take(6) });
++      this.capture('x-block-70-raw', blockRaw);
+       this.head = this.tensorFor('head', fullRows, 4, 'f32');
+       const { buffer, paddedN } = model.f16Matrix(tensor, layout.postWeights, 32, 4);
+       this.gemmF16({ input: blockRaw, weights: buffer, paddedN, outputF32: this.head,

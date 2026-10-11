@@ -1,0 +1,129 @@
+__deps__ := VULKANHEADERS
+$(eval $(call import.MODULE.defs,DLSSNR,dlssnr,$(__deps__)))
+$(eval $(call import.CONTRIB.defs,DLSSNR))
+
+## libdlssnr: the DLSS Neural Rendering runtime and frame library of
+## dlss-nr-on-vulkan, built from the copy in the source tree
+## ($(SRC/)dlss-nr-on-vulkan/) rather than a downloaded tarball, as one static
+## archive with the owner's weights and the shaders compiled in. On macOS it
+## carries the Metal runtime (the Metal compiler must be installed), on Windows
+## the Vulkan runtime, which finds vulkan-1.dll at run time. libhb/dlssnr.c is
+## the filter that drives it.
+
+DLSSNR.source/ = $(call fn.ABSOLUTE,$(SRC/)dlss-nr-on-vulkan/)
+
+# No distfile: the source is in the tree. Every stage before configure is a stamp.
+DLSSNR.FETCH.url      = dlssnr-in-tree-source
+DLSSNR.FETCH          = $(TOUCH.exe) $@
+DLSSNR.FETCH.test     = true
+DLSSNR.VERIFY         = $(TOUCH.exe) $@
+DLSSNR.EXTRACT        = $(TOUCH.exe) $@
+DLSSNR.PATCH          = $(TOUCH.exe) $@
+
+# Build out of tree, under the contrib build directory.
+DLSSNR.CONFIGURE.dir  = $(DLSSNR.build/)build
+DLSSNR.BUILD.dir      = $(DLSSNR.build/)build
+DLSSNR.INSTALL.dir    = $(DLSSNR.build/)build
+DLSSNR.UNINSTALL.dir  = $(DLSSNR.build/)build
+DLSSNR.CLEAN.dir      = $(DLSSNR.build/)build
+
+DLSSNR.CONFIGURE.exe         = $(CMAKE.exe) -G Ninja
+DLSSNR.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(DLSSNR.CONFIGURE.prefix)"
+DLSSNR.CONFIGURE.deps        =
+DLSSNR.CONFIGURE.static      =
+DLSSNR.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
+DLSSNR.CONFIGURE.extra       = -DNR_BUILD_TESTS=OFF -DNR_BUILD_LAYER=OFF -DNR_BUILD_LAYER32=OFF
+DLSSNR.CONFIGURE.extra      += -DNR_EMBED_WEIGHTS=ON -DNR_BIN2C_WEIGHTS=OFF -DNR_EMBED_SHADERS=ON
+DLSSNR.CONFIGURE.extra      += -DNR_VULKAN_INCLUDE="$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
+DLSSNR.CONFIGURE.extra      += -DNR_GLSLANG="$(GLSLANG.exe)"
+DLSSNR.CONFIGURE.extra      += -DNR_OUTPUT_DIR="$(call fn.ABSOLUTE,$(DLSSNR.build/)build)"
+DLSSNR.CONFIGURE.extra      += -DNR_WORK_DIR="$(call fn.ABSOLUTE,$(DLSSNR.build/)work)"
+
+ifneq (none,$(DLSSNR.GCC.g))
+    DLSSNR.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+else
+    DLSSNR.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
+endif
+
+## The host passes' CPU floor: the SDK builds nr_image.c for x86-64-v3 by
+## default, which a pre-Haswell Mac or PC cannot run; keep the generic CPU
+## unless the whole build is native.
+ifeq (native,$(GCC.cpu))
+    DLSSNR.CONFIGURE.extra += -DNR_IMAGE_ARCH=-march=native
+else
+    DLSSNR.CONFIGURE.extra += -DNR_IMAGE_ARCH=
+endif
+
+ifeq ($(HOST.system),darwin)
+    ## the Metal runtime; no MoltenVK link (the loader would be the host's)
+    DLSSNR.CONFIGURE.extra += -DNR_BUILD_METAL=ON -DNR_XMX_LINK_MOLTENVK=OFF
+    DLSSNR.CONFIGURE.extra += -DCMAKE_OSX_ARCHITECTURES=$(HOST.machine)
+    ifneq (,$(GCC.minver))
+        DLSSNR.CONFIGURE.extra += -DCMAKE_OSX_DEPLOYMENT_TARGET=$(GCC.minver)
+    endif
+    DLSSNR.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+    DLSSNR.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(DLSSNR.CONFIGURE.host)"
+endif
+
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
+    ## the Vulkan archive, finding vulkan-1.dll at run time; no Direct3D 12 (dxc)
+    DLSSNR.CONFIGURE.extra += -DNR_BUILD_D3D12=OFF -DNR_DLSSNR_D3D12=OFF
+    DLSSNR.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
+    DLSSNR.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+    DLSSNR.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(DLSSNR.GCC.gcc)
+    DLSSNR.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(DLSSNR.GCC.gxx)
+    DLSSNR.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
+    DLSSNR.CONFIGURE.extra += -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER
+    DLSSNR.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(DLSSNR.CONFIGURE.host)"
+    DLSSNR.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(DLSSNR.CONFIGURE.build)"
+    ## The shaders and the weights are embedded by two tools that run on the
+    ## build machine (bin2c and slice). The SDK refuses a host compiler found
+    ## in the cross compiler's own directory, which on a Linux build host is
+    ## where both live, so build them here with the build machine's cc and
+    ## name them.
+    DLSSNR.CONFIGURE.bootstrap = $(MKDIR.exe) -p tools; \
+        cc "$(DLSSNR.source/)src/tools/bin2c.c" -o tools/bin2c_dlss; \
+        cc "$(DLSSNR.source/)src/tools/slice.c" -o tools/slice_dlss;
+    DLSSNR.CONFIGURE.extra += -DNR_BIN2C="$(call fn.ABSOLUTE,$(DLSSNR.build/)build)/tools/bin2c_dlss"
+    DLSSNR.CONFIGURE.extra += -DNR_SLICE="$(call fn.ABSOLUTE,$(DLSSNR.build/)build)/tools/slice_dlss"
+endif
+
+## the source: the in-tree copy
+DLSSNR.CONFIGURE.extra += "$(DLSSNR.source/)"
+
+## build only the archive (and what it needs): not the tools, tests or layer
+DLSSNR.BUILD.make     = $(NINJA.exe)
+DLSSNR.BUILD.ntargets = dlssnr
+
+## the SDK installs nothing itself: the archive and its two headers, and a
+## pkg-config file so the CLI and the Xcode project link it like any other
+## optional static library
+ifeq ($(HOST.system),darwin)
+    DLSSNR.pc.libs = -ldlssnr -lpthread -lm -framework Metal -framework Foundation
+else ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
+    DLSSNR.pc.libs = -ldlssnr -lpthread
+else
+    DLSSNR.pc.libs = -ldlssnr -lpthread -lm -ldl
+endif
+
+define DLSSNR.INSTALL
+    $(MKDIR.exe) -p $(CONTRIB.build/)lib/pkgconfig $(CONTRIB.build/)include
+    $(CP.exe) $(DLSSNR.BUILD.dir)/libdlssnr.a $(CONTRIB.build/)lib/libdlssnr.a
+    $(CP.exe) $(DLSSNR.source/)src/ref/nr_frame.h $(CONTRIB.build/)include/nr_frame.h
+    $(CP.exe) $(DLSSNR.source/)src/ref/nr_image.h $(CONTRIB.build/)include/nr_image.h
+    printf 'prefix=%s\nlibdir=$${prefix}/lib\nincludedir=$${prefix}/include\n\nName: dlssnr\nDescription: DLSS Neural Rendering frame library (dlss-nr-on-vulkan)\nVersion: 0.0.1\nLibs: -L$${libdir} %s\nCflags: -I$${includedir}\n' "$(call fn.ABSOLUTE,$(CONTRIB.build/))" "$(DLSSNR.pc.libs)" > $(CONTRIB.build/)lib/pkgconfig/dlssnr.pc
+    $(TOUCH.exe) $@
+endef
+
+define DLSSNR.UNINSTALL
+    $(RM.exe) -f $(CONTRIB.build/)lib/libdlssnr.a $(CONTRIB.build/)lib/pkgconfig/dlssnr.pc
+    $(RM.exe) -f $(CONTRIB.build/)include/nr_frame.h $(CONTRIB.build/)include/nr_image.h
+    $(RM.exe) -f $(DLSSNR.INSTALL.target)
+endef
+
+DLSSNR.CLEAN.make     = $(NINJA.exe)
+DLSSNR.CLEAN.ntargets = -t clean
+
+## optional static libs need to be marked, for the CLI and the Xcode project
+DLSSNR.OSL.libs  = dlssnr
+DLSSNR.OSL.files = $(foreach i,$(DLSSNR.OSL.libs),$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/lib$(i).a))

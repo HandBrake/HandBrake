@@ -1,0 +1,27 @@
+$(eval $(call import.MODULE.defs,VULKANHEADERS,vulkan-headers))
+$(eval $(call import.CONTRIB.defs,VULKANHEADERS))
+
+## The Khronos Vulkan headers, for dlss-nr-on-vulkan's compute runtime (header
+## only: libdlssnr links no Vulkan library, it finds the loader at run time).
+## The tag is the one the SDK pins (dlss-nr-on-vulkan/CMakeLists.txt).
+VULKANHEADERS.FETCH.url      = https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.4.321.tar.gz
+VULKANHEADERS.FETCH.sha256   = 7c1874f9186d9e7d5245e279cdccaa77a66ed8f52871b428630aeb771dc7623c
+VULKANHEADERS.FETCH.basename = vulkan-headers-1.4.321.tar.gz
+VULKANHEADERS.EXTRACT.tarbase = Vulkan-Headers-1.4.321
+
+VULKANHEADERS.CONFIGURE = $(TOUCH.exe) $@
+VULKANHEADERS.BUILD     = $(TOUCH.exe) $@
+
+define VULKANHEADERS.INSTALL
+    $(MKDIR.exe) -p $(CONTRIB.build/)include/vulkan $(CONTRIB.build/)include/vk_video
+    $(CP.exe) -R $(VULKANHEADERS.EXTRACT.dir/)include/vulkan/* $(CONTRIB.build/)include/vulkan/
+    $(CP.exe) -R $(VULKANHEADERS.EXTRACT.dir/)include/vk_video/* $(CONTRIB.build/)include/vk_video/
+    $(TOUCH.exe) $@
+endef
+
+define VULKANHEADERS.UNINSTALL
+    $(RM.exe) -rf $(CONTRIB.build/)include/vulkan $(CONTRIB.build/)include/vk_video
+    $(RM.exe) -f $(VULKANHEADERS.INSTALL.target)
+endef
+
+VULKANHEADERS.CLEAN = $(TOUCH.exe) $@

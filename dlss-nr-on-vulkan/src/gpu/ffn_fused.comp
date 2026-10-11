@@ -1,0 +1,335 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * ffn_fused — a narrow block's whole feed-forward, with the hidden layer kept on chip.
+ *
+ * The feed-forward of the 32-channel blocks was two GEMMs: the expand wrote a gated,
+ * published 128-wide hidden layer as half, and the projection read it back and added the
+ * residual. At block 0 of a 720p frame that hidden layer is 252 MB written and 252 MB read,
+ * and both GEMMs ran at the memory ceiling. Here one subgroup takes 16 rows through both,
+ * 32 hidden columns at a time: the expand's block for those columns, its publish on the
+ * accumulator exactly as the expand GEMM did it, then into shared memory as the next
+ * GEMM's operand — so it never leaves the chip.
+ *
+ * Bit-identical to the two GEMMs by construction: each accumulator takes the same
+ * multiply-accumulates in the same K order (the expand over the 32 channels in two steps,
+ * the projection over the 128 hidden columns in eight), the publish is `publish.glsl`'s,
+ * and the residual is `residual_epilogue.glsl`'s. `src/gpu/test_ffn_fused.py`.
+ *
+ * Sixteen such subgroups share a workgroup, and for the narrow blocks the weights with it.
+ * One subgroup to a workgroup, each fetched both 8 KB matrices for its own 16 rows, sixteen
+ * times the bytes of its activations, and all of it from L2: shared memory and the L1 are
+ * one array, and the 2 KB a workgroup that filled it. Taken away, those loads were 45 % of
+ * the pass. So the narrow blocks' weights (32 channels, 128 hidden) arrive once, a 16-byte
+ * load a lane each, and the tiles come out of shared memory: 16 KB of weights, then a
+ * kilobyte a subgroup that holds its hidden chunk and, after the last chunk, its output
+ * stage. 32 KB is an allocation size, and four of these fill a core's 64 threads — the
+ * same threads as before. Other shapes (flag 0x800000 unset) read their tiles from global
+ * memory as the one-subgroup kernel did, with the same kilobyte each.
+ *
+ * The branched blocks' per-group feed-forward is the same shape of work — every group
+ * expands all C input channels to 128, gates, and projects to its own 32 — so it runs here
+ * too, one group per row of the grid, without the residual (the block's C x C projection
+ * adds that afterwards).
+ *
+ * Block 70's input can be made here too (flag 0x1000000, the staged shape with the
+ * residual): the level above upsampled 2x (nearest) times the per-channel sin, plus the
+ * full-resolution skip times the cos — what `UPSAMPLE_MERGE` in resident.comp computes
+ * and stored twice, as float32 for this pass's residual and published for its GEMM, so
+ * this pass could read both back. Each subgroup makes its sixteen rows once, publishes
+ * them to E4M3 through its kilobyte into the four A fragments every chunk reuses, and
+ * makes each value again where the residual needs it raw: the same operations in the same
+ * order, so the same bits (`src/gpu/test_glue.py`). a is then the level above (half,
+ * rows / 4 x n), d the skip (half), `aux` the sin then cos, lda the width and ldb the
+ * level above's.
+ *
+ * And block 0's (flag 0x2000000): the stem, the 16 feature channels times the adapter,
+ * which the stem GEMM wrote as float32 and published for the same two readers. Here it
+ * is that GEMM's one K step — the same multiply-add of the same operands onto zero — made
+ * once into the A fragments, published, and again for the residual. a is then the
+ * features (half, rows x 16) and `aux` the adapter (16 x 32).
+ *
+ * Both publish because every feed-forward GEMM reads its input published, and these two
+ * are the only blocks whose input arrives raw (notes/opendlss-reference.md).
+ *
+ * Operands, in the resident push block: a input (half, rows x n), b the expand weights
+ * (groups x n x hidden), c the output (row stride ldc, group g at columns 32g), d the
+ * residual's skip and residual_cos its per-channel cosine (only with flag 0x20000), and the
+ * projection weights (groups x hidden x 32) in the last slot. m rows, n input channels,
+ * k hidden per group, sa and sb the two weights' group strides.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+#extension GL_KHR_memory_scope_semantics : require
+#extension GL_KHR_cooperative_matrix : require
+#extension GL_KHR_shader_subgroup_basic : require
+#extension GL_EXT_shared_memory_block : require
+
+#include "publish.glsl"
+
+layout(local_size_x = 512) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf  { float16_t v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float     v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 8)  buffer Half4Buf { f16vec4   v4[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer Vec4Buf  { vec4      v4[]; };
+
+layout(push_constant, scalar) uniform Push {
+    HalfBuf a, b; FloatBuf c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    uint64_t aux;                              // offset 64: the merge's sin then cos,
+                                               // or the stem's adapter
+    float p2, p3;
+    uint lda, ldb, ldc, spare;
+    uint64_t residual_cos;                     // per-channel cosine of the skip
+    uint image_h, image_w, window_cols, window_pad;
+    uint64_t projection;                       // offset 120: hidden x channels
+} pc;
+
+#include "specialize.glsl"
+#include "residual_epilogue.glsl"   /* needs operation_flags() from above */
+
+const uint TM = 8, TN = 16, TK = 16;
+const uint ROWS = 16u, CHUNK = 32u, OUT = 32u, SUBGROUPS = 16u;
+const uint EPI_GATE_E4M3 = 3u;             // the expand GEMM's publish
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer Uvec4Buf { uvec4 u4[]; };
+
+/* 32 KB, every view the same bytes: the expand weights at 0 and the projection's at 8 KB
+ * (staged shapes only), then subgroup s's kilobyte at 16 KB + 1 KB * s. */
+layout(scalar) shared AsHalf  { float16_t h16[16384]; };
+layout(scalar) shared AsFloat { float     f32[8192]; };
+layout(scalar) shared AsUvec4 { uvec4     u4[2048]; };
+layout(scalar) shared AsHalf4 { f16vec4   h4[4096]; };
+const uint PROJECTION = 4096u;             // where the projection's weights start, in halves
+
+/* Flag 0x800000: one group of 32 channels and 128 hidden, its weights in shared memory. */
+bool staged() { return (operation_flags() & 0x800000u) != 0u; }
+
+/* Flag 0x1000000: the input is block 70's merge, made here. */
+bool merging() { return (operation_flags() & 0x1000000u) != 0u; }
+
+/* Flag 0x2000000: the input is block 0's stem, made here. */
+bool stemming() { return (operation_flags() & 0x2000000u) != 0u; }
+
+/* Four channels of the merge at one pixel, as `UPSAMPLE_MERGE` makes each: the scale
+ * rounded on its own, then the skip's fused multiply-add. `c` is a multiple of four. */
+vec4 merged4(uint pixel, uint c) {
+    uint x = pixel % pc.lda, y = pixel / pc.lda;
+    uint above = ((y / 2u) * pc.ldb + x / 2u) * 32u + c;
+    Vec4Buf sincos = Vec4Buf(pc.aux);
+    precise vec4 scaled = vec4(Half4Buf(uint64_t(pc.a)).v4[above >> 2]) * sincos.v4[c >> 2];
+    return fma(vec4(Half4Buf(uint64_t(pc.d)).v4[(pixel * 32u + c) >> 2]),
+               sincos.v4[(32u + c) >> 2], scaled);
+}
+
+void main() {
+    uint group = gl_WorkGroupID.y;
+    uint expand_base = group * pc.sa, project_base = group * pc.sb;
+    HalfBuf projection = HalfBuf(pc.projection);
+    if (staged()) {
+        uint lane = gl_LocalInvocationIndex;
+        u4[lane] = Uvec4Buf(uint64_t(pc.b) + uint64_t(expand_base) * 2ul).u4[lane];
+        u4[512u + lane] = Uvec4Buf(pc.projection + uint64_t(project_base) * 2ul).u4[lane];
+        barrier();
+    }
+    uint sub = gl_SubgroupID;
+    uint row = gl_WorkGroupID.x * (ROWS * SUBGROUPS) + sub * ROWS;
+    if (row >= pc.m) return;
+    // the staged shape as constants, so a specialised pipeline unrolls both K loops
+    uint cin = staged() ? 32u : pc.n, width = staged() ? 128u : pc.k;
+    uint ldc = pc.ldc != 0u ? pc.ldc : OUT;
+    uint lane = gl_SubgroupInvocationID;
+    uint hidden = 8192u + 512u * sub;          // this subgroup's kilobyte, in halves
+    uint stage = 4096u + 256u * sub;           // the same kilobyte, in floats
+
+    coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> result[2][2];
+    for (uint i = 0; i < 2u; i++)
+        for (uint j = 0; j < 2u; j++)
+            result[i][j] = coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(0.0);
+
+    // an input made here: its sixteen rows, rounded to half, through the kilobyte into
+    // the registers every chunk reads them from
+    coopmat<float16_t, gl_ScopeSubgroup, TM, TK, gl_MatrixUseA> held[2][2];
+    coopmat<float16_t, gl_ScopeSubgroup, TM, TK, gl_MatrixUseA> features[2];
+    if (stemming()) {
+        for (uint i = 0; i < 2u; i++)
+            coopMatLoad(features[i], pc.a.v, (row + i * TM) * 16u, 16u,
+                        gl_CooperativeMatrixLayoutRowMajor);
+    }
+    if (merging() || stemming()) {
+        if (merging()) {
+            // a lane a half row: sixteen channels, four at a time
+            uint r = lane >> 1, c0 = (lane & 1u) * 16u;
+            for (uint q = 0; q < 16u; q += 4u) {
+                vec4 merged = merged4(row + r, c0 + q);
+                for (uint e = 0u; e < 4u; e++) merged[e] = e4m3(merged[e]);
+                h4[(hidden + r * 32u + c0 + q) >> 2] = f16vec4(merged);
+            }
+        } else {
+            for (uint j = 0; j < 2u; j++) {
+                coopmat<float16_t, gl_ScopeSubgroup, TK, TN, gl_MatrixUseB> adapter;
+                coopMatLoad(adapter, HalfBuf(pc.aux).v, j * TN, OUT,
+                            gl_CooperativeMatrixLayoutRowMajor);
+                for (uint i = 0; i < 2u; i++) {
+                    coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> stem =
+                        coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(0.0);
+                    stem = coopMatMulAdd(features[i], adapter, stem);
+                    for (uint e = 0u; e < stem.length(); e++) stem[e] = e4m3(stem[e]);
+                    coopmat<float16_t, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> narrow =
+                        coopmat<float16_t, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(stem);
+                    coopMatStore(narrow, h16, hidden + i * TM * 32u + j * TN, 32u,
+                                 gl_CooperativeMatrixLayoutRowMajor);
+                }
+            }
+        }
+        subgroupMemoryBarrierShared();
+        subgroupBarrier();
+        for (uint s = 0; s < 2u; s++)
+            for (uint i = 0; i < 2u; i++)
+                coopMatLoad(held[s][i], h16, hidden + i * TM * 32u + s * TK, 32u,
+                            gl_CooperativeMatrixLayoutRowMajor);
+        subgroupMemoryBarrierShared();          // the first chunk overwrites the kilobyte
+        subgroupBarrier();
+    }
+
+    for (uint chunk = 0u; chunk < width; chunk += CHUNK) {
+        // the expand's 16x32 block for these hidden columns: K = 32 in two steps
+        coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> h[2][2];
+        for (uint i = 0; i < 2u; i++)
+            for (uint j = 0; j < 2u; j++)
+                h[i][j] = coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(0.0);
+        /* The input rows are read again for each chunk, from cache, rather than held
+         * across all four: that is fewer registers for the same time. Narrower chunks
+         * were measured too — 16 columns, no spills at all — and were 9 % slower: twice
+         * the barriers and shared-memory round trips for the same arithmetic. */
+        for (uint kk = 0; kk < cin; kk += TK) {
+            coopmat<float16_t, gl_ScopeSubgroup, TM, TK, gl_MatrixUseA> x[2];
+            for (uint i = 0; i < 2u; i++) {
+                if (merging() || stemming())
+                    x[i] = held[kk / TK][i];
+                else
+                    coopMatLoad(x[i], pc.a.v, (row + i * TM) * cin + kk, cin,
+                                gl_CooperativeMatrixLayoutRowMajor);
+            }
+            coopmat<float16_t, gl_ScopeSubgroup, TK, TN, gl_MatrixUseB> w[2];
+            for (uint j = 0; j < 2u; j++) {
+                if (staged())
+                    coopMatLoad(w[j], h16, kk * width + chunk + j * TN, width,
+                                gl_CooperativeMatrixLayoutRowMajor);
+                else
+                    coopMatLoad(w[j], pc.b.v, expand_base + kk * width + chunk + j * TN, width,
+                                gl_CooperativeMatrixLayoutRowMajor);
+            }
+            for (uint i = 0; i < 2u; i++)
+                for (uint j = 0; j < 2u; j++)
+                    h[i][j] = coopMatMulAdd(x[i], w[j], h[i][j]);
+        }
+        // its publish on the accumulator, then into shared memory as the projection's A
+        for (uint i = 0; i < 2u; i++)
+            for (uint j = 0; j < 2u; j++) {
+                for (uint e = 0; e < h[i][j].length(); e++)
+                    h[i][j][e] = publish(EPI_GATE_E4M3, h[i][j][e]);
+                coopmat<float16_t, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> narrow =
+                    coopmat<float16_t, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(h[i][j]);
+                coopMatStore(narrow, h16, hidden + i * TM * CHUNK + j * TN, CHUNK,
+                             gl_CooperativeMatrixLayoutRowMajor);
+            }
+        subgroupMemoryBarrierShared();
+        subgroupBarrier();
+        // the projection over these 32 hidden rows, in two steps of 16
+        for (uint kk = 0; kk < 2u; kk++) {
+            coopmat<float16_t, gl_ScopeSubgroup, TM, TK, gl_MatrixUseA> g[2];
+            for (uint i = 0; i < 2u; i++)
+                coopMatLoad(g[i], h16, hidden + i * TM * CHUNK + kk * TK, CHUNK,
+                            gl_CooperativeMatrixLayoutRowMajor);
+            coopmat<float16_t, gl_ScopeSubgroup, TK, TN, gl_MatrixUseB> p[2];
+            for (uint j = 0; j < 2u; j++) {
+                if (staged())
+                    coopMatLoad(p[j], h16, PROJECTION + (chunk + kk * TK) * OUT + j * TN,
+                                OUT, gl_CooperativeMatrixLayoutRowMajor);
+                else
+                    coopMatLoad(p[j], projection.v, project_base + (chunk + kk * TK) * OUT + j * TN,
+                                OUT, gl_CooperativeMatrixLayoutRowMajor);
+            }
+            for (uint i = 0; i < 2u; i++)
+                for (uint j = 0; j < 2u; j++)
+                    result[i][j] = coopMatMulAdd(g[i], p[j], result[i][j]);
+        }
+        subgroupMemoryBarrierShared();          // the next chunk overwrites the hidden chunk
+        subgroupBarrier();
+    }
+
+    // The residual and the publish, 16 columns at a time through the same kilobyte, exactly
+    // as the projection GEMM's residual epilogue finishes each element.
+    uint epilogue = (operation_flags() >> 8) & 0xFu;
+    bool narrow_out = (operation_flags() & 0x1000u) != 0u;
+    for (uint j = 0; j < 2u; j++) {
+        // the stem's values under these sixteen columns, through the stage first
+        vec4 stem_at[2];
+        if (stemming()) {
+            coopmat<float16_t, gl_ScopeSubgroup, TK, TN, gl_MatrixUseB> adapter;
+            coopMatLoad(adapter, HalfBuf(pc.aux).v, j * TN, OUT,
+                        gl_CooperativeMatrixLayoutRowMajor);
+            for (uint i = 0; i < 2u; i++) {
+                coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> stem =
+                    coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(0.0);
+                stem = coopMatMulAdd(features[i], adapter, stem);
+                coopMatStore(stem, f32, stage + i * TM * TN, TN,
+                             gl_CooperativeMatrixLayoutRowMajor);
+            }
+            subgroupMemoryBarrierShared();
+            subgroupBarrier();
+            for (uint n = 0; n < 2u; n++) {
+                uint e = lane * 4u + n * 128u;
+                stem_at[n] = vec4(f32[stage + e], f32[stage + e + 1u], f32[stage + e + 2u],
+                                  f32[stage + e + 3u]);
+            }
+            subgroupMemoryBarrierShared();      // the result overwrites the stage
+            subgroupBarrier();
+        }
+        for (uint i = 0; i < 2u; i++)
+            coopMatStore(result[i][j], f32, stage + i * TM * TN, TN, gl_CooperativeMatrixLayoutRowMajor);
+        subgroupMemoryBarrierShared();
+        subgroupBarrier();
+        for (uint e = lane * 4u; e < ROWS * TN; e += 32u * 4u) {
+            uint at = (row + e / TN) * ldc + group * OUT + j * TN + e % TN;
+            vec4 out4;
+            if (merging()) {
+                /* The merge again, the same four values the prologue made, and the
+                 * residual as the fused multiply-add `add_gemm_residual` compiles to —
+                 * written out, since left to the compiler this form was contracted
+                 * differently and missed by an ulp (test_glue.py caught it). */
+                vec4 skip = merged4(row + e / TN, j * TN + e % TN);
+                vec4 cosine = Vec4Buf(pc.residual_cos).v4[(j * TN + e % TN) >> 2];
+                for (uint q = 0; q < 4u; q++) {
+                    precise float total = fma(skip[q], cosine[q], f32[stage + e + q]);
+                    out4[q] = publish(epilogue, total);
+                }
+            } else if (stemming()) {
+                vec4 cosine = Vec4Buf(pc.residual_cos).v4[(j * TN + e % TN) >> 2];
+                vec4 skip = stem_at[e / 128u];
+                for (uint q = 0; q < 4u; q++) {
+                    precise float total = fma(skip[q], cosine[q], f32[stage + e + q]);
+                    out4[q] = publish(epilogue, total);
+                }
+            } else {
+                for (uint q = 0; q < 4u; q++)
+                    out4[q] = publish(epilogue, add_gemm_residual(f32[stage + e + q], at + q));
+            }
+            if (!narrow_out) {
+                for (uint q = 0; q < 4u; q++) pc.c.v[at + q] = out4[q];
+            } else if ((uint(uint64_t(pc.c)) & 7u) == 0u) {
+                Half4Buf(uint64_t(pc.c)).v4[at >> 2] = f16vec4(out4);
+            } else {
+                for (uint q = 0; q < 4u; q++) HalfBuf(uint64_t(pc.c)).v[at + q] = float16_t(out4[q]);
+            }
+        }
+        subgroupMemoryBarrierShared();          // the next half overwrites the stage
+        subgroupBarrier();
+    }
+}

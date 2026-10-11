@@ -1,0 +1,42 @@
+#version 450
+/*
+ * gemm_coopmat — C[M,N] = A[M,K] * B[K,N] on Xe2 XMX.
+ *
+ * FP16 operands, FP32 accumulator: cooperative matrix configuration 1 from
+ * notes/hw-coopmat.md, the only float config on this hardware that accumulates
+ * wider than it multiplies. Shape is fixed at M=8 N=16 K=16 because that is the
+ * single float shape Mesa exposes.
+ *
+ * One subgroup (32 invocations) produces one 8x16 output tile.
+ */
+#extension GL_KHR_memory_scope_semantics : require
+#extension GL_KHR_cooperative_matrix : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+
+layout(local_size_x = 32, local_size_y = 1, local_size_z = 1) in;
+
+layout(binding = 0) readonly  buffer Abuf { float16_t A[]; };
+layout(binding = 1) readonly  buffer Bbuf { float16_t B[]; };
+layout(binding = 2) writeonly buffer Cbuf { float     C[]; };
+
+layout(push_constant) uniform Push { uint M, N, K; } pc;
+
+const uint TM = 8, TN = 16, TK = 16;
+
+void main() {
+    uint row = gl_WorkGroupID.y * TM;
+    uint col = gl_WorkGroupID.x * TN;
+    if (row >= pc.M || col >= pc.N) return;
+
+    coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> acc =
+        coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(0.0);
+
+    for (uint k = 0; k < pc.K; k += TK) {
+        coopmat<float16_t, gl_ScopeSubgroup, TM, TK, gl_MatrixUseA> a;
+        coopmat<float16_t, gl_ScopeSubgroup, TK, TN, gl_MatrixUseB> b;
+        coopMatLoad(a, A, row * pc.K + k,   pc.K, gl_CooperativeMatrixLayoutRowMajor);
+        coopMatLoad(b, B, k   * pc.N + col, pc.N, gl_CooperativeMatrixLayoutRowMajor);
+        acc = coopMatMulAdd(a, b, acc);
+    }
+    coopMatStore(acc, C, row * pc.N + col, pc.N, gl_CooperativeMatrixLayoutRowMajor);
+}

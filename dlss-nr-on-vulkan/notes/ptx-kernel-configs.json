@@ -1,0 +1,1388 @@
+[
+ {
+  "entry": "cc_tinlayout_fused_pre_block_swin_1h_32_1",
+  "layer": "FusedSwin2d1HLayer",
+  "config": "FusedSwin2d1HConfig",
+  "params": "32, 4, 8, 8, 1, 1, 8, 8, 4, 32, 32, 16, 16, 16, true, false, false, false, 64, 32, 32, 8, 8, 32, true, false, true, false, false, true, 16"
+ },
+ {
+  "entry": "cc_tinlayout_fused_pre_block_swin_1h_32_1_fp8",
+  "layer": "FusedSwin2d1HLayer",
+  "config": "FusedSwin2d1HConfig",
+  "params": "32, 4, 8, 8, 1, 1, 8, 8, 4, 32, 32, 32, 32, 32, true, false, false, false, 64, 32, 32, 8, 8, 32, true, false, true, false, false, true, 16"
+ },
+ {
+  "entry": "cc_tinlayout_fused_pre_block_swin_1h_32_1_ds",
+  "layer": "FusedSwin2d1HLayer",
+  "config": "FusedSwin2d1HConfig",
+  "params": "32, 4, 8, 8, 1, 1, 8, 8, 4, 32, 32, 16, 16, 16, true, false, false, false, 64, 32, 32, 8, 8, 32, true, false, true, true, false, true, 16"
+ },
+ {
+  "entry": "cc_tinlayout_fused_pre_block_swin_1h_32_1_ds_fp8",
+  "layer": "FusedSwin2d1HLayer",
+  "config": "FusedSwin2d1HConfig",
+  "params": "32, 4, 8, 8, 1, 1, 8, 8, 4, 32, 32, 32, 32, 32, true, false, false, false, 64, 32, 32, 8, 8, 32, true, false, true, true, false, true, 16"
+ },
+ {
+  "entry": "cc_tinlayout_fused_post_block_swin_1h_32",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_post_block_swin_1h_32_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_post_block_swin_1h_32_simple_blend",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_post_block_swin_1h_32_fp8_simple_blend",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_post_block_swin_1h_32_simple_blend_full_rect",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_post_block_swin_1h_32_fp8_simple_blend_full_rect",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_post_block_swin_1h_32_control_mask",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_post_block_swin_1h_32_fp8_control_mask",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_post_block_swin_1h_32_control_mask_full_rect",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_post_block_swin_1h_32_fp8_control_mask_full_rect",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_tilesync",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_wait",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_chained",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_tilesync_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_wait_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_chained_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_inpview",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_inpview_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_outview",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_outview_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_ds",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_ds_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_upsample",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_upsample_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_inpview_tilesync",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_inpview_tilesync_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_ds_wait",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_ds_wait_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_outview_wait",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_outview_wait_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_upsample_tilesync",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_1h_32_1_upsample_tilesync_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, false, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_fp8",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, false, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_tilesync",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, true, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_wait",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, true, false, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_chained",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, true, true, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_tilesync_fp8",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, true, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_wait_fp8",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, true, false, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_chained_fp8",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, true, true, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_inpview",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, false, 64, 8, 8, 64, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_inpview_fp8",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, false, 64, 8, 8, 64, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_ds",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, false, 64, 8, 8, 64, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_ds_fp8",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, false, 64, 8, 8, 64, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_outview",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, false, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_outview_fp8",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, false, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_upsample",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 8, 8, 32, 32, 32, 2, true, false, false, 128, 4, 4, 64, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_upsample_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 8, 8, 32, 32, 32, 2, true, false, false, 128, 4, 4, 64, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_inpview_tilesync",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, true, 64, 8, 8, 64, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_inpview_tilesync_fp8",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, false, true, 64, 8, 8, 64, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_ds_wait",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, true, false, 64, 8, 8, 64, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_ds_wait_fp8",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, true, false, 64, 8, 8, 64, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_outview_wait",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, true, false, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_outview_wait_fp8",
+  "layer": "CrazyCuckooFusedSwin2d2HLayer",
+  "config": "CrazyCuckooFusedSwin2d2HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 2, 8, 8, 32, 32, 32, 2, false, true, false, 64, 8, 8, 64, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_upsample_tilesync",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 8, 8, 32, 32, 32, 2, true, false, true, 128, 4, 4, 64, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_2h_64_2_upsample_tilesync_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "64, 32, 4, 8, 8, 2, 8, 8, 32, 32, 32, 2, true, false, true, 128, 4, 4, 64, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, false, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, false, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_tilesync",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, true, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_wait",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, true, false, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_chained",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, true, true, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_tilesync_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, true, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_wait_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, true, false, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_chained_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, true, true, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_inpview",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, false, 128, 8, 8, 128, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_inpview_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, false, 128, 8, 8, 128, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_ds",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, false, 128, 8, 8, 128, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_ds_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, false, 128, 8, 8, 128, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_outview",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, false, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_outview_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, false, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_upsample",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, true, false, false, 256, 4, 4, 128, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_upsample_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, true, false, false, 256, 4, 4, 128, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_inpview_tilesync",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, true, 128, 8, 8, 128, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_inpview_tilesync_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, false, true, 128, 8, 8, 128, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_ds_wait",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, true, false, 128, 8, 8, 128, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_ds_wait_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, true, false, 128, 8, 8, 128, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_outview_wait",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, true, false, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_outview_wait_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, false, true, false, 128, 8, 8, 128, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_upsample_tilesync",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, true, false, true, 256, 4, 4, 128, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_4h_128_4_upsample_tilesync_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "128, 32, 4, 8, 8, 4, 8, 8, 32, 32, 32, 4, true, false, true, 256, 4, 4, 128, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, false, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, false, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_tilesync",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, true, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_wait",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, true, false, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_chained",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, true, true, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_tilesync_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, true, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_wait_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, true, false, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_chained_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, true, true, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_inpview",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, false, 256, 8, 8, 256, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_inpview_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, false, 256, 8, 8, 256, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_ds",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, false, 256, 8, 8, 256, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_ds_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, false, 256, 8, 8, 256, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_outview",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, false, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_outview_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, false, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_upsample",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, true, false, false, 512, 4, 4, 256, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_upsample_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, true, false, false, 512, 4, 4, 256, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_inpview_tilesync",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, true, 256, 8, 8, 256, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_inpview_tilesync_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, false, true, 256, 8, 8, 256, true, false, true, false, true"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_ds_wait",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, true, false, 256, 8, 8, 256, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_ds_wait_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, true, false, 256, 8, 8, 256, true, false, true, true, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_outview_wait",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, true, false, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_outview_wait_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, false, true, false, 256, 8, 8, 256, true, false, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_upsample_tilesync",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, true, false, true, 512, 4, 4, 256, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_tinlayout_fused_swin_8h_256_8_upsample_tilesync_fp8",
+  "layer": "CrazyCuckooFusedSwin2d4HLayer",
+  "config": "CrazyCuckooFusedSwin2d4HConfig",
+  "params": "256, 32, 4, 8, 8, 8, 8, 8, 32, 32, 32, 8, true, false, true, 512, 4, 4, 256, true, true, true, false, false"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_512",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 1, 4, 32, 32, false, false, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_512_fp8",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 2, 4, 64, 32, false, false, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_inpview_512",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 1, 4, 32, 32, false, false, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_inpview_512_fp8",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 1, 4, 64, 32, false, false, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_inpview_512_tilesync",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 1, 4, 32, 32, false, true, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_inpview_512_tilesync_fp8",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 1, 4, 64, 32, false, true, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_512_wait",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 1, 4, 32, 32, true, false, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_512_wait_fp8",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 2, 4, 64, 32, true, false, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_512_tilesync",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 1, 4, 32, 32, false, true, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_512_tilesync_fp8",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 2, 4, 64, 32, false, true, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_512_chained",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 1, 4, 32, 32, true, true, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_512_chained_fp8",
+  "layer": null,
+  "config": "FusedSwin2dFfwdConfig",
+  "params": "512, 64, 4, 8, 8, 2, 4, 64, 32, true, true, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_proj_512",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 1, 4, 1, true, false, false, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_proj_512_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 1, 4, 1, true, false, false, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_proj_512_wait",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 1, 4, 1, true, true, false, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_proj_512_wait_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 1, 4, 1, true, true, false, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_proj_512_chained",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 1, 4, 1, true, true, true, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_proj_512_chained_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 1, 4, 1, true, true, true, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_proj_inpview_512",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 1, 4, 1, true, false, false, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_proj_inpview_512_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 1, 4, 1, true, false, false, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_proj_inpview_512_chained",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 1, 4, 1, true, true, true, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_ffwd_proj_inpview_512_chained_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 1, 4, 1, true, true, true, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_qkv_512",
+  "layer": null,
+  "config": "FusedSwin2dQKVAttnConfig",
+  "params": "512, 8, 8, 16, 4, 16, 4, false, false, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_qkv_512_fp8",
+  "layer": null,
+  "config": "FusedSwin2dQKVAttnConfig",
+  "params": "512, 8, 8, 16, 4, 64, 4, false, false, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_qkv_512_chained",
+  "layer": null,
+  "config": "FusedSwin2dQKVAttnConfig",
+  "params": "512, 8, 8, 16, 4, 16, 4, true, true, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_qkv_512_chained_fp8",
+  "layer": null,
+  "config": "FusedSwin2dQKVAttnConfig",
+  "params": "512, 8, 8, 16, 4, 64, 4, true, true, 256, 8, 8"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 2, 4, 1, true, false, false, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 2, 4, 1, true, false, false, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_tilesync",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 2, 4, 1, true, false, true, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_tilesync_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 2, 4, 1, true, false, true, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_wait",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 2, 4, 1, true, true, false, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_wait_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 2, 4, 1, true, true, false, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_chained",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 2, 4, 1, true, true, true, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_chained_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 2, 4, 1, true, true, true, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_outview",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 1, 4, 1, true, false, false, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_outview_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 1, 4, 1, true, false, false, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_outview_wait",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 1, 4, 1, true, true, false, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_512_outview_wait_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 1, 4, 1, true, true, false, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_pool_512",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 1, 4, 1, true, false, false, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_pool_512_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 1, 4, 1, true, false, false, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_pool_512_chained",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 32, 1, 4, 1, true, true, true, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_proj_pool_512_chained_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 512, 8, 8, 256, 64, 1, 4, 1, true, true, true, 128"
+ },
+ {
+  "entry": "cc_split_swin_16h_final_head_512",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 512, 8, 8, 256, 32, 2, 4, 1, false, false, false, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_final_head_512_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 512, 8, 8, 256, 64, 2, 4, 1, false, false, false, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_final_head_512_wait",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 512, 8, 8, 256, 32, 2, 4, 1, false, true, false, 256"
+ },
+ {
+  "entry": "cc_split_swin_16h_final_head_512_wait_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 512, 8, 8, 256, 64, 2, 4, 1, false, true, false, 256"
+ },
+ {
+  "entry": "cc_vit_ffn_expand",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "4096, 1024, 16, 8, 128, 32, 2, 2, 1, false, false, false, 128"
+ },
+ {
+  "entry": "cc_vit_ffn_expand_wait",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "4096, 1024, 16, 8, 128, 32, 2, 2, 1, false, true, false, 128"
+ },
+ {
+  "entry": "cc_vit_ffn_contract",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 4096, 16, 8, 128, 32, 2, 2, 4, true, false, false, 128"
+ },
+ {
+  "entry": "cc_vit_qkv",
+  "layer": "Conv2dQKVLayer",
+  "config": "Conv2dQKVConfig",
+  "params": "32, 32, 1024, 16, 8, 32, 2, 2, 2, false, false, 128"
+ },
+ {
+  "entry": "cc_vit_attention",
+  "layer": "Attention2dLayer",
+  "config": "Attention2dConfig",
+  "params": "32, 32, 16, 8, 8, 8, 32, 2, false, false"
+ },
+ {
+  "entry": "cc_vit_projection",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 1024, 16, 8, 128, 32, 2, 2, 4, true, false, false, 32"
+ },
+ {
+  "entry": "cc_vit_projection_tilesync",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 1024, 16, 8, 128, 32, 2, 2, 4, true, false, true, 32"
+ },
+ {
+  "entry": "cc_vit_ffn_expand_tilesync",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "4096, 1024, 16, 8, 128, 32, 2, 2, 1, false, false, true, 128"
+ },
+ {
+  "entry": "cc_vit_ffn_expand_chained",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "4096, 1024, 16, 8, 128, 32, 2, 2, 1, false, true, true, 128"
+ },
+ {
+  "entry": "cc_vit_ffn_contract_chained",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 4096, 16, 8, 128, 32, 2, 2, 4, true, true, true, 128"
+ },
+ {
+  "entry": "cc_vit_qkv_wait",
+  "layer": "Conv2dQKVLayer",
+  "config": "Conv2dQKVConfig",
+  "params": "32, 32, 1024, 16, 8, 32, 2, 2, 2, true, false, 128"
+ },
+ {
+  "entry": "cc_vit_qkv_chained",
+  "layer": "Conv2dQKVLayer",
+  "config": "Conv2dQKVConfig",
+  "params": "32, 32, 1024, 16, 8, 32, 2, 2, 2, true, true, 128"
+ },
+ {
+  "entry": "cc_vit_attention_tilesync",
+  "layer": "Attention2dLayer",
+  "config": "Attention2dConfig",
+  "params": "32, 32, 16, 8, 8, 8, 32, 2, false, true"
+ },
+ {
+  "entry": "cc_vit_attention_wait",
+  "layer": "Attention2dLayer",
+  "config": "Attention2dConfig",
+  "params": "32, 32, 16, 8, 8, 8, 32, 2, true, false"
+ },
+ {
+  "entry": "cc_vit_attention_chained",
+  "layer": "Attention2dLayer",
+  "config": "Attention2dConfig",
+  "params": "32, 32, 16, 8, 8, 8, 32, 2, true, true"
+ },
+ {
+  "entry": "cc_vit_projection_wait",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 1024, 16, 8, 128, 32, 2, 2, 4, true, true, false, 32"
+ },
+ {
+  "entry": "cc_vit_projection_chained",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 1024, 16, 8, 128, 32, 2, 2, 4, true, true, true, 32"
+ },
+ {
+  "entry": "cc_vit_ffn_expand_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "4096, 1024, 16, 8, 128, 32, 2, 2, 1, false, false, false, 128"
+ },
+ {
+  "entry": "cc_vit_ffn_expand_wait_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "4096, 1024, 16, 8, 128, 32, 2, 2, 1, false, true, false, 128"
+ },
+ {
+  "entry": "cc_vit_ffn_contract_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 4096, 16, 8, 128, 32, 2, 2, 4, true, false, false, 128"
+ },
+ {
+  "entry": "cc_vit_qkv_fp8",
+  "layer": "Conv2dQKVLayer",
+  "config": "Conv2dQKVConfig",
+  "params": "32, 32, 1024, 16, 8, 32, 2, 2, 2, false, false, 128"
+ },
+ {
+  "entry": "cc_vit_attention_fp8",
+  "layer": "Attention2dLayer",
+  "config": "Attention2dConfig",
+  "params": "32, 32, 16, 8, 8, 8, 32, 2, false, false"
+ },
+ {
+  "entry": "cc_vit_projection_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 1024, 16, 8, 128, 32, 2, 2, 4, true, false, false, 32"
+ },
+ {
+  "entry": "cc_vit_projection_tilesync_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 1024, 16, 8, 128, 32, 2, 2, 4, true, false, true, 32"
+ },
+ {
+  "entry": "cc_vit_ffn_expand_tilesync_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "4096, 1024, 16, 8, 128, 32, 2, 2, 1, false, false, true, 128"
+ },
+ {
+  "entry": "cc_vit_ffn_expand_chained_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "4096, 1024, 16, 8, 128, 32, 2, 2, 1, false, true, true, 128"
+ },
+ {
+  "entry": "cc_vit_ffn_contract_chained_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 4096, 16, 8, 128, 32, 2, 2, 4, true, true, true, 128"
+ },
+ {
+  "entry": "cc_vit_qkv_wait_fp8",
+  "layer": "Conv2dQKVLayer",
+  "config": "Conv2dQKVConfig",
+  "params": "32, 32, 1024, 16, 8, 32, 2, 2, 2, true, false, 128"
+ },
+ {
+  "entry": "cc_vit_qkv_chained_fp8",
+  "layer": "Conv2dQKVLayer",
+  "config": "Conv2dQKVConfig",
+  "params": "32, 32, 1024, 16, 8, 32, 2, 2, 2, true, true, 128"
+ },
+ {
+  "entry": "cc_vit_attention_tilesync_fp8",
+  "layer": "Attention2dLayer",
+  "config": "Attention2dConfig",
+  "params": "32, 32, 16, 8, 8, 8, 32, 2, false, true"
+ },
+ {
+  "entry": "cc_vit_attention_wait_fp8",
+  "layer": "Attention2dLayer",
+  "config": "Attention2dConfig",
+  "params": "32, 32, 16, 8, 8, 8, 32, 2, true, false"
+ },
+ {
+  "entry": "cc_vit_attention_chained_fp8",
+  "layer": "Attention2dLayer",
+  "config": "Attention2dConfig",
+  "params": "32, 32, 16, 8, 8, 8, 32, 2, true, true"
+ },
+ {
+  "entry": "cc_vit_projection_wait_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 1024, 16, 8, 128, 32, 2, 2, 4, true, true, false, 32"
+ },
+ {
+  "entry": "cc_vit_projection_chained_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "1024, 1024, 16, 8, 128, 32, 2, 2, 4, true, true, true, 32"
+ },
+ {
+  "entry": "cc_vit_1d_repack_2d_to_1d",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_repack_2d_to_1d_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_repack_1d_to_2d",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_repack_1d_to_2d_fp8",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_ffn_expand",
+  "layer": "Conv1d1x1Layer",
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_ffn_expand_publish",
+  "layer": "Conv1d1x1Layer",
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_ffn_expand_chained",
+  "layer": "Conv1d1x1Layer",
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_ffn_expand_fp8",
+  "layer": "Conv1d1x1Layer",
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_ffn_expand_publish_fp8",
+  "layer": "Conv1d1x1Layer",
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_ffn_expand_chained_fp8",
+  "layer": "Conv1d1x1Layer",
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_ffn_contract",
+  "layer": "Conv1d1x1Layer",
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_ffn_contract_chained",
+  "layer": "Conv1d1x1Layer",
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_ffn_contract_fp8",
+  "layer": "Conv1d1x1Layer",
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_ffn_contract_chained_fp8",
+  "layer": "Conv1d1x1Layer",
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cc_vit_1d_qkv",
+  "layer": "Conv1dQKVLayer",
+  "config": "Conv1dQKVConfig",
+  "params": "32, 32, 1024, 128, 32, 2, 2, 2, false, false, 128"
+ },
+ {
+  "entry": "cc_vit_1d_qkv_chained",
+  "layer": "Conv1dQKVLayer",
+  "config": "Conv1dQKVConfig",
+  "params": "32, 32, 1024, 128, 32, 2, 2, 2, true, false, 128"
+ },
+ {
+  "entry": "cc_vit_1d_qkv_fp8",
+  "layer": "Conv1dQKVLayer",
+  "config": "Conv1dQKVConfig",
+  "params": "32, 32, 1024, 128, 32, 2, 2, 2, false, false, 128"
+ },
+ {
+  "entry": "cc_vit_1d_qkv_chained_fp8",
+  "layer": "Conv1dQKVLayer",
+  "config": "Conv1dQKVConfig",
+  "params": "32, 32, 1024, 128, 32, 2, 2, 2, true, false, 128"
+ },
+ {
+  "entry": "cc_vit_1d_attention",
+  "layer": "Attention1dLayer",
+  "config": "Attention1dConfig",
+  "params": "32, 32, 128, 64, 32, 2, false, false"
+ },
+ {
+  "entry": "cc_vit_1d_attention_chained",
+  "layer": "Attention1dLayer",
+  "config": "Attention1dConfig",
+  "params": "32, 32, 128, 64, 32, 2, true, false"
+ },
+ {
+  "entry": "cc_vit_1d_attention_fp8",
+  "layer": "Attention1dLayer",
+  "config": "Attention1dConfig",
+  "params": "32, 32, 128, 64, 32, 2, false, false"
+ },
+ {
+  "entry": "cc_vit_1d_attention_chained_fp8",
+  "layer": "Attention1dLayer",
+  "config": "Attention1dConfig",
+  "params": "32, 32, 128, 64, 32, 2, true, false"
+ },
+ {
+  "entry": "cc_vit_1d_projection",
+  "layer": "Conv1d1x1Layer",
+  "config": "Conv1d1x1Config",
+  "params": "1024, 1024, 128, 128, 32, 2, 2, 4, true, false, false, 32"
+ },
+ {
+  "entry": "cc_vit_1d_projection_wait",
+  "layer": "Conv1d1x1Layer",
+  "config": "Conv1d1x1Config",
+  "params": "1024, 1024, 128, 128, 32, 2, 2, 4, true, true, false, 32"
+ },
+ {
+  "entry": "cc_vit_1d_projection_chained",
+  "layer": "Conv1d1x1Layer",
+  "config": "Conv1d1x1Config",
+  "params": "1024, 1024, 128, 128, 32, 2, 2, 4, true, true, true, 32"
+ },
+ {
+  "entry": "cc_vit_1d_projection_fp8",
+  "layer": "Conv1d1x1Layer",
+  "config": "Conv1d1x1Config",
+  "params": "1024, 1024, 128, 128, 32, 2, 2, 4, true, false, false, 32"
+ },
+ {
+  "entry": "cc_vit_1d_projection_wait_fp8",
+  "layer": "Conv1d1x1Layer",
+  "config": "Conv1d1x1Config",
+  "params": "1024, 1024, 128, 128, 32, 2, 2, 4, true, true, false, 32"
+ },
+ {
+  "entry": "cc_vit_1d_projection_chained_fp8",
+  "layer": "Conv1d1x1Layer",
+  "config": "Conv1d1x1Config",
+  "params": "1024, 1024, 128, 128, 32, 2, 2, 4, true, true, true, 32"
+ },
+ {
+  "entry": "cc_dec_input_upsample_1024_512",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 1024, 4, 4, 256, 32, 1, 2, 4, false, false, false, 256"
+ },
+ {
+  "entry": "cc_dec_input_upsample_1024_512_tilesync",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 1024, 4, 4, 256, 32, 1, 2, 4, false, false, true, 256"
+ },
+ {
+  "entry": "cc_dec_input_upsample_1024_512_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 1024, 4, 4, 256, 64, 1, 2, 4, false, false, false, 256"
+ },
+ {
+  "entry": "cc_dec_input_upsample_1024_512_tilesync_fp8",
+  "layer": "Conv2d1x1Layer",
+  "config": "Conv2d1x1Config",
+  "params": "512, 1024, 4, 4, 256, 64, 1, 2, 4, false, false, true, 256"
+ },
+ {
+  "entry": "cc_cb_clear",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cuda_font_kernel",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cuda_capture_kernel",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cuda_capture_output_exposure_scale_kernel",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cuda_capture_mv_dilate_kernel",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cuda_capture_buffer_as_texture",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cuda_clear_view_kernel",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cg2r_post_process_kernel",
+  "layer": null,
+  "config": null,
+  "params": null
+ },
+ {
+  "entry": "cg2r_copy_kernel",
+  "layer": null,
+  "config": null,
+  "params": null
+ }
+]

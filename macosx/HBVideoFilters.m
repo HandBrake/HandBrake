@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
         @(HB_FILTER_CHROMA_SMOOTH),
         @(HB_FILTER_LAPSHARP),
         @(HB_FILTER_UNSHARP),
+        @(HB_FILTER_DLSSNR),
         @(HB_FILTER_GRAYSCALE),
         @(HB_FILTER_COLORSPACE),
     ];
@@ -55,6 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
     [groups addObject:[[HBFilterGroup alloc] initWithFilters:@[@(HB_FILTER_LAPSHARP),
                                                                @(HB_FILTER_UNSHARP)]
                                                    groupName:HBKitLocalizedString(@"Sharpen", "HBFilter")]];
+    [groups addObject:[[HBFilterGroup alloc] initWithFilterID:HB_FILTER_DLSSNR]];
     [groups addObject:[[HBFilterGroup alloc] initWithFilterID:HB_FILTER_GRAYSCALE]];
     [groups addObject:[[HBFilterGroup alloc] initWithFilterID:HB_FILTER_COLORSPACE]];
 
@@ -71,6 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
     preset[@"PictureDenoisePreset"]      = @"off";
     preset[@"PictureChromaSmoothPreset"] = @"off";
     preset[@"PictureSharpenPreset"]      = @"off";
+    preset[@"PictureDLSSNRPreset"]       = @"off";
     preset[@"PictureDeblockPreset"]      = @"off";
     preset[@"VideoGrayScale"]            = @NO;
     preset[@"PictureColorspacePreset"]   = @"off";
@@ -171,6 +174,7 @@ NS_ASSUME_NONNULL_BEGIN
         [self addComplexFilterWithKey:@"PictureDenoise" fromPreset:preset];
         [self addFilterWithName:@"chromasmooth" key:@"PictureChromaSmooth" fromPreset:preset];
         [self addComplexFilterWithKey:@"PictureSharpen" fromPreset:preset];
+        [self addFilterWithName:@"dlssnr" key:@"PictureDLSSNR" fromPreset:preset];
         [self addSimpleFilterWithName:@"grayscale" key:@"VideoGrayScale" fromPreset:preset];
         [self addFilterWithName:@"colorspace" key:@"PictureColorspace" fromPreset:preset];
     }

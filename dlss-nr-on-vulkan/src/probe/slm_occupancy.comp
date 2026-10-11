@@ -1,0 +1,31 @@
+#version 450
+/*
+ * slm_occupancy — the same arithmetic under different amounts of declared shared memory.
+ *
+ * Every invocation runs a chain of 4096 dependent FMAs and touches no global memory, so
+ * the run time depends only on how many workgroups a subslice keeps resident to
+ * interleave. The shared array is sized by specialization constant 0, in 32-bit words;
+ * each invocation writes some of it and reads one word back, so it cannot be dropped.
+ */
+layout(local_size_x = 32) in;
+layout(constant_id = 0) const uint WORDS = 256u;
+
+layout(set = 0, binding = 0) buffer Sink { float sink[]; };
+
+shared uint pad[WORDS];
+
+void main()
+{
+    uint lane = gl_LocalInvocationID.x;
+    for (uint i = lane; i < WORDS; i += 32u)
+        pad[i] = i;
+    barrier();
+
+    float x = float(gl_GlobalInvocationID.x) * 1e-6;
+    for (uint i = 0u; i < 4096u; i++)
+        x = fma(x, 0.999, 0.5);
+
+    uint v = pad[(gl_GlobalInvocationID.x + uint(x)) % WORDS];
+    if (x == -1.0 && v == 0xffffffffu)      /* never true; keeps both alive */
+        sink[0] = x;
+}

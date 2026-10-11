@@ -1,0 +1,164 @@
+#!/usr/bin/env bash
+# nr-photo — run a game with the DLSS-NR layer attached.
+#
+#   src/layer/nr-photo <game> [args]              a native Vulkan game
+#   src/layer/nr-photo --check-proton <appid> <exe>  verify paths without launching
+#   src/layer/nr-photo --proton <appid> <exe> ...  a Steam game, through Proton directly
+#   src/layer/nr-photo --steam 1091500            print the Steam launch option to paste
+#
+# `--proton` is the one that has actually been driven end to end: Steam launches a game
+# as a child of the client, so the layer's environment does not reach it unless it is
+# set in the launch options; running Proton directly sidesteps that and needs no change
+# to the Steam configuration. The prefix has to exist, which means the game has been
+# started from Steam at least once.
+#
+# The pass fires while the trigger file exists and holds its result on screen until it
+# is removed, so it is a photo mode rather than a per-frame filter:
+#
+#   NR_UI_MASK=1 src/layer/nr-photo ...       leave the game's interface untouched
+#   NR_LIVE=1    src/layer/nr-photo ...       a slideshow instead of a photo: every Nth
+#                                             present goes through the network and the
+#                                             frames between hold the last result. Set
+#                                             the game small — Tekken 7 at 640x360 ran 25 fps,
+#                                             the compositor stretches it (notes/phase47).
+#   NR_ASYNC=1   with NR_LIVE: the daemon works on this frame while the game draws the
+#                                             next, and each present shows the answer
+#                                             for the one before — more frames a second
+#                                             for one more frame of latency.
+#
+#   touch /tmp/nr_trigger     # freeze and enhance
+#   rm    /tmp/nr_trigger     # back to the game
+#
+# Start the daemon first; it holds the model, so it costs a second once rather than
+# per frame:  python3 src/layer/nr_daemon.py
+set -euo pipefail
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+layer_dir="${NR_LAYER_DIR:-$root/work/layer}"
+socket="${NR_LAYER_SOCKET:-/tmp/nr_layer.sock}"
+trigger="${NR_LAYER_TRIGGER:-/tmp/nr_trigger}"
+
+so=$([ "$(uname -s)" = Darwin ] && echo .dylib || echo .so)
+make -s -C "$root" "work/libnr_layer$so"
+python3 "$root/src/layer/prepare_layer.py" "$layer_dir"
+
+# The socket path has to fit in sun_path, 108 bytes — a long scratch directory will
+# silently truncate and the layer will report no daemon.
+if [ "${#socket}" -ge 100 ]; then
+    echo "socket path is $((${#socket})) characters; keep it under 100" >&2
+    exit 1
+fi
+
+export VK_LAYER_PATH="$layer_dir" \
+       VK_INSTANCE_LAYERS=VK_LAYER_dlssnr_intel \
+       ENABLE_NR_LAYER=1 \
+       NR_LAYER_SOCKET="$socket" \
+       NR_LAYER_TRIGGER="$trigger"
+# NR_LAYER_UI_MASK marks the pixels that held still between two presents so the daemon
+# can leave the interface exactly as the game drew it. Off unless asked for: it cannot
+# tell an interface over a still scene from a still scene, and refuses rather than
+# guesses when almost nothing moved.
+# an `&&` one-liner here is a trap under `set -e`: write the branch out
+if [ -n "${NR_UI_MASK:-}" ]; then
+    export NR_LAYER_UI_MASK=1
+fi
+# Live mode is a rate, not a flag: N presents per rendered frame.
+if [ -n "${NR_LIVE:-}" ]; then
+    export NR_LAYER_LIVE="$NR_LIVE"
+fi
+if [ -n "${NR_ASYNC:-}" ] && [ "${NR_ASYNC}" != 0 ]; then
+    export NR_LAYER_ASYNC=1
+fi
+
+if [ "${1:-}" = "--proton" ] || [ "${1:-}" = "--check-proton" ]; then
+    check_only=0
+    [ "$1" = "--check-proton" ] && check_only=1
+    shift
+    appid="${1:?usage: nr-photo --proton <appid> <exe> [args]}"; shift
+    steam="${STEAM_ROOT:-$HOME/.local/share/Steam}"
+    # the game may live in any library the client knows about
+    libraries=("$steam")
+    while IFS= read -r library; do
+        libraries+=("$library")
+    done < <(sed -n 's/.*"path"[^"]*"\([^"]*\)".*/\1/p' \
+             "$steam/steamapps/libraryfolders.vdf" 2>/dev/null)
+    prefix=""
+    for library in "${libraries[@]}"; do
+        if [ -d "$library/steamapps/compatdata/$appid" ]; then
+            prefix="$library/steamapps/compatdata/$appid"
+        fi
+    done
+    if [ -z "$prefix" ]; then
+        echo "no Proton prefix for appid $appid — start it from Steam once first" >&2
+        exit 1
+    fi
+    proton="${NR_PROTON:-}"
+    if [ -z "$proton" ]; then
+        proton_count=0
+        shopt -s nullglob
+        for library in "${libraries[@]}"; do
+            for candidate in "$library"/steamapps/common/Proton*/proton; do
+                if [ -x "$candidate" ]; then
+                    proton="$candidate"
+                    proton_count=$((proton_count + 1))
+                fi
+            done
+        done
+        shopt -u nullglob
+        if [ "$proton_count" -gt 1 ]; then
+            printf 'Multiple Proton installs found; selected %s. Set NR_PROTON to choose explicitly.\n' "$proton" >&2
+        fi
+    fi
+    if [ ! -x "$proton" ]; then
+        echo "no Proton runtime found in Steam libraries; set NR_PROTON to its proton executable" >&2
+        exit 1
+    fi
+    # Direct Proton runs do not inherit the per-game environment Steam normally
+    # supplies. Steam API initialization, game-specific Proton fixes and PROTON_LOG
+    # all use these IDs; the prefix directory alone does not supply them.
+    export STEAM_COMPAT_CLIENT_INSTALL_PATH="$steam" STEAM_COMPAT_DATA_PATH="$prefix" \
+           SteamAppId="$appid" SteamGameId="$appid" STEAM_COMPAT_APP_ID="$appid"
+    exe="${1:?usage: nr-photo --proton <appid> <exe> [args]}"; shift
+    if [ ! -f "$exe" ]; then
+        echo "game executable not found: $exe" >&2
+        exit 1
+    fi
+    # Proton may run a 32-bit game or helpers. Ship a matching layer for both
+    # Unix architectures; the manifest's library_arch lets the loader select it.
+    make -s -C "$root" "work/libnr_layer32$so"
+    python3 "$root/src/layer/prepare_layer.py" "$layer_dir"
+    if [ "$check_only" = 1 ]; then
+        printf 'Prefix: %s\nProton: %s\nGame: %s\nSocket: %s\n' "$prefix" "$proton" "$exe" "$socket"
+        exit 0
+    fi
+    printf 'Starting Steam app %s with %s\n' "$appid" "$proton" >&2
+    if [ "${PROTON_LOG:-0}" != 0 ]; then
+        export PROTON_LOG_DIR="${PROTON_LOG_DIR:-$root/work/proton-logs}"
+        mkdir -p "$PROTON_LOG_DIR"
+        printf 'Proton log: %s/steam-%s.log\n' "$PROTON_LOG_DIR" "$appid" >&2
+    fi
+    cd "$(dirname "$exe")"
+    exec "$proton" run "./$(basename "$exe")" "$@"
+fi
+
+if [ "${1:-}" = "--steam" ]; then
+    make -s -C "$root" "work/libnr_layer32$so"
+    python3 "$root/src/layer/prepare_layer.py" "$layer_dir"
+    printf 'Paste this into the game'"'"'s Steam launch options:\n\n'
+    # the printed line has to carry the mask too: a Steam-launched game does not inherit
+    # this shell's environment, so an exported NR_LAYER_UI_MASK would silently vanish
+    mask=""
+    if [ -n "${NR_LAYER_UI_MASK:-}" ]; then
+        mask="NR_LAYER_UI_MASK=1 "
+    fi
+    if [ -n "${NR_LAYER_LIVE:-}" ]; then
+        mask="${mask}NR_LAYER_LIVE=${NR_LAYER_LIVE} "
+    fi
+    if [ -n "${NR_LAYER_ASYNC:-}" ]; then
+        mask="${mask}NR_LAYER_ASYNC=1 "
+    fi
+    printf '  VK_LAYER_PATH=%q VK_INSTANCE_LAYERS=VK_LAYER_dlssnr_intel ENABLE_NR_LAYER=1 NR_LAYER_SOCKET=%q NR_LAYER_TRIGGER=%q %s%%command%%\n\n' \
+           "$layer_dir" "$socket" "$trigger" "$mask"
+    printf 'Then: touch %s to enhance, rm %s to release.\n' "$trigger" "$trigger"
+    exit 0
+fi
+exec "$@"

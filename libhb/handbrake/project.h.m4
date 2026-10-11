@@ -55,6 +55,7 @@ dnl
 <<#>>define HB_PROJECT_FEATURE_X265              __FEATURE_x265
 <<#>>define HB_PROJECT_FEATURE_NUMA              __FEATURE_numa
 <<#>>define HB_PROJECT_FEATURE_LIBDOVI           __FEATURE_libdovi
+<<#>>define HB_PROJECT_FEATURE_DLSSNR            __FEATURE_dlssnr
 
 <<#>>define HB_PROJECT_SECURITY_HARDEN           __SECURITY_harden
 

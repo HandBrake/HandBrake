@@ -1594,6 +1594,12 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Lapsharp.
         /// </summary>
+        public static string Filter_dlssnr {
+            get {
+                return ResourceManager.GetString("Filter_dlssnr", resourceCulture);
+            }
+        }
+        
         public static string Filter_lapsharp {
             get {
                 return ResourceManager.GetString("Filter_lapsharp", resourceCulture);

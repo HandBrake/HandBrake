@@ -1,0 +1,25 @@
+== header ==
+  magic            : 0x20b (PE32+)
+  sections         : 7
+  timestamp        : 1786480171 (2026-08-11 20:29:31 UTC)
+  characteristics  : 0x2022
+  data directories : 16
+  cert table       : offset=0x9e25e00 size=10352 (10.1 KiB)
+
+== sections ==
+  name            vaddr        vsize      raw off     raw size  flags     entropy(sampled)
+  .text      0x00001000       699900 0x0000000400       699904  0x60000020  6.4364  (  0.4% of file)
+  .rdata     0x000ac000       210462 0x00000ab200       210944  0x40000040  5.7373  (  0.1% of file)
+  .data      0x000e0000     17279620 0x00000dea00     17180672  0xc0000040  6.0648  ( 10.4% of file)
+  .pdata     0x0115b000        34368 0x0001141200        34816  0x40000040  5.8110  (  0.0% of file)
+  _RDATA     0x01164000          244 0x0001149a00          512  0x40000040  2.4513  (  0.0% of file)
+  .rsrc      0x01165000    147696792 0x0001149c00    147697152  0x40000040  5.8925  ( 89.1% of file)
+  .reloc     0x09e40000         4716 0x0009e24a00         5120  0x42000040  5.2827  (  0.0% of file)
+
+== version resource ==
+  FileVersion    : 46863.0.46863.4696
+  ProductVersion : 3908.4208.16662.28855
+  authenticode sha256: 9c438464491d54b8000a62562d21521cc6d8709e0fd5e7c4d27752824f473789
+  authenticode sha1  : 91d20f22c10f6c78b989eceefc0282b3cdc4046e
+  bytes after cert table: 0 (clean)
+  WIN_CERTIFICATE: len=10352 revision=0x0200 type=0x0002 -> work/dl/dlssnr.sig.der

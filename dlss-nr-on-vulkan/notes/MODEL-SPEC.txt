@@ -1,0 +1,112 @@
+# DLSS-NR (CG2R / HNet, build 310.8.0.0) — network specification
+#
+# Derived from the weight container; widths cross-checked against PTX
+# kernel template parameters. Head dim 32, Swin window 8x8 (64 tokens),
+# attention bias = heads * 64 * 64 = 128*C. Grouped-query attention:
+# QKV = 1.5C^2 = Q(C^2) + K(C^2/4) + V(C^2/4), i.e. 4:1 query:kv heads.
+
+block    C      subs  elements      kind                         layout
+block0   32     1     10,848        fused Swin                   4C^2+64C | 128C | 2C+544
+block1   32     1     10,336        fused Swin                   4C^2+64C | 128C | 2C+32
+block2   32     1     10,336        fused Swin                   4C^2+64C | 128C | 2C+32
+block3   32     1     10,336        fused Swin                   4C^2+64C | 128C | 2C+32
+block4   32     1     11,360        fused Swin + transition      4C^2+64C | 128C | C^2 | 2C+32
+block5   64     1     30,880        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block6   64     1     30,880        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block7   64     1     30,880        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block8   64     1     34,968        fused Swin + transition      4C^2+64C | 128C | C^2/2 | C^2 | 2C+24
+block9   128    1     98,592        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block10  128    1     98,592        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block11  128    1     98,592        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block12  128    1     98,592        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block13  128    1     98,592        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block14  128    1     114,968       fused Swin + transition      4C^2+64C | 128C | C^2/2 | C^2 | 2C+24
+block15  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block16  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block17  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block18  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block19  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block20  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block21  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block22  256    1     410,144       fused Swin + transition      4C^2+64C | 128C | C^2/2 | C^2 | 2C+32
+block23  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block24  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block25  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block26  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block27  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block28  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block29  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block30  1024   5     1,246,248     ViT-1D bottleneck            2C^2+8 | 2C^2+C | 1.5C^2+128C+64 | 1 | C^2/2+C
+block31  1024   5     6,293,577     ViT-1D bottleneck            2C^2+8 | 2C^2+C | 1.5C^2+128C+64 | 1 | C^2/2+C
+block32  1024   5     6,293,577     ViT-1D bottleneck            2C^2+8 | 2C^2+C | 1.5C^2+128C+64 | 1 | C^2/2+C
+block33  1024   5     6,293,577     ViT-1D bottleneck            2C^2+8 | 2C^2+C | 1.5C^2+128C+64 | 1 | C^2/2+C
+block34  1024   5     6,293,577     ViT-1D bottleneck            2C^2+8 | 2C^2+C | 1.5C^2+128C+64 | 1 | C^2/2+C
+block35  1024   5     6,293,577     ViT-1D bottleneck            2C^2+8 | 2C^2+C | 1.5C^2+128C+64 | 1 | C^2/2+C
+block36  1024   5     6,293,577     ViT-1D bottleneck            2C^2+8 | 2C^2+C | 1.5C^2+128C+64 | 1 | C^2/2+C
+block37  1024   5     6,293,577     ViT-1D bottleneck            2C^2+8 | 2C^2+C | 1.5C^2+128C+64 | 1 | C^2/2+C
+block38  1024   5     6,293,577     ViT-1D bottleneck            2C^2+8 | 2C^2+C | 1.5C^2+128C+64 | 1 | C^2/2+C
+block39  1024   1     262,656       dec_input_upsample           512x512 + 512
+block40  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block41  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block42  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block43  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block44  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block45  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block46  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block47  512    4     984,096       split-Swin-16H               C^2 | C^2/2+C | 1.5C^2+128C+32 | C^2/2+C
+block48  256    1     410,392       fused Swin + transition      4C^2+64C | 128C | C^2/2 | C^2 | 2C+280
+block49  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block50  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block51  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block52  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block53  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block54  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block55  256    1     344,616       fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+40
+block56  128    1     115,088       fused Swin + transition      4C^2+64C | 128C | C^2/2 | C^2 | 2C+144
+block57  128    1     98,592        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block58  128    1     98,592        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block59  128    1     98,592        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block60  128    1     98,592        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block61  128    1     98,592        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block62  64     1     35,024        fused Swin + transition      4C^2+64C | 128C | C^2/2 | C^2 | 2C+80
+block63  64     1     30,880        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block64  64     1     30,880        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block65  64     1     30,880        fused Swin                   4C^2+64C | 128C | C^2/2 | 2C+32
+block66  32     1     11,392        fused Swin + transition      4C^2+64C | 128C | C^2 | 2C+64
+block67  32     1     10,336        fused Swin                   4C^2+64C | 128C | 2C+32
+block68  32     1     10,336        fused Swin                   4C^2+64C | 128C | 2C+32
+block69  32     1     10,336        fused Swin                   4C^2+64C | 128C | 2C+32
+block70  32     2     10,905        output head + blend_scale    4C^2 | 128C | out_gain, out_conv_weight, blend
+
+# stage summary
+#   C=32    fused Swin                   x7
+#   C=32    fused Swin + transition      x2
+#   C=32    output head + blend_scale    x1
+#   C=64    fused Swin                   x6
+#   C=64    fused Swin + transition      x2
+#   C=128   fused Swin                   x10
+#   C=128   fused Swin + transition      x2
+#   C=256   fused Swin                   x14
+#   C=256   fused Swin + transition      x2
+#   C=512   split-Swin-16H               x15
+#   C=1024  ViT-1D bottleneck            x9
+#   C=1024  dec_input_upsample           x1
+
+# execution order (156-slot graph)
+# stage                  slots       blocks         weight records
+# clear                  0-0         -              0 (weightless)
+# encoder_1h_32          1-5         block0-4       5
+# encoder_2h_64          6-9         block5-8       4
+# encoder_4h_128         10-15       block9-14      6
+# encoder_8h_256         16-23       block15-22     8
+# bottleneck_16h_512     24-56       block23-30     33
+# vit_1d                 57-98       block31-38     40
+# decoder_16h_512        99-131      block39-47     33
+# decoder_8h_256         132-139     block48-55     8
+# decoder_4h_128         140-145     block56-61     6
+# decoder_2h_64          146-149     block62-65     4
+# decoder_1h_32          150-153     block66-69     4
+# output_head            154-154     block70-70     2
+# final_copy             155-155     -              0 (weightless)
+
+# accounted 73,841,889 of 73,841,889 elements -> COMPLETE

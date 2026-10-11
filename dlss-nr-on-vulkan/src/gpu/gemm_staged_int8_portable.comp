@@ -1,0 +1,61 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * gemm_staged_int8_portable — `gemm_staged_int8.comp` without the cooperative matrix.
+ *
+ * C[r][c] = acc[r][c] * a_scale[r] * b_scale[c], acc the exact int32 dot product of an
+ * int8 row of A and an int8 row of the transposed weights. The accumulator is exact in any
+ * order, and the two scalings are the matrix kernel's two multiplies in its order, so this
+ * gives its output bit for bit on any device (`src/gpu/test_gemm_int8_staged.py`).
+ *
+ * The bytes are read as 32-bit words and sign-extended here, so the device needs neither
+ * shaderInt8 nor 8-bit storage: MoltenVK, the phones, and a matrix device without the
+ * integer features all take it. A 32-lane workgroup takes an 8x16 block as `gemm_portable`
+ * does, a lane one row and four consecutive columns. Same push block as the matrix
+ * kernel: a the activations (M x K), b the weights (N x K), c the output (float32, M x N),
+ * d the row scales, residual_cos the column scales; K a multiple of 64.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+
+layout(local_size_x = 32) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer UintBuf  { uint v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float v[]; };
+
+layout(push_constant, scalar) uniform Push {
+    UintBuf a, b; FloatBuf c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    uint lda, ldb, ldc, spare;
+    uint64_t residual_cos;                     // the weights' per-column scales
+    uint image_h, image_w, window_cols, window_pad;
+    uint64_t qkv_scale;
+} pc;
+
+int dot4(uint a, uint b) {
+    int total = 0;
+    for (int i = 0; i < 4; i++)
+        total += bitfieldExtract(int(a), 8 * i, 8) * bitfieldExtract(int(b), 8 * i, 8);
+    return total;
+}
+
+void main() {
+    uint r = gl_WorkGroupID.y * 8u + (gl_LocalInvocationID.x >> 2u);
+    uint c = gl_WorkGroupID.x * 16u + (gl_LocalInvocationID.x & 3u) * 4u;
+    if (r >= pc.m || c >= pc.n) return;
+    uint words = pc.k / 4u;
+    ivec4 acc = ivec4(0);
+    for (uint w = 0u; w < words; w++) {
+        uint a = pc.a.v[r * words + w];
+        for (uint q = 0u; q < 4u; q++)
+            acc[q] += dot4(a, pc.b.v[(c + q) * words + w]);
+    }
+    float scale = pc.d.v[r];
+    FloatBuf column = FloatBuf(pc.residual_cos);
+    for (uint q = 0u; q < 4u; q++)
+        pc.c.v[r * pc.n + c + q] = float(acc[q]) * scale * column.v[c + q];
+}

@@ -1,0 +1,288 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * gemm_resident — the same cooperative-matrix GEMM as gemm_coopmat_batched.comp,
+ * with its operands addressed by pointer instead of bound to descriptors, so it can
+ * be recorded alongside the elementwise passes in one command buffer.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+#extension GL_KHR_memory_scope_semantics : require
+#extension GL_KHR_cooperative_matrix : require
+#extension GL_KHR_shader_subgroup_basic : require
+
+#include "publish.glsl"
+
+layout(local_size_x = 32) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf  { float16_t v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float     v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 8)  buffer Half4Buf { f16vec4   v4[]; };
+
+/* The epilogue runs on the accumulator itself; see the store below for why the shared
+ * memory this used to need is gone.
+ *
+ * This comment used to say the opposite: that **any** operation on a cooperative matrix
+ * between `coopMatMulAdd` and `coopMatStore` scrambles where the elements land, on
+ * Mesa 26.2.1 / ANV, cooperative matrix revision 2. That was wrong, and it shaped three
+ * phases of design before the reproducer written to file it upstream found out why —
+ * the last variant still failing was our own invalid shader, a float16 matrix stored
+ * into a `float[]`. `notes/phase38-there-was-no-bug.md`,
+ * `src/probe/coopmat_store_bug.comp`.
+ *
+ * The real rule is narrow, and it is about types rather than timing: **store a matrix
+ * only into an array of its own component type**, converting the matrix first if they
+ * differ. glslang accepts the mismatch and the driver hands back packed halves read as
+ * float32 — 79 of 128 zero, the rest denormal-sized. Given a matching destination every
+ * variant is exact, arithmetic on the accumulator included, which is why the publish
+ * below runs on the accumulator's own components and stores straight to global. That
+ * turned four trips over block 0's 503 MB hidden buffer into one 252 MB write. Every
+ * epilogue is bit-exact against the same chain run as a separate pass
+ * (`src/gpu/test_epilogue.py`).
+ */
+
+layout(push_constant, scalar) uniform Push {
+    HalfBuf a, b; FloatBuf c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    uint lda, ldb, ldc, spare;
+    uint64_t residual_cos;                     // per-channel cosine of the skip
+    uint image_h, image_w, window_cols, window_pad;   // window residual geometry
+    uint64_t qkv_scale;                        // the QKV epilogue's query scale
+} pc;
+
+#include "specialize.glsl"
+#include "residual_epilogue.glsl"   /* needs operation_flags() from above */
+
+const uint TM = 8, TN = 16, TK = 16;
+
+/* The accumulator's type. Config 1 (`fp16 x fp16 -> fp32`) is what this project has
+ * always used and is 400-800x more accurate than the original; config 0
+ * (`fp16 x fp16 -> fp16`) is what NVIDIA's own kernels do — zero of 218 PTX kernels
+ * carry an FP32 accumulator (notes/phase4-accumulation-choice.md). It is also half the
+ * registers: one 8x16 tile is 4 GRF in float32 and 2 in float16, which is the exact
+ * constraint that caps the register block (notes/phase26-the-register-ceiling.md). */
+#ifdef ACC16
+#define ACC float16_t
+#else
+#define ACC float
+#endif
+
+/* How many cooperative-matrix tiles one subgroup keeps in registers. The kernel is
+ * compiled twice: RM = RN = 1 for shapes whose extents are not a whole tile block, and
+ * RM = 2, RN = 2 otherwise. Every K step then loads RM fragments of A and RN of B to
+ * feed RM*RN multiply-accumulates, so the loads per unit of arithmetic fall by
+ * RM*RN/(RM+RN) — from 0.5 to 1 — and the workgroup count falls fourfold with it. */
+#ifndef RM
+#define RM 1
+#endif
+#ifndef RN
+#define RN 1
+#endif
+const uint BM = TM * RM, BN = TN * RN;
+
+/* A narrow output is still written through shared memory, and not because anything
+ * forbids the direct store — phase 38 established that a matrix stored into an array of
+ * its own component type is exact. It is a write-pattern choice: `coopMatStore` of a
+ * float16 matrix puts two bytes per lane per element on the wire, while going through
+ * shared memory lets each lane write four consecutive halves as one 64-bit store. That
+ * is worth about 20 ms of a 720p frame. */
+shared ACC stage[BM * BN];
+
+/* The QKV projection's epilogue needs a column block of exactly one head, 32 wide, so it
+ * exists in the register-tiled build only; libxmx never routes it anywhere else. */
+#if RN == 2
+void qkv_barrier() { subgroupMemoryBarrierShared(); subgroupBarrier(); }
+#define QKV_STAGE ACC
+#include "cosine_tree.glsl"
+#include "qkv_epilogue.glsl"
+#endif
+
+
+
+
+void main() {
+    uint row = gl_WorkGroupID.y * BM, col = gl_WorkGroupID.x * BN;
+    if (row >= pc.m || col >= pc.n) return;
+    uint batch = gl_WorkGroupID.z;
+    uint ao = batch * pc.sa, bo = batch * pc.sb, co = batch * pc.sc;
+    /* A row of a matrix need not be its width: the branched feed-forward writes each
+     * output head into a 32-column slice of a wider buffer, and the split feed-forward
+     * reads a 64-column slice of one. */
+    uint lda = pc.lda != 0u ? pc.lda : pc.k;
+    uint ldb = pc.ldb != 0u ? pc.ldb : ((operation_flags() & 1u) != 0u ? pc.k : pc.n);
+    uint ldc = pc.ldc != 0u ? pc.ldc : pc.n;
+
+    coopmat<ACC, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> acc[RM][RN];
+    for (uint i = 0; i < RM; i++)
+        for (uint j = 0; j < RN; j++)
+            acc[i][j] = coopmat<ACC, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(0.0);
+    coopmat<float16_t, gl_ScopeSubgroup, TM, TK, gl_MatrixUseA> a[RM];
+    coopmat<float16_t, gl_ScopeSubgroup, TK, TN, gl_MatrixUseB> b[RN];
+
+    /* The transposed test stays outside the K loop. Inside it, the loads stop being
+     * hoisted and the loop stops pipelining — worth 30 % of a frame when it was there. */
+    if ((operation_flags() & 1u) != 0u) {
+        for (uint k = 0; k < pc.k; k += TK) {
+            for (uint i = 0; i < RM; i++)
+                coopMatLoad(a[i], pc.a.v, ao + (row + i * TM) * lda + k, lda,
+                            gl_CooperativeMatrixLayoutRowMajor);
+            for (uint j = 0; j < RN; j++)
+                coopMatLoad(b[j], pc.b.v, bo + (col + j * TN) * ldb + k, ldb,
+                            gl_CooperativeMatrixLayoutColumnMajor);
+            for (uint i = 0; i < RM; i++)
+                for (uint j = 0; j < RN; j++)
+                    acc[i][j] = coopMatMulAdd(a[i], b[j], acc[i][j]);
+        }
+    } else {
+        for (uint k = 0; k < pc.k; k += TK) {
+            for (uint i = 0; i < RM; i++)
+                coopMatLoad(a[i], pc.a.v, ao + (row + i * TM) * lda + k, lda,
+                            gl_CooperativeMatrixLayoutRowMajor);
+            for (uint j = 0; j < RN; j++)
+                coopMatLoad(b[j], pc.b.v, bo + k * ldb + col + j * TN, ldb,
+                            gl_CooperativeMatrixLayoutRowMajor);
+            for (uint i = 0; i < RM; i++)
+                for (uint j = 0; j < RN; j++)
+                    acc[i][j] = coopMatMulAdd(a[i], b[j], acc[i][j]);
+        }
+    }
+
+    uint epilogue = (operation_flags() >> 8) & 0xFu;
+    bool narrow = (operation_flags() & 0x1000u) != 0u;
+    // The 32->4 head still computes a legal 8x16 cooperative-matrix tile, but
+    // only writes its four useful columns. Runtime restricts this to the base
+    // kernel, FP32 output, N=16 and ldc=4.
+    bool compact_head = (operation_flags() & 0x10000u) != 0u;
+    /* A fused residual (`branch + skip * cosine`, notes/improve-fusions.md) cannot use
+     * the publish-on-the-accumulator path below: the residual has to land *before* the
+     * publish, as the two-pass path adds it before rounding, and it needs each element's
+     * own address in the skip buffer and the cosine vector. So the raw accumulator goes
+     * through shared memory and every element is finished on its own. Bits 0x20000
+     * (residual), 0x40000 (half skip) and 0x80000 (window layout) are clear of
+     * compact_head's 0x10000. */
+#if RN == 2
+    /* Bit 0x100000: Q and K normalised and V published here, straight into the three
+     * (window, head, token, 32) targets (qkv_epilogue.glsl). */
+    if ((operation_flags() & 0x100000u) != 0u) {
+        for (uint i = 0; i < RM; i++)
+            for (uint j = 0; j < RN; j++)
+                coopMatStore(acc[i][j], stage, i * TM * BN + j * TN, BN,
+                             gl_CooperativeMatrixLayoutRowMajor);
+        subgroupMemoryBarrierShared();
+        subgroupBarrier();
+        qkv_epilogue(row, col, gl_LocalInvocationID.x, 32u);
+        return;
+    }
+#endif
+    if ((operation_flags() & 0x20000u) != 0u) {
+        for (uint i = 0; i < RM; i++)
+            for (uint j = 0; j < RN; j++)
+                coopMatStore(acc[i][j], stage, i * TM * BN + j * TN, BN,
+                             gl_CooperativeMatrixLayoutRowMajor);
+        /* One subgroup per workgroup, so a subgroup barrier is the whole barrier. */
+        subgroupMemoryBarrierShared();
+        subgroupBarrier();
+        for (uint e = gl_LocalInvocationID.x * 4u; e < BM * BN; e += 32u * 4u) {
+            uint at = co + (row + e / BN) * ldc + col + e % BN;
+            if (!residual_output_index(at)) continue;
+            vec4 out4;
+            for (uint i = 0; i < 4u; ++i)
+                out4[i] = publish(epilogue, add_gemm_residual(float(stage[e + i]), at + i));
+            if (!narrow) {
+                for (uint i = 0; i < 4u; ++i) pc.c.v[at + i] = out4[i];
+            } else if ((at & 3u) == 0u && (uint(uint64_t(pc.c)) & 7u) == 0u) {
+                Half4Buf(uint64_t(pc.c)).v4[at >> 2] = f16vec4(out4);
+            } else {
+                for (uint i = 0; i < 4u; ++i)
+                    HalfBuf(uint64_t(pc.c)).v[at + i] = float16_t(out4[i]);
+            }
+        }
+        return;
+    }
+    /* A float16 accumulator cannot take the direct store, and this is the one thing
+     * that genuinely does not work: `pc.c` is a `float[]`, so storing a float16 matrix
+     * into it is the component-type mismatch itself
+     * (notes/phase38-there-was-no-bug.md). The path below converts to a float32 matrix
+     * first and stores that — no shared memory involved. */
+#ifndef ACC16
+    if (epilogue == 0u && !narrow && !compact_head) {
+        for (uint i = 0; i < RM; i++)
+            for (uint j = 0; j < RN; j++)
+                coopMatStore(acc[i][j], pc.c.v, co + (row + i * TM) * ldc + col + j * TN,
+                             ldc, gl_CooperativeMatrixLayoutRowMajor);
+        /* Bit 0x200000: a published copy too, into `d`, as E4M3 halves. For a result the
+         * graph needs twice — block 0's stem, which its feed-forward's residual takes raw
+         * and its GEMM published — so that no pass reads the float32 back. */
+        if ((operation_flags() & 0x200000u) == 0u) return;
+        for (uint i = 0; i < RM; i++)
+            for (uint j = 0; j < RN; j++)
+                coopMatStore(acc[i][j], stage, i * TM * BN + j * TN, BN,
+                             gl_CooperativeMatrixLayoutRowMajor);
+        subgroupMemoryBarrierShared();
+        subgroupBarrier();
+        for (uint e = gl_LocalInvocationID.x * 4u; e < BM * BN; e += 32u * 4u) {
+            uint at = co + (row + e / BN) * ldc + col + e % BN;
+            if ((at & 3u) == 0u && (uint(uint64_t(pc.d)) & 7u) == 0u) {
+                Half4Buf(uint64_t(pc.d)).v4[at >> 2] =
+                    f16vec4(e4m3(float(stage[e])), e4m3(float(stage[e + 1])),
+                            e4m3(float(stage[e + 2])), e4m3(float(stage[e + 3])));
+            } else {
+                for (uint i = 0; i < 4u; ++i)
+                    HalfBuf(uint64_t(pc.d)).v[at + i] = float16_t(e4m3(float(stage[e + i])));
+            }
+        }
+        return;
+    }
+#endif
+    /* The publish runs on the accumulator's own components and the matrix stores
+     * straight to global. phase 18 recorded this as impossible and phase 38 found out
+     * why it looked that way: the failing case was storing a float16 matrix into a
+     * `float[]`, where the component type does not match the destination. Given a
+     * destination of the matching type, every variant is exact
+     * (`src/probe/coopmat_store_bug.comp`). So the rule is simply: store into an array
+     * of the accumulator's own type, converting the matrix first if they differ. */
+    for (uint i = 0; i < RM; i++)
+        for (uint j = 0; j < RN; j++) {
+            for (uint e = 0; e < acc[i][j].length(); e++)
+                acc[i][j][e] = ACC(publish(epilogue, float(acc[i][j][e])));
+            if (narrow || compact_head) {
+                coopMatStore(acc[i][j], stage, i * TM * BN + j * TN, BN,
+                             gl_CooperativeMatrixLayoutRowMajor);
+                continue;
+            }
+            uint at = co + (row + i * TM) * ldc + col + j * TN;
+#ifdef ACC16
+            coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> wide =
+                coopmat<float, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(acc[i][j]);
+            coopMatStore(wide, pc.c.v, at, ldc, gl_CooperativeMatrixLayoutRowMajor);
+#else
+            coopMatStore(acc[i][j], pc.c.v, at, ldc, gl_CooperativeMatrixLayoutRowMajor);
+#endif
+        }
+    if (!narrow && !compact_head) return;
+
+    memoryBarrierShared();
+    barrier();
+    if (compact_head) {
+        uint e = gl_LocalInvocationID.x;
+        pc.c.v[co + (row + e / 4u) * ldc + e % 4u] = float(stage[(e / 4u) * BN + e % 4u]);
+        return;
+    }
+    /* Four consecutive elements per lane, so the stores coalesce. */
+    for (uint e = gl_LocalInvocationID.x * 4u; e < BM * BN; e += 32u * 4u) {
+        uint at = co + (row + e / BN) * ldc + col + e % BN;
+        if ((at & 3u) == 0u && (uint(uint64_t(pc.c)) & 7u) == 0u) {
+            Half4Buf(uint64_t(pc.c)).v4[at >> 2] =
+                f16vec4(float(stage[e]), float(stage[e + 1]),
+                        float(stage[e + 2]), float(stage[e + 3]));
+        } else {
+            for (uint i = 0; i < 4u; ++i)
+                HalfBuf(uint64_t(pc.c)).v[at + i] = float16_t(stage[e + i]);
+        }
+    }
+}

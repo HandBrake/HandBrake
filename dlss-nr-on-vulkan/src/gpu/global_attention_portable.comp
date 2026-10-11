@@ -1,0 +1,183 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * global_attention_portable — `global_attention.comp` without the cooperative matrix.
+ *
+ * A bottleneck block's attention in one pass — QK^T, the ViT's softmax, PV and the head
+ * merge, no score stored — on a device with no matrix units. Same push block and dispatch
+ * as the matrix kernel: a 256-lane workgroup takes one head and 64 query rows, a 32-lane
+ * slice eight of them, and the keys and values come through shared memory 64 at a time,
+ * once. The ViT's softmax publishes its weights unnormalised and applies the reciprocal to
+ * the value sum (notes/opendlss-reference.md), so one trip through the keys does: each
+ * block's weights go into the PV as they are made, and each row's lane folds them into its
+ * running denominator in the vendor's tree order.
+ *
+ * It must equal *this path's* four passes bit for bit (`src/gpu/test_global_attention.py`):
+ * the batched transposed-B `gemm_portable` for QK^T, the ViT softmax (attention.comp,
+ * `vit_softmax`), the batched `gemm_portable` for PV over every padded key, and merge_heads
+ * scaled by the row's reciprocal with the E4M3 publish. So the products are the portable
+ * GEMM's arithmetic in its order — a lane one query row and four consecutive columns, vec4
+ * accumulators from zero, one K term at a time, the PV's running across the key blocks in
+ * key order — and the weights, the tree over each 64-key block, the padding's weight taken
+ * off and the reciprocal are `vit_softmax`'s.
+ *
+ * Every barrier is the workgroup's (a phone's subgroup may be narrower than a slice), so a
+ * slice past the last row idles through them. 24.25 KB of shared memory: a block of keys
+ * and its values as halves (8 KB), two kilobytes of logits a slice, the rows' reciprocals.
+ *
+ * Operands: a Q, b K, d V, each (heads, rows, 32) half; c the merged output (rows, 32 *
+ * heads) half; m the rows (a multiple of 16, no more than the tokens' 64-block), n the
+ * tokens, batch the heads.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+
+#include "publish.glsl"
+
+layout(local_size_x = 256) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf  { float16_t v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 8)  buffer Half4Buf { f16vec4 v4[]; };
+
+layout(push_constant, scalar) uniform Push {
+    HalfBuf a, b; FloatBuf c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    uint lda, ldb, ldc, spare;
+    uint64_t residual_cos;
+    uint image_h, image_w, window_cols, window_pad;
+    uint64_t qkv_scale;
+} pc;
+
+#include "specialize.glsl"
+#include "cosine_tree.glsl"
+
+shared float16_t keys16[64 * 32];
+shared float16_t values16[64 * 32];
+shared float region[8u * 512u];                // 8 rows x 64 keys a slice
+shared float reciprocal[64];
+
+void sync() { memoryBarrierShared(); barrier(); }
+
+/* attention.comp's `vit_weight`: the ViT's exponential. */
+float vit_weight(float logit) {
+    precise float affine = half_round(logit) * 0.08953857421875;
+    affine += 1.708984375;
+    affine = clamp(half_round(affine), 1.439453125, 1.9775390625);
+    uint bits = packHalf2x16(vec2(affine, 0.0)) & 0xFFFFu;
+    return unpackHalf2x16(((bits << 4) + 0x4000u) & 0xFFFFu).x;
+}
+
+void main() {
+    uint rows = pc.m, tokens = pc.n, heads = pc.batch, head = gl_WorkGroupID.y;
+    uint index = gl_LocalInvocationIndex;
+    uint slice = index >> 5u, lane = index & 31u;
+    uint r = lane >> 2u, cq = (lane & 3u) * 4u;
+    uint row = gl_WorkGroupID.x * 64u + slice * 8u;   // this slice's eight queries
+    bool busy = row < rows;                           // uniform across the slice
+    uint mine = slice * 512u;
+    uint plane = head * rows * 32u;                   // this head's (rows, 32)
+    uint blocks = (rows + 63u) / 64u;                 // the tokens' 64-blocks too
+
+    float total = 0.0;                                // lane r < 8: row r's sum
+    vec4 context[2];
+    for (uint j = 0u; j < 2u; j++) context[j] = vec4(0.0);
+
+    for (uint block = 0u; block < blocks; block++) {
+        uint first = block * 64u, count = min(64u, rows - first);
+        sync();                                       // the last block is done with
+        for (uint e = index; e < 64u * 32u; e += 256u) {
+            uint key = e / 32u;
+            keys16[e] = key < count ? pc.b.v[plane + first * 32u + e] : float16_t(0.0);
+            values16[e] = key < count ? HalfBuf(uint64_t(pc.d)).v[plane + first * 32u + e]
+                                      : float16_t(0.0);
+        }
+        sync();
+        if (busy) {
+            /* QK^T for this block's keys, as the transposed-B portable GEMM sums it */
+            vec4 acc[4];
+            for (uint j = 0u; j < 4u; j++) acc[j] = vec4(0.0);
+            for (uint c = 0u; c < 32u; c++) {
+                vec4 kv[4];
+                for (uint j = 0u; j < 4u; j++) {
+                    uint at = (cq + j * 16u) * 32u + c;
+                    kv[j] = vec4(float(keys16[at]), float(keys16[at + 32u]),
+                                 float(keys16[at + 64u]), float(keys16[at + 96u]));
+                }
+                float qv = float(pc.a.v[plane + (row + r) * 32u + c]);
+                for (uint j = 0u; j < 4u; j++)
+                    acc[j] += qv * kv[j];
+            }
+            for (uint j = 0u; j < 4u; j++)
+                for (uint e = 0u; e < 4u; e++)
+                    region[mine + r * 64u + cq + j * 16u + e] = acc[j][e];
+        }
+        sync();
+        /* the weights in place; keys past the tokens are padding whatever they hold */
+        if (busy)
+            for (uint at = lane; at < 512u; at += 32u) {
+                uint key = first + at % 64u;
+                region[mine + at] = vit_weight(key < tokens ? region[mine + at] : 0.0);
+            }
+        sync();
+        /* each row's lane adds its block's weights in the vendor's tree order */
+        if (busy && lane < 8u) {
+            uint base = mine + lane * 64u;
+            float column[8];
+            for (uint c = 0u; c < 8u; c++) {
+                float pair[4];
+                for (uint j = 0u; j < 4u; j++)
+                    pair[j] = hadd(region[base + c + 16u * j], region[base + c + 16u * j + 8u]);
+                column[c] = hadd(hadd(hadd(pair[0], pair[1]), pair[2]), pair[3]);
+            }
+            float even = hadd(hadd(hadd(column[0], column[2]), column[4]), column[6]);
+            float odd = hadd(hadd(hadd(column[1], column[3]), column[5]), column[7]);
+            total = hadd(total, hadd(even, odd));
+        }
+        sync();
+        /* published, unnormalised, as the PV's A; zero past the tokens */
+        if (busy)
+            for (uint at = lane; at < 512u; at += 32u) {
+                uint key = first + at % 64u;
+                region[mine + at] = key < tokens ? e4m3(region[mine + at]) : 0.0;
+            }
+        sync();
+        if (busy) {
+            /* PV as the plain portable GEMM sums it, key after key */
+            for (uint key = 0u; key < count; key++) {
+                vec4 vv[2];
+                for (uint j = 0u; j < 2u; j++) {
+                    uint at = key * 32u + cq + j * 16u;
+                    vv[j] = vec4(float(values16[at]), float(values16[at + 1u]),
+                                 float(values16[at + 2u]), float(values16[at + 3u]));
+                }
+                float p = region[mine + r * 64u + key];
+                for (uint j = 0u; j < 2u; j++)
+                    context[j] += p * vv[j];
+            }
+        }
+    }
+    if (busy && lane < 8u) {
+        uint padding = blocks * 64u - tokens;
+        if (padding > 0u) total = hadd(total, -hmul(vit_weight(0.0), float(padding)));
+        reciprocal[slice * 8u + lane] = half_round(1.0 / total);
+    }
+    sync();
+    if (!busy) return;                               // no barrier follows
+
+    /* the head merge's store, the value sum rounded to half times its row's reciprocal,
+     * published: (rows, heads * 32), this head's 32 columns */
+    uint channels = heads * 32u;
+    float scale = reciprocal[slice * 8u + r];
+    for (uint j = 0u; j < 2u; j++) {
+        vec4 values;
+        for (uint e = 0u; e < 4u; e++) values[e] = e4m3(hmul(half_round(context[j][e]), scale));
+        Half4Buf(uint64_t(pc.c)).v4[((row + r) * channels + head * 32u + cq + j * 16u) >> 2] =
+            f16vec4(values);
+    }
+}

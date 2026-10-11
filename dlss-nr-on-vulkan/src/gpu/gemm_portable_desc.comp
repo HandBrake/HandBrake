@@ -1,0 +1,58 @@
+#version 450
+/*
+ * gemm_portable_desc — `gemm_coopmat.comp` (and, with -DBATCHED,
+ * `gemm_coopmat_batched.comp`) without the cooperative matrix: the descriptor-bound
+ * benchmark and test path for a device that has no `VK_KHR_cooperative_matrix`.
+ * Same bindings, push constants, dispatch geometry and 8x16 block per 32-lane
+ * workgroup; FP16 operands, FP32 accumulation in ordinary multiply-adds. The
+ * resident graph's version of the same thing is `gemm_portable.comp`.
+ */
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+
+layout(local_size_x = 32, local_size_y = 1, local_size_z = 1) in;
+
+layout(binding = 0) readonly  buffer Abuf { float16_t A[]; };
+layout(binding = 1) readonly  buffer Bbuf { float16_t B[]; };
+layout(binding = 2) writeonly buffer Cbuf { float     C[]; };
+
+#ifdef BATCHED
+layout(push_constant) uniform Push { uint M, N, K, sa, sb, sc, bt; } pc;
+#else
+layout(push_constant) uniform Push { uint M, N, K; } pc;
+#endif
+
+const uint TM = 8, TN = 16;
+
+void main() {
+    uint row = gl_WorkGroupID.y * TM;
+    uint col = gl_WorkGroupID.x * TN;
+    if (row >= pc.M || col >= pc.N) return;
+#ifdef BATCHED
+    uint batch = gl_WorkGroupID.z;
+    uint ao = batch * pc.sa, bo = batch * pc.sb, co = batch * pc.sc;
+    bool transposed = pc.bt != 0u;
+#else
+    uint ao = 0u, bo = 0u, co = 0u;
+    bool transposed = false;
+#endif
+    uint r = gl_LocalInvocationID.x >> 2u, cq = (gl_LocalInvocationID.x & 3u) * 4u;
+    vec4 acc = vec4(0.0);
+    uint arow = ao + (row + r) * pc.K;
+    if (transposed) {
+        /* B stored (N, K): the key's own layout, read down four rows. */
+        uint b0 = bo + (col + cq) * pc.K;
+        for (uint k = 0; k < pc.K; k++) {
+            vec4 bv = vec4(float(B[b0 + k]), float(B[b0 + pc.K + k]),
+                           float(B[b0 + 2u * pc.K + k]), float(B[b0 + 3u * pc.K + k]));
+            acc += float(A[arow + k]) * bv;
+        }
+    } else {
+        for (uint k = 0; k < pc.K; k++) {
+            uint at = bo + k * pc.N + col + cq;
+            vec4 bv = vec4(float(B[at]), float(B[at + 1u]), float(B[at + 2u]), float(B[at + 3u]));
+            acc += float(A[arow + k]) * bv;
+        }
+    }
+    uint at = co + (row + r) * pc.N + col + cq;
+    C[at] = acc.x; C[at + 1u] = acc.y; C[at + 2u] = acc.z; C[at + 3u] = acc.w;
+}

@@ -1,0 +1,113 @@
+#version 450
+/*
+ * history — the temporal path's five-tap Catmull-Rom reprojection.
+ *
+ * At 720p this is 861 ms of the 1211 ms the host spends assembling a temporal
+ * frame's features, which with the graph itself down to 1.56 s makes it the largest
+ * single cost in a sequence. It is a per-pixel gather, so it belongs here.
+ *
+ * The order of the sum is part of the answer: the reference accumulates the five
+ * weighted taps left to right in float32, and `precise` keeps that from being
+ * regrouped or contracted.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+
+layout(local_size_x = 64) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float v[]; };
+
+layout(push_constant, scalar) uniform Push {
+    FloatBuf a, b, c, d;          // history, motion, output, unused
+    uint m, n, k, batch;          // pixels, channels, height, width
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+} pc;
+
+/* Catmull-Rom collapsed onto bilinear taps: the two inner weights are folded into one
+ * offset sample, which is why only five taps are needed instead of sixteen. */
+void catmull(float normalized, uint dimension,
+             out float outer0, out float middle, out float outer3,
+             out float weight0, out float weight3, out float gain) {
+    precise float pixel = normalized * float(dimension) - 0.5;
+    float base_index = floor(pixel);
+    float t = clamp(pixel - base_index, 0.0, 1.0);
+    float square = t * t, cube = square * t;
+    weight0 = -0.5 * t + square - 0.5 * cube;
+    float w1 = 1.0 - 2.5 * square + 1.5 * cube;
+    float w2 = 0.5 * t + 2.0 * square - 1.5 * cube;
+    weight3 = -0.5 * square + 0.5 * cube;
+    gain = w1 + w2;
+    float base = base_index + 0.5;
+    float lower = 0.5, upper = float(dimension) - 0.5;
+    outer0 = clamp(base - 1.0, lower, upper);
+    middle = clamp(base + w2 / gain, lower, upper);
+    outer3 = clamp(base + 2.0, lower, upper);
+}
+
+void bilinear(float x, float y, uint height, uint width, uint channels, out float rgb[4]) {
+    float px = x - 0.5, py = y - 0.5;
+    int x0 = int(clamp(floor(px), 0.0, float(width - 1u)));
+    int y0 = int(clamp(floor(py), 0.0, float(height - 1u)));
+    int x1 = min(x0 + 1, int(width - 1u));
+    int y1 = min(y0 + 1, int(height - 1u));
+    float tx = clamp(px - float(x0), 0.0, 1.0);
+    float ty = clamp(py - float(y0), 0.0, 1.0);
+    for (uint ch = 0u; ch < channels; ch++) {
+        precise float top = pc.a.v[(uint(y0) * width + uint(x0)) * channels + ch] * (1.0 - tx)
+                          + pc.a.v[(uint(y0) * width + uint(x1)) * channels + ch] * tx;
+        precise float bottom = pc.a.v[(uint(y1) * width + uint(x0)) * channels + ch] * (1.0 - tx)
+                             + pc.a.v[(uint(y1) * width + uint(x1)) * channels + ch] * tx;
+        rgb[ch] = top * (1.0 - ty) + bottom * ty;
+    }
+}
+
+void main() {
+    uint pixel = gl_GlobalInvocationID.x;
+    if (pixel >= pc.m) return;
+    uint channels = pc.n, height = pc.k, width = pc.batch;
+    uint x = pixel % width, y = pixel / width;
+
+    /* `flags` chooses what the second buffer holds: motion, from which the sample
+     * coordinate is built here, or the coordinate itself, which lets this stand in for
+     * `sample_history` unchanged. The coordinate has to be built exactly as the
+     * reference builds it — a last-bit difference moves the tap by ~1e-04 of a pixel,
+     * and a steep image gradient turns that into a visible-scale difference. */
+    float u, v;
+    if (pc.flags != 0u) {
+        u = pc.b.v[pixel * 2u];
+        v = pc.b.v[pixel * 2u + 1u];
+    } else {
+        precise float su = (float(x) + 0.5) / float(width);
+        su += pc.b.v[pixel * 2u];
+        precise float sv = (float(y) + 0.5) / float(height);
+        sv += pc.b.v[pixel * 2u + 1u];
+        u = su; v = sv;
+    }
+
+    float xo0, xm, xo3, xw0, xw3, xg, yo0, ym, yo3, yw0, yw3, yg;
+    catmull(u, width, xo0, xm, xo3, xw0, xw3, xg);
+    catmull(v, height, yo0, ym, yo3, yw0, yw3, yg);
+
+    float weights[5] = float[5](xw0 * yg, xg * yw0, xg * yg, xg * yw3, xw3 * yg);
+    float coords[5][2] = float[5][2](float[2](xo0, ym), float[2](xm, yo0),
+                                     float[2](xm, ym), float[2](xm, yo3),
+                                     float[2](xo3, ym));
+    float total[4] = float[4](0.0, 0.0, 0.0, 0.0);
+    float tap[4];
+    for (uint i = 0u; i < 5u; i++) {
+        bilinear(coords[i][0], coords[i][1], height, width, channels, tap);
+        for (uint ch = 0u; ch < channels; ch++) {
+            precise float term = weights[i] * tap[ch];
+            total[ch] += term;
+        }
+    }
+    precise float denominator = weights[0] + weights[1];
+    denominator += weights[2];
+    denominator += weights[3];
+    denominator += weights[4];
+    for (uint ch = 0u; ch < channels; ch++)
+        pc.c.v[pixel * channels + ch] = total[ch] / denominator;
+}

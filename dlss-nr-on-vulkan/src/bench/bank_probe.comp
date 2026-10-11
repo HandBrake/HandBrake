@@ -1,0 +1,39 @@
+#version 460
+/* Does a 32-way shared-memory bank conflict cost what the textbook says, on Xe2?
+ *
+ * One subgroup, 32 lanes, each walking its own row of a shared tile — the exact access
+ * pattern of `attention.comp`'s softmax and cosine publish. With the row stride a
+ * multiple of 32 every lane lands in the same bank on every access; padded by one they
+ * land in 32 different banks. Nothing else differs between the two runs.
+ *
+ * Driven through the ordinary unary path with XMX_UNARY_SPV, so the push constants are
+ * the project's own: `n` carries the stride, `k` the repeat count. */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+layout(local_size_x = 32) in;
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float v[]; };
+layout(push_constant, scalar) uniform Push {
+    FloatBuf a, b, c, d;
+    uint m, n, k, batch, sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    uint lda, ldb, ldc, spare;
+} pc;
+
+shared float stage[32 * 65];
+
+void main() {
+    uint lane = gl_LocalInvocationID.x;
+    uint stride = pc.n;                          /* 64 conflicting, 65 padded */
+    for (uint i = lane; i < 32u * stride; i += 32u) stage[i] = float(i & 255u);
+    barrier();
+    float acc = 0.0;
+    uint base = lane * stride;
+    for (uint r = 0u; r < pc.k; r++) {       /* the repeat count arrives in `k`, the last slot */
+        for (uint i = 0u; i < 64u; i++) acc += stage[base + i];
+        barrier();
+        for (uint i = 0u; i < 64u; i++) stage[base + i] = acc * 1e-9 + float(i);
+        barrier();
+    }
+    if (lane == 0u) pc.c.v[gl_WorkGroupID.x] = acc;
+}

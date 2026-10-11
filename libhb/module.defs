@@ -9,6 +9,9 @@ endif
 ifeq (netbsd,$(HOST.system))
     __deps__ += LIBJPEGTURBO
 endif
+ifeq (1,$(FEATURE.dlssnr))
+    __deps__ += DLSSNR
+endif
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
@@ -136,6 +139,10 @@ endif
 
 ifeq (1,$(FEATURE.libdovi))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libdovi.a
+endif
+
+ifeq (1,$(FEATURE.dlssnr))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libdlssnr.a
 endif
 
 ifeq (1,$(FEATURE.vaapi))

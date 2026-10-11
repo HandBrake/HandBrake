@@ -156,6 +156,17 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 }
             }
 
+            if (!string.IsNullOrEmpty(importedPreset.PictureDLSSNRPreset) && importedPreset.PictureDLSSNRPreset != "off")
+            {
+                AudioVideoFilter filter = new AudioVideoFilter(
+                    (int)hb_filter_ids.HB_FILTER_DLSSNR,
+                    new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DLSSNR).FirstOrDefault(s => s.ShortName == importedPreset.PictureDLSSNRPreset)),
+                    new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_DLSSNR).FirstOrDefault(s => s.ShortName == importedPreset.PictureDLSSNRTune)),
+                    importedPreset.PictureDLSSNRCustom);
+
+                preset.Task.VideoFilters.Add(filter);
+            }
+
             if (importedPreset.PictureDeinterlaceFilter != null)
             {
                 int filterId = 0;
@@ -676,6 +687,14 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.PictureSharpenPreset = unsharp.Preset?.Key;
                 preset.PictureSharpenTune = unsharp.Tune?.Key;
                 preset.PictureSharpenCustom = unsharp.CustomOptions;
+            }
+
+            AudioVideoFilter dlssnr = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_DLSSNR);
+            if (dlssnr != null)
+            {
+                preset.PictureDLSSNRPreset = dlssnr.Preset?.Key;
+                preset.PictureDLSSNRTune = dlssnr.Tune?.Key;
+                preset.PictureDLSSNRCustom = dlssnr.CustomOptions;
             }
 
             AudioVideoFilter colorspace = export.Task.VideoFilters.FirstOrDefault(s => s.FilterId == (int)hb_filter_ids.HB_FILTER_COLORSPACE);

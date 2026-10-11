@@ -1,0 +1,324 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * window_block_portable — `window_block.comp` without the cooperative matrix.
+ *
+ * A 32-channel window block's attention half, one 8x8 window a 256-lane workgroup, on a
+ * device with no matrix units (MoltenVK, the phones, Xe2 under XMX_PORTABLE=1). Same push
+ * block, flags and dispatch as the matrix kernel, so libxmx and the callers do not know
+ * which one they got.
+ *
+ * It must equal *this path's* three passes bit for bit (`src/gpu/test_window_block.py`):
+ * the QKV projection on the tiled `gemm_portable` with the window gather and the QKV
+ * epilogue, `window_attention_portable` merged, and the output projection on the tiled
+ * `gemm_portable` with the window residual — and, for block 0, the pooled epilogue that
+ * build has, for block 70 the head on the base `gemm_portable`. So every product is the
+ * portable GEMM's arithmetic in its order: a lane owns one row and four consecutive
+ * columns of each 16-column tile, its vec4 accumulators take the K terms one at a time
+ * from zero in the same expression shape. The normalisation is `cosine_tree.glsl`'s, the
+ * softmax `window_attention_portable.comp`'s, the residual the fused multiply-add
+ * `add_gemm_residual` compiles to, the publishes `publish.glsl`'s.
+ *
+ * Eight 32-lane slices, one window row each (eight tokens). Every barrier is the
+ * workgroup's, since a phone's subgroup may be narrower than a slice. Shared memory,
+ * 28.25 KB: the window's Q, K and V as halves (12 KB; exact, they are E4M3), two
+ * kilobytes a slice that hold in turn its projections, logits, weights, probabilities,
+ * attention output and block output, and the rows' reciprocals.
+ *
+ * Operands, in the resident push block: a the image (float32, or half with flag 0x8000),
+ * which is also the residual's skip; b the QKV weights (32 x 96); c the target; d the
+ * attention bias (64 x 64 float32); `projection` the output weights (32 x 32); `pooled`
+ * block 0's pooled output (0x800000) or block 70's head weights (0x1000000, 32 x 16);
+ * residual_cos the residual's cosine; qkv_scale the query's scale; m the windows; the
+ * geometry in image_h, image_w, window_cols and window_pad; bits 8-12 of the flags the
+ * block's publish and a half target; 0x2000000 all sixteen head columns.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+
+#include "publish.glsl"
+
+layout(local_size_x = 256) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf  { float16_t v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 8)  buffer Half4Buf { f16vec4 v4[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer Vec4Buf  { vec4 v4[]; };
+
+layout(push_constant, scalar) uniform Push {
+    HalfBuf a, b; FloatBuf c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    uint64_t projection;                       // offset 64: the output projection (32 x 32)
+    uint64_t pooled;                           // offset 72: block 0's pooled output (0x800000),
+                                               // or block 70's head weights (0x1000000)
+    uint lda, ldb, ldc, spare;
+    uint64_t residual_cos;                     // the residual's per-channel cosine
+    uint image_h, image_w, window_cols, window_pad;
+    uint64_t qkv_scale;                        // the query's scale (one head)
+} pc;
+
+#include "specialize.glsl"
+#include "cosine_tree.glsl"
+
+const uint KEYS = 2048u, VALUES = 4096u;     // in qkv16, in halves; Q is at 0
+shared float16_t qkv16[6144];                // the window's Q, K and V, (token, 32) each
+shared float region[8u * 512u];              // two kilobytes a slice
+shared float reciprocal[64];
+
+void sync() { memoryBarrierShared(); barrier(); }
+
+/* The weight scaled by its row's reciprocal, then published, as the row pass does it. A
+ * function on purpose: glslang propagates `precise` backwards at the object level, so
+ * `precise float product = region[at] * reciprocal[..]` written in main marks every store
+ * into `region` — all four multiply-accumulate loops — NoContraction, which SPIRV-Cross
+ * spells as `[[clang::optnone]]` helpers (49 decorations against 12). A parameter is a
+ * fresh object, so the qualifier stays on the one multiply it is for.
+ * notes/improve-portable-precise.md. */
+float probability(float weight, float reciprocal_norm) {
+    precise float product = weight * reciprocal_norm;
+    return e4m3(half_round(product));
+}
+
+bool image_half() { return (operation_flags() & 0x8000u) != 0u; }
+
+/* The weights are read a half at a time on purpose: fetched as aligned 8-byte quads
+ * instead (QKV, projection and head alike) this kernel ran 22 % slower through MoltenVK
+ * on an M3, 11.1 -> 13.6 ms of a 320x320 frame, same bytes (notes/improve-portable-precise.md). */
+
+/* One channel of the image at a pixel's first channel `at`, as float. */
+float image1(uint at) {
+    return image_half() ? float(HalfBuf(uint64_t(pc.a)).v[at]) : FloatBuf(uint64_t(pc.a)).v[at];
+}
+
+/* window_attention_portable.comp's transform, the bias added to the logits first */
+vec2 weights(float l0, float l1) {
+    vec2 affine;
+    for (uint j = 0u; j < 2u; j++) {
+        precise float scaled = half_round(j == 0u ? l0 : l1) * 0.044921875;
+        scaled += 1.30078125;
+        affine[j] = clamp(scaled, 1.03125, 1.5693359375);
+    }
+    return unpackHalf2x16((packHalf2x16(affine) << 5) + 0x7ff88000u);
+}
+
+void main() {
+    uint window = gl_WorkGroupID.x + gl_WorkGroupID.y * 65535u;
+    if (window >= pc.m) return;                  // uniform across the workgroup
+    uint index = gl_LocalInvocationIndex;
+    uint slice = index >> 5u, lane = index & 31u;
+    /* the portable GEMM's lane: row r of the slice's eight, four columns cq.. a tile */
+    uint r = lane >> 2u, cq = (lane & 3u) * 4u;
+    uint mine = slice * 512u;                    // this slice's two kilobytes
+    uint token = slice * 8u + r;                 // this lane's row of the window
+
+    uint top = pc.window_pad >> 16, left = pc.window_pad & 0xffffu;
+    int y = int((window / pc.window_cols) * 8u + slice) - int(top);
+    int x = int((window % pc.window_cols) * 8u + r) - int(left);
+    bool inside = y >= 0 && y < int(pc.image_h) && x >= 0 && x < int(pc.image_w);
+    uint pixel = inside ? (uint(y) * pc.image_w + uint(x)) * 32u : 0u;
+
+    /* Q, K and V as the tiled portable GEMM computes the projection with a gathered A:
+     * the image published to E4M3 on the way in (flag 0x4000 there) — the projection reads
+     * the feed-forward output published and only the residual takes it raw — zero outside
+     * it, six 16-column tiles. */
+    {
+        vec4 acc[6];
+        for (uint j = 0u; j < 6u; j++) acc[j] = vec4(0.0);
+        for (uint k = 0u; k < 32u; k++) {
+            vec4 bv[6];
+            for (uint j = 0u; j < 6u; j++) {
+                uint at = k * 96u + cq + j * 16u;
+                bv[j] = vec4(float(pc.b.v[at]), float(pc.b.v[at + 1u]),
+                             float(pc.b.v[at + 2u]), float(pc.b.v[at + 3u]));
+            }
+            float av = 0.0;
+            if (inside)
+                av = e4m3(image_half() ? float(HalfBuf(uint64_t(pc.a)).v[pixel + k])
+                                       : FloatBuf(uint64_t(pc.a)).v[pixel + k]);
+            for (uint j = 0u; j < 6u; j++)
+                acc[j] += av * bv[j];
+        }
+        /* the QKV epilogue, one part at a time through the slice's stage: Q and K a lane a
+         * row through the fragment tree, V as it is, then every value published */
+        float scale = half_round(FloatBuf(pc.qkv_scale).v[0]);
+        for (uint part = 0u; part < 3u; part++) {
+            for (uint j = 0u; j < 2u; j++)
+                for (uint e = 0u; e < 4u; e++)
+                    region[mine + r * 32u + cq + j * 16u + e] = acc[part * 2u + j][e];
+            sync();
+            if (part < 2u && lane < 8u) {
+                float h[32];
+                for (uint i = 0u; i < 32u; i++) h[i] = half_round(region[mine + lane * 32u + i]);
+                float norm = cosine_reciprocal(h);
+                for (uint i = 0u; i < 32u; i++) {
+                    float value = hmul(h[i], norm);
+                    if (part == 0u) value = hmul(value, scale);
+                    region[mine + lane * 32u + i] = value;
+                }
+            }
+            sync();
+            for (uint e = lane; e < 256u; e += 32u)
+                qkv16[part * 2048u + slice * 256u + e] = float16_t(e4m3(region[mine + e]));
+            sync();
+        }
+    }
+
+    /* QK^T as the transposed-B portable GEMM computes it, the key a row of K */
+    {
+        vec4 acc[4];
+        for (uint j = 0u; j < 4u; j++) acc[j] = vec4(0.0);
+        for (uint c = 0u; c < 32u; c++) {
+            vec4 kv[4];
+            for (uint j = 0u; j < 4u; j++) {
+                uint at = KEYS + (cq + j * 16u) * 32u + c;
+                kv[j] = vec4(float(qkv16[at]), float(qkv16[at + 32u]),
+                             float(qkv16[at + 64u]), float(qkv16[at + 96u]));
+            }
+            float qv = float(qkv16[token * 32u + c]);
+            for (uint j = 0u; j < 4u; j++)
+                acc[j] += qv * kv[j];
+        }
+        for (uint j = 0u; j < 4u; j++)
+            for (uint e = 0u; e < 4u; e++)
+                region[mine + r * 64u + cq + j * 16u + e] = acc[j][e];
+    }
+    sync();
+    /* every pair of keys into its weight in place, the bias in the logits (one head) */
+    for (uint at = lane * 2u; at < 512u; at += 64u) {
+        uint rr = at / 64u, key = at % 64u;
+        uint bias = (slice * 8u + rr) * 64u + key;
+        float l0 = region[mine + at] + pc.d.v[bias];
+        float l1 = region[mine + at + 1u] + pc.d.v[bias + 1u];
+        vec2 w = weights(l0, l1);
+        region[mine + at] = w.x;
+        region[mine + at + 1u] = w.y;
+    }
+    sync();
+    if (lane < 8u) {
+        float total = 0.0;
+        for (uint i = 0u; i < 64u; i += 2u) {
+            total += region[mine + lane * 64u + i];
+            total += region[mine + lane * 64u + i + 1u];
+        }
+        reciprocal[slice * 8u + lane] = half_round(1.0 / half_round(total));
+    }
+    sync();
+    for (uint at = lane; at < 512u; at += 32u)
+        region[mine + at] = probability(region[mine + at], reciprocal[slice * 8u + at / 64u]);
+    sync();
+    /* PV as the plain portable GEMM computes it, then the merged store's publish */
+    vec4 context[2];
+    for (uint j = 0u; j < 2u; j++) context[j] = vec4(0.0);
+    for (uint key = 0u; key < 64u; key++) {
+        vec4 vv[2];
+        for (uint j = 0u; j < 2u; j++) {
+            uint at = VALUES + key * 32u + cq + j * 16u;
+            vv[j] = vec4(float(qkv16[at]), float(qkv16[at + 1u]),
+                         float(qkv16[at + 2u]), float(qkv16[at + 3u]));
+        }
+        float p = region[mine + r * 64u + key];
+        for (uint j = 0u; j < 2u; j++)
+            context[j] += p * vv[j];
+    }
+    sync();                                      // every probability read before the overwrite
+    for (uint j = 0u; j < 2u; j++)
+        for (uint e = 0u; e < 4u; e++)
+            region[mine + r * 32u + cq + j * 16u + e] = e4m3(context[j][e]);
+    sync();
+
+    /* the output projection as the tiled portable GEMM computes it */
+    vec4 projected[2];
+    for (uint j = 0u; j < 2u; j++) projected[j] = vec4(0.0);
+    HalfBuf projection = HalfBuf(pc.projection);
+    for (uint k = 0u; k < 32u; k++) {
+        vec4 bv[2];
+        for (uint j = 0u; j < 2u; j++) {
+            uint at = k * 32u + cq + j * 16u;
+            bv[j] = vec4(float(projection.v[at]), float(projection.v[at + 1u]),
+                         float(projection.v[at + 2u]), float(projection.v[at + 3u]));
+        }
+        float av = region[mine + r * 32u + k];
+        for (uint j = 0u; j < 2u; j++)
+            projected[j] += av * bv[j];
+    }
+    sync();                                      // the attention output read by every lane
+
+    /* The window residual's epilogue, then the publish. `add_gemm_residual`'s
+     * `branch + skip * cosine` compiles to a fused multiply-add in the portable GEMM (on
+     * Xe2 and through MoltenVK alike); written inline here the compiler contracted it
+     * differently and a quarter of the outputs moved by an ulp, so it is written out as
+     * the fma it compiles to, as window_block.comp does. */
+    uint epilogue = (operation_flags() >> 8) & 0xFu;
+    bool narrow = (operation_flags() & 0x1000u) != 0u;
+    bool pooling = (operation_flags() & 0x800000u) != 0u;
+    bool head = (operation_flags() & 0x1000000u) != 0u;
+    FloatBuf cosine = FloatBuf(pc.residual_cos);
+    for (uint j = 0u; j < 2u; j++) {
+        if (!inside) continue;
+        uint c0 = cq + j * 16u;
+        vec4 out4;
+        for (uint e = 0u; e < 4u; e++) {
+            float total = fma(image1(pixel + c0 + e), cosine.v[c0 + e], projected[j][e]);
+            out4[e] = publish(epilogue, total);
+        }
+        uint at = pixel + c0;
+        if (head) {
+            /* block 70's output as the half target the head GEMM reads */
+            for (uint e = 0u; e < 4u; e++) region[mine + r * 32u + c0 + e] = float(float16_t(out4[e]));
+        } else if (pooling) {
+            for (uint e = 0u; e < 4u; e++) region[mine + r * 32u + c0 + e] = out4[e];
+            vec4 published;
+            for (uint e = 0u; e < 4u; e++) published[e] = e4m3(out4[e]);
+            Half4Buf(uint64_t(pc.c)).v4[at >> 2] = f16vec4(published);
+        } else if (narrow) {
+            Half4Buf(uint64_t(pc.c)).v4[at >> 2] = f16vec4(out4);
+        } else {
+            Vec4Buf(uint64_t(pc.c)).v4[at >> 2] = out4;
+        }
+    }
+    if (head) {
+        sync();
+        /* the head as the base portable GEMM computes it: 32 -> 16 columns, one tile */
+        vec4 acc = vec4(0.0);
+        HalfBuf weights = HalfBuf(pc.pooled);
+        for (uint k = 0u; k < 32u; k++) {
+            uint at = k * 16u + cq;
+            vec4 bv = vec4(float(weights.v[at]), float(weights.v[at + 1u]),
+                           float(weights.v[at + 2u]), float(weights.v[at + 3u]));
+            float av = region[mine + r * 32u + k];
+            acc += av * bv;
+        }
+        if (!inside) return;
+        uint at = uint(y) * pc.image_w + uint(x);
+        if ((operation_flags() & 0x2000000u) == 0u) {
+            if (cq == 0u)                        // the compact head: the four columns used
+                for (uint e = 0u; e < 4u; e++) pc.c.v[at * 4u + e] = acc[e];
+        } else {
+            Vec4Buf(uint64_t(pc.c)).v4[(at * 16u + cq) >> 2] = acc;
+        }
+        return;
+    }
+    if (!pooling) return;
+    sync();
+    /* The pool, POOL2's taps in its order: (y, x), (y + 1, x), (y, x + 1), (y + 1, x + 1).
+     * Pooled pixel (py, px) takes slices 2py and 2py + 1 at columns 2px and 2px + 1; the host
+     * checks the extent and the pads are even, so a 2x2 block is all in or all out. */
+    for (uint e = index; e < 16u * 32u; e += 256u) {
+        uint p = e / 32u, c = e % 32u, py = p / 4u, px = p % 4u;
+        int yy = int((window / pc.window_cols) * 8u + 2u * py) - int(top);
+        int xx = int((window % pc.window_cols) * 8u + 2u * px) - int(left);
+        if (yy < 0 || xx < 0 || yy >= int(pc.image_h) || xx >= int(pc.image_w)) continue;
+        uint upper = (2u * py) * 512u + (2u * px) * 32u + c, lower = upper + 512u;
+        /* no `precise`: a chain of adds has nothing to contract, and the qualifier would
+         * mark every store into `region` (see probability()) */
+        float total = region[upper] + region[lower];
+        total += region[upper + 32u];
+        total += region[lower + 32u];
+        uint at = ((uint(yy) / 2u) * (pc.image_w / 2u) + uint(xx) / 2u) * 32u + c;
+        HalfBuf(pc.pooled).v[at] = float16_t(e4m3(total * 0.25));
+    }
+}

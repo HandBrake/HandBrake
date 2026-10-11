@@ -1776,6 +1776,40 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         }
     }
 
+    // DLSS Neural Rendering filter
+    const char *dlssnr_preset, *dlssnr_tune, *dlssnr_custom;
+    dlssnr_preset = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureDLSSNRPreset"));
+    dlssnr_tune   = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureDLSSNRTune"));
+    dlssnr_custom = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureDLSSNRCustom"));
+    if (dlssnr_preset != NULL && strcasecmp(dlssnr_preset, "off"))
+    {
+        int filter_id = HB_FILTER_DLSSNR;
+        filter_settings = hb_generate_filter_settings(filter_id,
+                            dlssnr_preset, dlssnr_tune, dlssnr_custom);
+        if (filter_settings == NULL)
+        {
+            hb_error("Invalid DLSS-NR filter settings (%s%s%s)",
+                     dlssnr_preset,
+                     dlssnr_tune ? "," : "",
+                     dlssnr_tune ? dlssnr_tune : "");
+            return -1;
+        }
+        else if (!hb_dict_get_bool(filter_settings, "disable"))
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&filter_settings);
+        }
+    }
+
     // Deblock filter
     const char * deblock = hb_value_get_string(
                                 hb_dict_get(preset, "PictureDeblockPreset"));

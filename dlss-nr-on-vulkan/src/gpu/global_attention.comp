@@ -1,0 +1,201 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * global_attention — a bottleneck block's attention, every token over every token, in one
+ * pass: QK^T, the ViT's softmax, PV and the head merge, with no score ever stored.
+ *
+ * Four passes did it: the QK^T GEMM wrote float32 scores (heads x tokens x tokens), the
+ * softmax read them and wrote half weights and each row's reciprocal, the PV GEMM read the
+ * weights, and merge_heads put the context in token order and applied the reciprocal. At
+ * 640 tokens (a 1920x1088 frame) that is 52 MB of scores and 26 MB of weights a block.
+ *
+ * The ViT's softmax is the vendor's (OpenDLSS-NR's `vit.wgsl`, notes/opendlss-reference.md):
+ * the weights are published unnormalised, the value sum is multiplied by the reciprocal
+ * afterwards, and the denominator is a fixed tree of half adds over 64-key blocks, padded
+ * with zero keys and their weight taken off at the end. With the normalisation after the
+ * PV, one trip through the keys does: a workgroup takes one head and 64 query rows, a
+ * subgroup eight of them, and the keys and values come through shared memory 64 at a time.
+ * For each sixteen, the logits are the GEMM's two multiply-adds from zero, the weights
+ * `vit_weight`, published into the PV's A over the PV GEMM's own K steps; and each row's
+ * lane adds the sixteen weights into its eight column sums in the tree's order — the pairs
+ * (c, c+8) of this sixteen onto column c — and after the fourth sixteen folds the columns
+ * into its running total. Keys past the tokens are padding whatever they hold: their weight
+ * is the exponential of zero and they publish zero, as attention.comp's `vit_softmax` has
+ * them. The output is the four passes', bit for bit (`src/gpu/test_global_attention.py`).
+ *
+ * Operands, in the resident push block: a Q, b K, d V, each (heads, rows, 32) half as the
+ * QKV epilogue leaves them; c the merged output (rows, 32 * heads) half; m the rows
+ * (padded tokens, a multiple of 16 and no more than the tokens' 64-block), n the tokens,
+ * batch the heads.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+#extension GL_KHR_memory_scope_semantics : require
+#extension GL_KHR_cooperative_matrix : require
+#extension GL_KHR_shader_subgroup_basic : require
+#extension GL_KHR_shader_subgroup_shuffle : require
+#extension GL_EXT_shared_memory_block : require
+
+#include "publish.glsl"
+
+layout(local_size_x = 256) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf  { float16_t v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 8)  buffer Half4Buf { f16vec4 v4[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer Uvec4Buf { uvec4 v[]; };
+
+layout(push_constant, scalar) uniform Push {
+    HalfBuf a, b; FloatBuf c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    uint lda, ldb, ldc, spare;
+    uint64_t residual_cos;
+    uint image_h, image_w, window_cols, window_pad;
+    uint64_t qkv_scale;
+} pc;
+
+#include "specialize.glsl"
+#include "cosine_tree.glsl"
+
+/* 16 KB: a block of 64 keys (4 KB), the same block's values (4 KB), then a kilobyte a
+ * subgroup: sixteen keys' logits or weights (512 B) and probabilities (256 B), and at the
+ * end the context on its way out. */
+layout(scalar) shared AsHalf  { float16_t h16[8192]; };
+layout(scalar) shared AsFloat { float f32[4096]; };
+layout(scalar) shared AsUint  { uint u32[4096]; };
+layout(scalar) shared AsVec2  { vec2 v2[2048]; };
+layout(scalar) shared AsUvec4 { uvec4 u4[1024]; };
+
+const uint VALUES = 2048u;              // the value block, in halves; the keys are at 0
+const uint GLOBAL_ATTENTION = 5u;       // row-family profile kind
+
+/* attention.comp's `vit_weight`: the ViT's exponential. */
+float vit_weight(float logit) {
+    precise float affine = half_round(logit) * 0.08953857421875;
+    affine += 1.708984375;
+    affine = clamp(half_round(affine), 1.439453125, 1.9775390625);
+    uint bits = packHalf2x16(vec2(affine, 0.0)) & 0xFFFFu;
+    return unpackHalf2x16(((bits << 4) + 0x4000u) & 0xFFFFu).x;
+}
+
+void main() {
+    uint rows = pc.m, tokens = pc.n, heads = pc.batch, head = gl_WorkGroupID.y;
+    uint sub = gl_SubgroupID, local = gl_SubgroupInvocationID, lane = gl_LocalInvocationIndex;
+    uint row = gl_WorkGroupID.x * 64u + sub * 8u;          // this subgroup's eight queries
+    bool busy = row < rows;                               // a partial last block's idle
+    uint scratch = 2048u + 256u * sub;                      // its kilobyte, in floats
+    uint plane = head * rows * 32u;                         // this head's (rows, 32)
+
+    coopmat<float16_t, gl_ScopeSubgroup, 8, 16, gl_MatrixUseA> query[2];
+    if (busy)
+        for (uint c = 0u; c < 2u; c++)
+            coopMatLoad(query[c], pc.a.v, plane + row * 32u + c * 16u, 32u,
+                        gl_CooperativeMatrixLayoutRowMajor);
+
+    uint blocks = (rows + 63u) / 64u;                       // the tokens' 64-blocks too
+    float total = 0.0;                                      // lane r < 8: row r's sum
+    float column[8];                                        // and its block's columns
+    coopmat<float, gl_ScopeSubgroup, 8, 16, gl_MatrixUseAccumulator> context[2];
+    for (uint j = 0u; j < 2u; j++)
+        context[j] = coopmat<float, gl_ScopeSubgroup, 8, 16, gl_MatrixUseAccumulator>(0.0);
+
+    for (uint block = 0u; block < blocks; block++) {
+        uint first = block * 64u, keys = min(64u, rows - first);
+        /* The block's keys and values, 16 bytes a lane; the rows past the last are zero. */
+        barrier();                                          // the last block is done with
+        {
+            uint key = lane / 4u, part = lane % 4u;
+            uvec4 zero = uvec4(0u);
+            u4[lane] = key < keys
+                ? Uvec4Buf(uint64_t(pc.b)).v[(plane + (first + key) * 32u) / 8u + part] : zero;
+            u4[256u + lane] = key < keys
+                ? Uvec4Buf(uint64_t(pc.d)).v[(plane + (first + key) * 32u) / 8u + part] : zero;
+        }
+        barrier();
+        if (!busy) continue;
+
+        for (uint chunk = 0u; chunk < 4u; chunk++) {
+            uint start = first + chunk * 16u;
+            /* Sixteen keys' logits in; the weights back in their place, two neighbours a
+             * lane, for each row's lane to add in the tree's order, and the published
+             * weights beside them as the PV's A. */
+            coopmat<float, gl_ScopeSubgroup, 8, 16, gl_MatrixUseAccumulator> acc =
+                coopmat<float, gl_ScopeSubgroup, 8, 16, gl_MatrixUseAccumulator>(0.0);
+            if (start < rows)
+                for (uint c = 0u; c < 2u; c++) {
+                    coopmat<float16_t, gl_ScopeSubgroup, 16, 16, gl_MatrixUseB> key;
+                    coopMatLoad(key, h16, chunk * 16u * 32u + c * 16u, 32u,
+                                gl_CooperativeMatrixLayoutColumnMajor);
+                    acc = coopMatMulAdd(query[c], key, acc);
+                }
+            coopMatStore(acc, f32, scratch, 16u, gl_CooperativeMatrixLayoutRowMajor);
+            subgroupMemoryBarrierShared();
+            subgroupBarrier();
+            for (uint t = 0u; t < 2u; t++) {
+                uint at = local * 2u + t * 64u;              // row at / 16, keys at % 16 and + 1
+                vec2 logits = v2[(scratch + at) / 2u];
+                uint k0 = start + at % 16u, k1 = k0 + 1u;
+                float w0 = vit_weight(k0 < tokens ? logits.x : 0.0);
+                float w1 = vit_weight(k1 < tokens ? logits.y : 0.0);
+                v2[(scratch + at) / 2u] = vec2(w0, w1);
+                float p0 = k0 < tokens ? e4m3(w0) : 0.0;
+                float p1 = k1 < tokens ? e4m3(w1) : 0.0;
+                u32[scratch + 128u + at / 2u] = packHalf2x16(vec2(p0, p1));
+            }
+            subgroupMemoryBarrierShared();
+            subgroupBarrier();
+            if (local < 8u) {
+                uint base = scratch + local * 16u;
+                for (uint c = 0u; c < 8u; c++) {
+                    float pair = hadd(f32[base + c], f32[base + c + 8u]);
+                    column[c] = chunk == 0u ? pair : hadd(column[c], pair);
+                }
+            }
+            if (start < rows) {
+                coopmat<float16_t, gl_ScopeSubgroup, 8, 16, gl_MatrixUseA> p;
+                coopMatLoad(p, h16, (scratch + 128u) * 2u, 16u, gl_CooperativeMatrixLayoutRowMajor);
+                for (uint j = 0u; j < 2u; j++) {
+                    coopmat<float16_t, gl_ScopeSubgroup, 16, 16, gl_MatrixUseB> v;
+                    coopMatLoad(v, h16, VALUES + chunk * 16u * 32u + j * 16u, 32u,
+                                gl_CooperativeMatrixLayoutRowMajor);
+                    context[j] = coopMatMulAdd(p, v, context[j]);
+                }
+            }
+            subgroupMemoryBarrierShared();
+            subgroupBarrier();
+        }
+        if (local < 8u) {
+            float even = hadd(hadd(hadd(column[0], column[2]), column[4]), column[6]);
+            float odd = hadd(hadd(hadd(column[1], column[3]), column[5]), column[7]);
+            total = hadd(total, hadd(even, odd));
+        }
+    }
+    if (!busy) return;
+
+    float reciprocal = 0.0;
+    if (local < 8u) {
+        uint padding = blocks * 64u - tokens;
+        if (padding > 0u) total = hadd(total, -hmul(vit_weight(0.0), float(padding)));
+        reciprocal = half_round(1.0 / total);
+    }
+
+    /* The head merge's store, the value sum rounded to half times its row's reciprocal,
+     * published: (rows, heads * 32), this head's 32 columns. */
+    for (uint j = 0u; j < 2u; j++)
+        coopMatStore(context[j], f32, scratch + j * 16u, 32u, gl_CooperativeMatrixLayoutRowMajor);
+    subgroupMemoryBarrierShared();
+    subgroupBarrier();
+    uint channels = heads * 32u;
+    for (uint e = local * 4u; e < 256u; e += 128u) {
+        uint r = row + e / 32u, d = e % 32u;
+        float scale = subgroupShuffle(reciprocal, e / 32u);
+        vec4 values;
+        for (uint i = 0u; i < 4u; i++) values[i] = e4m3(hmul(half_round(f32[scratch + e + i]), scale));
+        Half4Buf(uint64_t(pc.c)).v4[(r * channels + head * 32u + d) >> 2] = f16vec4(values);
+    }
+}

@@ -1,0 +1,27 @@
+physical devices: 1
+
+=== device 0: Intel(R) Graphics (LNL) ===
+  apiVersion    : 1.4.354
+  subgroup size : 32
+  extensions    : KHR_cooperative_matrix=1 KHR_shader_bfloat16=1 NV_cooperative_matrix2=1
+  cooperativeMatrix              = 1
+  cooperativeMatrixRobustBufferAccess = 0
+  supportedStages                = compute
+  shaderBFloat16Type             = 1
+  shaderBFloat16CooperativeMatrix= 1
+  shaderBFloat16DotProduct       = 1
+
+  vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR -> 0, count=6
+
+   idx   M   N   K   A      B      C      Result  satAcc  scope
+   ---------------------------------------------------------------
+     0   8  16  16   fp16   fp16   fp16   fp16    0      subgroup
+     1   8  16  16   fp16   fp16   fp32   fp32    0      subgroup
+     2   8  16  16   bf16   bf16   bf16   bf16    0      subgroup
+     3   8  16  16   bf16   bf16   fp32   fp32    0      subgroup
+     4   8  16  32   sint8  sint8  sint32 sint32  0      subgroup
+     5   8  16  32   uint8  uint8  uint32 uint32  0      subgroup
+
+   summary: 6 configs total; 2 with A=bf16, of those 1 accumulate in fp32; 1 fp16 configs accumulate in fp32
+
+  NV_cooperative_matrix2 flexible dimensions -> 0, count=0

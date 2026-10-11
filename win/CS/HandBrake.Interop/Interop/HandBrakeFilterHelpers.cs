@@ -45,6 +45,7 @@ namespace HandBrake.Interop.Interop
             filters.Add(new HBFilter((int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH, "chromasmooth"));
             filters.Add(new HBFilter((int)hb_filter_ids.HB_FILTER_LAPSHARP, "lapsharp", "Sharpen"));
             filters.Add(new HBFilter((int)hb_filter_ids.HB_FILTER_UNSHARP, "unsharp", "Sharpen"));
+            filters.Add(new HBFilter((int)hb_filter_ids.HB_FILTER_DLSSNR, "dlssnr"));
             filters.Add(new HBFilter((int)hb_filter_ids.HB_FILTER_GRAYSCALE, "grayscale"));
             filters.Add(new HBFilter((int)hb_filter_ids.HB_FILTER_COLORSPACE, "colourspace"));
 

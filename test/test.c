@@ -118,6 +118,10 @@ static int     lapsharp_disable    = 0;
 static int     lapsharp_custom     = 0;
 static char *  lapsharp            = NULL;
 static char *  lapsharp_tune       = NULL;
+static int     dlssnr_disable      = 0;
+static int     dlssnr_custom       = 0;
+static char *  dlssnr              = NULL;
+static char *  dlssnr_tune         = NULL;
 static int     detelecine_disable  = 0;
 static int     detelecine_custom   = 0;
 static char *  detelecine          = NULL;
@@ -708,6 +712,8 @@ cleanup:
     free(unsharp_tune);
     free(lapsharp);
     free(lapsharp_tune);
+    free(dlssnr);
+    free(dlssnr_tune);
     free(bm3d);
     free(deband);
     free(preset_export_name);
@@ -1278,6 +1284,7 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_COLORSPACE:
         case HB_FILTER_UNSHARP:
         case HB_FILTER_LAPSHARP:
+        case HB_FILTER_DLSSNR:
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
@@ -2359,6 +2366,20 @@ static void ShowHelp(void)
     fprintf( out,
 "                           Applies to lapsharp presets only (does not affect\n"
 "                           custom settings)\n"
+"   --dlssnr[=string]       Re-render detail with the DLSS Neural Rendering\n"
+"                           filter (dlss-nr-on-vulkan). Presets set the\n"
+"                           intensity, tunes the vendor's profile.\n");
+    showFilterPresets(out, HB_FILTER_DLSSNR);
+    showFilterKeys(out, HB_FILTER_DLSSNR);
+    showFilterDefault(out, HB_FILTER_DLSSNR);
+    fprintf( out,
+
+"   --no-dlssnr             Disable preset dlssnr filter\n"
+"   --dlssnr-tune <string>  Tune dlssnr filter\n");
+    showFilterTunes(out, HB_FILTER_DLSSNR);
+    fprintf( out,
+"                           Applies to dlssnr presets only (does not affect\n"
+"                           custom settings)\n"
 "   -7, --deblock[=string]  Deblock video with avfilter deblock\n");
     showFilterPresets(out, HB_FILTER_DEBLOCK);
     showFilterKeys(out, HB_FILTER_DEBLOCK);
@@ -2797,6 +2818,8 @@ static int ParseOptions( int argc, char ** argv )
     #define AUDIO_CROSSFEED               348
     #define AUDIO_STEREOWIDEN             349
     #define AUDIO_LOUDNORM                350
+    #define FILTER_DLSSNR                 351
+    #define FILTER_DLSSNR_TUNE            352
 
     for( ;; )
     {
@@ -2928,6 +2951,9 @@ static int ParseOptions( int argc, char ** argv )
             { "lapsharp",    optional_argument, NULL,    FILTER_LAPSHARP },
             { "no-lapsharp", no_argument,       &lapsharp_disable,     1 },
             { "lapsharp-tune", required_argument, NULL,  FILTER_LAPSHARP_TUNE },
+            { "dlssnr",      optional_argument, NULL,    FILTER_DLSSNR },
+            { "no-dlssnr",   no_argument,       &dlssnr_disable,      1 },
+            { "dlssnr-tune", required_argument, NULL,    FILTER_DLSSNR_TUNE },
             { "detelecine",  optional_argument, NULL,    '9' },
             { "no-detelecine", no_argument,     &detelecine_disable,  1 },
             { "no-comb-detect", no_argument,    &comb_detect_disable, 1 },
@@ -3537,6 +3563,21 @@ static int ParseOptions( int argc, char ** argv )
             case FILTER_LAPSHARP_TUNE:
                 free(lapsharp_tune);
                 lapsharp_tune = strdup(optarg);
+                break;
+            case FILTER_DLSSNR:
+                free(dlssnr);
+                if (optarg != NULL)
+                {
+                    dlssnr = strdup(optarg);
+                }
+                else
+                {
+                    dlssnr = strdup(hb_filter_param_get_default_preset(HB_FILTER_DLSSNR));
+                }
+                break;
+            case FILTER_DLSSNR_TUNE:
+                free(dlssnr_tune);
+                dlssnr_tune = strdup(optarg);
                 break;
             case '9':
                 free(detelecine);
@@ -4350,6 +4391,32 @@ static int ParseOptions( int argc, char ** argv )
         else
         {
             fprintf(stderr, "Invalid lapsharp option %s\n", lapsharp);
+            return -1;
+        }
+    }
+
+    if (dlssnr != NULL)
+    {
+        if (dlssnr_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --dlssnr and --no-dlssnr\n");
+            return -1;
+        }
+        if (!hb_validate_filter_preset(HB_FILTER_DLSSNR, dlssnr,
+                                       dlssnr_tune, NULL))
+        {
+            // Nothing to do, but must validate preset before
+            // attempting to validate custom settings to prevent potential
+            // false positive
+        }
+        else if (!hb_validate_filter_string(HB_FILTER_DLSSNR, dlssnr))
+        {
+            dlssnr_custom = 1;
+        }
+        else
+        {
+            fprintf(stderr, "Invalid dlssnr option %s\n", dlssnr);
             return -1;
         }
     }
@@ -5575,6 +5642,26 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                         hb_value_string("custom"));
             hb_dict_set(preset, "PictureSharpenCustom",
                         hb_value_string(lapsharp));
+        }
+    }
+    if (dlssnr_disable)
+    {
+        hb_dict_set_string(preset, "PictureDLSSNRPreset", "off");
+    }
+    if (dlssnr != NULL)
+    {
+        if (!dlssnr_custom)
+        {
+            hb_dict_set_string(preset, "PictureDLSSNRPreset", dlssnr);
+            if (dlssnr_tune != NULL)
+            {
+                hb_dict_set_string(preset, "PictureDLSSNRTune", dlssnr_tune);
+            }
+        }
+        else
+        {
+            hb_dict_set_string(preset, "PictureDLSSNRPreset", "custom");
+            hb_dict_set_string(preset, "PictureDLSSNRCustom", dlssnr);
         }
     }
     if (deblock != NULL)

@@ -1,0 +1,274 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * resident — the elementwise half of the graph, addressed by pointer.
+ *
+ * Every buffer arrives as a 64-bit device address in the push constants, so there
+ * are no descriptor sets and a whole block's worth of dispatches can be recorded
+ * into one command buffer without touching a descriptor pool. On this shared-memory
+ * APU the buffers are HOST_CACHED, so "upload" is an address rather than a transfer.
+ *
+ * `precise` is not decoration here: the vendor's gate rounds to half between the
+ * multiply and the add, and an FMA contraction would skip that rounding and give a
+ * different answer from the reference.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+
+#include "publish.glsl"
+
+layout(local_size_x = 256) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf  { float16_t v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float     v[]; };
+
+layout(push_constant, scalar) uniform Push {
+    FloatBuf a, b, c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    uint lda, ldb, ldc, spare;                 // the GEMMs'; unused here
+    uint64_t second;                           // offset 96: a pass's second output
+} pc;
+
+#include "specialize.glsl"
+
+// kinds
+const uint E4M3 = 0u, GATE = 1u, HALF = 2u, TO_HALF = 3u, SCALE = 4u,
+           RESIDUAL = 5u, FROM_HALF = 6u, PARTITION = 7u, REVERSE = 8u, ADD_BIAS = 9u,
+           SPLIT_HEADS = 10u, MERGE_HEADS = 11u, POOL2 = 12u, UPSAMPLE2 = 13u,
+           SCALE_CHANNEL = 14u, ADD = 15u, PAD_END = 16u,
+           /* fused: one read of float32 and one write of float16 where the graph
+            * otherwise makes three round trips over the same buffer */
+           GATE_E4M3_HALF = 17u, E4M3_HALF = 18u, GATE_HALF = 19u,
+           UPSAMPLE_MERGE = 20u, UPSAMPLE_ADD = 21u, POOL2_SKIP = 22u;
+
+
+
+/* The publish a pass ends with: bits 8-11 of `flags` pick the transform and bit 12
+ * narrows the output to float16. Folding it in here is what lets `partition`,
+ * `split_heads`, `merge_heads` and the row passes feed a GEMM directly, instead of
+ * writing float32 for a `to_half` pass to read straight back. */
+/* An operand held as float16. A published value is E4M3 and therefore exact in half —
+ * measured, `src/bench/bf16_check.py` — so a buffer the graph publishes can be stored
+ * narrow and read back here with nothing lost. Bit 15 marks `a`, bit 16 marks `b`. */
+float load_a(uint index) {
+    return (operation_flags() & 0x8000u) != 0u ? float(HalfBuf(uint64_t(pc.a)).v[index]) : pc.a.v[index];
+}
+
+float load_b(uint index) {
+    return (operation_flags() & 0x10000u) != 0u ? float(HalfBuf(uint64_t(pc.b)).v[index]) : pc.b.v[index];
+}
+
+void store(uint index, float value) {
+    uint epilogue = (operation_flags() >> 8) & 0xFu;
+    if (epilogue == 2u || epilogue == 3u) value = gate_activation(value);
+    if (epilogue == 1u || epilogue == 3u) value = e4m3(value);
+    if (epilogue == 4u) value = half_round(value);
+    if ((operation_flags() & 0x1000u) != 0u) HalfBuf(uint64_t(pc.c)).v[index] = float16_t(value);
+    else                            pc.c.v[index] = value;
+}
+
+void main() {
+    uint index = gl_GlobalInvocationID.x;
+    if (index >= pc.m) return;
+    uint kind = operation_flags() & 0xFFu;
+
+    if (kind == GATE_E4M3_HALF || kind == E4M3_HALF || kind == GATE_HALF) {
+        float value = pc.a.v[index];
+        if (kind != E4M3_HALF) value = gate_activation(value);
+        if (kind != GATE_HALF) value = e4m3(value);
+        // an E4M3 value is exact in half, and the gate already returns a half value,
+        // so the narrowing here loses nothing either way
+        HalfBuf(uint64_t(pc.c)).v[index] = float16_t(value);
+        return;
+    }
+    if (kind == TO_HALF) {
+        HalfBuf(uint64_t(pc.c)).v[index] = float16_t(pc.a.v[index] * pc.p0);
+        return;
+    }
+    if (kind == FROM_HALF) {
+        store(index, float(HalfBuf(uint64_t(pc.a)).v[index]) * pc.p0);
+        return;
+    }
+    if (kind == RESIDUAL) {
+        /* out = branch + skip * cosine, the cosine one value per channel. Bit 14 makes
+         * the branch read through the window reverse, so the attention output goes
+         * straight into the residual instead of being copied into image order first. */
+        uint at = index;
+        if ((operation_flags() & 0x4000u) != 0u) {
+            uint channels = pc.n, size = pc.batch, width = pc.sb, across = pc.sc;
+            uint c = index % channels, rest = index / channels;
+            uint py = rest / width + (pc.k >> 16), px = rest % width + (pc.k & 0xFFFFu);
+            at = (((py / size) * across + px / size) * size * size
+                  + (py % size) * size + px % size) * channels + c;
+        }
+        store(index, load_a(at) + load_b(index) * pc.d.v[index % pc.n]);
+        return;
+    }
+    if (kind == PARTITION || kind == REVERSE) {
+        /* NHWC <-> (window, token, channel), with the shifted-window origin folded in
+         * rather than materialised as a padded copy. `k` carries the pad as
+         * (top << 16) | left; a window that reaches outside the image reads zero, which
+         * is what `functional.pad` would have put there. */
+        uint channels = pc.n, size = pc.batch;
+        uint height = pc.sa, width = pc.sb, across = pc.sc;
+        uint pad_top = pc.k >> 16, pad_left = pc.k & 0xFFFFu;
+        uint c = index % channels, rest = index / channels;
+        if (kind == PARTITION) {
+            uint token = rest % (size * size), window = rest / (size * size);
+            int y = int((window / across) * size + token / size) - int(pad_top);
+            int x = int((window % across) * size + token % size) - int(pad_left);
+            store(index, (y < 0 || x < 0 || y >= int(height) || x >= int(width))
+                ? 0.0 : load_a((uint(y) * width + uint(x)) * channels + c));
+        } else {
+            uint x = rest % width, y = rest / width;
+            uint py = y + pad_top, px = x + pad_left;
+            uint window = (py / size) * across + (px / size);
+            uint token = (py % size) * size + (px % size);
+            store(index, load_a((window * size * size + token) * channels + c));
+        }
+        return;
+    }
+    if (kind == POOL2) {
+        // 2x2 average, NHWC. n=channels, sb=source width.
+        uint channels = pc.n, width = pc.sb;
+        uint c = index % channels, rest = index / channels;
+        uint x = rest % (width / 2u), y = rest / (width / 2u);
+        uint base = ((2u * y) * width + 2u * x) * channels + c;
+        /* The reference adds the four taps column-first — (top-left + bottom-left) +
+         * top-right + bottom-right — and float32 addition is not associative, so the
+         * order is part of the answer. `precise` keeps the compiler from regrouping. */
+        precise float total = load_a(base) + load_a(base + width * channels);
+        total += load_a(base + channels);
+        total += load_a(base + (width + 1u) * channels);
+        store(index, total * 0.25);
+        return;
+    }
+    if (kind == UPSAMPLE2) {
+        // nearest 2x, cropped to the target extent. n=channels, sa=target width,
+        // sb=source width.
+        uint channels = pc.n, target = pc.sa, source = pc.sb;
+        uint c = index % channels, rest = index / channels;
+        uint x = rest % target, y = rest / target;
+        store(index, load_a(((y / 2u) * source + (x / 2u)) * channels + c));
+        return;
+    }
+    if (kind == UPSAMPLE_MERGE) {
+        /* Block 70's input in one pass: the level above, upsampled 2x (nearest), times the
+         * per-channel sin, plus the full-resolution skip times the per-channel cos. That
+         * was upsample2, scale_channel, residual and to_half — four passes over a full
+         * frame, three of them writing float32 for the next to read back. The steps and
+         * their roundings are theirs: the scale is its own rounded product, as
+         * scale_channel stored it, and the residual is the fused multiply-add the RESIDUAL
+         * pass compiles to (measured on Xe2, notes/improve-fusions.md, and on MoltenVK).
+         * An fma() addend cannot be contracted into, so the plain product stays a product;
+         * it is deliberately *not* `precise`: SPIRV-Cross spells a precise multiply as
+         * fma(l, r, 0.0), which turns a -0 product into +0 and so disagrees with
+         * scale_channel's -0 wherever sin or the source is a signed zero.
+         * The float32 result is the feed-forward's residual; the copy, published to E4M3,
+         * is its GEMM's input. n=channels, sa=target width, sb=source width; d holds sin then cos. */
+        uint channels = pc.n, target = pc.sa, source = pc.sb;
+        uint c = index % channels, rest = index / channels;
+        uint x = rest % target, y = rest / target;
+        float scaled = load_a(((y / 2u) * source + (x / 2u)) * channels + c) * pc.d.v[c];
+        float merged = fma(load_b(index), pc.d.v[channels + c], scaled);
+        pc.c.v[index] = merged;
+        HalfBuf(pc.second).v[index] = float16_t(e4m3(merged));
+        return;
+    }
+    if (kind == POOL2_SKIP) {
+        /* Block 0's output into both its consumers in one read: the 2x2 pool into the
+         * encoder, published (POOL2 with the E4M3 epilogue), and every pixel published to
+         * half as the post block's skip (E4M3_HALF) — two passes over a full-resolution
+         * float32 frame, 126 MB each at 720p. Their roundings are theirs: the pool adds its
+         * four taps column-first (`precise`), the skip publishes each tap alone.
+         * n=channels, sb=source width; `second` takes the skip. */
+        uint channels = pc.n, width = pc.sb;
+        uint c = index % channels, rest = index / channels;
+        uint x = rest % (width / 2u), y = rest / (width / 2u);
+        uint base = ((2u * y) * width + 2u * x) * channels + c;
+        uint taps[4] = uint[4](base, base + width * channels, base + channels,
+                                base + (width + 1u) * channels);
+        float value[4];
+        for (uint t = 0u; t < 4u; t++) value[t] = load_a(taps[t]);
+        precise float total = value[0] + value[1];
+        total += value[2];
+        total += value[3];
+        store(index, total * 0.25);
+        for (uint t = 0u; t < 4u; t++)
+            HalfBuf(pc.second).v[taps[t]] = float16_t(e4m3(value[t]));
+        return;
+    }
+    if (kind == UPSAMPLE_ADD) {
+        /* A decoder transition's merge in one pass: the projected level below upsampled 2x
+         * (nearest), plus the skip times the per-channel sine, then the publish. That was
+         * upsample2, scale_channel and add — three passes, two of them writing float32 for
+         * the next to read back. Their roundings are kept: the product is rounded on its
+         * own, as scale_channel stored it, and then added, so neither may become a fused
+         * multiply-add (`precise`). n=channels, sa=target width, sb=source width, d=sine,
+         * b=the skip. With a second output the merge goes there published as well: the
+         * 32-channel block's, whose feed-forward reads it published and its residual raw. */
+        uint channels = pc.n, target = pc.sa, source = pc.sb;
+        uint c = index % channels, rest = index / channels;
+        uint x = rest % target, y = rest / target;
+        precise float scaled = load_b(index) * pc.d.v[c];
+        precise float merged = load_a(((y / 2u) * source + (x / 2u)) * channels + c) + scaled;
+        store(index, merged);
+        if (pc.second != 0ul) HalfBuf(pc.second).v[index] = float16_t(e4m3(merged));
+        return;
+    }
+    if (kind == PAD_END) {
+        // extend to a larger extent with zeros. n=channels, sa=height, sb=width,
+        // sc=padded width.
+        uint channels = pc.n, height = pc.sa, width = pc.sb, padded = pc.sc;
+        uint c = index % channels, rest = index / channels;
+        uint x = rest % padded, y = rest / padded;
+        store(index, (y < height && x < width)
+            ? load_a((y * width + x) * channels + c) : 0.0);
+        return;
+    }
+    if (kind == SCALE_CHANNEL) { store(index, load_a(index) * pc.d.v[index % pc.n]); return; }
+    if (kind == ADD)           { store(index, load_a(index) + load_b(index)); return; }
+    if (kind == SPLIT_HEADS) {
+        // (windows, tokens, 3C) -> one of Q/K/V as (windows, heads, tokens, 32)
+        uint channels = pc.n, heads = pc.batch, tokens = pc.sa, part = pc.sb;
+        uint d = index % 32u, rest = index / 32u;
+        uint token = rest % tokens; rest /= tokens;
+        uint head = rest % heads, window = rest / heads;
+        store(index, load_a((window * tokens + token) * 3u * channels
+                               + part * channels + head * 32u + d));
+        return;
+    }
+    if (kind == MERGE_HEADS) {
+        // (windows, heads, tokens, 32) -> (windows, tokens, C)
+        uint channels = pc.n, heads = pc.batch, tokens = pc.sa;
+        uint c = index % channels, rest = index / channels;
+        uint token = rest % tokens, window = rest / tokens;
+        uint at = (window * heads + c / 32u) * tokens + token;
+        float value = load_a(at * 32u + c % 32u);
+        /* Flag 0x20000: the ViT's value sum, rounded to half, times its row's reciprocal
+         * from `d` — the softmax's normalisation, which the ViT applies here rather than
+         * to the weights (attention.comp, vit_softmax). */
+        if ((operation_flags() & 0x20000u) != 0u) {
+            precise float scaled = half_round(value) * pc.d.v[at];
+            value = half_round(scaled);
+        }
+        store(index, value);
+        return;
+    }
+    if (kind == ADD_BIAS) {
+        // scores are (windows*heads, tokens, tokens); the bias is (heads, tokens, tokens)
+        uint plane = pc.n * pc.n, inside = index % plane;
+        store(index, load_a(index) + pc.d.v[((index / plane) % pc.batch) * plane + inside]);
+        return;
+    }
+    float value = load_a(index) * pc.p0;
+    if (kind == E4M3)      store(index, e4m3(value));
+    else if (kind == GATE) store(index, gate_activation(value));
+    else if (kind == HALF) store(index, half_round(value));
+    else                   store(index, value);
+}

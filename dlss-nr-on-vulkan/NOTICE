@@ -1,0 +1,97 @@
+DLSS-NR on Intel Xe2
+Copyright 2026 uzbekunknown and the DLSS-NR on Intel Xe2 contributors
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+--------------------------------------------------------------------------------
+What this project is not
+--------------------------------------------------------------------------------
+
+DLSS, DLSS 5, Neural Rendering, NGX and nvngx_dlssnr.dll are NVIDIA Corporation's.
+This project is an independent reimplementation of the inference pass so that it can
+run on an Intel Xe2 GPU. It is not affiliated with, endorsed by, or supported by
+NVIDIA, and no NVIDIA source code is included.
+
+**No model weights and no NVIDIA binary are distributed here, and none ever will be.**
+The repository is source text only. To run anything you must supply your own copy of
+`nvngx_dlssnr.dll` and extract the weights from it yourself; the README says how.
+Whether you are entitled to that copy is between you and whoever gave it to you.
+
+`docs/ARCHITECTURE.md` and the notes under `notes/` describe what was measured about that
+binary — the recovered graph, tensor shapes, and the names of kernels demangled from its
+embedded code. They are published deliberately, as a record of analysis rather than a copy
+of the thing analysed: no NVIDIA code, no weights and no verbatim transcription of their
+material is included, and what is here is regenerable by anyone holding the same file.
+
+Comparison images live on the `media` branch, not in the code history. They are frames
+from commercial games — Tekken 7 © Bandai Namco Entertainment, Dead or Alive 5 Last Round
+© Koei Tecmo Games, Mortal Kombat 1 © Warner Bros. Entertainment Inc. and its guest
+characters' respective owners — shown to compare a rendering
+technique, and they remain their publishers' property.
+
+--------------------------------------------------------------------------------
+Third-party work this depends on
+--------------------------------------------------------------------------------
+
+bin2c — https://github.com/rkitover/bin2c
+  Copyright (c) 2016 Rafael Kitover, BSD 2-Clause License. `src/tools/bin2c.c` is that
+  program, unchanged; the CMake build runs it to compile the owner's weights file into
+  libnr_frame. The weights it embeds are the owner's and are not distributed.
+
+MLX-DLSS — https://github.com/iamwavecut/MLX-DLSS
+  Copyright the MLX-DLSS authors, licensed under the Apache License 2.0.
+  This project reads its numpy modules at runtime and reproduces its weight
+  specification; the two independent extractions of the same binary agree exactly.
+  It is fetched into `work/` at build time and is not redistributed here.
+
+OpenDLSS-NR — https://github.com/maanHimself/OpenDLSS-NR
+  Copyright (c) 2026 maan, licensed under the MIT License.
+  Where MLX-DLSS's graph and the vendor's differ, this project follows the structure
+  OpenDLSS-NR documents, and was checked against its WebGPU port, which the benches
+  `src/bench/opendlss_*` run from a clone in `work/`; the port is not redistributed here.
+  `src/bench/opendlss_captures.patch` (a capture-only change) and
+  `src/bench/opendlss_rounding.patch` (its half roundings made unfoldable) change that port and
+  quote a few of its lines as context. Those lines are theirs, under their licence:
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+DXVK — https://github.com/doitsujin/dxvk
+  Copyright (c) 2017 Philip Rebohle, (c) 2019 Joshua Ashton, (c) 2019 Robin Kertels,
+  (c) 2023 Jeffrey Ellison; licensed under the zlib/libpng licence.
+  Windows releases carry its unmodified release binaries in `dxvk/`, with its licence as
+  `dxvk/LICENSE` (version and SHA-256 pinned in `dist-tools/dxvk.json`); the setup window
+  puts them beside a DirectX 8-11 game and takes them away again. They are fetched at
+  release time and are not in this repository.
+
+Vulkan-Headers — https://github.com/KhronosGroup/Vulkan-Headers
+  Copyright the Khronos Group, licensed under the Apache License 2.0.
+  Fetched into `work/` at build time and not redistributed here.
+
+--------------------------------------------------------------------------------
+Provenance within this repository
+--------------------------------------------------------------------------------
+
+src/gpu/test_gemm_contract.py came back from uzbekunknown/dlss-nr-on-intel, which
+adapted this tree's CMake build and GEMM checks (commit 74bc1f7) and strengthened the
+epilogue and destination-guard tests.
+
+This project was written by AI agents: Claude Opus 5 in this tree, and Astra in a parallel
+one by the same owner. `src/ref/nr_image.c` began in that parallel tree and was extended
+here; its file header and `notes/phase57-native-host-passes.md` record what came from
+where. See "How this was built" in README.md.

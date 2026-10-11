@@ -178,6 +178,12 @@ namespace HandBrake.Interop.Interop.Json.Presets
 
         public string PictureSharpenTune { get; set; }
 
+        public string PictureDLSSNRPreset { get; set; }
+
+        public string PictureDLSSNRTune { get; set; }
+
+        public string PictureDLSSNRCustom { get; set; }
+
         /// <summary>
         /// Gets or sets the picture detelecine.
         /// </summary>

@@ -1,0 +1,78 @@
+--- a/src/intel/compiler/brw/brw_reg_allocate.cpp
++++ b/src/intel/compiler/brw/brw_reg_allocate.cpp
+@@ -66,6 +66,10 @@
+    int base_reg_count = (devinfo->ver >= 30 && !INTEL_DEBUG(DEBUG_NO_VRT) ?
+                          XE3_MAX_GRF / reg_unit(devinfo) :
+                          BRW_MAX_GRF);
++   /* Experiment: Xe2's large GRF mode, 256 physical registers a thread, for a process
++    * whose compute is all it runs (STATE_COMPUTE_MODE's LargeGRFMode, set by anv). */
++   if (devinfo->ver == 20 && brw_xe2_large_grf())
++      base_reg_count = XE3_MAX_GRF / reg_unit(devinfo);
+ 
+    /* The registers used to make up almost all values handled in the compiler
+     * are a scalar value occupying a single register (or 2 registers in the
+--- a/src/intel/compiler/brw/brw_compiler.h
++++ b/src/intel/compiler/brw/brw_compiler.h
+@@ -25,6 +25,20 @@
+ extern "C" {
+ #endif
+ 
++#include <stdlib.h>
++/* Experiment: Xe2's large GRF mode for compute — 256 physical registers a thread and half
++ * the threads an EU. Read once; anv sets STATE_COMPUTE_MODE's LargeGRFMode to match. */
++static inline bool
++brw_xe2_large_grf(void)
++{
++   static int cached = -1;
++   if (cached < 0) {
++      const char *value = getenv("INTEL_XE2_LARGE_GRF");
++      cached = value != NULL && value[0] == '1';
++   }
++   return cached == 1;
++}
++
+ struct ra_regs;
+ struct nir_builder;
+ struct nir_def;
+@@ -129,6 +143,7 @@
+     * backend IR scheduling can reduce register pressure.
+     */
+    unsigned register_pressure_threshold;
++   /* Experiment: INTEL_XE2_LARGE_GRF=1, see brw_xe2_large_grf(). */
+ 
+    /**
+     * A list of storage formats to lower from the matching return HW format.
+--- a/src/intel/compiler/brw/brw_compiler.c
++++ b/src/intel/compiler/brw/brw_compiler.c
+@@ -118,6 +118,8 @@
+                                    devinfo->ver >= 20 ? XE2_MAX_GRF :
+                                    BRW_MAX_GRF) * REG_SIZE;
+    compiler->register_pressure_threshold = devinfo->ver >= 30 ? 268 : 134;
++   if (devinfo->ver == 20 && brw_xe2_large_grf())
++      compiler->register_pressure_threshold = 268;
+ 
+    nir_lower_int64_options int64_options =
+       nir_lower_imul64 |
+--- a/src/intel/vulkan/genX_init_state.c
++++ b/src/intel/vulkan/genX_init_state.c
+@@ -715,6 +715,9 @@
+ #if GFX_VER >= 30
+       cm.EnableVariableRegisterSizeAllocation = !INTEL_DEBUG(DEBUG_NO_VRT);
+ #endif
++#if GFX_VER == 20
++      cm.LargeGRFMode = brw_xe2_large_grf();
++#endif
+       cm.Mask1 = 0xffff;
+ #if GFX_VERx10 >= 200
+       cm.Mask2 = 0xffff;
+@@ -894,6 +897,10 @@
+       cm.EnableVariableRegisterSizeAllocationMask = 1;
+       cm.EnableVariableRegisterSizeAllocation = !INTEL_DEBUG(DEBUG_NO_VRT);
+ #endif
++#if GFX_VER == 20
++      cm.LargeGRFModeMask = 1;
++      cm.LargeGRFMode = brw_xe2_large_grf();
++#endif
+ #if GFX_VER >= 20
+       cm.AsyncComputeThreadLimit = ACTL_Disabled;
+       cm.ZPassAsyncComputeThreadLimit = ZPACTL_Max60;

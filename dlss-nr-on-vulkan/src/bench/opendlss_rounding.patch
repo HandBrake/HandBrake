@@ -1,0 +1,40 @@
+diff --git a/ports/browser-webgpu/src/matmul/base.js b/ports/browser-webgpu/src/matmul/base.js
+index ffe4061..7013bff 100644
+--- a/ports/browser-webgpu/src/matmul/base.js
++++ b/ports/browser-webgpu/src/matmul/base.js
+@@ -396,7 +396,7 @@ export function productionMatmulCode() {
+   return MATMUL_WGSL
+     .replace('/*__F16_ENABLE__*/', 'enable f16;')
+     .replace('/*__ROUND_F16__*/',
+-      'fn round_accumulator(value: f32) -> f32 { return f32(f16(value)); }')
++      'fn round_accumulator(value: f32) -> f32 { return unpack2x16float(pack2x16float(vec2<f32>(value, 0.0))).x; }')
+     .replace(/fn ada_fp8_fdpa\([\s\S]*?\n}/, PRODUCTION_FDPA)
+     // In these bounded normal ranges, power-of-two construction and binary exponent extraction are exact;
+     // no exp2/log2 approximation is needed, and WGSL allows those two an error the arithmetic cannot take.
+diff --git a/ports/browser-webgpu/src/matmul/silu-table.js b/ports/browser-webgpu/src/matmul/silu-table.js
+index ddb7207..8aecdc5 100644
+--- a/ports/browser-webgpu/src/matmul/silu-table.js
++++ b/ports/browser-webgpu/src/matmul/silu-table.js
+@@ -13,7 +13,7 @@ export async function createSiluTable(device, code) {
+       return code.slice(begin, end);
+     };
+     const shader = `enable f16;
+-fn round_accumulator(value: f32) -> f32 { return f32(f16(value)); }
++fn round_accumulator(value: f32) -> f32 { return unpack2x16float(pack2x16float(vec2<f32>(value, 0.0))).x; }
+ ${fn('mp_cubic_silu')}
+ ${fn('fp8_domain')}
+ @group(0) @binding(0) var<storage, read_write> values: array<vec2<f16>>;
+diff --git a/ports/browser-webgpu/src/matmul/tiled.js b/ports/browser-webgpu/src/matmul/tiled.js
+index 1b4b801..ca732e5 100644
+--- a/ports/browser-webgpu/src/matmul/tiled.js
++++ b/ports/browser-webgpu/src/matmul/tiled.js
+@@ -58,7 +58,8 @@ fn quad_fdpa(row: u32, column: u32, start: u32, count: u32, accumulator: vec4<f3
+   let scale = bitcast<vec4<f32>>(vec4<u32>(exponents + vec4<i32>(114)) << vec4<u32>(23u));
+   // FP8 products and the incoming half accumulator cannot produce a nonzero
+   // result below the smallest half subnormal. Native publishes zero as +0.
+-  let rounded = vec4<f32>(vec4<f16>(sums * scale));
++  let scaled_sums = sums * scale;
++  let rounded = vec4<f32>(unpack2x16float(pack2x16float(scaled_sums.xy)), unpack2x16float(pack2x16float(scaled_sums.zw)));
+   return select(rounded, vec4<f32>(0.0), rounded == vec4<f32>(0.0));
+ }
+ `;

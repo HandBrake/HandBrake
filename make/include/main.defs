@@ -75,6 +75,11 @@ ifeq (1,$(FEATURE.libdovi))
     MODULES += contrib/libdovi
 endif
 
+ifeq (1,$(FEATURE.dlssnr))
+    MODULES += contrib/vulkan-headers
+    MODULES += contrib/dlssnr
+endif
+
 ifneq (,$(filter $(HOST.system),darwin))
     MODULES += contrib/xz
     MODULES += contrib/bin2c

@@ -3104,6 +3104,9 @@ Do you wish to proceed?</value>
   <data name="Filter_chromasmooth" xml:space="preserve">
     <value>Chroma Smooth</value>
   </data>
+  <data name="Filter_dlssnr" xml:space="preserve">
+    <value>DLSS Neural Rendering</value>
+  </data>
   <data name="Filter_lapsharp" xml:space="preserve">
     <value>Lapsharp</value>
   </data>

@@ -1,0 +1,416 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * attention — the row-wise operators: the cosine publish and the bit-affine softmax.
+ *
+ * One invocation per row, because both reduce along the last axis: 32 channels for the
+ * cosine normalise, the window's token count for the softmax.
+ *
+ * Both reductions are reproduced in the order the reference uses, which had to be
+ * measured rather than assumed. `sum(dtype=float16)` in numpy does *not* accumulate in
+ * half — it runs sequentially in float32 and rounds once at the end — and the cosine
+ * normalise instead uses a fixed fragment tree of half operations, whose shape is the
+ * kernel's, not a reduction library's.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+
+#include "publish.glsl"
+#include "cosine_tree.glsl"
+
+/* ROW_LANES: 32 for every row pass; `attention_rows.spv` builds 256, for the whole-row
+ * softmax alone — the same 8 KB of shared memory serving eight subgroups instead of one,
+ * which is what a core's threads were short of (softmax_rows). */
+#ifndef ROW_LANES
+#define ROW_LANES 32
+#endif
+layout(local_size_x = ROW_LANES) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float     v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf  { float16_t v[]; };
+
+layout(push_constant, scalar) uniform Push {
+    FloatBuf a, b, c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    FloatBuf qkv_scale; // offset 80: shares the GEMM-only lda/ldb slots in the C push ABI
+} pc;
+
+#include "specialize.glsl"
+
+/* Both row passes read a whole row into one invocation, and a row is 32 or 64
+ * consecutive floats: neighbouring invocations then touch addresses 128 or 256 bytes
+ * apart and every load instruction spans sixty-four cache lines. Staging the
+ * workgroup's rows through shared memory makes the global traffic contiguous — the
+ * cosine publish went from 23.7 GB/s to the 80-odd the other passes reach — while each
+ * invocation still sees its own row whole, which the vendor's fragment tree requires.
+ *
+ * The staging is fenced with workgroup-scope barriers, not subgroup ones. The workgroup
+ * is 32 wide and was measured where a subgroup is too (Xe2, Apple), but Mali runs 16-wide
+ * subgroups, so a subgroup barrier would fence only half the rows -- and the Bifrost/
+ * Valhall shader compiler cannot even build a subgroup-scope OpControlBarrier: on a
+ * Mali-G57 it aborts the process with "LLVM ERROR: Cannot select: intrinsic
+ * %llvm.bifrost.2556" from inside vkCreateComputePipelines (notes/phase73-mali.md).
+ * `barrier()` on a single-subgroup workgroup costs the same on the drivers measured. */
+shared float stage[32 * 64];
+
+/* `count` consecutive floats from `base`, spread across the workgroup. */
+void gather_part(uint base, uint count, uint part) {
+    /* Bit 15: the input is float16. The cosine publish rounds its input to half as its
+     * first act, so a producer that already wrote half loses nothing by it. */
+    if ((operation_flags() & 0x20000u) != 0u) {
+        // Q/K directly from (window, token, 3, head, channel). The cosine
+        // operation performs the split's half rounding before its reduction.
+        if (pc.n % 32u == 0u) {
+            // A workgroup's 32 rows stay in one head. Compute its base once,
+            // instead of repeating integer division for every gathered element.
+            uint row = base / 32u;
+            uint head = (row / pc.n) % pc.batch, token = row % pc.n;
+            uint window = row / (pc.n * pc.batch);
+            uint at = ((window * pc.n + token) * 3u * pc.batch + part * pc.batch + head) * 32u;
+            for (uint i = gl_LocalInvocationID.x; i < count; i += 32u)
+                stage[i] = pc.a.v[at + (i / 32u) * pc.batch * 96u + i % 32u];
+        } else {
+            for (uint i = gl_LocalInvocationID.x; i < count; i += 32u) {
+                uint row = (base + i) / 32u, channel = (base + i) % 32u;
+                uint head = (row / pc.n) % pc.batch, token = row % pc.n;
+                uint window = row / (pc.n * pc.batch);
+                uint at = ((window * pc.n + token) * 3u * pc.batch + part * pc.batch + head) * 32u + channel;
+                stage[i] = pc.a.v[at];
+            }
+        }
+    } else if ((operation_flags() & 0x8000u) != 0u) {
+        HalfBuf h = HalfBuf(uint64_t(pc.a));
+        for (uint i = gl_LocalInvocationID.x; i < count; i += 32u) stage[i] = float(h.v[base + i]);
+    } else
+    for (uint i = gl_LocalInvocationID.x; i < count; i += 32u) stage[i] = pc.a.v[base + i];
+    memoryBarrierShared();
+    barrier();
+}
+
+void gather(uint base, uint count) {
+    gather_part(base, count, (operation_flags() >> 18) & 1u);
+}
+
+void scatter_to(uint base, uint count, uint64_t target) {
+    memoryBarrierShared();
+    barrier();
+    if ((operation_flags() & 0x1000u) != 0u) {
+        HalfBuf h = HalfBuf(target);
+        for (uint i = gl_LocalInvocationID.x; i < count; i += 32u)
+            h.v[base + i] = float16_t(stage[i]);
+    } else {
+        for (uint i = gl_LocalInvocationID.x; i < count; i += 32u) FloatBuf(target).v[base + i] = stage[i];
+    }
+}
+
+void scatter(uint base, uint count) { scatter_to(base, count, uint64_t(pc.c)); }
+
+// VIT_SOFTMAX is 6: 3-5 are the fused attention kernels' profile kinds
+const uint COSINE_PUBLISH = 0u, SOFTMAX = 1u, QKV_PREPARE = 2u, VIT_SOFTMAX = 6u;
+
+/* The publish this pass ends with: bits 8-11 of `flags` pick the transform and bit 12
+ * narrows the output to float16, so the row passes can feed a GEMM directly instead of
+ * writing float32 for a `to_half` pass to read straight back. Both of these rows end in
+ * an E4M3 value, which is exact in half, so narrowing here changes nothing. */
+void store(uint index, float value) {
+    uint epilogue = (operation_flags() >> 8) & 0xFu;
+    if (epilogue == 1u) value = e4m3(value);
+    else if (epilogue == 4u) value = half_round(value);
+    if ((operation_flags() & 0x1000u) != 0u) HalfBuf(uint64_t(pc.c)).v[index] = float16_t(value);
+    else                            pc.c.v[index] = value;
+}
+
+/* Flag 0x80000: the ViT's normalisation and query scale (`vit_reciprocal`, VIT_ROOT). */
+/* `scales` arrives as a plain address rather than as a FloatBuf, because AMD's
+ * compiler takes about a minute over a buffer reference that crosses a call
+ * boundary. An empty function with a FloatBuf parameter, called once, compiles
+ * in 68.9 s on a Radeon iGPU; the same function taking the same address as a
+ * uint64_t -- a larger module -- compiles in 0.3 s. That one call was ~64 s of
+ * this shader's compile and, with attention_rows.spv, most of a cold model
+ * open. The reference is rebuilt here, which costs nothing. */
+void cosine_publish(uint row, uint local, bool scaled, uint64_t scales_address) {
+    FloatBuf scales = FloatBuf(scales_address);
+    uint base = local * 32u;
+    bool vit = (operation_flags() & 0x80000u) != 0u;
+    float h[32];
+    for (uint i = 0u; i < 32u; i++) h[i] = half_round(stage[base + i]);
+    float reciprocal = vit ? vit_reciprocal(h) : cosine_reciprocal(h);   // cosine_tree.glsl
+    // pc.k != 0 selects the query path, which also multiplies by its head's scale
+    float scale = 1.0;
+    if (scaled) {
+        uint head = (row / pc.n) % pc.batch;      // rows are (batch, head, token)
+        scale = half_round(scales.v[head]);
+    }
+    for (uint i = 0u; i < 32u; i++) {
+        float value = hmul(h[i], reciprocal);
+        if (scaled) value = hmul(vit ? hmul(value, VIT_ROOT) : value, scale);
+        stage[base + i] = e4m3(value);
+    }
+}
+
+/* One pair of attention weights. The vendor's exp is a bit-affine map on an `f16x2`
+ * register, so the pair is coupled — the shift moves bits across the halves and the add
+ * can carry between them — and the two elements cannot be computed apart.
+ * See notes/phase5-softmax-found.md. */
+/* The clamped affine values encode as 0x3c20..0x3e47. For every pair,
+ * the coupled transform below yields finite normal half values (0x0400..0x48e0).
+ * Native pack/unpack therefore reproduces the former bit reconstruction exactly,
+ * including the carry from the low half into the high half. */
+/* A logit as the transform takes it: the per-head attention bias added here rather than
+ * by a pass of its own — it is a few tens of kilobytes and stays in cache, so folding it
+ * in saves a whole read-modify-write of the scores — then the symmetric clamp. */
+float prepared(float logit, uint bias_index) {
+    if ((operation_flags() & 0x2000u) != 0u) logit += pc.b.v[bias_index];
+    if (pc.p0 != 0.0) logit = clamp(logit, -pc.p0, pc.p0);
+    return logit;
+}
+
+void pair_fast(float l0, float l1, out float w0, out float w1) {
+    vec2 affine;
+    for (uint j = 0u; j < 2u; j++) {
+        precise float scaled = half_round(j == 0u ? l0 : l1) * 0.044921875;
+        scaled += 1.30078125;
+        affine[j] = clamp(scaled, 1.03125, 1.5693359375);
+    }
+    uint transformed = (packHalf2x16(affine) << 5) + 0x7FF88000u;
+    vec2 weights = unpackHalf2x16(transformed);
+    w0 = weights.x; w1 = weights.y;
+}
+
+#ifdef SOFTMAX_AB
+void pair_reference(float l0, float l1, out float w0, out float w1) {
+    uint bits[2];
+    for (uint j = 0u; j < 2u; j++) {
+        precise float scaled = half_round(j == 0u ? l0 : l1) * 0.044921875;
+        scaled += 1.30078125;
+        float affine = clamp(scaled, 1.03125, 1.5693359375);
+        // the float16 bit pattern of the affine value
+        int f = floatBitsToInt(half_round(affine));
+        bits[j] = uint(((f >> 13) & 0x3FF) | (((((f >> 23) & 0xFF) - 112) & 0x1F) << 10)
+                       | ((f < 0) ? 0x8000 : 0));
+    }
+    uint transformed = ((bits[0] | (bits[1] << 16)) << 5) + 0x7FF88000u;
+    float out2[2];
+    for (uint j = 0u; j < 2u; j++) {
+        uint half_bits = (j == 0u) ? (transformed & 0xFFFFu) : ((transformed >> 16) & 0xFFFFu);
+        uint exponent = (half_bits >> 10) & 0x1Fu, mantissa = half_bits & 0x3FFu;
+        float weight = (exponent == 0u)
+            ? float(mantissa) * 5.9604644775390625e-08
+            : intBitsToFloat(int(((exponent + 112u) << 23) | (mantissa << 13)));
+        out2[j] = ((half_bits & 0x8000u) != 0u) ? -weight : weight;
+    }
+    w0 = out2[0]; w1 = out2[1];
+}
+#endif
+
+/* One pair of prepared logits into their weights. */
+void pair_weights(float l0, float l1, out float w0, out float w1) {
+#ifdef SOFTMAX_AB
+    // Test-only specialization bit; removed entirely from the shipped shader.
+    if ((operation_flags() & 0x40000000u) != 0u) {
+        pair_reference(l0, l1, w0, w1);
+        return;
+    }
+#endif
+    pair_fast(l0, l1, w0, w1);
+}
+
+void weights_at(bool staged, uint base, uint bias, uint i, out float w0, out float w1) {
+    float l0 = staged ? stage[base + i] : pc.a.v[base + i];
+    float l1 = staged ? stage[base + i + 1u] : pc.a.v[base + i + 1u];
+    pair_weights(prepared(l0, bias + i), prepared(l1, bias + i + 1u), w0, w1);
+}
+
+/* scores are (windows*heads, tokens, tokens) and the bias (heads, tokens, tokens) */
+uint bias_offset(uint row) {
+    return ((row / pc.n) % max(pc.batch, 1u)) * pc.n * pc.n + (row % pc.n) * pc.n;
+}
+
+/* A row short enough to stage whole — every window's, 64 tokens — one row a lane, out of
+ * the rows the workgroup gathered into shared memory. */
+void softmax(uint row, uint local) {
+    uint base = local * pc.n;
+    uint bias = bias_offset(row);
+    float total = 0.0;
+    float w0, w1;
+    for (uint i = 0u; i < pc.n; i += 2u) {
+        weights_at(true, base, bias, i, w0, w1);
+        /* The weights are parked where the logits were, so the normalising pass does
+         * not repeat the bit-affine transform. Only shared memory can hold them: the
+         * output buffer is the one being narrowed to float16, and a rounded weight
+         * would give a different product. */
+        stage[base + i] = w0; stage[base + i + 1u] = w1;
+        total += w0;                              // float32 accumulation, as numpy does
+        total += w1;
+    }
+    float reciprocal = half_round(1.0 / half_round(total));
+    for (uint i = 0u; i < pc.n; i++)
+        stage[base + i] = e4m3(hmul(stage[base + i], reciprocal));
+}
+
+/* The rows too wide to stage 32 at a time — the global blocks', as many columns as the
+ * bottleneck has tokens, padded to the tile in `sa`. One row a lane made every load a
+ * gather, 32 lanes reading 32 rows a kilobyte apart through L2 a word at a time — 0.57 ms
+ * a call at 1280x768, 8192 rows of 256, for 8 MB of scores. So a workgroup takes as many
+ * whole rows as fit in its shared memory, reads them once along the rows, turns them into
+ * weights in place, and each of its first lanes adds its own row in index order — the same
+ * weights added in the same order, so the same total bit for bit — and then the whole
+ * workgroup normalises and stores along the rows again. A pair that starts below `n` counts
+ * both halves, as the one-row loop did, and the pad past it is zeroed so the following
+ * P@V contributes nothing. Rows sit `stride + 1` apart, so the lanes adding their rows at
+ * the same column meet different banks; the last 32 floats hold the reciprocals, so a
+ * workgroup takes at most 32 rows, and libxmx dispatches one per `min(32, WHOLE / (stride
+ * + 1))` to match. Below a stride of 62 more would fit, and the ones past 32 lost their
+ * reciprocal: the 16-token bottleneck on 32 rows came out zero in rows 32-60 of each. */
+const uint WHOLE = 2016u;
+
+void softmax_rows(uint local) {
+    uint stride = pc.sa != 0u ? pc.sa : pc.n, pitch = stride + 1u;
+    uint per = min(32u, WHOLE / pitch), first = gl_WorkGroupID.x * per;
+    uint rows = min(per, pc.m - first);
+    uint paired = (pc.n + 1u) & ~1u, pairs = paired / 2u;
+    for (uint q = local; q < rows * stride; q += ROW_LANES)
+        stage[(q / stride) * pitch + q % stride] = pc.a.v[first * stride + q];
+    barrier();
+    for (uint q = local; q < rows * pairs; q += ROW_LANES) {
+        uint r = q / pairs, j = (q % pairs) * 2u, at = r * pitch + j;
+        uint bias = bias_offset(first + r) + j;
+        float w0, w1;
+        pair_weights(prepared(stage[at], bias), prepared(stage[at + 1u], bias + 1u), w0, w1);
+        stage[at] = w0;
+        stage[at + 1u] = w1;
+    }
+    barrier();
+    if (local < rows) {
+        /* in index order, eight loads ahead of their adds so the chain waits on adds */
+        float total = 0.0;
+        uint j = 0u, base = local * pitch;
+        for (; j + 8u <= paired; j += 8u) {
+            float v[8];
+            for (uint e = 0u; e < 8u; e++) v[e] = stage[base + j + e];
+            for (uint e = 0u; e < 8u; e++) total += v[e];
+        }
+        for (; j < paired; j++) total += stage[base + j];
+        stage[WHOLE + local] = half_round(1.0 / half_round(total));
+    }
+    barrier();
+    for (uint q = local; q < rows * stride; q += ROW_LANES) {
+        uint r = q / stride, j = q % stride;
+        store(first * stride + q,
+              j < paired ? e4m3(hmul(stage[r * pitch + j], stage[WHOLE + r])) : 0.0);
+    }
+}
+
+/* The ViT's exponential (OpenDLSS-NR's `vit_exp_weight`): its own affine, evaluated in
+ * half, and a 4-bit shift where the window blocks' is 5 — about 2^(1.4326 s - 3.656) over
+ * s in [-3, 3], which its clamp keeps it to. `nr_model._vit_exp_weight`. */
+float vit_weight(float logit) {
+    precise float affine = half_round(logit) * 0.08953857421875;
+    affine += 1.708984375;
+    affine = clamp(half_round(affine), 1.439453125, 1.9775390625);
+    uint bits = packHalf2x16(vec2(affine, 0.0)) & 0xFFFFu;
+    return unpackHalf2x16(((bits << 4) + 0x4000u) & 0xFFFFu).x;
+}
+
+/* The ViT's softmax, one row a lane: `sa` columns of float32 logits, `n` of them real
+ * tokens. The weights are published unnormalised, and the row's reciprocal goes to `d`
+ * for the head merge to apply to the value sum (`merge_heads`, flag 0x20000). The
+ * denominator is the vendor's order: the keys in blocks of 64, padded with zero keys —
+ * whose weight is the exponential of zero — to a whole block; in each, per column c of
+ * eight, the keys c, c+8, ..., c+56 added a pair at a time and the pairs in turn; the even
+ * columns, the odd ones, the two; the blocks in turn; and the padding's own weight taken
+ * off at the end. Columns past the tokens count as padding whatever they hold, and publish
+ * zero. `nr_model._vit_denominator`, global_attention.comp. */
+void vit_softmax(uint row) {
+    uint stride = pc.sa != 0u ? pc.sa : pc.n, tokens = pc.n, base = row * stride;
+    uint blocks = (tokens + 63u) / 64u;
+    float zero = vit_weight(0.0), total = 0.0;
+    for (uint b = 0u; b < blocks; b++) {
+        float column[8];
+        for (uint c = 0u; c < 8u; c++) {
+            float pair[4];
+            for (uint j = 0u; j < 4u; j++) {
+                uint k0 = b * 64u + c + 16u * j, k1 = k0 + 8u;
+                float w0 = k0 < tokens ? vit_weight(pc.a.v[base + k0]) : zero;
+                float w1 = k1 < tokens ? vit_weight(pc.a.v[base + k1]) : zero;
+                pair[j] = hadd(w0, w1);
+            }
+            column[c] = hadd(hadd(hadd(pair[0], pair[1]), pair[2]), pair[3]);
+        }
+        float even = hadd(hadd(hadd(column[0], column[2]), column[4]), column[6]);
+        float odd = hadd(hadd(hadd(column[1], column[3]), column[5]), column[7]);
+        total = hadd(total, hadd(even, odd));
+    }
+    uint padding = blocks * 64u - tokens;
+    if (padding > 0u) total = hadd(total, -hmul(zero, float(padding)));
+    pc.d.v[row] = half_round(1.0 / total);
+    for (uint k = 0u; k < stride; k++)
+        store(base + k, k < tokens ? e4m3(vit_weight(pc.a.v[base + k])) : 0.0);
+}
+
+/* Rows wider than shared memory holds whole: the one-row-a-lane loop, which still reads
+ * each row twice through L2, for extents far past any this project runs. */
+void softmax_long(uint row) {
+    uint stride = pc.sa != 0u ? pc.sa : pc.n;
+    uint base = row * stride, bias = bias_offset(row);
+    for (uint i = pc.n; i < stride; i++) store(base + i, 0.0);
+    float total = 0.0;
+    float w0, w1;
+    for (uint i = 0u; i < pc.n; i += 2u) {
+        weights_at(false, base, bias, i, w0, w1);
+        total += w0;
+        total += w1;
+    }
+    float reciprocal = half_round(1.0 / half_round(total));
+    for (uint i = 0u; i < pc.n; i += 2u) {
+        weights_at(false, base, bias, i, w0, w1);
+        store(base + i,      e4m3(hmul(w0, reciprocal)));
+        store(base + i + 1u, e4m3(hmul(w1, reciprocal)));
+    }
+}
+
+void main() {
+    uint row = gl_GlobalInvocationID.x;
+    uint kind = operation_flags() & 0xFFu, local = gl_LocalInvocationID.x;
+    if (kind == QKV_PREPARE) {
+        // Three independent workgroup planes: identical arithmetic to the old
+        // Q/K normalizations and V split, recorded as one dispatch and one barrier.
+        uint part = gl_WorkGroupID.y;
+        uint base = gl_WorkGroupID.x * 32u * 32u;
+        uint count = min(32u * 32u, pc.m * 32u - base);
+        gather_part(base, count, part);
+        if (part < 2u) {
+            if (row < pc.m) cosine_publish(row, local, part == 0u, uint64_t(pc.qkv_scale));
+        } else {
+            for (uint i = local; i < count; i += 32u) stage[i] = e4m3(stage[i]);
+        }
+        uint64_t target = part == 0u ? uint64_t(pc.b) :
+                          (part == 1u ? uint64_t(pc.c) : uint64_t(pc.d));
+        scatter_to(base, count, target);
+    } else if (kind == COSINE_PUBLISH) {
+        uint base = gl_WorkGroupID.x * 32u * 32u;
+        gather(base, min(32u * 32u, pc.m * 32u - base));
+        if (row < pc.m) cosine_publish(row, local, pc.k != 0u, uint64_t(pc.d));
+        scatter(base, min(32u * 32u, pc.m * 32u - base));
+    } else if (kind == VIT_SOFTMAX) {
+        if (row < pc.m) vit_softmax(row);
+    } else if (kind == SOFTMAX) {
+        uint stride = pc.sa != 0u ? pc.sa : pc.n;
+        if (stride == pc.n && stride <= 64u) {
+            uint base = gl_WorkGroupID.x * 32u * stride;
+            uint count = min(32u * stride, pc.m * stride - base);
+            gather(base, count);
+            if (row < pc.m) softmax(row, local);
+            scatter(base, count);
+        } else if (stride + 1u <= WHOLE) {
+            softmax_rows(local);
+        } else if (row < pc.m) {
+            softmax_long(row);
+        }
+    }
+}

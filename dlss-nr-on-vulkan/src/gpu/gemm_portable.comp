@@ -1,0 +1,402 @@
+#version 450
+#extension GL_GOOGLE_include_directive : require
+/*
+ * gemm_portable — `gemm_resident.comp` without the cooperative matrix.
+ *
+ * Same contract in every respect a caller can see: the push constants, the operation
+ * flags (bit 0 a transposed B, bits 8-11 the epilogue, bit 12 a half output, and the
+ * fused epilogues below), the row strides, the batch on gl_WorkGroupID.z, an 8x16 output
+ * block per 32-lane workgroup (16x32 with -DRM=2 -DRN=2, matching `gemm_tiled.spv`; and
+ * 16x64 with -DRM=2 -DRN=4, `gemm_portable_wide.spv`, which libxmx gives the GEMMs whose N
+ * is whole 64-column blocks on this path — the same sums, twice as many per lane), and
+ * the store: the epilogue's publish on the accumulator, straight to global. The runtime
+ * dispatches it with the geometry it uses for the cooperative-matrix kernel and nothing
+ * else changes.
+ *
+ * What differs is the arithmetic: FP16 operands promoted to FP32 and accumulated with
+ * ordinary multiply-adds, one lane owning four consecutive columns of one row. It exists
+ * for a Vulkan device with no `VK_KHR_cooperative_matrix` — MoltenVK on Apple silicon is
+ * the one it was written for, where SPIRV-Cross cannot translate the matrix opcodes at
+ * all ("Currently no block to insert opcode"), and the phones — and for testing the same
+ * path on the Xe2 machine through `XMX_PORTABLE=1`. It reaches no matrix unit anywhere;
+ * that is the price of running at all, and the fast path is still the other kernel.
+ *
+ * The fused epilogues of `gemm_resident.comp` and `gemm_staged.comp` are all here, so a
+ * device without matrix units records the very same graph (notes/improve-fusions.md,
+ * improve-qkv-epilogue.md): the residual (0x20000, half skip 0x40000, written back
+ * through a window layout 0x80000), the QKV projection finished in its own epilogue
+ * (0x100000, the 16x32 build only — a column block must be one head), the half copy of a
+ * float32 result, published (0x200000), the compact head (0x10000, the 8x16 build only), and A
+ * gathered from the image in window order (0x400000, the 16x32 build: on a device without
+ * the staged kernel the runtime routes the window-gathered projection here), and block 0's
+ * window residual pooled and published in its epilogue (0x800000, the 16x32 build). Where the
+ * matrix kernels take those through a shared-memory stage, this one has every element in
+ * a lane's own registers already; the arithmetic per element is theirs.
+ *
+ * Numerics: a float16 x float16 product is exact in float32 and the K sum runs in
+ * order, so the result is the float32 dot product to within summation order, which is
+ * the same claim the matrix units make (`notes/phase9-numerics.md`: per-element
+ * agreement is not a property either can promise). -DACC16 accumulates in half, as the
+ * `ACC16` build of the matrix kernel does. The fused passes that replace two of these
+ * (`window_attention_portable.comp`, `ffn_fused_portable.comp`) sum in the same order,
+ * which is what keeps them bit-identical to the passes they replace on this path.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+#extension GL_KHR_shader_subgroup_basic : require
+
+#include "publish.glsl"
+
+layout(local_size_x = 32) in;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf   { float16_t v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf  { float     v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 8)  buffer Half4Buf  { f16vec4   v4[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer Float4Buf { vec4      v4[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer Packed8Buf { uvec4    v8[]; };
+
+/* The staged kernel's packed loader (gemm_staged.comp, specialization constant 2) as this
+ * kernel can take it: the plain form fetches A sixteen bytes — eight K terms — at a time
+ * where the addresses allow; the sums are the eight-byte path's bit for bit. Its own
+ * constant, 3, and off by default: through MoltenVK on an M3 the compiler already combines
+ * the eight-byte fetches, and this path measured slower (XMX_PORTABLE_PACKED=1 to try it on
+ * another device). */
+layout(constant_id = 3) const bool PORTABLE_PACKED = false;
+
+layout(push_constant, scalar) uniform Push {
+    HalfBuf a, b; FloatBuf c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    uint lda, ldb, ldc, spare;      // row strides; 0 means the dense default
+    uint64_t residual_cos;                     // per-channel cosine of the skip
+    uint image_h, image_w, window_cols, window_pad;   // window residual geometry
+    uint64_t qkv_scale;                        // the QKV epilogue's query scale
+} pc;
+
+#include "specialize.glsl"
+#include "residual_epilogue.glsl"   /* needs operation_flags() from above */
+
+const uint TM = 8, TN = 16;
+
+#ifdef ACC16
+#define ACC  float16_t
+#define ACC4 f16vec4
+#else
+#define ACC  float
+#define ACC4 vec4
+#endif
+
+#ifndef RM
+#define RM 1
+#endif
+#ifndef RN
+#define RN 1
+#endif
+const uint BM = TM * RM, BN = TN * RN;
+
+/* The QKV projection's epilogue needs a column block of exactly one head, 32 wide, so it
+ * exists in the register-tiled build only; libxmx never routes it anywhere else. The
+ * block goes through shared memory because a row's 32 channels are spread over four
+ * lanes and the normalisation needs them all; a full barrier rather than a subgroup one,
+ * since a phone's subgroup may be narrower than the workgroup (notes/phase73). */
+#if RN == 2
+shared float stage[BM * BN];
+void qkv_barrier() { memoryBarrierShared(); barrier(); }
+#define QKV_STAGE float
+#include "cosine_tree.glsl"
+#include "qkv_epilogue.glsl"
+#endif
+
+/* Where a lane's A row begins in the image for a window-gathered A (0x400000), or
+ * NOWHERE for a token outside the image, whose row is zero. `sa` is the image width, `sb`
+ * its height, `sc` the windows per row; `k` (= K) the channels. */
+const uint NOWHERE = 0xFFFFFFFFu;
+uint window_row_base(uint token_row) {
+    uint window = token_row / 64u, token = token_row % 64u;
+    int y = int((window / pc.sc) * 8u + token / 8u) - int(pc.window_pad >> 16);
+    int x = int((window % pc.sc) * 8u + token % 8u) - int(pc.window_pad & 0xffffu);
+    if (y < 0 || x < 0 || y >= int(pc.sb) || x >= int(pc.sa)) return NOWHERE;
+    return (uint(y) * pc.sa + uint(x)) * pc.k;
+}
+
+void main() {
+    uint row = gl_WorkGroupID.y * BM, col = gl_WorkGroupID.x * BN;
+    if (row >= pc.m || col >= pc.n) return;
+    uint flags = operation_flags();
+    uint batch = gl_WorkGroupID.z;
+    uint ao = batch * pc.sa, bo = batch * pc.sb, co = batch * pc.sc;
+    uint lda = pc.lda != 0u ? pc.lda : pc.k;
+    uint ldb = pc.ldb != 0u ? pc.ldb : ((flags & 1u) != 0u ? pc.k : pc.n);
+    uint ldc = pc.ldc != 0u ? pc.ldc : pc.n;
+
+    /* Lane l owns row l/4 of every 8-row tile and columns 4*(l%4)..+3 of every 16-column
+     * tile: the four lanes of a row share its A element, and a lane's four B elements are
+     * consecutive in a row-major B. */
+    uint r = gl_LocalInvocationID.x >> 2u, cq = (gl_LocalInvocationID.x & 3u) * 4u;
+
+    ACC4 acc[RM][RN];
+    for (uint i = 0; i < RM; i++)
+        for (uint j = 0; j < RN; j++)
+            acc[i][j] = ACC4(0.0);
+
+    if ((flags & 0x400000u) != 0u) {
+        /* A gathered from the image in window order: what the partition pass wrote into a
+         * half buffer, read here instead — a float32 image rounded to half on the way in,
+         * as the partition's narrow store did, and zero outside the image. Never a
+         * transposed B, never a batch (the runtime says so). Bit 0x4000 publishes it to
+         * E4M3 on the way in instead: a 32-channel block's feed-forward output, which the
+         * projection reads published and the residual raw (notes/opendlss-reference.md). */
+        bool image_half = (flags & 0x8000u) != 0u;
+        bool image_publish = (flags & 0x4000u) != 0u;
+        uint base[RM];
+        for (uint i = 0; i < RM; i++) base[i] = window_row_base(row + r + i * TM);
+        Float4Buf unused = Float4Buf(uint64_t(pc.a));   /* silences a no-use warning on some compilers */
+        FloatBuf image = FloatBuf(uint64_t(pc.a));
+        bool wide_b = (ldb & 3u) == 0u && (uint(uint64_t(pc.b)) & 7u) == 0u;
+        /* A is fetched one term at a time on purpose. A pixel's channels are consecutive,
+         * so four K terms could come as one 8-byte load as the plain forms below take
+         * theirs; tried, through MoltenVK on an M3, and the window-gathered QKV GEMMs ran
+         * 1.4x slower (256x1536x512 0.46 -> 0.64 ms, 576x768x256 0.27 -> 0.38), same bytes
+         * (notes/improve-portable-precise.md). */
+        for (uint k = 0; k < pc.k; k++) {
+            ACC4 bv[RN];
+            for (uint j = 0; j < RN; j++) {
+                uint at = k * ldb + col + cq + j * TN;
+                bv[j] = wide_b ? ACC4(Half4Buf(uint64_t(pc.b)).v4[at >> 2])
+                               : ACC4(ACC(pc.b.v[at]), ACC(pc.b.v[at + 1u]),
+                                      ACC(pc.b.v[at + 2u]), ACC(pc.b.v[at + 3u]));
+            }
+            for (uint i = 0; i < RM; i++) {
+                ACC av = ACC(0.0);
+                if (base[i] != NOWHERE) {
+                    float x = image_half ? float(pc.a.v[base[i] + k]) : image.v[base[i] + k];
+                    av = ACC(image_publish ? e4m3(x) : half_round(x));
+                }
+                for (uint j = 0; j < RN; j++)
+                    acc[i][j] += av * bv[j];
+            }
+        }
+    } else if ((flags & 1u) != 0u && (ldb & 3u) == 0u && (lda & 3u) == 0u
+               && (pc.k & 3u) == 0u && ((bo | ao) & 3u) == 0u
+               && ((uint(uint64_t(pc.a)) | uint(uint64_t(pc.b))) & 7u) == 0u) {
+        /* The transposed form with the operands fetched eight bytes at a time along K,
+         * the same terms added in the same order (see the plain form below). */
+        for (uint k0 = 0; k0 < pc.k; k0 += 4u) {
+            ACC4 as4[RM], bt[RN][4];
+            for (uint i = 0; i < RM; i++)
+                as4[i] = ACC4(Half4Buf(uint64_t(pc.a)).v4[(ao + (row + r + i * TM) * lda + k0) >> 2]);
+            for (uint j = 0; j < RN; j++)
+                for (uint q = 0; q < 4u; q++)
+                    bt[j][q] = ACC4(Half4Buf(uint64_t(pc.b)).v4[(bo + (col + cq + j * TN + q) * ldb + k0) >> 2]);
+            for (uint kk = 0; kk < 4u; kk++) {
+                ACC4 bv[RN];
+                for (uint j = 0; j < RN; j++)
+                    bv[j] = ACC4(bt[j][0][kk], bt[j][1][kk], bt[j][2][kk], bt[j][3][kk]);
+                for (uint i = 0; i < RM; i++) {
+                    ACC av = as4[i][kk];
+                    for (uint j = 0; j < RN; j++)
+                        acc[i][j] += av * bv[j];
+                }
+            }
+        }
+    } else if ((flags & 1u) != 0u) {
+        /* B is stored (N, K): a lane's four columns are four rows of it. */
+        for (uint k = 0; k < pc.k; k++) {
+            ACC4 bv[RN];
+            for (uint j = 0; j < RN; j++) {
+                uint at = bo + (col + cq + j * TN) * ldb + k;
+                bv[j] = ACC4(ACC(pc.b.v[at]), ACC(pc.b.v[at + ldb]),
+                             ACC(pc.b.v[at + 2u * ldb]), ACC(pc.b.v[at + 3u * ldb]));
+            }
+            for (uint i = 0; i < RM; i++) {
+                ACC av = ACC(pc.a.v[ao + (row + r + i * TM) * lda + k]);
+                for (uint j = 0; j < RN; j++)
+                    acc[i][j] += av * bv[j];
+            }
+        }
+    } else if (PORTABLE_PACKED && (ldb & 3u) == 0u && (lda & 7u) == 0u && (pc.k & 7u) == 0u
+               && (bo & 3u) == 0u && (ao & 7u) == 0u
+               && (uint(uint64_t(pc.a)) & 15u) == 0u && (uint(uint64_t(pc.b)) & 7u) == 0u) {
+        /* The plain form with A fetched sixteen bytes at a time (PORTABLE_PACKED above), a
+         * lane's four B columns one eight-byte fetch as below; each K term still goes into
+         * the accumulator alone and in order, so the sums are the eight-byte path's. */
+        for (uint k0 = 0; k0 < pc.k; k0 += 8u) {
+            ACC4 as8[RM][2];
+            for (uint i = 0; i < RM; i++) {
+                uvec4 w = Packed8Buf(uint64_t(pc.a)).v8[(ao + (row + r + i * TM) * lda + k0) >> 3];
+                as8[i][0] = ACC4(f16vec4(unpackFloat2x16(w.x), unpackFloat2x16(w.y)));
+                as8[i][1] = ACC4(f16vec4(unpackFloat2x16(w.z), unpackFloat2x16(w.w)));
+            }
+            for (uint kk = 0; kk < 8u; kk++) {
+                ACC4 bv[RN];
+                for (uint j = 0; j < RN; j++)
+                    bv[j] = ACC4(Half4Buf(uint64_t(pc.b)).v4[(bo + (k0 + kk) * ldb + col + cq + j * TN) >> 2]);
+                for (uint i = 0; i < RM; i++) {
+                    ACC av = as8[i][kk >> 2][kk & 3u];
+                    for (uint j = 0; j < RN; j++)
+                        acc[i][j] += av * bv[j];
+                }
+            }
+        }
+    } else if ((ldb & 3u) == 0u && (lda & 3u) == 0u && (pc.k & 3u) == 0u
+               && ((bo | ao) & 3u) == 0u
+               && ((uint(uint64_t(pc.a)) | uint(uint64_t(pc.b))) & 7u) == 0u) {
+        /* The same sums, the operands fetched eight bytes at a time: a lane's four B
+         * columns are adjacent in a row-major B, and its A row's next four K terms are
+         * adjacent too. Nothing about the arithmetic or its order changes — each K term
+         * still goes into the accumulator alone, in order — only how many loads bring
+         * the halves in (1.15-1.2x on the graph's shapes through MoltenVK on an M3). */
+        for (uint k0 = 0; k0 < pc.k; k0 += 4u) {
+            ACC4 as4[RM];
+            for (uint i = 0; i < RM; i++)
+                as4[i] = ACC4(Half4Buf(uint64_t(pc.a)).v4[(ao + (row + r + i * TM) * lda + k0) >> 2]);
+            for (uint kk = 0; kk < 4u; kk++) {
+                ACC4 bv[RN];
+                for (uint j = 0; j < RN; j++)
+                    bv[j] = ACC4(Half4Buf(uint64_t(pc.b)).v4[(bo + (k0 + kk) * ldb + col + cq + j * TN) >> 2]);
+                for (uint i = 0; i < RM; i++) {
+                    ACC av = as4[i][kk];
+                    for (uint j = 0; j < RN; j++)
+                        acc[i][j] += av * bv[j];
+                }
+            }
+        }
+    } else {
+        for (uint k = 0; k < pc.k; k++) {
+            ACC4 bv[RN];
+            for (uint j = 0; j < RN; j++) {
+                uint at = bo + k * ldb + col + cq + j * TN;
+                bv[j] = ACC4(ACC(pc.b.v[at]), ACC(pc.b.v[at + 1u]),
+                             ACC(pc.b.v[at + 2u]), ACC(pc.b.v[at + 3u]));
+            }
+            for (uint i = 0; i < RM; i++) {
+                ACC av = ACC(pc.a.v[ao + (row + r + i * TM) * lda + k]);
+                for (uint j = 0; j < RN; j++)
+                    acc[i][j] += av * bv[j];
+            }
+        }
+    }
+
+    uint epilogue = (flags >> 8) & 0xFu;
+    bool narrow = (flags & 0x1000u) != 0u;
+    uint64_t base_c = uint64_t(pc.c);
+
+#if RN == 2
+    /* Bit 0x100000: Q and K normalised and V published here, straight into the three
+     * (window, head, token, 32) targets (qkv_epilogue.glsl). The raw accumulator block goes
+     * to shared memory row-major, as the matrix kernels stage it, and the epilogue is the
+     * same code they include. */
+    if ((flags & 0x100000u) != 0u) {
+        for (uint i = 0; i < RM; i++)
+            for (uint j = 0; j < RN; j++)
+                for (uint e = 0; e < 4u; e++)
+                    stage[(i * TM + r) * BN + j * TN + cq + e] = float(acc[i][j][e]);
+        qkv_barrier();
+        qkv_epilogue(row, col, gl_LocalInvocationID.x, 32u);
+        return;
+    }
+    /* Bit 0x800000 (with the window residual): block 0's output, read only pooled 2x2 and
+     * published into the encoder or published as the last block's skip — both made here,
+     * as gemm_staged.comp makes them on the matrix path. A 16-row block is two rows of one
+     * 8x8 window across all 32 channels, so each value goes out published as half and into
+     * the stage as it is, and after the barrier its four pooled pixels are summed from the
+     * stage in POOL2_SKIP's order. `c` takes the published skip, `qkv_scale` the pool. */
+    if ((flags & 0x800000u) != 0u) {
+        for (uint i = 0; i < RM; i++)
+            for (uint j = 0; j < RN; j++) {
+                uint at = co + (row + r + i * TM) * ldc + col + cq + j * TN;
+                if (!residual_output_index(at)) continue;
+                vec4 v = vec4(acc[i][j]), published;
+                for (uint e = 0; e < 4u; e++) {
+                    v[e] = add_gemm_residual(v[e], at + e);
+                    stage[(i * TM + r) * BN + j * TN + cq + e] = v[e];
+                    published[e] = e4m3(v[e]);
+                }
+                Half4Buf(base_c).v4[at >> 2] = f16vec4(published);
+            }
+        qkv_barrier();
+        uint pixel = gl_LocalInvocationID.x / 8u, c = (gl_LocalInvocationID.x % 8u) * 4u;
+        uint window = row / 64u, pair = (row % 64u) / 8u;      // the block's first window row
+        uint top = pc.window_pad >> 16, left = pc.window_pad & 0xffffu;
+        uint y = (window / pc.window_cols) * 8u + pair, x = (window % pc.window_cols) * 8u + 2u * pixel;
+        if (y < top || x < left || y - top >= pc.image_h || x - left >= pc.image_w) return;
+        uint at = (((y - top) / 2u) * (pc.image_w / 2u) + (x - left) / 2u) * BN + c;
+        uint upper = (2u * pixel) * BN + c, lower = upper + 8u * BN;
+        /* No `precise` on this sum, and that is load-bearing. glslang propagates `precise`
+         * backwards at the object level: a precise read of `stage` makes every store into
+         * `stage` precise, and through them the accumulators and the K loop's own
+         * multiply-adds and index arithmetic (54 NoContraction decorations against 8).
+         * SPIRV-Cross then spells each one as an `[[clang::optnone]]` helper, and through
+         * MoltenVK this whole build ran at 337 GFLOP/s against 1290 without it — on every
+         * GEMM it took, pooled or not. The qualifier protected nothing here: a chain of
+         * adds has no multiply to contract. Same bits, measured (notes/improve-portable-precise.md). */
+        vec4 pooled;
+        for (uint e = 0; e < 4u; e++) {
+            float total = stage[upper + e] + stage[lower + e];
+            total += stage[upper + BN + e];
+            total += stage[lower + BN + e];
+            pooled[e] = e4m3(total * 0.25);
+        }
+        Half4Buf(pc.qkv_scale).v4[at >> 2] = f16vec4(pooled);
+        return;
+    }
+#endif
+
+#if RM == 1 && RN == 1
+    /* Bit 0x10000: the 32->4 head still computes a legal 8x16 block, but only its four
+     * useful columns are written, at a row stride of 4 (the runtime pins ldc to 4 and
+     * routes this to the base kernel alone). */
+    if ((flags & 0x10000u) != 0u) {
+        if (cq == 0u)
+            for (uint e = 0; e < 4u; e++)
+                pc.c.v[co + (row + r) * ldc + e] = float(acc[0][0][e]);
+        return;
+    }
+#endif
+
+    bool residual = (flags & 0x20000u) != 0u;
+    bool half_copy = (flags & 0x200000u) != 0u;
+    for (uint i = 0; i < RM; i++)
+        for (uint j = 0; j < RN; j++) {
+            vec4 v = vec4(acc[i][j]);
+            uint at = co + (row + r + i * TM) * ldc + col + cq + j * TN;
+            /* A window-layout residual maps the four (consecutive, one pixel's) elements
+             * to their place in the unpadded image, and drops the padding's. */
+            if (residual && !residual_output_index(at)) continue;
+            for (uint e = 0; e < 4u; e++) {
+                /* the residual lands before the publish, as the two-pass path adds it
+                 * before rounding — which is what keeps the fused head bit-identical */
+                if (residual) v[e] = add_gemm_residual(v[e], at + e);
+                if (epilogue != 0u) v[e] = publish(epilogue, v[e]);
+            }
+            if (narrow) {
+                /* Four consecutive halves per lane, as one 64-bit store when aligned. */
+                if ((at & 3u) == 0u && (uint(base_c) & 7u) == 0u)
+                    Half4Buf(base_c).v4[at >> 2] = f16vec4(v);
+                else
+                    for (uint e = 0; e < 4u; e++)
+                        HalfBuf(base_c).v[at + e] = float16_t(v[e]);
+            } else {
+                if ((at & 3u) == 0u && (uint(base_c) & 15u) == 0u)
+                    Float4Buf(base_c).v4[at >> 2] = v;
+                else
+                    for (uint e = 0; e < 4u; e++)
+                        pc.c.v[at + e] = v[e];
+            }
+            /* Bit 0x200000: a published copy too, into `d`, as E4M3 halves: block 0's stem,
+             * which its feed-forward's residual takes raw and its GEMM published. */
+            if (half_copy) {
+                uint64_t base_d = uint64_t(pc.d);
+                vec4 p = vec4(e4m3(v[0]), e4m3(v[1]), e4m3(v[2]), e4m3(v[3]));
+                if ((at & 3u) == 0u && (uint(base_d) & 7u) == 0u)
+                    Half4Buf(base_d).v4[at >> 2] = f16vec4(p);
+                else
+                    for (uint e = 0; e < 4u; e++)
+                        HalfBuf(base_d).v[at + e] = float16_t(p[e]);
+            }
+        }
+}

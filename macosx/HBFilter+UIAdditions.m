@@ -105,6 +105,8 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
             return HBKitLocalizedString(@"Lapsharp", @"Detelecine filter");
         case HB_FILTER_UNSHARP:
             return HBKitLocalizedString(@"Unsharp", @"Detelecine filter");
+        case HB_FILTER_DLSSNR:
+            return HBKitLocalizedString(@"DLSS Neural Rendering", @"DLSS-NR filter");
         case HB_FILTER_GRAYSCALE:
             return HBKitLocalizedString(@"Grayscale", @"Detelecine filter");
         case HB_FILTER_COLORSPACE:

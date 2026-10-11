@@ -5486,6 +5486,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_unsharp;
             break;
 
+        case HB_FILTER_DLSSNR:
+            filter = &hb_filter_dlssnr;
+            break;
+
         case HB_FILTER_AVFILTER:
             filter = &hb_filter_avfilter;
             break;

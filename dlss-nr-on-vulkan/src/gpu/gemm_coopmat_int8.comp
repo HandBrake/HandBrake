@@ -1,0 +1,60 @@
+#version 450
+/*
+ * gemm_coopmat_int8 — C[M,N] = A[M,K] * B[K,N] on Xe2 XMX, integer path.
+ *
+ * The twin of `gemm_coopmat.comp`, on cooperative matrix configuration **4** from
+ * notes/hw-coopmat.md: `sint8 x sint8 -> sint32`, M=8 N=16 **K=32**. Twice the K depth
+ * of the float config, so half as many `coopMatMulAdd` for the same work — which is
+ * where the integer path's speed comes from. It is not bandwidth: the shapes this
+ * model runs reach 5-21 % of the FP16 arithmetic peak and 20-54 % of memory, so they
+ * are bound by neither, and halving the instruction count is what moves them.
+ *
+ * **Both operands are integer, and that is the whole difficulty.** There is no mixed
+ * mode on this hardware, so using this kernel means quantising activations as well as
+ * weights. `notes/improve-int8-bottleneck.md` measures what that costs where it is
+ * worth doing — the eight global blocks, 69.1 % of the model's parameters, 4.8 % of
+ * the effect at 1080p — and `notes/phase23-integer-weights.md` measures what it costs
+ * everywhere else, which is too much.
+ *
+ * The accumulator is int32 and therefore exact: no subnormal flush, no rounding
+ * between the multiply and the add. The scales come back afterwards, on the host or in
+ * an epilogue: `C[r][c] = acc[r][c] * a_scale[r] * b_scale[c]`. A scale per row of A
+ * and per column of B is free in that form, which is why the quantiser uses them.
+ *
+ * One subgroup (32 invocations) produces one 8x16 output tile.
+ */
+#extension GL_KHR_memory_scope_semantics : require
+#extension GL_KHR_cooperative_matrix : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int8 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int32 : require
+
+layout(local_size_x = 32, local_size_y = 1, local_size_z = 1) in;
+
+layout(binding = 0) readonly  buffer Abuf { int8_t  A[]; };
+layout(binding = 1) readonly  buffer Bbuf { int8_t  B[]; };
+layout(binding = 2) writeonly buffer Cbuf { int32_t C[]; };
+
+layout(push_constant) uniform Push { uint M, N, K; } pc;
+
+const uint TM = 8, TN = 16, TK = 32;
+
+void main() {
+    uint row = gl_WorkGroupID.y * TM;
+    uint col = gl_WorkGroupID.x * TN;
+    if (row >= pc.M || col >= pc.N) return;
+
+    coopmat<int32_t, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator> acc =
+        coopmat<int32_t, gl_ScopeSubgroup, TM, TN, gl_MatrixUseAccumulator>(0);
+
+    /* K is a multiple of TK by construction: the caller pads, because
+     * cooperativeMatrixRobustBufferAccess is false on this hardware and an edge tile
+     * would read whatever follows the buffer. */
+    for (uint k = 0; k < pc.K; k += TK) {
+        coopmat<int8_t, gl_ScopeSubgroup, TM, TK, gl_MatrixUseA> a;
+        coopmat<int8_t, gl_ScopeSubgroup, TK, TN, gl_MatrixUseB> b;
+        coopMatLoad(a, A, row * pc.K + k,   pc.K, gl_CooperativeMatrixLayoutRowMajor);
+        coopMatLoad(b, B, k   * pc.N + col, pc.N, gl_CooperativeMatrixLayoutRowMajor);
+        acc = coopMatMulAdd(a, b, acc);
+    }
+    coopMatStore(acc, C, row * pc.N + col, pc.N, gl_CooperativeMatrixLayoutRowMajor);
+}

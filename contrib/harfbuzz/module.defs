@@ -38,7 +38,12 @@ ifeq (1,$(HOST.cross))
 endif
 
 ifeq ($(HOST.system),darwin)
-    HARFBUZZ.CONFIGURE.extra += -Dglib=disabled -Dcoretext=disabled
+    ## gobject, icu, cairo and chafa default to auto and would pull in whatever
+    ## glib/icu/cairo a Mac has under /usr/local; none of them belong in the
+    ## static library HandBrake links
+    HARFBUZZ.CONFIGURE.extra += -Dglib=disabled -Dgobject=disabled -Dcoretext=disabled \
+                                -Dicu=disabled -Dcairo=disabled -Dchafa=disabled \
+                                -Dintrospection=disabled
 endif
 
 ifeq (darwin,$(HOST.system))

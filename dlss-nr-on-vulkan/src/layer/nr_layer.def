@@ -1,0 +1,14 @@
+; nr_layer.def — the symbols the Vulkan loader asks a layer DLL for.
+;
+; The Linux build exports everything (a shared object exports by default); MSVC exports
+; nothing unless told. The loader negotiates through vkNegotiateLoaderLayerInterfaceVersion,
+; which hands it the layer's own nr_GetInstanceProcAddr and nr_GetDeviceProcAddr; the two
+; vk*ProcAddr exports below are those same functions under the names an older loader looks
+; up. They used to name no function of the layer's at all: the 64-bit build linked
+; vulkan-1.lib, which supplied the loader's own vkGetInstanceProcAddr to export in their
+; place, and the 32-bit build, which has no such library to link, could not link. No LIBRARY
+; line: the 64-bit and the 32-bit DLL share this file under different names.
+EXPORTS
+    vkNegotiateLoaderLayerInterfaceVersion
+    vkGetInstanceProcAddr = nr_GetInstanceProcAddr
+    vkGetDeviceProcAddr = nr_GetDeviceProcAddr

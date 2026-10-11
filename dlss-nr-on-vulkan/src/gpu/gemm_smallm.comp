@@ -1,0 +1,102 @@
+#version 450
+/*
+ * gemm_smallm — EXPERIMENT (improve-b), measured and not routed: C = A @ B for a few rows
+ * and a deep K, with no shared memory. One subgroup takes 16 rows by 16 columns; its
+ * fragments come straight from memory, two K steps of them in flight, so one step's loads
+ * wait behind the multiply-adds of the step before. On cold weights it does not beat the
+ * staged kernel at any M (notes/improve-b.md); the host has to pack B for it (below).
+ *
+ * B is packed: 16x16 tiles, each column block's tiles in K order, and inside a tile the
+ * element (k, n) at n * 16 + k — the order a B fragment wants, a K pair per word — so a
+ * tile is 512 contiguous bytes. The multiply-adds run k = 0, 16, 32, ... into the same
+ * accumulators as every other GEMM here, so the sums are the same bit for bit.
+ *
+ * Needs M a multiple of ROWS, N of 16 and K of 32; plain float32 output.
+ */
+#extension GL_EXT_buffer_reference : require
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_scalar_block_layout : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+#extension GL_KHR_memory_scope_semantics : require
+#extension GL_KHR_cooperative_matrix : require
+#extension GL_KHR_shader_subgroup_basic : require
+
+/* SUBGROUPS subgroups a workgroup, stacked down the rows over the same 16 columns: they
+ * start together and ask for the same B tiles, so all but the first find them in L1. */
+#ifndef SUBGROUPS
+#define SUBGROUPS 1
+#endif
+layout(local_size_x = 32 * SUBGROUPS) in;
+layout(constant_id = 0) const uint SPECIALIZED_FLAGS = 0xFFFFFFFFu;
+
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer HalfBuf  { float16_t v[]; };
+layout(buffer_reference, scalar, buffer_reference_align = 16) buffer FloatBuf { float     v[]; };
+
+layout(push_constant, scalar) uniform Push {
+    HalfBuf a, b; FloatBuf c, d;
+    uint m, n, k, batch;
+    uint sa, sb, sc, flags;
+    float p0, p1, p2, p3;
+    uint lda, ldb, ldc, spare;
+    uint64_t residual_cos;
+    uint image_h, image_w, window_cols, window_pad;
+    uint64_t qkv_scale;
+} pc;
+
+#define A_TILE coopmat<float16_t, gl_ScopeSubgroup, 8, 16, gl_MatrixUseA>
+#define B_TILE coopmat<float16_t, gl_ScopeSubgroup, 16, 16, gl_MatrixUseB>
+#define ACC    coopmat<float, gl_ScopeSubgroup, 8, 16, gl_MatrixUseAccumulator>
+
+/* ROWS: 16 or 32 rows a subgroup — two or four accumulators, spelled out rather than in
+ * arrays: an array of cooperative matrices indexed in a loop compiled to something a third
+ * slower at 16 rows and three times slower at 32. Two stages of loads in flight; four
+ * spilled (11 registers out, 26 back in) and were twice as slow. */
+#ifndef ROWS
+#define ROWS 16
+#endif
+#if ROWS == 16
+#define ROW_TILES(X) X(0, 0u) X(1, 8u)
+#elif ROWS == 32
+#define ROW_TILES(X) X(0, 0u) X(1, 8u) X(2, 16u) X(3, 24u)
+#else
+#error ROWS must be 16 or 32
+#endif
+
+#define DECLARE(i, r) ACC acc##i = ACC(0.0); A_TILE a0_##i, a1_##i;
+#define LOAD_A0(i, r) coopMatLoad(a0_##i, pc.a.v, (row + r) * lda + kk, lda, gl_CooperativeMatrixLayoutRowMajor);
+#define LOAD_A1(i, r) coopMatLoad(a1_##i, pc.a.v, (row + r) * lda + kk, lda, gl_CooperativeMatrixLayoutRowMajor);
+#define MMA0(i, r) acc##i = coopMatMulAdd(a0_##i, b0, acc##i);
+#define MMA1(i, r) acc##i = coopMatMulAdd(a1_##i, b1, acc##i);
+#define STORE(i, r) coopMatStore(acc##i, pc.c.v, (row + r) * ldc + col, ldc, gl_CooperativeMatrixLayoutRowMajor);
+
+void main() {
+    uint col = gl_WorkGroupID.x * 16u;
+    uint row = (gl_WorkGroupID.y * SUBGROUPS + gl_SubgroupID) * ROWS;
+    uint K = pc.k;
+    uint lda = pc.lda != 0u ? pc.lda : K;
+    uint ldc = pc.ldc != 0u ? pc.ldc : pc.n;
+    uint bbase = gl_WorkGroupID.x * (K / 16u) * 256u;
+    ROW_TILES(DECLARE)
+    B_TILE b0, b1;
+    /* Unconditional: a load inside a branch is waited for at the branch's end, which would
+     * put the stages back in single file. Past the end of K the address is held on the last
+     * step, a load nobody reads. */
+    uint kk = 0u;
+    ROW_TILES(LOAD_A0)
+    coopMatLoad(b0, pc.b.v, bbase, 16u, gl_CooperativeMatrixLayoutColumnMajor);
+    kk = 16u;
+    ROW_TILES(LOAD_A1)
+    coopMatLoad(b1, pc.b.v, bbase + 256u, 16u, gl_CooperativeMatrixLayoutColumnMajor);
+    for (uint k0 = 0u; k0 < K; k0 += 32u) {
+        ROW_TILES(MMA0)
+        kk = min(k0 + 32u, K - 16u);
+        ROW_TILES(LOAD_A0)
+        coopMatLoad(b0, pc.b.v, bbase + (kk / 16u) * 256u, 16u, gl_CooperativeMatrixLayoutColumnMajor);
+        ROW_TILES(MMA1)
+        kk = min(k0 + 48u, K - 16u);
+        ROW_TILES(LOAD_A1)
+        coopMatLoad(b1, pc.b.v, bbase + (kk / 16u) * 256u, 16u, gl_CooperativeMatrixLayoutColumnMajor);
+    }
+    ROW_TILES(STORE)
+}
