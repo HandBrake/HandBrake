@@ -84,6 +84,8 @@
 #define NLMEANS_SORT(a,b) { if (a > b) NLMEANS_SWAP(a, b); }
 #define NLMEANS_SWAP(a,b) { a = (a ^ b); b = (a ^ b); a = (b ^ a); }
 
+#define NLMEANS_STRENGTH_MAX 63
+#define NLMEANS_PATCH_SIZE_MAX 15
 #define NLMEANS_FRAMES_MAX  32
 #define NLMEANS_EXPSIZE     128
 
@@ -138,7 +140,7 @@ struct hb_filter_private_s
 
     float  exptable[3][NLMEANS_EXPSIZE];
     float  weight_fact_table[3];
-    int    diff_max[3];
+    uint64_t diff_max[3];
 
     NLMeansFunctions functions;
 
@@ -160,13 +162,12 @@ struct hb_filter_private_s
                                     int dst_w,
                                     int dst_s,
                                     int dst_h,
-                                    double h_param,
                                     double origin_tune,
                                     int n,
                                     int r,
                               const float *exptable,
                               const float  weight_fact_table,
-                              const int    diff_max);
+                              const uint64_t diff_max);
 
     Frame      *frame;
     int         next_frame;
@@ -248,13 +249,23 @@ static int nlmeans_init(hb_filter_object_t *filter,
             pv->nlmeans_deborder      = nlmeans_deborder_8;
             pv->nlmeans_plane         = nlmeans_plane_8;
         #if defined(ARCH_X86)
-            nlmeans_init_x86(functions);
+            nlmeans_init_x86(functions, 8);
         #endif
             break;
 
         case 10:
         case 12:
         case 16:
+            functions->build_integral = build_integral_scalar_16;
+            pv->nlmeans_alloc         = nlmeans_alloc_16;
+            pv->nlmeans_prefilter     = nlmeans_prefilter_16;
+            pv->nlmeans_deborder      = nlmeans_deborder_16;
+            pv->nlmeans_plane         = nlmeans_plane_16;
+        #if defined(ARCH_X86)
+            nlmeans_init_x86(functions, 16);
+        #endif
+            break;
+
         default:
             functions->build_integral = build_integral_scalar_16;
             pv->nlmeans_alloc         = nlmeans_alloc_16;
@@ -329,10 +340,12 @@ static int nlmeans_init(hb_filter_object_t *filter,
 
         // Sanitize
         if (pv->strength[c] < 0)        { pv->strength[c] = 0; }
+        if (pv->strength[c] > NLMEANS_STRENGTH_MAX) { pv->strength[c] = NLMEANS_STRENGTH_MAX; }
         if (pv->origin_tune[c] < 0.01)  { pv->origin_tune[c] = 0.01; } // avoid black artifacts
         if (pv->origin_tune[c] > 1)     { pv->origin_tune[c] = 1; }
         if (pv->patch_size[c] % 2 == 0) { pv->patch_size[c]--; }
         if (pv->patch_size[c] < 1)      { pv->patch_size[c] = 1; }
+        if (pv->patch_size[c] > NLMEANS_PATCH_SIZE_MAX) { pv->patch_size[c] = NLMEANS_PATCH_SIZE_MAX; }
         if (pv->range[c] % 2 == 0)      { pv->range[c]--; }
         if (pv->range[c] < 1)           { pv->range[c] = 1; }
         if (pv->nframes[c] < 1)         { pv->nframes[c] = 1; }
@@ -347,12 +360,13 @@ static int nlmeans_init(hb_filter_object_t *filter,
         // Precompute exponential table
         float *exptable = &pv->exptable[c][0];
         float *weight_fact_table = &pv->weight_fact_table[c];
-        int   *diff_max = &pv->diff_max[c];
+        uint64_t *diff_max = &pv->diff_max[c];
         const float weight_factor        = 1.0/pv->patch_size[c]/pv->patch_size[c] / (pv->strength[c] * pv->strength[c]);
         const float min_weight_in_table  = 0.0005;
         const float stretch              = NLMEANS_EXPSIZE / (-log(min_weight_in_table));
         *(weight_fact_table)             = weight_factor * stretch;
-        *(diff_max)                      = NLMEANS_EXPSIZE / *(weight_fact_table);
+        const double diff_max_d          = NLMEANS_EXPSIZE / (double)(*weight_fact_table);
+        *(diff_max)                      = diff_max_d >= (double)(UINT64_MAX) ? UINT64_MAX : (uint64_t)(diff_max_d);
         for (int i = 0; i < NLMEANS_EXPSIZE; i++)
         {
             exptable[i] = exp(-i/stretch);
@@ -510,7 +524,6 @@ static void nlmeans_filter_work(void *thread_args_v)
                           buf->plane[c].width,
                           buf->plane[c].stride / pv->bps,
                           buf->plane[c].height,
-                          pv->strength[c],
                           pv->origin_tune[c],
                           pv->patch_size[c],
                           pv->range[c],
@@ -650,7 +663,6 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
                               buf->plane[c].width,
                               buf->plane[c].stride / pv->bps,
                               buf->plane[c].height,
-                              pv->strength[c],
                               pv->origin_tune[c],
                               pv->patch_size[c],
                               pv->range[c],

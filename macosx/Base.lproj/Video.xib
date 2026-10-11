@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -34,7 +34,7 @@
                     </connections>
                 </textField>
                 <textField toolTip="Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video." focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3o-Zx-OfM">
-                    <rect key="frame" x="504" y="309" width="78" height="19"/>
+                    <rect key="frame" x="502" y="308" width="78" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="78" id="EZ2-qD-5pb"/>
                     </constraints>
@@ -82,7 +82,7 @@
                     </connections>
                 </textField>
                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="50" translatesAutoresizingMaskIntoConstraints="NO" id="Pai-3Q-Gs3">
-                    <rect key="frame" x="527" y="356" width="11" height="14"/>
+                    <rect key="frame" x="525" y="356" width="11" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="0" id="bvD-W7-O0N">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="wYW-16-bWA"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -96,7 +96,7 @@
                     </connections>
                 </textField>
                 <popUpButton toolTip="Framerate (Frames Per Second). Number of pictures displayed during each second of video." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9tc-EO-QMd">
-                    <rect key="frame" x="113" y="327" width="151" height="22"/>
+                    <rect key="frame" x="117" y="325" width="143" height="20"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="0VS-Ah-Q3S">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -123,7 +123,7 @@
                     </connections>
                 </popUpButton>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="bnV-aE-FVh">
-                    <rect key="frame" x="344" y="285" width="129" height="16"/>
+                    <rect key="frame" x="345" y="287" width="126" height="14"/>
                     <string key="toolTip">Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode.</string>
                     <buttonCell key="cell" type="check" title="Multi-pass encoding" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nPA-nO-Eik">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -151,7 +151,7 @@
                     </connections>
                 </button>
                 <button toolTip="Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis." translatesAutoresizingMaskIntoConstraints="NO" id="olm-zg-k9Y">
-                    <rect key="frame" x="503" y="285" width="125" height="16"/>
+                    <rect key="frame" x="502" y="287" width="121" height="28"/>
                     <buttonCell key="cell" type="check" title="Turbo analysis pass" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="vSc-VB-NEv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -189,7 +189,7 @@
                     </connections>
                 </button>
                 <popUpButton toolTip="Video encoder. Determines video type and settings used during encoding." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xwK-Yu-a1e">
-                    <rect key="frame" x="113" y="351" width="151" height="22"/>
+                    <rect key="frame" x="117" y="353" width="143" height="20"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="KHu-7m-NR7">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -219,7 +219,7 @@
                     </connections>
                 </popUpButton>
                 <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="bAn-iZ-ieF">
-                    <rect key="frame" x="18" y="332" width="93" height="14"/>
+                    <rect key="frame" x="18" y="328" width="93" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Framerate (FPS):" id="SJc-tv-AMH">
                         <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -230,7 +230,7 @@
                     </connections>
                 </textField>
                 <popUpButton toolTip="Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="R00-pj-eFX">
-                    <rect key="frame" x="113" y="261" width="133" height="22"/>
+                    <rect key="frame" x="117" y="255" width="125" height="20"/>
                     <popUpButtonCell key="cell" type="push" title="Same As Source" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="F37-pp-Zet" id="gzf-9B-0My">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -256,7 +256,7 @@
                     </connections>
                 </popUpButton>
                 <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="7oJ-hv-HBm">
-                    <rect key="frame" x="18" y="266" width="93" height="14"/>
+                    <rect key="frame" x="18" y="258" width="93" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Color Range:" id="yBk-7V-j1G">
                         <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -278,14 +278,7 @@
                     </connections>
                 </textField>
                 <slider horizontalHuggingPriority="1000" verticalHuggingPriority="749" horizontalCompressionResistancePriority="200" translatesAutoresizingMaskIntoConstraints="NO" id="GPu-Ht-bKg">
-                    <rect key="frame" x="359" y="333" width="543" height="17"/>
-                    <string key="toolTip">Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.
-
-Adjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.
-
-Recommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.
-
-x264 is lossless at RF 0.</string>
+                    <rect key="frame" x="361" y="336" width="539" height="12"/>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="51" doubleValue="33.149999999999999" tickMarkPosition="above" sliderType="linear" id="hOs-xu-ZdT">
                         <font key="font" metaFont="label" size="9"/>
                     </sliderCell>
@@ -311,7 +304,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </slider>
                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="60" translatesAutoresizingMaskIntoConstraints="NO" id="1au-ZO-l1i">
-                    <rect key="frame" x="502" y="356" width="21" height="14"/>
+                    <rect key="frame" x="500" y="356" width="21" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="RF:" id="rRB-9F-pHn">
                         <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -324,7 +317,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vae-sv-7Up">
-                    <rect key="frame" x="344" y="355.5" width="114" height="15"/>
+                    <rect key="frame" x="345" y="356" width="111" height="14"/>
                     <buttonCell key="cell" type="radio" title="Constant Quality" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="ZjL-cY-O5f">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -347,7 +340,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="brN-9J-qa1">
-                    <rect key="frame" x="344" y="310.5" width="147" height="15"/>
+                    <rect key="frame" x="345" y="312" width="144" height="14"/>
                     <buttonCell key="cell" type="radio" title="Average Bitrate (kbps):" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="VQe-CK-YDR">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -374,7 +367,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fc1-EX-DWd">
-                    <rect key="frame" x="116" y="310.5" width="120" height="15"/>
+                    <rect key="frame" x="117" y="305" width="117" height="14"/>
                     <buttonCell key="cell" type="radio" title="Variable Framerate" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zZo-75-1WG">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -393,7 +386,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y3k-tv-pIb">
-                    <rect key="frame" x="116" y="288.5" width="126" height="15"/>
+                    <rect key="frame" x="117" y="283" width="123" height="14"/>
                     <buttonCell key="cell" type="radio" title="Constant Framerate" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="6Dd-IP-Pwt">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -408,14 +401,14 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h2m-9o-ibu">
-                    <rect key="frame" x="0.0" y="53" width="920" height="204"/>
+                    <rect key="frame" x="0.0" y="43" width="920" height="204"/>
                     <subviews>
                         <customView id="6Tf-Wn-haS" userLabel="presets view">
                             <rect key="frame" x="0.0" y="0.0" width="920" height="204"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <subviews>
                                 <textField focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="w5n-Cd-ztl">
-                                    <rect key="frame" x="58" y="158" width="42" height="14"/>
+                                    <rect key="frame" x="58" y="157" width="42" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="QWu-rv-zfM">
                                         <font key="font" metaFont="controlContent" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -426,7 +419,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </textField>
                                 <textField focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="O1a-XY-efg">
-                                    <rect key="frame" x="58" y="134" width="42" height="14"/>
+                                    <rect key="frame" x="58" y="130" width="42" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="fzT-im-zKN">
                                         <font key="font" metaFont="controlContent" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -437,7 +430,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </textField>
                                 <textField focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="LUQ-6T-KDP">
-                                    <rect key="frame" x="58" y="110" width="42" height="14"/>
+                                    <rect key="frame" x="58" y="102" width="42" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Profile:" id="Hho-GY-qOR">
                                         <font key="font" metaFont="controlContent" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -448,7 +441,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </textField>
                                 <textField focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Axj-zl-Cyb">
-                                    <rect key="frame" x="58" y="86" width="42" height="14"/>
+                                    <rect key="frame" x="58" y="74" width="42" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Level:" id="sTM-lk-DBC">
                                         <font key="font" metaFont="controlContent" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -459,7 +452,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </textField>
                                 <popUpButton toolTip="Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cXd-X7-OhB">
-                                    <rect key="frame" x="102" y="129" width="132" height="22"/>
+                                    <rect key="frame" x="106" y="127" width="124" height="20"/>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="DM4-nK-RoT">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="controlContent" size="11"/>
@@ -481,7 +474,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </popUpButton>
                                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kh8-d2-hSD">
-                                    <rect key="frame" x="102" y="105" width="132" height="22"/>
+                                    <rect key="frame" x="106" y="99" width="124" height="20"/>
                                     <string key="toolTip">Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings.</string>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="Pod-LO-yvB">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -500,7 +493,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </popUpButton>
                                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8CM-4G-oId">
-                                    <rect key="frame" x="102" y="81" width="132" height="22"/>
+                                    <rect key="frame" x="106" y="71" width="124" height="20"/>
                                     <string key="toolTip">Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings.</string>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="hlv-UO-sPl">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -519,7 +512,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </popUpButton>
                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="stU-Fo-Avu">
-                                    <rect key="frame" x="250" y="133" width="87" height="16"/>
+                                    <rect key="frame" x="251" y="130" width="84" height="14"/>
                                     <string key="toolTip">Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering.</string>
                                     <buttonCell key="cell" type="check" title="Fast Decode" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="EcY-w1-bc8">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -536,7 +529,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </button>
                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="t4D-CZ-8G3">
-                                    <rect key="frame" x="248" y="110" width="104" height="14"/>
+                                    <rect key="frame" x="248" y="102" width="104" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Additional Options:" id="ja7-Zr-y1P">
                                         <font key="font" metaFont="controlContent" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -547,7 +540,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </textField>
                                 <textField focusRingType="none" horizontalHuggingPriority="240" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rbo-w6-ENd">
-                                    <rect key="frame" x="358" y="82" width="542" height="42"/>
+                                    <rect key="frame" x="358" y="74" width="542" height="42"/>
                                     <string key="toolTip">Additional video encoder options. For advanced use only.
 
 Syntax: option-1=foo:opt2=bar,baz</string>
@@ -567,7 +560,7 @@ Syntax: option-1=foo:opt2=bar,baz</string>
                                     </connections>
                                 </textField>
                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="SOa-xA-qAq">
-                                    <rect key="frame" x="237" y="158" width="54" height="14"/>
+                                    <rect key="frame" x="237" y="157" width="54" height="14"/>
                                     <constraints>
                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="A77-A3-lQn"/>
                                     </constraints>
@@ -582,7 +575,7 @@ Syntax: option-1=foo:opt2=bar,baz</string>
                                     </connections>
                                 </textField>
                                 <textField toolTip="Displays all internal video encoder options." focusRingType="none" horizontalHuggingPriority="240" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dwn-bf-Ua0">
-                                    <rect key="frame" x="18" y="12" width="884" height="57"/>
+                                    <rect key="frame" x="18" y="12" width="884" height="43"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="aXf-QV-oea"/>
                                     </constraints>
@@ -610,7 +603,7 @@ Syntax: option-1=foo:opt2=bar,baz</string>
                                     <rect key="frame" x="119" y="185" width="781" height="5"/>
                                 </box>
                                 <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fue-2d-Bjn">
-                                    <rect key="frame" x="104" y="155" width="128" height="20"/>
+                                    <rect key="frame" x="106" y="155" width="124" height="18"/>
                                     <string key="toolTip">Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.
 
 Adjust the slider to the right to increase compression efficiency at the expense of encoding speed, or to the left to increase encoding speed at the expense of compression efficiency.</string>

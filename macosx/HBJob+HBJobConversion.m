@@ -455,7 +455,16 @@
             audio.out.compression_level         = hb_audio_compression_get_default(audio.out.codec);
             audio.out.mixdown                   = audioTrack.mixdown;
             audio.out.normalize_mix_level       = 0;
-            audio.out.bitrate                   = audioTrack.bitRate;
+            if (audioTrack.mode == HBAudioEncoderModeQuality)
+            {
+                audio.out.quality = audioTrack.quality;
+                audio.out.bitrate = 0;
+            }
+            else
+            {
+                audio.out.bitrate = audioTrack.bitRate;
+                audio.out.quality = HB_INVALID_AUDIO_QUALITY;
+            }
             audio.out.samplerate                = sampleRateToUse;
             audio.out.dither_method             = hb_audio_dither_get_default();
             audio.out.name                      = audioTrack.title.UTF8String;

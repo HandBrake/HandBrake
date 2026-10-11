@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2TT-sX-tpi">
-                    <rect key="frame" x="14" y="357" width="38" height="14"/>
+                    <rect key="frame" x="14" y="387" width="38" height="14"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Name:" id="eBw-qE-Hyb">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -28,7 +28,7 @@
                     </textFieldCell>
                 </textField>
                 <textField toolTip="Players may use this in the audio/subtitles selection list." focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FpM-Jx-vLD">
-                    <rect key="frame" x="58" y="353" width="397" height="22"/>
+                    <rect key="frame" x="58" y="383" width="397" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="Jvz-9x-Y8X"/>
                     </constraints>
@@ -56,13 +56,13 @@ DQ
                     </connections>
                 </button>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="50" horizontalPageScroll="10" verticalLineScroll="50" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VkD-7i-VS6">
-                    <rect key="frame" x="16" y="40" width="439" height="249"/>
+                    <rect key="frame" x="16" y="40" width="439" height="279"/>
                     <clipView key="contentView" id="zJm-Ba-wxe">
-                        <rect key="frame" x="1" y="1" width="437" height="247"/>
+                        <rect key="frame" x="1" y="1" width="437" height="277"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" autosaveColumns="NO" rowHeight="50" usesAutomaticRowHeights="YES" viewBased="YES" id="ars-Tz-UZN" customClass="HBTableView">
-                                <rect key="frame" x="0.0" y="0.0" width="437" height="247"/>
+                                <rect key="frame" x="0.0" y="0.0" width="437" height="277"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -291,6 +291,11 @@ DQ
                                 <accessibility description="Filters"/>
                                 <connections>
                                     <binding destination="FDF-35-TzO" name="content" keyPath="arrangedObjects" id="X6s-65-Sgr"/>
+                                    <binding destination="-2" name="enabled" keyPath="self.track.filters" id="Eyc-xK-qe3">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNotNil</string>
+                                        </dictionary>
+                                    </binding>
                                     <binding destination="-2" name="enabled2" keyPath="self.track.passThruDisabled" previousBinding="Eyc-xK-qe3" id="Ci7-Vd-cwI">
                                         <dictionary key="options">
                                             <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -299,18 +304,13 @@ DQ
                                             <integer key="NSNullPlaceholder" value="-1"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="-2" name="enabled" keyPath="self.track.filters" id="Eyc-xK-qe3">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">NSIsNotNil</string>
-                                        </dictionary>
-                                    </binding>
                                     <outlet property="menu" destination="Vh0-Bw-DOV" id="fB0-H0-Q08"/>
                                 </connections>
                             </tableView>
                         </subviews>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="OIG-wn-Gyb">
-                        <rect key="frame" x="1" y="201" width="437" height="17"/>
+                        <rect key="frame" x="1" y="231" width="437" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="XdF-FL-xDw">
@@ -319,7 +319,7 @@ DQ
                     </scroller>
                 </scrollView>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CI7-Ad-qWj">
-                    <rect key="frame" x="16" y="299" width="82" height="20"/>
+                    <rect key="frame" x="16" y="329" width="82" height="20"/>
                     <popUpButtonCell key="cell" type="push" title="Filters" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="mXM-Vc-HkU" id="bjN-oQ-Pgw">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -343,7 +343,7 @@ DQ
                     </connections>
                 </popUpButton>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EOT-pf-ndI">
-                    <rect key="frame" x="8" y="382" width="57" height="14"/>
+                    <rect key="frame" x="8" y="412" width="57" height="14"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Metadata" id="efq-ic-w8O">
                         <font key="font" metaFont="smallSystemBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -351,7 +351,7 @@ DQ
                     </textFieldCell>
                 </textField>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0xO-Kn-Ie6">
-                    <rect key="frame" x="8" y="327" width="40" height="14"/>
+                    <rect key="frame" x="8" y="357" width="40" height="14"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Filters" id="9fv-Og-OMj">
                         <font key="font" metaFont="smallSystemBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>

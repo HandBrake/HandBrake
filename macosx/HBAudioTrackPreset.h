@@ -8,6 +8,12 @@
 
 @class HBAudioFilters;
 
+typedef NS_ENUM(NSUInteger, HBAudioPresetEncoderMode)
+{
+    HBAudioPresetEncoderModeABR,
+    HBAudioPresetEncoderModeQuality,
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -28,7 +34,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite) int fallbackEncoder;
 @property (nonatomic, readwrite) int mixdown;
 @property (nonatomic, readwrite) int sampleRate;
+
 @property (nonatomic, readwrite) int bitRate;
+@property (nonatomic, readwrite) double quality;
+@property (nonatomic, readwrite) HBAudioPresetEncoderMode mode;
 
 @property (nonatomic, readwrite) double gain;
 @property (nonatomic, readwrite) double drc;
@@ -41,7 +50,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSArray<NSString *> *encoders;
 @property (nonatomic, readonly) NSArray<NSString *> *mixdowns;
 @property (nonatomic, readonly) NSArray<NSString *> *sampleRates;
-@property (nonatomic, readonly) NSArray<NSString *> *bitRates;
+@property (nonatomic, readonly) NSArray<NSNumber *> *bitRates;
+@property (nonatomic, readonly) NSArray<NSNumber *> *qualities;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 

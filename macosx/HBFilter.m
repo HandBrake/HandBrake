@@ -289,7 +289,7 @@ fail:
 {
     if (self.filterID == HB_FILTER_DECOMB ||
         self.filterID == HB_FILTER_YADIF ||
-        self.filterID == HB_FILTER_YADIF)
+        self.filterID == HB_FILTER_BWDIF)
     {
         preset[@"PictureDeinterlaceFilter"] = @(hb_filter_get_short_name(self.filterID));
         preset[@"PictureDeinterlacePreset"] = self.preset;

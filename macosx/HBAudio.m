@@ -234,7 +234,21 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
             track.gain = [trackDict[@"Gain"] doubleValue];
             track.mixdown = hb_mixdown_get_from_name([trackDict[@"Mixdown"] UTF8String]);
             track.sampleRate = [trackDict[@"Samplerate"] intValue] == -1 ? 0 : [trackDict[@"Samplerate"] intValue];
-            track.bitRate = [trackDict[@"Bitrate"] intValue];
+
+            int bitRate = [trackDict[@"Bitrate"] intValue];
+            double quality = [trackDict[@"Quality"] doubleValue];
+
+            if (bitRate <= 0 && quality != HB_INVALID_AUDIO_QUALITY)
+            {
+                track.quality = quality;
+                track.mode = HBAudioEncoderModeQuality;
+            }
+            else
+            {
+                track.bitRate = bitRate;
+                track.mode = HBAudioEncoderModeABR;
+            }
+
             track.encoder = hb_audio_encoder_get_from_name([trackDict[@"Encoder"] UTF8String]);
             track.title = trackDict[@"Name"];
 

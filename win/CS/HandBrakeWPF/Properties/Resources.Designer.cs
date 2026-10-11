@@ -1981,7 +1981,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy to Clipboard.
+        ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string Generic_CopyToClipboard {
             get {
@@ -2080,7 +2080,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose log file :.
+        ///   Looks up a localized string similar to Log file:.
         /// </summary>
         public static string LogView_ChooseLogFile {
             get {
@@ -2089,7 +2089,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy to clipboard.
+        ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string LogView_CopyClipboard {
             get {

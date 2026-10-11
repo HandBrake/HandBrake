@@ -411,8 +411,10 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
             if (job->hw_pix_fmt != AV_PIX_FMT_NONE)
             {
                 AVBufferRef *hw_frames_ctx = hb_hwaccel_init_hw_frames_ctx(job->hw_device_ctx,
-                                                                           job->input_pix_fmt, job->hw_pix_fmt,
-                                                                           job->width, job->height, 0);
+                                                                           job->input_pix_fmt,
+                                                                           job->hw_pix_fmt,
+                                                                           job->title->geometry.width,
+                                                                           job->title->geometry.height, 0);
                 buf = job->hw_accel->upload(hw_frames_ctx, &buf);
                 av_buffer_unref(&hw_frames_ctx);
             }
