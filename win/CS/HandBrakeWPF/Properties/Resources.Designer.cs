@@ -6006,6 +6006,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear search.
+        /// </summary>
+        public static string PresetPane_ClearSearch {
+            get {
+                return ResourceManager.GetString("PresetPane_ClearSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide Preset Description.
         /// </summary>
         public static string PresetPane_HidePresetDesc {
@@ -6047,6 +6056,15 @@ namespace HandBrakeWPF.Properties {
         public static string PresetPane_MoveUp {
             get {
                 return ResourceManager.GetString("PresetPane_MoveUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search ....
+        /// </summary>
+        public static string PresetPane_Search {
+            get {
+                return ResourceManager.GetString("PresetPane_Search", resourceCulture);
             }
         }
         

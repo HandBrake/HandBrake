@@ -49,9 +49,17 @@ namespace HandBrakeWPF.Controls
 
         private bool isSyncing;
 
+        private readonly System.Windows.Threading.DispatcherTimer searchTimer;
+
+        private string searchText = string.Empty;
+
         public PresetPaneControl()
         {
             InitializeComponent();
+
+            this.searchTimer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
+            this.searchTimer.Tick += this.SearchTimer_OnTick;
+            this.Unloaded += (s, e) => this.searchTimer.Stop();
 
             this.presetListView.ItemsSource = this.rows;
             this.DataContextChanged += this.OnDataContextChanged;
@@ -99,6 +107,50 @@ namespace HandBrakeWPF.Controls
             }
 
             this.ScheduleRebuild();
+        }
+
+        private bool IsSearchActive => !string.IsNullOrEmpty(this.searchText);
+
+        private void PresetSearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            this.searchTimer.Stop();
+            if (string.IsNullOrWhiteSpace(this.presetSearchBox.Text))
+            {
+                this.ApplySearch();
+                return;
+            }
+
+            this.searchTimer.Start();
+        }
+
+        private void SearchTimer_OnTick(object sender, EventArgs e)
+        {
+            this.searchTimer.Stop();
+            this.ApplySearch();
+        }
+
+        private void ApplySearch()
+        {
+            string text = (this.presetSearchBox.Text ?? string.Empty).Trim();
+            if (text == this.searchText)
+            {
+                return;
+            }
+
+            this.searchText = text;
+            this.ScheduleRebuild();
+        }
+
+        private void PresetSearchClear_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.presetSearchBox.Clear();
+            this.presetSearchBox.Focus();
+        }
+
+        private bool MatchesSearch(Preset preset)
+        {
+            return (preset.Name != null && preset.Name.Contains(this.searchText, StringComparison.CurrentCultureIgnoreCase))
+                   || (preset.Description != null && preset.Description.Contains(this.searchText, StringComparison.CurrentCultureIgnoreCase));
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -211,24 +263,36 @@ namespace HandBrakeWPF.Controls
             {
                 this.TrackList(sourceItems);
 
+                bool filtering = this.IsSearchActive;
+
                 foreach (IPresetObject item in sourceItems.ToList())
                 {
                     this.Track(item);
-                    newRows.Add(item);
 
                     PresetDisplayCategory category = item as PresetDisplayCategory;
                     if (category != null && category.Presets != null)
                     {
                         this.TrackList(category.Presets);
 
+                        List<Preset> visible = new List<Preset>();
                         foreach (Preset preset in category.Presets.ToList())
                         {
                             this.Track(preset);
-                            if (category.IsExpanded)
+                            if (filtering ? this.MatchesSearch(preset) : category.IsExpanded)
                             {
-                                newRows.Add(preset);
+                                visible.Add(preset);
                             }
                         }
+
+                        if (!filtering || visible.Count > 0)
+                        {
+                            newRows.Add(item);
+                            newRows.AddRange(visible);
+                        }
+                    }
+                    else if (!filtering)
+                    {
+                        newRows.Add(item);
                     }
                 }
             }
@@ -396,6 +460,12 @@ namespace HandBrakeWPF.Controls
             {
                 this.editPresetMenuItem.IsEnabled = true;
             }
+
+            bool allowMove = !this.IsSearchActive;
+            this.moveUp.IsEnabled = allowMove;
+            this.moveDown.IsEnabled = allowMove;
+            this.moveTop.IsEnabled = allowMove;
+            this.moveBottom.IsEnabled = allowMove;
         }
 
         private void PresetOptionsBtn_OnClick(object sender, RoutedEventArgs e)

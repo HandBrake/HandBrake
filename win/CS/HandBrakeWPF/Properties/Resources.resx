@@ -2760,6 +2760,12 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="PresetPane_MoveToBottom" xml:space="preserve">
     <value>Move to Bottom</value>
   </data>
+  <data name="PresetPane_Search" xml:space="preserve">
+    <value>Search ...</value>
+  </data>
+  <data name="PresetPane_ClearSearch" xml:space="preserve">
+    <value>Clear search</value>
+  </data>
   <data name="PresetPane_MoveToTop" xml:space="preserve">
     <value>Move to Top</value>
   </data>

@@ -87,7 +87,7 @@
                 </DataTemplate>
             </Grid.Resources>
 
-            <Grid Grid.Row="1" Margin="0,0,0,4">
+            <Grid Grid.Row="0" Margin="0,0,0,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -136,6 +136,41 @@
                             <MenuItem Header="{x:Static Properties:Resources.Shared_CollapseAll}" x:Name="presetCollapseAllOptions" Click="PresetCollapseAll_OnClick" />
                         </ContextMenu>
                     </Button.ContextMenu>
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0,0,0,4">
+                <TextBox x:Name="presetSearchBox" Height="26" VerticalContentAlignment="Center" Padding="2,0,24,0"
+                         AutomationProperties.Name="{x:Static Properties:Resources.PresetPane_Search}"
+                         TextChanged="PresetSearchBox_OnTextChanged" />
+                <TextBlock Text="{x:Static Properties:Resources.PresetPane_Search}" Foreground="{StaticResource Ui.ContrastLight}"
+                           IsHitTestVisible="False" VerticalAlignment="Center" Margin="6,0,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, ElementName=presetSearchBox}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <Button x:Name="presetSearchClear"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" Padding="8,2"
+                        Click="PresetSearchClear_OnClick" Focusable="False" Background="Transparent" BorderThickness="0"
+                        AutomationProperties.Name="{x:Static Properties:Resources.PresetPane_ClearSearch}"
+                        ToolTip="{x:Static Properties:Resources.PresetPane_ClearSearch}">
+                    <Path Width="8" Height="8" Stretch="Uniform" Data="M 0 0 L 8 8 M 8 0 L 0 8" Stroke="{DynamicResource ButtonGlyphBrush}" StrokeThickness="1.5" />
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, ElementName=presetSearchBox}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
                 </Button>
             </Grid>
 
