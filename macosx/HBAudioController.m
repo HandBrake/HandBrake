@@ -74,6 +74,8 @@
     {
         self.audio.defaults = settings;
     }
+    [self dismissViewController:self.defaultsController];
+    self.defaultsController = nil;
 }
 
 @end

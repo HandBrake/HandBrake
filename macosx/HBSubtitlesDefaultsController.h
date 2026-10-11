@@ -10,9 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HBSubtitlesDefaultsController : NSWindowController
+@protocol HBSubtitlesDefaultsControllerDelegate <NSObject>
 
-- (instancetype)initWithSettings:(HBSubtitlesDefaults *)settings;
+- (void)subtitlesControllerDidEnd:(HBSubtitlesDefaults *)settings returnCode:(NSModalResponse)returnCode;
+
+@end
+
+@interface HBSubtitlesDefaultsController : NSViewController
+
+- (instancetype)initWithSettings:(HBSubtitlesDefaults *)settings delegate:(id<HBSubtitlesDefaultsControllerDelegate>)delegate;
 
 @end
 
