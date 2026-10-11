@@ -169,13 +169,6 @@
 
             <TextBlock Text="{x:Static Properties:Resources.Options_Scaling}" Style="{StaticResource subHeader}" Margin="0,20,0,10" Visibility="Collapsed" />
 
-            <!--<StackPanel Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
-                            <TextBlock Text="{x:Static Properties:Resources.Options_Scaler}" Margin="0,0,5,0" VerticalAlignment="Center" />
-                            <ComboBox  ItemsSource="{Binding ScalingOptions, Converter={StaticResource enumComboConverter}}" 
-                                       SelectedItem="{Binding SelectedScalingMode, Converter={StaticResource enumComboConverter}}" 
-                                       Width="120" VerticalAlignment="Center" />
-                        </StackPanel>-->
-
         </StackPanel>
     </StackPanel>
 </UserControl>
