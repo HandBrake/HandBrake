@@ -992,6 +992,8 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
         }
     }];
 
+}
+
 #pragma mark - Relinking
 
 - (BOOL)canRelinkQueue
