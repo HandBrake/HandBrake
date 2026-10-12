@@ -3167,4 +3167,7 @@ Do you wish to proceed?</value>
   <data name="Filter_loudnorm" xml:space="preserve">
     <value>Loudness Normalization</value>
   </data>
+  <data name="LogView_ClearCompletedLogs" xml:space="preserve">
+    <value>Clear Completed</value>
+  </data>
 </root>

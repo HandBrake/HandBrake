@@ -2095,6 +2095,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear Completed.
+        /// </summary>
+        public static string LogView_ClearCompletedLogs {
+            get {
+                return ResourceManager.GetString("LogView_ClearCompletedLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string LogView_CopyClipboard {
