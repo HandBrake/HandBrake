@@ -6300,6 +6300,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
     AVChannelLayout *out_ch_layout = audio->config.out.ch_layout;
     audio->config.out = audiocfg->out;
     audio->config.out.track = hb_list_count(job->list_audio) + 1;
+    audio->config.out.name = NULL;
     if (audiocfg->out.name && *audiocfg->out.name)
     {
         audio->config.out.name = strdup(audiocfg->out.name);
