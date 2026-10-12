@@ -3167,4 +3167,10 @@ Do you wish to proceed?</value>
   <data name="LogView_ClearCompletedLogs" xml:space="preserve">
     <value>Clear Completed</value>
   </data>
+  <data name="LogView_LogFiles" xml:space="preserve">
+    <value>Log Files: </value>
+  </data>
+  <data name="LogView_LogDirectorySize" xml:space="preserve">
+    <value>Log Directory Size: </value>
+  </data>
 </root>

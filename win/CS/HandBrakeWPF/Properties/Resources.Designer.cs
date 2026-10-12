@@ -2116,6 +2116,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log Directory Size: .
+        /// </summary>
+        public static string LogView_LogDirectorySize {
+            get {
+                return ResourceManager.GetString("LogView_LogDirectorySize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log Files: .
+        /// </summary>
+        public static string LogView_LogFiles {
+            get {
+                return ResourceManager.GetString("LogView_LogFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Log Directory.
         /// </summary>
         public static string LogView_OpenLogDir {

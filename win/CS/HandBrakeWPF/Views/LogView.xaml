@@ -89,13 +89,24 @@
 
                     <Button.ContextMenu>
                         <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}">
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ClearCompleted" Header="{x:Static Properties:Resources.LogView_ClearCompletedLogs}" />
+                            <Separator />
+
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="OpenLogDirectory" Header="{x:Static Properties:Resources.LogView_OpenLogDir}" >
                                 <MenuItem.Icon>
                                     <Image Width="16" Height="16"
                                            Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Folder.png'}" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ClearCompleted" Header="{x:Static Properties:Resources.LogView_ClearCompletedLogs}" />
+                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0" IsHitTestVisible="False">
+                                <TextBlock Text="{x:Static Properties:Resources.LogView_LogFiles}"/>
+                                <TextBlock Text="{Binding LogFileCount}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0" IsHitTestVisible="False">
+                                <TextBlock Text="{x:Static Properties:Resources.LogView_LogDirectorySize}"/>
+                                <TextBlock Text="{Binding LogFileSizeTotal}"  />
+                                <TextBlock Text=" MB" />
+                            </StackPanel>
   
                         </ContextMenu>
                     </Button.ContextMenu>
