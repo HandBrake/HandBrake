@@ -75,10 +75,19 @@ struct hb_work_private_s
         OSType encoderPixFmt;
 
         int32_t timescale;
+        double expectedFrameRate;
+
+        enum
+        {
+            HB_VT_AVERAGE_BITRATE = 0,
+            HB_VT_VARIABLE_BITRATE,
+            HB_VT_QUALITY,
+            HB_VT_CONSTANT_QUALITY_FACTOR,
+        }
+        mode;
 
         double quality;
         int averageBitRate;
-        double expectedFrameRate;
 
         int profile;
         CFStringRef profileLevel;
@@ -98,6 +107,7 @@ struct hb_work_private_s
         {
             int maxrate;
             int bufsize;
+            double init;
         }
         vbv;
         struct
@@ -141,8 +151,10 @@ struct hb_work_private_s
 void hb_vt_param_default(struct hb_vt_param *param)
 {
     param->quality                  = -1;
+    param->mode                     =  HB_VT_AVERAGE_BITRATE;
     param->vbv.maxrate              =  0;
     param->vbv.bufsize              =  0;
+    param->vbv.init                 =  0.9;
     param->maxAllowedFrameQP        = -1;
     param->minAllowedFrameQP        = -1;
     param->maxReferenceBufferCount  = -1;
@@ -483,7 +495,12 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
     {
         if (!strcasecmp(job->encoder_preset, "speed"))
         {
+            pv->settings.lookAheadFrameCount = 4;
             pv->settings.prioritizeEncodingSpeedOverQuality = kCFBooleanTrue;
+        }
+        else if (job->pass_id == HB_PASS_ENCODE)
+        {
+            pv->settings.lookAheadFrameCount = 16;
         }
     }
 
@@ -634,14 +651,34 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
     if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         pv->settings.quality = job->vquality / 100;
-        hb_log("encvt_Init: encoding with constant quality %f",
-               pv->settings.quality * 100);
+        if (__builtin_available(macOS 27, *))
+        {
+            pv->settings.mode = HB_VT_CONSTANT_QUALITY_FACTOR;
+            hb_log("encvt_Init: encoding with constant quality factor %f",
+                   pv->settings.quality * 100);
+        }
+        else
+        {
+            pv->settings.mode = HB_VT_QUALITY;
+            hb_log("encvt_Init: encoding with quality %f",
+                   pv->settings.quality * 100);
+        }
     }
     else if (job->vbitrate > 0)
     {
         pv->settings.averageBitRate = job->vbitrate * 1000;
-        hb_log("encvt_Init: encoding with output bitrate %d Kbps",
-               pv->settings.averageBitRate / 1000);
+        if (__builtin_available(macOS 26, *))
+        {
+            pv->settings.mode = HB_VT_VARIABLE_BITRATE;
+            hb_log("encvt_Init: encoding with variable bitrate %d Kbps",
+                   pv->settings.averageBitRate / 1000);
+        }
+        else
+        {
+            pv->settings.mode = HB_VT_AVERAGE_BITRATE;
+            hb_log("encvt_Init: encoding with average bitrate %d Kbps",
+                   pv->settings.averageBitRate / 1000);
+        }
     }
     else
     {
@@ -733,6 +770,14 @@ static int hb_vt_parse_options(hb_work_private_t *pv, hb_job_t *job)
             if (maxrate > 0)
             {
                 pv->settings.vbv.maxrate = maxrate;
+            }
+        }
+        else if (!strcmp(key, "vbv-init"))
+        {
+            double init = hb_value_get_double(value);
+            if (init >= 0)
+            {
+                pv->settings.vbv.init = init;
             }
         }
         else if (!strcmp(key, "slice-max-size"))
@@ -1371,14 +1416,52 @@ static OSStatus hb_vt_init_session(hb_work_object_t *w, hb_job_t *job, hb_work_p
     }
 #endif
 
-    if (
-#if defined(__aarch64__)
-        job->pass_id == HB_PASS_ENCODE &&
-#endif
-        pv->settings.vbv.maxrate > 0 &&
+    if (pv->settings.vbv.maxrate > 0 &&
         pv->settings.vbv.bufsize > 0)
     {
-        hb_vt_set_data_rate_limits(pv->session, pv->settings.vbv.bufsize, pv->settings.vbv.maxrate);
+        if (
+#if defined(__aarch64__)
+            job->pass_id == HB_PASS_ENCODE &&
+#endif
+            (pv->settings.mode == HB_VT_AVERAGE_BITRATE ||
+             pv->settings.mode == HB_VT_QUALITY))
+        {
+            hb_vt_set_data_rate_limits(pv->session, pv->settings.vbv.bufsize, pv->settings.vbv.maxrate);
+        }
+        else if (pv->settings.mode == HB_VT_VARIABLE_BITRATE ||
+                 pv->settings.mode == HB_VT_CONSTANT_QUALITY_FACTOR)
+        {
+            if (__builtin_available(macOS 26, *))
+            {
+                float initialDelayPercentage = pv->settings.vbv.init * 100;
+                cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType,
+                                         &initialDelayPercentage);
+                // kVTCompressionPropertyKey_VBVInitialDelayPercentage
+                hb_vt_set_property(pv->session,
+                                   CFSTR("VBVInitialDelayPercentage"),
+                                   cfValue);
+                CFRelease(cfValue);
+
+                float bufferDuration = ((float)pv->settings.vbv.bufsize /
+                                        (float)pv->settings.vbv.maxrate);
+                cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType,
+                                         &bufferDuration);
+                // kVTCompressionPropertyKey_VBVBufferDuration
+                hb_vt_set_property(pv->session,
+                                   CFSTR("VBVBufferDuration"),
+                                   cfValue);
+                CFRelease(cfValue);
+
+                int64_t maxBitRate = pv->settings.vbv.maxrate * 1000;
+                cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type,
+                                         &maxBitRate);
+                // kVTCompressionPropertyKey_VBVMaxBitRate
+                hb_vt_set_property(pv->session,
+                                   CFSTR("VBVMaxBitRate"),
+                                   cfValue);
+                CFRelease(cfValue);
+            }
+        }
     }
 
     if (pv->settings.fieldDetail != HB_VT_FIELDORDER_PROGRESSIVE)
@@ -1507,22 +1590,37 @@ static OSStatus hb_vt_init_session(hb_work_object_t *w, hb_job_t *job, hb_work_p
                        cfValue);
     CFRelease(cfValue);
 
-    if (pv->settings.quality > -1)
+    if (pv->settings.mode == HB_VT_QUALITY ||
+        pv->settings.mode == HB_VT_CONSTANT_QUALITY_FACTOR)
     {
         cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberDoubleType,
                                  &pv->settings.quality);
-        hb_vt_set_property(pv->session,
-                           kVTCompressionPropertyKey_Quality,
-                           cfValue);
+        CFStringRef key = kVTCompressionPropertyKey_Quality;
+        if (__builtin_available(macOS 27, *))
+        {
+            if (pv->settings.mode == HB_VT_CONSTANT_QUALITY_FACTOR)
+            {
+                // kVTCompressionPropertyKey_ConstantQualityFactor
+                key = CFSTR("ConstantQualityFactor");
+            }
+        }
+        hb_vt_set_property(pv->session, key, cfValue);
         CFRelease(cfValue);
     }
     else
     {
         cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType,
                                  &pv->settings.averageBitRate);
-        hb_vt_set_property(pv->session,
-                           kVTCompressionPropertyKey_AverageBitRate,
-                           cfValue);
+        CFStringRef key = kVTCompressionPropertyKey_AverageBitRate;
+        if (__builtin_available(macOS 26, *))
+        {
+            if (pv->settings.mode == HB_VT_VARIABLE_BITRATE)
+            {
+                // kVTCompressionPropertyKey_VariableBitRate
+                key = CFSTR("VariableBitRate");
+            }
+        }
+        hb_vt_set_property(pv->session, key, cfValue);
         CFRelease(cfValue);
     }
 
