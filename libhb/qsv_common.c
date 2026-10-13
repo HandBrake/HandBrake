@@ -2293,6 +2293,7 @@ static int are_filters_supported(hb_list_t *filters)
         hb_filter_object_t *filter = hb_list_item(filters, i);
         switch (filter->id)
         {
+            case HB_FILTER_ADAPTER:
             // pixel format conversion is done via VPP filter
             case HB_FILTER_FORMAT:
             // cropping and scaling always done via VPP filter
