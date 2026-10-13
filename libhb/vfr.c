@@ -15,9 +15,9 @@
 
 typedef enum
 {
-    HB_FRAME_DROP_MODE_AUTO            = 0,
-    HB_FRAME_DROP_MODE_NEAREST         = 1,
-    HB_FRAME_DROP_MODE_MOTION_ANALYSIS = 2,
+    HB_FRAME_DROP_MODE_NEAREST         = 0,
+    HB_FRAME_DROP_MODE_MOTION_ANALYSIS = 1,
+    HB_FRAME_DROP_MODE_AUTO            = 2,
 } hb_frame_drop_mode_t;
 
 struct hb_filter_private_s

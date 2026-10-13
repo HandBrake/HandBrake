@@ -257,14 +257,14 @@ int hb_mf_are_filters_supported(hb_list_t *filters)
 
             case HB_FILTER_VFR:
                 {
-                    int mode = hb_dict_get_int(filter->settings, "mode");
-                    hb_log("Checking VFR mode: %d", mode);
-                    if (mode == 2)
+                    int frame_drop_mode = hb_dict_get_int(filter->settings, "frame-drop-mode");
+                    hb_log("Checking VFR frame drop mode: %d", frame_drop_mode);
+                    if (frame_drop_mode != 0)
                     {
-                        hb_log("D3D11: Unsupported VFR mode %d detected", mode);
+                        hb_log("D3D11: Unsupported VFR frame drop mode %d detected", frame_drop_mode);
                         return 0;
                     }
-                    hb_log("D3D11: VFR mode %d supported", mode);
+                    hb_log("D3D11: VFR frame drop mode %d supported", frame_drop_mode);
                     continue;
                 }
 
