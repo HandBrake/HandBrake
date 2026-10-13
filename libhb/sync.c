@@ -3240,6 +3240,7 @@ static void UpdateState( sync_common_t * common, int frame_count )
     hb_job_t          * job = common->job;
     hb_state_t state;
     uint64_t   now;
+    int64_t    elapsed;
 
     if (job->indepth_scan)
     {
@@ -3274,19 +3275,19 @@ static void UpdateState( sync_common_t * common, int frame_count )
     {
         p.progress = 1.0;
     }
-    p.rate_cur   = 1000.0 * (common->st_counts[3] - common->st_counts[0]) /
-                            (common->st_dates[3]  - common->st_dates[0]);
-    // Always keep the average rate current so that short jobs
-    // (less than the 4 second ETA warmup) still report a valid
-    // average encoding speed when the job completes.
-    if (now > common->st_first + job->st_paused)
+    // Update the average rate on every call so that jobs shorter
+    // than the ETA warmup still report a valid average speed
+    elapsed    = now - common->st_first - job->st_paused;
+    p.rate_avg = elapsed > 0 ? 1000.0 * frame_count / elapsed : 0.0;
+    // The current rate needs 4 samples, use the average until then
+    if (common->st_dates[0] != 0)
     {
-        p.rate_avg = 1000.0 * frame_count /
-                     (now - common->st_first - job->st_paused);
+        p.rate_cur = 1000.0 * (common->st_counts[3] - common->st_counts[0]) /
+                              (common->st_dates[3]  - common->st_dates[0]);
     }
     else
     {
-        p.rate_avg = 0.0;
+        p.rate_cur = p.rate_avg;
     }
     if (now > common->st_first + 4000 && p.rate_avg > 0)
     {
