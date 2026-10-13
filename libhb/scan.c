@@ -641,6 +641,108 @@ static hb_buffer_t * read_buf(hb_scan_t * data, hb_stream_t * stream)
     return NULL;
 }
 
+static void close_video_filter(hb_filter_object_t **filter)
+{
+    if (filter == NULL || *filter == NULL)
+    {
+        return;
+    }
+
+    hb_filter_object_t *_filter = *filter;
+    _filter->close(_filter);
+    hb_fifo_close(&_filter->fifo_in);
+    hb_fifo_close(&_filter->fifo_out);
+
+    hb_filter_close(filter);
+}
+
+static int reinit_video_filter(hb_filter_object_t **filter, hb_work_info_t vid_info, hb_work_info_t prev_vid_info, int rotation)
+{
+    if (prev_vid_info.geometry.width == vid_info.geometry.width &&
+        prev_vid_info.geometry.height == vid_info.geometry.height &&
+        *filter != NULL)
+    {
+        return 0;
+    }
+
+    close_video_filter(filter);
+
+    hb_filter_init_t init;
+    memset(&init, 0, sizeof(init));
+
+    init.time_base.num = 1;
+    init.time_base.den = 90000;
+    init.pix_fmt = AV_PIX_FMT_YUV420P;
+    init.hw_pix_fmt = AV_PIX_FMT_NONE;
+
+    init.color_prim     = vid_info.color_prim;
+    init.color_transfer = vid_info.color_transfer;
+    init.color_matrix   = vid_info.color_matrix;
+    init.color_range    = AVCOL_RANGE_MPEG;
+    init.chroma_location = vid_info.chroma_location;
+    init.geometry = vid_info.geometry;
+    init.geometry.par.num = 1;
+    init.geometry.par.den = 1;
+    memset(init.crop, 0, sizeof(int[4]));
+    init.vrate = vid_info.rate;
+
+    hb_filter_object_t *_filter = hb_filter_init(HB_FILTER_ADAPTER);
+    _filter->settings = hb_dict_init();
+
+    hb_dict_set_int(_filter->settings, "rotation", rotation);
+
+    if (_filter->init != NULL && _filter->init(_filter, &init))
+    {
+        hb_error("scan: failure to initialize filter '%s'", _filter->name);
+        hb_filter_close(&_filter);
+        return 1;
+    }
+
+    if (_filter->post_init != NULL && _filter->post_init(_filter, NULL))
+    {
+        hb_log("scan: failure to initialise filter '%s'", _filter->name);
+        hb_filter_close(&_filter);
+        return 1;
+    }
+
+    // Set up filter fifos
+    _filter->fifo_in  = hb_fifo_init(1, 1);
+    _filter->fifo_out = hb_fifo_init(1, 1);
+
+    *filter = _filter;
+
+    return 0;
+}
+
+static hb_buffer_t * filter_buf(hb_filter_object_t *filter, hb_buffer_t *in)
+{
+    // Feed frame to filter chain
+    hb_fifo_push(filter->fifo_in, in);
+
+    in = hb_fifo_get_wait(filter->fifo_in);
+    if (in == NULL)
+    {
+        return NULL;
+    }
+
+    // Process the frame through filter
+    hb_buffer_t *out = NULL;
+    filter->status = filter->work(filter, &in, &out);
+    if (in != NULL)
+    {
+        hb_buffer_close(&in);
+    }
+    if (out != NULL)
+    {
+        hb_fifo_push(filter->fifo_out, out);
+    }
+
+    // Retrieve the filtered frame
+    out = hb_fifo_get(filter->fifo_out);
+
+    return out;
+}
+
 /***********************************************************************
  * DecodePreviews
  ***********************************************************************
@@ -739,6 +841,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         hb_hwaccel_hw_device_ctx_close(&hw_device_ctx);
         return 0;
     }
+
+    hb_filter_object_t *filter = NULL;
+    hb_work_info_t prev_vid_info = {0};
 
     for( i = 0; i < data->preview_count; i++ )
     {
@@ -968,6 +1073,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
             continue;
         }
         remember_info( info_list, &vid_info );
+
+        /* Convert to YUV420 */
+        reinit_video_filter(&filter, vid_info, prev_vid_info, title->rotation);
+        prev_vid_info = vid_info;
+
+        vid_buf = filter_buf(filter, vid_buf);
 
         /* Check preview for interlacing artifacts */
         if( hb_detect_comb( vid_buf, 10, 30, 9, 10, 30, 9 ) )
@@ -1429,6 +1540,7 @@ skip_preview:
             title->detected_interlacing = 0;
         }
     }
+    close_video_filter(&filter);
     crop_record_free( crops );
     free( info_list );
 

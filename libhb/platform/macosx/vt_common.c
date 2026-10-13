@@ -432,6 +432,7 @@ static int are_filters_supported(hb_list_t *filters)
 
         switch (filter->id)
         {
+            case HB_FILTER_ADAPTER:
             case HB_FILTER_VFR:
             case HB_FILTER_COMB_DETECT:
             case HB_FILTER_YADIF:
@@ -507,12 +508,7 @@ void hb_vt_setup_hw_filters(hb_job_t *job)
     {
         fix_prores_pix_fmt(job);
 
-        // Add adapter
-        hb_filter_object_t *filter = hb_filter_init(HB_FILTER_ADAPTER_VT);
-        char *settings = hb_strdup_printf("rotation=%d", job->title->rotation);
-        hb_add_filter(job->list_filter, filter, settings);
-        free(settings);
-
+        replace_filter(job, HB_FILTER_ADAPTER, HB_FILTER_ADAPTER_VT);
         replace_filter(job, HB_FILTER_COMB_DETECT, HB_FILTER_COMB_DETECT_VT);
         replace_filter(job, HB_FILTER_YADIF, HB_FILTER_YADIF_VT);
         replace_filter(job, HB_FILTER_BWDIF, HB_FILTER_BWDIF_VT);
