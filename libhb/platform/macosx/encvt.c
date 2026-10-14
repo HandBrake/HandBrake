@@ -84,7 +84,7 @@ struct hb_work_private_s
             HB_VT_QUALITY,
             HB_VT_CONSTANT_QUALITY_FACTOR,
         }
-        mode;
+        rateControl;
 
         double quality;
         int averageBitRate;
@@ -151,7 +151,7 @@ struct hb_work_private_s
 void hb_vt_param_default(struct hb_vt_param *param)
 {
     param->quality                  = -1;
-    param->mode                     =  HB_VT_AVERAGE_BITRATE;
+    param->rateControl              =  HB_VT_AVERAGE_BITRATE;
     param->vbv.maxrate              =  0;
     param->vbv.bufsize              =  0;
     param->vbv.init                 =  0.9;
@@ -653,13 +653,13 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
         pv->settings.quality = job->vquality / 100;
         if (__builtin_available(macOS 27, *))
         {
-            pv->settings.mode = HB_VT_CONSTANT_QUALITY_FACTOR;
+            pv->settings.rateControl = HB_VT_CONSTANT_QUALITY_FACTOR;
             hb_log("encvt_Init: encoding with constant quality factor %f",
                    pv->settings.quality * 100);
         }
         else
         {
-            pv->settings.mode = HB_VT_QUALITY;
+            pv->settings.rateControl = HB_VT_QUALITY;
             hb_log("encvt_Init: encoding with quality %f",
                    pv->settings.quality * 100);
         }
@@ -669,13 +669,13 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
         pv->settings.averageBitRate = job->vbitrate * 1000;
         if (__builtin_available(macOS 26, *))
         {
-            pv->settings.mode = HB_VT_VARIABLE_BITRATE;
+            pv->settings.rateControl = HB_VT_VARIABLE_BITRATE;
             hb_log("encvt_Init: encoding with variable bitrate %d Kbps",
                    pv->settings.averageBitRate / 1000);
         }
         else
         {
-            pv->settings.mode = HB_VT_AVERAGE_BITRATE;
+            pv->settings.rateControl = HB_VT_AVERAGE_BITRATE;
             hb_log("encvt_Init: encoding with average bitrate %d Kbps",
                    pv->settings.averageBitRate / 1000);
         }
@@ -1423,13 +1423,13 @@ static OSStatus hb_vt_init_session(hb_work_object_t *w, hb_job_t *job, hb_work_p
 #if defined(__aarch64__)
             job->pass_id == HB_PASS_ENCODE &&
 #endif
-            (pv->settings.mode == HB_VT_AVERAGE_BITRATE ||
-             pv->settings.mode == HB_VT_QUALITY))
+            (pv->settings.rateControl == HB_VT_AVERAGE_BITRATE ||
+             pv->settings.rateControl == HB_VT_QUALITY))
         {
             hb_vt_set_data_rate_limits(pv->session, pv->settings.vbv.bufsize, pv->settings.vbv.maxrate);
         }
-        else if (pv->settings.mode == HB_VT_VARIABLE_BITRATE ||
-                 pv->settings.mode == HB_VT_CONSTANT_QUALITY_FACTOR)
+        else if (pv->settings.rateControl == HB_VT_VARIABLE_BITRATE ||
+                 pv->settings.rateControl == HB_VT_CONSTANT_QUALITY_FACTOR)
         {
             if (__builtin_available(macOS 26, *))
             {
@@ -1590,15 +1590,15 @@ static OSStatus hb_vt_init_session(hb_work_object_t *w, hb_job_t *job, hb_work_p
                        cfValue);
     CFRelease(cfValue);
 
-    if (pv->settings.mode == HB_VT_QUALITY ||
-        pv->settings.mode == HB_VT_CONSTANT_QUALITY_FACTOR)
+    if (pv->settings.rateControl == HB_VT_QUALITY ||
+        pv->settings.rateControl == HB_VT_CONSTANT_QUALITY_FACTOR)
     {
         cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberDoubleType,
                                  &pv->settings.quality);
         CFStringRef key = kVTCompressionPropertyKey_Quality;
         if (__builtin_available(macOS 27, *))
         {
-            if (pv->settings.mode == HB_VT_CONSTANT_QUALITY_FACTOR)
+            if (pv->settings.rateControl == HB_VT_CONSTANT_QUALITY_FACTOR)
             {
                 // kVTCompressionPropertyKey_ConstantQualityFactor
                 key = CFSTR("ConstantQualityFactor");
@@ -1614,7 +1614,7 @@ static OSStatus hb_vt_init_session(hb_work_object_t *w, hb_job_t *job, hb_work_p
         CFStringRef key = kVTCompressionPropertyKey_AverageBitRate;
         if (__builtin_available(macOS 26, *))
         {
-            if (pv->settings.mode == HB_VT_VARIABLE_BITRATE)
+            if (pv->settings.rateControl == HB_VT_VARIABLE_BITRATE)
             {
                 // kVTCompressionPropertyKey_VariableBitRate
                 key = CFSTR("VariableBitRate");
