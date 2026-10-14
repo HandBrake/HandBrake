@@ -42,7 +42,7 @@ hb_motion_metric_object_t hb_motion_metric_vt =
 static int hb_motion_metric_vt_init(hb_motion_metric_object_t *metric,
                                     hb_filter_init_t *init)
 {
-    metric->private_data = calloc(sizeof(struct hb_motion_metric_private_s), 1);
+    metric->private_data = calloc(1, sizeof(struct hb_motion_metric_private_s));
     if (metric->private_data == NULL)
     {
         hb_error("motion_metric_vt: calloc failed");

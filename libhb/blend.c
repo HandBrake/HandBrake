@@ -793,7 +793,7 @@ static int hb_blend_init(hb_blend_object_t *object,
                          int in_color_range,
                          int overlay_pix_fmt)
 {
-    object->private_data = calloc(sizeof(struct hb_blend_private_s), 1);
+    object->private_data = calloc(1, sizeof(struct hb_blend_private_s));
     if (object->private_data == NULL)
     {
         hb_error("blend: calloc failed");

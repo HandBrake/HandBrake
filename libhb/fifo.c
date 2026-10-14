@@ -403,7 +403,7 @@ hb_buffer_t * hb_buffer_init_internal( int size )
     /*
      * No existing buffers, create a new one
      */
-    if( !( b = calloc( sizeof( hb_buffer_t ), 1 ) ) )
+    if( !( b = calloc( 1, sizeof( hb_buffer_t ) ) ) )
     {
         hb_error( "out of memory" );
         return NULL;
@@ -1194,7 +1194,7 @@ void hb_image_close(hb_image_t **_image)
 hb_fifo_t * hb_fifo_init( int capacity, int thresh )
 {
     hb_fifo_t * f;
-    f             = calloc( sizeof( hb_fifo_t ), 1 );
+    f             = calloc( 1, sizeof( hb_fifo_t ) );
     f->lock       = hb_lock_init();
     f->cond_full  = hb_cond_init();
     f->cond_empty = hb_cond_init();

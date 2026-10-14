@@ -44,7 +44,7 @@ hb_bd_t * hb_bd_init( hb_handle_t *h, const char * path, int keep_duplicate_titl
     hb_bd_t * d;
     int ii;
 
-    d = calloc( sizeof( hb_bd_t ), 1 );
+    d = calloc( 1, sizeof( hb_bd_t ) );
     d->h = h;
     d->keep_duplicate_titles = keep_duplicate_titles;
 
@@ -70,7 +70,7 @@ hb_bd_t * hb_bd_init( hb_handle_t *h, const char * path, int keep_duplicate_titl
         hb_log( "bd: not a bd - trying as a stream/file instead" );
         goto fail;
     }
-    d->title_info = calloc( sizeof( BLURAY_TITLE_INFO* ) , d->title_count );
+    d->title_info = calloc( d->title_count, sizeof( BLURAY_TITLE_INFO* ) );
     for ( ii = 0; ii < d->title_count; ii++ )
     {
         d->title_info[ii] = bd_get_title_info( d->bd, ii, 0 );
@@ -100,7 +100,7 @@ static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO
     hb_subtitle_t * subtitle;
     iso639_lang_t * lang;
 
-    subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
+    subtitle = calloc( 1, sizeof( hb_subtitle_t ) );
 
     subtitle->track = track;
     subtitle->id = bdsub->pid;
@@ -144,7 +144,7 @@ static void add_audio(int index, int linked_index, int track, hb_list_t *list_au
     hb_audio_t * audio;
     iso639_lang_t * lang;
 
-    audio = calloc( sizeof( hb_audio_t ), 1 );
+    audio = calloc( 1, sizeof( hb_audio_t ) );
 
     audio->id = (substream_type << 16) | bdaudio->pid;
     audio->config.index = index;
@@ -678,7 +678,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration, uint6
             continue;
         }
 
-        chapter = calloc( sizeof( hb_chapter_t ), 1 );
+        chapter = calloc( 1, sizeof( hb_chapter_t ) );
 
         chapter->index = ++jj;
         snprintf( chapter_title, sizeof(chapter_title), "Chapter %d", chapter->index );

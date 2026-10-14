@@ -4344,8 +4344,8 @@ hb_list_t * hb_list_init()
 {
     hb_list_t * l;
 
-    l              = calloc( sizeof( hb_list_t ), 1 );
-    l->items       = calloc( HB_LIST_DEFAULT_SIZE * sizeof( void * ), 1 );
+    l              = calloc( 1, sizeof( hb_list_t ) );
+    l->items       = calloc( HB_LIST_DEFAULT_SIZE, sizeof( void * ) );
     l->items_alloc = HB_LIST_DEFAULT_SIZE;
 
     return l;
@@ -4908,7 +4908,7 @@ hb_title_t * hb_title_init( char * path, int index )
 {
     hb_title_t * t;
 
-    t = calloc( sizeof( hb_title_t ), 1 );
+    t = calloc( 1, sizeof( hb_title_t ) );
 
     t->index              = index;
     t->playlist           = -1;
@@ -5202,7 +5202,7 @@ hb_job_t * hb_job_init( hb_title_t * title )
     if ( title == NULL )
         return NULL;
 
-    job = calloc( sizeof( hb_job_t ), 1 );
+    job = calloc( 1, sizeof( hb_job_t ) );
     job_setup(job, title);
 
     return job;
