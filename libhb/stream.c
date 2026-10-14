@@ -3072,13 +3072,13 @@ static int parse_pes_header(
         int hdr_len = pes_info->header_len = bits_get(bb, 8);
         pes_info->header_len += bb->pos >> 3;
 
-        bitbuf_t bb_hdr;
-        bits_clone(&bb_hdr, bb, hdr_len);
-
-        if ( bits_bytes_left(&bb_hdr) < hdr_len )
+        if ( bits_bytes_left(bb) < hdr_len )
         {
             return 0;
         }
+
+        bitbuf_t bb_hdr;
+        bits_clone(&bb_hdr, bb, hdr_len);
 
         int expect = (!!has_pts) * 5 + (has_pts & 0x01) * 5 + has_escr * 6 +
                      has_esrate * 3 + has_dsm + has_copy_info + has_crc * 2 +
