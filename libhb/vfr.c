@@ -401,8 +401,8 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
 
     int frame_drop_mode = 0;
     if (hb_dict_extract_int(&frame_drop_mode, filter->settings, "frame-drop-mode") &&
-        frame_drop_mode >= HB_FRAME_DROP_MODE_AUTO &&
-        frame_drop_mode <= HB_FRAME_DROP_MODE_MOTION_ANALYSIS)
+        frame_drop_mode >= HB_FRAME_DROP_MODE_NEAREST &&
+        frame_drop_mode <= HB_FRAME_DROP_MODE_AUTO)
     {
         pv->frame_drop_mode = (hb_frame_drop_mode_t)frame_drop_mode;
     }
