@@ -2876,7 +2876,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            av_dict_set_int(av_opts, "bf", HB_QSV_CLIP3(-1, 32, ivalue), 0);
+            param->gop.gop_ref_dist = HB_QSV_CLIP3(-1, 32, ivalue);
         }
     }
     else if (!strcasecmp(key, "gop-pic-size") ||
@@ -2885,7 +2885,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            av_dict_set_int(av_opts, "g", HB_QSV_CLIP3(-1, UINT16_MAX, ivalue), 0);
+            param->gop.gop_pic_size = HB_QSV_CLIP3(-1, UINT16_MAX, ivalue);
         }
     }
     else if (!strcasecmp(key, "b-pyramid"))
@@ -3194,7 +3194,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atoi(value, &error);
             if (!error)
             {
-                av_dict_set_int(av_opts, "look_ahead_depth", HB_QSV_CLIP3(10, 100, ivalue), 0);
+                param->codingOption2.LookAheadDepth = HB_QSV_CLIP3(10, 100, ivalue);
             }
         }
         else
