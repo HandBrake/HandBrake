@@ -1216,7 +1216,7 @@ static hb_buffer_t *wrap_frame(hb_work_private_t *pv)
                 iso639_lang_t * lang;
                 hb_audio_t    * audio;
 
-                subtitle        = calloc(sizeof( hb_subtitle_t ), 1);
+                subtitle        = calloc(1, sizeof( hb_subtitle_t ));
                 subtitle->track = hb_list_count(pv->title->list_subtitle);
                 subtitle->id           = HB_SUBTITLE_EMBEDDED_CC_TAG;
                 subtitle->format       = TEXTSUB;

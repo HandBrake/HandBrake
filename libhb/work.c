@@ -54,7 +54,7 @@ static void filter_loop( void * );
  */
 hb_thread_t * hb_work_init( hb_list_t * jobs, volatile int * die, hb_error_code * error, hb_job_t ** job )
 {
-    hb_work_t * work = calloc( sizeof( hb_work_t ), 1 );
+    hb_work_t * work = calloc( 1, sizeof( hb_work_t ) );
 
     work->jobs      = jobs;
     work->current_job = job;

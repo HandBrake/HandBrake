@@ -214,7 +214,7 @@ static void hqdn3d_denoise_depth(uint8_t *frame_src, uint8_t *frame_dst,
 static int hb_denoise_init( hb_filter_object_t * filter,
                             hb_filter_init_t * init )
 {
-    filter->private_data = calloc( sizeof(struct hb_filter_private_s), 1 );
+    filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
     if (filter->private_data == NULL)
     {
         hb_error("denoise: calloc failed");

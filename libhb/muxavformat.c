@@ -1766,7 +1766,7 @@ static int avformatEnd(hb_mux_object_t *m)
 
 hb_mux_object_t * hb_mux_avformat_init( hb_job_t * job )
 {
-    hb_mux_object_t * m = calloc( sizeof( hb_mux_object_t ), 1 );
+    hb_mux_object_t * m = calloc( 1, sizeof( hb_mux_object_t ) );
     m->init      = avformatInit;
     m->mux       = avformatMux;
     m->end       = avformatEnd;

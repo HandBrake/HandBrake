@@ -192,7 +192,7 @@ DEF_LAPSHARP_FUNC(lapsharp, 8, 16)
 static int hb_lapsharp_init(hb_filter_object_t *filter,
                             hb_filter_init_t   *init)
 {
-    filter->private_data = calloc(sizeof(struct hb_filter_private_s), 1);
+    filter->private_data = calloc(1, sizeof(struct hb_filter_private_s));
     if (filter->private_data == NULL)
     {
         hb_error("lapsharp: calloc failed");

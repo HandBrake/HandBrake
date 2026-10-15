@@ -154,7 +154,7 @@ static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, const char * path )
     hb_dvdnav_t * d;
     int region_mask;
 
-    e = calloc( sizeof( hb_dvd_t ), 1 );
+    e = calloc( 1, sizeof( hb_dvd_t ) );
     d = &(e->dvdnav);
     d->h = h;
 
@@ -325,7 +325,7 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
         }
     }
 
-    subtitle        = calloc(sizeof(hb_subtitle_t), 1);
+    subtitle        = calloc(1, sizeof(hb_subtitle_t));
     subtitle->track = count;
     subtitle->id    = ((0x20 + position) << 8) | 0xbd;
     snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s",
@@ -592,7 +592,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
 
         hb_log( "scan: checking audio %d", i + 1 );
 
-        audio = calloc( sizeof( hb_audio_t ), 1 );
+        audio = calloc( 1, sizeof( hb_audio_t ) );
 
         audio_format   = d->ifo->vtsi_mat->vts_audio_attr[i].audio_format;
         lang_code      = d->ifo->vtsi_mat->vts_audio_attr[i].lang_code;
@@ -794,7 +794,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
         char chapter_title[80];
 
         dvd_chapter       = hb_list_item(d->list_dvd_chapter, i);
-        chapter           = calloc(sizeof( hb_chapter_t ), 1);
+        chapter           = calloc(1, sizeof( hb_chapter_t ));
         chapter->index    = i + 1;
         chapter->duration = dvd_chapter->duration;
 
@@ -2129,7 +2129,7 @@ static int TitleOpenIfo(hb_dvdnav_t * d, int t)
         {
             int cell_start, cell_end;
 
-            dvd_chapter = calloc(sizeof(hb_dvd_chapter_t), 1);
+            dvd_chapter = calloc(1, sizeof(hb_dvd_chapter_t));
 
             dvd_chapter->pgcn  = pgcn;
             dvd_chapter->pgn   = i;

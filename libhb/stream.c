@@ -843,7 +843,7 @@ hb_stream_open(hb_handle_t *h, const char *path, hb_title_t *title, int scan)
         return NULL;
     }
 
-    hb_stream_t *d = calloc( sizeof( hb_stream_t ), 1 );
+    hb_stream_t *d = calloc( 1, sizeof( hb_stream_t ) );
     if ( d == NULL )
     {
         fclose( f );
@@ -951,7 +951,7 @@ hb_stream_t * hb_bd_stream_open( hb_handle_t *h, hb_title_t *title )
 {
     int ii;
 
-    hb_stream_t *d = calloc( sizeof( hb_stream_t ), 1 );
+    hb_stream_t *d = calloc( 1, sizeof( hb_stream_t ) );
     if ( d == NULL )
     {
         hb_error( "hb_bd_stream_open: can't allocate space for stream state" );
@@ -1118,7 +1118,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
 
     // One Chapter
     hb_chapter_t * chapter;
-    chapter = calloc( sizeof( hb_chapter_t ), 1 );
+    chapter = calloc( 1, sizeof( hb_chapter_t ) );
     hb_chapter_set_title( chapter, "Chapter 1" );
     chapter->index = 1;
     chapter->duration = title->duration;
@@ -1985,7 +1985,7 @@ static void pes_add_subtitle_to_title(
             return;
     }
 
-    hb_subtitle_t *subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
+    hb_subtitle_t *subtitle = calloc( 1, sizeof( hb_subtitle_t ) );
     iso639_lang_t * lang;
 
     subtitle->track        = idx;
@@ -2158,7 +2158,7 @@ static void pes_add_audio_to_title(
             return;
     }
 
-    hb_audio_t *audio = calloc( sizeof( hb_audio_t ), 1 );
+    hb_audio_t *audio = calloc( 1, sizeof( hb_audio_t ) );
 
     audio->id = id;
     audio->config.in.reg_desc = stream->reg_desc;
@@ -6225,7 +6225,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 // beginning, we need to an additional entry
                 if (i == 0 && ic->nb_chapters > 1 && m->start != 0)
                 {
-                    hb_chapter_t *chapter = calloc(sizeof(hb_chapter_t), 1);
+                    hb_chapter_t *chapter = calloc(1, sizeof(hb_chapter_t));
                     chapter->index = nb_chapters++;
 
                     chapter->duration = ic->chapters[0]->start * 90000 *
@@ -6246,7 +6246,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 hb_chapter_t      * chapter;
                 int64_t             end;
 
-                chapter = calloc(sizeof(hb_chapter_t), 1);
+                chapter = calloc(1, sizeof(hb_chapter_t));
                 chapter->index = nb_chapters++;
 
                 /* AVChapter.end is not guaranteed to be set.
@@ -6331,7 +6331,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     {
         // Need at least one chapter
         hb_chapter_t * chapter;
-        chapter = calloc( sizeof( hb_chapter_t ), 1 );
+        chapter = calloc( 1, sizeof( hb_chapter_t ) );
         chapter->index = 1;
         chapter->duration = title->duration;
         chapter->hours = title->hours;

@@ -94,7 +94,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             hb_list_t * exclude_extensions, int hw_decode,
                             int keep_duplicate_titles)
 {
-    hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
+    hb_scan_t * data = calloc( 1, sizeof( hb_scan_t ) );
 
     data->h            = handle;
     data->die          = die;

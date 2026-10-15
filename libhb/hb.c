@@ -206,7 +206,7 @@ void hb_log_level_set(hb_handle_t *h, int level)
  */
 hb_handle_t * hb_init( int verbose )
 {
-    hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
+    hb_handle_t * h = calloc( 1, sizeof( hb_handle_t ) );
 
     /* See hb_deep_log() and hb_log() in common.c */
     hb_log_level_set(h, verbose);
@@ -225,7 +225,7 @@ hb_handle_t * hb_init( int verbose )
     h->pause_lock = hb_lock_init();
     h->pause_date = -1;
 
-    h->interjob = calloc( sizeof( hb_interjob_t ), 1 );
+    h->interjob = calloc( 1, sizeof( hb_interjob_t ) );
 
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
@@ -1786,7 +1786,7 @@ static void hb_add_internal( hb_handle_t * h, hb_job_t * job, hb_list_t *list_pa
     char            audio_lang[4];
 
     /* Copy the job */
-    job_copy                  = calloc( sizeof( hb_job_t ), 1 );
+    job_copy                  = calloc( 1, sizeof( hb_job_t ) );
     memcpy(job_copy, job, sizeof(hb_job_t));
     job_copy->json            = NULL;
     job_copy->encoder_preset  = NULL;
@@ -1896,7 +1896,7 @@ hb_job_t* hb_job_copy(hb_job_t * job)
     hb_job_t      * job_copy;
 
     /* Copy the job */
-    job_copy        = calloc( sizeof( hb_job_t ), 1 );
+    job_copy        = calloc( 1, sizeof( hb_job_t ) );
     if (job_copy == NULL)
         return NULL;
 
