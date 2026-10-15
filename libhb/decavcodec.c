@@ -2361,11 +2361,17 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
                 else
                 {
                     int size = pv->drop_samples * sample_size;
-                    double drop_duration = pv->drop_samples * 90000L /
-                                           pv->audio->config.out.samplerate;
+                    // The samples are at the decoder output sample rate
+                    // (the input sample rate), samplerate conversion
+                    // to the output sample rate happens later in sync.
+                    double drop_duration = pv->drop_samples * 90000. /
+                                           pv->resample->out.sample_rate;
                     memmove(out->data, out->data + size, out->size - size);
                     out->size -= size;
-                    pts += drop_duration;
+                    if (pts != AV_NOPTS_VALUE)
+                    {
+                        pts += drop_duration;
+                    }
                     duration -= drop_duration;
                     pv->drop_samples = 0;
                 }
@@ -2390,7 +2396,8 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             }
             if (pv->next_pts != (int64_t)AV_NOPTS_VALUE)
             {
-                pv->next_pts += pv->duration;
+                // duration excludes the samples dropped above
+                pv->next_pts += duration;
                 out->s.stop  = pv->next_pts;
             }
             hb_buffer_list_append(&pv->list, out);
