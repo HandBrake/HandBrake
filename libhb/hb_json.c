@@ -1388,7 +1388,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             for (int ii = hb_list_count(job->metadata->list_coverart) - 1; ii >= 0; ii--)
             {
                 int found = 0;
-                for (int jj = count; jj >= 0; jj--)
+                for (int jj = count - 1; jj >= 0; jj--)
                 {
                     hb_dict_t *art_dict = hb_value_array_get(art_array, jj);
                     if (art_dict)
