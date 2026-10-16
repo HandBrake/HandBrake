@@ -868,7 +868,10 @@ void write_chapter_names(hb_dict_t *job_dict, const char *marker_file)
                                 "ChapterList");
 
     if (chapter_array == NULL)
+    {
+        hb_close_csv_file( file );
         return;
+    }
 
     /* Parse the cells */
     while (NULL != (cell = hb_read_next_cell(file)))
