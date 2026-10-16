@@ -2042,29 +2042,28 @@ static void compute_frame_duration( hb_work_private_t *pv )
         }
         else
         {
-            AVRational *tb = NULL;
             // We don't have a frame count or duration so try to use the
             // far less reliable avg_frame_rate info in the stream.
             if (st->avg_frame_rate.den && st->avg_frame_rate.num)
             {
-                tb = &(st->avg_frame_rate);
+                duration = (double)st->avg_frame_rate.den /
+                           (double)st->avg_frame_rate.num;
             }
             // Try r_frame_rate, which is usually set for cfr streams
             else if (st->r_frame_rate.num && st->r_frame_rate.den)
             {
-                tb = &(st->r_frame_rate);
+                duration = (double)st->r_frame_rate.den /
+                           (double)st->r_frame_rate.num;
             }
             // Because the time bases are so screwed up, we only take values
             // in a restricted range.
             else if (st->time_base.num * max_fps > st->time_base.den &&
                      st->time_base.den > st->time_base.num * min_fps)
             {
-                tb = &(st->time_base);
-            }
-
-            if (tb != NULL)
-            {
-                duration = (double)tb->den / (double)tb->num;
+                // The time base is in seconds per tick, not a frame rate,
+                // so it is already the frame duration
+                duration = (double)st->time_base.num /
+                           (double)st->time_base.den;
             }
         }
     }
