@@ -1636,34 +1636,29 @@ try:
     arch_gcc = None
     cross    = None
     xcode_opts = { 'disabled': False, 'config': None }
-    for i in range(len(sys.argv)):
+    i = 0
+    while i < len(sys.argv):
         if re.match( r'^--arch=(.+)$', sys.argv[i] ):
             arch_gcc = sys.argv[i][7:]
-            continue
         elif re.match( r'^--arch$', sys.argv[i] ) and ((i + 1) < len(sys.argv)):
             arch_gcc = sys.argv[i+1]
             arch_gcc = None if arch_gcc == '' else arch_gcc
             i = i + 1
-            continue
         elif re.match( r'^--cross=(.+)$', sys.argv[i] ):
             cross = sys.argv[i][8:]
-            continue
         elif re.match( r'^--cross$', sys.argv[i] ) and ((i + 1) < len(sys.argv)):
             cross = sys.argv[i+1]
             cross = None if cross == '' else cross
             i = i + 1
-            continue
         elif re.match( r'^--xcode-config=(.+)$', sys.argv[i] ):
             xcode_opts['config'] = sys.argv[i][15:]
-            continue
         elif re.match( r'^--xcode-config$', sys.argv[i] ) and ((i + 1) < len(sys.argv)):
             xcode_opts['config'] = sys.argv[i+1]
             xcode_opts['config'] = None if xcode_opts['config'] == '' else xcode_opts['config']
             i = i + 1
-            continue
         elif re.match( r'^--disable-xcode$', sys.argv[i] ):
             xcode_opts['disabled'] = True
-            continue
+        i = i + 1
 
     ## create tools in a scope
     class Tools:
