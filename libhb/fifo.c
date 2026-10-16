@@ -70,16 +70,19 @@ static hb_fifo_t fifo_list =
 /* we round the requested buffer size up to the next power of 2 so there can
  * be at most 32 possible pools when the size is a 32 bit int. To avoid a lot
  * of slow & error-prone run-time checking we allow for all 32. */
-#define MAX_BUFFER_POOLS  32
-#define BUFFER_POOL_FIRST 10
-#define BUFFER_POOL_LAST  25
+#define MAX_BUFFER_POOLS   32
+#define BUFFER_POOL_FIRST  12
+#define BUFFER_POOL_SECOND 14
+#define BUFFER_POOL_LAST   25
 /* the buffer pool only exists to avoid the two malloc and two free calls that
  * it would otherwise take to allocate & free a buffer. but we don't want to
  * tie up a lot of memory in the pool because this allocator isn't as general
  * as malloc so memory tied up here puts more pressure on the malloc pool.
  * A pool of 16 elements will avoid 94% of the malloc/free calls without wasting
  * too much memory. */
-#define BUFFER_POOL_MAX_ELEMENTS 32
+#define BUFFER_POOL_MAX_FIRST  512
+#define BUFFER_POOL_MAX_SECOND 64
+#define BUFFER_POOL_MAX_LAST   32
 
 struct hb_buffer_pools_s
 {
@@ -108,27 +111,32 @@ void hb_buffer_pool_init( void )
 #endif
 
 #if !defined(HB_NO_BUFFER_POOL)
-    /* we allocate pools for sizes 2^10 through 2^25. requests larger than
+    /* we allocate pools for sizes 2^12 through 2^25. requests larger than
      * 2^25 will get passed through to malloc. */
     int i;
 
     // Create a queue with empty buffers for non native storage types
-    buffers.pool[0] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS*10, 1);
+    buffers.pool[0] = hb_fifo_init(BUFFER_POOL_MAX_FIRST, 1);
     buffers.pool[0]->buffer_size = 0;
 
-    // Create larger queue for 2^10 bucket since all allocations smaller than
-    // 2^10 come from here.
-    buffers.pool[BUFFER_POOL_FIRST] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS*10, 1);
-    buffers.pool[BUFFER_POOL_FIRST]->buffer_size = 1 << 10;
+    // Create larger queue for 2^12 bucket since all allocations smaller than
+    // 2^12 come from here.
+    buffers.pool[BUFFER_POOL_FIRST] = hb_fifo_init(BUFFER_POOL_MAX_FIRST, 1);
+    buffers.pool[BUFFER_POOL_FIRST]->buffer_size = 1 << 12;
 
-    /* requests smaller than 2^10 are satisfied from the 2^10 pool. */
+    /* requests smaller than 2^12 are satisfied from the 2^12 pool. */
     for ( i = 1; i < BUFFER_POOL_FIRST; ++i )
     {
         buffers.pool[i] = buffers.pool[BUFFER_POOL_FIRST];
     }
-    for ( i = BUFFER_POOL_FIRST + 1; i <= BUFFER_POOL_LAST; ++i )
+    for ( i = BUFFER_POOL_FIRST + 1; i <= BUFFER_POOL_SECOND; ++i )
     {
-        buffers.pool[i] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS, 1);
+        buffers.pool[i] = hb_fifo_init(BUFFER_POOL_MAX_SECOND, 1);
+        buffers.pool[i]->buffer_size = 1 << i;
+    }
+    for ( i = BUFFER_POOL_SECOND + 1; i <= BUFFER_POOL_LAST; ++i )
+    {
+        buffers.pool[i] = hb_fifo_init(BUFFER_POOL_MAX_LAST, 1);
         buffers.pool[i]->buffer_size = 1 << i;
     }
 #endif
