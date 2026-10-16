@@ -135,7 +135,7 @@
             </ListView.InputBindings>
 
             <ListView.ItemContainerStyle>
-                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                <Style TargetType="ListBoxItem" BasedOn="{StaticResource ModernListBoxItemStyle}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="0,0,0,1" />
                     <EventSetter Event="PreviewMouseRightButtonDown" Handler="ListViewItem_PreviewMouseRightButtonDown" />
