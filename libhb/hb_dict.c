@@ -467,8 +467,16 @@ int hb_dict_elements(hb_dict_t * dict)
 
 static char * makelower(const char *key)
 {
+    if (key == NULL)
+    {
+        return NULL;
+    }
     int    ii, len = strlen(key);
     char * lower = malloc(len + 1);
+    if (lower == NULL)
+    {
+        return NULL;
+    }
 
     for (ii = 0; ii < len; ii++)
     {
@@ -490,7 +498,15 @@ void hb_dict_merge(hb_dict_t * dict, hb_dict_t *value)
 
 void hb_dict_case_set(hb_dict_t * dict, const char *key, hb_value_t *value)
 {
+    if (dict == NULL || key == NULL)
+    {
+        return;
+    }
     char * lower = makelower(key);
+    if (lower == NULL)
+    {
+        return;
+    }
     json_object_set_new(dict, lower, value);
     free(lower);
 }
@@ -499,14 +515,22 @@ int hb_dict_remove(hb_dict_t * dict, const char * key)
 {
     int    result;
 
+    if (dict == NULL || key == NULL)
+    {
+        return 0;
+    }
+
     // First try case sensitive lookup
     result = json_object_del(dict, key) == 0;
     if (!result)
     {
         // If not found, try case insensitive lookup
         char * lower = makelower(key);
-        result = json_object_del(dict, lower) == 0;
-        free(lower);
+        if (lower != NULL)
+        {
+            result = json_object_del(dict, lower) == 0;
+            free(lower);
+        }
     }
     return result;
 }
@@ -515,14 +539,22 @@ hb_value_t * hb_dict_get(const hb_dict_t * dict, const char * key)
 {
     hb_value_t * result;
 
+    if (dict == NULL || key == NULL)
+    {
+        return NULL;
+    }
+
     // First try case sensitive lookup
     result = json_object_get(dict, key);
     if (result == NULL)
     {
         // If not found, try case insensitive lookup
         char * lower = makelower(key);
-        result = json_object_get(dict, lower);
-        free(lower);
+        if (lower != NULL)
+        {
+            result = json_object_get(dict, lower);
+            free(lower);
+        }
     }
     return result;
 }
