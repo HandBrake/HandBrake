@@ -573,4 +573,8 @@ Bitrate will vary source to source.</value>
   <data name="Video_ColourRange" xml:space="preserve">
     <value>Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility.</value>
   </data>
+  <data name="OptionsView_PresetDisplayToolbarModes" xml:space="preserve">
+    <value>Menu - Display a simplified menu of presets.
+Overlay - A panel with allowing for more control over presets.</value>
+  </data>
 </root>
