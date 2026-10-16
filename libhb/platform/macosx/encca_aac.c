@@ -544,8 +544,10 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
 
 static void Flush(hb_work_object_t *w, hb_buffer_list_t * list)
 {
+    hb_work_private_t *pv = w->private_data;
+
     // Nothing to flush if all we got was a EOF
-    if (w->private_data->first_pts == AV_NOPTS_VALUE)
+    if (pv->first_pts == AV_NOPTS_VALUE)
     {
         return;
     }
@@ -554,6 +556,25 @@ static void Flush(hb_work_object_t *w, hb_buffer_list_t * list)
     while ((buf = Encode(w)))
     {
         hb_buffer_list_append(list, buf);
+    }
+
+    buf = hb_buffer_list_tail(list);
+    if (buf != NULL)
+    {
+        // Subtract the trailing frames duration
+        AudioConverterPrimeInfo primeInfo;
+        UInt32 piSize = sizeof(primeInfo);
+        bzero(&primeInfo, piSize);
+        AudioConverterGetProperty(pv->converter,
+                                  kAudioConverterPrimeInfo,
+                                  &piSize, &primeInfo);
+
+        int64_t trailingFrames = (int64_t)primeInfo.trailingFrames * 90000LL / pv->osamplerate;
+
+        if (trailingFrames < buf->s.duration)
+        {
+            buf->s.duration -= trailingFrames;
+        }
     }
 }
 
