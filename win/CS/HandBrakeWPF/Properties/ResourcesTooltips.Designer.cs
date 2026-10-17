@@ -61,11 +61,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatically generate a name for the output track based on the output settings. This can be for tracks that remain unnamed after passthru, or for all tracks..
+        /// </summary>
+        public static string AudioDefaultView_AutoNamingTooltip {
+            get {
+                return ResourceManager.GetString("AudioDefaultView_AutoNamingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title..
         /// </summary>
         public static string AudioView_AudioDefaults {
             get {
                 return ResourceManager.GetString("AudioView_AudioDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the source track does not match the above selected codecs you can select the fallback behaviour..
+        /// </summary>
+        public static string AudioView_OtherwiseFallbackEncoder {
+            get {
+                return ResourceManager.GetString("AudioView_OtherwiseFallbackEncoder", resourceCulture);
             }
         }
         
