@@ -2162,6 +2162,15 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         info->video_decode_support |= hwaccel->id;
     }
 
+    // Check for stand-alone hardware decoders
+    // that don't set an hardware pixel format
+    if (w->hw_accel &&
+        (w->hw_accel->id == HB_DECODE_AMFDEC ||
+         w->hw_accel->id == HB_DECODE_QSV))
+    {
+        info->video_decode_support |= w->hw_accel->id;
+    }
+
     return 1;
 }
 
