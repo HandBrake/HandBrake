@@ -26,7 +26,7 @@ void encCoreAudioClose(hb_work_object_t*);
 hb_work_object_t hb_encca_aac =
 {
     WORK_ENC_CA_AAC,
-    "AAC encoder (Apple)",
+    "AAC encoder (AudioToolbox)",
     encCoreAudioInitLC,
     encCoreAudioWork,
     encCoreAudioClose
@@ -35,7 +35,7 @@ hb_work_object_t hb_encca_aac =
 hb_work_object_t hb_encca_haac =
 {
     WORK_ENC_CA_HAAC,
-    "HE-AAC encoder (Apple)",
+    "HE-AAC encoder (AudioToolbox)",
     encCoreAudioInitHE,
     encCoreAudioWork,
     encCoreAudioClose
@@ -490,11 +490,8 @@ static OSStatus inInputDataProc(AudioConverterRef converter, UInt32 *npackets,
  ***********************************************************************
  *
  **********************************************************************/
-static hb_buffer_t* Encode(hb_work_object_t *w)
+static hb_buffer_t * Encode(hb_work_private_t *pv)
 {
-    hb_work_private_t *pv = w->private_data;
-    UInt32 npackets = 1;
-
     // Check if we need more data or we have already got to EOF
     // if so, we need to call the audio converter again even
     // without data to get out the remaining packets.
@@ -516,6 +513,7 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     obuflist.mBuffers[0].mDataByteSize = obuf->size;
     obuflist.mBuffers[0].mData = obuf->data;
 
+    UInt32 npackets = 1;
     OSStatus err = AudioConverterFillComplexBuffer(pv->converter,
                                                    inInputDataProc, pv,
                                                    &npackets, &obuflist, &odesc);
@@ -544,10 +542,8 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     return obuf;
 }
 
-static void Flush(hb_work_object_t *w, hb_buffer_list_t * list)
+static void Flush(hb_work_private_t *pv, hb_buffer_list_t * list)
 {
-    hb_work_private_t *pv = w->private_data;
-
     // Nothing to flush if all we got was a EOF
     if (pv->first_pts == AV_NOPTS_VALUE)
     {
@@ -555,7 +551,7 @@ static void Flush(hb_work_object_t *w, hb_buffer_list_t * list)
     }
 
     hb_buffer_t *buf;
-    while ((buf = Encode(w)))
+    while ((buf = Encode(pv)))
     {
         hb_buffer_list_append(list, buf);
     }
@@ -605,7 +601,7 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
     {
         /* EOF on input - send it downstream & say we're done */
         pv->input_done = 1;
-        Flush(w, &list);
+        Flush(pv, &list);
         hb_buffer_list_append(&list, hb_buffer_eof_init());
         *buf_out = hb_buffer_list_clear(&list);
         return HB_WORK_DONE;
@@ -619,7 +615,7 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
     hb_list_add(pv->list, in);
     *buf_in = NULL;
 
-    while ((buf = Encode(w)))
+    while ((buf = Encode(pv)))
     {
         hb_buffer_list_append(&list, buf);
     }
