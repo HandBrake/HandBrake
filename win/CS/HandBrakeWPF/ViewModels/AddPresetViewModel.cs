@@ -173,12 +173,12 @@ namespace HandBrakeWPF.ViewModels
 
         public int? CustomHeight { get; set; }
 
-        public void Setup(EncodeTask task, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours, string name)
+        public void Setup(EncodeTask task, AudioBehaviours audioBehaviours, SubtitleBehaviourRule subtitleBehaviours, string name)
         {
             this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCategoryName };
             this.Preset.Task = new EncodeTask(task);
-            this.Preset.AudioTrackBehaviours = new AudioBehaviours(audioBehaviours); 
-            this.Preset.SubtitleTrackBehaviours = new SubtitleBehaviours(subtitleBehaviours);
+            this.Preset.AudioTrackBehaviours = new AudioBehaviours(audioBehaviours);
+            this.Preset.SubtitleTrackBehaviours = new SubtitleBehaviourRule(subtitleBehaviours);
             if (!string.IsNullOrEmpty(name))
             {
                 this.Preset.Name = name;
@@ -268,7 +268,8 @@ namespace HandBrakeWPF.ViewModels
 
             if (subtitlesDefaultsViewModel.IsApplied)
             {
-                this.Preset.SubtitleTrackBehaviours = new SubtitleBehaviours(this.subtitlesDefaultsViewModel.SubtitleBehaviours);
+                this.Preset.SubtitleTrackBehaviours =
+                    new SubtitleBehaviourRule(this.subtitlesDefaultsViewModel.SubtitleBehaviourRules);
             }
         }
 
