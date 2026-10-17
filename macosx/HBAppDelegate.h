@@ -17,6 +17,8 @@
 - (IBAction)toggleStartCancel:(id)sender;
 - (IBAction)togglePauseResume:(id)sender;
 
+- (IBAction)relinkQueue:(id)sender;
+
 - (IBAction)reloadPreset:(id)sender;
 
 - (void)openJob:(HBJob *)job completionHandler:(void (^)(BOOL result))handler;
