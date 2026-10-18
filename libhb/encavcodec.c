@@ -1667,7 +1667,11 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
         }
         if (ret < 0)
         {
-            hb_log("encavcodec: avcodec_receive_packet failed");
+            // No packet was returned, the encoder can return
+            // the same error again, so do not loop on it
+            hb_error("encavcodec: avcodec_receive_packet failed, error code: %s",
+                     av_err2str(ret));
+            break;
         }
 
         out = hb_buffer_init(pv->pkt->size);
