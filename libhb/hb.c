@@ -857,6 +857,8 @@ hb_image_t * hb_get_preview(hb_handle_t * h, hb_dict_t * job_dict,
             case HB_FILTER_DECOMB:
             case HB_FILTER_DETELECINE:
             case HB_FILTER_YADIF:
+            case HB_FILTER_DEBAND:
+            case HB_FILTER_BM3D:
             case HB_FILTER_GRAYSCALE:
                 break;
 
