@@ -637,6 +637,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_is_ffmpeg_supported_codec(job->vcodec))
     {
+        if (!(job->hw_decode & HB_DECODE_QSV))
+        {
+            hb_qsv_setup_job(job);
+        }
         hb_qsv_apply_encoder_options(&pv->qsv_data, job, &av_opts);
     }
 #endif
