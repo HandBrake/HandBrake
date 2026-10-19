@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -20,6 +19,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -34,9 +34,10 @@ namespace HandBrakeWPF.ViewModels
     {
         private readonly IWindowManager windowManager;
 
-        private SubtitleBehaviours subtitleBehaviours;
         private BindingList<Language> availableLanguages;
 
+        private SubtitleBehaviourRule subtitleBehaviourRules;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="SubtitlesDefaultsViewModel"/> class. 
         /// </summary>
@@ -45,13 +46,29 @@ namespace HandBrakeWPF.ViewModels
             this.windowManager = windowManager;
             this.Languages = HandBrakeLanguagesHelper.AllLanguagesWithAny;
             this.CharacterCodes = CharCodesUtilities.GetCharacterCodes();
-            this.SubtitleBehaviours = new SubtitleBehaviours();
-            this.SelectedAvailableToMove = new BindingList<Language>();
-            this.SelectedLanguagesToMove = new BindingList<Language>();
             this.availableLanguages = new BindingList<Language>();
+            this.SubtitleBehaviourRules = new SubtitleBehaviourRule();
+            
             this.SetupPreset((Preset)null);
 
             this.Title = Resources.SubtitlesViewModel_SubDefaults;
+
+            this.RemoveTrackCommand = new SimpleRelayCommand<SubtitleBehaviourTrack>(this.RemoveTrack, null);
+        }
+
+        public SubtitleBehaviourRule SubtitleBehaviourRules
+        {
+            get => this.subtitleBehaviourRules;
+            private set
+            {
+                if (Equals(value, this.subtitleBehaviourRules))
+                {
+                    return;
+                }
+
+                this.subtitleBehaviourRules = value;
+                this.NotifyOfPropertyChange(() => this.SubtitleBehaviourRules);
+            }
         }
 
         public bool IsApplied { get; set; }
@@ -66,26 +83,17 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IEnumerable<Language> Languages { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the subtitle behaviours.
-        /// </summary>
-        public SubtitleBehaviours SubtitleBehaviours
-        {
-            get
-            {
-                return this.subtitleBehaviours;
-            }
-            set
-            {
-                if (Equals(value, this.subtitleBehaviours))
-                {
-                    return;
-                }
+        public BindingList<SubtitleBehaviourModes> TrackSelectionModes => new BindingList<SubtitleBehaviourModes>(EnumHelper<SubtitleBehaviourModes>.GetEnumList().ToList());
 
-                this.subtitleBehaviours = value;
-                this.NotifyOfPropertyChange(() => this.SubtitleBehaviours);
-            }
-        }
+        public BindingList<IsDefaultModes> IsDefaultModes => new BindingList<IsDefaultModes>(EnumHelper<IsDefaultModes>.GetEnumList().ToList());
+
+        public BindingList<SubtitleBurnInBehaviourModes> BurnPassthruModes => new BindingList<SubtitleBurnInBehaviourModes>(EnumHelper<SubtitleBurnInBehaviourModes>.GetEnumList().ToList());
+
+        public BindingList<ForcedModes> ForcedModes => new BindingList<ForcedModes>(EnumHelper<ForcedModes>.GetEnumList().ToList());
+
+        public BindingList<SubtitleImportMode> SubtitleImportModes => new BindingList<SubtitleImportMode>(EnumHelper<SubtitleImportMode>.GetEnumList().ToList());
+
+        public SimpleRelayCommand<SubtitleBehaviourTrack> RemoveTrackCommand { get; }
 
         /// <summary>
         /// Gets the subtitle behaviour modes.
@@ -125,60 +133,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.AvailableLanguages);
             }
         }
-
-        /// <summary>
-        /// Gets SelectedLanguages.
-        /// </summary>
-        public BindingList<Language> SelectedAvailableToMove { get; private set; }
-
-        /// <summary>
-        /// Gets SelectedLanguages.
-        /// </summary>
-        public BindingList<Language> SelectedLanguagesToMove { get; private set; }
         
-        /// <summary>
-        /// Audio List Move Left
-        /// </summary>
-        public void LanguageMoveRight()
-        {
-            if (this.SelectedAvailableToMove.Count > 0)
-            {
-                List<Language> copiedList = SelectedAvailableToMove.ToList();
-                foreach (Language item in copiedList)
-                {
-                    this.SubtitleBehaviours.SelectedLanguages.Add(item);
-                }
-
-                this.UpdateAvailableLanguages();
-            }
-        }
-
-        /// <summary>
-        /// Audio List Move Right
-        /// </summary>
-        public void LanguageMoveLeft()
-        {
-            if (this.SelectedLanguagesToMove.Count > 0)
-            {
-                List<Language> copiedList = SelectedLanguagesToMove.ToList();
-                foreach (Language item in copiedList)
-                {
-                    this.SubtitleBehaviours.SelectedLanguages.Remove(item);
-                }
-            }
-
-            this.UpdateAvailableLanguages();
-        }
-
-        /// <summary>
-        /// Language List Clear all selected languages
-        /// </summary>
-        public void LanguageClearAll()
-        {
-            this.SubtitleBehaviours.SelectedLanguages.Clear();
-            this.UpdateAvailableLanguages();
-        }
-
         public void LaunchHelp()
         {
             Process.Start("explorer.exe", "https://handbrake.fr/docs/en/latest/advanced/audio-subtitle-defaults.html");
@@ -198,47 +153,50 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void AddRule()
+        {
+            this.SubtitleBehaviourRules.Tracks.Add(new SubtitleBehaviourTrack());
+        }
+
+        public void AddForeignScanTrack()
+        {
+            SubtitleBehaviourTrack newTrack = new SubtitleBehaviourTrack() { IsForeignAudioScanRule = true };
+
+            if (!this.SubtitleBehaviourRules.Tracks.Any(s => s.IsForeignAudioScanRule))
+            {
+                this.SubtitleBehaviourRules.Tracks.Add(newTrack);
+            }
+        }
+
+        /// <summary>
+        /// Remove the Selected Track
+        /// </summary>
+        /// <param name="track">
+        /// The track.
+        /// </param>
+        public void RemoveTrack(SubtitleBehaviourTrack track)
+        {
+            this.SubtitleBehaviourRules.Tracks.Remove(track);
+        }
+
+        public void Clear()
+        {
+            this.SubtitleBehaviourRules.Tracks.Clear();
+        }
+
         /// <summary>
         /// The setup languages.
         /// </summary>
         /// <param name="behaviours">
         /// The behaviours.
         /// </param>
-        public void SetupPreset(SubtitleBehaviours behaviours)
+        public void SetupPreset(SubtitleBehaviourRule behaviours)
         {
             // Reset
             this.IsApplied = false;
 
             // Step 1, Set the behaviour mode
-            this.SubtitleBehaviours.SelectedBehaviour = SubtitleBehaviourModes.None;
-            this.SubtitleBehaviours.SelectedBurnInBehaviour = SubtitleBurnInBehaviourModes.None;
-            this.SubtitleBehaviours.AddClosedCaptions = false;
-            this.SubtitleBehaviours.AddForeignAudioScanTrack = false;
-            this.SubtitleBehaviours.SelectedLanguages.Clear();
-
-            // Step 2, Setup Available Languages
-            this.AvailableLanguages.Clear();
-            foreach (Language item in HandBrakeLanguagesHelper.AllLanguagesWithAny)
-            {
-                this.AvailableLanguages.Add(item);
-            }
-
-            // Step 3, Set the Selected Languages        
-            if (behaviours != null)
-            {
-                this.SubtitleBehaviours.SelectedBehaviour = behaviours.SelectedBehaviour;
-                this.SubtitleBehaviours.SelectedBurnInBehaviour = behaviours.SelectedBurnInBehaviour;
-                this.SubtitleBehaviours.AddClosedCaptions = behaviours.AddClosedCaptions;
-                this.SubtitleBehaviours.AddForeignAudioScanTrack = behaviours.AddForeignAudioScanTrack;
-                this.SubtitleBehaviours.SubtitleTrackNamePassthru = behaviours.SubtitleTrackNamePassthru;
-
-                foreach (Language selectedItem in behaviours.SelectedLanguages)
-                {
-                    this.SubtitleBehaviours.SelectedLanguages.Add(selectedItem);
-                }
-
-                this.UpdateAvailableLanguages();
-            }
+            this.SubtitleBehaviourRules = new SubtitleBehaviourRule(behaviours);
         }
 
         public bool ShowWindow()
@@ -259,23 +217,6 @@ namespace HandBrakeWPF.ViewModels
         {
             this.IsApplied = true;
             this.TryClose();
-        }
-
-        private void UpdateAvailableLanguages()
-        {
-            List<Language> copiedList = this.SubtitleBehaviours.SelectedLanguages.ToList();
-
-            BindingList<Language> newAvailable = new BindingList<Language>();
-
-            foreach (Language lang in HandBrakeLanguagesHelper.AllLanguagesWithAny)
-            {
-                if (!copiedList.Contains(lang))
-                {
-                    newAvailable.Add(lang);
-                }
-            }
-
-            this.AvailableLanguages = newAvailable;
         }
     }
 }

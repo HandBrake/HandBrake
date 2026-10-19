@@ -21,6 +21,11 @@
         <Setter Property="ToolTipService.ShowDuration" Value="20000" />
     </Style>
 
+    <!-- Implicit ListView style; required by views using BasedOn="{StaticResource {x:Type ListView}}". -->
+    <Style TargetType="{x:Type ListView}" />
+
+
+
     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
