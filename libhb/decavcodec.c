@@ -1216,7 +1216,7 @@ static hb_buffer_t *wrap_frame(hb_work_private_t *pv)
                 iso639_lang_t * lang;
                 hb_audio_t    * audio;
 
-                subtitle        = calloc(sizeof( hb_subtitle_t ), 1);
+                subtitle        = calloc(1, sizeof( hb_subtitle_t ));
                 subtitle->track = hb_list_count(pv->title->list_subtitle);
                 subtitle->id           = HB_SUBTITLE_EMBEDDED_CC_TAG;
                 subtitle->format       = TEXTSUB;
@@ -2042,29 +2042,28 @@ static void compute_frame_duration( hb_work_private_t *pv )
         }
         else
         {
-            AVRational *tb = NULL;
             // We don't have a frame count or duration so try to use the
             // far less reliable avg_frame_rate info in the stream.
             if (st->avg_frame_rate.den && st->avg_frame_rate.num)
             {
-                tb = &(st->avg_frame_rate);
+                duration = (double)st->avg_frame_rate.den /
+                           (double)st->avg_frame_rate.num;
             }
             // Try r_frame_rate, which is usually set for cfr streams
             else if (st->r_frame_rate.num && st->r_frame_rate.den)
             {
-                tb = &(st->r_frame_rate);
+                duration = (double)st->r_frame_rate.den /
+                           (double)st->r_frame_rate.num;
             }
             // Because the time bases are so screwed up, we only take values
             // in a restricted range.
             else if (st->time_base.num * max_fps > st->time_base.den &&
                      st->time_base.den > st->time_base.num * min_fps)
             {
-                tb = &(st->time_base);
-            }
-
-            if (tb != NULL)
-            {
-                duration = (double)tb->den / (double)tb->num;
+                // The time base is in seconds per tick, not a frame rate,
+                // so it is already the frame duration
+                duration = (double)st->time_base.num /
+                           (double)st->time_base.den;
             }
         }
     }
@@ -2160,6 +2159,15 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     if (hwaccel != NULL)
     {
         info->video_decode_support |= hwaccel->id;
+    }
+
+    // Check for stand-alone hardware decoders
+    // that don't set an hardware pixel format
+    if (w->hw_accel &&
+        (w->hw_accel->id == HB_DECODE_AMFDEC ||
+         w->hw_accel->id == HB_DECODE_QSV))
+    {
+        info->video_decode_support |= w->hw_accel->id;
     }
 
     return 1;
@@ -2361,11 +2369,17 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
                 else
                 {
                     int size = pv->drop_samples * sample_size;
-                    double drop_duration = pv->drop_samples * 90000L /
-                                           pv->audio->config.out.samplerate;
+                    // The samples are at the decoder output sample rate
+                    // (the input sample rate), samplerate conversion
+                    // to the output sample rate happens later in sync.
+                    double drop_duration = pv->drop_samples * 90000. /
+                                           pv->resample->out.sample_rate;
                     memmove(out->data, out->data + size, out->size - size);
                     out->size -= size;
-                    pts += drop_duration;
+                    if (pts != AV_NOPTS_VALUE)
+                    {
+                        pts += drop_duration;
+                    }
                     duration -= drop_duration;
                     pv->drop_samples = 0;
                 }
@@ -2390,7 +2404,8 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             }
             if (pv->next_pts != (int64_t)AV_NOPTS_VALUE)
             {
-                pv->next_pts += pv->duration;
+                // duration excludes the samples dropped above
+                pv->next_pts += duration;
                 out->s.stop  = pv->next_pts;
             }
             hb_buffer_list_append(&pv->list, out);

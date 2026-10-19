@@ -496,6 +496,7 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
     {
         goto fail;
     }
+    pv->iconv_context = (iconv_t) -1;
 
     // For SRT files, libav will generate an SSA subtitle header for us.
     // We will copy it into subtitle extradata after the decoder is
@@ -616,8 +617,14 @@ static void decsrtClose( hb_work_object_t * w )
     if (pv != NULL)
     {
         decavsubClose(pv->ctx);
-        fclose( pv->file );
-        iconv_close(pv->iconv_context);
+        if (pv->file != NULL)
+        {
+            fclose( pv->file );
+        }
+        if (pv->iconv_context != (iconv_t) -1)
+        {
+            iconv_close(pv->iconv_context);
+        }
         free( w->private_data );
     }
     w->private_data = NULL;

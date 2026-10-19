@@ -637,6 +637,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_is_ffmpeg_supported_codec(job->vcodec))
     {
+        if (!(job->hw_decode & HB_DECODE_QSV))
+        {
+            hb_qsv_setup_job(job);
+        }
         hb_qsv_apply_encoder_options(&pv->qsv_data, job, &av_opts);
     }
 #endif
@@ -1667,7 +1671,11 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
         }
         if (ret < 0)
         {
-            hb_log("encavcodec: avcodec_receive_packet failed");
+            // No packet was returned, the encoder can return
+            // the same error again, so do not loop on it
+            hb_error("encavcodec: avcodec_receive_packet failed, error code: %s",
+                     av_err2str(ret));
+            break;
         }
 
         out = hb_buffer_init(pv->pkt->size);

@@ -87,7 +87,7 @@ static int hb_bitvec_add_bits(hb_bitvec_t *bv, int bits)
 
 static hb_bitvec_t* hb_bitvec_new(int size)
 {
-    hb_bitvec_t *bv = calloc(sizeof(hb_bitvec_t), 1);
+    hb_bitvec_t *bv = calloc(1, sizeof(hb_bitvec_t));
     if (bv)
     {
         hb_bitvec_add_bits(bv, size);
@@ -240,12 +240,12 @@ static int add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
         mux->max_tracks = max_tracks;
     }
 
-    hb_track_t *track = calloc( sizeof( hb_track_t ), 1 );
+    hb_track_t *track = calloc( 1, sizeof( hb_track_t ) );
     if (track)
     {
         track->mux_data = mux_data;
         track->mf.flen = 8;
-        track->mf.fifo = calloc( sizeof(track->mf.fifo[0]), track->mf.flen );
+        track->mf.fifo = calloc( track->mf.flen, sizeof(track->mf.fifo[0]) );
     }
 
     if (track == NULL || track->mf.fifo == NULL)
@@ -620,14 +620,14 @@ static void muxClose( hb_work_object_t * muxer )
 
 static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
 {
-    muxer->private_data = calloc( sizeof(hb_work_private_t ), 1);
+    muxer->private_data = calloc( 1, sizeof(hb_work_private_t ));
     if (muxer->private_data == NULL)
     {
         return -1;
     }
     hb_work_private_t *pv = muxer->private_data;
 
-    hb_mux_t *mux = calloc( sizeof( hb_mux_t ), 1 );
+    hb_mux_t *mux = calloc( 1, sizeof( hb_mux_t ) );
     if (mux == NULL)
     {
         goto fail;
@@ -706,7 +706,7 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
         hb_audio_t  *audio = hb_list_item( job->list_audio, i );
 
         hb_work_object_t *w = hb_get_work(job->h, WORK_MUX);
-        w->private_data = calloc(sizeof(hb_work_private_t), 1);
+        w->private_data = calloc(1, sizeof(hb_work_private_t));
         if (w->private_data)
         {
             w->private_data->job = job;
@@ -731,7 +731,7 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
             continue;
 
         hb_work_object_t *w = hb_get_work(job->h, WORK_MUX);
-        w->private_data = calloc(sizeof(hb_work_private_t), 1);
+        w->private_data = calloc(1, sizeof(hb_work_private_t));
         if (w->private_data)
         {
             w->private_data->job = job;

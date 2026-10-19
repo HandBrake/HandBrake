@@ -746,9 +746,6 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
     <value>Dimensions:</value>
   </data>
-  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>Source Track Selection</value>
-  </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
     <value>Allow passthru of:</value>
   </data>
@@ -1498,7 +1495,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Available Languages:</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
-    <value>Choose Languages:</value>
+    <value>Select Languages:</value>
   </data>
   <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Selected Languages:</value>
@@ -2998,7 +2995,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Autonaming:</value>
   </data>
   <data name="AudioDefaultsView_PassthruTrackNames" xml:space="preserve">
-    <value>Passthru Track Names</value>
+    <value>Passthru Track Names from source</value>
   </data>
   <data name="SubtitlesDefaultsView_PassthruTrackName" xml:space="preserve">
     <value>Passthru Track Names</value>
@@ -3172,5 +3169,29 @@ Do you wish to proceed?</value>
   </data>
   <data name="LogView_LogDirectorySize" xml:space="preserve">
     <value>Log Directory Size: </value>
+  </data>
+  <data name="AudioDefaultView_TrackSelectionTab" xml:space="preserve">
+    <value>Track Selection</value>
+  </data>
+  <data name="AudioDefaultView_ExplanationSubTitle" xml:space="preserve">
+    <value>When a source is loaded, these settings determine which audio tracks are added automatically and how they are configured for output.</value>
+  </data>
+  <data name="SubtitleDefaultView_ExplanationSubTitle" xml:space="preserve">
+    <value>When a source is loaded, these settings determine which subtitle tracks are added automatically and how they are configured for output.</value>
+  </data>
+  <data name="AudioDefaultView_TrackNamingTab" xml:space="preserve">
+    <value>Track Naming</value>
+  </data>
+  <data name="AudioDefaultView_PassthruBehaviourTab" xml:space="preserve">
+    <value>Passthru Behaviour</value>
+  </data>
+  <data name="AudioDefaultView_AutoNamingTooltip" xml:space="preserve">
+    <value>Automatically generate a name for the output track based on the output settings.</value>
+  </data>
+  <data name="AudioDefaultView_OtherwiseFallbackHelp" xml:space="preserve">
+    <value>If source track does not match the above codecs:</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackHelp" xml:space="preserve">
+    <value>Otherwise, if the source track does not match the above codec(s) :</value>
   </data>
 </root>

@@ -75,7 +75,7 @@
 
                 <DataTemplate DataType="{x:Type loc:PresetDisplayCategory}">
                     <StackPanel Orientation="Horizontal" Background="Transparent" Margin="4">
-                        <Path x:Name="chevron" Width="8" Height="8" Margin="8,0,8,0" VerticalAlignment="Center" Stretch="Uniform"
+                        <Path x:Name="chevron" Width="8" Height="8" Margin="0,0,8,0" VerticalAlignment="Center" Stretch="Uniform"
                               Data="M 0 0 L 4 4 L 0 8 Z" Fill="{DynamicResource ButtonGlyphBrush}" />
                         <TextBlock Text="{Binding Category}" FontSize="14" />
                     </StackPanel>
@@ -187,9 +187,10 @@
                 </ListView.CommandBindings>
 
                 <ListView.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource ModernListBoxItemStyle}">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        <Setter Property="Padding" Value="0,3,3,3" />
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Padding" Value="5,4"></Setter>
                         <Setter Property="ToolTip" Value="{Binding Description}" />
                         <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
                         <EventSetter Event="Loaded" Handler="PresetListViewItem_OnLoaded" />

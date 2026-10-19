@@ -33,7 +33,7 @@
     <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#252525" />
     <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="White" />
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White" />
-    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#4089C4" />
     <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkBrushKey}" Color="WhiteSmoke" />
 

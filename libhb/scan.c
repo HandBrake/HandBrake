@@ -94,7 +94,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             hb_list_t * exclude_extensions, int hw_decode,
                             int keep_duplicate_titles)
 {
-    hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
+    hb_scan_t * data = calloc( 1, sizeof( hb_scan_t ) );
 
     data->h            = handle;
     data->die          = die;
@@ -106,7 +106,15 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
     data->max_title_duration = max_duration;
-     
+
+    // Discard previews if user disables them.
+    if (data->preview_count == 0)
+        data->store_previews = 0;
+
+    // Do at least 3 previews for any case.
+    if (data->preview_count < 3)
+        data->preview_count = 3;
+
     data->crop_threshold_frames = crop_threshold_frames;
     data->crop_threshold_pixels = crop_threshold_pixels;
     data->exclude_extensions    = hb_string_list_copy(exclude_extensions);
@@ -652,7 +660,6 @@ static void close_video_filter(hb_filter_object_t **filter)
     _filter->close(_filter);
     hb_fifo_close(&_filter->fifo_in);
     hb_fifo_close(&_filter->fifo_out);
-
     hb_filter_close(filter);
 }
 
@@ -764,6 +771,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     int                cc_wait = 10;
     int                frames;
     hb_stream_t      * stream = NULL;
+    hb_work_object_t * vid_decoder = NULL;
+    void             * hw_device_ctx = NULL;
+    hb_filter_object_t * filter = NULL;
     info_list_t      * info_list;
     int                abort_audio = 0;
 
@@ -800,22 +810,15 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     if (data->bd == NULL && data->dvd == NULL && stream == NULL)
     {
         hb_error("Can't open stream!");
-        free(info_list);
-        crop_record_free(crops);
-        hb_stream_close(&stream);
-        return 0;
+        goto finish;
     }
 
     if (title->video_codec == WORK_NONE)
     {
         hb_error("No video decoder set!");
-        free(info_list);
-        crop_record_free(crops);
-        hb_stream_close(&stream);
-        return 0;
+        goto finish;
     }
 
-    void *hw_device_ctx = NULL;
     hb_hwaccel_t *hwaccel = hb_get_hwaccel(data->hw_decode);
 
     if (hwaccel &&
@@ -825,7 +828,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         hb_hwaccel_hw_device_ctx_init(hwaccel->type, -1, &hw_device_ctx);
     }
 
-    hb_work_object_t *vid_decoder = hb_get_work(data->h, title->video_codec);
+    vid_decoder = hb_get_work(data->h, title->video_codec);
     vid_decoder->codec_param = title->video_codec_param;
     vid_decoder->hw_device_ctx = hw_device_ctx;
     vid_decoder->hw_accel = hwaccel;
@@ -834,15 +837,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     if (vid_decoder->init(vid_decoder, NULL))
     {
         hb_error("Decoder init failed!");
-        free(info_list);
-        crop_record_free(crops);
-        free( vid_decoder );
-        hb_stream_close(&stream);
-        hb_hwaccel_hw_device_ctx_close(&hw_device_ctx);
-        return 0;
+        goto finish;
     }
 
-    hb_filter_object_t *filter = NULL;
     hb_work_info_t prev_vid_info = {0};
 
     for( i = 0; i < data->preview_count; i++ )
@@ -853,13 +850,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 
         if ( *data->die )
         {
-            free( info_list );
-            crop_record_free( crops );
-            vid_decoder->close( vid_decoder );
-            free( vid_decoder );
-            hb_stream_close(&stream);
-            hb_hwaccel_hw_device_ctx_close(&hw_device_ctx);
-            return 0;
+            npreviews = 0;
+            goto finish;
         }
         if (data->bd)
         {
@@ -934,6 +926,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         while (vid_decoder->frame_count < PREVIEW_READ_THRESH ||
               (!AllAudioOK(title) && packets < 10000))
         {
+            if (*data->die)
+            {
+                hb_buffer_close(&last_vid_buf);
+                hb_buffer_close(&vid_buf);
+                npreviews = 0;
+                goto finish;
+            }
+
             if ((buf = read_buf(data, stream)) == NULL)
             {
                 // If we reach EOF and no audio, don't continue looking for
@@ -1186,8 +1186,10 @@ skip_preview:
 
     vid_decoder->close( vid_decoder );
     free( vid_decoder );
+    vid_decoder = NULL;
 
     hb_hwaccel_hw_device_ctx_close(&hw_device_ctx);
+    close_video_filter(&filter);
 
     if (stream != NULL)
     {
@@ -1540,16 +1542,26 @@ skip_preview:
             title->detected_interlacing = 0;
         }
     }
-    close_video_filter(&filter);
-    crop_record_free( crops );
-    free( info_list );
 
-    hb_buffer_list_close(&list_es);
-
+finish:
     if (data->bd)
       hb_bd_stop( data->bd );
     if (data->dvd)
       hb_dvd_stop( data->dvd );
+
+    if (vid_decoder)
+    {
+        vid_decoder->close(vid_decoder);
+        free(vid_decoder);
+    }
+    hb_hwaccel_hw_device_ctx_close(&hw_device_ctx);
+    close_video_filter(&filter);
+    hb_stream_close(&stream);
+
+    crop_record_free(crops);
+    free(info_list);
+
+    hb_buffer_list_close(&list_es);
 
     return npreviews;
 }

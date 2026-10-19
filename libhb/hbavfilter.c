@@ -198,12 +198,20 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 
     graph->out_time_base = graph->output->inputs[0]->time_base;
 
+    if (par)
+    {
+        av_buffer_unref(&par->hw_frames_ctx);
+    }
     av_free(par);
     avfilter_inout_free(&in);
     avfilter_inout_free(&out);
     return graph;
 
 fail:
+    if (par)
+    {
+        av_buffer_unref(&par->hw_frames_ctx);
+    }
     av_free(par);
     avfilter_inout_free(&in);
     avfilter_inout_free(&out);

@@ -2742,6 +2742,14 @@ int hb_qsv_apply_encoder_options(qsv_data_t * qsv_data, hb_job_t *job, AVDiction
         return ret;
     }
 
+    // hb_qsv_select_ffmpeg_options() and the option parser read these fields
+    videoParam.mfx.CodecId             = qsv_data->qsv_info->codec_id;
+    videoParam.mfx.FrameInfo.PicStruct = MFX_PICSTRUCT_PROGRESSIVE;
+    if (job->vcodec == HB_VCODEC_FFMPEG_QSV_H265_10BIT)
+    {
+        videoParam.mfx.CodecProfile = MFX_PROFILE_HEVC_MAIN10;
+    }
+
     if (job->encoder_options != NULL && *job->encoder_options)
     {
         hb_dict_t *options_list;
@@ -2782,6 +2790,9 @@ int hb_qsv_apply_encoder_options(qsv_data_t * qsv_data, hb_job_t *job, AVDiction
         }
         hb_dict_free(&options_list);
     }
+
+    // low_power may have been changed by the user options above
+    videoParam.mfx.LowPower = qsv_data->param.low_power ? MFX_CODINGOPTION_ON : MFX_CODINGOPTION_OFF;
 
     ret = hb_qsv_select_ffmpeg_options(qsv_data, job, av_opts);
     if(ret)
@@ -2876,7 +2887,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            av_dict_set_int(av_opts, "bf", HB_QSV_CLIP3(-1, 32, ivalue), 0);
+            param->gop.gop_ref_dist = HB_QSV_CLIP3(-1, 32, ivalue);
         }
     }
     else if (!strcasecmp(key, "gop-pic-size") ||
@@ -2885,7 +2896,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            av_dict_set_int(av_opts, "g", HB_QSV_CLIP3(-1, UINT16_MAX, ivalue), 0);
+            param->gop.gop_pic_size = HB_QSV_CLIP3(-1, UINT16_MAX, ivalue);
         }
     }
     else if (!strcasecmp(key, "b-pyramid"))
@@ -3194,7 +3205,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
             ivalue = hb_qsv_atoi(value, &error);
             if (!error)
             {
-                av_dict_set_int(av_opts, "look_ahead_depth", HB_QSV_CLIP3(10, 100, ivalue), 0);
+                param->codingOption2.LookAheadDepth = HB_QSV_CLIP3(10, 100, ivalue);
             }
         }
         else

@@ -119,7 +119,7 @@ hb_batch_t * hb_batch_init( hb_handle_t *h, char * path, hb_list_t * exclude_ext
     qsort(files, count, sizeof(char*), compare_str);
 
     // Create file list
-    d = calloc( sizeof( hb_batch_t ), 1 );
+    d = calloc( 1, sizeof( hb_batch_t ) );
     if (d == NULL)
     {
         free(files);
