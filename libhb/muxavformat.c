@@ -1093,10 +1093,6 @@ static int avformatInit( hb_mux_object_t * m )
         {
             track->st->disposition |= AV_DISPOSITION_DEFAULT;
         }
-        if (subtitle->config.default_track)
-        {
-            track->st->disposition |= AV_DISPOSITION_FORCED;
-        }
 
         lang = lookup_lang_code(job->mux, subtitle->iso639_2 );
         if (lang != NULL)
