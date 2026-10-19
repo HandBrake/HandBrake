@@ -338,7 +338,6 @@ int hb_hwaccel_hwframes_ctx_init(AVCodecContext *ctx,
 #if HB_PROJECT_FEATURE_QSV
     if (hw_pix_fmt == AV_PIX_FMT_QSV)
     {
-        ctx->extra_hw_frames = HB_QSV_FFMPEG_EXTRA_HW_FRAMES;
         frames_ctx->initial_pool_size = HB_QSV_FFMPEG_INITIAL_POOL_SIZE;
 
         AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
