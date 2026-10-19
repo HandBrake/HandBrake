@@ -3194,4 +3194,7 @@ Do you wish to proceed?</value>
   <data name="AudioView_OtherwiseFallbackHelp" xml:space="preserve">
     <value>Otherwise, if the source track does not match the above codec(s) :</value>
   </data>
+  <data name="LogView_Search" xml:space="preserve">
+    <value>Search ...</value>
+  </data>
 </root>
