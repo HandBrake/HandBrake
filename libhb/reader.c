@@ -243,7 +243,7 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * r;
 
-    r = calloc( sizeof( hb_work_private_t ), 1 );
+    r = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = r;
 
     r->h     = job->h;

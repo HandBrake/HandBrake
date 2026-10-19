@@ -38,8 +38,8 @@ struct hb_work_private_s
     hb_subtitle_t         * subtitle;
 
     // Time of first desired subtitle adjusted by reader_pts_offset
-    uint64_t start_time;
-    uint64_t stop_time;
+    int64_t start_time;
+    int64_t stop_time;
 };
 
 static int extradataInit( hb_work_private_t * pv )
@@ -95,11 +95,6 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
     {
         hb_error("Could not open the SSA subtitle file '%s'\n",
                  pv->subtitle->config.src_filename);
-        goto fail;
-    }
-    pv->ctx = decavsubInit(w, job);
-    if (pv->ctx == NULL)
-    {
         goto fail;
     }
 
@@ -234,7 +229,9 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
     out->s.type = SUBTITLE_BUF;
     av_packet_unref(pv->pkt);
 
-    if (out->s.stop  <= pv->start_time || out->s.start >= pv->stop_time)
+    if (out->s.start == AV_NOPTS_VALUE ||
+        (out->s.stop != AV_NOPTS_VALUE && out->s.stop <= pv->start_time) ||
+        out->s.start >= pv->stop_time)
     {
         // Drop subtitles that end before the PtoP start time
         // or start after the PtoP stop time
@@ -249,7 +246,7 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
         {
             out->s.start = pv->start_time;
         }
-        if (out->s.stop > pv->stop_time)
+        if (out->s.stop == AV_NOPTS_VALUE || out->s.stop > pv->stop_time)
         {
             out->s.stop = pv->stop_time;
         }

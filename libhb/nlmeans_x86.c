@@ -45,6 +45,7 @@ static void build_integral_8_sse2(void *integral,
 
         const uint8_t *pixel_src     = src_pre     + (y-n_half   )*bw - n_half;
         const uint8_t *pixel_compare = compare_pre + (y-n_half+dy)*bw - n_half + dx;
+        const __m128i *prev = (const __m128i *)((uint32_t *)(integral) + ((y > 0 ? y-1 : 0) * integral_stride));
         uint32_t *out = (uint32_t *)(integral) + (y*integral_stride);
 
         for (int x = 0; x < dst_w + n; x += 16)
@@ -107,6 +108,15 @@ static void build_integral_8_sse2(void *integral,
             sum_grp3 = _mm_add_epi32(sum_grp3, sum_tmp);
             sum_prev = _mm_shuffle_epi32(sum_grp3, _MM_SHUFFLE(3, 3, 3, 3));
 
+            if (y > 0)
+            {
+                // Add the values from the previous row to the current row
+                sum_grp0 = _mm_add_epi32(sum_grp0, _mm_loadu_si128(prev));
+                sum_grp1 = _mm_add_epi32(sum_grp1, _mm_loadu_si128(prev+1));
+                sum_grp2 = _mm_add_epi32(sum_grp2, _mm_loadu_si128(prev+2));
+                sum_grp3 = _mm_add_epi32(sum_grp3, _mm_loadu_si128(prev+3));
+            }
+
             // Store
             _mm_storeu_si128((__m128i*)(out),    sum_grp0);
             _mm_storeu_si128((__m128i*)(out+4),  sum_grp1);
@@ -114,28 +124,10 @@ static void build_integral_8_sse2(void *integral,
             _mm_storeu_si128((__m128i*)(out+12), sum_grp3);
 
             // Increment
+            prev          += 4; // 4x __m128i == 16x uint32_t
             out           += 16;
             pixel_src     += 16;
             pixel_compare += 16;
-        }
-
-        if (y > 0)
-        {
-            out = (uint32_t *)(integral) + y*integral_stride;
-
-            // Add the values from the previous row to the current row
-            for (int x = 0; x < dst_w + n; x += 16)
-            {
-                *((__m128i*)out)      = _mm_add_epi32(*(__m128i*)(out    - integral_stride),
-                                                      *(__m128i*)(out));
-                *((__m128i*)(out+4))  = _mm_add_epi32(*(__m128i*)(out+4  - integral_stride),
-                                                      *(__m128i*)(out+4));
-                *((__m128i*)(out+8))  = _mm_add_epi32(*(__m128i*)(out+8  - integral_stride),
-                                                      *(__m128i*)(out+8));
-                *((__m128i*)(out+12)) = _mm_add_epi32(*(__m128i*)(out+12 - integral_stride),
-                                                      *(__m128i*)(out+12));
-                out += 16;
-            }
         }
     }
 }
@@ -167,6 +159,7 @@ static void build_integral_8_sse4(void *integral,
 
         const uint8_t *pixel_src     = src_pre     + (y-n_half   )*bw - n_half;
         const uint8_t *pixel_compare = compare_pre + (y-n_half+dy)*bw - n_half + dx;
+        const __m128i *prev = (const __m128i *)((uint32_t *)(integral) + ((y > 0 ? y-1 : 0) * integral_stride));
         uint32_t *out = (uint32_t *)(integral) + (y*integral_stride);
 
         for (int x = 0; x < dst_w + n; x += 16)
@@ -229,6 +222,15 @@ static void build_integral_8_sse4(void *integral,
             sum_grp3 = _mm_add_epi32(sum_grp3, sum_tmp);
             sum_prev = _mm_shuffle_epi32(sum_grp3, _MM_SHUFFLE(3, 3, 3, 3));
 
+            if (y > 0)
+            {
+                // Add the values from the previous row to the current row
+                sum_grp0 = _mm_add_epi32(sum_grp0, _mm_loadu_si128(prev));
+                sum_grp1 = _mm_add_epi32(sum_grp1, _mm_loadu_si128(prev+1));
+                sum_grp2 = _mm_add_epi32(sum_grp2, _mm_loadu_si128(prev+2));
+                sum_grp3 = _mm_add_epi32(sum_grp3, _mm_loadu_si128(prev+3));
+            }
+
             // Store
             _mm_storeu_si128((__m128i*)(out),    sum_grp0);
             _mm_storeu_si128((__m128i*)(out+4),  sum_grp1);
@@ -236,28 +238,10 @@ static void build_integral_8_sse4(void *integral,
             _mm_storeu_si128((__m128i*)(out+12), sum_grp3);
 
             // Increment
+            prev          += 4; // 4x __m128i == 16x uint32_t
             out           += 16;
             pixel_src     += 16;
             pixel_compare += 16;
-        }
-
-        if (y > 0)
-        {
-            out = (uint32_t *)(integral) + y*integral_stride;
-
-            // Add the values from the previous row to the current row
-            for (int x = 0; x < dst_w + n; x += 16)
-            {
-                *((__m128i*)out)      = _mm_add_epi32(*(__m128i*)(out    - integral_stride),
-                                                      *(__m128i*)(out));
-                *((__m128i*)(out+4))  = _mm_add_epi32(*(__m128i*)(out+4  - integral_stride),
-                                                      *(__m128i*)(out+4));
-                *((__m128i*)(out+8))  = _mm_add_epi32(*(__m128i*)(out+8  - integral_stride),
-                                                      *(__m128i*)(out+8));
-                *((__m128i*)(out+12)) = _mm_add_epi32(*(__m128i*)(out+12 - integral_stride),
-                                                      *(__m128i*)(out+12));
-                out += 16;
-            }
         }
     }
 }
@@ -289,6 +273,7 @@ static void build_integral_16_sse4(void *integral,
 
         const uint16_t *pixel_src     = src_pre     + (y-n_half   )*bw - n_half;
         const uint16_t *pixel_compare = compare_pre + (y-n_half+dy)*bw - n_half + dx;
+        const __m128i *prev = (const __m128i *)((uint64_t *)(integral) + ((y > 0 ? y-1 : 0) * integral_stride));
         uint64_t *out = (uint64_t *)(integral) + (y*integral_stride);
 
         for (int x = 0; x < dst_w + n; x += 8)
@@ -347,6 +332,15 @@ static void build_integral_16_sse4(void *integral,
             sum_grp3 = _mm_add_epi64(sum_grp3, sum_tmp);
             sum_prev = _mm_shuffle_epi32(sum_grp3, _MM_SHUFFLE(3, 2, 3, 2));
 
+            if (y > 0)
+            {
+                // Add the values from the previous row to the current row
+                sum_grp0 = _mm_add_epi64(sum_grp0, _mm_loadu_si128(prev));
+                sum_grp1 = _mm_add_epi64(sum_grp1, _mm_loadu_si128(prev+1));
+                sum_grp2 = _mm_add_epi64(sum_grp2, _mm_loadu_si128(prev+2));
+                sum_grp3 = _mm_add_epi64(sum_grp3, _mm_loadu_si128(prev+3));
+            }
+
             // Store
             _mm_storeu_si128((__m128i*)(out),   sum_grp0);
             _mm_storeu_si128((__m128i*)(out+2), sum_grp1);
@@ -354,28 +348,10 @@ static void build_integral_16_sse4(void *integral,
             _mm_storeu_si128((__m128i*)(out+6), sum_grp3);
 
             // Increment
+            prev          += 4; // 4x __m128i == 8x uint64_t
             out           += 8;
             pixel_src     += 8;
             pixel_compare += 8;
-        }
-
-        if (y > 0)
-        {
-            out = (uint64_t *)(integral) + y*integral_stride;
-
-            // Add the values from the previous row to the current row
-            for (int x = 0; x < dst_w + n; x += 8)
-            {
-                *((__m128i*)out)     = _mm_add_epi64(*(__m128i*)(out   - integral_stride),
-                                                     *(__m128i*)(out));
-                *((__m128i*)(out+2)) = _mm_add_epi64(*(__m128i*)(out+2 - integral_stride),
-                                                     *(__m128i*)(out+2));
-                *((__m128i*)(out+4)) = _mm_add_epi64(*(__m128i*)(out+4 - integral_stride),
-                                                     *(__m128i*)(out+4));
-                *((__m128i*)(out+6)) = _mm_add_epi64(*(__m128i*)(out+6 - integral_stride),
-                                                     *(__m128i*)(out+6));
-                out += 8;
-            }
         }
     }
 }

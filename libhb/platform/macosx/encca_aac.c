@@ -26,7 +26,7 @@ void encCoreAudioClose(hb_work_object_t*);
 hb_work_object_t hb_encca_aac =
 {
     WORK_ENC_CA_AAC,
-    "AAC encoder (Apple)",
+    "AAC encoder (AudioToolbox)",
     encCoreAudioInitLC,
     encCoreAudioWork,
     encCoreAudioClose
@@ -35,7 +35,7 @@ hb_work_object_t hb_encca_aac =
 hb_work_object_t hb_encca_haac =
 {
     WORK_ENC_CA_HAAC,
-    "HE-AAC encoder (Apple)",
+    "HE-AAC encoder (AudioToolbox)",
     encCoreAudioInitHE,
     encCoreAudioWork,
     encCoreAudioClose
@@ -53,6 +53,7 @@ struct hb_work_private_s
     uint64_t samples, ibytes;
     Float64 osamplerate;
 
+    int prime_scale;
     int input_done;
 
     hb_audio_remap_t *remap;
@@ -391,7 +392,8 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
                               kAudioConverterPrimeInfo,
                               &piSize, &primeInfo);
 
-    pv->delay = primeInfo.leadingFrames * 90000LL / pv->osamplerate;
+    pv->prime_scale = mode == AAC_MODE_HE ? 2 : 1;
+    pv->delay = primeInfo.leadingFrames * 90000LL / pv->osamplerate * pv->prime_scale;
     *w->init_delay = pv->delay;
 
     pv->list = hb_list_init();
@@ -488,11 +490,8 @@ static OSStatus inInputDataProc(AudioConverterRef converter, UInt32 *npackets,
  ***********************************************************************
  *
  **********************************************************************/
-static hb_buffer_t* Encode(hb_work_object_t *w)
+static hb_buffer_t * Encode(hb_work_private_t *pv)
 {
-    hb_work_private_t *pv = w->private_data;
-    UInt32 npackets = 1;
-
     // Check if we need more data or we have already got to EOF
     // if so, we need to call the audio converter again even
     // without data to get out the remaining packets.
@@ -514,6 +513,7 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     obuflist.mBuffers[0].mDataByteSize = obuf->size;
     obuflist.mBuffers[0].mData = obuf->data;
 
+    UInt32 npackets = 1;
     OSStatus err = AudioConverterFillComplexBuffer(pv->converter,
                                                    inInputDataProc, pv,
                                                    &npackets, &obuflist, &odesc);
@@ -542,18 +542,44 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     return obuf;
 }
 
-static void Flush(hb_work_object_t *w, hb_buffer_list_t * list)
+static void Flush(hb_work_private_t *pv, hb_buffer_list_t * list)
 {
     // Nothing to flush if all we got was a EOF
-    if (w->private_data->first_pts == AV_NOPTS_VALUE)
+    if (pv->first_pts == AV_NOPTS_VALUE)
     {
         return;
     }
 
     hb_buffer_t *buf;
-    while ((buf = Encode(w)))
+    while ((buf = Encode(pv)))
     {
         hb_buffer_list_append(list, buf);
+    }
+
+    // Subtract the trailing frames duration
+    AudioConverterPrimeInfo primeInfo;
+    UInt32 piSize = sizeof(primeInfo);
+    bzero(&primeInfo, piSize);
+    AudioConverterGetProperty(pv->converter,
+                              kAudioConverterPrimeInfo,
+                              &piSize, &primeInfo);
+
+    int64_t trailingFrames = (int64_t)primeInfo.trailingFrames * 90000LL /
+                                pv->osamplerate * pv->prime_scale;
+
+    while ((buf = hb_buffer_list_tail(list)))
+    {
+        if (trailingFrames < buf->s.duration)
+        {
+            buf->s.duration -= trailingFrames;
+            break;
+        }
+        else
+        {
+            trailingFrames -= buf->s.duration;
+            buf = hb_buffer_list_rem_tail(list);
+            hb_buffer_close(&buf);
+        }
     }
 }
 
@@ -575,7 +601,7 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
     {
         /* EOF on input - send it downstream & say we're done */
         pv->input_done = 1;
-        Flush(w, &list);
+        Flush(pv, &list);
         hb_buffer_list_append(&list, hb_buffer_eof_init());
         *buf_out = hb_buffer_list_clear(&list);
         return HB_WORK_DONE;
@@ -589,7 +615,7 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
     hb_list_add(pv->list, in);
     *buf_in = NULL;
 
-    while ((buf = Encode(w)))
+    while ((buf = Encode(pv)))
     {
         hb_buffer_list_append(&list, buf);
     }

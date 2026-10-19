@@ -16,7 +16,7 @@
         xmlns:model="clr-namespace:HandBrakeWPF.Services.Queue.Model"
         xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
         Title="{Binding Title}"
-        Width="975"
+        Width="995"
         Height="600"
         MinWidth="420"
         Closing="QueueView_OnClosing"
@@ -269,7 +269,7 @@
                     </ListBox.ContextMenu>
 
                     <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource ModernListBoxItemStyle}">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="Margin" Value="0,0,0,1" />
                         </Style>

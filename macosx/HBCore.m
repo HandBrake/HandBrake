@@ -610,7 +610,15 @@ static void cgimage_release_byte_pointer_callback(void *info, const void *pointe
         size_t stride = image->width * 3;
 #endif
 
-        CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNone;
+        CGBitmapInfo bitmapInfo;
+        if (@available(macOS 10.14, *))
+        {
+            bitmapInfo = CGBitmapInfoMake(kCGImageAlphaNone, 0, kCGImageByteOrderDefault, 0);
+        }
+        else
+        {
+            bitmapInfo = (uint32_t)kCGBitmapByteOrderDefault | (uint32_t)kCGImageAlphaNone;
+        }
         CGColorSpaceRef colorSpace = copyColorSpace(image->color_prim,
                                                     image->color_transfer,
                                                     image->color_matrix);

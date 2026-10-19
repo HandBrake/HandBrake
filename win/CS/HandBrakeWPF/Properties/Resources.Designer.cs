@@ -419,7 +419,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Passthru Track Names.
+        ///   Looks up a localized string similar to Passthru Track Names from source.
         /// </summary>
         public static string AudioDefaultsView_PassthruTrackNames {
             get {
@@ -428,11 +428,56 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Source Track Selection.
+        ///   Looks up a localized string similar to Automatically generate a name for the output track based on the output settings..
         /// </summary>
-        public static string AudioDefaultView_Behaviours {
+        public static string AudioDefaultView_AutoNamingTooltip {
             get {
-                return ResourceManager.GetString("AudioDefaultView_Behaviours", resourceCulture);
+                return ResourceManager.GetString("AudioDefaultView_AutoNamingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When a source is loaded, these settings determine which audio tracks are added automatically and how they are configured for output..
+        /// </summary>
+        public static string AudioDefaultView_ExplanationSubTitle {
+            get {
+                return ResourceManager.GetString("AudioDefaultView_ExplanationSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If source track does not match the above codecs:.
+        /// </summary>
+        public static string AudioDefaultView_OtherwiseFallbackHelp {
+            get {
+                return ResourceManager.GetString("AudioDefaultView_OtherwiseFallbackHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passthru Behaviour.
+        /// </summary>
+        public static string AudioDefaultView_PassthruBehaviourTab {
+            get {
+                return ResourceManager.GetString("AudioDefaultView_PassthruBehaviourTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Track Naming.
+        /// </summary>
+        public static string AudioDefaultView_TrackNamingTab {
+            get {
+                return ResourceManager.GetString("AudioDefaultView_TrackNamingTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Track Selection.
+        /// </summary>
+        public static string AudioDefaultView_TrackSelectionTab {
+            get {
+                return ResourceManager.GetString("AudioDefaultView_TrackSelectionTab", resourceCulture);
             }
         }
         
@@ -586,6 +631,15 @@ namespace HandBrakeWPF.Properties {
         public static string AudioView_OtherwiseFallbackEncoder {
             get {
                 return ResourceManager.GetString("AudioView_OtherwiseFallbackEncoder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Otherwise, if the source track does not match the above codec(s) :.
+        /// </summary>
+        public static string AudioView_OtherwiseFallbackHelp {
+            get {
+                return ResourceManager.GetString("AudioView_OtherwiseFallbackHelp", resourceCulture);
             }
         }
         
@@ -2089,6 +2143,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear Completed.
+        /// </summary>
+        public static string LogView_ClearCompletedLogs {
+            get {
+                return ResourceManager.GetString("LogView_ClearCompletedLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string LogView_CopyClipboard {
@@ -2103,6 +2166,24 @@ namespace HandBrakeWPF.Properties {
         public static string LogView_EncodeLog {
             get {
                 return ResourceManager.GetString("LogView_EncodeLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log Directory Size: .
+        /// </summary>
+        public static string LogView_LogDirectorySize {
+            get {
+                return ResourceManager.GetString("LogView_LogDirectorySize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log Files: .
+        /// </summary>
+        public static string LogView_LogFiles {
+            get {
+                return ResourceManager.GetString("LogView_LogFiles", resourceCulture);
             }
         }
         
@@ -6006,11 +6087,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preset Description:.
+        ///   Looks up a localized string similar to Clear search.
         /// </summary>
-        public static string PresetPane_Desc {
+        public static string PresetPane_ClearSearch {
             get {
-                return ResourceManager.GetString("PresetPane_Desc", resourceCulture);
+                return ResourceManager.GetString("PresetPane_ClearSearch", resourceCulture);
             }
         }
         
@@ -6056,6 +6137,15 @@ namespace HandBrakeWPF.Properties {
         public static string PresetPane_MoveUp {
             get {
                 return ResourceManager.GetString("PresetPane_MoveUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search ....
+        /// </summary>
+        public static string PresetPane_Search {
+            get {
+                return ResourceManager.GetString("PresetPane_Search", resourceCulture);
             }
         }
         
@@ -7434,7 +7524,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose Languages:.
+        ///   Looks up a localized string similar to Select Languages:.
         /// </summary>
         public static string Shared_ChooseLanguages {
             get {
@@ -8007,6 +8097,15 @@ namespace HandBrakeWPF.Properties {
         public static string SubtitleBurnInBehaviourModes_None {
             get {
                 return ResourceManager.GetString("SubtitleBurnInBehaviourModes_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When a source is loaded, these settings determine which subtitle tracks are added automatically and how they are configured for output..
+        /// </summary>
+        public static string SubtitleDefaultView_ExplanationSubTitle {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_ExplanationSubTitle", resourceCulture);
             }
         }
         

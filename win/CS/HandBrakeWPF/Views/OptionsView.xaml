@@ -51,6 +51,10 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
+        <Style x:Key="ModernListBoxItemStyle" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource ModernListBoxItemStyle}">
+            <Setter Property="Padding" Value="8,6"/>
+        </Style>
+
 
     </UserControl.Resources>
 

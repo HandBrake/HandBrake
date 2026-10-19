@@ -261,8 +261,10 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
 
     if (resample->resample_needed)
     {
-        out_samples = nsamples  * resample->out.sample_rate /
-                                  resample->in.sample_rate + 1;
+        // Compute in 64 bit, nsamples * sample_rate can overflow an int
+        // (e.g. 16384 samples FLAC frames at 192 kHz)
+        out_samples = (int64_t)nsamples * resample->out.sample_rate /
+                                          resample->in.sample_rate + 1;
         out_size = av_samples_get_buffer_size(NULL, resample->out.ch_layout.nb_channels,
                                               out_samples,
                                               resample->out.sample_fmt, 0);

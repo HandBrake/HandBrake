@@ -10,10 +10,12 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Numerics;
     using System.Text;
 
     using HandBrake.App.Core.Utilities;
@@ -56,9 +58,48 @@ namespace HandBrakeWPF.ViewModels
 
         public event EventHandler LogResetEvent;
 
+        private string searchText = string.Empty;
+
         public string ActivityLog => this.log.ToString();
 
+        public string SearchText
+        {
+            get => this.searchText;
+            set
+            {
+                if (value == this.searchText)
+                {
+                    return;
+                }
+
+                this.searchText = value;
+                this.NotifyOfPropertyChange(() => this.SearchText);
+            }
+        }
+
+        public bool MatchesFilter(string line)
+        {
+            string filter = this.SearchText;
+            return string.IsNullOrEmpty(filter) || (line != null && line.Contains(filter, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public string GetFilteredLog()
+        {
+            string full = this.ActivityLog.TrimStart();
+            if (string.IsNullOrEmpty(this.SearchText))
+            {
+                return full;
+            }
+
+            var lines = full.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).Where(this.MatchesFilter);
+            return string.Join(Environment.NewLine, lines) + Environment.NewLine;
+        }
+
         public BindingList<LogFile> LogFiles { get; private set; }
+
+        public long LogFileCount => this.GetLogFileCount();
+
+        public decimal LogFileSizeTotal => this.GetLogFileSizeTotal();
 
         public LogFile SelectedLogFile
         {
@@ -97,6 +138,24 @@ namespace HandBrakeWPF.ViewModels
             catch (Exception exc)
             {
                 this.errorService.ShowError(Resources.Clipboard_Unavailable, Resources.Clipboard_Unavailable_Solution, exc);
+            }
+        }
+
+        public void ClearCompleted()
+        {
+            List<LogFile> localCopy = this.LogFiles.ToList();
+
+            foreach (var checkLog in localCopy)
+            {
+                if (checkLog.IsComplete)
+                {
+                    this.LogFiles.Remove(checkLog);
+                }
+            }
+
+            if (this.SelectedLogFile == null && this.LogFiles.Any())
+            {
+                this.SelectedLogFile = this.LogFiles.LastOrDefault();
             }
         }
 
@@ -252,6 +311,8 @@ namespace HandBrakeWPF.ViewModels
         {
             lock (readLockObject)
             {
+                this.SelectedLogFile = null; // Fix for the ComboBox resetting this later as we have to rebuild the collection here.
+
                 BindingList<string> activeLogs = new BindingList<string>(this.logInstanceManager.GetLogFiles());
                 BindingList<LogFile> logfiles = new BindingList<LogFile>();
 
@@ -282,6 +343,25 @@ namespace HandBrakeWPF.ViewModels
 
                 this.SelectedLogFile ??= this.LogFiles.LastOrDefault();
             }
+        }
+
+        private long GetLogFileCount()
+        {
+            string logDir = DirectoryUtilities.GetLogDirectory();
+            return Directory.GetFiles(logDir, "*.txt").LongLength;
+        }
+
+        private decimal GetLogFileSizeTotal()
+        {
+            string logDir = DirectoryUtilities.GetLogDirectory();
+            long totalBytes = 0;
+
+            foreach (string logPath in Directory.GetFiles(logDir))
+            {
+                totalBytes += new FileInfo(logPath).Length;
+            }
+
+            return Math.Round(totalBytes / 1024m / 1024m, 2);
         }
     }
 }

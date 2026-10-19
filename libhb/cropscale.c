@@ -21,7 +21,8 @@ static hb_filter_info_t * crop_scale_info( hb_filter_object_t * filter );
 static const char crop_scale_template[] =
     "width=^"HB_INT_REG"$:height=^"HB_INT_REG"$:"
     "crop-top=^"HB_INT_REG"$:crop-bottom=^"HB_INT_REG"$:"
-    "crop-left=^"HB_INT_REG"$:crop-right=^"HB_INT_REG"$";
+    "crop-left=^"HB_INT_REG"$:crop-right=^"HB_INT_REG"$:"
+    "range=^"HB_INT_REG"$";
 
 hb_filter_object_t hb_filter_crop_scale =
 {
@@ -47,6 +48,7 @@ hb_filter_object_t hb_filter_crop_scale =
  *  crop-bottom - bottom crop margin
  *  crop-left   - left crop margin
  *  crop-right  - right crop margin
+ *  range       - color range
  *
  */
 static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
@@ -66,6 +68,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     int                width, height;
     int                cropped_width, cropped_height;
     int                top = 0, bottom = 0, left = 0, right = 0;
+    int                color_range = AVCOL_RANGE_UNSPECIFIED;
 
     // Convert crop settings to 'crop' avfilter
     hb_dict_extract_int(&top, settings, "crop-top");
@@ -90,6 +93,8 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     width  = cropped_width;
     height = cropped_height;
 
+    hb_dict_extract_int(&color_range, settings, "range");
+
     // Convert scale settings to 'scale' avfilter
     hb_dict_extract_int(&width, settings, "width");
     hb_dict_extract_int(&height, settings, "height");
@@ -110,6 +115,10 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
 
         hb_dict_set_int(avsettings, "w", width);
         hb_dict_set_int(avsettings, "h", height);
+        if (color_range != AVCOL_RANGE_UNSPECIFIED)
+        {
+            hb_dict_set_string(avsettings, "out_range", ((color_range == AVCOL_RANGE_JPEG) ? "full" : "limited"));
+        }
         hb_dict_set_int(avsettings, "async_depth", init->job->hw_device_async_depth);
         if (init->job->qsv_ctx->vpp_scale_mode)
         {
@@ -127,6 +136,15 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     {
         if (init->hw_pix_fmt == AV_PIX_FMT_CUDA)
         {
+            if (color_range != AVCOL_RANGE_UNSPECIFIED)
+            {
+                hb_dict_set_int(avsettings, "range", color_range);
+                hb_dict_set(avfilter, "colorspace_cuda", avsettings);
+                hb_value_array_append(avfilters, avfilter);
+                avfilter   = hb_dict_init();
+                avsettings = hb_dict_init();
+            }
+
             hb_dict_set_int(avsettings, "w", width);
             hb_dict_set_int(avsettings, "h", height);
             hb_dict_set_string(avsettings, "interp_algo", "lanczos");
@@ -144,6 +162,10 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
             hb_dict_set_int(avsettings, "w", width);
             hb_dict_set_int(avsettings, "h", height);
             hb_dict_set_string(avsettings, "scale_type", "bilinear");
+            if (color_range != AVCOL_RANGE_UNSPECIFIED)
+            {
+                hb_dict_set_string(avsettings, "out_color_range", ((color_range == AVCOL_RANGE_JPEG) ? "full" : "studio"));
+            }
             hb_dict_set_string(avsettings, "format", av_get_pix_fmt_name(init->pix_fmt));
             hb_dict_set(avfilter, "vpp_amf", avsettings);
         }
@@ -153,6 +175,10 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         {
             hb_dict_set_int(avsettings, "width", width);
             hb_dict_set_int(avsettings, "height", height);
+            if (color_range != AVCOL_RANGE_UNSPECIFIED)
+            {
+                hb_dict_set_string(avsettings, "range", av_color_range_name(color_range));
+            }
             hb_dict_set_string(avsettings, "filter", "lanczos");
             hb_dict_set(avfilter, "zscale", avsettings);
         }
@@ -160,11 +186,15 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         {
             hb_dict_set_int(avsettings, "width", width);
             hb_dict_set_int(avsettings, "height", height);
+            if (color_range != AVCOL_RANGE_UNSPECIFIED)
+            {
+                hb_dict_set_int(avsettings, "out_range", color_range);
+            }
             hb_dict_set_string(avsettings, "flags", "lanczos+accurate_rnd");
             hb_dict_set(avfilter, "scale", avsettings);
         }
     }
-    
+
     hb_value_array_append(avfilters, avfilter);
 
     init->crop[0] = top;

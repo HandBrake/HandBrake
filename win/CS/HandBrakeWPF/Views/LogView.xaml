@@ -6,7 +6,7 @@
         Title="{Binding Title}"
         Width="740"
         Height="650"
-        MinWidth="625"
+        MinWidth="725"
         MinHeight="600"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
@@ -30,19 +30,86 @@
                     <ComboBox ItemsSource="{Binding LogFiles}" SelectedItem="{Binding SelectedLogFile}" DisplayMemberPath="FileDisplayName" Width="250" MaxWidth="300" />
                 </StackPanel>
 
-                <Button Command="{Binding RelayCommand}" CommandParameter="CopyLog" Margin="10,0,0,0" VerticalAlignment="Center"
+                <Grid Width="160" MaxHeight="24" Margin="10,0,0,0" VerticalAlignment="Center">
+                    <TextBox x:Name="searchBox" Padding="0,0,20,0" VerticalContentAlignment="Center"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             TextChanged="SearchBox_TextChanged" Height="22" 
+                             AutomationProperties.Name="Search" />
+
+                    <TextBlock Text="search ..." Margin="5,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"
+                               Foreground="{StaticResource Ui.ContrastLight}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=searchBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <Button Click="ClearSearch_Click" HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Margin="0,3,5,3" BorderThickness="0" Background="Transparent"
+                            Cursor="Hand" AutomationProperties.Name="Clear search">
+                        <Path Width="8" Height="8" Stretch="Uniform" Data="M 0 0 L 8 8 M 8 0 L 0 8" Stroke="{DynamicResource ButtonGlyphBrush}" StrokeThickness="1.5" />
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=searchBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+
+                <Button Command="{Binding RelayCommand}" CommandParameter="CopyLog" Margin="10,0,0,0"
                         AutomationProperties.Name="{x:Static Properties:Resources.LogView_CopyClipboard}" >
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Copy.png'}" />
                         <TextBlock Margin="2,0,0,0" Text="{x:Static Properties:Resources.LogView_CopyClipboard}" />
                     </StackPanel>
                 </Button>
-                <Button Margin="5,0,0,0" Command="{Binding RelayCommand}" CommandParameter="OpenLogDirectory" VerticalAlignment="Center"
-                        AutomationProperties.Name="{x:Static Properties:Resources.LogView_OpenLogDir}" >
-                    <StackPanel Orientation="Horizontal" >
-                        <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Folder.png'}" />
-                        <TextBlock Margin="2,0,0,0" Text="{x:Static Properties:Resources.LogView_OpenLogDir}" />
-                    </StackPanel>
+
+                <Button x:Name="logViewOptions" Margin="5,0,0,0" Click="logViewOptions_OnClick" >
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}" Width="16" Height="16" VerticalAlignment="Center" />
+                            <TextBlock VerticalAlignment="Center"
+                            Text="{x:Static Properties:Resources.QueueView_Options}" Margin="5,0,0,0" />
+                            <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Data="M 0 0 L 4 4 L 8 0 Z"
+                       Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrowPreset" />
+                        </StackPanel>
+                    </Button.Content>
+
+                    <Button.ContextMenu>
+                        <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}">
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ClearCompleted" Header="{x:Static Properties:Resources.LogView_ClearCompletedLogs}" />
+                            <Separator />
+
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="OpenLogDirectory" Header="{x:Static Properties:Resources.LogView_OpenLogDir}" >
+                                <MenuItem.Icon>
+                                    <Image Width="16" Height="16"
+                                           Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Folder.png'}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0" IsHitTestVisible="False">
+                                <TextBlock Text="{x:Static Properties:Resources.LogView_LogFiles}"/>
+                                <TextBlock Text="{Binding LogFileCount}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0" IsHitTestVisible="False">
+                                <TextBlock Text="{x:Static Properties:Resources.LogView_LogDirectorySize}"/>
+                                <TextBlock Text="{Binding LogFileSizeTotal}"  />
+                                <TextBlock Text=" MB" />
+                            </StackPanel>
+  
+                        </ContextMenu>
+                    </Button.ContextMenu>
                 </Button>
 
             </StackPanel>

@@ -87,7 +87,11 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Source="../Images/warningsmall.png" Margin="25,10,0,5"  Visibility="{Binding DisplayIntelDriverWarning, Converter={StaticResource boolToVisConverter}}" />
                         <TextBlock Text="{x:Static Properties:Resources.OptionsViewVideo_UnsupportedIntelDriver}" Margin="10,10,0,5"  FontWeight="SemiBold" Visibility="{Binding DisplayIntelDriverWarning, Converter={StaticResource boolToVisConverter}}" />
+                    </StackPanel>
 
+                    <StackPanel Orientation="Horizontal"  Margin="25,5,0,2">
+                        <Image Source="../Images/Complete.png" Width="16" Height="16"  Margin="0,0,5,0" Grid.Column="0" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_Available}" />
                     </StackPanel>
 
                     <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncLowPower}" Margin="25,5,0,10" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" 
@@ -115,6 +119,11 @@
                         <TextBlock Text="{x:Static Properties:Resources.OptionsViewVideo_UnsupportedIntelDriver}" Margin="10,10,0,5"  FontWeight="SemiBold" Visibility="{Binding DisplayNvidiaDriverWarning, Converter={StaticResource boolToVisConverter}}" />
                     </StackPanel>
 
+                    <StackPanel Orientation="Horizontal"  Margin="25,5,0,2">
+                        <Image Source="../Images/Complete.png" Width="16" Height="16"  Margin="0,0,5,0" Grid.Column="0" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_Available}" />
+                    </StackPanel>
+
                     <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvDecSupport}" Margin="25,5,0,0" IsEnabled="{Binding IsNvencAvailable}"
                               Visibility="{Binding IsNvdecAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableNvDecSupport}" />
                 </StackPanel>
@@ -126,7 +135,10 @@
                 <!-- VCN -->
                 <StackPanel Orientation="Vertical" Visibility="{Binding IsVceAvailable, Converter={StaticResource boolToVisConverter}}">
                     <TextBlock Text="AMD VCN" Style="{StaticResource subHeader}" Margin="0,15,0,0" />
-                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_Available}" Margin="25,5,0,0" />
+                    <StackPanel Orientation="Horizontal"  Margin="25,5,0,2">
+                        <Image Source="../Images/Complete.png" Width="16" Height="16"  Margin="0,0,5,0" Grid.Column="0" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_Available}" />
+                    </StackPanel>
 
                     <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableAmfDecSupport}" Margin="25,5,0,0" IsEnabled="{Binding IsVceAvailable}"
                               Visibility="{Binding IsAmfdecAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableAmfDecSupport}" />
@@ -140,6 +152,11 @@
                 <!-- DirectX -->
                 <StackPanel Orientation="Vertical" Visibility="{Binding IsARMDevice, Converter={StaticResource boolToVisConverter}}">
                     <TextBlock Text="Media Foundation (ARM Devices)" Style="{StaticResource subHeader}" Margin="0,15,0,0" />
+                    <StackPanel Orientation="Horizontal"  Margin="25,5,0,2">
+                        <Image Source="../Images/Complete.png" Width="16" Height="16"  Margin="0,0,5,0" Grid.Column="0" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_Available}" />
+                    </StackPanel>
+
                     <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableDirectXDecoding}" Margin="25,5,0,0" IsEnabled="{Binding IsDirectXAvailable}" IsChecked="{Binding EnableDirectXDecoding}" />
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Visibility="{Binding IsARMDevice, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
@@ -151,13 +168,6 @@
 
 
             <TextBlock Text="{x:Static Properties:Resources.Options_Scaling}" Style="{StaticResource subHeader}" Margin="0,20,0,10" Visibility="Collapsed" />
-
-            <!--<StackPanel Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
-                            <TextBlock Text="{x:Static Properties:Resources.Options_Scaler}" Margin="0,0,5,0" VerticalAlignment="Center" />
-                            <ComboBox  ItemsSource="{Binding ScalingOptions, Converter={StaticResource enumComboConverter}}" 
-                                       SelectedItem="{Binding SelectedScalingMode, Converter={StaticResource enumComboConverter}}" 
-                                       Width="120" VerticalAlignment="Center" />
-                        </StackPanel>-->
 
         </StackPanel>
     </StackPanel>
