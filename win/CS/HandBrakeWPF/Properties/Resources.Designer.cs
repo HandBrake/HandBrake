@@ -9072,5 +9072,14 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
+		
+        /// <summary>
+        ///   Looks up a localized string similar to Activity Log Search ....
+        /// </summary>
+        public static string LogView_Search {
+            get {
+                return ResourceManager.GetString("LogView_Search", resourceCulture);
+            }
+        }
     }
 }

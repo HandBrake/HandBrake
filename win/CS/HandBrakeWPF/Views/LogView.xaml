@@ -36,7 +36,7 @@
                              TextChanged="SearchBox_TextChanged" Height="22" 
                              AutomationProperties.Name="Search" />
 
-                    <TextBlock Text="search ..." Margin="5,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"
+                    <TextBlock Text="{x:Static Properties:Resources.LogView_Search}" Margin="5,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"
                                Foreground="{StaticResource Ui.ContrastLight}">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
