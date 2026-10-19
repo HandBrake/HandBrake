@@ -114,9 +114,13 @@ static int ssa_update_style(const char *ssa, hb_subtitle_style_context_t *ctx)
         index = -1;
 
         // Skip any malformed markup junk
-        while (strchr("\\}", ssa[pos]) == NULL) pos++;
-        pos++;
+        while (ssa[pos] != '\0' && strchr("\\}", ssa[pos]) == NULL) pos++;
         // Early exit if there is no tag
+        if (ssa[pos] != '\\')
+        {
+            break;
+        }
+        pos++;
         if (ssa[pos] == '\0')
         {
             break;
@@ -187,14 +191,14 @@ static int ssa_update_style(const char *ssa, hb_subtitle_style_context_t *ctx)
             }
         }
         if ((ssa[pos] == 'a' && ssa[pos+1] == '&' && ssa[pos+2] == 'H') ||
-            (!strcmp(ssa+pos, "alpha") && ssa[pos+5] == '&' && ssa[pos+6] == 'H'))
+            (!strncmp(ssa+pos, "alpha", 5) && ssa[pos+5] == '&' && ssa[pos+6] == 'H'))
         {
             // Font alpha markup
             char *endptr;
             uint8_t alpha;
             int alpha_pos = 3;
 
-            if (ssa[1] == 'l')
+            if (ssa[pos+1] == 'l')
                 alpha_pos = 7;
 
             alpha = strtol(ssa + pos + alpha_pos, &endptr, 16);

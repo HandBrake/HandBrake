@@ -49,7 +49,7 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-        <Setter Property="Padding" Value="8,6"/>
+        <Setter Property="Padding" Value="4,2"/>
     </Style>
 
     <!-- Fixes HorizontalContentAlignment and VerticalContentAlignment binding errors that you get when you setup MenuItems by binding their ItemSource property -->
@@ -67,6 +67,11 @@
 
     <Style x:Key="subTextSmall" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="FontSize" Value="11" />
+    </Style>
+
+    <Style x:Key="subTextSmallest" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontWeight" Value="UltraLight" />
         <Setter Property="FontSize" Value="11" />
     </Style>
 

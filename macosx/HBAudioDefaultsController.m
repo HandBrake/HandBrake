@@ -38,6 +38,7 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
         _settings = settings;
         _languagesList = [[HBLanguagesSelection alloc] initWithLanguages:_settings.trackSelectionLanguages];
         _delegate = delegate;
+        self.title = NSLocalizedString(@"Audio Selection Behaviour", @"Audio Selection Behaviour view title");
     }
     return self;
 }
@@ -111,13 +112,11 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 {
     self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
     [self.delegate audioControllerDidEnd:self.settings returnCode:NSModalResponseOK];
-    [self dismissViewController:self];
 }
 
 - (IBAction)cancel:(id)sender
 {
     [self.delegate audioControllerDidEnd:self.settings returnCode:NSModalResponseCancel];
-    [self dismissViewController:self];
 }
 
 - (IBAction)openUserGuide:(id)sender

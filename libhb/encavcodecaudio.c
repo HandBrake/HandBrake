@@ -421,7 +421,6 @@ static void encavcodecaClose(hb_work_object_t * w)
 static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_audio_t        * audio = w->audio;
 
     while (1)
     {
@@ -454,8 +453,9 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
             // back to our timebase.
             out->s.start = av_rescale_q(pv->pkt->pts, pv->context->time_base,
                                         (AVRational){1, 90000});
-            out->s.duration  = (double)90000 * pv->samples_per_frame /
-                                               audio->config.out.samplerate;
+            out->s.duration  = av_rescale_q(pv->pkt->duration,
+                                            pv->context->time_base,
+                                            (AVRational){1, 90000});
             out->s.stop      = out->s.start + out->s.duration;
             out->s.type      = AUDIO_BUF;
             out->s.frametype = HB_FRAME_AUDIO;
@@ -467,69 +467,94 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
     }
 }
 
-static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
+// Read nb_samples samples from the input list and send them to the encoder.
+// nb_samples must not exceed samples_per_frame.
+static int EncodeFrame(hb_work_object_t *w, hb_buffer_list_t *list,
+                       int nb_samples)
 {
     hb_work_private_t * pv = w->private_data;
     uint64_t            pts, pos;
+    int                 ret;
+
+    hb_list_getbytes(pv->list, (uint8_t *)pv->input_buf,
+                     nb_samples * pv->context->ch_layout.nb_channels *
+                     sizeof(float), &pts, &pos);
+
+    // Prepare input frame
+    int     out_size;
+    AVFrame frame = { .nb_samples = nb_samples,
+                      .format = pv->context->sample_fmt,
+                      .ch_layout = pv->context->ch_layout
+    };
+
+    out_size = av_samples_get_buffer_size(NULL,
+                                          pv->context->ch_layout.nb_channels,
+                                          nb_samples,
+                                          pv->context->sample_fmt, 1);
+    avcodec_fill_audio_frame(&frame,
+                             pv->context->ch_layout.nb_channels, pv->context->sample_fmt,
+                             (uint8_t *)pv->output_buf, out_size, 1);
+    if (pv->swresample != NULL)
+    {
+        int out_samples;
+
+        out_samples = swr_convert(pv->swresample,
+                                  frame.extended_data, frame.nb_samples,
+                (const uint8_t **)&pv->input_buf,      frame.nb_samples);
+        if (out_samples != nb_samples)
+        {
+            // we're not doing sample rate conversion,
+            // so this shouldn't happen
+            hb_log("encavcodecaWork: swr_convert() failed");
+            return 0;
+        }
+    }
+
+    frame.pts = pts + (90000LL * pos / (sizeof(float) *
+                                        pv->context->ch_layout.nb_channels *
+                                        pv->context->sample_rate));
+
+    frame.pts = av_rescale_q(frame.pts, (AVRational){1, 90000},
+                             pv->context->time_base);
+
+    // Encode
+    ret = avcodec_send_frame(pv->context, &frame);
+    if (ret < 0)
+    {
+        hb_log("encavcodecaudio: avcodec_send_frame failed");
+        return -1;
+    }
+    get_packets(w, list);
+
+    return 0;
+}
+
+static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
+{
+    hb_work_private_t * pv = w->private_data;
 
     while (hb_list_bytes(pv->list) >= pv->input_samples * sizeof(float))
     {
-        int ret;
-
-        hb_list_getbytes(pv->list, (uint8_t *)pv->input_buf,
-                         pv->input_samples * sizeof(float), &pts, &pos);
-
-        // Prepare input frame
-        int     out_size;
-        AVFrame frame = { .nb_samples = pv->samples_per_frame,
-                          .format = pv->context->sample_fmt,
-                          .ch_layout = pv->context->ch_layout
-        };
-
-        out_size = av_samples_get_buffer_size(NULL,
-                                              pv->context->ch_layout.nb_channels,
-                                              pv->samples_per_frame,
-                                              pv->context->sample_fmt, 1);
-        avcodec_fill_audio_frame(&frame,
-                                 pv->context->ch_layout.nb_channels, pv->context->sample_fmt,
-                                 (uint8_t *)pv->output_buf, out_size, 1);
-        if (pv->swresample != NULL)
+        if (EncodeFrame(w, list, pv->samples_per_frame) < 0)
         {
-            int out_samples;
-
-            out_samples = swr_convert(pv->swresample,
-                                      frame.extended_data, frame.nb_samples,
-                    (const uint8_t **)&pv->input_buf,      frame.nb_samples);
-            if (out_samples != pv->samples_per_frame)
-            {
-                // we're not doing sample rate conversion,
-                // so this shouldn't happen
-                hb_log("encavcodecaWork: swr_convert() failed");
-                continue;
-            }
-        }
-
-        frame.pts = pts + (90000LL * pos / (sizeof(float) *
-                                            pv->context->ch_layout.nb_channels *
-                                            pv->context->sample_rate));
-
-        frame.pts = av_rescale_q(frame.pts, (AVRational){1, 90000},
-                                 pv->context->time_base);
-
-        // Encode
-        ret = avcodec_send_frame(pv->context, &frame);
-        if (ret < 0)
-        {
-            hb_log("encavcodecaudio: avcodec_send_frame failed");
             return;
         }
-        get_packets(w, list);
     }
 }
 
 static void Flush( hb_work_object_t * w, hb_buffer_list_t * list )
 {
     hb_work_private_t * pv = w->private_data;
+
+    // Encode the remaining samples, less than a full frame.
+    // libavcodec accepts a smaller last frame, and pads it
+    // if the encoder requires a fixed frame size.
+    int nb_samples = hb_list_bytes(pv->list) /
+                     (pv->context->ch_layout.nb_channels * sizeof(float));
+    if (nb_samples > 0)
+    {
+        EncodeFrame(w, list, nb_samples);
+    }
 
     avcodec_send_frame(pv->context, NULL);
     get_packets(w, list);

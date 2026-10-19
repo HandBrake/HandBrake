@@ -10,7 +10,7 @@
 
 @import HandBrakeKit;
 
-@interface HBSubtitlesController ()
+@interface HBSubtitlesController () <HBSubtitlesDefaultsControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet NSTableView *table;
 @property (nonatomic, strong) NSArray<HBSecurityAccessToken *> *fileTokens;
@@ -66,16 +66,18 @@
 
 - (IBAction)showSettingsSheet:(id)sender
 {
-    HBSubtitlesDefaults *defaults = [self.subtitles.defaults copy];
-    self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:defaults];
+    self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:[self.subtitles.defaults copy] delegate:self];
+    [self presentViewControllerAsSheet:self.defaultsController];
+}
 
-    [self.view.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
-        if (returnCode == NSModalResponseOK)
-        {
-            self.subtitles.defaults = defaults;
-        }
-        self.defaultsController = nil;
-    }];
+- (void)subtitlesControllerDidEnd:(nonnull HBSubtitlesDefaults *)settings returnCode:(NSModalResponse)returnCode
+{
+    if (returnCode == NSModalResponseOK)
+    {
+        self.subtitles.defaults = settings;
+    }
+    [self dismissViewController:self.defaultsController];
+    self.defaultsController = nil;
 }
 
 - (IBAction)showAdditionalSettingsPopOver:(id)sender

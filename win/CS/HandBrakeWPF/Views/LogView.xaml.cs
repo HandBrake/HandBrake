@@ -25,6 +25,7 @@ namespace HandBrakeWPF.Views
     public partial class LogView : Window
     {
         private DelayedActionProcessor delayProcessor = new DelayedActionProcessor();
+        private DelayedActionProcessor searchDelayProcessor = new DelayedActionProcessor();
         private LogViewModel viewModel;
         
         public LogView()
@@ -53,7 +54,7 @@ namespace HandBrakeWPF.Views
             if (vm != null)
             {
                 viewModel = vm;
-                this.logText.AppendText(vm.ActivityLog);
+                this.logText.AppendText(vm.GetFilteredLog());
                 vm.LogMessageReceived += this.Vm_LogMessageReceived;
                 vm.LogResetEvent += this.Vm_LogResetEvent;
             }
@@ -65,14 +66,45 @@ namespace HandBrakeWPF.Views
                 () =>
                 {
                     this.logText.Clear();
-                    this.logText.AppendText(this.viewModel.ActivityLog.TrimStart());
+                    this.logText.AppendText(this.viewModel.GetFilteredLog());
                 });
+        }
+
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (this.viewModel == null)
+            {
+                return;
+            }
+
+            this.searchDelayProcessor.PerformTask(() => ThreadHelper.OnUIThread(this.RefreshLog), 250);
+        }
+
+        private void RefreshLog()
+        {
+            this.logText.Clear();
+            this.logText.AppendText(this.viewModel.GetFilteredLog());
+            if (this.AutoScroll.IsChecked)
+            {
+                this.logText.ScrollToEnd();
+            }
+        }
+
+        private void ClearSearch_Click(object sender, RoutedEventArgs e)
+        {
+            this.searchBox.Clear();
+            this.searchBox.Focus();
         }
 
         private void Vm_LogMessageReceived(object sender, LogEventArgs e)
         {
             try
             { 
+                if (!this.viewModel.MatchesFilter(e.Log.Content))
+                {
+                    return;
+                }
+
                 // This works better than Data Binding because of the scroll.
                 this.logText.AppendText(e.Log.Content + Environment.NewLine);
 
@@ -105,6 +137,17 @@ namespace HandBrakeWPF.Views
             if (e.Key == Key.Escape)
             {
                 this.Close();
+            }
+        }
+
+        private void logViewOptions_OnClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            if (button != null && button.ContextMenu != null)
+            {
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                button.ContextMenu.IsOpen = true;
             }
         }
     }

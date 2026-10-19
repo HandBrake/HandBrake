@@ -33,7 +33,7 @@
     <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#252525" />
     <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="White" />
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White" />
-    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#4089C4" />
     <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkBrushKey}" Color="WhiteSmoke" />
 
@@ -198,7 +198,6 @@
         <ResourceDictionary Source="Controls/ContextMenuDark.xaml" />
         <ResourceDictionary Source="Controls/ToolbarDark.xaml" />
         <ResourceDictionary Source="Controls/GroupBoxDark.xaml" />
-        <ResourceDictionary Source="Controls/TreeviewDark.xaml" />
         <ResourceDictionary Source="Controls/ProgressBarBoth.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

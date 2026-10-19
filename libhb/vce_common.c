@@ -269,14 +269,15 @@ int hb_vce_are_filters_supported(hb_list_t *filters)
         switch (filter->id)
         {
             // AMF VPP-capable filters.
+            case HB_FILTER_ADAPTER:
             case HB_FILTER_FORMAT:
             case HB_FILTER_CROP_SCALE:
                 break;
             case HB_FILTER_VFR:
             {
-                // mode=0 does not access frame data.
-                int mode = hb_dict_get_int(filter->settings, "mode");
-                if (mode != 0)
+                // frame-drop-mode=0 does not access frame data.
+                int frame_drop_mode = hb_dict_get_int(filter->settings, "frame-drop-mode");
+                if (frame_drop_mode != 0)
                 {
                     num_sw_filters++;
                 }

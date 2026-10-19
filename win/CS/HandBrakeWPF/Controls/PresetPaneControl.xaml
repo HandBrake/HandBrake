@@ -7,7 +7,7 @@
              xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="400">
+             d:DesignHeight="700" d:DesignWidth="450">
 
     <UserControl.Resources>
         <converters:ThemeImageConverter x:Key="themeConverter" />
@@ -20,14 +20,13 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Grid.Resources>
 
-                <HierarchicalDataTemplate DataType="{x:Type loc:Preset}">
-                    <StackPanel Orientation="Horizontal" >
-                        <StackPanel.Resources>
+                <DataTemplate DataType="{x:Type loc:Preset}">
+                    <Grid Margin="16,0,0,0">
+                        <Grid.Resources>
                             <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="True" >
@@ -39,23 +38,56 @@
                                     <DataTrigger Binding="{Binding IsPresetDisabled}" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource Ui.ContrastLight}" />
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataContext.IsPresetDescriptionVisible, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True">
+                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </StackPanel.Resources>
-                        <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
-                        <TextBlock Text="{x:Static Properties:Resources.Preset_Default}" Margin="10,0,0,0" Visibility="{Binding IsDefault, Converter={StaticResource boolToVisConverter}}"  />
-                        <TextBlock Text="{x:Static Properties:Resources.Preset_NotAvailable}" Margin="10,0,0,0" Visibility="{Binding IsPresetDisabled, Converter={StaticResource boolToVisConverter}}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
+                        </Grid.Resources>
 
-                <HierarchicalDataTemplate DataType="{x:Type loc:PresetDisplayCategory}" ItemsSource="{Binding Presets}">
-                    <StackPanel Orientation="Horizontal" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                            <TextBlock Text="{x:Static Properties:Resources.Preset_Default}" Margin="10,0,0,0" Visibility="{Binding IsDefault, Converter={StaticResource boolToVisConverter}}"  />
+                            <TextBlock Text="{x:Static Properties:Resources.Preset_NotAvailable}" Margin="10,0,0,0" Visibility="{Binding IsPresetDisabled, Converter={StaticResource boolToVisConverter}}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" Grid.Row="1" 
+                                    Visibility="{Binding DataContext.IsPresetDescriptionVisible, Converter={StaticResource boolToVisConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Margin="0,2,10,3" MaxHeight="40" >
+                                <TextBlock.Resources>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource subTextSmallest}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPresetDisabled}" Value="True">
+                                                <Setter Property="Foreground" Value="{StaticResource Ui.ContrastLight}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Resources>
+                            </TextBlock>
+                        </StackPanel>
+             
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type loc:PresetDisplayCategory}">
+                    <StackPanel Orientation="Horizontal" Background="Transparent" Margin="4">
+                        <Path x:Name="chevron" Width="8" Height="8" Margin="0,0,8,0" VerticalAlignment="Center" Stretch="Uniform"
+                              Data="M 0 0 L 4 4 L 0 8 Z" Fill="{DynamicResource ButtonGlyphBrush}" />
                         <TextBlock Text="{Binding Category}" FontSize="14" />
                     </StackPanel>
-                </HierarchicalDataTemplate>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsExpanded}" Value="True">
+                            <Setter TargetName="chevron" Property="Data" Value="M 0 0 L 8 0 L 4 4 Z" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
             </Grid.Resources>
 
-            <Grid Grid.Row="1" Margin="0,0,0,4">
+            <Grid Grid.Row="0" Margin="0,0,0,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -107,34 +139,65 @@
                 </Button>
             </Grid>
 
-            <TreeView x:Name="presetListTree" HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Presets}"
-                              VerticalAlignment="Stretch" Grid.Row="2" 
-                              ItemsSource="{Binding PresetsCategories}" Width="285"
-                              SelectedItemChanged="PresetListTree_OnSelectedItemChanged"
-                              PreviewMouseRightButtonDown="PresetListTree_OnPreviewMouseRightButtonDown">
+            <Grid Grid.Row="1" Margin="0,0,0,4">
+                <TextBox x:Name="presetSearchBox" Height="26" VerticalContentAlignment="Center" Padding="2,0,24,0"
+                         AutomationProperties.Name="{x:Static Properties:Resources.PresetPane_Search}"
+                         TextChanged="PresetSearchBox_OnTextChanged" />
+                <TextBlock Text="{x:Static Properties:Resources.PresetPane_Search}" Foreground="{StaticResource Ui.ContrastLight}"
+                           IsHitTestVisible="False" VerticalAlignment="Center" Margin="6,0,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, ElementName=presetSearchBox}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <Button x:Name="presetSearchClear"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" Padding="8,2"
+                        Click="PresetSearchClear_OnClick" Focusable="False" Background="Transparent" BorderThickness="0"
+                        AutomationProperties.Name="{x:Static Properties:Resources.PresetPane_ClearSearch}"
+                        ToolTip="{x:Static Properties:Resources.PresetPane_ClearSearch}">
+                    <Path Width="8" Height="8" Stretch="Uniform" Data="M 0 0 L 8 8 M 8 0 L 0 8" Stroke="{DynamicResource ButtonGlyphBrush}" StrokeThickness="1.5" />
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, ElementName=presetSearchBox}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
 
-                <TreeView.CommandBindings>
+            <ListView x:Name="presetListView" HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Presets}"
+                              VerticalAlignment="Stretch" Grid.Row="2" Width="350"
+                              SelectionMode="Single"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              SelectionChanged="PresetListView_OnSelectionChanged"
+                              PreviewMouseLeftButtonDown="PresetListView_OnPreviewMouseLeftButtonDown"
+                              PreviewMouseRightButtonDown="PresetListView_OnPreviewMouseRightButtonDown">
+
+                <ListView.CommandBindings>
                     <CommandBinding Command="Delete" Executed="Delete_Execute" />
-                </TreeView.CommandBindings>
+                </ListView.CommandBindings>
 
-                <TreeView.ItemContainerStyle>
-                    <Style BasedOn="{StaticResource {x:Type TreeViewItem}}" TargetType="TreeViewItem">
-                        <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        <Setter Property="Padding" Value="0,3,3,3" />
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource ModernListBoxItemStyle}">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Padding" Value="5,4"></Setter>
                         <Setter Property="ToolTip" Value="{Binding Description}" />
                         <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
-                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                        <EventSetter Event="TreeViewItem.Collapsed" Handler="PresetTreeviewItemCollapsed" />
-                        <Style.Triggers>
-                            <Trigger Property="HasItems" Value="True">
-                                <Setter Property="Focusable" Value="false" />
-                            </Trigger>
-                        </Style.Triggers>
+                        <EventSetter Event="Loaded" Handler="PresetListViewItem_OnLoaded" />
                     </Style>
-                </TreeView.ItemContainerStyle>
+                </ListView.ItemContainerStyle>
 
-                <TreeView.ContextMenu>
+                <ListView.ContextMenu>
                     <ContextMenu AutomationProperties.Name="Presets List Context Menu" Opened="ContextMenu_OnOpened">
                         <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" x:Name="setDefault" Command="{Binding RelayCommand}" CommandParameter="PresetSetDefault" />
                         <Separator x:Name="moveSplitter1" />
@@ -153,20 +216,9 @@
                         <MenuItem Header="{x:Static Properties:Resources.Shared_ExpandAll}" x:Name="presetExpandAll" Click="PresetExpandAll_OnClick"  />
                         <MenuItem Header="{x:Static Properties:Resources.Shared_CollapseAll}" x:Name="presetCollapseAll" Click="PresetCollapseAll_OnClick" />
                     </ContextMenu>
-                </TreeView.ContextMenu>
-            </TreeView>
+                </ListView.ContextMenu>
+            </ListView>
 
-            <Grid Grid.Row="3" Visibility="{Binding IsPresetDescriptionVisible, Converter={StaticResource boolToVisConverter}}"
-                  Width="285">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <TextBlock Text="{x:Static Properties:Resources.PresetPane_Desc}" Margin="0,5,0,2" Style="{StaticResource subHeaderSmall}" />
-                <TextBox IsReadOnly="True" Text="{Binding SelectedPreset.Description}" Height="75" TextWrapping="Wrap" Grid.Row="1"
-                         VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" />
-            </Grid>
         </Grid>
 
     </Border>

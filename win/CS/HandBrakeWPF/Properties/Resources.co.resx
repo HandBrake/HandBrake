@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -893,9 +893,6 @@ Indiziu : Ciò ch’ella ci vole à fà in casu di rimpiazzamentu di schedariu p
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
     <value>Rigatura d’arrutata</value>
-  </data>
-  <data name="FiltersView_Tune" xml:space="preserve">
-    <value>Rigatura :</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
     <value>Aghjunghje</value>
@@ -2290,7 +2287,7 @@ Ci vole à sceglie una prerigatura sfarente.</value>
     <value>Piantà</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>U nome di categuria scrittu esiste dighjà. Ci vole à sceglie un nome sfarente.</value>
@@ -2713,9 +2710,6 @@ Osinnò, attivate l’ozzione « Impiegà un lettore esternu » quì sottu.</v
   <data name="QueueStats_ShortOutputStats" xml:space="preserve">
     <value>Esciuta : {0}, mez. {1} fps</value>
   </data>
-  <data name="PresetPane_Desc" xml:space="preserve">
-    <value>Discrizzione di a prerigatura :</value>
-  </data>
   <data name="PresetPane_HidePresetDesc" xml:space="preserve">
     <value>Piattà a discrizzione di a prerigatura</value>
   </data>
@@ -2858,16 +2852,16 @@ Per permette parechje cudificazioni simultanee, attivate st’ozzione in u listi
     <value>Apre a finestra di l’attività</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="AnamorphicMode_Custom" xml:space="preserve">
     <value>Persunalizata</value>
@@ -3035,5 +3029,8 @@ Vulete cuntinuà ?</value>
   </data>
   <data name="VideoView_SameAsSource" xml:space="preserve">
     <value>Listessa chì a fonte</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Rigatura :</value>
   </data>
 </root>

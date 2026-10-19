@@ -588,26 +588,21 @@ static void FUNC(build_integral_scalar)(void *integral,
     {
         const pixel *p1 = src_pre     + (y-n_half   )*bw - n_half;
         const pixel *p2 = compare_pre + (y-n_half+dy)*bw - n_half + dx;
+        const integral_pixel *prev = (const integral_pixel *)(integral) + ((y > 0 ? y-1 : 0) * integral_stride);
         integral_pixel *out = (integral_pixel *)(integral) + (y*integral_stride);
 
+        integral_pixel pixel_sum = 0;
         for (int x = 0; x < dst_w + n; x++)
         {
+            // Square the difference between the two pixels and add to the integral sum
             pixel_diff diff = (pixel_diff)(*p1) - (pixel_diff)(*p2);
-            *out = *(out-1) + (integral_pixel)((pixel_diff_2)(diff) * diff);
+            pixel_sum += (integral_pixel)((pixel_diff_2)(diff) * diff);
+            *out = pixel_sum + (y > 0 ? *prev : 0);
+
+            prev++;
             out++;
             p1++;
             p2++;
-        }
-
-        if (y > 0)
-        {
-            out = (integral_pixel *)(integral) + y*integral_stride;
-
-            for (int x = 0; x < dst_w + n; x++)
-            {
-                *out += *(out - integral_stride);
-                out++;
-            }
         }
     }
 }

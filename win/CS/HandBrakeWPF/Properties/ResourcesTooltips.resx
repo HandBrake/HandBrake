@@ -573,4 +573,14 @@ Bitrate will vary source to source.</value>
   <data name="Video_ColourRange" xml:space="preserve">
     <value>Color Range. Determines the values of the reference black and white. Set to limited to maximize compatibility.</value>
   </data>
+  <data name="OptionsView_PresetDisplayToolbarModes" xml:space="preserve">
+    <value>Menu - Display a simplified menu of presets.
+Overlay - A panel with allowing for more control over presets.</value>
+  </data>
+  <data name="AudioDefaultView_AutoNamingTooltip" xml:space="preserve">
+    <value>Automatically generate a name for the output track based on the output settings. This can be for tracks that remain unnamed after passthru, or for all tracks.</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>If the source track does not match the above selected codecs you can select the fallback behaviour.</value>
+  </data>
 </root>

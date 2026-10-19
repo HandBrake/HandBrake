@@ -54,7 +54,7 @@ static void filter_loop( void * );
  */
 hb_thread_t * hb_work_init( hb_list_t * jobs, volatile int * die, hb_error_code * error, hb_job_t ** job )
 {
-    hb_work_t * work = calloc( sizeof( hb_work_t ), 1 );
+    hb_work_t * work = calloc( 1, sizeof( hb_work_t ) );
 
     work->jobs      = jobs;
     work->current_job = job;
@@ -1417,6 +1417,12 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
 {
     hb_list_t *list = job->list_filter;
 
+    // Add adapter
+    hb_filter_object_t *filter = hb_filter_init(HB_FILTER_ADAPTER);
+    char *settings = hb_strdup_printf("rotation=%d", job->title->rotation);
+    hb_add_filter(list, filter, settings);
+    free(settings);
+
     // Add selective deinterlacing mode if comb detection is enabled
     if (hb_filter_find(list, HB_FILTER_COMB_DETECT) != NULL)
     {
@@ -1437,7 +1443,7 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
     }
 
     int angle = 0;
-    hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_ROTATE);
+    filter = hb_filter_find(list, HB_FILTER_ROTATE);
     if (filter != NULL)
     {
         hb_dict_t *settings = filter->settings;
@@ -1831,6 +1837,7 @@ static void do_job(hb_job_t *job)
                                                   &job->hw_device_ctx);
             if (result)
             {
+                hb_log("Failure to initialise hwaccel");
                 job->hw_accel = NULL;
                 job->hw_pix_fmt = AV_PIX_FMT_NONE;
             }

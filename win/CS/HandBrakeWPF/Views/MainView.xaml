@@ -757,7 +757,7 @@
               Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
         </Grid>
 
-        <Controls:PresetPaneControl x:Name="presetPaneControl" Visibility="{Binding IsPresetPaneDisplayed, Converter={StaticResource boolToVisConverter}}" Panel.ZIndex="11"  
+        <Controls:PresetPaneControl x:Name="presetPaneControl" Visibility="{Binding IsPresetPaneDisplayed, Converter={StaticResource boolToVisConverter}}" Panel.ZIndex="11"
                                     DataContext="{Binding}"  Grid.Row="1" HorizontalAlignment="Right" Margin="0,2,10,10" SelectedPreset="{Binding SelectedPreset}"  />
 
         <!-- Source Selection-->

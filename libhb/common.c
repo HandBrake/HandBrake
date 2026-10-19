@@ -4344,8 +4344,8 @@ hb_list_t * hb_list_init()
 {
     hb_list_t * l;
 
-    l              = calloc( sizeof( hb_list_t ), 1 );
-    l->items       = calloc( HB_LIST_DEFAULT_SIZE * sizeof( void * ), 1 );
+    l              = calloc( 1, sizeof( hb_list_t ) );
+    l->items       = calloc( HB_LIST_DEFAULT_SIZE, sizeof( void * ) );
     l->items_alloc = HB_LIST_DEFAULT_SIZE;
 
     return l;
@@ -4908,7 +4908,7 @@ hb_title_t * hb_title_init( char * path, int index )
 {
     hb_title_t * t;
 
-    t = calloc( sizeof( hb_title_t ), 1 );
+    t = calloc( 1, sizeof( hb_title_t ) );
 
     t->index              = index;
     t->playlist           = -1;
@@ -5202,7 +5202,7 @@ hb_job_t * hb_job_init( hb_title_t * title )
     if ( title == NULL )
         return NULL;
 
-    job = calloc( sizeof( hb_job_t ), 1 );
+    job = calloc( 1, sizeof( hb_job_t ) );
     job_setup(job, title);
 
     return job;
@@ -5414,6 +5414,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
     hb_filter_object_t * filter;
     switch( filter_id )
     {
+        case HB_FILTER_ADAPTER:
+            filter = &hb_filter_adapter;
+            break;
+
         case HB_FILTER_DETELECINE:
             filter = &hb_filter_detelecine;
             break;
@@ -6300,6 +6304,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
     AVChannelLayout *out_ch_layout = audio->config.out.ch_layout;
     audio->config.out = audiocfg->out;
     audio->config.out.track = hb_list_count(job->list_audio) + 1;
+    audio->config.out.name = NULL;
     if (audiocfg->out.name && *audiocfg->out.name)
     {
         audio->config.out.name = strdup(audiocfg->out.name);

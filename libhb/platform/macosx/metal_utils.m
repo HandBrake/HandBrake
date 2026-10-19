@@ -19,7 +19,7 @@ hb_metal_context_t * hb_metal_context_init(const char *metallib_data,
                                            int width, int height,
                                            int pix_fmt, int color_range)
 {
-    hb_metal_context_t *ctx = calloc(sizeof(struct hb_metal_context_s), 1);
+    hb_metal_context_t *ctx = calloc(1, sizeof(struct hb_metal_context_s));
     if (ctx == NULL)
     {
         goto fail;

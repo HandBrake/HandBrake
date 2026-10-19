@@ -18,36 +18,45 @@ static void *HBSubtitlesDefaultsContext = &HBSubtitlesDefaultsContext;
 @property (nonatomic, readonly) HBLanguagesSelection *languagesList;
 @property (nonatomic, unsafe_unretained) IBOutlet HBLanguageArrayController *tableController;
 
+@property (nonatomic, weak) id<HBSubtitlesDefaultsControllerDelegate> delegate;
+
 @end
 
 @implementation HBSubtitlesDefaultsController
 
-- (instancetype)initWithSettings:(HBSubtitlesDefaults *)settings
+- (instancetype)initWithSettings:(HBSubtitlesDefaults *)settings delegate:(nonnull id<HBSubtitlesDefaultsControllerDelegate>)delegate
 {
-    self = [super initWithWindowNibName:@"SubtitlesDefaults"];
+    self = [super initWithNibName:@"SubtitlesDefaults" bundle:nil];
     if (self)
     {
         _settings = settings;
         _languagesList = [[HBLanguagesSelection alloc] initWithLanguages:_settings.trackSelectionLanguages];
-        _settings.undo = self.window.undoManager;
+        _delegate = delegate;
+        self.title = NSLocalizedString(@"Subtitles Selection Behaviour", @"Subtitles Selection Behaviour view title");
     }
     return self;
 }
 
-- (void)windowDidLoad
+- (void)viewWillAppear
 {
-    self.window.preventsApplicationTerminationWhenModal = NO;
+    self.settings.undo = self.view.window.undoManager;
+    self.languagesList.undo = self.view.window.undoManager;
+}
+
+- (void)viewDidAppear
+{
+    self.view.window.preventsApplicationTerminationWhenModal = NO;
 }
 
 - (IBAction)ok:(id)sender
 {
     self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
-    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
+    [self.delegate subtitlesControllerDidEnd:self.settings returnCode:NSModalResponseOK];
 }
 
 - (IBAction)cancel:(id)sender
 {
-    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
+    [self.delegate subtitlesControllerDidEnd:self.settings returnCode:NSModalResponseCancel];
 }
 
 - (IBAction)openUserGuide:(id)sender

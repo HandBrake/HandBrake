@@ -11,7 +11,7 @@
 #import "HBAudioDefaultsController.h"
 #import "HBSubtitlesDefaultsController.h"
 
-@interface HBAddPresetController ()
+@interface HBAddPresetController () <HBAudioDefaultsControllerDelegate, HBSubtitlesDefaultsControllerDelegate>
 
 @property (nonatomic, unsafe_unretained) IBOutlet NSTextField *name;
 @property (nonatomic, unsafe_unretained) IBOutlet NSTextField *desc;
@@ -35,7 +35,7 @@
 
 @property (nonatomic) HBPictureResolutionLimitMode resolutionLimitMode;
 
-@property (nonatomic, readwrite, strong) NSWindowController *defaultsController;
+@property (nonatomic, readwrite, strong) NSWindow *defaultsWindow;
 
 
 @end
@@ -178,15 +178,18 @@
     HBAudioDefaults *defaults = [[HBAudioDefaults alloc] init];
     [defaults applyPreset:self.mutablePreset error:NULL];
 
-//    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
-//
-//    [self.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
-//        if (returnCode == NSModalResponseOK)
-//        {
-//            [defaults writeToPreset:self.mutablePreset];
-//        }
-//        self.defaultsController = nil;
-//    }];
+    self.defaultsWindow = [NSWindow windowWithContentViewController:[[HBAudioDefaultsController alloc] initWithSettings:defaults delegate:self]];
+    [self.window beginSheet:self.defaultsWindow completionHandler:^(NSModalResponse returnCode) {}];
+}
+
+- (void)audioControllerDidEnd:(nonnull HBAudioDefaults *)settings returnCode:(NSModalResponse)returnCode
+{
+    if (returnCode == NSModalResponseOK)
+    {
+        [settings writeToPreset:self.mutablePreset];
+    }
+    [self.window endSheet:self.defaultsWindow];
+    self.defaultsWindow = nil;
 }
 
 - (IBAction)showSubtitlesSettingsSheet:(id)sender
@@ -194,15 +197,18 @@
     HBSubtitlesDefaults *defaults = [[HBSubtitlesDefaults alloc] init];
     [defaults applyPreset:self.mutablePreset error:NULL];
 
-    self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:defaults];
+    self.defaultsWindow = [NSWindow windowWithContentViewController:[[HBSubtitlesDefaultsController alloc] initWithSettings:defaults delegate:self]];
+    [self.window beginSheet:self.defaultsWindow completionHandler:^(NSModalResponse returnCode) {}];
+}
 
-    [self.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
-        if (returnCode == NSModalResponseOK)
-        {
-            [defaults writeToPreset:self.mutablePreset];
-        }
-        self.defaultsController = nil;
-    }];
+- (void)subtitlesControllerDidEnd:(nonnull HBSubtitlesDefaults *)settings returnCode:(NSModalResponse)returnCode
+{
+    if (returnCode == NSModalResponseOK)
+    {
+        [settings writeToPreset:self.mutablePreset];
+    }
+    [self.window endSheet:self.defaultsWindow];
+    self.defaultsWindow = nil;
 }
 
 - (IBAction)add:(id)sender
