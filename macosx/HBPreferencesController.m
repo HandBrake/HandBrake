@@ -315,8 +315,9 @@ static BOOL _hardwareDecoderSupported = NO;
                                            context:HBPreferencesControllerContext];
 
     // Set default tab
-    toolbar.selectedItemIdentifier = TOOLBAR_GENERAL;
-    [self setPrefView:nil];
+    NSToolbarItem *first = self.window.toolbar.items.firstObject;
+    toolbar.selectedItemIdentifier = first.itemIdentifier;
+    [self setPrefView:first];
 }
 
 - (nullable NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
@@ -643,64 +644,79 @@ static BOOL _hardwareDecoderSupported = NO;
 
 #pragma mark - Private methods
 
-- (void)setPrefView:(id)sender
+- (NSView *)viewForIdentifier:(NSString *)identifier
 {
-    NSView *view = self.generalView;
-    if (sender)
+    if ([identifier isEqualToString:TOOLBAR_OUTPUT_NAME])
     {
-        NSString *identifier = [sender itemIdentifier];
-        if ([identifier isEqualToString:TOOLBAR_OUTPUT_NAME])
-        {
-            view = self.fileNameView;
-        }
-        else if ([identifier isEqualToString:TOOLBAR_QUEUE])
-        {
-            view = self.queueView;
-        }
-        else if ([identifier isEqualToString:TOOLBAR_ADVANCED])
-        {
-            view = self.advancedView;
-        }
+        return self.fileNameView;
+    }
+    else if ([identifier isEqualToString:TOOLBAR_QUEUE])
+    {
+        return self.queueView;
+    }
+    else if ([identifier isEqualToString:TOOLBAR_ADVANCED])
+    {
+        return self.advancedView;
+    }
+    else
+    {
+        return self.generalView;
+    }
+}
+
+- (void)resizeWindowToFitView:(NSView *)view
+{
+    NSWindow *window = self.window;
+
+    [view setFrameSize:view.fittingSize];
+
+    NSRect viewFrame = view.frame;
+    NSRect windowFrame = window.frame;
+    NSRect contentViewFrame = window.contentView.frame;
+
+    CGFloat windowWidth = MAX(windowFrame.size.width, viewFrame.size.width);
+    CGFloat deltaHeight = contentViewFrame.size.height - viewFrame.size.height;
+    CGFloat heightForWindow = windowFrame.size.height - deltaHeight;
+    CGFloat windowOriginY = NSMinY(windowFrame) + deltaHeight;
+
+    NSRect updatedWindowFrame = windowFrame;
+    updatedWindowFrame.size.height = heightForWindow;
+    updatedWindowFrame.origin.y = windowOriginY;
+    updatedWindowFrame.size.width = windowWidth;
+
+    NSRect updatedViewFrame = NSMakeRect(0, 0, viewFrame.size.width, viewFrame.size.height);
+    updatedViewFrame.origin = NSZeroPoint;
+    updatedViewFrame.size.width = windowWidth;
+    if (NSEqualRects(viewFrame, updatedViewFrame) == NO)
+    {
+        view.frame = updatedViewFrame;
     }
 
-    NSWindow *window =  self.window;
-    if (window.contentView == view)
+    if (NSEqualRects(windowFrame, updatedWindowFrame) == NO)
+    {
+        window.contentView.hidden = YES;
+        [window setFrame:updatedWindowFrame display:YES animate:YES];
+        window.contentView.hidden = NO;
+    }
+}
+
+- (void)setPrefView:(id)sender
+{
+    NSWindow *window = self.window;
+    NSView *currentView = window.contentView.subviews.firstObject;
+    NSView *newView = [self viewForIdentifier:[sender itemIdentifier]];
+
+    if (currentView == newView)
     {
         return;
     }
 
-    window.contentView = view;
+    [currentView removeFromSuperview];
+    [window.contentView addSubview:newView];
+    [self resizeWindowToFitView:newView];
 
-    if (window.isVisible)
-    {
-        view.hidden = YES;
-
-        [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-            context.allowsImplicitAnimation = YES;
-            [window layoutIfNeeded];
-        } completionHandler:^{
-            view.hidden = NO;
-        }];
-    }
-
-    // set title label
-    if (sender)
-    {
-        window.title = [sender label];
-    }
-    else
-    {
-        NSToolbar *toolbar = window.toolbar;
-        NSString *itemIdentifier = toolbar.selectedItemIdentifier;
-        for (NSToolbarItem *item in toolbar.items)
-        {
-            if ([item.itemIdentifier isEqualToString:itemIdentifier])
-            {
-                window.title = item.label;
-                break;
-            }
-        }
-    }
+    window.title = [sender label];
+    [window makeFirstResponder:newView];
 }
 
 - (NSToolbarItem *)toolbarItemWithIdentifier:(NSString *)identifier
