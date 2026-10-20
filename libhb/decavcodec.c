@@ -1588,7 +1588,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         {
             if (job && job->hw_pix_fmt != AV_PIX_FMT_NONE)
             {
-                hb_hwaccel_hwframes_ctx_init(pv->context, job->input_pix_fmt, job->hw_pix_fmt);
+                pv->context->extra_hw_frames = HB_QSV_FFMPEG_EXTRA_HW_FRAMES;
             }
             if (pv->context->codec_id == AV_CODEC_ID_HEVC)
             {
