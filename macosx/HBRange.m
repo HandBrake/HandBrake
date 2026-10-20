@@ -7,10 +7,18 @@
 #import "HBRange.h"
 #import "HBTitle+Private.h"
 #import "HBCodingUtilities.h"
+#import "HBLocalizationUtilities.h"
 
 NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 
+static NSCharacterSet *invalidTimeChars;
+
 @implementation HBRange
+
++ (void)initialize
+{
+    invalidTimeChars = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789:"] invertedSet];
+}
 
 - (instancetype)initWithTitle:(HBTitle *)title
 {
@@ -106,6 +114,30 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
     _secondsStart = secondsStart;
 }
 
+- (BOOL)validateSecondsStart:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    BOOL retval = YES;
+
+    if (nil != *ioValue)
+    {
+        NSString *value = [*ioValue stringValue];
+        NSRange range = [value rangeOfCharacterFromSet:invalidTimeChars];
+        if (NSNotFound != range.location)
+        {
+            retval = NO;
+            if (outError)
+            {
+                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid time range value.",
+                                           @"HBRange -> invalid time range value"),
+                                           NSLocalizedRecoverySuggestionErrorKey: @"Try to use a time range in the hh:mm:ss format."};
+                *outError = [NSError errorWithDomain:@"HBRangeError" code:0 userInfo:userInfo];
+            }
+        }
+    }
+
+    return retval;
+}
+
 - (void)setSecondsStop:(int)secondsStop
 {
     if (secondsStop != _secondsStop)
@@ -113,6 +145,30 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
         [[self.undo prepareWithInvocationTarget:self] setSecondsStop:_secondsStop];
     }
     _secondsStop = secondsStop;
+}
+
+- (BOOL)validateSecondsStop:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    BOOL retval = YES;
+
+    if (nil != *ioValue)
+    {
+        NSString *value = [*ioValue stringValue];
+        NSRange range = [value rangeOfCharacterFromSet:invalidTimeChars];
+        if (NSNotFound != range.location)
+        {
+            retval = NO;
+            if (outError)
+            {
+                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid time range value.",
+                                           @"HBRange -> invalid time range value"),
+                                           NSLocalizedRecoverySuggestionErrorKey: @"Try to use a time range in the hh:mm:ss format."};
+                *outError = [NSError errorWithDomain:@"HBRangeError" code:0 userInfo:userInfo];
+            }
+        }
+    }
+
+    return retval;
 }
 
 - (NSString *)duration
@@ -136,14 +192,21 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
     }
     else if (self.type == HBRangeTypeSeconds)
     {
-        int duration = self.secondsStop - self.secondsStart;
+        int duration = 0;
+        if (self.secondsStop >= self.secondsStart)
+        {
+            duration = self.secondsStop - self.secondsStart;
+        }
         return [NSString stringWithFormat:@"%02d:%02d:%02d", duration / 3600, (duration / 60) % 60, duration % 60];
-
     }
     else if (self.type == HBRangeTypeFrames)
     {
-        hb_title_t *title = self.title.hb_title;
-        int duration = (int) ((self.frameStop - self.frameStart) / (title->vrate.num / (double)title->vrate.den));
+        int duration = 0;
+        if (self.frameStop >= self.frameStart)
+        {
+            hb_title_t *title = self.title.hb_title;
+            duration = (int)((self.frameStop - self.frameStart) / (title->vrate.num / (double)title->vrate.den));
+        }
         return [NSString stringWithFormat: @"%02d:%02d:%02d", duration / 3600, ( duration / 60 ) % 60, duration % 60];
     }
 
