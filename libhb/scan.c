@@ -1065,8 +1065,17 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
             continue;
         }
 
-        if (vid_info.geometry.width  != vid_buf->f.width ||
-            vid_info.geometry.height != vid_buf->f.height)
+        int buf_width  = vid_buf->f.width;
+        int buf_height = vid_buf->f.height;
+        if (title->rotation == HB_ROTATION_90 ||
+            title->rotation == HB_ROTATION_270)
+        {
+            buf_width  = vid_buf->f.height;
+            buf_height = vid_buf->f.width;
+        }
+
+        if (vid_info.geometry.width  != buf_width ||
+            vid_info.geometry.height != buf_height)
         {
             hb_log( "scan: video geometry information does not match buffer" );
             hb_buffer_close( &vid_buf );
