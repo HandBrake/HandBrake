@@ -3,7 +3,7 @@ $(eval $(call import.CONTRIB.defs,LIBDOVI))
 
 ifeq (1,$(FEATURE.flatpak))
     LIBDOVI.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/dovi_tool-libdovi-3.4.0_vendor.tar.gz
-    LIBDOVI.FETCH.sha256   = 7a6eac8975ba576cad48eae7e569eebb988bce8f47a0e259647b206e938429cb
+    LIBDOVI.FETCH.sha256   = d3fcafc092c65609bc358f0e763063f4861d2daa7576d3406747a31c46ce729c
     LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.4.0_vendor.tar.gz
 else
     LIBDOVI.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/dovi_tool-libdovi-3.4.0.tar.gz
