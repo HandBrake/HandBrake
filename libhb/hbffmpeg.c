@@ -642,7 +642,7 @@ AVAmbientViewingEnvironment hb_ambient_hb_to_ff(hb_ambient_viewing_environment_m
 
 AVDOVIDecoderConfigurationRecord hb_dovi_hb_to_ff(hb_dovi_conf_t dovi)
 {
-    AVDOVIDecoderConfigurationRecord ff_dovi;
+    AVDOVIDecoderConfigurationRecord ff_dovi = {0};
 
     ff_dovi.dv_version_major = dovi.dv_version_major;
     ff_dovi.dv_version_minor = dovi.dv_version_minor;
