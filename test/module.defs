@@ -59,7 +59,7 @@ TEST.GCC.I += $(LIBHB.GCC.I)
 
 ifeq ($(HOST.system),darwin)
     TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox VideoToolbox CoreMedia CoreVideo IOSurface Foundation DiskArbitration Metal
-    TEST.GCC.l += iconv
+    TEST.GCC.l += iconv hvf
 else ifeq ($(HOST.system),linux)
     TEST.GCC.l += pthread dl m
 ifeq (1, $(FEATURE.numa))

@@ -323,6 +323,8 @@
 		A9BBBA7B300F4A250042E1B3 /* HBVideoFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BBBA7A300F4A250042E1B3 /* HBVideoFilters.m */; };
 		A9BBBA7C300F4A250042E1B3 /* HBVideoFilters.h in Headers */ = {isa = PBXBuildFile; fileRef = A9BBBA79300F4A250042E1B3 /* HBVideoFilters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9BC24C91A69293E007DC41A /* HBAttributedStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */; };
+		A9C0967130889FEB001D3BB1 /* libhvf.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E2612B30889EF100DD6520 /* libhvf.tbd */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A9C096733088A009001D3BB1 /* libhvf.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E2612B30889EF100DD6520 /* libhvf.tbd */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A9C1722B2B8F4E890047C49D /* HBControllerToolbarDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C1722A2B8F4E890047C49D /* HBControllerToolbarDelegate.m */; };
 		A9C1722E2B8F5F540047C49D /* NSToolbar+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C1722D2B8F5F540047C49D /* NSToolbar+HBAdditions.m */; };
 		A9C3A50123C7A66100269CA3 /* HBFilePromiseProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C3A50023C7A66100269CA3 /* HBFilePromiseProvider.m */; };
@@ -977,6 +979,7 @@
 		A9E1467E16BC2AD800C307BC /* PlayTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PlayTemplate.pdf; sourceTree = "<group>"; };
 		A9E1467F16BC2AD800C307BC /* PrevTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PrevTemplate.pdf; sourceTree = "<group>"; };
 		A9E165511C523016003EF30E /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = external/contrib/lib/libavfilter.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9E2612B30889EF100DD6520 /* libhvf.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libhvf.tbd; path = usr/lib/libhvf.tbd; sourceTree = SDKROOT; };
 		A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAddPresetController.h; sourceTree = "<group>"; };
 		A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAddPresetController.m; sourceTree = "<group>"; };
 		A9E34AD4297871FE00C5DD82 /* libdovi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdovi.a; path = external/contrib/lib/libdovi.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1333,6 +1336,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9C0967130889FEB001D3BB1 /* libhvf.tbd in Frameworks */,
 				A96E35732D44F35800642601 /* IOSurface.framework in Frameworks */,
 				A9C3A8F7278DFFA500839EDF /* Foundation.framework in Frameworks */,
 				A9A25D9C21182741005A8A0F /* CoreMedia.framework in Frameworks */,
@@ -1429,6 +1433,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9C096733088A009001D3BB1 /* libhvf.tbd in Frameworks */,
 				A96E35742D44F35F00642601 /* IOSurface.framework in Frameworks */,
 				A9A25D9D21182753005A8A0F /* CoreMedia.framework in Frameworks */,
 				A9AB9AA5211819A500BB3C7E /* VideoToolbox.framework in Frameworks */,
@@ -1595,6 +1600,7 @@
 				A91CE2D31C7DABE40068F46F /* libiconv.tbd */,
 				A91CE2D11C7DABDA0068F46F /* libz.tbd */,
 				A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */,
+				A9E2612B30889EF100DD6520 /* libhvf.tbd */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
