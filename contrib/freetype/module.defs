@@ -2,9 +2,9 @@ __deps__ := BZIP2 ZLIB
 $(eval $(call import.MODULE.defs,FREETYPE,freetype,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FREETYPE))
 
-FREETYPE.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/freetype-2.14.3.tar.gz
-FREETYPE.FETCH.url    += https://download.savannah.gnu.org/releases/freetype/freetype-2.14.3.tar.gz
-FREETYPE.FETCH.sha256  = e61b31ab26358b946e767ed7eb7f4bb2e507da1cfefeb7a8861ace7fd5c899a1
+FREETYPE.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/freetype-2.15.0.tar.gz
+FREETYPE.FETCH.url    += https://download.savannah.gnu.org/releases/freetype/freetype-2.15.0.tar.gz
+FREETYPE.FETCH.sha256  = 9186627467a616d9a9e3e574748ac0c45fa77398e6364edef3041a8ba8d92f64
 
 FREETYPE.CONFIGURE.deps  =
 FREETYPE.CONFIGURE.extra = --with-harfbuzz=no --with-png=no --with-brotli=no
