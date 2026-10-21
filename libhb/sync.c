@@ -3239,6 +3239,8 @@ static void UpdateState( sync_common_t * common, int frame_count )
 {
     hb_job_t          * job = common->job;
     hb_state_t state;
+    uint64_t   now;
+    int64_t    elapsed;
 
     if (job->indepth_scan)
     {
@@ -3248,18 +3250,19 @@ static void UpdateState( sync_common_t * common, int frame_count )
         return;
     }
 
+    now = hb_get_date();
     if (frame_count == 0)
     {
-        common->st_first = hb_get_date();
+        common->st_first = now;
     }
 
-    if (hb_get_date() > common->st_dates[3] + 1000)
+    if (now > common->st_dates[3] + 1000)
     {
         memmove( &common->st_dates[0], &common->st_dates[1],
                  3 * sizeof( uint64_t ) );
         memmove( &common->st_counts[0], &common->st_counts[1],
                  3 * sizeof( uint64_t ) );
-        common->st_dates[3]  = hb_get_date();
+        common->st_dates[3]  = now;
         common->st_counts[3] = frame_count;
     }
 
@@ -3272,12 +3275,22 @@ static void UpdateState( sync_common_t * common, int frame_count )
     {
         p.progress = 1.0;
     }
-    p.rate_cur   = 1000.0 * (common->st_counts[3] - common->st_counts[0]) /
-                            (common->st_dates[3]  - common->st_dates[0]);
-    if (hb_get_date() > common->st_first + 4000)
+    // Update the average rate on every call so that jobs shorter
+    // than the ETA warmup still report a valid average speed
+    elapsed    = now - common->st_first - job->st_paused;
+    p.rate_avg = elapsed > 0 ? 1000.0 * frame_count / elapsed : 0.0;
+    // The current rate needs 4 samples, use the average until then
+    if (common->st_dates[0] != 0)
     {
-        p.rate_avg = 1000.0 * common->st_counts[3] /
-                     (common->st_dates[3] - common->st_first - job->st_paused);
+        p.rate_cur = 1000.0 * (common->st_counts[3] - common->st_counts[0]) /
+                              (common->st_dates[3]  - common->st_dates[0]);
+    }
+    else
+    {
+        p.rate_cur = p.rate_avg;
+    }
+    if (now > common->st_first + 4000 && p.rate_avg > 0)
+    {
         if (common->est_frame_count >= common->st_counts[3])
         {
             int eta = (common->est_frame_count - common->st_counts[3]) / p.rate_avg;
@@ -3296,7 +3309,6 @@ static void UpdateState( sync_common_t * common, int frame_count )
     }
     else
     {
-        p.rate_avg = 0.0;
         p.hours    = -1;
         p.minutes  = -1;
         p.seconds  = -1;
