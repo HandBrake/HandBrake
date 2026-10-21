@@ -3,7 +3,7 @@ $(eval $(call import.CONTRIB.defs,AMF))
 
 AMF.FETCH.url        = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/AMF-headers-v1.5.3.tar.gz
 AMF.FETCH.url       += https://github.com/GPUOpen-LibrariesAndSDKs/AMF/releases/download/v1.5.3/AMF-headers-v1.5.3.tar.gz
-AMF.FETCH.sha256     = 570c8f6593b8c24a6e47a0a9c59b216a7198138e660ba4011590ae913343d5c3
+AMF.FETCH.sha256     = 0f521ad98041f8001147cded4a660127f18b1c27a801a5cd691bda1fa48381be
 AMF.FETCH.basename   = AMF-headers-v1.5.3.tar.gz
 AMF.EXTRACT.tarbase  = amf-headers-v1.5.3
 
