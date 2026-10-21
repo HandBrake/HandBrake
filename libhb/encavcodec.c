@@ -1027,7 +1027,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     else if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
     {
-        context->profile = AV_PROFILE_UNKNOWN;
+        if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
+        {
+            context->profile = AV_PROFILE_HEVC_MAIN;
+        }
+        else if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
+        {
+            context->profile = AV_PROFILE_HEVC_MAIN_10;
+        }
+
         if (job->encoder_profile != NULL && *job->encoder_profile)
         {
             if (!strcasecmp(job->encoder_profile, "main")) {
