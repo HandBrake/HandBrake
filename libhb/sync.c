@@ -484,6 +484,21 @@ static void alignStream( sync_common_t * common, sync_stream_t * stream,
     {
         int ii;
 
+        // Drop frames of this stream that start before the alignment point
+        while (hb_list_count(stream->in_queue) > 0)
+        {
+            buf = hb_list_item(stream->in_queue, 0);
+            if (buf->s.start >= pts)
+            {
+                break;
+            }
+            hb_list_rem(stream->in_queue, buf);
+            saveChap(stream, buf);
+            hb_buffer_close(&buf);
+        }
+        // Fill the partial frame gap left after dropping frames
+        alignStream(common, stream, pts);
+
         // Drop frames from other streams
         for (ii = 0; ii < common->stream_count; ii++)
         {
@@ -565,7 +580,7 @@ static void alignStreams( sync_common_t * common, int64_t pts )
     if (common->job->align_av_start)
     {
         int64_t first_pts = AV_NOPTS_VALUE;
-        int     audio_passthru = 0;
+        int64_t passthru_pts = AV_NOPTS_VALUE;
 
         for (ii = 0; ii < common->stream_count; ii++)
         {
@@ -593,13 +608,12 @@ static void alignStreams( sync_common_t * common, int64_t pts )
                 // To align with a passthru audio stream, we must drop
                 // buffers from all other streams that are before
                 // the first buffer in the passthru audio stream.
-                audio_passthru = 1;
-                if (first_pts < buf->s.start)
+                if (passthru_pts == AV_NOPTS_VALUE || passthru_pts < buf->s.start)
                 {
-                    first_pts = buf->s.start;
+                    passthru_pts = buf->s.start;
                 }
             }
-            else if (!audio_passthru)
+            else
             {
                 // Find the smallest initial pts of all streams when
                 // there is *no* passthru audio.
@@ -612,6 +626,12 @@ static void alignStreams( sync_common_t * common, int64_t pts )
                     first_pts = buf->s.start;
                 }
             }
+        }
+        if (passthru_pts != AV_NOPTS_VALUE)
+        {
+            // Passthru audio can't be padded, so it sets the start point
+            // regardless of where the other streams start.
+            first_pts = passthru_pts;
         }
         if (first_pts != AV_NOPTS_VALUE)
         {
