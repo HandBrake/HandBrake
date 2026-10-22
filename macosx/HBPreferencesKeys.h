@@ -18,12 +18,14 @@ extern NSString * const HBShowOpenPanelAtLaunch;
 extern NSString * const HBShowSummaryPreview;
 extern NSString * const HBKeepPresetEdits;
 extern NSString * const HBUseSourceFolderDestination;
+extern NSString * const HBRememberSourceFolderPermissions;
 
 extern NSString * const HBRecursiveScan;
 extern NSString * const HBExcludedFileExtensions;
 extern NSString * const HBLastDestinationDirectoryURL;
 extern NSString * const HBLastDestinationDirectoryBookmark;
 extern NSString * const HBLastSourceDirectoryURL;
+extern NSString * const HBAuthorizedFolderBookmarks;
 
 extern NSString * const HBDefaultAutoNaming;
 extern NSString * const HBAutoNamingFormat;

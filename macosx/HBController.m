@@ -756,6 +756,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
          {
              self.destinationFolderURL = panel.URL;
              self.destinationFolderToken = [HBSecurityAccessToken tokenWithAlreadyAccessedObject:panel.URL];
+             if ([NSUserDefaults.standardUserDefaults boolForKey:HBRememberSourceFolderPermissions])
+             {
+                 [self rememberAuthorizedFolderURL:panel.URL];
+             }
              if (self.job)
              {
                  [self.job setDestinationFolderURL:self.destinationFolderURL sameAsSource:YES];
@@ -763,6 +767,64 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
              }
          }
      }];
+}
+
+- (BOOL)isURL:(NSURL *)url insideFolderURL:(NSURL *)folderURL
+{
+    NSArray<NSString *> *components = url.URLByStandardizingPath.pathComponents;
+    NSArray<NSString *> *folderComponents = folderURL.URLByStandardizingPath.pathComponents;
+
+    if (components.count < folderComponents.count)
+    {
+        return NO;
+    }
+
+    return [[components subarrayWithRange:NSMakeRange(0, folderComponents.count)] isEqualToArray:folderComponents];
+}
+
+- (nullable NSURL *)authorizedFolderURLContainingURL:(NSURL *)url
+{
+    for (NSData *bookmark in [NSUserDefaults.standardUserDefaults arrayForKey:HBAuthorizedFolderBookmarks])
+    {
+        if ([bookmark isKindOfClass:[NSData class]] == NO)
+        {
+            continue;
+        }
+
+        NSURL *folderURL = [HBUtilities URLFromBookmark:bookmark];
+        if (folderURL && [self isURL:url insideFolderURL:folderURL])
+        {
+            return folderURL;
+        }
+    }
+
+    return nil;
+}
+
+- (void)rememberAuthorizedFolderURL:(NSURL *)folderURL
+{
+    NSData *newBookmark = [HBUtilities bookmarkFromURL:folderURL];
+    if (newBookmark == nil)
+    {
+        return;
+    }
+
+    NSMutableArray<NSData *> *bookmarks = [NSMutableArray arrayWithObject:newBookmark];
+    for (NSData *bookmark in [NSUserDefaults.standardUserDefaults arrayForKey:HBAuthorizedFolderBookmarks])
+    {
+        if ([bookmark isKindOfClass:[NSData class]] == NO)
+        {
+            continue;
+        }
+
+        NSURL *url = [HBUtilities URLFromBookmark:bookmark];
+        if (url && [self isURL:url insideFolderURL:folderURL] == NO)
+        {
+            [bookmarks addObject:bookmark];
+        }
+    }
+
+    [NSUserDefaults.standardUserDefaults setObject:bookmarks forKey:HBAuthorizedFolderBookmarks];
 }
 
 - (void)askForPermissionAndSetDestinationURLs:(NSArray<NSURL *> *)destinationURLs sourceURLs:(NSArray<NSURL *> *)sourceURLs
@@ -792,7 +854,23 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     if (![self.destinationFolderURL isEqualTo:destinationURLs.firstObject])
     {
 #ifdef __SANDBOX_ENABLED__
-        [self showOpenPanelForDestination:destinationURLs.firstObject];
+        NSURL *authorizedFolderURL = nil;
+        if ([NSUserDefaults.standardUserDefaults boolForKey:HBRememberSourceFolderPermissions])
+        {
+            authorizedFolderURL = [self authorizedFolderURLContainingURL:destinationURLs.firstObject];
+        }
+
+        if (authorizedFolderURL)
+        {
+            self.destinationFolderToken = [HBSecurityAccessToken tokenWithObject:authorizedFolderURL];
+            self.destinationFolderURL = authorizedFolderURL;
+            [self.job setDestinationFolderURL:authorizedFolderURL sameAsSource:YES];
+            [self.window.undoManager removeAllActions];
+        }
+        else
+        {
+            [self showOpenPanelForDestination:destinationURLs.firstObject];
+        }
 #else
         [self.job setDestinationFolderURL:destinationURLs.firstObject sameAsSource:YES];
 #endif
