@@ -20,9 +20,6 @@ struct hb_motion_metric_private_s
     int       bps;
     int       max_value;
 
-    uint8_t *approx_buf_a;
-    uint8_t *approx_buf_b;
-
     float (*motion_metric)(hb_motion_metric_private_t *pv,
                            int width, int height,
                            int stride_a, int stride_b,
@@ -40,38 +37,6 @@ static void build_gamma_lut(hb_motion_metric_private_t *pv)
         pv->gamma_lut[i] = 4095 * pow(((float)i / (float)(pv->max_value -1)), 2.2f);;
     }
 }
-
-#define APPROX(a, b, c, d) (((((uint32_t)a + b + 1) >> 1) + (((uint32_t)c + d + 1) >> 1) + 1) >> 1)
-#define APPROX_FRAME_DATA(nbits)                                                                        \
-static void approximate_frame_data##_##nbits(const uint##nbits##_t *source, uint##nbits##_t *dest,      \
-                                             int source_stride, int dest_stride, int width, int height) \
-{                                                                                                       \
-    int stride2 = source_stride * 2;                                                                    \
-    int stride3 = source_stride * 3;                                                                    \
-    int jj4;                                                                                            \
-    int top_left, top_right, bottom_left, bottom_right;                                                 \
-    for (int ii = 0; ii < height; ii++)                                                                 \
-    {                                                                                                   \
-        for (int jj = 0; jj < width; jj++)                                                              \
-        {                                                                                               \
-            jj4 = jj * 4;                                                                               \
-            top_left     = APPROX(source[jj4], source[jj4 + source_stride],                             \
-                                  source[jj4 + 1], source[jj4 + source_stride + 1]);                    \
-            top_right    = APPROX(source[jj4 + 2], source[jj4 + source_stride + 2],                     \
-                                  source[jj4 + 3], source[jj4 + source_stride + 3]);                    \
-            bottom_left  = APPROX(source[jj4 + stride2], source[jj4 + stride3],                         \
-                                  source[jj4 + stride2 + 1], source[jj4 + stride3 + 1]);                \
-            bottom_right = APPROX(source[jj4 + stride2 + 2], source[jj4 + stride3 + 2],                 \
-                                  source[jj4 + stride2 + 3], source[jj4 + stride3 + 3]);                \
-            dest[jj]     = APPROX(top_left, top_right, bottom_left, bottom_right);                      \
-        }                                                                                               \
-        source += source_stride * 4;                                                                    \
-        dest += dest_stride;                                                                            \
-    }                                                                                                   \
-}                                                                                                       \
-
-APPROX_FRAME_DATA(8)
-APPROX_FRAME_DATA(16)
 
 // Compute the sum of squared errors for a 16x16 block
 // Gamma adjusts pixel values so that less visible differences
@@ -198,34 +163,6 @@ static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,            
 DEF_MOTION_METRIC(8)
 DEF_MOTION_METRIC(16)
 
-#define DEF_MOTION_METRIC_FAST(nbits)                                                       \
-static float motion_metric_fast##_##nbits(hb_motion_metric_private_t *pv,                   \
-                                     int width, int height,                                 \
-                                     int stride_a, int stride_b,                            \
-                                     const uint8_t *a, const uint8_t *b)                    \
-{                                                                                           \
-    uint##nbits##_t *buf_a, *buf_b;                                                         \
-    int stride_buf_a, stride_buf_b;                                                         \
-    width  /= 4;                                                                            \
-    height /= 4;                                                                            \
-    stride_buf_a = width;                                                                   \
-    stride_buf_b = width;                                                                   \
-    buf_a = (uint##nbits##_t *)pv->approx_buf_a;                                            \
-    buf_b = (uint##nbits##_t *)pv->approx_buf_b;                                            \
-                                                                                            \
-    approximate_frame_data##_##nbits((const uint##nbits##_t *)a, buf_a,                     \
-                                     stride_a / pv->bps, stride_buf_a, width, height);      \
-    approximate_frame_data##_##nbits((const uint##nbits##_t *)b, buf_b,                     \
-                                     stride_b / pv->bps, stride_buf_b, width, height);      \
-                                                                                            \
-    return motion_metric##_##nbits(pv, width, height,                                       \
-                                   stride_buf_a, stride_buf_b,                              \
-                                   (const uint8_t *)buf_a, (const uint8_t *)buf_b);         \
-}                                                                                           \
-
-DEF_MOTION_METRIC_FAST(8)
-DEF_MOTION_METRIC_FAST(16)
-
 static int hb_motion_metric_init(hb_motion_metric_object_t *metric,
                                  hb_filter_init_t *init)
 {
@@ -250,29 +187,13 @@ static int hb_motion_metric_init(hb_motion_metric_object_t *metric,
     }
     build_gamma_lut(pv);
 
-    int fast = 0;
-    if (init->geometry.width >= 1920 || init->geometry.height >= 1080)
-    {
-        fast = 1;
-        int approx_height = init->geometry.height / 4;
-        int approx_width  = init->geometry.width  / 4;
-        int size = approx_height * approx_width * sizeof(uint8_t) * pv->bps;
-        pv->approx_buf_a  = malloc(size);
-        pv->approx_buf_b  = malloc(size);
-        if (pv->approx_buf_a == NULL || pv->approx_buf_b == NULL)
-        {
-            hb_error("motion_metric: malloc failed");
-            return -1;
-        }
-    }
-
     switch (pv->depth)
     {
         case 8:
-            pv->motion_metric = fast ? motion_metric_fast_8 : motion_metric_8;
+            pv->motion_metric = motion_metric_8;
             break;
         default:
-            pv->motion_metric = fast ? motion_metric_fast_16 : motion_metric_16;
+            pv->motion_metric = motion_metric_16;
     }
 
     return 0;
@@ -300,8 +221,6 @@ static void hb_motion_metric_close(hb_motion_metric_object_t *metric)
     }
 
     free(pv->gamma_lut);
-    free(pv->approx_buf_a);
-    free(pv->approx_buf_b);
     free(pv);
 }
 
