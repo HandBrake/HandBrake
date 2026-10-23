@@ -19,6 +19,7 @@ struct hb_motion_metric_private_s
     int       depth;
     int       bps;
     int       max_value;
+    int       sample_shift;
 
     float (*motion_metric)(hb_motion_metric_private_t *pv,
                            int width, int height,
@@ -38,6 +39,19 @@ static void build_gamma_lut(hb_motion_metric_private_t *pv)
     }
 }
 
+// Pixel formats such as P010 and P012 store samples left-aligned in 16 bits.
+// Convert stored samples to their nominal depth before accessing gamma_lut.
+static inline unsigned gamma_lut_value(const hb_motion_metric_private_t *pv,
+                                       unsigned sample)
+{
+    unsigned index = sample >> pv->sample_shift;
+    if (index > (unsigned)pv->max_value)
+    {
+        index = (unsigned)pv->max_value;
+    }
+    return pv->gamma_lut[index];
+}
+
 // Compute the sum of squared errors for a 16x16 block
 // Gamma adjusts pixel values so that less visible differences
 // count less.
@@ -54,6 +68,8 @@ static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,            
                                                                                            \
     buf_a     = (uint##nbits##_t *)a;                                                      \
     buf_b     = (uint##nbits##_t *)b;                                                      \
+    stride_a /= pv->bps;                                                                   \
+    stride_b /= pv->bps;                                                                   \
     bw        = width / 16;                                                                \
     bh        = height / 16;                                                               \
                                                                                            \
@@ -70,8 +86,8 @@ static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,            
                 uint32_t arrgb[16];                                                        \
                 for (int xx = 0; xx < 16; xx++)                                            \
                 {                                                                          \
-                    arrga[xx] = pv->gamma_lut[ra[xx]];                                     \
-                    arrgb[xx] = pv->gamma_lut[rb[xx]];                                     \
+                    arrga[xx] = gamma_lut_value(pv, ra[xx]);                                      \
+                    arrgb[xx] = gamma_lut_value(pv, rb[xx]);                                      \
                 }                                                                          \
                 uint32x4_t vga0 = vld1q_u32(arrga);                                        \
                 uint32x4_t vga1 = vld1q_u32(arrga + 4);                                    \
@@ -104,7 +120,7 @@ static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,            
 #else
 
 #define DEF_SSE_BLOCK16(nbits)                                                         \
-static inline unsigned sse_block16##_##nbits(unsigned *gamma_lut,                      \
+static inline unsigned sse_block16##_##nbits(hb_motion_metric_private_t *pv,                      \
                                    const uint##nbits##_t *a, const uint##nbits##_t *b, \
                                    int stride_a, int stride_b)                         \
 {                                                                                      \
@@ -113,7 +129,7 @@ static inline unsigned sse_block16##_##nbits(unsigned *gamma_lut,               
     {                                                                                  \
         for (int x = 0; x < 16; x++)                                                   \
         {                                                                              \
-            int diff = gamma_lut[a[x]] - gamma_lut[b[x]];                              \
+            int diff = gamma_lut_value(pv, a[x]) - gamma_lut_value(pv, b[x]);                     \
             sum += diff * diff;                                                        \
         }                                                                              \
         a += stride_a;                                                                 \
@@ -149,7 +165,7 @@ static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,            
     {                                                                                       \
         for (int x = 0; x < bw; x++)                                                        \
         {                                                                                   \
-            sum += sse_block16##_##nbits(pv->gamma_lut,                                     \
+            sum += sse_block16##_##nbits(pv,                                                      \
                         buf_a + y * 16 * stride_a + x * 16,                                 \
                         buf_b + y * 16 * stride_b + x * 16,                                 \
                         stride_a, stride_b);                                                \
@@ -178,6 +194,7 @@ static int hb_motion_metric_init(hb_motion_metric_object_t *metric,
     pv->depth     = desc->comp[0].depth;
     pv->bps       = pv->depth > 8 ? 2 : 1;
     pv->max_value = (1 << pv->depth) - 1;
+    pv->sample_shift = desc->comp[0].shift;
 
     pv->gamma_lut = malloc(sizeof(unsigned) * (pv->max_value + 1));
     if (pv->gamma_lut == NULL)
