@@ -6031,6 +6031,64 @@ static int ffmpeg_decmetadata( AVDictionary *m, hb_title_t *title )
     return result;
 }
 
+/*
+ * Detect H.264 Multiview Video Coding (e.g. Blu-ray 3D) from the extradata.
+ * In ISO/IEC 14496-15 extradata the MVC configuration is stored in a
+ * 'mvcC' box after the avcC record, in Annex B extradata it is signaled
+ * by a subset sequence parameter set (NAL type 15).
+ */
+static int ffmpeg_h264_extradata_has_mvc(const uint8_t *data, int size)
+{
+    if (data == NULL || size < 7)
+    {
+        return 0;
+    }
+
+    if (data[0] == 1)
+    {
+        // Skip the SPS and PPS arrays of the avcC record
+        int pos = 5;
+        for (int array = 0; array < 2; array++)
+        {
+            if (pos >= size)
+            {
+                return 0;
+            }
+            int count = array == 0 ? data[pos] & 0x1f : data[pos];
+            pos++;
+            for (int ii = 0; ii < count; ii++)
+            {
+                if (pos + 2 > size)
+                {
+                    return 0;
+                }
+                pos += 2 + ((data[pos] << 8) | data[pos + 1]);
+            }
+        }
+        for (; pos + 4 <= size; pos++)
+        {
+            if (!memcmp(data + pos, "mvcC", 4))
+            {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    for (int pos = 0; pos + 3 < size; pos++)
+    {
+        if (data[pos] == 0 && data[pos + 1] == 0 && data[pos + 2] == 1)
+        {
+            int nal_type = data[pos + 3] & 0x1f;
+            if (nal_type == 15 || nal_type == 20)
+            {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
 {
     AVFormatContext *ic = stream->ffmpeg_ic;
@@ -6160,6 +6218,21 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                     default:
                         break;
                 }
+            }
+
+            if (codecpar->codec_id == AV_CODEC_ID_H264 &&
+                ffmpeg_h264_extradata_has_mvc(codecpar->extradata,
+                                              codecpar->extradata_size))
+            {
+                title->multiview = HB_MULTIVIEW_MVC;
+            }
+
+            // MV-HEVC (e.g. Apple spatial video), the demuxer flags streams
+            // with an 'lhvC' layered HEVC configuration as multilayer
+            if (codecpar->codec_id == AV_CODEC_ID_HEVC &&
+                (st->disposition & AV_DISPOSITION_MULTILAYER))
+            {
+                title->multiview = HB_MULTIVIEW_MVHEVC;
             }
 
             title->video_codec        = WORK_DECAVCODECV;

@@ -1411,6 +1411,12 @@ struct hb_title_s
     hb_spherical_mapping_t spherical_mapping;
     hb_stereo_3d_t stereo_3d;
 
+    // Multiview coding of the source video, only the base view is decoded
+    int             multiview;
+#define HB_MULTIVIEW_NONE                    0
+#define HB_MULTIVIEW_MVC                     1
+#define HB_MULTIVIEW_MVHEVC                  2
+
     hb_rational_t   vrate;
     int             crop[4];
     int             loose_crop[4];

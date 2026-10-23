@@ -411,6 +411,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
             "HorizontalFieldOfViewDen", title->stereo_3d.horizontal_field_of_view.den);
         hb_dict_set(dict, "Stereo3D", stereo_dict);
     }
+    hb_dict_set(dict, "Multiview", hb_value_int(title->multiview));
 
     if (title->container_name != NULL)
     {
