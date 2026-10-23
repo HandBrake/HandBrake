@@ -7,6 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
 #include "handbrake/handbrake.h"
@@ -467,6 +468,7 @@ int hb_dict_elements(hb_dict_t * dict)
 
 static char * makelower(const char *key)
 {
+    assert(key != NULL);
     int    ii, len = strlen(key);
     char * lower = malloc(len + 1);
 
@@ -490,6 +492,7 @@ void hb_dict_merge(hb_dict_t * dict, hb_dict_t *value)
 
 void hb_dict_case_set(hb_dict_t * dict, const char *key, hb_value_t *value)
 {
+    assert(key != NULL);
     char * lower = makelower(key);
     json_object_set_new(dict, lower, value);
     free(lower);
@@ -498,6 +501,8 @@ void hb_dict_case_set(hb_dict_t * dict, const char *key, hb_value_t *value)
 int hb_dict_remove(hb_dict_t * dict, const char * key)
 {
     int    result;
+
+    assert(key != NULL);
 
     // First try case sensitive lookup
     result = json_object_del(dict, key) == 0;
@@ -514,6 +519,8 @@ int hb_dict_remove(hb_dict_t * dict, const char * key)
 hb_value_t * hb_dict_get(const hb_dict_t * dict, const char * key)
 {
     hb_value_t * result;
+
+    assert(key != NULL);
 
     // First try case sensitive lookup
     result = json_object_get(dict, key);
