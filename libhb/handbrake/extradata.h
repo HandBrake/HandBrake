@@ -22,6 +22,8 @@ int hb_set_xiph_extradata(hb_data_t **extradata, uint8_t headers[3][HB_CONFIG_MA
 int hb_parse_av1_extradata(hb_data_t *extradata, int *level_idx, int *high_tier);
 int hb_parse_h265_extradata(hb_data_t *extradata, int *level_idc, int *high_tier);
 
+int hb_h264_extradata_has_mvc(uint8_t *data, size_t size);
+
 #endif
 
 #endif /* HANDBRAKE_TASKSET_H */

@@ -6162,6 +6162,21 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 }
             }
 
+            if (codecpar->codec_id == AV_CODEC_ID_H264 &&
+                hb_h264_extradata_has_mvc(codecpar->extradata,
+                                          codecpar->extradata_size))
+            {
+                title->multiview = HB_MULTIVIEW_MVC;
+            }
+
+            // MV-HEVC (e.g. Apple spatial video), the demuxer flags streams
+            // with an 'lhvC' layered HEVC configuration as multilayer
+            if (codecpar->codec_id == AV_CODEC_ID_HEVC &&
+                (st->disposition & AV_DISPOSITION_MULTILAYER))
+            {
+                title->multiview = HB_MULTIVIEW_MVHEVC;
+            }
+
             title->video_codec        = WORK_DECAVCODECV;
             title->video_codec_param  = codecpar->codec_id;
             // If we ever improve our pipeline to allow other time bases...
