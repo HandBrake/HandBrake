@@ -103,10 +103,10 @@
                             <rect key="frame" x="0.0" y="74" width="490" height="5"/>
                         </box>
                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vDi-cz-xYM">
-                            <rect key="frame" x="0.0" y="0.0" width="361" height="58"/>
+                            <rect key="frame" x="0.0" y="0.0" width="361" height="80"/>
                             <subviews>
                                 <textField verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="1Wy-ic-s3e">
-                                    <rect key="frame" x="-2" y="44" width="60" height="14"/>
+                                    <rect key="frame" x="-2" y="66" width="60" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Options:" id="saX-n7-YV0">
                                         <font key="font" metaFont="menu" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -114,10 +114,10 @@
                                     </textFieldCell>
                                 </textField>
                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y9P-zp-EOV">
-                                    <rect key="frame" x="64" y="0.0" width="297" height="58"/>
+                                    <rect key="frame" x="64" y="0.0" width="297" height="80"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="iHN-w6-93G">
-                                            <rect key="frame" x="0.0" y="44" width="250" height="14"/>
+                                            <rect key="frame" x="0.0" y="66" width="250" height="14"/>
                                             <buttonCell key="cell" type="check" title="Keep preset edits when selecting a new title" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="6Sg-su-vLd">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
@@ -127,13 +127,24 @@
                                             </connections>
                                         </button>
                                         <button verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="Qrf-by-Sdu">
-                                            <rect key="frame" x="0.0" y="22" width="297" height="14"/>
+                                            <rect key="frame" x="0.0" y="44" width="297" height="14"/>
                                             <buttonCell key="cell" type="check" title="Use same destination folder as source when possible" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="wXE-Fz-Dru">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="menu" size="11"/>
                                             </buttonCell>
                                             <connections>
                                                 <binding destination="61" name="value" keyPath="values.HBUseSourceFolderDestination" id="rbg-Jo-lKI"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="hBr-Pm-Fp1">
+                                            <rect key="frame" x="0.0" y="22" width="297" height="14"/>
+                                            <buttonCell key="cell" type="check" title="Remember folder permissions" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="rSP-Cl-Kb2">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="menu" size="11"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="61" name="enabled" keyPath="values.HBUseSourceFolderDestination" id="eNb-Rs-Fp3"/>
+                                                <binding destination="61" name="value" keyPath="values.HBRememberSourceFolderPermissions" id="vAl-Rs-Fp4"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="1000" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="E4E-EU-MQK">
@@ -151,8 +162,10 @@
                                         <integer value="1000"/>
                                         <integer value="1000"/>
                                         <integer value="1000"/>
+                                        <integer value="1000"/>
                                     </visibilityPriorities>
                                     <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>

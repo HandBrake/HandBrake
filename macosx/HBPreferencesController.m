@@ -11,12 +11,14 @@ NSString * const HBShowOpenPanelAtLaunch              = @"HBShowOpenPanelAtLaunc
 NSString * const HBShowSummaryPreview                 = @"HBShowSummaryPreview";
 NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
 NSString * const HBUseSourceFolderDestination    = @"HBUseSourceFolderDestination";
+NSString * const HBRememberSourceFolderPermissions = @"HBRememberSourceFolderPermissions";
 
 NSString * const HBRecursiveScan                      = @"HBRecursiveScan";
 NSString * const HBExcludedFileExtensions             = @"HBExcludedFileExtensions";
 NSString * const HBLastDestinationDirectoryURL        = @"HBLastDestinationDirectoryURL";
 NSString * const HBLastDestinationDirectoryBookmark   = @"HBLastDestinationDirectoryBookmark";
 NSString * const HBLastSourceDirectoryURL             = @"HBLastSourceDirectoryURL";
+NSString * const HBAuthorizedFolderBookmarks          = @"HBAuthorizedFolderBookmarks";
 
 NSString * const HBDefaultAutoNaming             = @"DefaultAutoNaming";
 NSString * const HBAutoNamingFormat              = @"HBAutoNamingFormat";
@@ -214,6 +216,7 @@ static BOOL _hardwareDecoderSupported = NO;
         HBLastDestinationDirectoryURL:      moviesData,
         HBLastSourceDirectoryURL:           moviesData,
         HBUseSourceFolderDestination:       @NO,
+        HBRememberSourceFolderPermissions:  @NO,
         HBDefaultAutoNaming:                @NO,
         HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],
         HBAutoNamingISODateFormat:          @NO,
