@@ -712,9 +712,10 @@ hb_create_temporary_directory (const char *base_dir, char **path)
 static void
 hb_init_temporary_directory (void)
 {
-    char *path = NULL, *base = NULL, *p;
+    char *path = NULL;
 
 #if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
+    char *base = NULL, *p;
     if (tmp_override != NULL && tmp_override[0] != '\0')
     {
         base = strdup(tmp_override);
