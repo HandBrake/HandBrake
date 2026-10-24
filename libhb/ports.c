@@ -690,6 +690,25 @@ static pthread_once_t tmp_control = PTHREAD_ONCE_INIT;
 static char *tmp_dirname = NULL;
 static const char *tmp_override = NULL;
 
+#if !defined( SYS_CYGWIN ) && !defined( SYS_MINGW )
+static int
+hb_create_temporary_directory (const char *base_dir, char **path)
+{
+    char *base = strdup(base_dir);
+    if (base[0] != '\0' && base[strlen(base)-1] == '/')
+        base[strlen(base)-1] = '\0';
+
+    *path = hb_strdup_printf("%s/handbrake-XXXXXX", base);
+    free(base);
+    if (mkdtemp(*path) != NULL)
+        return 0;
+
+    hb_error("Failed to create a temporary directory at %s (reason: %s)",
+             *path, strerror(errno));
+    return -1;
+}
+#endif
+
 static void
 hb_init_temporary_directory (void)
 {
@@ -737,25 +756,23 @@ hb_init_temporary_directory (void)
     hb_mkdir(path);
     free(base);
 #else
-    if (tmp_override != NULL && tmp_override[0] != '\0')
-        base = strdup(tmp_override);
-    else if ((p = getenv("TMPDIR")) != NULL ||
-             (p = getenv("TEMP"))   != NULL)
-        base = strdup(p);
-    else
-        base = strdup("/tmp");
+    const char *normal_tmp = getenv("TMPDIR");
+    if (normal_tmp == NULL)
+        normal_tmp = getenv("TEMP");
+    if (normal_tmp == NULL)
+        normal_tmp = "/tmp";
 
-    if (base[strlen(base)-1] == '/')
-        base[strlen(base)-1] = '\0';
-
-    /* Create a new randomly-named directory from the template */
-    path = hb_strdup_printf("%s/handbrake-XXXXXX", base);
-    if (!mkdtemp(path))
+    int has_custom = tmp_override != NULL && tmp_override[0] != '\0';
+    if (has_custom && hb_create_temporary_directory(tmp_override, &path) < 0)
     {
-        /* We still use the path even if directory creation fails */
-        hb_error("Failed to create a temporary directory at %s\n", path);
+        free(path);
+        path = NULL;
     }
-    free(base);
+    if (path == NULL)
+    {
+        if (hb_create_temporary_directory(normal_tmp, &path) == 0 && has_custom)
+            hb_log("Using default temporary directory %s instead", path);
+    }
 #endif
     tmp_dirname = path;
 }
