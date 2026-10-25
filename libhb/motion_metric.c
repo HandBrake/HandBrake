@@ -40,17 +40,17 @@ static void build_gamma_lut(hb_motion_metric_private_t *pv)
 // count less.
 
 #define DEF_SSE_BLOCK16(nbits, suffix, shift)                                          \
-static inline unsigned sse_block16##_##nbits##suffix(                                \
-                       hb_motion_metric_private_t *pv,                              \
-                       const uint##nbits##_t *a, const uint##nbits##_t *b,           \
-                       int stride_a, int stride_b)                                  \
+static inline unsigned sse_block16##_##nbits##suffix(                                  \
+                       hb_motion_metric_private_t *pv,                                 \
+                       const uint##nbits##_t *a, const uint##nbits##_t *b,             \
+                       int stride_a, int stride_b)                                     \
 {                                                                                      \
     unsigned sum = 0;                                                                  \
     for (int y = 0; y < 16; y++)                                                       \
     {                                                                                  \
         for (int x = 0; x < 16; x++)                                                   \
         {                                                                              \
-            int diff = pv->gamma_lut[a[x] >> (shift)] - pv->gamma_lut[b[x] >> (shift)]; \
+            int diff = pv->gamma_lut[a[x] >> (shift)] - pv->gamma_lut[b[x] >> (shift)];\
             sum += diff * diff;                                                        \
         }                                                                              \
         a += stride_a;                                                                 \
@@ -65,8 +65,8 @@ DEF_SSE_BLOCK16(16, _shift, pv->sample_shift)
 
 // Sum of squared errors.  Computes and sums the SSEs for all
 // 16x16 blocks in the images.  Only checks the Y component.
-#define DEF_MOTION_METRIC(nbits, suffix)                                                  \
-static float motion_metric##_##nbits##suffix(hb_motion_metric_private_t *pv,               \
+#define DEF_MOTION_METRIC(nbits, suffix)                                                    \
+static float motion_metric##_##nbits##suffix(hb_motion_metric_private_t *pv,                \
                                      int width, int height,                                 \
                                      int stride_a, int stride_b,                            \
                                      const uint8_t *a, const uint8_t *b)                    \
@@ -87,7 +87,7 @@ static float motion_metric##_##nbits##suffix(hb_motion_metric_private_t *pv,    
     {                                                                                       \
         for (int x = 0; x < bw; x++)                                                        \
         {                                                                                   \
-            sum += sse_block16##_##nbits##suffix(pv,                                      \
+            sum += sse_block16##_##nbits##suffix(pv,                                        \
                         buf_a + y * 16 * stride_a + x * 16,                                 \
                         buf_b + y * 16 * stride_b + x * 16,                                 \
                         stride_a, stride_b);                                                \
