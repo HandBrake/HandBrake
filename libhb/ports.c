@@ -906,15 +906,15 @@ void hb_rewinddir(HB_DIR *dir)
 #endif
 }
 
-char * hb_strr_dir_sep(const char *path)
+const char * hb_strr_dir_sep(const char *path)
 {
 #ifdef SYS_MINGW
-    char *sep = (char *)strrchr(path, '/');
+    const char *sep = strrchr(path, '/');
     if (sep == NULL)
-        sep = (char *)strrchr(path, '\\');
+        sep = strrchr(path, '\\');
     return sep;
 #else
-    return (char *)strrchr(path, '/');
+    return strrchr(path, '/');
 #endif
 }
 
