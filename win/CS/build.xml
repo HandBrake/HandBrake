@@ -35,8 +35,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <ARM64DependsOn>ARM64Setup;BuildSoftware;BuildInstaller</ARM64DependsOn>
-    <X64DependsOn>X64Setup;BuildSoftware;BuildInstaller</X64DependsOn>
+    <ARM64DependsOn>ARM64Setup;BuildSoftware;CodeSign;BuildInstaller;CodeSignInstaller</ARM64DependsOn>
+    <X64DependsOn>X64Setup;BuildSoftware;CodeSign;BuildInstaller;CodeSignInstaller</X64DependsOn>
   </PropertyGroup>
 
   <Target Name="ARM64Setup">
@@ -119,9 +119,15 @@
     <SignEnabled>true</SignEnabled>
   </PropertyGroup>
 
+  <!-- Signs the application binaries. Runs before makensis so the signed files are packaged. -->
   <Target Name="CodeSign" Condition="'$(SignEnabled)' == 'true'">
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\HandBrake.exe&quot;" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\HandBrake.Worker.exe&quot;" />
+  </Target>
+
+  <!-- Signs the installer produced by makensis. -->
+  <Target Name="CodeSignInstaller" Condition="'$(SignEnabled)' == 'true'">
     <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*Win_GUI.exe&quot;" />
-    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*Win_GUI.msi&quot;" />
   </Target>
 
 </Project>
