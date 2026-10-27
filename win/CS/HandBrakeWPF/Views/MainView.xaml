@@ -474,7 +474,7 @@
                   ToolBarTray.IsLocked="True"
                   KeyboardNavigation.TabNavigation="Continue">
 
-                    <Button x:Name="infoButton" PreviewMouseLeftButtonDown="InfoButton_OnPreviewMouseLeftButtonDown"  AutomationProperties.Name="{x:Static Properties:Resources.MainView_Options}">
+                    <Button x:Name="infoButton" PreviewMouseLeftButtonDown="InfoButton_OnPreviewMouseLeftButtonDown" PreviewKeyDown="InfoButton_OnPreviewKeyDown"  AutomationProperties.Name="{x:Static Properties:Resources.MainView_Options}">
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Settings.png'}" />

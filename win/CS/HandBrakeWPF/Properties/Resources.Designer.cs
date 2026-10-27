@@ -2206,6 +2206,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search ....
+        /// </summary>
+        public static string LogView_Search {
+            get {
+                return ResourceManager.GetString("LogView_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [Finished].
         /// </summary>
         public static string LogViewModel_Complete {
@@ -2971,7 +2980,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _HandBrake Documentation (HTTPS).
+        ///   Looks up a localized string similar to _HandBrake User Guide (Online).
         /// </summary>
         public static string MainView_HandBrakeDocs {
             get {
@@ -3061,7 +3070,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download Development Builds (HTTPS).
+        ///   Looks up a localized string similar to Download Development Builds (Online).
         /// </summary>
         public static string MainView_NightlyBuildsUpdate {
             get {
@@ -9070,15 +9079,6 @@ namespace HandBrakeWPF.Properties {
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
-            }
-        }
-		
-        /// <summary>
-        ///   Looks up a localized string similar to Activity Log Search ....
-        /// </summary>
-        public static string LogView_Search {
-            get {
-                return ResourceManager.GetString("LogView_Search", resourceCulture);
             }
         }
     }
