@@ -14,10 +14,24 @@ endif
 
 LIBDOVI.EXTRACT.tarbase = dovi_tool-libdovi-3.4.0
 
-define LIBDOVI.CONFIGURE
-     cd $(LIBDOVI_DV.dir); $(CARGO.exe) fetch
-     $(TOUCH.exe) $@
-endef
+ifeq (1-msys,$(HOST.cross)-$(BUILD.system))
+        define LIBDOVI.CONFIGURE
+           cd $(LIBDOVI_DV.dir); unset MAKEFLAGS; unset MFLAGS; $(CARGO.exe) fetch
+           $(TOUCH.exe) $@
+        endef
+      else
+      ifeq ($(HOST.system),darwin)
+        define LIBDOVI.CONFIGURE
+           cd $(LIBDOVI_DV.dir); unset MAKEFLAGS; unset MFLAGS; $(CARGO.exe) fetch
+           $(TOUCH.exe) $@
+        endef
+      else
+        define LIBDOVI.CONFIGURE
+          cd $(LIBDOVI_DV.dir); $(CARGO.exe) fetch
+          $(TOUCH.exe) $@
+        endef
+     endif
+endif
 
 ifeq (1,$(HOST.cross))
     ifeq ($(HOST.system),darwin)
@@ -39,15 +53,30 @@ LIBDOVI.prefix   = --prefix "$(LIBDOVI.CONFIGURE.prefix)"
 LIBDOVI.extra    = --release --library-type staticlib $(LIBDOVI.prefix) $(LIBDOVI.target) \
                    --libdir="$(LIBDOVI.CONFIGURE.prefix)/lib" --pkgconfigdir="$(LIBDOVI.CONFIGURE.prefix)/lib/pkgconfig"
 
-LIBDOVI.BUILD.make       = cd $(LIBDOVI_DV.dir); $(CARGO.exe) cbuild
+ifeq (1-msys,$(HOST.cross)-$(BUILD.system))
+        LIBDOVI.BUILD.make       = cd $(LIBDOVI_DV.dir); unset MAKEFLAGS; unset MFLAGS; $(CARGO.exe) cbuild
+     else
+        LIBDOVI.BUILD.make       = cd $(LIBDOVI_DV.dir); $(CARGO.exe) cbuild
+endif
+
 LIBDOVI.BUILD.extra      = $(LIBDOVI.extra)
 LIBDOVI.BUILD.args.dir   =
 
-LIBDOVI.INSTALL.make       = cd $(LIBDOVI_DV.dir); $(CARGO.exe) cinstall
+ifeq (1-msys,$(HOST.cross)-$(BUILD.system))
+        LIBDOVI.INSTALL.make     = cd $(LIBDOVI_DV.dir); unset MAKEFLAGS; unset MFLAGS; $(CARGO.exe) cinstall
+      else
+        LIBDOVI.INSTALL.make     = cd $(LIBDOVI_DV.dir); $(CARGO.exe) cinstall
+endif
+
 LIBDOVI.INSTALL.extra    = $(LIBDOVI.extra)
 LIBDOVI.INSTALL.args.dir =
 
-LIBDOVI.CLEAN.make       = $(CARGO.exe) clean
+ifeq (1-msys,$(HOST.cross)-$(BUILD.system))
+       LIBDOVI.CLEAN.make        = unset MAKEFLAGS; unset MFLAGS; $(CARGO.exe) clean
+    else
+      LIBDOVI.CLEAN.make         = $(CARGO.exe) clean
+endif
+
 LIBDOVI.CLEAN.args.dir   = $(LIBDOVI.manifest)
 LIBDOVI.CLEAN.ntargets   =
 
