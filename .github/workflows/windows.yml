@@ -208,14 +208,14 @@ jobs:
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v7
       with:
-        name: HandBrake-Win_GUI-x64
-        path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake*.exe
+        path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake-*-x64-Win_GUI.exe
+        archive: false
 
     - name: Upload HandBrake ZIP
       uses: actions/upload-artifact@v7
       with:
-        name: HandBrake-Win_GUI-x64-Zip
-        path: win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
+        path: win/CS/HandBrakeWPF/bin/HandBrake-*-x64-Win_GUI.zip
+        archive: false
 
   build_gui_arm:
     name: Windows UI ARM
@@ -288,12 +288,12 @@ jobs:
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v7
       with:
-        name: HandBrake-Win_GUI-ARM64
-        path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake*.exe
+        path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake-*-arm64-Win_GUI.exe
+        archive: false
 
     - name: Upload HandBrake ZIP
       uses: actions/upload-artifact@v7
       with:
-        name: HandBrake-Win_GUI-ARM64-Zip
-        path: win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
+        path: win/CS/HandBrakeWPF/bin/HandBrake-*-arm64-Win_GUI.zip
+        archive: false
 
