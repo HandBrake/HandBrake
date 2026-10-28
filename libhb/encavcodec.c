@@ -1435,7 +1435,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             NULL != av_opts_string)
         {
             hb_log("encavcodec: avcodec_open options: %s", av_opts_string);
-            free(av_opts_string);
+            av_free(av_opts_string);
         }
         else
         {
