@@ -9325,7 +9325,7 @@ const char hb_builtin_presets_json[] =
 "                    \"VideoGrayScale\": false,\n"
 "                    \"VideoLevel\": \"auto\",\n"
 "                    \"VideoMultiPass\": false,\n"
-"                    \"VideoOptionExtra\": \"rc-lookahead=10\",\n"
+"                    \"VideoOptionExtra\": \"rc-lookahead=0\",\n"
 "                    \"VideoPasshtruHDRDynamicMetadata\": \"all\",\n"
 "                    \"VideoPreset\": \"medium\",\n"
 "                    \"VideoProfile\": \"auto\",\n"

@@ -9573,7 +9573,7 @@
                     "VideoTune": "",
                     "VideoProfile": "auto",
                     "VideoLevel": "auto",
-                    "VideoOptionExtra": "rc-lookahead=10",
+                    "VideoOptionExtra": "rc-lookahead=0",
                     "VideoQualityType": 2,
                     "VideoQualitySlider": 27.0,
                     "VideoMultiPass": false,
