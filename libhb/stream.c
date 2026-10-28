@@ -1067,8 +1067,8 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     title->type = HB_STREAM_TYPE;
 
     // Copy part of the stream path to the title name
-    char * name = stream->path;
-    char * sep  = hb_strr_dir_sep(stream->path);
+    const char * name = stream->path;
+    const char * sep  = hb_strr_dir_sep(stream->path);
     if (sep)
         name = sep + 1;
     title->name = strdup(name);
@@ -6039,8 +6039,8 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     title->type = HB_FF_STREAM_TYPE;
 
     // Copy part of the stream path to the title name
-    char * name = stream->path;
-    char * sep = hb_strr_dir_sep(stream->path);
+    const char * name = stream->path;
+    const char * sep = hb_strr_dir_sep(stream->path);
     if (sep)
         name = sep + 1;
     title->name = strdup(name);
@@ -6160,6 +6160,21 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                     default:
                         break;
                 }
+            }
+
+            if (codecpar->codec_id == AV_CODEC_ID_H264 &&
+                hb_h264_extradata_has_mvc(codecpar->extradata,
+                                          codecpar->extradata_size))
+            {
+                title->multiview = HB_MULTIVIEW_MVC;
+            }
+
+            // MV-HEVC (e.g. Apple spatial video), the demuxer flags streams
+            // with an 'lhvC' layered HEVC configuration as multilayer
+            if (codecpar->codec_id == AV_CODEC_ID_HEVC &&
+                (st->disposition & AV_DISPOSITION_MULTILAYER))
+            {
+                title->multiview = HB_MULTIVIEW_MVHEVC;
             }
 
             title->video_codec        = WORK_DECAVCODECV;

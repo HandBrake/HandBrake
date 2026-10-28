@@ -132,7 +132,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Name="Start" AutomationProperties.Name="Start Queue" Grid.Column="0"
-                                IsEnabled="{Binding IsQueueRunning, Converter={StaticResource notBooleanConverter}}" ContextMenuService.IsEnabled="False" PreviewMouseLeftButtonDown="Start_OnPreviewMouseLeftButtonDown"
+                                PreviewMouseLeftButtonDown="Start_OnPreviewMouseLeftButtonDown" PreviewKeyDown="Start_OnPreviewKeyDown"
                                 Visibility="{Binding IsQueueRunning, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
 
                         <StackPanel Orientation="Horizontal">
@@ -432,7 +432,7 @@
             <TabControl x:Name="summaryTabControl"  Grid.Column="1"  Margin="5,0,10,10" SelectedIndex="{Binding SelectedTabIndex}" 
                         MinWidth="550" Width="550"
                         Visibility="{Binding IsSimpleView, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
-                <TabItem Header="{x:Static Properties:Resources.QueueView_Summary}" IsEnabled="{Binding JobInfoVisible}" >
+                <TabItem Header="{x:Static Properties:Resources.QueueView_Summary}">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5,5,0,5">
 
                         <StackPanel>
@@ -581,7 +581,7 @@
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Header="{x:Static Properties:Resources.QueueView_Statistics}" IsEnabled="{Binding JobInfoVisible}" >
+                <TabItem Header="{x:Static Properties:Resources.QueueView_Statistics}">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,0,0,5">
                         <StackPanel>
 
@@ -664,7 +664,7 @@
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Header="{x:Static Properties:Resources.MainView_ActivityLog}" IsEnabled="{Binding JobInfoVisible}">
+                <TabItem Header="{x:Static Properties:Resources.MainView_ActivityLog}">
                     <TextBox ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding ActivityLog, Mode=OneWay}" TextWrapping="Wrap" x:Name="logText">
                         <TextBox.ContextMenu>
                             <ContextMenu>

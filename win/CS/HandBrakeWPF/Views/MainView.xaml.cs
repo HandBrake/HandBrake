@@ -162,6 +162,11 @@ namespace HandBrakeWPF.Views
             {
                 ((IMainViewModel)this.DataContext).AddToQueueWithErrorHandling();
             }
+            else if (e.Key == Key.Down)
+            {
+                this.OpenButtonMenu(sender as Button);
+                e.Handled = true;
+            }
         }
 
         private void Presetbtn_OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -179,6 +184,26 @@ namespace HandBrakeWPF.Views
             if (e.Key == Key.Space || e.Key == Key.Enter)
             {
                 PresetsMenuButton_PreviewMouseDown(sender, null);
+            }
+        }
+
+        private void InfoButton_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space || e.Key == Key.Enter || e.Key == Key.Down)
+            {
+                this.OpenButtonMenu(sender as Button);
+                e.Handled = true;
+            }
+        }
+
+        private void OpenButtonMenu(Button button)
+        {
+            if (button?.ContextMenu != null)
+            {
+                button.ContextMenu.IsEnabled = true;
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                button.ContextMenu.IsOpen = true;
             }
         }
     }

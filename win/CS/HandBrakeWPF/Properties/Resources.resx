@@ -1741,7 +1741,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>_File</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>_HandBrake Documentation (HTTPS)</value>
+    <value>_HandBrake User Guide (Online)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
     <value>_Help</value>
@@ -2596,7 +2596,7 @@ Only queue files from the current version are supported.</value>
     <value>Download via Github</value>
   </data>
   <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
-    <value>Download Development Builds (HTTPS)</value>
+    <value>Download Development Builds (Online)</value>
   </data>
   <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
     <value>Enable QuickSync Deep Link Hyper Encode</value>
