@@ -100,7 +100,20 @@ static void FUNC(nlmeans_alloc)(const void *in_src,
 
     const pixel *src = in_src;
 
-    pixel *mem   = malloc(bw * bh * sizeof(pixel));
+    // Reuse slot in buffer pool unless frame geometry changed
+    pixel *mem = dst->mem;
+    if (mem == NULL ||
+        dst->w != src_w || dst->h != src_h || dst->border != border)
+    {
+        free(mem);
+        if (dst->mem_pre != NULL && dst->mem_pre != dst->mem)
+        {
+            free(dst->mem_pre);
+        }
+        dst->mem_pre   = NULL;
+        dst->image_pre = NULL;
+        mem = malloc(bw * bh * sizeof(pixel));
+    }
     pixel *image = mem + border + bw * border;
 
     // Copy main image
@@ -116,8 +129,12 @@ static void FUNC(nlmeans_alloc)(const void *in_src,
     dst->border    = border;
 
     FUNC(nlmeans_border)(dst->mem, dst->w, dst->h, dst->border);
-    dst->mem_pre     = dst->mem;
-    dst->image_pre   = dst->image;
+    if (dst->mem_pre == NULL)
+    {
+        // Actual prefilter will allocate a separate buffer and replace this alias
+        dst->mem_pre   = dst->mem;
+        dst->image_pre = dst->image;
+    }
     dst->prefiltered = 0;
 
 }
@@ -474,8 +491,13 @@ static void FUNC(nlmeans_prefilter)(BorderedPlane *src,
         const int bw         = w + 2 * border;
         const int bh         = h + 2 * border;
 
-        // Duplicate plane
-        pixel *mem_pre = malloc(bw * bh * sizeof(pixel));
+        // Duplicate plane, reusing buffer pool if available
+        pixel *mem_pre = src->mem_pre;
+        if (mem_pre == mem)
+        {
+            // Replace source memory alias with a real allocation for the prefilter buffer
+            mem_pre = malloc(bw * bh * sizeof(pixel));
+        }
         pixel *image_pre = mem_pre + border + bw * border;
         memcpy(mem_pre, mem, bw * bh * sizeof(pixel));
 
@@ -551,12 +573,21 @@ static void FUNC(nlmeans_prefilter)(BorderedPlane *src,
         FUNC(nlmeans_border)(mem_pre, w, h, border);
 
         // Assign result
-        src->mem_pre   = mem_pre;
-        src->image_pre = image_pre;
         if (filter_type & NLMEANS_PREFILTER_MODE_PASSTHRU)
         {
-            src->mem   = src->mem_pre;
-            src->image = src->image_pre;
+            // When passing through a prefiltered image, swap buffers
+            // so that the slot correctly retains ownership of both
+            void *mem_out   = src->mem;
+            void *image_out = src->image;
+            src->mem        = mem_pre;
+            src->image      = image_pre;
+            src->mem_pre    = mem_out;
+            src->image_pre  = image_out;
+        }
+        else
+        {
+            src->mem_pre   = mem_pre;
+            src->image_pre = image_pre;
         }
 
     }
@@ -609,6 +640,8 @@ static void FUNC(build_integral_scalar)(void *integral,
 
 static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
                                 Frame *frame,
+                                int slot,
+                                int frame_pool_size,
                                 int prefilter,
                                 int plane,
                                 int nframes,
@@ -627,10 +660,10 @@ static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
     const int r_half = (r-1) /2;
 
     // Source image
-    const pixel *src     = frame[0].plane[plane].image;
-    const pixel *src_pre = frame[0].plane[plane].image_pre;
-    const int w      = frame[0].plane[plane].w;
-    const int border = frame[0].plane[plane].border;
+    const pixel *src     = frame[slot].plane[plane].image;
+    const pixel *src_pre = frame[slot].plane[plane].image_pre;
+    const int w      = frame[slot].plane[plane].w;
+    const int border = frame[slot].plane[plane].border;
     const int bw     = w + 2 * border;
 
     // Allocate temporary pixel sums
@@ -641,14 +674,16 @@ static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
     integral_pixel* const integral_mem = calloc(integral_stride * (dst_h + n + 1), sizeof(integral_pixel));
     integral_pixel* const integral     = integral_mem + integral_stride + 16;
 
-    // Iterate through available frames
+    // Iterate through available frames; temporal neighbors wrap around the buffer pool
     for (int f = 0; f < nframes; f++)
     {
-        FUNC(nlmeans_prefilter)(&frame[f].plane[plane], prefilter);
+        Frame *f_frame = &frame[(slot + f) % frame_pool_size];
+
+        FUNC(nlmeans_prefilter)(&f_frame->plane[plane], prefilter);
 
         // Compare image
-        const pixel *compare     = frame[f].plane[plane].image;
-        const pixel *compare_pre = frame[f].plane[plane].image_pre;
+        const pixel *compare     = f_frame->plane[plane].image;
+        const pixel *compare_pre = f_frame->plane[plane].image_pre;
 
         // Iterate through all displacements
         for (int dy = -r_half; dy <= r_half; dy++)

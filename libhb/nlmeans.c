@@ -155,6 +155,8 @@ struct hb_filter_private_s
                                 const int w, const int s, const int h);
     void (*nlmeans_plane)(NLMeansFunctions *functions,
                                     Frame *frame,
+                                    int slot,
+                                    int frame_pool_size,
                                     int prefilter,
                                     int plane,
                                     int nframes,
@@ -170,7 +172,9 @@ struct hb_filter_private_s
                               const uint64_t diff_max);
 
     Frame      *frame;
-    int         next_frame;
+    int         frame_pool_size;   // total slots in the frame buffer pool
+    int         frame_pool_head;   // slot index of the oldest buffered frame
+    int         frame_pool_count;  // number of frames currently buffered
     int         max_frames;
 
     taskset_t   taskset;
@@ -389,13 +393,14 @@ static int nlmeans_init(hb_filter_object_t *filter,
     }
     hb_log("NLMeans using %i threads", pv->threads);
 
-    pv->frame = calloc(pv->threads + pv->max_frames, sizeof(Frame));
+    pv->frame_pool_size = pv->threads + pv->max_frames;
+    pv->frame = calloc(pv->frame_pool_size, sizeof(Frame));
     if (pv->frame == NULL)
     {
         hb_error("nlmeans: calloc failed");
         goto fail;
     }
-    for (int ii = 0; ii < pv->threads + pv->max_frames; ii++)
+    for (int ii = 0; ii < pv->frame_pool_size; ii++)
     {
         for (int c = 0; c < 3; c++)
         {
@@ -444,9 +449,9 @@ static void nlmeans_close(hb_filter_object_t *filter)
     }
 
     taskset_fini(&pv->taskset);
-    for (int c = 0; c < 3; c++)
+    for (int f = 0; f < pv->frame_pool_size; f++)
     {
-        for (int f = 0; f < pv->nframes[c]; f++)
+        for (int c = 0; c < 3; c++)
         {
             if (pv->frame[f].plane[c].mem_pre != NULL &&
                 pv->frame[f].plane[c].mem_pre != pv->frame[f].plane[c].mem)
@@ -463,7 +468,7 @@ static void nlmeans_close(hb_filter_object_t *filter)
         }
     }
 
-    for (int ii = 0; ii < pv->threads + pv->max_frames; ii++)
+    for (int ii = 0; ii < pv->frame_pool_size; ii++)
     {
         for (int c = 0; c < 3; c++)
         {
@@ -482,7 +487,8 @@ static void nlmeans_filter_work(void *thread_args_v)
     nlmeans_thread_arg_t *thread_data = thread_args_v;
     hb_filter_private_t *pv = thread_data->pv;
     int segment = thread_data->arg.segment;
-    Frame *frame = &pv->frame[segment];
+    const int slot = (pv->frame_pool_head + segment) % pv->frame_pool_size;
+    Frame *frame = &pv->frame[slot];
 
     hb_buffer_t *buf;
     buf = hb_frame_buffer_init(pv->output.pix_fmt,
@@ -516,7 +522,9 @@ static void nlmeans_filter_work(void *thread_args_v)
 
         // Process current plane
         pv->nlmeans_plane(functions,
-                          frame,
+                          pv->frame,
+                          slot,
+                          pv->frame_pool_size,
                           pv->prefilter[c],
                           c,
                           pv->nframes[c],
@@ -531,13 +539,15 @@ static void nlmeans_filter_work(void *thread_args_v)
                           pv->weight_fact_table[c],
                           pv->diff_max[c]);
     }
-    hb_buffer_copy_props(buf, pv->frame[segment].buf);
-    hb_buffer_close(&pv->frame[segment].buf);
+    hb_buffer_copy_props(buf, pv->frame[slot].buf);
+    hb_buffer_close(&pv->frame[slot].buf);
     thread_data->out = buf;
 }
 
 static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)
 {
+    const int slot = (pv->frame_pool_head + pv->frame_pool_count) % pv->frame_pool_size;
+
     for (int c = 0; c < 3; c++)
     {
         // Extend copy of plane with extra border and place in buffer
@@ -546,60 +556,32 @@ static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)
                           buf->plane[c].width,
                           buf->plane[c].stride / pv->bps,
                           buf->plane[c].height,
-                          &pv->frame[pv->next_frame].plane[c],
+                          &pv->frame[slot].plane[c],
                           border);
     }
-    pv->frame[pv->next_frame].width = buf->f.width;
-    pv->frame[pv->next_frame].height = buf->f.height;
-    pv->frame[pv->next_frame].fmt = buf->f.fmt;
-    pv->frame[pv->next_frame].buf = hb_buffer_init(0);
-    hb_buffer_copy_props(pv->frame[pv->next_frame].buf, buf);
+    pv->frame[slot].width = buf->f.width;
+    pv->frame[slot].height = buf->f.height;
+    pv->frame[slot].fmt = buf->f.fmt;
+    pv->frame[slot].buf = hb_buffer_init(0);
+    hb_buffer_copy_props(pv->frame[slot].buf, buf);
 
-    pv->next_frame++;
+    pv->frame_pool_count++;
 }
 
 static hb_buffer_t * nlmeans_filter(hb_filter_private_t *pv)
 {
-    if (pv->next_frame < pv->max_frames + pv->threads)
+    if (pv->frame_pool_count < pv->frame_pool_size)
     {
         return NULL;
     }
 
     taskset_cycle(&pv->taskset);
 
-    // Free buffers that are not needed for next taskset cycle
-    for (int c = 0; c < 3; c++)
-    {
-        for (int t = 0; t < pv->threads; t++)
-        {
-            // Release last frame in buffer
-            if (pv->frame[t].plane[c].mem_pre != NULL &&
-                pv->frame[t].plane[c].mem_pre != pv->frame[t].plane[c].mem)
-            {
-                free(pv->frame[t].plane[c].mem_pre);
-                pv->frame[t].plane[c].mem_pre = NULL;
-            }
-            if (pv->frame[t].plane[c].mem != NULL)
-            {
-                free(pv->frame[t].plane[c].mem);
-                pv->frame[t].plane[c].mem = NULL;
-            }
-        }
-    }
-    // Shift frames in buffer down
-    for (int f = 0; f < pv->max_frames; f++)
-    {
-        // Don't move the mutex!
-        Frame frame = pv->frame[f];
-        pv->frame[f] = pv->frame[f+pv->threads];
-        for (int c = 0; c < 3; c++)
-        {
-            pv->frame[f].plane[c].mutex = frame.plane[c].mutex;
-            pv->frame[f+pv->threads].plane[c].mem_pre = NULL;
-            pv->frame[f+pv->threads].plane[c].mem = NULL;
-        }
-    }
-    pv->next_frame -= pv->threads;
+    // Advance the frame head and decrease the frame count to release processed frames,
+    // effectively removing the oldest threads number of frames from the buffer pool
+    // Memory is not freed here; it remains allocated for reuse by nlmeans_alloc()
+    pv->frame_pool_head = (pv->frame_pool_head + pv->threads) % pv->frame_pool_size;
+    pv->frame_pool_count -= pv->threads;
 
     // Collect results from taskset
     hb_buffer_list_t list;
@@ -616,9 +598,10 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
     hb_buffer_list_t list;
 
     hb_buffer_list_clear(&list);
-    for (int f = 0; f < pv->next_frame; f++)
+    for (int f = 0; f < pv->frame_pool_count; f++)
     {
-        Frame *frame = &pv->frame[f];
+        const int slot = (pv->frame_pool_head + f) % pv->frame_pool_size;
+        Frame *frame = &pv->frame[slot];
         hb_buffer_t *buf;
         buf = hb_frame_buffer_init(pv->output.pix_fmt,
                                    frame->width, frame->height);
@@ -648,14 +631,16 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
                 continue;
             }
 
-            int nframes = pv->next_frame - f;
+            int nframes = pv->frame_pool_count - f;
             if (pv->nframes[c] < nframes)
             {
                 nframes = pv->nframes[c];
             }
             // Process current plane
             pv->nlmeans_plane(functions,
-                              frame,
+                              pv->frame,
+                              slot,
+                              pv->frame_pool_size,
                               pv->prefilter[c],
                               c,
                               nframes,
