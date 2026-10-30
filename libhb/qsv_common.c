@@ -136,7 +136,7 @@ static hb_triplet_t hb_qsv_h265_profiles[] =
 {
     { "Main",               "main",             MFX_PROFILE_HEVC_MAIN,   },
     { "Main 10",            "main10",           MFX_PROFILE_HEVC_MAIN10, },
-    { "Main Still Picture", "mainstillpicture", MFX_PROFILE_HEVC_MAINSP, },
+    { "Main Still Picture", "mainsp",           MFX_PROFILE_HEVC_MAINSP, },
     { NULL,                                                              },
 };
 static const char * const hb_qsv_h265_profiles_names_10bit[] = {
