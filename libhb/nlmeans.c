@@ -175,7 +175,6 @@ struct hb_filter_private_s
     int         frame_pool_size;   // total slots in the frame buffer pool
     int         frame_pool_head;   // slot index of the oldest buffered frame
     int         frame_pool_count;  // number of frames currently buffered
-    int         max_frames;
 
     taskset_t   taskset;
     nlmeans_thread_arg_t ** thread_data;
@@ -332,6 +331,9 @@ static int nlmeans_init(hb_filter_object_t *filter,
         if (pv->prefilter[c]   == -1) { pv->prefilter[c]   = pv->prefilter[c-1]; }
     }
 
+    // Initial maximum temporal search depth value; sizes the frame buffer pool
+    int max_frames = 1;
+
     for (int c = 0; c < 3; c++)
     {
         // Replace unset values with defaults
@@ -356,7 +358,8 @@ static int nlmeans_init(hb_filter_object_t *filter,
         if (pv->nframes[c] > NLMEANS_FRAMES_MAX) { pv->nframes[c] = NLMEANS_FRAMES_MAX; }
         if (pv->prefilter[c] < 0)       { pv->prefilter[c] = 0; }
 
-        if (pv->max_frames < pv->nframes[c]) pv->max_frames = pv->nframes[c];
+        // Set max_frames to the largest temporal search depth for any plane
+        if (max_frames < pv->nframes[c]) max_frames = pv->nframes[c];
 
         // Scale strength with bit depth
         pv->strength[c] *= pv->depth > 8 ? 1 << (pv->depth - 8) : 1;
@@ -393,7 +396,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
     }
     hb_log("NLMeans using %i threads", pv->threads);
 
-    pv->frame_pool_size = pv->threads + pv->max_frames;
+    pv->frame_pool_size = pv->threads + max_frames;
     pv->frame = calloc(pv->frame_pool_size, sizeof(Frame));
     if (pv->frame == NULL)
     {
