@@ -8,6 +8,8 @@
 #import "HBAudioTrack.h"
 
 #define HB_INVALID_AUDIO_QUALITY (-3.)
+#define HB_AVG_SECTION     -1
+#define HB_QUALITY_SECTION -2
 
 static void *HBAudioQualityCellContext = &HBAudioQualityCellContext;
 static void *HBAudioQualityCellItemContext = &HBAudioQualityCellItemContext;
@@ -68,6 +70,23 @@ static void *HBAudioQualityCellItemContext = &HBAudioQualityCellItemContext;
     }
 }
 
+- (NSMenuItem *)buildSectionHeaderWithTitle:(NSString *)title tag:(NSInteger)tag
+{
+    NSMenuItem *sectionHeader;
+    if (@available(macOS 14.0, *))
+    {
+        sectionHeader = [NSMenuItem sectionHeaderWithTitle:title];
+    }
+    else
+    {
+        sectionHeader = [[NSMenuItem alloc] initWithTitle:title action:nil keyEquivalent:@""];
+        sectionHeader.enabled = NO;
+    }
+    sectionHeader.tag = tag;
+
+    return sectionHeader;
+}
+
 - (void)buildMenu
 {
     if (self.objectValue != nil)
@@ -83,6 +102,7 @@ static void *HBAudioQualityCellItemContext = &HBAudioQualityCellItemContext;
         else
         {
             NSMenu *menu = self.popUp.menu;
+            menu.autoenablesItems = NO;
             [menu removeAllItems];
 
             self.bitRates = bitRates;
@@ -90,16 +110,14 @@ static void *HBAudioQualityCellItemContext = &HBAudioQualityCellItemContext;
 
             if (bitRates.count)
             {
-                if (@available(macOS 14.0, *))
-                {
-                    NSMenuItem *bitRateHeader = [NSMenuItem sectionHeaderWithTitle:NSLocalizedString(@"Average Bitrate", @"Audio bitrates")];
-                    [menu addItem:bitRateHeader];
-                }
+                NSMenuItem *bitRateHeader = [self buildSectionHeaderWithTitle:NSLocalizedString(@"Average Bitrate (kbps)", @"Audio bitrates")
+                                                                          tag:HB_AVG_SECTION];
+                [menu addItem:bitRateHeader];
 
                 for (NSNumber *bitRate in bitRates)
                 {
                     NSMenuItem *bitRateItem = [[NSMenuItem alloc] init];
-                    bitRateItem.title = [NSString stringWithFormat:@"%@ kbps", bitRate];
+                    bitRateItem.title = bitRate.stringValue;
                     bitRateItem.tag = bitRate.intValue;
                     bitRateItem.action = @selector(setTrackBitrate:);
                     bitRateItem.target = self;
@@ -114,11 +132,9 @@ static void *HBAudioQualityCellItemContext = &HBAudioQualityCellItemContext;
 
             if (qualities.count)
             {
-                if (@available(macOS 14.0, *))
-                {
-                    NSMenuItem *qualityHeader = [NSMenuItem sectionHeaderWithTitle:NSLocalizedString(@"Constant Quality", @"Audio quality")];
-                    [menu addItem:qualityHeader];
-                }
+                NSMenuItem *qualityHeader = [self buildSectionHeaderWithTitle:NSLocalizedString(@"Constant Quality", @"Audio quality")
+                                                                          tag:HB_QUALITY_SECTION];
+                [menu addItem:qualityHeader];
 
                 for (NSNumber *quality in qualities)
                 {
@@ -150,11 +166,17 @@ static void *HBAudioQualityCellItemContext = &HBAudioQualityCellItemContext;
 {
     if ((int)[self.objectValue mode] == (int)HBAudioEncoderModeABR)
     {
-        [self.popUp selectItemWithTag:[self.objectValue bitRate]];
+        if ([self.popUp selectItemWithTag:[self.objectValue bitRate]] == NO)
+        {
+            [self.popUp selectItemAtIndex:[self.popUp indexOfItemWithTag:HB_AVG_SECTION] + 1];
+        }
     }
     else
     {
-        [self.popUp selectItemWithTag:[self.objectValue quality] * 1000];
+        if ([self.popUp selectItemWithTag:[self.objectValue quality] * 1000] == NO)
+        {
+            [self.popUp selectItemAtIndex:[self.popUp indexOfItemWithTag:HB_QUALITY_SECTION] + 1];
+        }
     }
 }
 

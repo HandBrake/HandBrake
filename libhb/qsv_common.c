@@ -136,7 +136,7 @@ static hb_triplet_t hb_qsv_h265_profiles[] =
 {
     { "Main",               "main",             MFX_PROFILE_HEVC_MAIN,   },
     { "Main 10",            "main10",           MFX_PROFILE_HEVC_MAIN10, },
-    { "Main Still Picture", "mainstillpicture", MFX_PROFILE_HEVC_MAINSP, },
+    { "Main Still Picture", "mainsp",           MFX_PROFILE_HEVC_MAINSP, },
     { NULL,                                                              },
 };
 static const char * const hb_qsv_h265_profiles_names_10bit[] = {
@@ -2750,6 +2750,18 @@ int hb_qsv_apply_encoder_options(qsv_data_t * qsv_data, hb_job_t *job, AVDiction
         videoParam.mfx.CodecProfile = MFX_PROFILE_HEVC_MAIN10;
     }
 
+    if (hb_qsv_profile_parse(&qsv_data->param, qsv_data->qsv_info,
+                             job->encoder_profile, job->vcodec))
+    {
+        hb_error("hb_qsv_apply_encoder_options: bad profile %s", job->encoder_profile);
+        return -1;
+    }
+    if (job->encoder_profile != NULL && *job->encoder_profile &&
+        strcasecmp(job->encoder_profile, "auto"))
+    {
+        av_dict_set_int(av_opts, "profile", videoParam.mfx.CodecProfile, 0);
+    }
+
     if (job->encoder_options != NULL && *job->encoder_options)
     {
         hb_dict_t *options_list;
@@ -3398,7 +3410,7 @@ int hb_qsv_profile_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char 
                 profile = hb_triplet4key(hb_qsv_h265_profiles, profile_key);
 
                 /* HEVC10 supported starting from KBL/G6 */
-                if (profile->value == MFX_PROFILE_HEVC_MAIN10 &&
+                if (profile != NULL && profile->value == MFX_PROFILE_HEVC_MAIN10 &&
                     hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index())) < QSV_G6)
                 {
                     hb_log("qsv: HEVC Main10 is not supported on this platform");
@@ -3909,7 +3921,7 @@ hb_hwaccel_t hb_hwaccel_qsv =
     .hw_pix_fmt   = AV_PIX_FMT_QSV,
     .can_filter   = are_filters_supported,
     .find_decoder = find_decoder,
-    .caps         = HB_HWACCEL_CAP_ROTATE | HB_HWACCEL_CAP_COLOR_RANGE
+    .caps         = HB_HWACCEL_CAP_ROTATE | HB_HWACCEL_CAP_COLOR_RANGE | HB_HWACCEL_CAP_SYSTEM_MEMORY
 };
 
 #else // HB_PROJECT_FEATURE_QSV
