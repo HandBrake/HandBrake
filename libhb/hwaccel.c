@@ -224,6 +224,12 @@ enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPi
     const hb_job_t *job = ctx->opaque;
     const enum AVPixelFormat *p;
 
+    if (job && job->hw_pix_fmt == AV_PIX_FMT_NONE &&
+        (job->hw_accel->caps & HB_HWACCEL_CAP_SYSTEM_MEMORY))
+    {
+        return ctx->sw_pix_fmt;
+    }
+
     for (p = pix_fmts; *p != AV_PIX_FMT_NONE; p++)
     {
         if (job && job->hw_pix_fmt != AV_PIX_FMT_NONE)
