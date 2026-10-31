@@ -20,24 +20,39 @@ Download available from Microsoft:
 - Added video filters:
     - Deband
     - BM3D
+- Added Stereo 3D and spherical video mapping metadata passthru
 - Added H.264 10-bit (High10) encoder for Nvidia Blackwell GPUs 
-- Stereo 3D and spherical video mapping metadata are now preserved
+- Added AMD hardware decoding (experimental)
+- Improved Intel QSV video encoding/decoding support
+- Reworked the frame dropping filter to be more deterministic
 - Fixed FFV1 SAR in bitstream
 
 #### Audio
 
 - Added audio filters:
-    - Gate
+    - Declick
+    - Declip
+    - FFT Denoiser
+    - NLMeans Denoiser
+    - Noise Gate
     - Compressor
+    - Limiter
+    - Dialogue Enhance
+    - Headphone Crossfeed
+    - Stereo Widening
+    - Loudness Normalization
 - Added 3.0, 4.0, and quadrophonic mixdowns
 - Renamed "7.1 (5F/2R/LFE)" mixdown to "7.1 (SDDS)" (speaker layout used by Sony Dynamic Digital Sound)
 - Enabled 6.1/7.1 mixdowns for FFmpeg AAC audio encoder and 6.1 for fdk-aac
 - Fixed an issue when converting audio with channels set to "Unused"
+- Fixed audio trailing frames not being encoded
+- Fixed various sync issues
 
 #### Subtitles
 
 - Improved the tx3g decoder
 - Fixed the SSA to tx3g conversion styles when subtitles lines overlaps
+- Fixed overlapping subtitles when the output container is set to MOV
 
 #### Build system
 
@@ -46,12 +61,15 @@ Download available from Microsoft:
 #### Third-party libraries
 
 - Updated libraries
-  - AMF 1.5.2 (AMD VCN video encoding)
-  - FFmpeg 9.0.1 (decoding and filters)
-  - FreeType 2.14.3 (subtitles)
+  - AMF 1.5.3 (AMD VCN video encoding)
+  - FFmpeg 9.0.2 (decoding and filters)
+  - FreeType 2.15.0 (subtitles)
+  - Fribidi 1.0.17 (subtitles)
   - HarfBuzz 14.3.0 (subtitles)
+  - Jansson 2.15.1 (JSON architecture)
   - libbluray 1.5.1 (Blu-ray decoding)
   - libdav1d 1.5.4 (AV1 decoding)
+  - libdovi 3.4.0 (Dolby Vision dynamic metadata)
   - libdvdread 7.1.1 (DVD decoding)
   - libiconv 1.19 (character encoding support)
   - liblzma (xz) 5.8.4 (LZMA video decoding, e.g. TIFF)
@@ -61,6 +79,20 @@ Download available from Microsoft:
   - oneVPL 2.17.0 (Intel QSV video encoding/decoding)
   - SVT-AV1 4.2.0 (AV1 video encoding)
   - x265 4.3 (H.265/HEVC video encoding)
+
+### Linux
+
+
+### Mac
+
+  - Added audio encoder quality base rate control UI
+  - Added a new default range preference
+  - Added a way to manually add a "Stop" action to the queue
+  - Enabled proper VideoToolbox VBV options on macOS 27 and later
+  - Enabled a new VideoToolbox "Constant Quality Factor" rate control mode on macOS 27
+  - Enabled Core audio HE-AAC encoder quality based rate control
+
+### Windows
 
 
 ## HandBrake 1.11.2
