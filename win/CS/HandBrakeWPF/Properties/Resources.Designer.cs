@@ -8324,6 +8324,15 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("SubtitleViewModel_ForeignAudioSearch", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Subtitle language.
+        /// </summary>
+        public static string SubtitleViewModel_ImportLanguage {
+            get {
+                return ResourceManager.GetString("SubtitleViewModel_ImportLanguage", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Additional Audio Tracks.

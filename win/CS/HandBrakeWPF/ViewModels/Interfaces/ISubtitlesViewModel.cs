@@ -30,6 +30,19 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         void Import(string[] subtitleFiles);
 
         /// <summary>
+        /// Imports subtitle files for the current title, reusing the language selected for the import batch.
+        /// </summary>
+        /// <param name="subtitleFiles">
+        /// String array of files.
+        /// </param>
+        void ImportForCurrentTitle(string[] subtitleFiles);
+
+        /// <summary>
+        /// Resets the language remembered for the current subtitle import batch.
+        /// </summary>
+        void ResetImportLanguage();
+
+        /// <summary>
         /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
         /// </summary>
         void RefreshTask();
