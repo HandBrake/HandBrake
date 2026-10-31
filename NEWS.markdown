@@ -94,6 +94,9 @@ Download available from Microsoft:
 
 ### Windows
 
+  - Minor UI visual refresh including usability and accessibility changes throughout the entire UI.
+  - Minor miscellaneous fixes
+  - Updated existing and maintained locales
 
 ## HandBrake 1.11.2
 
