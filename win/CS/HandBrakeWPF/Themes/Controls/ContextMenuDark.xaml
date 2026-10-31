@@ -3,15 +3,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
 
-    <SolidColorBrush x:Key="Menu.Static.Background" Color="#363636" />  <!-- Ui.Mid -->
-    <SolidColorBrush x:Key="Menu.Static.Border" Color="#acacac" /><!-- Ui.ContrastLight -->
-    <SolidColorBrush x:Key="Menu.Static.Foreground" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="Menu.Static.Background" Color="#33363A" />
+    <SolidColorBrush x:Key="Menu.Static.Border" Color="#4A4F55" />
+    <SolidColorBrush x:Key="Menu.Static.Foreground" Color="#E6E8EB" />
 
-    <SolidColorBrush x:Key="Menu.Static.Separator" Color="#606060" />
+    <SolidColorBrush x:Key="Menu.Static.Separator" Color="#4A4F55" />
 
-    <SolidColorBrush x:Key="Menu.Disabled.Background" Color="#363636" /><!-- Ui.Mid -->
-    <SolidColorBrush x:Key="Menu.Disabled.Border" Color="#FFDADADA" />
-    <SolidColorBrush x:Key="Menu.Disabled.Foreground" Color="#FF707070" />
+    <SolidColorBrush x:Key="Menu.Disabled.Background" Color="#33363A" />
+    <SolidColorBrush x:Key="Menu.Disabled.Border" Color="#4A4F55" />
+    <SolidColorBrush x:Key="Menu.Disabled.Foreground" Color="#9AA0A6" />
 
     <SolidColorBrush x:Key="MenuItem.Selected.Background" Color="#3D26A0DA" />
     <SolidColorBrush x:Key="MenuItem.Selected.Border" Color="#FF26A0DA" />

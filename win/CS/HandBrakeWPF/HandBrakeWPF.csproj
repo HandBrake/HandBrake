@@ -173,9 +173,6 @@
     <Page Update="Themes\Controls\ContextMenuLight.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="Themes\Controls\GroupBoxDark.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Themes\Controls\ToolbarLight.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
