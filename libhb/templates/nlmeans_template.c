@@ -357,6 +357,10 @@ static void FUNC(nlmeans_filter_csm)(const pixel *src,
             {
                 *(dst + bw*y + x) = max3;
             }
+            else
+            {
+                *(dst + bw*y + x) = pixel;
+            }
         }
     }
 }
@@ -499,7 +503,6 @@ static void FUNC(nlmeans_prefilter)(BorderedPlane *src,
             mem_pre = malloc(bw * bh * sizeof(pixel));
         }
         pixel *image_pre = mem_pre + border + bw * border;
-        memcpy(mem_pre, mem, bw * bh * sizeof(pixel));
 
         // Filter plane; should already have at least 2px extra border on each side
         if (filter_type & NLMEANS_PREFILTER_MODE_CSM5X5)
