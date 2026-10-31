@@ -25,10 +25,13 @@ namespace HandBrakeWPF.Converters
 
         private readonly bool isDarkTheme;
 
+        private readonly ThemeImageType imageType;
+
         public ThemeImageConverter()
         {
             this.userSettingService = IoCHelper.Get<IUserSettingService>();
             AppThemeMode mode = (AppThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
+            this.imageType = (ThemeImageType)this.userSettingService.GetUserSetting<int>(UserSettingConstants.ThemeImageType);
 
             if (SystemParameters.HighContrast)
             {
@@ -52,6 +55,11 @@ namespace HandBrakeWPF.Converters
                     string file = components.LastOrDefault();
                     directory = image.Replace(file, string.Empty);
                     image = file;
+                }
+
+                if (this.imageType == ThemeImageType.Colour)
+                {
+                    return directory + "Colour/" + image;
                 }
 
                 if (this.isDarkTheme)

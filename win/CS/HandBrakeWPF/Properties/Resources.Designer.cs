@@ -1238,6 +1238,33 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("DarkTheme_system", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Icons:.
+        /// </summary>
+        public static string OptionsView_ThemeImageType {
+            get {
+                return ResourceManager.GetString("OptionsView_ThemeImageType", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Match Theme.
+        /// </summary>
+        public static string ThemeImageType_Theme {
+            get {
+                return ResourceManager.GetString("ThemeImageType_Theme", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Colour.
+        /// </summary>
+        public static string ThemeImageType_Colour {
+            get {
+                return ResourceManager.GetString("ThemeImageType_Colour", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Export Queue Statistics Data (csv).
