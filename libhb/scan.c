@@ -923,8 +923,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 
         int packets = 0;
         vid_decoder->frame_count = 0;
-        while (vid_decoder->frame_count < PREVIEW_READ_THRESH ||
-              (!AllAudioOK(title) && packets < 10000))
+        while (vid_decoder->frame_count < PREVIEW_READ_THRESH && packets < 10000)
         {
             if (*data->die)
             {
