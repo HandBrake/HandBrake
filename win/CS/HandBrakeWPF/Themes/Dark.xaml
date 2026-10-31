@@ -16,10 +16,10 @@
     <SolidColorBrush x:Key="Ui.UltraLight2" Color="#acacac" />
     <SolidColorBrush x:Key="Ui.UltraLight3" Color="#E3E3E3" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
-    <SolidColorBrush x:Key="Ui.ControlHover" Color="#474C52" />
+    <SolidColorBrush x:Key="Ui.ControlHover" Color="#50565D" />
     <SolidColorBrush x:Key="Ui.WhiteSmoke" Color="#E6E8EB" />
     <SolidColorBrush x:Key="Ui.ListBoxSelect" Color="#606060" />
-    <SolidColorBrush x:Key="Ui.ToolbarHover" Color="#474C52" />
+    <SolidColorBrush x:Key="Ui.ToolbarHover" Color="#50565D" />
 
     <SolidColorBrush x:Key="Ui.Blue" Color="#00579f" />
     <SolidColorBrush x:Key="Ui.BlueBright" Color="#006cc5" />
@@ -197,7 +197,6 @@
         <ResourceDictionary Source="Controls/ButtonDark.xaml" />
         <ResourceDictionary Source="Controls/ContextMenuDark.xaml" />
         <ResourceDictionary Source="Controls/ToolbarDark.xaml" />
-        <ResourceDictionary Source="Controls/GroupBoxDark.xaml" />
         <ResourceDictionary Source="Controls/ProgressBarBoth.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
