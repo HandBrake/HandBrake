@@ -1699,7 +1699,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Or drop a file, set of files or folder here ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
-    <value>Help</value>
+    <value>User Guide</value>
   </data>
   <data name="Preferences" xml:space="preserve">
     <value>Preferences</value>

@@ -7687,7 +7687,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Help.
+        ///   Looks up a localized string similar to User Guide.
         /// </summary>
         public static string SourceSelection_Help {
             get {
