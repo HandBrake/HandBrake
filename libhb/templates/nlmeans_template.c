@@ -542,7 +542,8 @@ static void FUNC(nlmeans_prefilter)(BorderedPlane *src,
             FUNC(nlmeans_filter_edgeboost)(image, image_pre, w, h, border);
         }
 
-        // Blend source and destination for lesser effect
+        // Blend source and destination main image pixels for lesser effect
+        // Border pixels are skipped here and recreated afterward
         int wet = 1;
         int dry = 0;
         if (filter_type & NLMEANS_PREFILTER_MODE_REDUCE50 &&
@@ -563,11 +564,15 @@ static void FUNC(nlmeans_prefilter)(BorderedPlane *src,
         }
         if (dry > 0)
         {
-            for (int y = 0; y < bh; y++)
+            const pixel *s;
+            pixel *d;
+            for (int y = 0; y < h; y++)
             {
-                for (int x = 0; x < bw; x++)
+                s = image     + y * bw;
+                d = image_pre + y * bw;
+                for (int x = 0; x < w; x++)
                 {
-                    *(mem_pre + bw*y + x) = (pixel)((wet * *(mem_pre + bw*y + x) + dry * *(mem + bw*y + x)) / (wet + dry));
+                    d[x] = (pixel)((wet * d[x] + dry * s[x]) / (wet + dry));
                 }
             }
         }
