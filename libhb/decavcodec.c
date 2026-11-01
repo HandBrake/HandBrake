@@ -178,7 +178,7 @@ static int downmix_required(const AVChannelLayout *target_layout_mask, const AVC
     return av_channel_layout_compare(input_layout_mask, target_layout_mask);
 }
 
-static uint64_t ac3_downmix_mask(int hb_mixdown, int normalized, const AVChannelLayout *input_layout, const char **dmix_mode)
+static uint64_t ac3_downmix_mask(int hb_mixdown, int normalized, const AVChannelLayout *input_layout)
 {
     /*
      * ac3/eac3 bitstreams contain mix levels for center, surround and LFE channels.
@@ -217,12 +217,11 @@ static uint64_t ac3_downmix_mask(int hb_mixdown, int normalized, const AVChannel
             if (downmix_required(&mask_layout, input_layout))
             {
                 /*
-                 * We also set the existing decoder option "dmix_mode" to 2 (AC3_DMIXMOD_LORO)
-                 * which is currently ignored by the decoder but should (theoretically) ensure
-                 * we always get a regular Lo/Ro downmix, if the decoder were to ever gain the
-                 * ability to do a Dolby/PLII downmix in the future.
+                 * The decoder always uses the regular Lo/Ro mix levels for its
+                 * downmix. Its "dmix_mode" option only exports the preferred
+                 * downmix mode signaled in the bitstream; it is read-only and
+                 * setting it makes avcodec_open2() fail.
                  */
-                *dmix_mode = "2";
                 av_channel_layout_uninit(&mask_layout);
                 return mask;
             }
@@ -425,14 +424,13 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         char mixname[256];
         char *downmix = NULL;
         uint64_t downmix_mask = 0;
-        const char *dmix_mode = NULL;
         switch (w->codec_param)
         {
             case AV_CODEC_ID_AC3:
             case AV_CODEC_ID_EAC3:
                 downmix_mask = ac3_downmix_mask(w->audio->config.out.mixdown,
                                                 w->audio->config.out.normalize_mix_level,
-                                                w->audio->config.in.ch_layout, &dmix_mode);
+                                                w->audio->config.in.ch_layout);
                 break;
 
             case AV_CODEC_ID_DTS:
@@ -453,10 +451,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         if (downmix_mask)
         {
             downmix = channel_layout_name_from_mask(downmix_mask, mixname, sizeof(mixname));
-        }
-        if (dmix_mode)
-        {
-            av_dict_set(&av_opts, "dmix_mode", dmix_mode, 0);
         }
         if (downmix)
         {
