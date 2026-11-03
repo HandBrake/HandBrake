@@ -277,9 +277,16 @@ inhibit_suspend (void)
         // Already inhibited
         return;
     }
+    // Idle only: backends without suspend support reject anything
+    // else outright, leaving no inhibitor at all.  Holding idle
+    // keeps the session active so automatic suspend never triggers.
     suspend_cookie = gtk_application_inhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
-            NULL, GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
+            NULL, GTK_APPLICATION_INHIBIT_IDLE,
             _("An encode is in progress."));
+    if (!suspend_cookie)
+    {
+        g_warning("Failed to inhibit idle, the system may suspend during encode");
+    }
 }
 
 static void
