@@ -1,0 +1,26 @@
+From fa224ebee479046c179605a7070e02f81910c786 Mon Sep 17 00:00:00 2001
+From: DRC <information@libjpeg-turbo.org>
+Date: Thu, 29 Oct 2026 19:51:44 -0400
+Subject: [PATCH] zlib: Rename in-tree z_errmsg array
+
+Z_PREFIX doesn't rename z_errmsg, so attempting to link statically with
+both the TurboJPEG API library and zlib could cause a link error.  This
+is known to affect official builds of TurboVNC, but only because those
+builds link statically with an in-tree version of zlib-ng.  The issue is
+unlikely to affect other applications.
+---
+ src/spng/zlib/zconf.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/spng/zlib/zconf.h b/src/spng/zlib/zconf.h
+index 4ad69032c..41ec144b7 100644
+--- a/src/spng/zlib/zconf.h
++++ b/src/spng/zlib/zconf.h
+@@ -145,6 +145,7 @@
+ #    define uncompress_z          z_uncompress_z
+ #    define uncompress2_z         z_uncompress2_z
+ #  endif
++#  define z_errmsg              z_z_errmsg
+ #  define zError                z_zError
+ #  ifndef Z_SOLO
+ #    define zcalloc               z_zcalloc
