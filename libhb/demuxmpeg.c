@@ -72,34 +72,59 @@ static inline void restore_chap( hb_psdemux_t *state, hb_buffer_t *buf )
 
 /* Basic MPEG demuxer */
 
+static inline int has_bytes(const hb_buffer_t *buf, int pos, int size)
+{
+    return pos >= 0 && size >= 0 && pos <= buf->size &&
+           size <= buf->size - pos;
+}
+
 static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
                           hb_psdemux_t* state )
 {
     hb_buffer_t * buf_es;
-    int           pos = 0;
 
     while ( buf )
     {
+        int pos = 0;
+
         save_chap( state, buf );
 
 #define d (buf->data)
         /* pack_header */
-        if( d[pos] != 0 || d[pos+1] != 0 ||
+        if( !has_bytes(buf, pos, 4) || d[pos] != 0 || d[pos+1] != 0 ||
             d[pos+2] != 0x1 || d[pos+3] != 0xBA )
         {
-            hb_log( "demux_dvd_ps: not a PS packet (%02x%02x%02x%02x)",
-                    d[pos], d[pos+1], d[pos+2], d[pos+3] );
+            if (has_bytes(buf, pos, 4))
+            {
+                hb_log( "demux_dvd_ps: not a PS packet (%02x%02x%02x%02x)",
+                        d[pos], d[pos+1], d[pos+2], d[pos+3] );
+            }
+            else
+            {
+                hb_log( "demux_dvd_ps: truncated PS packet" );
+            }
             hb_buffer_t *tmp = buf->next;
             buf->next = NULL;
             hb_buffer_close( &buf );
             buf = tmp;
             continue;
         }
-        pos += 4;                    /* pack_start_code */
+
+        /* A pack header contains ten bytes after the start code. */
+        if (!has_bytes(buf, pos, 14))
+        {
+            hb_log( "demux_dvd_ps: truncated pack header" );
+            hb_buffer_t *tmp = buf->next;
+            buf->next = NULL;
+            hb_buffer_close( &buf );
+            buf = tmp;
+            continue;
+        }
 
         if ( state )
         {
             /* extract the system clock reference (scr) */
+            pos += 4;                /* pack_start_code */
             int64_t scr = ((uint64_t)(d[pos] & 0x38) << 27) |
                           ((uint64_t)(d[pos] & 0x03) << 28) |
                           ((uint64_t)(d[pos+1]) << 20) |
@@ -110,22 +135,40 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
             check_mpeg_scr( state, scr, 700 );
         }
 
-        pos += 9;                    /* pack_header */
-        pos += 1 + ( d[pos] & 0x7 ); /* stuffing bytes */
+        pos = 14 + ( d[13] & 0x7 );
+        if (!has_bytes(buf, 0, pos))
+        {
+            hb_log( "demux_dvd_ps: truncated pack stuffing" );
+            hb_buffer_t *tmp = buf->next;
+            buf->next = NULL;
+            hb_buffer_close( &buf );
+            buf = tmp;
+            continue;
+        }
 
         /* system_header */
-        if( d[pos] == 0 && d[pos+1] == 0 &&
+        if( has_bytes(buf, pos, 4) && d[pos] == 0 && d[pos+1] == 0 &&
             d[pos+2] == 0x1 && d[pos+3] == 0xBB )
         {
             int header_length;
 
-            pos           += 4; /* system_header_start_code */
-            header_length  = ( d[pos] << 8 ) + d[pos+1];
-            pos           += 2 + header_length;
+            if (has_bytes(buf, pos, 6))
+            {
+                header_length = ( d[pos+4] << 8 ) + d[pos+5];
+                pos += 6;
+                if (has_bytes(buf, pos, header_length))
+                    pos += header_length;
+                else
+                    pos = buf->size;
+            }
+            else
+            {
+                pos = buf->size;
+            }
         }
 
         /* pes */
-        while( pos + 6 < buf->size &&
+        while( has_bytes(buf, pos, 6) &&
                d[pos] == 0 && d[pos+1] == 0 && d[pos+2] == 0x1 )
         {
             int      id;
@@ -136,14 +179,17 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
             int      has_pts;
             int64_t  pts = AV_NOPTS_VALUE, dts = AV_NOPTS_VALUE;
 
-            pos               += 3;               /* packet_start_code_prefix */
-            id           = d[pos];
-            pos               += 1;
+            id = d[pos+3];
 
             /* pack_header */
             if( id == 0xBA)
             {
-                pos += 10 + (d[pos+9] & 7);
+                if (!has_bytes(buf, pos, 14))
+                    break;
+                int stuffing_bytes = d[pos+13] & 7;
+                if (!has_bytes(buf, pos, 14 + stuffing_bytes))
+                    break;
+                pos += 14 + stuffing_bytes;
                 continue;
             }
 
@@ -152,13 +198,18 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
             {
                 int header_length;
 
-                header_length  = ( d[pos] << 8 ) + d[pos+1];
-                pos           += 2 + header_length;
+                header_length = ( d[pos+4] << 8 ) + d[pos+5];
+                pos += 6;
+                if (!has_bytes(buf, pos, header_length))
+                    break;
+                pos += header_length;
                 continue;
             }
 
-            pes_packet_length  = ( d[pos] << 8 ) + d[pos+1];
-            pos               += 2;               /* pes_packet_length */
+            pes_packet_length  = ( d[pos+4] << 8 ) + d[pos+5];
+            pos               += 6;               /* packet start code and length */
+            if (!has_bytes(buf, pos, pes_packet_length))
+                break;
             pes_packet_end     = pos + pes_packet_length;
 
             if( id != 0xE0 && id != 0xBD &&
@@ -169,15 +220,29 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
                 continue;
             }
 
+            if (pes_packet_end - pos < 3)
+            {
+                pos = pes_packet_end;
+                continue;
+            }
             has_pts            = d[pos+1] >> 6;
-            pos               += 2;               /* Required headers */
-
-            pes_header_d_length  = d[pos];
-            pos                    += 1;
-            pes_header_end          = pos + pes_header_d_length;
+            pes_header_d_length = d[pos+2];
+            pos += 3;               /* Required headers and header length */
+            if (pes_header_d_length > pes_packet_end - pos)
+            {
+                pos = pes_packet_end;
+                continue;
+            }
+            pes_header_end = pos + pes_header_d_length;
 
             if( has_pts )
             {
+                int pts_length = (has_pts & 1) ? 10 : 5;
+                if (pes_header_d_length < pts_length)
+                {
+                    pos = pes_packet_end;
+                    continue;
+                }
                 pts = ( (uint64_t)(d[pos] & 0xe ) << 29 ) +
                       ( d[pos+1] << 22 ) +
                       ( ( d[pos+2] >> 1 ) << 15 ) +
@@ -199,16 +264,33 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
 
             pos = pes_header_end;
 
+            /* No payload remains after the PES header. */
+            if( pos >= pes_packet_end )
+            {
+                pos = pes_packet_end;
+                continue;
+            }
+
             if( id == 0xBD )
             {
                 id |= ( d[pos] << 8 );
                 if( ( id & 0xF0FF ) == 0x80BD ) /* A52 */
                 {
+                    if (pes_packet_end - pos < 4)
+                    {
+                        pos = pes_packet_end;
+                        continue;
+                    }
                     pos += 4;
                 }
                 else if( ( id & 0xE0FF ) == 0x20BD || /* SPU */
                          ( id & 0xF0FF ) == 0xA0BD )  /* LPCM */
                 {
+                    if (pes_packet_end - pos < 1)
+                    {
+                        pos = pes_packet_end;
+                        continue;
+                    }
                     pos += 1;
                 }
             }
