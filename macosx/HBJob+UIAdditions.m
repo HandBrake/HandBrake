@@ -339,13 +339,19 @@ static HBMixdownTransformer    *mixdownTransformer;
         {
             [summary appendFormat:@", %@ (%@)", filter.localizedName, filter.custom];
         }
-        else if (filter.tune.length)
+        else if (filter.tune && [filter.tune isEqualToString:@"none"] == NO)
         {
-            [summary appendFormat:@", %@ (%@, %@)", filter.localizedName, filter.preset, filter.tune];
+            HBFilterPresetTransformer *pT = [[HBFilterPresetTransformer alloc] initWithWithFilterID:filter.filterID];
+            HBFilterTuneTransformer *tT = [[HBFilterTuneTransformer alloc] initWithWithFilterID:filter.filterID];
+            [summary appendFormat:@", %@ (%@, %@)", filter.localizedName,
+             [pT transformedValue:filter.preset],
+             [tT transformedValue:filter.tune]];
         }
         else
         {
-            [summary appendFormat:@", %@ (%@)", filter.localizedName, filter.preset];
+            HBFilterPresetTransformer *pT = [[HBFilterPresetTransformer alloc] initWithWithFilterID:filter.filterID];
+            [summary appendFormat:@", %@ (%@)", filter.localizedName,
+             [pT transformedValue:filter.preset]];
         }
     }
 
@@ -644,8 +650,7 @@ static HBMixdownTransformer    *mixdownTransformer;
         [attrString appendAttributedString:[self dimensionsAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
-        NSAttributedString *filters = [self filtersAttributedDescription];
-        if (filters.length)
+        if (self.filters.filters.count)
         {
             [attrString appendAttributedString:[self filtersAttributedDescription]];
             [attrString appendString:@"\n" withAttributes: shortHeightAttr];

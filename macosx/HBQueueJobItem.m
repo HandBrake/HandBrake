@@ -141,7 +141,8 @@ static NSDictionary     *shortHeightAttr;
 
 - (NSAttributedString *)attributedDescription
 {
-    if (_attributedDescription == nil) {
+    if (_attributedDescription == nil)
+    {
         _attributedDescription = _job.attributedDescription;
     }
     return _attributedDescription;
