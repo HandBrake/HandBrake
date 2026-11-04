@@ -543,6 +543,28 @@ static HBMixdownTransformer    *mixdownTransformer;
                 }
             }
 
+            for (HBFilter *filter in audioTrack.filters.filters)
+            {
+                if ([filter.preset isEqualToString:@"custom"])
+                {
+                    [detailString appendFormat:@", %@ (%@)", filter.localizedName, filter.custom];
+                }
+                else if (filter.tune && [filter.tune isEqualToString:@"none"] == NO)
+                {
+                    HBFilterPresetTransformer *pT = [[HBFilterPresetTransformer alloc] initWithWithFilterID:filter.filterID];
+                    HBFilterTuneTransformer *tT = [[HBFilterTuneTransformer alloc] initWithWithFilterID:filter.filterID];
+                    [detailString appendFormat:@", %@ (%@, %@)", filter.localizedName,
+                     [pT transformedValue:filter.preset],
+                     [tT transformedValue:filter.tune]];
+                }
+                else
+                {
+                    HBFilterPresetTransformer *pT = [[HBFilterPresetTransformer alloc] initWithWithFilterID:filter.filterID];
+                    [detailString appendFormat:@", %@ (%@)", filter.localizedName,
+                     [pT transformedValue:filter.preset]];
+                }
+            }
+
             if (audioTrack.title.length)
             {
                 [detailString appendString:@", "];
