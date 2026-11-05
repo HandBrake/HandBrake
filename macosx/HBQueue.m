@@ -37,6 +37,10 @@ NSString * const HBQueueDidStartItemNotification = @"HBQueueDidStartItemNotifica
 NSString * const HBQueueDidCompleteItemNotification = @"HBQueueDidCompleteItemNotification";
 NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemKey";
 
+NSString * const HBQueueFileExtension = @"hbqueue";
+
+NSString * const HBQueueErrorDomain = @"HBQueueErrorDomain";
+
 @interface HBQueue ()
 
 @property (nonatomic, readonly) NSURL *fileURL;
@@ -185,6 +189,23 @@ static void powerSourceCallback(void *context)
 
 #pragma mark - Load and save
 
+/**
+ *  The archive the queue is stored as, both in the application support folder
+ *  and in the files the user exports. Keep the two identical, so a queue file
+ *  can always be read back by the same version that wrote it.
+ */
++ (nullable NSData *)archivedDataWithItems:(NSArray<id<HBQueueItem>> *)items error:(NSError **)outError
+{
+    return [NSKeyedArchiver archivedDataWithRootObject:items requiringSecureCoding:YES error:outError];
+}
+
++ (nullable NSArray<id<HBQueueItem>> *)itemsFromArchivedData:(NSData *)data error:(NSError **)outError
+{
+    NSSet *objectClasses = [NSSet setWithObjects:[NSArray class], [NSMutableArray class],
+                            [HBQueueJobItem class], [HBQueueActionStopItem class], nil];
+    return [NSKeyedUnarchiver unarchivedObjectOfClasses:objectClasses fromData:data error:outError];
+}
+
 - (NSMutableArray *)load
 {
     NSError *error;
@@ -193,8 +214,7 @@ static void powerSourceCallback(void *context)
     NSData *data = [NSData dataWithContentsOfURL:self.fileURL];
     if (data)
     {
-        NSSet *objectClasses = [NSSet setWithObjects:[NSMutableArray class], [HBQueueJobItem class], [HBQueueActionStopItem class], nil];
-        loadedItems = [NSKeyedUnarchiver unarchivedObjectOfClasses:objectClasses fromData:data error:&error];
+        loadedItems = [HBQueue itemsFromArchivedData:data error:&error];
 
         if (loadedItems == nil && error)
         {
@@ -208,7 +228,7 @@ static void powerSourceCallback(void *context)
 - (void)save
 {
     NSError *error = nil;
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.itemsInternal requiringSecureCoding:YES error:&error];
+    NSData *data = [HBQueue archivedDataWithItems:self.itemsInternal error:&error];
     if (data == nil)
     {
         [HBUtilities writeToActivityLog:"Failed to archive the queue"];
@@ -220,6 +240,78 @@ static void powerSourceCallback(void *context)
     {
         [HBUtilities writeToActivityLog:"Failed to write the queue to disk"];
     }
+}
+
+#pragma mark - Import and export
+
+- (BOOL)exportItems:(NSArray<id<HBQueueItem>> *)items toURL:(NSURL *)url error:(NSError **)outError
+{
+    NSParameterAssert(items);
+    NSParameterAssert(url);
+
+    NSData *data = [HBQueue archivedDataWithItems:items error:outError];
+    if (data == nil)
+    {
+        return NO;
+    }
+
+    return [data writeToURL:url options:NSDataWritingAtomic error:outError];
+}
+
+- (NSUInteger)importItemsFromURL:(NSURL *)url error:(NSError **)outError
+{
+    NSParameterAssert(url);
+
+    NSData *data = [NSData dataWithContentsOfURL:url options:0 error:outError];
+    if (data == nil)
+    {
+        return 0;
+    }
+
+    NSError *unarchiveError = nil;
+    NSArray<id<HBQueueItem>> *items = [HBQueue itemsFromArchivedData:data error:&unarchiveError];
+
+    // A queue written by a different version of HandBrake decodes to nil, or to
+    // nothing at all when every item in it failed the version check.
+    if (items.count == 0)
+    {
+        if (unarchiveError)
+        {
+            [HBUtilities writeErrorToActivityLog:unarchiveError];
+        }
+
+        if (outError)
+        {
+            NSString *description = NSLocalizedString(@"The queue could not be imported.", @"Queue import error description");
+            NSString *recovery = NSLocalizedString(@"The file is not a queue, or it was created by a different version of HandBrake.", @"Queue import error recovery suggestion");
+            *outError = [NSError errorWithDomain:HBQueueErrorDomain
+                                            code:HBQueueErrorUnreadableFile
+                                        userInfo:@{NSLocalizedDescriptionKey: description,
+                                                   NSLocalizedRecoverySuggestionErrorKey: recovery,
+                                                   NSURLErrorKey: url}];
+        }
+        return 0;
+    }
+
+    // Whatever an item was doing when it was exported, it has not been encoded
+    // by this queue, so it comes in ready to go, like the Reset command does.
+    for (id<HBQueueItem> item in items)
+    {
+        if (item.state != HBQueueItemStateReady)
+        {
+            item.state = HBQueueItemStateReady;
+        }
+    }
+
+    NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.itemsInternal.count, items.count)];
+    [self addItems:items atIndexes:indexes];
+
+    if (self.undoManager.isUndoing == NO)
+    {
+        [self.undoManager setActionName:NSLocalizedString(@"Import Queue", @"Queue undo action name")];
+    }
+
+    return items.count;
 }
 
 #pragma mark - Public methods
@@ -330,6 +422,80 @@ static void powerSourceCallback(void *context)
                                                       object:self
                                                     userInfo:@{HBQueueItemNotificationIndexesKey: [NSIndexSet indexSetWithIndex:index]}];
     [self updateStats];
+}
+
+- (BOOL)replaceJobs:(NSArray<HBJob *> *)jobs forItems:(NSArray<HBQueueJobItem *> *)items error:(NSError **)error
+{
+    NSParameterAssert(jobs.count == items.count);
+    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+    NSMutableArray<HBJob *> *previousJobs = [NSMutableArray array];
+    for (HBQueueJobItem *item in items)
+    {
+        NSUInteger index = [self.itemsInternal indexOfObjectIdenticalTo:item];
+        if (index == NSNotFound || item.state == HBQueueItemStateWorking || item.state == HBQueueItemStateRescanning)
+        {
+            if (error)
+            {
+                *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:@{
+                    NSLocalizedDescriptionKey: NSLocalizedString(@"The queue changed while relinking. Please try again.", @"Queue relink error")}];
+            }
+            return NO;
+        }
+        [indexes addIndex:index];
+        [previousJobs addObject:item.job];
+    }
+
+    // Check the resulting queue, including jobs added while the relink sheet was open.
+    NSMapTable<HBQueueJobItem *, HBJob *> *replacements = [NSMapTable strongToStrongObjectsMapTable];
+    for (NSUInteger index = 0; index < items.count; index++)
+    {
+        [replacements setObject:jobs[index] forKey:items[index]];
+    }
+    NSMutableSet<NSString *> *sources = [NSMutableSet set];
+    NSCountedSet<NSString *> *destinations = [[NSCountedSet alloc] init];
+    for (HBQueueJobItem *item in self.itemsInternal)
+    {
+        if ([item isKindOfClass:HBQueueJobItem.class])
+        {
+            HBJob *job = [replacements objectForKey:item] ?: item.job;
+            [sources addObject:job.fileURL.URLByResolvingSymlinksInPath.path];
+            if (job.destinationURL)
+            {
+                [destinations addObject:job.destinationURL.URLByResolvingSymlinksInPath.path];
+            }
+        }
+    }
+    for (NSUInteger index = 0; index < jobs.count; index++)
+    {
+        NSURL *destination = jobs[index].destinationURL;
+        NSString *path = destination.URLByResolvingSymlinksInPath.path;
+        BOOL destinationChanged = ![destination isEqual:items[index].destinationURL];
+        if (path && ([sources containsObject:path] ||
+                     (destinationChanged && ([destinations countForObject:path] > 1 ||
+                                             [NSFileManager.defaultManager fileExistsAtPath:destination.path]))))
+        {
+            if (error)
+            {
+                *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileWriteFileExistsError userInfo:@{
+                    NSLocalizedDescriptionKey: NSLocalizedString(@"Relinking would overwrite a source, an existing file, or another job's destination. Choose a different destination folder.", @"Queue relink destination conflict"),
+                    NSURLErrorKey: destination}];
+            }
+            return NO;
+        }
+    }
+    for (NSUInteger index = 0; index < items.count; index++)
+    {
+        [items[index] replaceJob:jobs[index]];
+    }
+    [[self.undoManager prepareWithInvocationTarget:self] replaceJobs:previousJobs forItems:items error:NULL];
+    if (!self.undoManager.isUndoing)
+    {
+        [self.undoManager setActionName:NSLocalizedString(@"Relink Queue Items", @"Queue undo action name")];
+    }
+    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeItemNotification object:self
+                                                  userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
+    [self save];
+    return YES;
 }
 
 - (void)removeItemsAtIndexes:(NSIndexSet *)indexes
