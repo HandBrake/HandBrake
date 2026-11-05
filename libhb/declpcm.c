@@ -11,6 +11,9 @@
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/audio_resample.h"
 
+#define LPCM_HEADER_SIZE       6
+#define LPCM_FRAME_BUFFER_SIZE (HB_DVD_READ_BUFFER_SIZE * 2)
+
 struct hb_work_private_s
 {
     hb_job_t    *job;
@@ -29,7 +32,7 @@ struct hb_work_private_s
     uint8_t     nchannels;
     uint8_t     sample_size; /* bits per sample */
 
-    uint8_t     frame[HB_DVD_READ_BUFFER_SIZE*2];
+    uint8_t     frame[LPCM_FRAME_BUFFER_SIZE];
     uint8_t   * data;
     uint32_t    alloc_size;
 
@@ -64,7 +67,44 @@ static const uint64_t hdr2layout[] =
     AV_CH_LAYOUT_6POINT1,      AV_CH_LAYOUT_7POINT1,
 };
 
-static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
+static void lpcmDropFrame( hb_work_private_t *pv )
+{
+    pv->size      = 0;
+    pv->nchunks   = 0;
+    pv->nsamples  = 0;
+    pv->pos       = 0;
+    pv->duration  = 0;
+}
+
+static int lpcmPacketOffset( const hb_buffer_t *in, uint32_t *offset )
+{
+    if (in == NULL || in->data == NULL || in->size < LPCM_HEADER_SIZE)
+    {
+        hb_log("declpcm: truncated packet");
+        return 1;
+    }
+
+    uint32_t value = ((uint32_t)in->data[1] << 8) | in->data[2];
+    value += 2;
+    if (value >= HB_DVD_READ_BUFFER_SIZE ||
+        value > (uint32_t)in->size)
+    {
+        hb_log("declpcm: illegal frame offset %u for packet size %d",
+               value, in->size);
+        return 1;
+    }
+    if ((uint32_t)in->size - value > LPCM_FRAME_BUFFER_SIZE)
+    {
+        hb_log("declpcm: packet payload exceeds frame buffer");
+        return 1;
+    }
+
+    *offset = value;
+    return 0;
+}
+
+static int lpcmInfo( hb_work_object_t *w, const hb_buffer_t *in,
+                     uint32_t offset )
 {
     hb_work_private_t * pv = w->private_data;
 
@@ -98,22 +138,16 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
      * so we can't assume that we can consume all the data in one packet
      * on every call to the work routine.
      */
-    pv->offset = ( ( in->data[1] << 8 ) | in->data[2] ) + 2;
-    if ( pv->offset >= HB_DVD_READ_BUFFER_SIZE )
-    {
-        hb_log( "declpcm: illegal frame offset %d", pv->offset );
-        pv->offset = 2; /*XXX*/
-    }
-    pv->nchannels   = ( in->data[4] & 7 ) + 1;
-    pv->samplerate  = hdr2samplerate[ ( in->data[4] >> 4 ) & 0x3 ];
-    pv->sample_size = hdr2samplesize[in->data[4] >> 6];
+    uint32_t nchannels  = ( in->data[4] & 7 ) + 1;
+    uint32_t samplerate = hdr2samplerate[ ( in->data[4] >> 4 ) & 0x3 ];
+    uint32_t sample_size = hdr2samplesize[in->data[4] >> 6];
 
     // 20 and 24 bit lpcm is always encoded in sample pairs.  So take this
     // into account when computing sizes.
-    int chunk_size = pv->sample_size / 8;
-    int samples_per_chunk = 1;
+    uint32_t chunk_size = sample_size / 8;
+    uint32_t samples_per_chunk = 1;
 
-    switch( pv->sample_size )
+    switch( sample_size )
     {
         case 20:
             chunk_size = 5;
@@ -139,24 +173,41 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
      * streams for which this is incorrect, and it can be computed.
      * pv->duration = in->data[0] * 150;
      */
-    int chunks = ( in->size - pv->offset ) / chunk_size;
-    int samples = chunks * samples_per_chunk;
+    uint32_t chunks = ((uint32_t)in->size - offset) / chunk_size;
+    uint32_t samples = chunks * samples_per_chunk;
 
     // Calculate number of frames that start in this packet
-    int frames = ( 90000 * samples / ( pv->samplerate * pv->nchannels ) +
-                   149 ) / 150;
+    uint64_t frames = ( 90000ULL * samples / ( samplerate * nchannels ) +
+                        149 ) / 150;
+    uint64_t duration = frames * 150;
+    uint64_t nchunks = ( duration * nchannels * samplerate +
+                         samples_per_chunk - 1 ) /
+                       ( 90000ULL * samples_per_chunk );
+    uint64_t nsamples = duration * samplerate / 90000;
+    uint64_t size = nchunks * chunk_size;
 
-    pv->duration = frames * 150;
-    pv->nchunks =  ( pv->duration * pv->nchannels * pv->samplerate +
-                    samples_per_chunk - 1 ) / ( 90000 * samples_per_chunk );
-    pv->nsamples = ( pv->duration * pv->samplerate ) / 90000;
-    pv->size = pv->nchunks * chunk_size;
+    if (nchunks > UINT32_MAX || nsamples > UINT32_MAX ||
+        size > LPCM_FRAME_BUFFER_SIZE)
+    {
+        hb_log("declpcm: invalid frame size");
+        return 1;
+    }
+
+    pv->offset      = offset;
+    pv->nchannels   = nchannels;
+    pv->samplerate  = samplerate;
+    pv->sample_size = sample_size;
+    pv->duration    = duration;
+    pv->nchunks     = nchunks;
+    pv->nsamples    = nsamples;
+    pv->size        = size;
 
     if (in->s.start != AV_NOPTS_VALUE)
     {
         pv->next_pts     = in->s.start;
     }
     pv->scr_sequence = in->s.scr_sequence;
+    return 0;
 }
 
 static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
@@ -203,6 +254,7 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_buffer_t *in = *buf_in;
     hb_buffer_t *buf = NULL;
     hb_buffer_list_t list;
+    uint32_t offset;
 
     hb_buffer_list_clear(&list);
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -213,28 +265,51 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
+    if (lpcmPacketOffset(in, &offset))
+    {
+        lpcmDropFrame(pv);
+        goto done;
+    }
+
     // if we have a frame to finish, add enough data from this buf
     // to finish it
     if (pv->size)
     {
-        memcpy(pv->frame + pv->pos, in->data + 6, pv->size - pv->pos);
-        buf = Decode( w );
-        hb_buffer_list_append(&list, buf);
+        uint32_t available = (uint32_t)in->size - LPCM_HEADER_SIZE;
+        if (pv->pos > pv->size || pv->size > sizeof(pv->frame) ||
+            pv->size - pv->pos > available)
+        {
+            hb_log("declpcm: invalid partial frame");
+            lpcmDropFrame(pv);
+        }
+        else
+        {
+            uint32_t remaining = pv->size - pv->pos;
+            memcpy(pv->frame + pv->pos,
+                   in->data + LPCM_HEADER_SIZE, remaining);
+            buf = Decode( w );
+            hb_buffer_list_append(&list, buf);
+            lpcmDropFrame(pv);
+        }
     }
 
     /* save the (rest of) data from this buf in our frame buffer */
-    lpcmInfo( w, in );
-    int off = pv->offset;
-    int amt = in->size - off;
-    pv->pos = amt;
-    memcpy( pv->frame, in->data + off, amt );
-    if (amt >= pv->size)
+    if (lpcmInfo(w, in, offset))
+    {
+        lpcmDropFrame(pv);
+        goto done;
+    }
+    uint32_t amount = (uint32_t)in->size - offset;
+    pv->pos = amount;
+    memcpy(pv->frame, in->data + offset, amount);
+    if (amount >= pv->size)
     {
         buf = Decode( w );
         hb_buffer_list_append(&list, buf);
-        pv->size = 0;
+        lpcmDropFrame(pv);
     }
 
+done:
     *buf_out = hb_buffer_list_clear(&list);
     return HB_WORK_OK;
 }
@@ -386,15 +461,21 @@ static void declpcmClose( hb_work_object_t * w )
 static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
                           hb_work_info_t *info )
 {
+    uint32_t offset;
+
+    memset( info, 0, sizeof(*info) );
+    info->ch_layout = calloc(1, sizeof(*info->ch_layout));
+    if (lpcmPacketOffset(b, &offset))
+    {
+        return AVERROR_INVALIDDATA;
+    }
+
     int nchannels  = ( b->data[4] & 7 ) + 1;
     int sample_size = hdr2samplesize[b->data[4] >> 6];
 
     int rate = hdr2samplerate[ ( b->data[4] >> 4 ) & 0x3 ];
     int bitrate = rate * sample_size * nchannels;
     int64_t duration = b->data[0] * 150;
-
-    memset( info, 0, sizeof(*info) );
-    info->ch_layout = calloc(1, sizeof(*info->ch_layout));
 
     info->name = "LPCM";
     info->rate.num = rate;
