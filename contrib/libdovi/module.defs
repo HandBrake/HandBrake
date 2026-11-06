@@ -12,10 +12,11 @@ else
     LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.4.0.tar.gz
 endif
 
-LIBDOVI.EXTRACT.tarbase = dovi_tool-libdovi-3.4.0
+LIBDOVI.EXTRACT.tarbase    = dovi_tool-libdovi-3.4.0
+LIBDOVI.CARGO.env          = CARGO_MAKEFLAGS= MAKEFLAGS= MFLAGS=
 
 define LIBDOVI.CONFIGURE
-     cd $(LIBDOVI_DV.dir); $(CARGO.exe) fetch
+     cd $(LIBDOVI_DV.dir); $(LIBDOVI.CARGO.env) $(CARGO.exe) fetch
      $(TOUCH.exe) $@
 endef
 
@@ -39,15 +40,15 @@ LIBDOVI.prefix   = --prefix "$(LIBDOVI.CONFIGURE.prefix)"
 LIBDOVI.extra    = --release --library-type staticlib $(LIBDOVI.prefix) $(LIBDOVI.target) \
                    --libdir="$(LIBDOVI.CONFIGURE.prefix)/lib" --pkgconfigdir="$(LIBDOVI.CONFIGURE.prefix)/lib/pkgconfig"
 
-LIBDOVI.BUILD.make       = cd $(LIBDOVI_DV.dir); $(CARGO.exe) cbuild
+LIBDOVI.BUILD.make       = cd $(LIBDOVI_DV.dir); $(LIBDOVI.CARGO.env) $(CARGO.exe) cbuild
 LIBDOVI.BUILD.extra      = $(LIBDOVI.extra)
 LIBDOVI.BUILD.args.dir   =
 
-LIBDOVI.INSTALL.make       = cd $(LIBDOVI_DV.dir); $(CARGO.exe) cinstall
+LIBDOVI.INSTALL.make       = cd $(LIBDOVI_DV.dir); $(LIBDOVI.CARGO.env) $(CARGO.exe) cinstall
 LIBDOVI.INSTALL.extra    = $(LIBDOVI.extra)
 LIBDOVI.INSTALL.args.dir =
 
-LIBDOVI.CLEAN.make       = $(CARGO.exe) clean
+LIBDOVI.CLEAN.make       = $(LIBDOVI.CARGO.env) $(CARGO.exe) clean
 LIBDOVI.CLEAN.args.dir   = $(LIBDOVI.manifest)
 LIBDOVI.CLEAN.ntargets   =
 
