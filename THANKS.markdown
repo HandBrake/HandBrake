@@ -35,7 +35,7 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 | [libx265](http://x265.org/) | [GPL v2](https://www.x265.org/x265-licensing-faq/) ||
 | [libzlib](http://zlib.net/) | [License](https://zlib.net/zlib_license.html) ||
 | [NV-codec-headers](https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git) | MIT ||
-| [SVT-AV1](https://gitlab.com/AOMediaCodec/SVT-AV1) | [BSD 3-Clause Clear](https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/LICENSE.md) ||
+| [SVT-AV1](https://github.com/AOMediaCodec/SVT-AV1) | [BSD 3-Clause Clear](https://github.com/AOMediaCodec/SVT-AV1/blob/main/LICENSE.md) ||
 | [zimg](https://github.com/sekrit-twc/zimg) | [WTFPL](https://bitbucket.org/the-sekrit-twc/zimg/src/master/COPYING) | |
 | [GongSolutions.WPF.DragDrop](https://github.com/punker76/gong-wpf-dragdrop) | [BSD 3-Clause](https://github.com/punker76/gong-wpf-dragdrop/blob/develop/LICENSE) | Windows UI Only |
 | [Autofac](https://autofac.org/) | [MIT](https://github.com/autofac/Autofac/blob/develop/LICENSE) |  Windows UI Only |
