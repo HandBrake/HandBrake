@@ -379,21 +379,31 @@ static HBMixdownTransformer    *mixdownTransformer;
     NSMutableString *videoInfo = [NSMutableString string];
 
     const char *encoderName = hb_video_encoder_get_name(self.video.encoder);
-    [videoInfo appendFormat:HBKitLocalizedString(@"Encoder: %@, ", @"Video description"),
-                            encoderName ? @(encoderName) : HBKitLocalizedString(@"Unknown", @"Video description")];
+    [videoInfo appendString:encoderName ? @(encoderName) : HBKitLocalizedString(@"Unknown", @"Video description")];
 
-    [videoInfo appendString:HBKitLocalizedString(@"Framerate: ", @"Video description")];
+    if (self.video.qualityType == 0) // ABR
+    {
+        [videoInfo appendFormat:@", "];
+        [videoInfo appendFormat:HBKitLocalizedString(@"%d kbps", @"Video description"), self.video.avgBitrate];
+    }
+    else // CRF
+    {
+        [videoInfo appendFormat:@", "];
+        [videoInfo appendString:[NSString localizedStringWithFormat:HBKitLocalizedString(@"%.2f %s", @"Video description"), self.video.quality, hb_video_quality_get_name(self.video.encoder)]];
+    }
+
+    [videoInfo appendFormat:@", "];
 
     if (self.video.frameRate == 0)
     {
         if (self.video.frameRateMode == 0)
         {
             // we are using same as source with vfr
-            [videoInfo appendString:HBKitLocalizedString(@"Same as source (variable)", @"Video description")];
+            [videoInfo appendString:HBKitLocalizedString(@"Same as source framerate (variable)", @"Video description")];
         }
         else
         {
-            [videoInfo appendString:HBKitLocalizedString(@"Same as source (constant)", @"Video description")];
+            [videoInfo appendString:HBKitLocalizedString(@"Same as source framerate (constant)", @"Video description")];
         }
     }
     else
@@ -401,23 +411,12 @@ static HBMixdownTransformer    *mixdownTransformer;
         // we have a specified, constant framerate
         if (self.video.frameRateMode == 0)
         {
-            [videoInfo appendFormat:HBKitLocalizedString(@"Peak %@ (may be lower)", @"Video description"), @(hb_video_framerate_get_name(self.video.frameRate))];
+            [videoInfo appendFormat:HBKitLocalizedString(@"Peak framerate %@ (may be lower)", @"Video description"), @(hb_video_framerate_get_name(self.video.frameRate))];
         }
         else
         {
-            [videoInfo appendFormat:HBKitLocalizedString(@"Peak %@ (constant frame rate)", @"Video description"), @(hb_video_framerate_get_name(self.video.frameRate))];
+            [videoInfo appendFormat:HBKitLocalizedString(@"Peak framerate %@ (constant)", @"Video description"), @(hb_video_framerate_get_name(self.video.frameRate))];
         }
-    }
-
-    if (self.video.qualityType == 0) // ABR
-    {
-        [videoInfo appendFormat:@", "];
-        [videoInfo appendFormat:HBKitLocalizedString(@"Bitrate: %d kbps", @"Video description"), self.video.avgBitrate];
-    }
-    else // CRF
-    {
-        [videoInfo appendFormat:@", "];
-        [videoInfo appendString:[NSString localizedStringWithFormat:HBKitLocalizedString(@"Constant Quality: %.2f %s", @"Video description"), self.video.quality, hb_video_quality_get_name(self.video.encoder)]];
     }
 
     [attrString appendString:@"\t"       withAttributes:detailAttr];
@@ -463,7 +462,7 @@ static HBMixdownTransformer    *mixdownTransformer;
             [encoderPresetInfo appendFormat:HBKitLocalizedString(@"Level: %@", @"Video description"), self.video.level];
         }
 
-        [attrString appendString:@"\t"                  withAttributes:detailAttr];
+        [attrString appendString:@"\n\t"                withAttributes:detailAttr];
         [attrString appendString:HBKitLocalizedString(@"Video Options:", @"Video description") withAttributes:detailBoldAttr];
         [attrString appendString:@" \t"                 withAttributes:detailAttr];
         [attrString appendString:encoderPresetInfo      withAttributes:detailAttr];
@@ -506,7 +505,7 @@ static HBMixdownTransformer    *mixdownTransformer;
         if (audioTrack.isEnabled)
         {
             const char *encoder_name = hb_audio_encoder_get_name(audioTrack.encoder);
-            NSMutableString *detailString = [NSMutableString stringWithFormat:HBKitLocalizedString(@"%@ ▸ Encoder: %@", @"Audio description"),
+            NSMutableString *detailString = [NSMutableString stringWithFormat:HBKitLocalizedString(@"%@ ▸ %@", @"Audio description"),
                                              self.audio.sourceTracks[audioTrack.sourceTrackIdx].displayName,
                                              encoder_name ? @(encoder_name) : HBKitLocalizedString(@"Unknown", @"HBJob -> video short description encoder name")];
 
@@ -515,31 +514,31 @@ static HBMixdownTransformer    *mixdownTransformer;
                 NSString *mixdown = [mixdownTransformer transformedValue:@(audioTrack.mixdown)];
 
                 [detailString appendString:@", "];
-                [detailString appendFormat:HBKitLocalizedString(@"Mixdown: %@, Samplerate: %@", @"Audio description"),
+                [detailString appendFormat:HBKitLocalizedString(@"%@, %@", @"Audio description"),
                                             mixdown,
                                             audioTrack.sampleRate ? [NSString stringWithFormat:@"%@ khz", @(hb_audio_samplerate_get_name(audioTrack.sampleRate))] : @"Auto"];
 
                 if (audioTrack.mode == HBAudioEncoderModeABR)
                 {
-                    [detailString appendFormat:HBKitLocalizedString(@", Bitrate: %d kbps", @"Audio description"),
+                    [detailString appendFormat:HBKitLocalizedString(@", %d kbps", @"Audio description"),
                                                 audioTrack.bitRate];
                 }
                 else
                 {
-                    [detailString appendFormat:HBKitLocalizedString(@", Quality: %@ CQ", @"Audio description"),
+                    [detailString appendFormat:HBKitLocalizedString(@", %@ CQ", @"Audio description"),
                                                 @(audioTrack.quality)];
                 }
 
                 if (0.0 < audioTrack.drc)
                 {
                     [detailString appendString:@", "];
-                    [detailString appendString:[NSString localizedStringWithFormat:HBKitLocalizedString(@"DRC: %.2f", @"Audio description"), audioTrack.drc]];
+                    [detailString appendString:[NSString localizedStringWithFormat:HBKitLocalizedString(@"DRC (%.2f)", @"Audio description"), audioTrack.drc]];
                 }
 
                 if (0.0 != audioTrack.gain)
                 {
                     [detailString appendString:@", "];
-                    [detailString appendString:[NSString localizedStringWithFormat:HBKitLocalizedString(@"Gain: %.2f", @"Audio description"), audioTrack.gain]];
+                    [detailString appendString:[NSString localizedStringWithFormat:HBKitLocalizedString(@"Gain (%.2f)", @"Audio description"), audioTrack.gain]];
                 }
             }
 
@@ -663,10 +662,10 @@ static HBMixdownTransformer    *mixdownTransformer;
         [attrString appendAttributedString:[self destinationAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
-        [attrString appendAttributedString:[self formatAttributedDescription]];
+        [attrString appendAttributedString:[self rangeAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
-        [attrString appendAttributedString:[self rangeAttributedDescription]];
+        [attrString appendAttributedString:[self formatAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
         [attrString appendAttributedString:[self dimensionsAttributedDescription]];
