@@ -668,8 +668,8 @@ static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
     const int r_half = (r-1) /2;
 
     // Source image
-    const pixel *src     = frame[slot].plane[plane].image;
-    const pixel *src_pre = frame[slot].plane[plane].image_pre;
+    const pixel *src = frame[slot].plane[plane].image;
+    const pixel *src_pre;
     const int w      = frame[slot].plane[plane].w;
     const int border = frame[slot].plane[plane].border;
     const int bw     = w + 2 * border;
@@ -692,6 +692,12 @@ static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
         // Compare image
         const pixel *compare     = f_frame->plane[plane].image;
         const pixel *compare_pre = f_frame->plane[plane].image_pre;
+
+        // Prefiltered source image; buffer is allocated lazily
+        if (f == 0)
+        {
+            src_pre = f_frame->plane[plane].image_pre;
+        }
 
         // Iterate through all displacements
         for (int dy = -r_half; dy <= r_half; dy++)
