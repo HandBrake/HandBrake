@@ -5627,9 +5627,10 @@ Each selected source track will be encoded with all selected encoders.</property
                             <property name="margin-start">18</property>
                             <property name="margin-end">8</property>
                             <property name="spacing">4</property>
-                            <property name="tooltip-text" translatable="yes">{auto-increment} adds an increasing number to automatically named files.
-Numbering restarts at 1 when the Auto-Name Template is changed, and rolls
-over to 1 again after the highest number that fits in the selected padding.</property>
+                            <property name="tooltip-text" translatable="yes">{auto-increment} numbers automatically named files by continuing from
+the highest matching number already in the destination folder or the queue,
+e.g. Show 03 follows Show 02. Numbers are padded with zeros to at least
+the selected number of digits.</property>
                             <child>
                               <object class="GtkLabel" id="auto_increment_padding_label">
                                 <property name="halign">end</property>
