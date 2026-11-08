@@ -21,18 +21,19 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *automaticExt;
 @property (nonatomic, readonly) NSString *defaultName;
 
-/// Same as defaultName, but the {Auto-Increment} token renders
-/// offset positions past the next stored counter value, so a batch
-/// of titles can be numbered consecutively
-- (NSString *)defaultNameWithAutoIncrementOffset:(NSUInteger)offset;
+/// Same as automaticName, but the {Auto-Increment} token renders one past
+/// the highest number already used by a matching file in the destination
+/// folder or by any of the reserved destinations (e.g. queued jobs).
+/// If currentName already holds an unused number at or below that value,
+/// the number is kept, so a job being edited does not jump to a new number.
+- (NSString *)automaticNameReservingURLs:(nullable NSArray<NSURL *> *)reservedURLs
+                             currentName:(nullable NSString *)currentName;
+
+/// Same as defaultName, with {Auto-Increment} resolved as described above.
+- (NSString *)defaultNameReservingURLs:(nullable NSArray<NSURL *> *)reservedURLs;
 
 /// Whether automatic naming is enabled and the format uses {Auto-Increment}
 + (BOOL)autoIncrementEnabled;
-
-/// Advances the stored {Auto-Increment} counter after count jobs
-/// have been committed to the queue, rolling over to 1 past the
-/// highest value that fits in the configured padding
-+ (void)advanceAutoIncrementBy:(NSUInteger)count;
 
 - (void)setDestinationFolderURL:(NSURL *)destinationFolderURL sameAsSource:(BOOL)useSourceFolderDestination;
 

@@ -57,6 +57,10 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueJ
 
 - (BOOL)itemExistAtURL:(NSURL *)url;
 
+/// Destinations of job items that will be, are being, or have been encoded.
+/// Canceled and failed items are left out, so their names can be reused.
+@property (nonatomic, readonly) NSArray<NSURL *> *reservedDestinationURLs;
+
 - (void)prepareItemForEditingAtIndex:(NSUInteger)index;
 
 - (void)removeAllItems;

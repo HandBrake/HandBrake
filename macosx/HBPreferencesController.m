@@ -28,7 +28,6 @@ NSString * const HBAutoNamingRemovePunctuation   = @"HBAutoNamingRemovePunctuati
 NSString * const HBAutoNamingTitleCase           = @"HBAutoNamingTitleCase";
 NSString * const HBAutoNamingISODateFormat       = @"HBAutoNamingISODateFormat";
 NSString * const HBAutoNamingAutoIncrementPadding = @"HBAutoNamingAutoIncrementPadding";
-NSString * const HBAutoNamingAutoIncrementNext   = @"HBAutoNamingAutoIncrementNext";
 
 NSString * const HBDefaultMpegExtension          = @"DefaultMpegExtension";
 
@@ -262,7 +261,6 @@ static BOOL _hardwareDecoderSupported = NO;
         HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],
         HBAutoNamingISODateFormat:          @NO,
         HBAutoNamingAutoIncrementPadding:   @2,
-        HBAutoNamingAutoIncrementNext:      @1,
         HBResetWhenDoneOnLaunch:            @NO,
         HBLoggingLevel:                     @1,
         HBClearOldLogs:                     @YES,

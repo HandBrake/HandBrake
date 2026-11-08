@@ -9,10 +9,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class HBJob;
+@class HBQueue;
 
 @interface HBAutoNamer : NSObject
 
-- (instancetype)initWithJob:(HBJob *)job;
+/// The queue's destinations are taken into account when numbering
+/// the {Auto-Increment} token, and the name refreshes when it changes.
+- (instancetype)initWithJob:(HBJob *)job queue:(nullable HBQueue *)queue;
 
 - (void)updateFileExtension;
 - (void)updateFileName;
