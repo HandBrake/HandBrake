@@ -14,7 +14,6 @@ namespace HandBrakeWPF
     /// </summary>
     public class UserSettingConstants
     {
-        public const string AutoNameAutoIncrementNext = "AutoNameAutoIncrementNext";
         public const string AutoNameAutoIncrementPadding = "AutoNameAutoIncrementPadding";
         public const string AutoNameFormat = "autoNameFormat";
         public const string AutoNamePath = "autoNamePath";

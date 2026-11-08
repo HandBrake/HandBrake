@@ -10,8 +10,11 @@
 namespace HandBrakeWPF.Helpers
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
 
     using HandBrake.App.Core.Extensions;
 
@@ -20,6 +23,8 @@ namespace HandBrakeWPF.Helpers
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Queue.Interfaces;
+    using HandBrakeWPF.Services.Queue.Model;
 
     using EncodeTask = Services.Encode.Model.EncodeTask;
     using OutputFormat = Services.Encode.Model.Models.OutputFormat;
@@ -48,18 +53,9 @@ namespace HandBrakeWPF.Helpers
             return format != null && format.Contains(Constants.AutoIncrement);
         }
 
-        /// <summary>
-        /// Advances the stored {auto-increment} counter after a job using it has
-        /// been committed to the queue, rolling over to 1 past the highest value
-        /// that fits in the configured padding
-        /// </summary>
-        public static void AdvanceAutoIncrement()
-        {
-            IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
-            int max = GetAutoIncrementMax(GetAutoIncrementPadding(userSettingService));
-            int used = GetAutoIncrementValue(userSettingService);
-            userSettingService.SetUserSetting(UserSettingConstants.AutoNameAutoIncrementNext, (used % max) + 1);
-        }
+        // Marks where {auto-increment} goes while the name is rendered. A control
+        // character cannot come from the format and is not expected in source names.
+        private const string AutoIncrementMarker = "\u001F";
 
         private static int GetAutoIncrementPadding(IUserSettingService userSettingService)
         {
@@ -67,23 +63,122 @@ namespace HandBrakeWPF.Helpers
             return Math.Clamp(padding, AutoIncrementPadMin, AutoIncrementPadMax);
         }
 
-        // Highest value that fits in the configured padding, e.g. 99 for 2 digits
-        private static int GetAutoIncrementMax(int padding)
+        /// <summary>
+        /// Replaces the {auto-increment} markers in the destination with one past the
+        /// highest number used by a matching file in the same folder, or by a queued job
+        /// that has not failed or been cancelled. A free number already in the current
+        /// destination is kept if it is not past that value, so editing a job does not
+        /// renumber it.
+        /// </summary>
+        private static string ResolveAutoIncrement(string path, string currentDestination, IUserSettingService userSettingService)
         {
-            int max = 1;
-            while (padding-- > 0)
+            string directory = Path.GetDirectoryName(path) ?? string.Empty;
+            string fileName = Path.GetFileName(path);
+
+            // Match the rendered name with any run of digits in place of the token.
+            // Repeated tokens always render the same number. Windows file names are
+            // case-insensitive.
+            string[] parts = fileName.Normalize(NormalizationForm.FormC).Split(AutoIncrementMarker);
+            StringBuilder pattern = new StringBuilder("^");
+            for (int i = 0; i < parts.Length; i++)
             {
-                max *= 10;
+                if (i == 1)
+                {
+                    pattern.Append("([0-9]{1,9})");
+                }
+                else if (i > 1)
+                {
+                    pattern.Append("\\1");
+                }
+
+                pattern.Append(Regex.Escape(parts[i]));
             }
 
-            return max - 1;
+            pattern.Append('$');
+            Regex regex = new Regex(pattern.ToString(), RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+            HashSet<int> used = new HashSet<int>();
+            foreach (string name in GetAutoIncrementCandidates(directory))
+            {
+                int number = MatchAutoIncrement(regex, name);
+                if (number > 0)
+                {
+                    used.Add(number);
+                }
+            }
+
+            int next = used.Count > 0 ? used.Max() + 1 : 1;
+            int current = MatchAutoIncrement(regex, Path.GetFileName(currentDestination ?? string.Empty));
+            if (current > 0 && current <= next && !used.Contains(current))
+            {
+                next = current;
+            }
+
+            string formatted = next.ToString("D" + GetAutoIncrementPadding(userSettingService));
+            return Path.Combine(directory, fileName.Replace(AutoIncrementMarker, formatted));
         }
 
-        private static int GetAutoIncrementValue(IUserSettingService userSettingService)
+        /// <summary>
+        /// File names in the directory, plus the destinations of queued jobs in it.
+        /// </summary>
+        private static IEnumerable<string> GetAutoIncrementCandidates(string directory)
         {
-            int max = GetAutoIncrementMax(GetAutoIncrementPadding(userSettingService));
-            int next = userSettingService.GetUserSetting<int>(UserSettingConstants.AutoNameAutoIncrementNext);
-            return (next < 1 || next > max) ? 1 : next;
+            List<string> names = new List<string>();
+
+            try
+            {
+                if (Directory.Exists(directory))
+                {
+                    names.AddRange(Directory.EnumerateFiles(directory).Select(Path.GetFileName));
+                }
+            }
+            catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
+            {
+                // Numbering then only considers the queue.
+            }
+
+            string folder = NormalizeDirectory(directory);
+            IQueueService queueService = IoCHelper.Get<IQueueService>();
+            foreach (QueueTask job in queueService.Queue.ToList())
+            {
+                string destination = job.Task?.Destination;
+                if (string.IsNullOrEmpty(destination) || job.Status == QueueItemStatus.Error || job.Status == QueueItemStatus.Cancelled)
+                {
+                    continue;
+                }
+
+                if (string.Equals(NormalizeDirectory(Path.GetDirectoryName(destination)), folder, StringComparison.OrdinalIgnoreCase))
+                {
+                    names.Add(Path.GetFileName(destination));
+                }
+            }
+
+            return names;
+        }
+
+        private static string NormalizeDirectory(string directory)
+        {
+            try
+            {
+                return Path.GetFullPath(directory ?? string.Empty).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            }
+            catch (Exception e) when (e is ArgumentException || e is NotSupportedException || e is PathTooLongException)
+            {
+                return directory;
+            }
+        }
+
+        // The {auto-increment} number in the file name, or 0 if it does not match.
+        // The extension is part of the match.
+        private static int MatchAutoIncrement(Regex regex, string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return 0;
+            }
+
+            Match match = regex.Match(fileName.Normalize(NormalizationForm.FormC));
+            return match.Success ? int.Parse(match.Groups[1].Value) : 0;
         }
 
         /// <summary>
@@ -125,6 +220,12 @@ namespace HandBrakeWPF.Helpers
                 string destinationFilename = GenerateDestinationFileName(task, userSettingService, sourceName, dvdTitle, combinedChapterTag, presetName);
                 string autoNamePath = GetAutonamePath(userSettingService, task, sourceName);
                 string finalPath = Path.Combine(autoNamePath, destinationFilename);
+
+                if (destinationFilename.Contains(AutoIncrementMarker))
+                {
+                    finalPath = ResolveAutoIncrement(finalPath, task.Destination, userSettingService);
+                    destinationFilename = Path.GetFileName(finalPath);
+                }
 
                 autoNamePath = CheckAndHandleFilenameCollisions(finalPath, destinationFilename, task, userSettingService);
                 return autoNamePath;
@@ -227,7 +328,7 @@ namespace HandBrakeWPF.Helpers
                         .Replace(Constants.Codec, task.VideoEncoder?.Codec)
                         .Replace(Constants.EncoderDisplay, task.VideoEncoder?.DisplayName)
                         .Replace(Constants.Encoder, task.VideoEncoder?.ShortName)
-                        .Replace(Constants.AutoIncrement, GetAutoIncrementValue(userSettingService).ToString("D" + GetAutoIncrementPadding(userSettingService)));
+                        .Replace(Constants.AutoIncrement, AutoIncrementMarker);
 
 
                 if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)

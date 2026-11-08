@@ -307,7 +307,6 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.FileOverwriteBehaviour, 0);
             defaults.Add(UserSettingConstants.UseM4v, 0);
             defaults.Add(UserSettingConstants.AutoNameAutoIncrementPadding, 2);
-            defaults.Add(UserSettingConstants.AutoNameAutoIncrementNext, 1);
 
             // When Done
             defaults.Add(UserSettingConstants.SendFile, false);
