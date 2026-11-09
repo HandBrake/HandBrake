@@ -66,6 +66,7 @@
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
 static int     json                = 0;
+static int     no_stdin            = 0;
 static int     inline_parameter_sets = -1;
 static int     align_av_start      = -1;
 static int     dvdnav              = 1;
@@ -386,7 +387,7 @@ void EventLoop(hb_handle_t *h, hb_dict_t *preset_dict)
     while (!die && !work_done)
     {
 #if defined( __MINGW32__ )
-        if( _kbhit() ) {
+        if( !no_stdin && _kbhit() ) {
             switch( _getch() )
             {
                 case 0x03: /* ctrl-c */
@@ -421,7 +422,11 @@ void EventLoop(hb_handle_t *h, hb_dict_t *preset_dict)
 
         FD_ZERO( &fds );
         FD_SET( STDIN_FILENO, &fds );
-        ret = select( STDIN_FILENO + 1, &fds, NULL, NULL, &tv );
+        ret = 0;
+        if( !no_stdin )
+        {
+            ret = select( STDIN_FILENO + 1, &fds, NULL, NULL, &tv );
+        }
 
         if( ret > 0 )
         {
@@ -1733,6 +1738,7 @@ static void ShowHelp(void)
 "   --version               Print version\n"
 "   --json                  Log title, progress, and version info in\n"
 "                           JSON format\n"
+"   --no-stdin              Do not read from stdin or the keyboard\n"
 "   -v, --verbose[=number]  Be verbose (optional argument: logging level)\n"
 "   -Z, --preset <string>   Select preset by name (case-sensitive)\n"
 "                           Enclose names containing spaces in double quotation\n"
@@ -2807,6 +2813,7 @@ static int ParseOptions( int argc, char ** argv )
           {
             { "help",        no_argument,       NULL,    'h' },
             { "version",     no_argument,       NULL,    VERSION },
+            { "no-stdin",    no_argument,       &no_stdin, 1 },
             { "describe",    no_argument,       NULL,    DESCRIBE },
             { "verbose",     optional_argument, NULL,    'v' },
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
