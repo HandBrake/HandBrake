@@ -18,6 +18,7 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
 @property (nonatomic) HBJob *job;
 @property (nonatomic, nullable) HBQueue *queue;
 @property (nonatomic) NSArray<NSString *> *format;
+@property (nonatomic) BOOL queueUpdatePending;
 
 @end
 
@@ -120,10 +121,21 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
 - (void)queueDidChange:(NSNotification *)notification
 {
     // Only {Auto-Increment} depends on the queue; leave other names alone
-    if ([self.format containsObject:@"{Auto-Increment}"])
+    if (![self.format containsObject:@"{Auto-Increment}"] || self.queueUpdatePending)
     {
-        [self updateFileName];
+        return;
     }
+
+    // Coalesce the notifications of one queue operation into a single
+    // update. Editing a queued job resets the item and then removes it;
+    // updating in between would see the job's own number as taken.
+    self.queueUpdatePending = YES;
+    __weak HBAutoNamer *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        HBAutoNamer *strongSelf = weakSelf;
+        strongSelf.queueUpdatePending = NO;
+        [strongSelf updateFileName];
+    });
 }
 
 #pragma mark - File extension
