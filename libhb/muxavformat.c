@@ -8,10 +8,12 @@
  */
 
 #include <time.h>
+#include <utime.h>
 #include "handbrake/common.h"
 #include "libavcodec/bsf.h"
 #include "libavformat/avformat.h"
 #include "libavutil/avstring.h"
+#include "libavutil/parseutils.h"
 
 #include "handbrake/handbrake.h"
 #include "handbrake/lang.h"
@@ -72,7 +74,7 @@ const char *metadata_keys[][META_MUX_LAST] =
     {"Album",               "album",                  "com.apple.quicktime.album",            NULL},
     {"Genre",               "genre",                  "com.apple.quicktime.genre",            "GENRE"},
     {"ReleaseDate",         "date",                   "com.apple.quicktime.creationdate",     "DATE_RELEASED"},
-    {"CreationTime",        "creation_time",          NULL,                                   NULL},
+    {"CreationTime",        "creation_time",          "com.apple.quicktime.creationdate",     NULL},
     {"Track",               "track",                  "com.apple.quicktime.track",            NULL},
     {"Show",                "show",                   NULL,                                   NULL},
     {"Network",             "network",                NULL,                                   NULL},
@@ -110,6 +112,7 @@ const char *metadata_keys[][META_MUX_LAST] =
     {"ShowWorkAndMovement", "show_work_and_movement", NULL,                                   NULL},
 
     {"LinearNotes",         "linear_notes",           NULL,                                   NULL},
+    {"Make",                "make",                   "com.apple.quicktime.make",             NULL},
     {"RecordCompany",       "make",                   "com.apple.quicktime.make",             NULL},
     {"OriginalArtist",      "original_artist",        "com.apple.quicktime.originalartist",   NULL},
     {"PhonogramRights",     "phonogram_rights",       "com.apple.quicktime.phonogramrights",  NULL},
@@ -137,6 +140,7 @@ const char *metadata_keys[][META_MUX_LAST] =
     {"iTunEXTC",            "iTunEXTC",               NULL,                                   NULL},
     {"iTunMOVI",            "iTunMOVI",               NULL,                                   NULL},
     {"Location",            "location",               "com.apple.quicktime.location.ISO6709", NULL},
+    {"Model",               "model",                  "com.apple.quicktime.model",            NULL},
     {NULL}
 };
 
@@ -300,9 +304,9 @@ static int avformatInit( hb_mux_object_t * m )
             av_dict_set(&av_opts, "brand", "mp42", 0);
             av_dict_set(&av_opts, "strict", "experimental", 0);
             if (job->optimize)
-                av_dict_set(&av_opts, "movflags", "faststart+disable_chpl+write_colr", 0);
+                av_dict_set(&av_opts, "movflags", "faststart+disable_chpl+write_colr+use_metadata_tags", 0);
             else
-                av_dict_set(&av_opts, "movflags", "+disable_chpl+write_colr", 0);
+                av_dict_set(&av_opts, "movflags", "+disable_chpl+write_colr+use_metadata_tags", 0);
             break;
 
         case HB_MUX_AV_MOV:
@@ -313,9 +317,9 @@ static int avformatInit( hb_mux_object_t * m )
 
             av_dict_set(&av_opts, "strict", "experimental", 0);
             if (job->optimize)
-                av_dict_set(&av_opts, "movflags", "faststart+disable_chpl+write_colr+negative_cts_offsets", 0);
+                av_dict_set(&av_opts, "movflags", "faststart+disable_chpl+write_colr+negative_cts_offsets+use_metadata_tags", 0);
             else
-                av_dict_set(&av_opts, "movflags", "+disable_chpl+write_colr+negative_cts_offsets", 0);
+                av_dict_set(&av_opts, "movflags", "+disable_chpl+write_colr+negative_cts_offsets+use_metadata_tags", 0);
             break;
 
         case HB_MUX_AV_MKV:
@@ -1197,15 +1201,45 @@ static int avformatInit( hb_mux_object_t * m )
                 }
             }
 
-            if (job->mux == HB_MUX_AV_MP4)
+            if (job->mux == HB_MUX_AV_MP4 || job->mux == HB_MUX_AV_MOV)
             {
-                // Set the location tag language to undefined,
-                // Apple software seems to require it
+                // Write standard, language-tagged, and Apple QuickTime location tags
                 hb_value_t *location = hb_dict_get(job->metadata->dict, "Location");
                 if (location)
                 {
                     char *str = hb_value_get_string_xform(location);
+                    av_dict_set(&m->oc->metadata, "location", str, 0);
                     av_dict_set(&m->oc->metadata, "location-und", str, 0);
+                    av_dict_set(&m->oc->metadata, "com.apple.quicktime.location.ISO6709", str, 0);
+                    free(str);
+                }
+
+                hb_value_t *make = hb_dict_get(job->metadata->dict, "Make");
+                if (make)
+                {
+                    char *str = hb_value_get_string_xform(make);
+                    av_dict_set(&m->oc->metadata, "make", str, 0);
+                    av_dict_set(&m->oc->metadata, "com.apple.quicktime.make", str, 0);
+                    free(str);
+                }
+
+                hb_value_t *model = hb_dict_get(job->metadata->dict, "Model");
+                if (model)
+                {
+                    char *str = hb_value_get_string_xform(model);
+                    av_dict_set(&m->oc->metadata, "model", str, 0);
+                    av_dict_set(&m->oc->metadata, "com.apple.quicktime.model", str, 0);
+                    free(str);
+                }
+
+                // Prefer ReleaseDate (original camera recording date e.g. 2026-10-25T07:31:32+0500)
+                // over CreationTime (which might reflect the later QuickTime trim timestamp)
+                hb_value_t *release_date = hb_dict_get(job->metadata->dict, "ReleaseDate");
+                if (release_date)
+                {
+                    char *str = hb_value_get_string_xform(release_date);
+                    av_dict_set(&m->oc->metadata, "creation_time", str, 0);
+                    av_dict_set(&m->oc->metadata, "com.apple.quicktime.creationdate", str, 0);
                     free(str);
                 }
             }
@@ -1282,11 +1316,21 @@ static int avformatInit( hb_mux_object_t * m )
 
     if (av_dict_get(m->oc->metadata, "creation_time", NULL, 0) == NULL)
     {
-        time_t now = time(NULL);
-        struct tm *now_utc = gmtime(&now);
-        char now_8601[24];
-        strftime(now_8601, sizeof(now_8601), "%Y-%m-%dT%H:%M:%SZ", now_utc);
-        av_dict_set(&m->oc->metadata, "creation_time", now_8601, 0);
+        const char *rd = (job->metadata && job->metadata->dict) ?
+            hb_dict_get_string(job->metadata->dict, "ReleaseDate") : NULL;
+        if (rd != NULL)
+        {
+            av_dict_set(&m->oc->metadata, "creation_time", rd, 0);
+            av_dict_set(&m->oc->metadata, "com.apple.quicktime.creationdate", rd, 0);
+        }
+        else
+        {
+            time_t now = time(NULL);
+            struct tm *now_utc = gmtime(&now);
+            char now_8601[24];
+            strftime(now_8601, sizeof(now_8601), "%Y-%m-%dT%H:%M:%SZ", now_utc);
+            av_dict_set(&m->oc->metadata, "creation_time", now_8601, 0);
+        }
     }
 
     char tool_string[80];
@@ -1732,6 +1776,27 @@ static int avformatEnd(hb_mux_object_t *m)
 
     av_write_trailer(m->oc);
     avio_close(m->oc->pb);
+
+    // Synchronize output file's filesystem timestamp to original recording date
+    if (m->job != NULL && m->job->file != NULL && m->job->metadata != NULL && m->job->metadata->dict != NULL)
+    {
+        const char *date_str = hb_dict_get_string(m->job->metadata->dict, "ReleaseDate");
+        if (date_str == NULL)
+        {
+            date_str = hb_dict_get_string(m->job->metadata->dict, "CreationTime");
+        }
+        if (date_str != NULL)
+        {
+            int64_t parsed_time = 0;
+            if (av_parse_time(&parsed_time, date_str, 0) >= 0 && parsed_time > 0)
+            {
+                struct utimbuf times;
+                times.actime  = (time_t)(parsed_time / 1000000);
+                times.modtime = (time_t)(parsed_time / 1000000);
+                utime(m->job->file, &times);
+            }
+        }
+    }
     avformat_free_context(m->oc);
     av_packet_free(&m->pkt);
     av_packet_free(&m->empty_pkt);
