@@ -3186,6 +3186,9 @@ title_changed_cb (GtkWidget *widget, gpointer data)
     }
     ud->settings = ghb_array_get(ud->settings_array, idx);
     ghb_load_settings(ud);
+    // The title's name was numbered when the source was scanned; titles
+    // queued since then may have taken that {auto-increment} number
+    ghb_auto_increment_refresh(ud);
 
     ghb_audio_set_actions_enabled(ud, title != NULL);
     ghb_subtitle_set_actions_enabled(ud, title != NULL);
