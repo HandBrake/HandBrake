@@ -2242,6 +2242,13 @@ namespace HandBrakeWPF.ViewModels
                 is_execute = true;
             }
 
+            // A new source or title needs its own {auto-increment} number, and an empty
+            // destination has nothing to preserve, whatever the format contains.
+            if (option == ChangedOption.Source && (autonameFormat.Contains(Constants.AutoIncrement) || string.IsNullOrEmpty(this.Destination)))
+            {
+                is_execute = true;
+            }
+
             if (option == ChangedOption.Chapters 
                 && this.SelectedPointToPoint == PointToPointMode.Chapters
                 && this.SelectedTitle.SourcePath != null
