@@ -66,6 +66,9 @@
                               <MenuItem Header="{x:Static Properties:Resources.MetaData_CheckAll}" Command="{Binding RelayCommand}" CommandParameter="CheckAll" />
                               <MenuItem Header="{x:Static Properties:Resources.MetaData_UncheckAll}" Command="{Binding RelayCommand}" CommandParameter="UncheckAll" />
                               <Separator />
+                              <MenuItem Header="{x:Static Properties:Resources.MetaData_Import}" Command="{Binding RelayCommand}" CommandParameter="ImportMetadata" />
+                              <MenuItem Header="{x:Static Properties:Resources.MetaData_Export}" Command="{Binding RelayCommand}" CommandParameter="ExportMetadataFile" />
+                              <Separator />
                               <MenuItem Header="{x:Static Properties:Resources.MetaData_ClearAddedFields}" Command="{Binding RelayCommand}" CommandParameter="ClearAddedFields" />
                           </ContextMenu>
                       </ListView.ContextMenu>

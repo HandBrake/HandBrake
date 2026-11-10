@@ -2985,6 +2985,27 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="MetaData_ClearAddedFields" xml:space="preserve">
     <value>Clear Added Fields</value>
   </data>
+  <data name="MetaData_Import" xml:space="preserve">
+    <value>Import Metadata...</value>
+  </data>
+  <data name="MetaData_Export" xml:space="preserve">
+    <value>Export Metadata...</value>
+  </data>
+  <data name="MetaData_OverwritePrompt" xml:space="preserve">
+    <value>The file &quot;{0}&quot; already exists. Do you want to overwrite it?</value>
+  </data>
+  <data name="MetaData_ImportSkippedTags" xml:space="preserve">
+    <value>The following tags were not imported because they are unsupported for this output format:{0}{1}</value>
+  </data>
+  <data name="MetaData_ImportFailed" xml:space="preserve">
+    <value>Unable to import metadata: {0}</value>
+  </data>
+  <data name="MetaData_ExportFailed" xml:space="preserve">
+    <value>Unable to export metadata: {0}</value>
+  </data>
+  <data name="MetaData_InvalidTxtLine" xml:space="preserve">
+    <value>Invalid text metadata on line {0}. Expected key=value.</value>
+  </data>
   <data name="MainView_DebugMenu" xml:space="preserve">
     <value>Debug Menu</value>
   </data>

@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     public class MetaDataValue : PropertyChangedBase
     {
         private bool enabled;
+        private string value;
 
         public MetaDataValue(string annotation, string value)
         {
@@ -24,7 +25,20 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
         public string Annotation { get; set; }
 
-        public string Value { get; set; }
+        public string Value
+        {
+            get => this.value;
+            set
+            {
+                if (value == this.value)
+                {
+                    return;
+                }
+
+                this.value = value;
+                this.NotifyOfPropertyChange(() => this.Value);
+            }
+        }
 
         public bool Enabled
         {

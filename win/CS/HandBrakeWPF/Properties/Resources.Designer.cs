@@ -61,42 +61,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save Image As....
-        /// </summary>
-        public static string CoverArtPreviewView_SaveAs {
-            get {
-                return ResourceManager.GetString("CoverArtPreviewView_SaveAs", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Unable to save the cover art: {0}.
-        /// </summary>
-        public static string CoverArtPreviewView_SaveError {
-            get {
-                return ResourceManager.GetString("CoverArtPreviewView_SaveError", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to The original cover art is no longer available to save.
-        /// </summary>
-        public static string CoverArtPreviewView_SaveUnavailable {
-            get {
-                return ResourceManager.GetString("CoverArtPreviewView_SaveUnavailable", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to {0} (Scale: {1}%).
-        /// </summary>
-        public static string CoverArtPreviewView_ScaledTitle {
-            get {
-                return ResourceManager.GetString("CoverArtPreviewView_ScaledTitle", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to Copyright (C) 2003-2026 The HandBrake Team.
         /// </summary>
         public static string About_Copyright {
@@ -1195,6 +1159,42 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Image As....
+        /// </summary>
+        public static string CoverArtPreviewView_SaveAs {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to save the cover art: {0}.
+        /// </summary>
+        public static string CoverArtPreviewView_SaveError {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_SaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The original cover art is no longer available to save..
+        /// </summary>
+        public static string CoverArtPreviewView_SaveUnavailable {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_SaveUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (Scale: {1}%).
+        /// </summary>
+        public static string CoverArtPreviewView_ScaledTitle {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_ScaledTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Automatic.
         /// </summary>
         public static string CropMode_Auto {
@@ -1272,33 +1272,6 @@ namespace HandBrakeWPF.Properties {
         public static string DarkTheme_system {
             get {
                 return ResourceManager.GetString("DarkTheme_system", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Icons:.
-        /// </summary>
-        public static string OptionsView_ThemeImageType {
-            get {
-                return ResourceManager.GetString("OptionsView_ThemeImageType", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Match Theme.
-        /// </summary>
-        public static string ThemeImageType_Theme {
-            get {
-                return ResourceManager.GetString("ThemeImageType_Theme", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Colour.
-        /// </summary>
-        public static string ThemeImageType_Colour {
-            get {
-                return ResourceManager.GetString("ThemeImageType_Colour", resourceCulture);
             }
         }
         
@@ -3818,31 +3791,130 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("MetaData_Add", resourceCulture);
             }
         }
-
-        public static string MetaData_Field {
-            get {
-                return ResourceManager.GetString("MetaData_Field", resourceCulture);
-            }
-        }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check All.
+        /// </summary>
         public static string MetaData_CheckAll {
             get {
                 return ResourceManager.GetString("MetaData_CheckAll", resourceCulture);
             }
         }
-
-        public static string MetaData_UncheckAll {
-            get {
-                return ResourceManager.GetString("MetaData_UncheckAll", resourceCulture);
-            }
-        }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Added Fields.
+        /// </summary>
         public static string MetaData_ClearAddedFields {
             get {
                 return ResourceManager.GetString("MetaData_ClearAddedFields", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Metadata.
+        /// </summary>
+        public static string MetaData_Export {
+            get {
+                return ResourceManager.GetString("MetaData_Export", resourceCulture);
+            }
+        }
 
+        public static string MetaData_OverwritePrompt {
+            get {
+                return ResourceManager.GetString("MetaData_OverwritePrompt", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to export metadata: {0}.
+        /// </summary>
+        public static string MetaData_ExportFailed {
+            get {
+                return ResourceManager.GetString("MetaData_ExportFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metadata field.
+        /// </summary>
+        public static string MetaData_Field {
+            get {
+                return ResourceManager.GetString("MetaData_Field", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Metadata....
+        /// </summary>
+        public static string MetaData_Import {
+            get {
+                return ResourceManager.GetString("MetaData_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to import metadata: {0}.
+        /// </summary>
+        public static string MetaData_ImportFailed {
+            get {
+                return ResourceManager.GetString("MetaData_ImportFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following tags were not imported because they are unsupported for this output format:{0}{1}.
+        /// </summary>
+        public static string MetaData_ImportSkippedTags {
+            get {
+                return ResourceManager.GetString("MetaData_ImportSkippedTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid text metadata on line {0}. Expected key=value..
+        /// </summary>
+        public static string MetaData_InvalidTxtLine {
+            get {
+                return ResourceManager.GetString("MetaData_InvalidTxtLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to JSON.
+        /// </summary>
+        public static string MetaData_Json {
+            get {
+                return ResourceManager.GetString("MetaData_Json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text (key=value).
+        /// </summary>
+        public static string MetaData_Txt {
+            get {
+                return ResourceManager.GetString("MetaData_Txt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uncheck All.
+        /// </summary>
+        public static string MetaData_UncheckAll {
+            get {
+                return ResourceManager.GetString("MetaData_UncheckAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML.
+        /// </summary>
+        public static string MetaData_Xml {
+            get {
+                return ResourceManager.GetString("MetaData_Xml", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Actors:.
         /// </summary>
@@ -5320,6 +5392,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_SimultaneousHardwareLimitNotice {
             get {
                 return ResourceManager.GetString("OptionsView_SimultaneousHardwareLimitNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icons:.
+        /// </summary>
+        public static string OptionsView_ThemeImageType {
+            get {
+                return ResourceManager.GetString("OptionsView_ThemeImageType", resourceCulture);
             }
         }
         
@@ -7974,7 +8055,7 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("StaticPreviewView_Duration", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Error: Unable to Generate Image.
         /// </summary>
@@ -7983,7 +8064,7 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("StaticPreviewView_ErrorUnableToGenerateImage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Fine Tune Picture Settings.
         /// </summary>
@@ -8028,7 +8109,7 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("StaticPreviewView_ShowCropBoundaries", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Show crop adjustment controls..
         /// </summary>
@@ -8037,7 +8118,7 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("StaticPreviewView_ShowPictureSettingsAdjustment", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Preview ({0}% actual size).
         /// </summary>
@@ -8708,6 +8789,24 @@ namespace HandBrakeWPF.Properties {
         public static string TextEntryView_EnterName {
             get {
                 return ResourceManager.GetString("TextEntryView_EnterName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colour.
+        /// </summary>
+        public static string ThemeImageType_Colour {
+            get {
+                return ResourceManager.GetString("ThemeImageType_Colour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Match Theme.
+        /// </summary>
+        public static string ThemeImageType_Theme {
+            get {
+                return ResourceManager.GetString("ThemeImageType_Theme", resourceCulture);
             }
         }
         
