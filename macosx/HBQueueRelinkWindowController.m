@@ -34,15 +34,20 @@
     return self;
 }
 
+- (BOOL)hasMissingLocations
+{
+    NSUInteger missing = [self.resources indexOfObjectPassingTest:^BOOL(HBQueueRelinkResource *resource, NSUInteger idx, BOOL *stop) {
+        return resource.isMissing;
+    }];
+    return missing != NSNotFound;
+}
+
 - (void)windowDidLoad
 {
     [super windowDidLoad];
 
     // Nothing to show in the missing list, so show everything.
-    NSUInteger missing = [self.resources indexOfObjectPassingTest:^BOOL(HBQueueRelinkResource *resource, NSUInteger idx, BOOL *stop) {
-        return resource.isMissing;
-    }];
-    self.filter.selectedSegment = missing == NSNotFound ? 1 : 0;
+    self.filter.selectedSegment = self.hasMissingLocations ? 0 : 1;
 
     [self filterChanged:nil];
 }

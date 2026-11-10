@@ -204,7 +204,7 @@
     SEL action = menuItem.action;
 
     if (action == @selector(toggleStartCancel:) || action == @selector(togglePauseResume:) ||
-        action == @selector(relinkQueue:))
+        action == @selector(exportQueue:) || action == @selector(relinkQueue:))
     {
         // Delegate the validation to the queue controller
         return [self.queueController validateMenuItem:menuItem];
@@ -301,6 +301,16 @@
 - (IBAction)browseSources:(id)sender
 {
     [self.mainController browseSources:sender];
+}
+
+- (IBAction)importQueue:(id)sender
+{
+    [self.queueController importQueue:sender];
+}
+
+- (IBAction)exportQueue:(id)sender
+{
+    [self.queueController exportQueue:sender];
 }
 
 - (IBAction)relinkQueue:(id)sender

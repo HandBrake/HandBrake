@@ -14,6 +14,8 @@
 #import "HBQueueDetailsViewController.h"
 #import "HBQueueInfoViewController.h"
 #import "HBQueueMultiSelectionViewController.h"
+#import "HBQueueArchive.h"
+#import "HBQueueImportWindowController.h"
 #import "HBQueueRelinkWindowController.h"
 
 #import "HBQueueToolbarDelegate.h"
@@ -32,6 +34,7 @@
 @property (nonatomic) NSViewController *containerViewController;
 @property (nonatomic) HBQueueInfoViewController *infoViewController;
 @property (nonatomic) HBQueueMultiSelectionViewController *multiSelectionViewController;
+@property (nonatomic) HBQueueImportWindowController *importWindowController;
 @property (nonatomic) HBQueueRelinkWindowController *relinkWindowController;
 
 @property (nonatomic) HBQueueToolbarDelegate *toolbarDelegate;
@@ -267,6 +270,10 @@
     else if (action == @selector(removeCompleted:))
     {
         return self.queue.completedItemsCount > 0;
+    }
+    else if (action == @selector(exportQueue:))
+    {
+        return self.queue.items.count > 0;
     }
     else if (action == @selector(relinkQueue:))
     {
@@ -854,6 +861,11 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
     [self.queue addItems:@[action] atIndexes:indexSet];
 }
 
+- (void)tableViewExportItemsAtIndexes:(nonnull NSIndexSet *)indexes
+{
+    [self exportItems:[self.queue.items objectsAtIndexes:indexes]];
+}
+
 - (void)detailsViewEditItem:(nonnull id<HBQueueItem>)item
 {
     if ([item isKindOfClass:[HBQueueJobItem class]])
@@ -891,6 +903,120 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
     [self.queue removeCompletedItems];
 }
 
+#pragma mark - Import and export
+
+- (void)exportItems:(NSArray<id<HBQueueItem>> *)items
+{
+    NSSavePanel *panel = [NSSavePanel savePanel];
+    panel.allowedFileTypes = @[HBQueueArchiveFileExtension];
+    panel.nameFieldStringValue = items.count == 1 ? items.firstObject.title.stringByDeletingPathExtension :
+                                                    NSLocalizedString(@"Queue", @"Queue export -> default file name");
+
+    [panel beginWithCompletionHandler:^(NSModalResponse result) {
+        NSError *error = nil;
+        if (result == NSModalResponseOK && ![HBQueueArchive writeItems:items toURL:panel.URL error:&error])
+        {
+            [self presentError:error];
+        }
+    }];
+}
+
+- (IBAction)exportQueue:(id)sender
+{
+    [self exportItems:self.queue.items];
+}
+
+- (IBAction)importQueue:(id)sender
+{
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.allowsMultipleSelection = YES;
+    panel.allowedFileTypes = @[HBQueueArchiveFileExtension];
+
+    [panel beginWithCompletionHandler:^(NSModalResponse result) {
+        if (result != NSModalResponseOK)
+        {
+            return;
+        }
+
+        NSMutableArray<id<HBQueueItem>> *items = [NSMutableArray array];
+        for (NSURL *url in panel.URLs)
+        {
+            NSError *error = nil;
+            NSArray<id<HBQueueItem>> *fileItems = [HBQueueArchive itemsWithContentsOfURL:url error:&error];
+            if (fileItems)
+            {
+                [items addObjectsFromArray:fileItems];
+            }
+            else
+            {
+                [self presentError:error];
+            }
+        }
+
+        if (items.count)
+        {
+            [self selectItemsToImport:items];
+        }
+    }];
+}
+
+- (void)selectItemsToImport:(NSArray<id<HBQueueItem>> *)items
+{
+    [self showWindow:self];
+    self.importWindowController = [[HBQueueImportWindowController alloc] initWithItems:items];
+    [self.window beginSheet:self.importWindowController.window completionHandler:^(NSModalResponse response) {
+        NSArray<id<HBQueueItem>> *selectedItems = self.importWindowController.selectedItems;
+        self.importWindowController = nil;
+        if (response == NSModalResponseOK)
+        {
+            [self importItems:selectedItems];
+        }
+    }];
+}
+
+- (void)importItems:(NSArray<id<HBQueueItem>> *)items
+{
+    NSMutableArray<HBQueueJobItem *> *jobItems = [NSMutableArray array];
+    BOOL fileExists = NO;
+    for (HBQueueJobItem *item in items)
+    {
+        if ([item isKindOfClass:[HBQueueJobItem class]])
+        {
+            [jobItems addObject:item];
+            fileExists |= [item.destinationURL checkResourceIsReachableAndReturnError:NULL] || [self.queue itemExistAtURL:item.destinationURL];
+        }
+    }
+
+    void (^addItems)(void) = ^{
+        NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.queue.items.count, items.count)];
+        [self.queue addItems:items atIndexes:indexes];
+        // Stop is unavailable while the relink sheet is open.
+        if (!self.queue.isEncoding)
+        {
+            [self relinkItems:jobItems onlyIfMissing:YES];
+        }
+    };
+
+    if (fileExists == NO)
+    {
+        addItems();
+        return;
+    }
+
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Some of the imported items would overwrite existing files or queue items.", @"Queue import overwrite alert -> message");
+    alert.informativeText = NSLocalizedString(@"Do you want to import them anyway?", @"Queue import overwrite alert -> informative text");
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Queue import overwrite alert -> first button")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Import", @"Queue import overwrite alert -> second button")];
+    alert.alertStyle = NSAlertStyleCritical;
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse response) {
+        if (response == NSAlertSecondButtonReturn)
+        {
+            addItems();
+        }
+    }];
+}
+
 #pragma mark - Relinking
 
 - (BOOL)canRelinkQueue
@@ -918,17 +1044,25 @@ NSString * const HBQueueItemNotificationShowCategory = @"HBQueueItemNotification
         return;
     }
     NSMutableArray<HBQueueJobItem *> *items = [NSMutableArray array];
-    NSMutableArray<HBJob *> *jobs = [NSMutableArray array];
     for (HBQueueJobItem *item in self.queue.items)
     {
         if ([item isKindOfClass:HBQueueJobItem.class])
         {
             [items addObject:item];
-            [jobs addObject:item.job];
         }
     }
-    [self showWindow:sender];
-    self.relinkWindowController = [[HBQueueRelinkWindowController alloc] initWithJobs:jobs];
+    [self relinkItems:items onlyIfMissing:NO];
+}
+
+- (void)relinkItems:(NSArray<HBQueueJobItem *> *)items onlyIfMissing:(BOOL)onlyIfMissing
+{
+    HBQueueRelinkWindowController *controller = [[HBQueueRelinkWindowController alloc] initWithJobs:[items valueForKey:@"job"]];
+    if (onlyIfMissing && !controller.hasMissingLocations)
+    {
+        return;
+    }
+    [self showWindow:self];
+    self.relinkWindowController = controller;
     [self.relinkWindowController beginSheetForWindow:self.window completionHandler:^(NSModalResponse response) {
         NSError *error = nil;
         if (response == NSModalResponseOK && ![self.queue replaceJobs:self.relinkWindowController.jobs forItems:items error:&error])

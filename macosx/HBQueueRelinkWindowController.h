@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Works on copies, so cancelling leaves the supplied jobs untouched.
 - (instancetype)initWithJobs:(NSArray<HBJob *> *)jobs;
 @property (nonatomic, readonly) NSArray<HBJob *> *jobs;
+@property (nonatomic, readonly) BOOL hasMissingLocations;
 
 /// The completion handler must save the jobs before returning, while access is held.
 - (void)beginSheetForWindow:(NSWindow *)window completionHandler:(void (^)(NSModalResponse response))handler;
