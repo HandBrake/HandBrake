@@ -104,6 +104,8 @@ Download available from Microsoft:
 ### Windows
 
   - Minor UI visual refresh including usability and accessibility changes throughout the entire UI.
+  - Redesigned Filters Tab to accomondate new and future filters. 
+  - Added option for showing crop boundaries on the Preview Window.
   - Added support for NVEnc and NVDEC on Nvidia ARM devices
   - Added support for selecting audio filters per track.
   - Minor miscellaneous fixes

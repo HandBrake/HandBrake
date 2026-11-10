@@ -7914,7 +7914,16 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("StaticPreviewView_Duration", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error: Unable to Generate Image.
+        /// </summary>
+        public static string StaticPreviewView_ErrorUnableToGenerateImage {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_ErrorUnableToGenerateImage", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Fine Tune Picture Settings.
         /// </summary>
@@ -7952,6 +7961,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Crop Boundaries.
+        /// </summary>
+        public static string StaticPreviewView_ShowCropBoundaries {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_ShowCropBoundaries", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Show crop adjustment controls..
         /// </summary>
         public static string StaticPreviewView_ShowPictureSettingsAdjustment {
@@ -7959,7 +7977,7 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("StaticPreviewView_ShowPictureSettingsAdjustment", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preview ({0}% actual size).
         /// </summary>

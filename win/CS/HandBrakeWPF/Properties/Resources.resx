@@ -2333,6 +2333,12 @@ Please choose a different preset.</value>
   <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
     <value>Show crop adjustment controls.</value>
   </data>
+  <data name="StaticPreviewView_ShowCropBoundaries" xml:space="preserve">
+    <value>Show Crop Boundaries</value>
+  </data>
+  <data name="StaticPreviewView_ErrorUnableToGenerateImage" xml:space="preserve">
+    <value>Error: Unable to Generate Image</value>
+  </data>
   <data name="DarkTheme_dark" xml:space="preserve">
     <value>Use Dark</value>
   </data>

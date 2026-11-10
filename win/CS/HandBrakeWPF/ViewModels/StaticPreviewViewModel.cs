@@ -59,6 +59,7 @@ namespace HandBrakeWPF.ViewModels
         private bool isEncoding;
         private bool useExternalPlayer;
         private bool showPictureSettingControls;
+        private bool showCropBoundaries;
 
         private bool isMediaPlayerVisible;
 
@@ -88,6 +89,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.useExternalPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseExternalPlayer);
             this.showPictureSettingControls = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreviewShowPictureSettingsOverlay);
+            this.showCropBoundaries = false;
             this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration);
         }
         
@@ -339,7 +341,27 @@ namespace HandBrakeWPF.ViewModels
                 this.userSettingService.SetUserSetting(UserSettingConstants.PreviewShowPictureSettingsOverlay, value);
             }
         }
-        
+
+        public bool ShowCropBoundaries
+        {
+            get => this.showCropBoundaries;
+            set
+            {
+                if (value == this.showCropBoundaries)
+                {
+                    return;
+                }
+
+                this.showCropBoundaries = value;
+                this.NotifyOfPropertyChange(() => this.ShowCropBoundaries);
+
+                if (this.Task != null)
+                {
+                    this.UpdatePreviewFrame();
+                }
+            }
+        }
+
         public void UpdatePreviewFrame(Title selectedTitle, EncodeTask task, Source scannedSource)
         {
             this.Task = task;
@@ -390,7 +412,7 @@ namespace HandBrakeWPF.ViewModels
             BitmapSource image = null;
             try
             {
-                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage, false);
+                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage, this.ShowCropBoundaries);
             }
             catch (Exception exc)
             {

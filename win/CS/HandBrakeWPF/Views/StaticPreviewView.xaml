@@ -81,9 +81,13 @@
 
                 <!-- Crop Check -->
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}">
-                    <CheckBox IsChecked="{Binding ShowPictureSettingControls}" Margin="0,0,0,10"
+                    <CheckBox IsChecked="{Binding ShowPictureSettingControls}" Margin="0,0,10,10"
                               Visibility="{Binding IsMediaPlayerVisible, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" >
                         <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_ShowPictureSettingsAdjustment}" Foreground="White" />
+                    </CheckBox>
+
+                    <CheckBox IsChecked="{Binding ShowCropBoundaries}" Margin="0,0,0,10">
+                        <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_ShowCropBoundaries}" Foreground="White" />
                     </CheckBox>
                 </StackPanel>
 
