@@ -27,7 +27,17 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{x:Static Properties:Resources.MetaDataView_Title}" FontWeight="Bold" Margin="0,5,0,0" Grid.Row="0" />
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="{x:Static Properties:Resources.MetaDataView_Title}" FontWeight="Bold" Margin="0,5,0,0" />
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0"
+                        Visibility="{Binding HasAvailableMetadataKeys, Converter={StaticResource boolToVisConverter}}">
+                <TextBlock Text="{x:Static Properties:Resources.MetaData_Field}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                <ComboBox Width="170" ItemsSource="{Binding AvailableMetadataKeys}" SelectedItem="{Binding SelectedMetadataKey}"
+                          AutomationProperties.Name="{x:Static Properties:Resources.MetaData_Field}" />
+                <Button Margin="5,0,0,0" Content="{x:Static Properties:Resources.MetaData_Add}" Command="{Binding RelayCommand}"
+                        CommandParameter="Add" IsEnabled="{Binding CanAddMetadata}" />
+            </StackPanel>
+        </StackPanel>
 
         <!-- Metadata Input Area -->
         <Grid Grid.Row="1"  Margin="0,10,10,10">
@@ -47,11 +57,20 @@
                       BorderBrush="{StaticResource Ui.ContrastLight}"
                       KeyboardNavigation.TabNavigation="Continue"
                       KeyDown="MetadataList_OnKeyDown"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      SelectionMode="Single"
-                      Grid.IsSharedSizeScope="true">
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             SelectionMode="Single"
+                             Grid.IsSharedSizeScope="true">
 
-                <ListView.Resources>
+                      <ListView.ContextMenu>
+                          <ContextMenu>
+                              <MenuItem Header="{x:Static Properties:Resources.MetaData_CheckAll}" Command="{Binding RelayCommand}" CommandParameter="CheckAll" />
+                              <MenuItem Header="{x:Static Properties:Resources.MetaData_UncheckAll}" Command="{Binding RelayCommand}" CommandParameter="UncheckAll" />
+                              <Separator />
+                              <MenuItem Header="{x:Static Properties:Resources.MetaData_ClearAddedFields}" Command="{Binding RelayCommand}" CommandParameter="ClearAddedFields" />
+                          </ContextMenu>
+                      </ListView.ContextMenu>
+
+                      <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}" >
                         <Setter Property="Template" >
                             <Setter.Value>
@@ -65,13 +84,6 @@
                         </Setter>
                     </Style>
                 </ListView.Resources>
-
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <!-- Maybe Later -->
-                        <!--<MenuItem Header="{x:Static Properties:Resources.MetaData_Add}" Command="{Binding RelayCommand}" CommandParameter="Add" />-->
-                    </ContextMenu>
-                </ListView.ContextMenu>
 
                 <ListView.View>
                     <GridView AllowsColumnReorder="False">
@@ -107,20 +119,13 @@
                                 <ColumnDefinition Width="50" />
                             </Grid.ColumnDefinitions>
 
-                            <CheckBox Grid.Column="1" IsChecked="{Binding Enabled}" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                            <CheckBox Grid.Column="1" IsChecked="{Binding Enabled, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Left" />
 
                             <!-- Annotation -->
-                            <TextBlock Grid.Column="2" Text="{Binding Annotation}" HorizontalAlignment="Left" Margin="0,0,0,0"
-                                       Visibility="{Binding IsNew, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
-                                       />
-
-                            <TextBox Grid.Column="2" Text="{Binding Annotation}"  behaviours:TextBoxBehavior.TripleClickSelectAll="True" 
-                                     Visibility="{Binding IsNew, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center"
-                                     TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="0,2,0,2" Margin="1,1,10,1"  />
-
+                            <TextBlock Grid.Column="2" Text="{Binding Annotation}" HorizontalAlignment="Left" Margin="0,0,0,0" />
 
                             <!-- Value -->
-                            <TextBox Grid.Column="3" Text="{Binding Value}" x:Name="metadataValue" behaviours:TextBoxBehavior.TripleClickSelectAll="True" MaxHeight="100"
+                            <TextBox Grid.Column="3" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" x:Name="metadataValue" behaviours:TextBoxBehavior.TripleClickSelectAll="True" MaxHeight="100"
                                      TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="0,2,0,2" Margin="1" PreviewMouseDown="MetadataValue_OnPreviewMouseDown" />
 
 

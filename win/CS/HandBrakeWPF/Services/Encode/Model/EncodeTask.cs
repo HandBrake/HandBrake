@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Services.Encode.Model
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
@@ -142,7 +143,8 @@ namespace HandBrakeWPF.Services.Encode.Model
 
             /* Other */
             this.PassthruMetadataEnabled = task.PassthruMetadataEnabled;
-            this.MetaData = new ObservableCollection<MetaDataValue>(task.MetaData);
+            this.MetaData = new ObservableCollection<MetaDataValue>(task.MetaData.Select(item =>
+                new MetaDataValue(item.Annotation, item.Value) { Enabled = item.Enabled, IsNew = item.IsNew }));
             this.CoverArts = new ObservableCollection<CoverArt>(task.CoverArts);
         }
         

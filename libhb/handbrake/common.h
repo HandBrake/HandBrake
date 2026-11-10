@@ -198,6 +198,7 @@ hb_metadata_t * hb_metadata_copy(const hb_metadata_t *src);
 void hb_metadata_close(hb_metadata_t **metadata);
 void hb_update_meta_dict(hb_dict_t * dict, const char * key, const char * value);
 const char * hb_lookup_meta_key(const char * mux_key);
+const char * hb_metadata_key_get_next(int mux, int *index);
 void hb_metadata_add_coverart( hb_metadata_t *metadata,
                                const uint8_t *data, int size,
                                int type, const char *name );

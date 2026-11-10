@@ -9,8 +9,12 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    public class MetaDataValue
+    using HandBrakeWPF.ViewModels;
+
+    public class MetaDataValue : PropertyChangedBase
     {
+        private bool enabled;
+
         public MetaDataValue(string annotation, string value)
         {
             this.Annotation = annotation;
@@ -22,7 +26,20 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
         public string Value { get; set; }
 
-        public bool Enabled { get; set; }
+        public bool Enabled
+        {
+            get => this.enabled;
+            set
+            {
+                if (value == this.enabled)
+                {
+                    return;
+                }
+
+                this.enabled = value;
+                this.NotifyOfPropertyChange(() => this.Enabled);
+            }
+        }
 
         public bool IsNew { get; set; }
     }

@@ -3818,7 +3818,31 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("MetaData_Add", resourceCulture);
             }
         }
-        
+
+        public static string MetaData_Field {
+            get {
+                return ResourceManager.GetString("MetaData_Field", resourceCulture);
+            }
+        }
+
+        public static string MetaData_CheckAll {
+            get {
+                return ResourceManager.GetString("MetaData_CheckAll", resourceCulture);
+            }
+        }
+
+        public static string MetaData_UncheckAll {
+            get {
+                return ResourceManager.GetString("MetaData_UncheckAll", resourceCulture);
+            }
+        }
+
+        public static string MetaData_ClearAddedFields {
+            get {
+                return ResourceManager.GetString("MetaData_ClearAddedFields", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Actors:.
         /// </summary>

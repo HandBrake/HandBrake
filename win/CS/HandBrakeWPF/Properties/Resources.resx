@@ -2973,6 +2973,18 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="MetaData_Add" xml:space="preserve">
     <value>Add Row</value>
   </data>
+  <data name="MetaData_Field" xml:space="preserve">
+    <value>Metadata field</value>
+  </data>
+  <data name="MetaData_CheckAll" xml:space="preserve">
+    <value>Check All</value>
+  </data>
+  <data name="MetaData_UncheckAll" xml:space="preserve">
+    <value>Uncheck All</value>
+  </data>
+  <data name="MetaData_ClearAddedFields" xml:space="preserve">
+    <value>Clear Added Fields</value>
+  </data>
   <data name="MainView_DebugMenu" xml:space="preserve">
     <value>Debug Menu</value>
   </data>

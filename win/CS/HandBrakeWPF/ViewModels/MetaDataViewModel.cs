@@ -10,10 +10,13 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Windows.Forms;
 
+    using HandBrake.App.Core.Utilities;
+    using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Shared;
 
@@ -40,6 +43,8 @@ namespace HandBrakeWPF.ViewModels
         private bool isNextAvailable;
         private bool isBackAvailable;
         private bool isCovertArtPreviewEnabled = true;
+        private List<string> supportedMetadataKeys = new List<string>();
+        private string selectedMetadataKey;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaDataViewModel"/> class. 
@@ -61,6 +66,24 @@ namespace HandBrakeWPF.ViewModels
         public event EventHandler<TabStatusEventArgs> TabStatusChanged { add { } remove { } }
 
         public SimpleRelayCommand<MetaDataValue> RemoveCommand { get; set; }
+
+        public IEnumerable<string> AvailableMetadataKeys => this.supportedMetadataKeys
+            .Where(key => !this.SourceMetadata.Any(row => row.Annotation == key));
+
+        public string SelectedMetadataKey
+        {
+            get => this.selectedMetadataKey;
+            set
+            {
+                this.selectedMetadataKey = value;
+                this.NotifyOfPropertyChange(() => this.SelectedMetadataKey);
+                this.NotifyOfPropertyChange(() => this.CanAddMetadata);
+            }
+        }
+
+        public bool CanAddMetadata => this.SelectedMetadataKey != null && this.AvailableMetadataKeys.Contains(this.SelectedMetadataKey);
+
+        public bool HasAvailableMetadataKeys => this.AvailableMetadataKeys.Any();
 
         public ObservableCollection<MetaDataValue> SourceMetadata
         {
@@ -164,18 +187,60 @@ namespace HandBrakeWPF.ViewModels
 
         public void Add()
         {
-            MetaDataValue value = new MetaDataValue("", "");
-            value.IsNew = true;
-
-            this.SourceMetadata.Add(value);
+            if (this.CanAddMetadata)
+            {
+                this.SourceMetadata.Add(new MetaDataValue(this.SelectedMetadataKey, string.Empty) { IsNew = true });
+                this.UpdateMetadataChoices();
+            }
         }
 
         public void Delete(MetaDataValue row)
         {
-            if (SourceMetadata.Contains(row) && row.IsNew)
+            if (this.SourceMetadata.Contains(row) && row.IsNew)
             {
                 this.SourceMetadata.Remove(row);
+                this.UpdateMetadataChoices();
             }
+        }
+
+        public void CheckAll()
+        {
+            foreach (MetaDataValue metadata in this.SourceMetadata)
+            {
+                metadata.Enabled = true;
+            }
+        }
+
+        public void UncheckAll()
+        {
+            foreach (MetaDataValue metadata in this.SourceMetadata)
+            {
+                metadata.Enabled = false;
+            }
+        }
+
+        public void ClearAddedFields()
+        {
+            foreach (MetaDataValue metadata in this.SourceMetadata.Where(metadata => metadata.IsNew).ToList())
+            {
+                this.SourceMetadata.Remove(metadata);
+            }
+
+            this.UpdateMetadataChoices();
+        }
+
+        public void RefreshMetadataKeys()
+        {
+            var container = HandBrakeEncoderHelpers.GetContainer(EnumHelper<OutputFormat>.GetShortName(this.task.OutputFormat));
+            this.supportedMetadataKeys = HandBrakeEncoderHelpers.GetMetadataKeys(container.Id);
+            this.UpdateMetadataChoices();
+        }
+
+        private void UpdateMetadataChoices()
+        {
+            this.NotifyOfPropertyChange(() => this.AvailableMetadataKeys);
+            this.NotifyOfPropertyChange(() => this.HasAvailableMetadataKeys);
+            this.SelectedMetadataKey = this.AvailableMetadataKeys.FirstOrDefault();
         }
 
         /// <summary>
@@ -229,6 +294,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.NotifyOfPropertyChange(() => this.SourceMetadata);
             this.NotifyOfPropertyChange(() => this.SourceCoverArts);
+            this.RefreshMetadataKeys();
         }
 
         /// <summary>
@@ -254,6 +320,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.task = encodeTask;
             this.NotifyOfPropertyChange(() => this.SourceMetadata);
+            this.RefreshMetadataKeys();
         }
 
         public bool MatchesPreset(Preset preset)
