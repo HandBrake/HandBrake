@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CoverArtPreviewView_SaveAs" xml:space="preserve">
+    <value>Save Image As...</value>
+  </data>
+  <data name="CoverArtPreviewView_SaveError" xml:space="preserve">
+    <value>Unable to save the cover art: {0}</value>
+  </data>
+  <data name="CoverArtPreviewView_SaveUnavailable" xml:space="preserve">
+    <value>The original cover art is no longer available to save.</value>
+  </data>
+  <data name="CoverArtPreviewView_ScaledTitle" xml:space="preserve">
+    <value>{0} (Scale: {1}%)</value>
+  </data>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>The full list of encoder parameters: 
 {0}</value>

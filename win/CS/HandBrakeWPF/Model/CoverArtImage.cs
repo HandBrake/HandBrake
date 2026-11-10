@@ -50,6 +50,7 @@ namespace HandBrakeWPF.Model
                     this.Image = new BitmapImage(new Uri("pack://application:,,,/Views/Images/EmptyCoverArt.png"));
                 }
 
+                this.NotifyOfPropertyChange(() => this.Enabled);
                 this.NotifyOfPropertyChange(() => this.Image);
             }
         }

@@ -85,12 +85,12 @@
                 </ListView.View>
 
                 <ListView.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                    <Style TargetType="ListBoxItem"  BasedOn="{StaticResource ModernListBoxItemStyle}">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         <Setter Property="Margin" Value="0,0,0,1" />
                     </Style>
                 </ListView.ItemContainerStyle>
-
+                
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -162,8 +162,26 @@
                     </Border>
                    
 
-                    <Image Source="{Binding CoverArtImage.Image}" Canvas.ZIndex="0">
-                    </Image>
+                    <Button Canvas.ZIndex="0" Click="CoverArtPreview_OnClick"
+                            Cursor="Hand" ToolTip="{x:Static Properties:Resources.PictureSettingsView_SeePreview}"
+                            AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_SeePreview}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="IsEnabled" Value="{Binding CoverArtImage.Enabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CoverArtImage.Image}" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Image Source="{Binding CoverArtImage.Image}" />
+                    </Button>
 
                     <TextBlock Text="No Cover Art" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding CoverArtImage.IsNoCoverArt, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
                            FontWeight="SemiBold" FontSize="16" />

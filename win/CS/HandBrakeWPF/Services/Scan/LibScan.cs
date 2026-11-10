@@ -221,13 +221,12 @@ namespace HandBrakeWPF.Services.Scan
 
         public BitmapImage GetCoverArt(CoverArt artwork, int title)
         {
-            RawCoverArtData rawImageData = this.instance.GetCoverArt(title, artwork.ID);
-            if (rawImageData != null)
+            RawCoverArtData rawData = this.GetCoverArtRaw(artwork, title);
+            if (rawData != null)
             {
                 try
                 {
-                    // File.WriteAllBytes("test.jpg", rawImageData.RawBitmapData); // Debug
-                    using (MemoryStream ms = new MemoryStream(rawImageData.RawBitmapData))
+                    using (MemoryStream ms = new MemoryStream(rawData.RawBitmapData))
                     {
                         return BitmapUtilities.ConvertToBitmapImage(ms);
                     }
@@ -239,6 +238,11 @@ namespace HandBrakeWPF.Services.Scan
             }
 
             return null;
+        }
+
+        public RawCoverArtData GetCoverArtRaw(CoverArt artwork, int title)
+        {
+            return this.instance.GetCoverArt(title, artwork.ID);
         }
 
         /// <summary>

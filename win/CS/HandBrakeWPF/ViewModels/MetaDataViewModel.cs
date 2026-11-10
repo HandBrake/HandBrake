@@ -14,6 +14,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows.Forms;
 
+    using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Shared;
 
     using HandBrakeWPF.Commands;
@@ -272,6 +273,12 @@ namespace HandBrakeWPF.ViewModels
             }
 
             return new CoverArtImage(null);
+        }
+
+        public Func<RawCoverArtData> CreateCoverArtRawLoader(CoverArt coverArt)
+        {
+            int titleNumber = this.currentTitle.TitleNumber;
+            return () => this.scanService.GetCoverArtRaw(coverArt, titleNumber);
         }
     }
 }

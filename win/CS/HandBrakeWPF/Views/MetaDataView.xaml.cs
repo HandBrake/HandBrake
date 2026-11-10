@@ -10,7 +10,9 @@
 namespace HandBrakeWPF.Views
 {
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
+    using HandBrakeWPF.ViewModels;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
@@ -27,6 +29,20 @@ namespace HandBrakeWPF.Views
         public MetaDataView()
         {
             this.InitializeComponent();
+        }
+
+        private void CoverArtPreview_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext is MetaDataViewModel viewModel &&
+                viewModel.CoverArtImage is CoverArtImage coverArt &&
+                coverArt.Enabled && !coverArt.IsNoCoverArt && coverArt.Image != null)
+            {
+                CoverArtPreviewView preview = new CoverArtPreviewView(coverArt.Image, viewModel.CreateCoverArtRawLoader(coverArt.CoverArt))
+                {
+                    Owner = Window.GetWindow(this)
+                };
+                preview.ShowDialog();
+            }
         }
 
         private void MetadataValue_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)

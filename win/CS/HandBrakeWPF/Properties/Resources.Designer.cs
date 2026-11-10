@@ -61,6 +61,42 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Image As....
+        /// </summary>
+        public static string CoverArtPreviewView_SaveAs {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_SaveAs", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to save the cover art: {0}.
+        /// </summary>
+        public static string CoverArtPreviewView_SaveError {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_SaveError", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The original cover art is no longer available to save.
+        /// </summary>
+        public static string CoverArtPreviewView_SaveUnavailable {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_SaveUnavailable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (Scale: {1}%).
+        /// </summary>
+        public static string CoverArtPreviewView_ScaledTitle {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_ScaledTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Copyright (C) 2003-2026 The HandBrake Team.
         /// </summary>
         public static string About_Copyright {
