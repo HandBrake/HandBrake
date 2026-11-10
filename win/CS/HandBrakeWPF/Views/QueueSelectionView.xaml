@@ -69,6 +69,7 @@
                     <MenuItem Header="Order by Title"  Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
                     <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />
                     <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" Command="{Binding RelayCommand}" CommandParameter="OrderByName" />
+                    <MenuItem Header="Order by Name (Natural)" Command="{Binding RelayCommand}" CommandParameter="OrderByNameNatural" />
                 </MenuItem>
             </Menu>
         </Grid>
@@ -101,6 +102,7 @@
                     <MenuItem Header="Order by Title" Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
                     <MenuItem Header="Order by Duration" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />
                     <MenuItem Header="Order by Name"  Command="{Binding RelayCommand}" CommandParameter="OrderByName" />
+                    <MenuItem Header="Order by Name (Natural)" Command="{Binding RelayCommand}" CommandParameter="OrderByNameNatural" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 

@@ -12,7 +12,9 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices;
 
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Queue;
@@ -37,6 +39,7 @@ namespace HandBrakeWPF.ViewModels
         public bool titleDesc = true;
         public bool durationDesc = true;
         public bool nameDesc = true;
+        public bool nameNaturalDesc = true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueSelectionViewModel"/> class. 
@@ -166,9 +169,67 @@ namespace HandBrakeWPF.ViewModels
             {
                 TitleList = new BindingList<SelectionTitle>(TitleList.OrderBy(o => o.Title.SourcePath).ToList());
             }
-            
+
             this.NotifyOfPropertyChange(() => TitleList);
             this.nameDesc = !this.nameDesc;
+        }
+
+        public void OrderByNameNatural()
+        {
+            if (this.nameNaturalDesc)
+            {
+                TitleList = new BindingList<SelectionTitle>(TitleList.OrderByDescending(o => GetNaturalSortName(o), NaturalStringComparer.Instance).ToList());
+            }
+            else
+            {
+                TitleList = new BindingList<SelectionTitle>(TitleList.OrderBy(o => GetNaturalSortName(o), NaturalStringComparer.Instance).ToList());
+            }
+
+            this.NotifyOfPropertyChange(() => TitleList);
+            this.nameNaturalDesc = !this.nameNaturalDesc;
+        }
+
+        private static string GetNaturalSortName(SelectionTitle selectionTitle)
+        {
+            if (selectionTitle == null || string.IsNullOrWhiteSpace(selectionTitle.SourceName))
+            {
+                return string.Empty;
+            }
+
+            string fileName = Path.GetFileName(selectionTitle.SourceName);
+            return string.IsNullOrEmpty(fileName) ? selectionTitle.SourceName : fileName;
+        }
+
+        private sealed class NaturalStringComparer : IComparer<string>
+        {
+            public static readonly NaturalStringComparer Instance = new NaturalStringComparer();
+
+            private NaturalStringComparer()
+            {
+            }
+
+            public int Compare(string left, string right)
+            {
+                if (ReferenceEquals(left, right))
+                {
+                    return 0;
+                }
+
+                if (left == null)
+                {
+                    return -1;
+                }
+
+                if (right == null)
+                {
+                    return 1;
+                }
+
+                return StrCmpLogicalW(left, right);
+            }
+
+            [DllImport("shlwapi.dll", CharSet = CharSet.Unicode)]
+            private static extern int StrCmpLogicalW(string left, string right);
         }
 
         /// <summary>
