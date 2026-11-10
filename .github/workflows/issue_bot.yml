@@ -17,17 +17,18 @@ jobs:
         with:
           issue_message: |-
             Hello, and welcome to the HandBrake repository.
-
-            Please complete the issue template. For bug reports, include steps to reproduce the problem and an activity log where relevant. For feature requests, explain the proposed feature and the problem it would solve.
+            
+            This is an automated message from the HandBrake Bot.
+            
+            > [!IMPORTANT]
+            > Please make sure you have completed the issue template and provide all the requested information.
 
             > [!WARNING]
             > Be cautious of replies asking you to download DLLs or other files from third-party websites, particularly from users who are not members of the HandBrake team. These downloads may be malicious.
             > HandBrake team members have a “Member” label beside their comments.
 
             > [!TIP]
-            > See the [HandBrake documentation](https://handbrake.fr/docs) for guidance and troubleshooting.
-
-            Please follow our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md).
+            > See the [HandBrake documentation](https://handbrake.fr/docs) for guidance and troubleshooting. Please also follow our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md).
 
             Thank you,
             The HandBrake Bot
