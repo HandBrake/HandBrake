@@ -3872,7 +3872,7 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("MetaData_OverwritePrompt", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Reset Metadata.
         /// </summary>
@@ -3881,7 +3881,7 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("MetaData_Reset", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Reset metadata to the selected title? All metadata changes will be lost..
         /// </summary>
@@ -3890,7 +3890,7 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("MetaData_ResetPrompt", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Actors:.
         /// </summary>
@@ -6645,7 +6645,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Limit the length of the titles added to the queue..
+        ///   Looks up a localized string similar to Apply the following Limits when adding titles to the queue..
         /// </summary>
         public static string QueueSelectionView_RangeLimitsDesc {
             get {

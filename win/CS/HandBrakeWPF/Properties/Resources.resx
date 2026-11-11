@@ -2854,7 +2854,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Range Limits:</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
-    <value>Limit the length of the titles added to the queue.</value>
+    <value>Apply the following Limits when adding titles to the queue.</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
     <value>Enable Range Limits</value>
