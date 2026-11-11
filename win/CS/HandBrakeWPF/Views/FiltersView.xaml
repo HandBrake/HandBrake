@@ -57,7 +57,7 @@
                     <Button.ContextMenu>
                         <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}" ItemsSource="{Binding AvailableFiltersMenu}">
                             <ContextMenu.ItemContainerStyle>
-                                <Style TargetType="MenuItem">
+                                <Style TargetType="MenuItem" BasedOn="{StaticResource LocalMenuItemBaseStyle}">
                                     <Setter Property="Header" Value="{Binding Header}" />
                                     <Setter Property="ItemsSource" Value="{Binding Children}" />
                                     <Setter Property="Command" Value="{Binding DataContext.RelayCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
@@ -104,7 +104,7 @@
 
                     <MenuItem Header="{x:Static Properties:Resources.FilterView_AddFilter}" ItemsSource="{Binding AvailableFiltersMenu}">
                         <MenuItem.ItemContainerStyle>
-                            <Style TargetType="MenuItem">
+                            <Style TargetType="MenuItem" BasedOn="{StaticResource LocalMenuItemBaseStyle}">
                                 <Setter Property="Header" Value="{Binding Header}" />
                                 <Setter Property="ItemsSource" Value="{Binding Children}" />
                                 <Setter Property="Command" Value="{Binding DataContext.RelayCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />

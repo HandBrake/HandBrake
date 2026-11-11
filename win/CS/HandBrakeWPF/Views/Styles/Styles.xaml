@@ -59,6 +59,8 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
 
+    <Style x:Key="LocalMenuItemBaseStyle" TargetType="MenuItem" />
+
     <Style x:Key="subText" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontWeight" Value="Regular" />
         <Setter Property="FontSize" Value="12" />

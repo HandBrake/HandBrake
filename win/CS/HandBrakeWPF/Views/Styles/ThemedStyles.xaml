@@ -2,6 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:HandBrakeWPF.Converters">
 
+    <Style x:Key="LocalMenuItemBaseStyle" TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" />
+
     <!-- List Box Styling -->
     <Style x:Key="ModernListBoxItemStyle" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
         <Setter Property="Background" Value="Transparent"/>
