@@ -131,9 +131,10 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBox
+		<TextBox
 			Name="numberBox"
 			Grid.Column="0"
+			Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
 			GotFocus="NumberBoxGotFocus"
 			LostFocus="NumberBoxLostFocus"
 			PreviewTextInput="NumberBoxPreviewTextInput"

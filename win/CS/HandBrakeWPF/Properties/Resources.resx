@@ -1368,6 +1368,15 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
     <value>Choose titles:</value>
   </data>
+  <data name="QueueSelectionView_MaxDuration" xml:space="preserve">
+    <value>Max Duration:</value>
+  </data>
+  <data name="QueueSelectionView_MinDuration" xml:space="preserve">
+    <value>Min Duration:</value>
+  </data>
+  <data name="QueueSelectionView_TitleCountDisplay" xml:space="preserve">
+    <value>(Displaying {0} of {1})</value>
+  </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
     <value>Add to Queue</value>
   </data>

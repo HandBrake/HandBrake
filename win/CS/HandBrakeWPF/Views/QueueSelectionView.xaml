@@ -47,9 +47,12 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{x:Static Properties:Resources.QueueSelectionView_ChooseTitles}" FontSize="14" />
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="{x:Static Properties:Resources.QueueSelectionView_ChooseTitles}" FontSize="14" />
+                <TextBlock Text="{Binding TitleCountDisplay}" FontSize="14" Margin="5,0,0,0" />
+            </StackPanel>
 
-            <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Bottom" Grid.Column="2" Margin="0,0,0,0">
+            <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Center" Grid.Column="2" Margin="0,0,0,0">
                 <MenuItem>
                     <MenuItem.Header>
                         <StackPanel Height="27" Orientation="Horizontal">
@@ -66,7 +69,7 @@
                     <MenuItem Header="Deselect All" Command="{Binding RelayCommand}" CommandParameter="UnSelectAll" />
                     <MenuItem Header="Invert Selection" Command="{Binding RelayCommand}" CommandParameter="InvertSelection" />
                     <Separator />
-                    <MenuItem Header="Order by Title"  Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
+                    <MenuItem Header="Order by Title" Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
                     <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />
                     <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" Command="{Binding RelayCommand}" CommandParameter="OrderByName" />
                     <MenuItem Header="Order by Name (Natural)" Command="{Binding RelayCommand}" CommandParameter="OrderByNameNatural" />
@@ -80,12 +83,53 @@
                  Margin="10,10,10,10"
                  VerticalAlignment="Stretch"
                  HorizontalAlignment="Stretch"
-                 ItemsSource="{Binding TitleList}"
+                 ItemsSource="{Binding FilteredTitleList}"
                  SelectionMode="Single" 
                  PreviewKeyDown="SelectionGrid_OnKeyDown"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
                  dd:DragDrop.IsDropTarget="True">
+            <ListBox.Template>
+                <ControlTemplate TargetType="ListBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="2"
+                            SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0" Margin="10,5,10,5" VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border BorderBrush="{StaticResource Ui.ContrastLight}" BorderThickness="0,0,0,1" Padding="0,0,0,5">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Static Properties:Resources.MainView_Filters}" FontWeight="Bold" Margin="0,0,10,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="{x:Static Properties:Resources.AddPresetView_Name}" Margin="0,0,5,0" VerticalAlignment="Center" />
+                                        <TextBox Text="{Binding NameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="160" VerticalContentAlignment="Center" />
+                                        <TextBlock Text="{x:Static Properties:Resources.QueueSelectionView_MinDuration}" Margin="12,0,5,0" VerticalAlignment="Center" />
+                                        <controls:TimeSpanBox Number="{Binding MinimumDuration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                              Minimum="0" AllowEmpty="True" ShowTimeSpan="True" MinWidth="100" />
+                                        <TextBlock Text="{x:Static Properties:Resources.QueueSelectionView_MaxDuration}" Margin="12,0,5,0" VerticalAlignment="Center" />
+                                        <controls:TimeSpanBox Number="{Binding MaximumDuration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                              Minimum="0" AllowEmpty="True" ShowTimeSpan="True" MinWidth="100" />
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <ScrollViewer Grid.Row="1" Focusable="False" Padding="{TemplateBinding Padding}">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </ListBox.Template>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource ModernListBoxItemStyle}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -128,7 +172,7 @@
                         <TextBlock Text="Source:" Margin="0,0,5,0" FontWeight="Bold" Grid.Row="1" Grid.Column="1" />
                         <TextBlock Text="{Binding SourceName}" Margin="5,0,5,0" Grid.Row="1" Grid.Column="2" />
 
-                        <TextBlock Text="{Binding SourceInfo}" Margin="5,0,5,0" Grid.Row="2" Grid.Column="2" Foreground="DimGray" />
+                        <TextBlock Text="{Binding SourceInfo}" Margin="5,0,5,0" Grid.Row="2" Grid.Column="2" Foreground="{DynamicResource Ui.ContrastLight}" />
 
                     </Grid>
 

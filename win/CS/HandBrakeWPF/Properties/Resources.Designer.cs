@@ -6627,6 +6627,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Displaying {0} of {1}).
+        /// </summary>
+        public static string QueueSelectionView_TitleCountDisplay {
+            get {
+                return ResourceManager.GetString("QueueSelectionView_TitleCountDisplay", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Max Duration:.
+        /// </summary>
+        public static string QueueSelectionView_MaxDuration {
+            get {
+                return ResourceManager.GetString("QueueSelectionView_MaxDuration", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Min Duration:.
+        /// </summary>
+        public static string QueueSelectionView_MinDuration {
+            get {
+                return ResourceManager.GetString("QueueSelectionView_MinDuration", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Choose titles:.
         /// </summary>
         public static string QueueSelectionView_ChooseTitles {

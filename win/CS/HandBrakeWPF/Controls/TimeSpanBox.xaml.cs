@@ -15,7 +15,6 @@ namespace HandBrakeWPF.Controls
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
-    using System.Windows.Media;
 
     /// <summary>
     ///     Interaction logic for TimeSpanBox.xaml
@@ -456,8 +455,6 @@ namespace HandBrakeWPF.Controls
                 {
                     this.numberBox.Text = string.Empty;
                 }
-
-                this.numberBox.Foreground = new SolidColorBrush(Colors.Black);
             }
         }
 

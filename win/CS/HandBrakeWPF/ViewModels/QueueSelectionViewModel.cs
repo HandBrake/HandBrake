@@ -14,7 +14,6 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
-    using System.Runtime.InteropServices;
 
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Queue;
@@ -23,6 +22,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -36,6 +36,9 @@ namespace HandBrakeWPF.ViewModels
         private BindingList<int> startEndRangeItems1;
 
         private string currentPreset;
+        private string nameFilter;
+        private long minimumDuration;
+        private long maximumDuration;
         public bool titleDesc = true;
         public bool durationDesc = true;
         public bool nameDesc = true;
@@ -56,6 +59,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService = userSettingService;
             this.Title = Resources.QueueSelectionViewModel_AddToQueue;
             this.TitleList = new BindingList<SelectionTitle>();
+            this.FilteredTitleList = new BindingList<SelectionTitle>();
             this.RangeLimits = new QueueAddRangeLimit();
 
 
@@ -78,6 +82,58 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the selected titles.
         /// </summary>
         public BindingList<SelectionTitle> TitleList { get; set; }
+
+        public BindingList<SelectionTitle> FilteredTitleList { get; }
+
+        public string TitleCountDisplay => string.Format(Resources.QueueSelectionView_TitleCountDisplay, this.FilteredTitleList.Count, this.TitleList.Count);
+
+        public string NameFilter
+        {
+            get => this.nameFilter;
+            set
+            {
+                if (value == this.nameFilter)
+                {
+                    return;
+                }
+
+                this.nameFilter = value;
+                this.NotifyOfPropertyChange(() => this.NameFilter);
+                this.RefreshFilteredTitles();
+            }
+        }
+
+        public long MinimumDuration
+        {
+            get => this.minimumDuration;
+            set
+            {
+                if (value == this.minimumDuration)
+                {
+                    return;
+                }
+
+                this.minimumDuration = value;
+                this.NotifyOfPropertyChange(() => this.MinimumDuration);
+                this.RefreshFilteredTitles();
+            }
+        }
+
+        public long MaximumDuration
+        {
+            get => this.maximumDuration;
+            set
+            {
+                if (value == this.maximumDuration)
+                {
+                    return;
+                }
+
+                this.maximumDuration = value;
+                this.NotifyOfPropertyChange(() => this.MaximumDuration);
+                this.RefreshFilteredTitles();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the current preset.
@@ -141,6 +197,7 @@ namespace HandBrakeWPF.ViewModels
             }
             
             this.NotifyOfPropertyChange(() => TitleList);
+            this.RefreshFilteredTitles();
             this.titleDesc = !this.titleDesc;
         }
 
@@ -156,6 +213,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.NotifyOfPropertyChange(() => TitleList);
+            this.RefreshFilteredTitles();
             this.durationDesc = !this.durationDesc;
         }
 
@@ -171,6 +229,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.NotifyOfPropertyChange(() => TitleList);
+            this.RefreshFilteredTitles();
             this.nameDesc = !this.nameDesc;
         }
 
@@ -186,6 +245,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.NotifyOfPropertyChange(() => TitleList);
+            this.RefreshFilteredTitles();
             this.nameNaturalDesc = !this.nameNaturalDesc;
         }
 
@@ -200,44 +260,12 @@ namespace HandBrakeWPF.ViewModels
             return string.IsNullOrEmpty(fileName) ? selectionTitle.SourceName : fileName;
         }
 
-        private sealed class NaturalStringComparer : IComparer<string>
-        {
-            public static readonly NaturalStringComparer Instance = new NaturalStringComparer();
-
-            private NaturalStringComparer()
-            {
-            }
-
-            public int Compare(string left, string right)
-            {
-                if (ReferenceEquals(left, right))
-                {
-                    return 0;
-                }
-
-                if (left == null)
-                {
-                    return -1;
-                }
-
-                if (right == null)
-                {
-                    return 1;
-                }
-
-                return StrCmpLogicalW(left, right);
-            }
-
-            [DllImport("shlwapi.dll", CharSet = CharSet.Unicode)]
-            private static extern int StrCmpLogicalW(string left, string right);
-        }
-
         /// <summary>
         /// The select all.
         /// </summary>
         public void SelectAll()
         {
-            foreach (var item in TitleList)
+            foreach (var item in this.FilteredTitleList)
             {
                 item.IsSelected = true;
             }
@@ -248,7 +276,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void UnSelectAll()
         {
-            foreach (var item in TitleList)
+            foreach (var item in this.FilteredTitleList)
             {
                 item.IsSelected = false;
             }
@@ -259,7 +287,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void InvertSelection()
         {
-            foreach (var item in TitleList)
+            foreach (var item in this.FilteredTitleList)
             {
                 item.IsSelected = !item.IsSelected;
             }
@@ -270,7 +298,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Add()
         {
-            this.addToQueue(this.TitleList.Where(c => c.IsSelected), this.RangeLimits);
+            this.addToQueue(this.FilteredTitleList.Where(c => c.IsSelected), this.RangeLimits);
             this.Close();
         }
 
@@ -325,7 +353,42 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentPreset = string.Format(Resources.QueueSelection_UsingPreset, preset.Name);
             }
 
+            this.RefreshFilteredTitles();
             this.NotifyOfPropertyChange(() => this.IsAutoNamingEnabled);
+        }
+
+        private void RefreshFilteredTitles()
+        {
+            string nameFilter = this.NameFilter?.Trim();
+            IEnumerable<SelectionTitle> matchingTitles = this.TitleList;
+
+            if (!string.IsNullOrEmpty(nameFilter))
+            {
+                matchingTitles = matchingTitles.Where(title =>
+                    title.SourceName?.Contains(nameFilter, StringComparison.OrdinalIgnoreCase) == true ||
+                    title.Title?.SourceDisplayName?.Contains(nameFilter, StringComparison.OrdinalIgnoreCase) == true);
+            }
+
+            if (this.MinimumDuration > 0)
+            {
+                matchingTitles = matchingTitles.Where(title => title.Title.Duration.TotalSeconds >= this.MinimumDuration);
+            }
+
+            if (this.MaximumDuration > 0)
+            {
+                matchingTitles = matchingTitles.Where(title => title.Title.Duration.TotalSeconds <= this.MaximumDuration);
+            }
+
+            this.FilteredTitleList.RaiseListChangedEvents = false;
+            this.FilteredTitleList.Clear();
+            foreach (SelectionTitle title in matchingTitles)
+            {
+                this.FilteredTitleList.Add(title);
+            }
+
+            this.FilteredTitleList.RaiseListChangedEvents = true;
+            this.FilteredTitleList.ResetBindings();
+            this.NotifyOfPropertyChange(() => this.TitleCountDisplay);
         }
     }
 }
