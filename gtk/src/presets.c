@@ -1944,6 +1944,17 @@ delayed_store_prefs(gpointer data)
     return FALSE;
 }
 
+void
+ghb_prefs_store_now(void)
+{
+    ghb_prefs_store();
+    if (prefs_timeout_id != 0)
+    {
+        g_source_remove(prefs_timeout_id);
+        delayed_store_prefs(NULL);
+    }
+}
+
 static void
 store_presets (void)
 {
