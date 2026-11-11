@@ -1,0 +1,4154 @@
+# HandBrake GTK arayüzü Türkçe çevirisi.
+# Copyright (C) 2026 HandBrake Team
+# This file is distributed under the same license as the ghb package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ghb 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-15 17:30+0100\n"
+"PO-Revision-Date: 2026-11-11 20:00+0300\n"
+"Last-Translator: Turkish Translation <tr@example.org>\n"
+"Language-Team: uma <uma@netusu.com>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.10\n"
+
+#: src/ui/menu.ui:6
+msgid "_File"
+msgstr "_Dosya"
+
+#: src/ui/menu.ui:10 src/ui/menu.ui:456
+msgid "_Open Source…"
+msgstr "_Kaynak Aç..."
+
+#: src/ui/menu.ui:14 src/ui/menu.ui:460
+msgid "Open _Directory…"
+msgstr "_Dizin Aç..."
+
+#: src/ui/menu.ui:18 src/ui/menu.ui:176
+msgid "_Set Destination…"
+msgstr "_Hedef Belirle…"
+
+#: src/ui/menu.ui:26 src/ui/menu.ui:196
+msgid "_Preferences"
+msgstr "_Tercihler"
+
+#. Toss up a warning dialog
+#: src/ui/menu.ui:30 src/ui/menu.ui:210 src/callbacks.c:3802
+msgid "_Quit"
+msgstr "_Çık"
+
+#: src/ui/menu.ui:35 src/ui/menu.ui:80
+msgid "_Queue"
+msgstr "_Kuyruk"
+
+#: src/ui/menu.ui:39
+msgid "_Add"
+msgstr "_Ekle"
+
+#: src/ui/menu.ui:43 src/ui/menu.ui:443
+msgid "Add _Multiple…"
+msgstr "_Birden Fazla Ekle…"
+
+#: src/ui/menu.ui:47 src/ui/menu.ui:447
+msgid "Add A_ll"
+msgstr "_Tümünü Ekle"
+
+#: src/ui/menu.ui:53 src/queuehandler.c:1876
+msgid "_Start Encoding"
+msgstr "_Kodlamayı Başlat"
+
+#: src/ui/menu.ui:57 src/queuehandler.c:1919
+msgid "_Pause Encoding"
+msgstr "_Kodlamayı Duraklat"
+
+#: src/ui/menu.ui:63 src/ui/menu.ui:182 src/ui/menu.ui:334
+msgid "_Import Queue…"
+msgstr "Kuyruğu _İçe Aktar..."
+
+#: src/ui/menu.ui:67 src/ui/menu.ui:186 src/ui/menu.ui:338
+msgid "_Export Queue…"
+msgstr "Kuyruğu _Dışa Aktar..."
+
+#: src/ui/menu.ui:72
+msgid "_View"
+msgstr "_Görünüm"
+
+#: src/ui/menu.ui:76
+msgid "Presets _List"
+msgstr "Ön Ayarlar _Listesi"
+
+#: src/ui/menu.ui:84
+msgid "_Preview"
+msgstr "_Önizleme"
+
+#: src/ui/menu.ui:88 src/ui/menu.ui:192
+msgid "_Activity Window"
+msgstr "_Etkinlik Penceresi"
+
+#: src/ui/menu.ui:93
+msgid "_Presets"
+msgstr "_Ön Ayarlar"
+
+#: src/ui/menu.ui:97 src/ui/menu.ui:219 src/ui/menu.ui:262
+msgid "Set De_fault"
+msgstr "_Varsayılan Yap"
+
+#: src/ui/menu.ui:103 src/ui/menu.ui:225
+msgid "_New Preset…"
+msgstr "_Yeni Ön Ayar…"
+
+#: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:6199
+#: src/ui/ghb.ui:6289 src/ui/ghb.ui:6629 src/ui/ghb.ui:6901 src/callbacks.c:2123
+#: src/chapters.c:455 src/ghb-file-button.c:219 src/presets.c:2369
+#: src/queuehandler.c:1386
+msgid "_Save"
+msgstr "_Kaydet"
+
+#: src/ui/menu.ui:111 src/ui/menu.ui:233 src/ui/menu.ui:272
+msgid "_Rename…"
+msgstr "_Yeniden Adlandır…"
+
+#: src/ui/menu.ui:115 src/ui/menu.ui:237 src/ui/menu.ui:276
+msgid "_Delete…"
+msgstr "_Sil…"
+
+#: src/ui/menu.ui:121 src/ui/menu.ui:243
+msgid "_Import Preset…"
+msgstr "Ön Ayarı _İçe Aktar..."
+
+#: src/ui/menu.ui:125 src/ui/menu.ui:247 src/ui/menu.ui:282
+msgid "_Export Preset…"
+msgstr "Ön Ayarı _Dışa Aktar..."
+
+#: src/ui/menu.ui:131 src/ui/menu.ui:253
+msgid "Reset _Built-in Presets"
+msgstr "_Yerleşik Ön Ayarları Sıfırla"
+
+#: src/ui/menu.ui:140 src/ui/menu.ui:200
+msgid "_Help"
+msgstr "_Yardım"
+
+#: src/ui/menu.ui:144
+msgid "_Online Documentation"
+msgstr "_Çevrimiçi Belgeler"
+
+#: src/ui/menu.ui:148
+msgid "_About"
+msgstr "_Hakkında"
+
+#: src/ui/menu.ui:158
+msgid "HandBrake For _Dummies"
+msgstr "_Acemiler İçin HandBrake"
+
+#: src/ui/menu.ui:204
+msgid "A_bout HandBrake"
+msgstr "HandBrake _Hakkında"
+
+#: src/ui/menu.ui:290 src/ui/menu.ui:369
+msgid "_Play File"
+msgstr "_Dosyayı Oynat"
+
+#: src/ui/menu.ui:294 src/ui/menu.ui:373
+msgid "Open _Source Directory"
+msgstr "_Kaynak Dizinini Aç"
+
+#: src/ui/menu.ui:298 src/ui/menu.ui:377
+msgid "Open _Destination Directory"
+msgstr "_Hedef Dizinini Aç"
+
+#: src/ui/menu.ui:304 src/ui/menu.ui:382
+msgid "Open Encode _Log"
+msgstr "Kodlama _Günlüğünü Aç"
+
+#: src/ui/menu.ui:308 src/ui/menu.ui:386
+msgid "Open _Encode Log Directory"
+msgstr "_Kodlama Günlüğü Dizinini Aç"
+
+#: src/ui/menu.ui:316
+msgid "Reset _Failed Jobs"
+msgstr "_Başarısız İşleri Sıfırla"
+
+#: src/ui/menu.ui:320
+msgid "_Reset All Jobs"
+msgstr "Tüm İşleri _Sıfırla"
+
+#: src/ui/menu.ui:324
+msgid "_Clear Completed Jobs"
+msgstr "Tamamlanan İşleri _Temizle"
+
+#: src/ui/menu.ui:328
+msgid "Clear _All Jobs"
+msgstr "Tüm İşleri _Temizle"
+
+#: src/ui/menu.ui:346
+msgid "_Add Track"
+msgstr "_Parça Ekle"
+
+#: src/ui/menu.ui:350 src/ui/menu.ui:419 src/ui/menu.ui:431
+msgid "Add A_ll Tracks"
+msgstr "Tüm _Parçaları Ekle"
+
+#: src/ui/menu.ui:354 src/ui/menu.ui:435
+msgid "Add _Foreign Audio Scan"
+msgstr "_Yabancı Ses Taraması Ekle"
+
+#: src/ui/menu.ui:360
+msgid "Add External Subtitle File"
+msgstr "Harici Altyazı Dosyası Ekle"
+
+#: src/ui/menu.ui:393
+msgid "Move to _Top"
+msgstr "_Üste Taşı"
+
+#: src/ui/menu.ui:397
+msgid "Move to _Bottom"
+msgstr "_Alta Taşı"
+
+#: src/ui/menu.ui:403
+msgid "_Edit"
+msgstr "_Düzenle"
+
+#: src/ui/menu.ui:407
+msgid "_Reset"
+msgstr "_Sıfırla"
+
+#: src/ui/menu.ui:415 src/ui/menu.ui:427
+msgid "_Add New Track"
+msgstr "_Yeni Parça Ekle"
+
+#: src/ui/ghb.ui:93
+msgid ""
+"Render the subtitle over the video.\n"
+"\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr ""
+"Altyazıyı videonun üzerine yerleştir.\n"
+"\n"
+"Altyazı videonun bir parçası olur ve devre dışı bırakılamaz."
+
+#: src/ui/ghb.ui:96
+msgid "<b>Burned In</b>"
+msgstr "<b>Videoya Gömülü</b>"
+
+#: src/ui/ghb.ui:100 src/ui/ghb.ui:6870
+msgid ""
+"Set the default output subtitle track.\n"
+"\n"
+"Most players will automatically display this\n"
+"subtitle track whenever the video is played.\n"
+"\n"
+"This is useful for creating a \"forced\" track\n"
+"in your output."
+msgstr ""
+"Varsayılan çıktı altyazı parçasını ayarla.\n"
+"\n"
+"Çoğu oynatıcı, video oynatıldığında bu altyazı\n"
+"parçasını otomatik olarak gösterir.\n"
+"\n"
+"Bu, çıktınızda \"zorunlu\" bir parça oluşturmak\n"
+"için kullanışlıdır."
+
+#: src/ui/ghb.ui:107
+msgid "<b>Default</b>"
+msgstr "<b>Varsayılan</b>"
+
+#: src/ui/ghb.ui:111 src/ui/ghb.ui:6846
+msgid ""
+"Use only subtitles that have been flagged\n"
+"as forced in the source subtitle track\n"
+"\n"
+"\"Forced\" subtitles are usually used to show\n"
+"subtitles during scenes where someone is speaking\n"
+"a foreign language."
+msgstr ""
+"Yalnızca kaynak altyazı parçasında zorunlu olarak\n"
+"işaretlenmiş altyazıları kullan\n"
+"\n"
+"\"Zorunlu\" altyazılar genellikle birinin yabancı dil\n"
+"konuştuğu sahnelerde altyazı göstermek için kullanılır."
+
+#: src/ui/ghb.ui:117
+msgid "<b>Forced Only</b>"
+msgstr "<b>Yalnızca Zorunlu</b>"
+
+#: src/ui/ghb.ui:121
+msgid ""
+"Add (or subtract) an offset (in milliseconds)\n"
+"to the start of the SRT subtitle track.\n"
+"\n"
+"Often, the start of an external SRT file\n"
+"does not coincide with the start of the video.\n"
+"This setting allows you to synchronize the files."
+msgstr ""
+"SRT altyazı parçasının başlangıcına bir ofset\n"
+"(milisaniye cinsinden) ekle (veya çıkar).\n"
+"\n"
+"Genellikle harici bir SRT dosyasının başlangıcı\n"
+"videonun başlangıcıyla çakışmaz.\n"
+"Bu ayar dosyaları eşitlemenizi sağlar."
+
+#: src/ui/ghb.ui:127
+msgid "<b>SRT Offset</b>"
+msgstr "<b>SRT Ofseti</b>"
+
+#: src/ui/ghb.ui:131
+msgid ""
+"The source subtitle track\n"
+"\n"
+"You can choose any of the subtitles\n"
+"recognized in your source file.\n"
+"\n"
+"In addition, there is a special track option\n"
+"\"Foreign Audio Scan\".  This option will add\n"
+"an extra pass to the encode that searches for\n"
+"subtitles that may correspond to a foreign\n"
+"language scene.  This option is best used in\n"
+"conjunction with the \"Forced\" option."
+msgstr ""
+"Kaynak altyazı parçası\n"
+"\n"
+"Kaynak dosyanızda tanınan altyazılardan\n"
+"herhangi birini seçebilirsiniz.\n"
+"\n"
+"Ayrıca özel bir parça seçeneği vardır:\n"
+"\"Yabancı Ses Taraması\". Bu seçenek, kodlamaya\n"
+"yabancı dil içeren bir sahneye karşılık gelebilecek\n"
+"altyazıları arayan ek bir geçiş ekler.\n"
+"Bu seçenek en iyi \"Zorunlu\" seçeneğiyle\n"
+"birlikte kullanılır."
+
+#: src/ui/ghb.ui:142
+msgid "<b>Track</b>"
+msgstr "<b>Parça</b>"
+
+#: src/ui/ghb.ui:146 src/ui/ghb.ui:1440
+msgid "Presets"
+msgstr "Ön Ayarlar"
+
+#: src/ui/ghb.ui:157
+msgid "Save as new preset"
+msgstr "Yeni ön ayar olarak kaydet"
+
+#: src/ui/ghb.ui:166 src/ui/ghb.ui:430
+msgid "Actions"
+msgstr "Eylemler"
+
+#: src/ui/ghb.ui:205
+msgid "HandBrake Queue"
+msgstr "HandBrake Kuyruğu"
+
+#: src/ui/ghb.ui:212 src/ui/ghb.ui:1416 src/queuehandler.c:1849
+#: src/queuehandler.c:1862
+msgid "Start Encoding"
+msgstr "Kodlamayı Başlat"
+
+#: src/ui/ghb.ui:213 src/ui/ghb.ui:1417 src/ui/ghb.ui:4233 src/queuehandler.c:1848
+#: src/queuehandler.c:1861
+msgid "Start"
+msgstr "Başlat"
+
+#: src/ui/ghb.ui:221 src/ui/ghb.ui:1424 src/queuehandler.c:1893
+#: src/queuehandler.c:1906
+msgid "Pause Encoding"
+msgstr "Kodlamayı Duraklat"
+
+#: src/ui/ghb.ui:222 src/ui/ghb.ui:1425 src/queuehandler.c:1892
+#: src/queuehandler.c:1905
+msgid "Pause"
+msgstr "Duraklat"
+
+#: src/ui/ghb.ui:235 src/ui/ghb.ui:1456
+msgid "Queue"
+msgstr "Kuyruk"
+
+#: src/ui/ghb.ui:241
+msgid "0 jobs pending"
+msgstr "0 iş bekliyor"
+
+#: src/ui/ghb.ui:251
+msgid "Options"
+msgstr "Seçenekler"
+
+#: src/ui/ghb.ui:322 src/ui/ghb.ui:4617
+msgid "When Done:"
+msgstr "Bittiğinde:"
+
+#: src/ui/ghb.ui:335
+msgid "Show/hide the queue details panel"
+msgstr "Kuyruk ayrıntıları panelini göster/gizle"
+
+#: src/ui/ghb.ui:364 src/ui/ghb.ui:1733
+msgid "Summary"
+msgstr "Özet"
+
+#: src/ui/ghb.ui:382
+msgid ""
+"Mark selected queue entry as pending.\n"
+"Resets the queue job to pending and ready to run again."
+msgstr ""
+"Seçili kuyruk girdisini beklemede olarak işaretle.\n"
+"Kuyruk işini beklemede ve yeniden çalıştırılmaya hazır durumuna sıfırlar."
+
+#: src/ui/ghb.ui:397
+msgid "Reset"
+msgstr "Sıfırla"
+
+#: src/ui/ghb.ui:419
+msgid "Edit"
+msgstr "Düzenle"
+
+#: src/ui/ghb.ui:456 src/ui/ghb.ui:2999 src/ui/ghb.ui:3123 src/ui/ghb.ui:3264
+#: src/ui/ghb.ui:3661 src/hb-backend.c:4418 src/hb-backend.c:4425
+#: src/hb-backend.c:4449 src/hb-backend.c:4457 src/hb-backend.c:4485
+#: src/hb-backend.c:4494 src/hb-backend.c:4521 src/hb-backend.c:4546
+msgid "Preset:"
+msgstr "Ön Ayar:"
+
+#: src/ui/ghb.ui:483
+msgid "Source:"
+msgstr "Kaynak:"
+
+#: src/ui/ghb.ui:515 src/ui/ghb.ui:4282
+msgid "Title:"
+msgstr "Başlık:"
+
+#: src/ui/ghb.ui:546
+msgid "Destination:"
+msgstr "Hedef:"
+
+#: src/ui/ghb.ui:578
+msgid "Dimensions:"
+msgstr "Boyutlar:"
+
+#: src/ui/ghb.ui:605
+msgid "Video:"
+msgstr "Video:"
+
+#: src/ui/ghb.ui:632
+msgid "Audio:"
+msgstr "Ses:"
+
+#: src/ui/ghb.ui:659
+msgid "Subtitles:"
+msgstr "Altyazılar:"
+
+#: src/ui/ghb.ui:691
+msgid "Statistics"
+msgstr "İstatistikler"
+
+#: src/ui/ghb.ui:720
+msgid "Pass:"
+msgstr "Geçiş:"
+
+#: src/ui/ghb.ui:748
+msgid "Start Time:"
+msgstr "Başlangıç Zamanı:"
+
+#: src/ui/ghb.ui:775
+msgid "End Time:"
+msgstr "Bitiş Zamanı:"
+
+#: src/ui/ghb.ui:806
+msgid "Paused Duration:"
+msgstr "Duraklatma Süresi:"
+
+#: src/ui/ghb.ui:837
+msgid "Encode Time:"
+msgstr "Kodlama Süresi:"
+
+#: src/ui/ghb.ui:864
+msgid "File Size:"
+msgstr "Dosya Boyutu:"
+
+#: src/ui/ghb.ui:891
+msgid "Status:"
+msgstr "Durum:"
+
+#: src/ui/ghb.ui:923 src/ui/ghb.ui:958 src/ui/ghb.ui:980 src/ui/ghb.ui:1008
+#: src/ui/ghb.ui:1040
+msgid "Activity Log"
+msgstr "Etkinlik Günlüğü"
+
+#: src/ui/ghb.ui:1300
+msgid "About HandBrake"
+msgstr "HandBrake Hakkında"
+
+#: src/ui/ghb.ui:1303
+msgid ""
+"Copyright © 2008-2024 John Stebbins\n"
+"Copyright © 2004-2024, HandBrake Devs"
+msgstr ""
+"Telif Hakkı © 2008-2024 John Stebbins\n"
+"Telif Hakkı © 2004-2024, HandBrake Geliştiricileri"
+
+#: src/ui/ghb.ui:1305
+msgid "Multithreaded video transcoder"
+msgstr "Çok iş parçacıklı video dönüştürücü"
+
+#: src/ui/ghb.ui:1334 data/fr.handbrake.ghb.desktop.in:2
+msgid "HandBrake"
+msgstr "HandBrake"
+
+#: src/ui/ghb.ui:1363 src/callbacks.c:4630
+msgid "Choose Video Source"
+msgstr "Video Kaynağı Seç"
+
+#: src/ui/ghb.ui:1364 src/callbacks.c:1855 src/callbacks.c:4629
+msgid "Open Source"
+msgstr "Kaynağı Aç"
+
+#: src/ui/ghb.ui:1391
+msgid "Add to Queue"
+msgstr "Kuyruğa Ekle"
+
+#: src/ui/ghb.ui:1392
+msgid "Add To Queue"
+msgstr "Kuyruğa Ekle"
+
+#: src/ui/ghb.ui:1439
+msgid "Show Presets Window"
+msgstr "Ön Ayarlar Penceresini Göster"
+
+#: src/ui/ghb.ui:1447
+msgid "Show Preview Window"
+msgstr "Önizleme Penceresini Göster"
+
+#: src/ui/ghb.ui:1448
+msgid "Preview"
+msgstr "Önizleme"
+
+#: src/ui/ghb.ui:1455
+msgid "Show Queue"
+msgstr "Kuyruğu Göster"
+
+#: src/ui/ghb.ui:1463
+msgid "Show Activity Window"
+msgstr "Etkinlik Penceresini Göster"
+
+#: src/ui/ghb.ui:1464
+msgid "Activity"
+msgstr "Etkinlik"
+
+#: src/ui/ghb.ui:1482
+msgid "<b>Source:</b>"
+msgstr "<b>Kaynak:</b>"
+
+#: src/ui/ghb.ui:1498 src/hb-backend.c:54 src/hb-backend.c:66 src/hb-backend.c:78
+#: src/hb-backend.c:91 src/hb-backend.c:129 src/hb-backend.c:229 src/hb-backend.c:274
+#: src/hb-backend.c:285 src/hb-backend.c:312 src/hb-backend.c:397
+#: src/hb-backend.c:2863 src/subtitlehandler.c:1439
+msgid "None"
+msgstr "Yok"
+
+#: src/ui/ghb.ui:1526 src/callbacks.c:4602
+msgid "Scanning..."
+msgstr "Taranıyor..."
+
+#: src/ui/ghb.ui:1546
+msgid "<b>Title:</b>"
+msgstr "<b>Başlık:</b>"
+
+#: src/ui/ghb.ui:1564
+msgid ""
+"Set the title to encode.\n"
+"By default the longest title is chosen.\n"
+"This is often the feature title of a DVD."
+msgstr ""
+"Kodlanacak başlığı ayarla.\n"
+"Varsayılan olarak en uzun başlık seçilir.\n"
+"Bu genellikle bir DVD'nin ana film başlığıdır."
+
+#: src/ui/ghb.ui:1580
+msgid "<b>Angle:</b>"
+msgstr "<b>Açı:</b>"
+
+#: src/ui/ghb.ui:1588
+msgid "For multi-angle DVD's, select the desired angle to encode."
+msgstr "Çok açılı DVD'ler için kodlanacak istenen açıyı seçin."
+
+#: src/ui/ghb.ui:1599
+msgid "<b>Range:</b>"
+msgstr "<b>Aralık:</b>"
+
+#: src/ui/ghb.ui:1605
+msgid "Range of title to encode. Can be chapters, seconds, or frames."
+msgstr "Kodlanacak başlık aralığı. Bölümler, saniyeler veya kareler olabilir."
+
+#: src/ui/ghb.ui:1613
+msgid "Set the first chapter to encode."
+msgstr "Kodlanacak ilk bölümü ayarla."
+
+#: src/ui/ghb.ui:1624
+msgid "-"
+msgstr "-"
+
+#: src/ui/ghb.ui:1631
+msgid "Set the last chapter to encode."
+msgstr "Kodlanacak son bölümü ayarla."
+
+#: src/ui/ghb.ui:1649
+msgid "<b>Preset:</b>"
+msgstr "<b>Ön Ayar:</b>"
+
+#: src/ui/ghb.ui:1666
+msgid "Choose Preset"
+msgstr "Ön Ayar Seç"
+
+#: src/ui/ghb.ui:1675
+msgid "<u><i>Modified</i></u>"
+msgstr "<u><i>Değiştirildi</i></u>"
+
+#: src/ui/ghb.ui:1681 src/ui/ghb.ui:3936 src/ui/ghb.ui:4090
+msgid "Reload"
+msgstr "Yeniden Yükle"
+
+#: src/ui/ghb.ui:1684
+msgid ""
+"Reload the settings for the currently selected preset.\n"
+"Modifications will be discarded."
+msgstr ""
+"Şu anda seçili ön ayarın ayarlarını yeniden yükle.\n"
+"Değişiklikler atılacak."
+
+#: src/ui/ghb.ui:1693
+msgid "Save New Preset"
+msgstr "Yeni Ön Ayar Kaydet"
+
+#: src/ui/ghb.ui:1696
+msgid "Save the current settings to a new Preset."
+msgstr "Mevcut ayarları yeni bir Ön Ayar olarak kaydet."
+
+#: src/ui/ghb.ui:1746
+msgid "Format:"
+msgstr "Biçim:"
+
+#: src/ui/ghb.ui:1760
+msgid "Format to mux encoded tracks to."
+msgstr "Kodlanan parçaların çoklanacağı biçim."
+
+#: src/ui/ghb.ui:1770 src/queuehandler.c:225
+msgid "Web Optimized"
+msgstr "Web için Optimize Edilmiş"
+
+#: src/ui/ghb.ui:1772
+msgid ""
+"Optimize the layout of the MP4 file for progressive download.\n"
+"This allows a player to initiate playback before downloading the entire file."
+msgstr ""
+"MP4 dosyasının düzenini aşamalı indirme için optimize et.\n"
+"Bu, bir oynatıcının tüm dosyayı indirmeden önce oynatmayı başlatmasını sağlar."
+
+#: src/ui/ghb.ui:1785
+msgid "Align A/V Start"
+msgstr "Ses/Video Başlangıcını Hizala"
+
+#: src/ui/ghb.ui:1787
+msgid ""
+"Aligns the initial timestamps of all audio and video streams by\n"
+"inserting blank frames or dropping frames. May improve audio/video\n"
+"sync for broken players that do not honor MP4 edit lists."
+msgstr ""
+"Tüm ses ve video akışlarının başlangıç zaman damgalarını boş kareler\n"
+"ekleyerek veya kareleri düşürerek hizalar. MP4 düzenleme listelerini\n"
+"dikkate almayan bozuk oynatıcılar için ses/video eşitlemesini iyileştirebilir."
+
+#: src/ui/ghb.ui:1801
+msgid "iPod 5G Support"
+msgstr "iPod 5G Desteği"
+
+#: src/ui/ghb.ui:1803
+msgid "Add iPod Atom needed by some older iPods."
+msgstr "Bazı eski iPod'ların ihtiyaç duyduğu iPod Atomunu ekle."
+
+#: src/ui/ghb.ui:1815
+msgid "Passthru Common Metadata"
+msgstr "Ortak Üst Verileri Geçir"
+
+#: src/ui/ghb.ui:1817
+msgid "Copy metadata from source to output."
+msgstr "Üst verileri kaynaktan çıktıya kopyala."
+
+#: src/ui/ghb.ui:1850
+msgid "Duration:"
+msgstr "Süre:"
+
+#: src/ui/ghb.ui:1863
+msgid "hh:mm:ss"
+msgstr "sa:dk:sn"
+
+#: src/ui/ghb.ui:1874
+msgid "Tracks:"
+msgstr "Parçalar:"
+
+#: src/ui/ghb.ui:1907
+msgid "Filters:"
+msgstr "Filtreler:"
+
+#: src/ui/ghb.ui:1940
+msgid "Size:"
+msgstr "Boyut:"
+
+#: src/ui/ghb.ui:1987 src/ui/ghb.ui:2018 src/ui/ghb.ui:6454
+msgid "Video Preview"
+msgstr "Video Önizleme"
+
+#: src/ui/ghb.ui:2076
+msgid "Dimensions"
+msgstr "Boyutlar"
+
+#: src/ui/ghb.ui:2090
+msgid "<b>Source Dimensions</b>"
+msgstr "<b>Kaynak Boyutları</b>"
+
+#: src/ui/ghb.ui:2105 src/ui/ghb.ui:2751
+msgid "Storage Size:"
+msgstr "Depolama Boyutu:"
+
+#: src/ui/ghb.ui:2128 src/ui/ghb.ui:2778
+msgid "Display Size:"
+msgstr "Görüntüleme Boyutu:"
+
+#: src/ui/ghb.ui:2151 src/ui/ghb.ui:2845
+msgid "Aspect Ratio:"
+msgstr "En-Boy Oranı:"
+
+#: src/ui/ghb.ui:2183
+msgid "<b>Orientation &amp; Cropping</b>"
+msgstr "<b>Yönlendirme ve Kırpma</b>"
+
+#: src/ui/ghb.ui:2202
+msgid "Flipping:"
+msgstr "Çevirme:"
+
+#: src/ui/ghb.ui:2211
+msgid "Horizontal ⇌"
+msgstr "Yatay ⇌"
+
+#: src/ui/ghb.ui:2213
+msgid "Flip video horizontally."
+msgstr "Videoyu yatay olarak çevir."
+
+#: src/ui/ghb.ui:2226
+msgid "Rotation:"
+msgstr "Döndürme:"
+
+#: src/ui/ghb.ui:2237
+msgid "Rotate the video clockwise in 90 degree increments."
+msgstr "Videoyu saat yönünde 90 derecelik artışlarla döndür."
+
+#: src/ui/ghb.ui:2249
+msgid "Cropping:"
+msgstr "Kırpma:"
+
+#: src/ui/ghb.ui:2260
+msgid "How to apply crop settings."
+msgstr "Kırpma ayarlarının nasıl uygulanacağı."
+
+#: src/ui/ghb.ui:2274
+msgid "Left Crop"
+msgstr "Sol Kırpma"
+
+#: src/ui/ghb.ui:2288
+msgid "Top Crop"
+msgstr "Üst Kırpma"
+
+#: src/ui/ghb.ui:2302
+msgid "Bottom Crop"
+msgstr "Alt Kırpma"
+
+#: src/ui/ghb.ui:2316
+msgid "Right Crop"
+msgstr "Sağ Kırpma"
+
+#: src/ui/ghb.ui:2347
+msgid "<b>Resolution &amp; Scaling</b>"
+msgstr "<b>Çözünürlük ve Ölçekleme</b>"
+
+#: src/ui/ghb.ui:2365
+msgid "Resolution Limit:"
+msgstr "Çözünürlük Sınırı:"
+
+#: src/ui/ghb.ui:2375
+msgid "Resolution limits for common video formats."
+msgstr "Yaygın video biçimleri için çözünürlük sınırları."
+
+#: src/ui/ghb.ui:2388
+msgid "Maximum Size:"
+msgstr "Maksimum Boyut:"
+
+#: src/ui/ghb.ui:2400
+msgid "This is the maximum width that the video will be stored at."
+msgstr "Bu, videonun depolanacağı maksimum genişliktir."
+
+#: src/ui/ghb.ui:2425
+msgid "This is the maximum height that the video will be stored at."
+msgstr "Bu, videonun depolanacağı maksimum yüksekliktir."
+
+#: src/ui/ghb.ui:2437
+msgid "Anamorphic:"
+msgstr "Anamorfik:"
+
+#: src/ui/ghb.ui:2447
+msgid ""
+"<b>Anamorphic Modes:</b><small><tt>\n"
+"    Automatic - Use a pixel aspect ratio that maximizes\n"
+"        storage resolution while preserving the original\n"
+"        display aspect ratio.\n"
+"    None      - Force pixel aspect ratio to 1:1.\n"
+"    Custom    - Enter a custom pixel aspect ratio.</tt></small>"
+msgstr ""
+"<b>Anamorfik Modlar:</b><small><tt>\n"
+"    Otomatik  - Orijinal görüntüleme en-boy oranını korurken\n"
+"        depolama çözünürlüğünü en üst düzeye çıkaran\n"
+"        bir piksel en-boy oranı kullan.\n"
+"    Yok       - Piksel en-boy oranını 1:1 olarak zorla.\n"
+"    Özel      - Özel bir piksel en-boy oranı girin.</tt></small>"
+
+#: src/ui/ghb.ui:2464
+msgid "Pixel Aspect:"
+msgstr "Piksel En-Boy Oranı:"
+
+#: src/ui/ghb.ui:2475
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"Piksel en-boy oranı piksellerin şeklini tanımlar.\n"
+"\n"
+"1:1 oranı kare bir piksel tanımlar. Diğer değerler dikdörtgen şekiller tanımlar.\n"
+"Oynatıcılar belirtilen oranı elde etmek için görüntüyü ölçekler."
+
+#: src/ui/ghb.ui:2490
+msgid ":"
+msgstr ":"
+
+#: src/ui/ghb.ui:2501
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"Piksel en-boy oranı piksellerin şeklini tanımlar.\n"
+"1:1 oranı kare bir piksel tanımlar. Diğer değerler dikdörtgen şekiller tanımlar.\n"
+"Oynatıcılar belirtilen oranı elde etmek için görüntüyü ölçekler."
+
+#: src/ui/ghb.ui:2515
+msgid "Scaled Size:"
+msgstr "Ölçeklenmiş Boyut:"
+
+#: src/ui/ghb.ui:2526
+msgid ""
+"This is the width that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+"Bu, videonun depolanacağı genişliktir.\n"
+"Piksel en-boy oranı 1:1 değilse gerçek görüntüleme boyutları farklı olacaktır."
+
+#: src/ui/ghb.ui:2539 src/ui/ghb.ui:2801
+msgid "×"
+msgstr "×"
+
+#: src/ui/ghb.ui:2550
+msgid ""
+"This is the height that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+"Bu, videonun depolanacağı yüksekliktir.\n"
+"Piksel en-boy oranı 1:1 değilse gerçek görüntüleme boyutları farklı olacaktır."
+
+#: src/ui/ghb.ui:2562
+msgid "Optimal Size"
+msgstr "Optimal Boyut"
+
+#: src/ui/ghb.ui:2564
+msgid "Use highest resolution permitted by above settings."
+msgstr "Yukarıdaki ayarların izin verdiği en yüksek çözünürlüğü kullan."
+
+#: src/ui/ghb.ui:2576
+msgid "Allow Upscaling"
+msgstr "Yukarı Ölçeklemeye İzin Ver"
+
+#: src/ui/ghb.ui:2578
+msgid "If not enabled, scaled dimensions will be limited to source dimensions."
+msgstr "Etkinleştirilmezse, ölçeklenmiş boyutlar kaynak boyutlarıyla sınırlandırılır."
+
+#: src/ui/ghb.ui:2602
+msgid "<b>Borders</b>"
+msgstr "<b>Kenarlıklar</b>"
+
+#: src/ui/ghb.ui:2621
+msgid "Fill:"
+msgstr "Dolgu:"
+
+#: src/ui/ghb.ui:2633
+msgid "Add a border around the video."
+msgstr "Videonun etrafına bir kenarlık ekle."
+
+#: src/ui/ghb.ui:2646
+msgid "Left Pad"
+msgstr "Sol Dolgu"
+
+#: src/ui/ghb.ui:2660
+msgid "Top Pad"
+msgstr "Üst Dolgu"
+
+#: src/ui/ghb.ui:2674
+msgid "Bottom Pad"
+msgstr "Alt Dolgu"
+
+#: src/ui/ghb.ui:2688
+msgid "Right Pad"
+msgstr "Sağ Dolgu"
+
+#: src/ui/ghb.ui:2701
+msgid "Color:"
+msgstr "Renk:"
+
+#: src/ui/ghb.ui:2713
+msgid "Color of border added around video."
+msgstr "Video etrafına eklenen kenarlığın rengi."
+
+#: src/ui/ghb.ui:2737
+msgid "<b>Final Dimensions</b>"
+msgstr "<b>Son Boyutlar</b>"
+
+#: src/ui/ghb.ui:2789 src/ui/ghb.ui:2812 src/ui/ghb.ui:2825
+msgid "Changing the display size will stretch the video."
+msgstr "Görüntüleme boyutunu değiştirmek videoyu esnetecektir."
+
+#: src/ui/ghb.ui:2823 src/hb-backend.c:128 src/hb-backend.c:231 src/hb-backend.c:315
+msgid "Automatic"
+msgstr "Otomatik"
+
+#: src/ui/ghb.ui:2874
+msgid "Filters"
+msgstr "Filtreler"
+
+#: src/ui/ghb.ui:2884
+msgid "Detelecine:"
+msgstr "Telecine Giderme:"
+
+#: src/ui/ghb.ui:2895
+msgid ""
+"This filter removes 'combing' artifacts that are the result of telecining.\n"
+"\n"
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video "
+"frame rates which are 30fps."
+msgstr ""
+"Bu filtre, telecine işleminin sonucu olan 'taraklanma' bozulmalarını giderir.\n"
+"\n"
+"Telecine, 24 fps olan film kare hızlarını 30 fps olan NTSC video kare hızlarına "
+"ayarlayan bir işlemdir."
+
+#: src/ui/ghb.ui:2911 src/ui/ghb.ui:3337
+msgid ""
+"Custom detelecine filter string format\n"
+"\n"
+"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+msgstr ""
+"Özel telecine giderme filtresi dizesi biçimi\n"
+"\n"
+"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+
+#: src/ui/ghb.ui:2926
+msgid "Interlace Detection:"
+msgstr "Tarama Algılama:"
+
+#: src/ui/ghb.ui:2937
+msgid ""
+"This filter detects interlaced frames.\n"
+"\n"
+"If a deinterlace filter is enabled, only frames that this filter finds\n"
+"to be interlaced will be deinterlaced."
+msgstr ""
+"Bu filtre taramalı kareleri algılar.\n"
+"\n"
+"Bir tarama giderme filtresi etkinse, yalnızca bu filtrenin taramalı\n"
+"olarak bulduğu karelerin taraması giderilir."
+
+#: src/ui/ghb.ui:2952
+msgid ""
+"Custom interlace detection filter string format\n"
+"\n"
+"Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:\n"
+"Block Thresh: Block Width: Block Height"
+msgstr ""
+"Özel tarama algılama filtresi dizesi biçimi\n"
+"\n"
+"Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:\n"
+"Block Thresh: Block Width: Block Height"
+
+#: src/ui/ghb.ui:2968
+msgid "Deinterlace:"
+msgstr "Tarama Giderme:"
+
+#: src/ui/ghb.ui:2979
+msgid ""
+"Choose decomb or deinterlace filter.\n"
+"\n"
+"The decomb filter supports a variety of interpolation algorithms.\n"
+"The deinterlace filter is a classic YADIF deinterlacer.\n"
+msgstr ""
+"Decomb veya tarama giderme filtresini seçin.\n"
+"\n"
+"Decomb filtresi çeşitli interpolasyon algoritmalarını destekler.\n"
+"Tarama giderme filtresi klasik bir YADIF tarama gidericidir.\n"
+
+#: src/ui/ghb.ui:3006
+msgid ""
+"Choose decomb or deinterlace filter options.\n"
+"\n"
+"    The decomb filter supports a variety of interpolation algorithms.\n"
+"    The deinterlace filter is a classic YADIF deinterlacer.\n"
+"    "
+msgstr ""
+"Decomb veya tarama giderme filtresi seçeneklerini seçin.\n"
+"\n"
+"    Decomb filtresi çeşitli interpolasyon algoritmalarını destekler.\n"
+"    Tarama giderme filtresi klasik bir YADIF tarama gidericidir.\n"
+"    "
+
+#: src/ui/ghb.ui:3033
+msgid "Deblock Filter:"
+msgstr "Blok Giderme Filtresi:"
+
+#: src/ui/ghb.ui:3044
+msgid ""
+"The deblocking filter removes a common type of compression artifact.\n"
+"If your source exhibits 'blockiness', this filter may help clean it up."
+msgstr ""
+"Blok giderme filtresi yaygın bir sıkıştırma bozulması türünü giderir.\n"
+"Kaynağınızda 'blokluluk' varsa, bu filtre temizlemeye yardımcı olabilir."
+
+#: src/ui/ghb.ui:3061 src/ui/ghb.ui:3141 src/ui/ghb.ui:3203 src/ui/ghb.ui:3281
+#: src/ui/ghb.ui:3720 src/hb-backend.c:4522 src/hb-backend.c:4547
+msgid "Tune:"
+msgstr "Ayar:"
+
+#: src/ui/ghb.ui:3068
+msgid ""
+"The deblocking filter removes a common type of compression artifact.\n"
+"    If your source exhibits 'blockiness', this filter may help clean it up."
+msgstr ""
+"Blok giderme filtresi yaygın bir sıkıştırma bozulması türünü giderir.\n"
+"    Kaynağınızda 'blokluluk' varsa, bu filtre temizlemeye yardımcı olabilir."
+
+#: src/ui/ghb.ui:3077 src/ui/ghb.ui:3219
+msgid ""
+"Custom deblock filter string format\n"
+"\n"
+"    strength=weak|strong:thresh=0-100:blocksize=4-512"
+msgstr ""
+"Özel blok giderme filtresi dizesi biçimi\n"
+"\n"
+"    strength=weak|strong:thresh=0-100:blocksize=4-512"
+
+#: src/ui/ghb.ui:3094
+msgid "Denoise Filter:"
+msgstr "Gürültü Giderme Filtresi:"
+
+#: src/ui/ghb.ui:3105
+msgid ""
+"Denoise filtering reduces or removes the appearance of noise and grain.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
+"Using this filter on such sources can result in smaller file sizes."
+msgstr ""
+"Gürültü giderme filtresi gürültü ve gren görünümünü azaltır veya giderir.\n"
+"Film greni ve diğer yüksek frekanslı gürültü türlerini sıkıştırmak zordur.\n"
+"Bu filtreyi bu tür kaynaklarda kullanmak daha küçük dosya boyutlarıyla "
+"sonuçlanabilir."
+
+#: src/ui/ghb.ui:3130 src/ui/ghb.ui:3148
+msgid ""
+"Denoise filtering reduces or removes the appearance of noise and grain.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
+"    Using this filter on such sources can result in smaller file sizes."
+msgstr ""
+"Gürültü giderme filtresi gürültü ve gren görünümünü azaltır veya giderir.\n"
+"    Film greni ve diğer yüksek frekanslı gürültü türlerini sıkıştırmak zordur.\n"
+"    Bu filtreyi bu tür kaynaklarda kullanmak daha küçük dosya boyutlarıyla "
+"sonuçlanabilir."
+
+#: src/ui/ghb.ui:3158 src/ui/ghb.ui:3297
+msgid ""
+"Custom denoise filter string format\n"
+"\n"
+"    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+msgstr ""
+"Özel gürültü giderme filtresi dizesi biçimi\n"
+"\n"
+"    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+
+#: src/ui/ghb.ui:3175
+msgid "Chroma Smooth Filter:"
+msgstr "Kroma Yumuşatma Filtresi:"
+
+#: src/ui/ghb.ui:3186
+msgid ""
+"The chroma smooth filter removes common color artifacts.\n"
+"Lower resolution analog source content may benefit from this filter."
+msgstr ""
+"Kroma yumuşatma filtresi yaygın renk bozulmalarını giderir.\n"
+"Düşük çözünürlüklü analog kaynak içeriği bu filtreden yararlanabilir."
+
+#: src/ui/ghb.ui:3210
+msgid ""
+"The chroma smooth filter removes common color artifacts.\n"
+"    Lower resolution analog source content may benefit from this filter."
+msgstr ""
+"Kroma yumuşatma filtresi yaygın renk bozulmalarını giderir.\n"
+"    Düşük çözünürlüklü analog kaynak içeriği bu filtreden yararlanabilir."
+
+#: src/ui/ghb.ui:3236
+msgid "Sharpen Filter:"
+msgstr "Keskinleştirme Filtresi:"
+
+#: src/ui/ghb.ui:3247
+msgid ""
+"Sharpen filtering enhances edges and other\n"
+"high frequency components in the video."
+msgstr ""
+"Keskinleştirme filtresi videodaki kenarları ve diğer\n"
+"yüksek frekanslı bileşenleri güçlendirir."
+
+#: src/ui/ghb.ui:3271 src/ui/ghb.ui:3288
+msgid ""
+"Sharpen filtering enhances edges and other\n"
+"    high frequency components in the video."
+msgstr ""
+"Keskinleştirme filtresi videodaki kenarları ve diğer\n"
+"    yüksek frekanslı bileşenleri güçlendirir."
+
+#: src/ui/ghb.ui:3314
+msgid "Colorspace:"
+msgstr "Renk Uzayı:"
+
+#: src/ui/ghb.ui:3325
+msgid "Translate the colorspace of the source."
+msgstr "Kaynağın renk uzayını dönüştür."
+
+#: src/ui/ghb.ui:3351 src/hb-backend.c:4991
+msgid "Grayscale"
+msgstr "Gri Tonlama"
+
+#: src/ui/ghb.ui:3353
+msgid "If enabled, filter colour components out of video."
+msgstr "Etkinleştirilirse, renk bileşenlerini videodan çıkarır."
+
+#: src/ui/ghb.ui:3370 src/callbacks.c:5831
+msgid "Video"
+msgstr "Video"
+
+#: src/ui/ghb.ui:3385
+msgid "Video Encoder:"
+msgstr "Video Kodlayıcı:"
+
+#: src/ui/ghb.ui:3395
+msgid "Available video encoders."
+msgstr "Kullanılabilir video kodlayıcıları."
+
+#: src/ui/ghb.ui:3406
+msgid "Framerate:"
+msgstr "Kare Hızı:"
+
+#: src/ui/ghb.ui:3416
+msgid ""
+"Output framerate.\n"
+"\n"
+"'Same as source' is recommended. If your source video has\n"
+"a variable framerate, 'Same as source' will preserve it."
+msgstr ""
+"Çıktı kare hızı.\n"
+"\n"
+"'Kaynakla aynı' önerilir. Kaynak videonuz değişken kare hızına\n"
+"sahipse, 'Kaynakla aynı' bunu korur."
+
+#: src/ui/ghb.ui:3432
+msgid "Constant Framerate"
+msgstr "Sabit Kare Hızı"
+
+#: src/ui/ghb.ui:3433
+msgid "Enables constant framerate output."
+msgstr "Sabit kare hızı çıktısını etkinleştirir."
+
+#: src/ui/ghb.ui:3440
+msgid "Peak Framerate (VFR)"
+msgstr "Tepe Kare Hızı (VFR)"
+
+#: src/ui/ghb.ui:3441
+msgid ""
+"Enables variable framerate output with a peak\n"
+"    rate determined by the framerate setting.\n"
+"\n"
+"    VFR is not compatible with some players."
+msgstr ""
+"Kare hızı ayarıyla belirlenen bir tepe oranıyla\n"
+"değişken kare hızı çıktısını etkinleştirir.\n"
+"\n"
+"    VFR bazı oynatıcılarla uyumlu değildir."
+
+#: src/ui/ghb.ui:3452
+msgid "Variable Framerate"
+msgstr "Değişken Kare Hızı"
+
+#: src/ui/ghb.ui:3453
+msgid ""
+"Enables variable framerate output.\n"
+"\n"
+"    VFR is not compatible with some players."
+msgstr ""
+"Değişken kare hızı çıktısını etkinleştirir.\n"
+"\n"
+"    VFR bazı oynatıcılarla uyumlu değildir."
+
+#: src/ui/ghb.ui:3470
+msgid "Color Range:"
+msgstr "Renk Aralığı:"
+
+#: src/ui/ghb.ui:3481
+msgid ""
+"Color Range. Determines the values of the reference black and white. Set to limited "
+"to maximize compatibility."
+msgstr ""
+"Renk Aralığı. Referans siyah ve beyazın değerlerini belirler. Uyumluluğu en üst "
+"düzeye çıkarmak için sınırlı olarak ayarlayın."
+
+#: src/ui/ghb.ui:3501
+msgid "Constant Quality:"
+msgstr "Sabit Kalite:"
+
+#: src/ui/ghb.ui:3502
+msgid ""
+"Set the desired quality factor.\n"
+"  The encoder targets a certain quality.\n"
+"  The scale used by each video encoder is different.\n"
+"\n"
+"  x264's scale is logarithmic and lower values correspond to higher quality.\n"
+"  So small decreases in value will result in progressively larger increases\n"
+"  in the resulting file size.  A value of 0 means lossless and will result\n"
+"  in a file size that is larger than the original source, unless the source\n"
+"  was also lossless.\n"
+"\n"
+"  FFMpeg's and Theora's scale is more linear.\n"
+"  These encoders do not have a lossless mode."
+msgstr ""
+"İstenen kalite faktörünü ayarla.\n"
+"  Kodlayıcı belirli bir kaliteyi hedefler.\n"
+"  Her video kodlayıcının kullandığı ölçek farklıdır.\n"
+"\n"
+"  x264'ün ölçeği logaritmiktir ve düşük değerler daha yüksek kaliteye karşılık "
+"gelir.\n"
+"  Bu nedenle değerdeki küçük düşüşler, sonuçta ortaya çıkan dosya boyutunda\n"
+"  aşamalı olarak daha büyük artışlara yol açar. 0 değeri kayıpsız anlamına gelir\n"
+"  ve kaynak da kayıpsız değilse orijinal kaynaktan daha büyük bir dosya boyutuyla\n"
+"  sonuçlanır.\n"
+"\n"
+"  FFMpeg'in ve Theora'nın ölçeği daha doğrusaldır.\n"
+"  Bu kodlayıcıların kayıpsız modu yoktur."
+
+#: src/ui/ghb.ui:3541
+msgid ""
+"Set the desired quality factor.\n"
+"The encoder targets a certain quality.\n"
+"The scale used by each video encoder is different.\n"
+"\n"
+"x264's scale is logarithmic and lower values correspond to higher quality.\n"
+"So small decreases in value will result in progressively larger increases\n"
+"in the resulting file size.  A value of 0 means lossless and will result\n"
+"in a file size that is larger than the original source, unless the source\n"
+"was also lossless.\n"
+"\n"
+"FFMpeg's and Theora's scale is more linear.\n"
+"These encoders do not have a lossless mode."
+msgstr ""
+"İstenen kalite faktörünü ayarla.\n"
+"Kodlayıcı belirli bir kaliteyi hedefler.\n"
+"Her video kodlayıcının kullandığı ölçek farklıdır.\n"
+"\n"
+"x264'ün ölçeği logaritmiktir ve düşük değerler daha yüksek kaliteye karşılık "
+"gelir.\n"
+"Bu nedenle değerdeki küçük düşüşler, sonuçta ortaya çıkan dosya boyutunda\n"
+"aşamalı olarak daha büyük artışlara yol açar. 0 değeri kayıpsız anlamına gelir\n"
+"ve kaynak da kayıpsız değilse orijinal kaynaktan daha büyük bir dosya boyutuyla\n"
+"sonuçlanır.\n"
+"\n"
+"FFMpeg'in ve Theora'nın ölçeği daha doğrusaldır.\n"
+"Bu kodlayıcıların kayıpsız modu yoktur."
+
+#: src/ui/ghb.ui:3557 src/ui/ghb.ui:7073 src/audiohandler.c:1790
+msgid "Quality"
+msgstr "Kalite"
+
+#: src/ui/ghb.ui:3568
+msgid "Bitrate (kbps):    "
+msgstr "Bit Hızı (kbps):    "
+
+#: src/ui/ghb.ui:3569 src/ui/ghb.ui:3586
+msgid ""
+"Set the average bitrate.\n"
+"\n"
+"The instantaneous bitrate can be much higher or lower at any point in time.\n"
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate "
+"settings."
+msgstr ""
+"Ortalama bit hızını ayarla.\n"
+"\n"
+"Anlık bit hızı herhangi bir anda çok daha yüksek veya düşük olabilir.\n"
+"Ancak uzun bir süre boyunca ortalama, burada ayarlanan değer olacaktır. Anlık bit\n"
+"hızını sınırlamanız gerekiyorsa, x264'ün vbv-bufsize ve vbv-maxrate ayarlarına "
+"bakın."
+
+#: src/ui/ghb.ui:3615
+msgid "Multi-Pass Encoding"
+msgstr "Çok Geçişli Kodlama"
+
+#: src/ui/ghb.ui:3617
+msgid ""
+"Perform Multi Pass Encoding.\n"
+"\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
+"the video are collected.  Then in the final pass, those statistics are used\n"
+"to make bitrate allocation decisions."
+msgstr ""
+"Çok Geçişli Kodlama gerçekleştir.\n"
+"\n"
+"'Bit Hızı' seçeneği ön koşuldur. Analiz geçişleri sırasında video hakkında\n"
+"istatistikler toplanır. Ardından son geçişte, bit hızı tahsis kararları vermek\n"
+"için bu istatistikler kullanılır."
+
+#: src/ui/ghb.ui:3628
+msgid "Turbo Analysis Pass"
+msgstr "Turbo Analiz Geçişi"
+
+#: src/ui/ghb.ui:3630
+msgid ""
+"During the analysis pass of a multi pass encode, use settings that speed things "
+"along."
+msgstr ""
+"Çok geçişli bir kodlamanın analiz geçişi sırasında, işleri hızlandıran ayarları "
+"kullan."
+
+#: src/ui/ghb.ui:3675
+msgid ""
+"Adjusts encoder settings to trade off compression efficiency against encoding "
+"speed.\n"
+"\n"
+"This establishes your default encoder settings.\n"
+"Tunes, profiles, levels and extra options string will be applied to this.\n"
+"You should generally set this option to the slowest you can bear since slower\n"
+"settings will result in better quality or smaller files.\n"
+"\n"
+"Adjust the slider to the right to increase compression efficiency at the expense of "
+"encoding speed,\n"
+"or to the left to increase encoding speed at the expense of compression efficiency."
+msgstr ""
+"Sıkıştırma verimliliğini kodlama hızıyla değiş tokuş etmek için kodlayıcı "
+"ayarlarını düzenler.\n"
+"\n"
+"Bu, varsayılan kodlayıcı ayarlarınızı oluşturur.\n"
+"Ayar, profil, seviye ve ek seçenekler dizesi buna uygulanır.\n"
+"Genellikle bu seçeneği tahammül edebileceğiniz en yavaş değere ayarlamalısınız "
+"çünkü daha yavaş\n"
+"ayarlar daha iyi kalite veya daha küçük dosyalarla sonuçlanır.\n"
+"\n"
+"Kodlama hızı pahasına sıkıştırma verimliliğini artırmak için kaydırıcıyı sağa,\n"
+"sıkıştırma verimliliği pahasına kodlama hızını artırmak için sola ayarlayın."
+
+#: src/ui/ghb.ui:3693
+msgid "Encoder Preset"
+msgstr "Kodlayıcı Ön Ayarı"
+
+#: src/ui/ghb.ui:3730
+msgid ""
+"Tune settings to optimize for common scenarios.\n"
+"\n"
+"This can improve efficiency for particular source characteristics or set\n"
+"characteristics of the output file.  Changes will be applied after the\n"
+"preset but before all other parameters."
+msgstr ""
+"Yaygın senaryolar için optimize etmek üzere ayarları düzenle.\n"
+"\n"
+"Bu, belirli kaynak özellikleri veya çıktı dosyasının belirli özellikleri için\n"
+"verimliliği artırabilir. Değişiklikler ön ayardan sonra ancak diğer tüm\n"
+"parametrelerden önce uygulanır."
+
+#: src/ui/ghb.ui:3744
+msgid "Fast Decode"
+msgstr "Hızlı Çözme"
+
+#: src/ui/ghb.ui:3746
+msgid ""
+"Reduce decoder CPU usage.\n"
+"\n"
+"Set this if your device is struggling to play the output (dropped frames)."
+msgstr ""
+"Çözücü CPU kullanımını azalt.\n"
+"\n"
+"Cihazınız çıktıyı oynatmakta zorlanıyorsa (kare düşmeleri) bunu ayarlayın."
+
+#: src/ui/ghb.ui:3761
+msgid "Zero Latency"
+msgstr "Sıfır Gecikme"
+
+#: src/ui/ghb.ui:3763
+msgid ""
+"Minimize latency between input to encoder and output of decoder.\n"
+"\n"
+"This is useful for broadcast of live streams.\n"
+"\n"
+"Since HandBrake is not suitable for live stream broadcast purposes,\n"
+"this setting is of little value here."
+msgstr ""
+"Kodlayıcıya giriş ile çözücü çıkışı arasındaki gecikmeyi en aza indir.\n"
+"\n"
+"Bu, canlı akış yayını için kullanışlıdır.\n"
+"\n"
+"HandBrake canlı akış yayını amacıyla uygun olmadığından,\n"
+"bu ayar burada çok az değere sahiptir."
+
+#: src/ui/ghb.ui:3781
+msgid "Profile:"
+msgstr "Profil:"
+
+#: src/ui/ghb.ui:3791
+msgid ""
+"Sets and ensures compliance with the specified profile.\n"
+"\n"
+"Overrides all other settings."
+msgstr ""
+"Belirtilen profile uyumu ayarlar ve sağlar.\n"
+"\n"
+"Diğer tüm ayarları geçersiz kılar."
+
+#: src/ui/ghb.ui:3804
+msgid "Level:"
+msgstr "Seviye:"
+
+#: src/ui/ghb.ui:3814
+msgid ""
+"Sets and ensures compliance with the specified level.\n"
+"\n"
+"Overrides all other settings."
+msgstr ""
+"Belirtilen seviyeye uyumu ayarlar ve sağlar.\n"
+"\n"
+"Diğer tüm ayarları geçersiz kılar."
+
+#: src/ui/ghb.ui:3830
+msgid "Additional Options:"
+msgstr "Ek Seçenekler:"
+
+#: src/ui/ghb.ui:3870
+msgid "Audio"
+msgstr "Ses"
+
+#: src/ui/ghb.ui:3887
+msgid "Add audio tracks to the list"
+msgstr "Listeye ses parçaları ekle"
+
+#: src/ui/ghb.ui:3899
+msgid "Show audio default selection options"
+msgstr "Ses varsayılan seçim seçeneklerini göster"
+
+#: src/ui/ghb.ui:3913 src/ui/ghb.ui:4067
+msgid "Selection Behavior…"
+msgstr "Seçim Davranışı…"
+
+#: src/ui/ghb.ui:3922
+msgid "Reload all audio settings from defaults"
+msgstr "Tüm ses ayarlarını varsayılanlardan yeniden yükle"
+
+#: src/ui/ghb.ui:3951
+msgid "Remove the selected audio track"
+msgstr "Seçili ses parçasını kaldır"
+
+#: src/ui/ghb.ui:3965 src/ui/ghb.ui:4119 src/ui/ghb.ui:4765 src/ui/ghb.ui:5041
+msgid "Remove"
+msgstr "Kaldır"
+
+#: src/ui/ghb.ui:3974
+msgid "Remove all audio tracks"
+msgstr "Tüm ses parçalarını kaldır"
+
+#: src/ui/ghb.ui:3988 src/ui/ghb.ui:4142
+msgid "Clear"
+msgstr "Temizle"
+
+#: src/ui/ghb.ui:4024
+msgid "Subtitles"
+msgstr "Altyazılar"
+
+#: src/ui/ghb.ui:4040
+msgid "Tracks"
+msgstr "Parçalar"
+
+#: src/ui/ghb.ui:4041
+msgid "Add subtitle tracks to the list"
+msgstr "Listeye altyazı parçaları ekle"
+
+#: src/ui/ghb.ui:4053
+msgid "Show subtitle default selection options"
+msgstr "Altyazı varsayılan seçim seçeneklerini göster"
+
+#: src/ui/ghb.ui:4076
+msgid "Reload all subtitle settings from defaults"
+msgstr "Tüm altyazı ayarlarını varsayılanlardan yeniden yükle"
+
+#: src/ui/ghb.ui:4105
+msgid "Remove the selected subtitle track"
+msgstr "Seçili altyazı parçasını kaldır"
+
+#: src/ui/ghb.ui:4128
+msgid "Remove all subtitle tracks"
+msgstr "Tüm altyazı parçalarını kaldır"
+
+#: src/ui/ghb.ui:4178
+msgid "Chapters"
+msgstr "Bölümler"
+
+#: src/ui/ghb.ui:4189 src/callbacks.c:2521 src/queuehandler.c:215
+msgid "Chapter Markers"
+msgstr "Bölüm İşaretleyicileri"
+
+#: src/ui/ghb.ui:4191
+msgid "Add chapter markers to output file."
+msgstr "Çıktı dosyasına bölüm işaretleyicileri ekle."
+
+#: src/ui/ghb.ui:4198
+msgid "Import Chapters"
+msgstr "Bölümleri İçe Aktar"
+
+#: src/ui/ghb.ui:4200
+msgid "Import chapter list from an XML file"
+msgstr "Bölüm listesini bir XML dosyasından içe aktar"
+
+#: src/ui/ghb.ui:4208
+msgid "Export Chapters"
+msgstr "Bölümleri Dışa Aktar"
+
+#: src/ui/ghb.ui:4210
+msgid "Export chapter list as an XML file"
+msgstr "Bölüm listesini XML dosyası olarak dışa aktar"
+
+#: src/ui/ghb.ui:4226
+msgid "Index"
+msgstr "Dizin"
+
+#: src/ui/ghb.ui:4240
+msgid "Duration"
+msgstr "Süre"
+
+#: src/ui/ghb.ui:4246
+msgid "Title"
+msgstr "Başlık"
+
+#: src/ui/ghb.ui:4272
+msgid "Tags"
+msgstr "Etiketler"
+
+#: src/ui/ghb.ui:4310
+msgid "Actors:"
+msgstr "Oyuncular:"
+
+#: src/ui/ghb.ui:4338
+msgid "Director:"
+msgstr "Yönetmen:"
+
+#: src/ui/ghb.ui:4366
+msgid "Release Date:"
+msgstr "Yayın Tarihi:"
+
+#: src/ui/ghb.ui:4394
+msgid "Comment:"
+msgstr "Yorum:"
+
+#: src/ui/ghb.ui:4422
+msgid "Genre:"
+msgstr "Tür:"
+
+#: src/ui/ghb.ui:4450 src/ui/ghb.ui:6250 src/ui/ghb.ui:6402
+msgid "Description:"
+msgstr "Açıklama:"
+
+#: src/ui/ghb.ui:4478
+msgid "Plot:"
+msgstr "Konu:"
+
+#: src/ui/ghb.ui:4529
+msgid "<b>Save As:</b>"
+msgstr "<b>Farklı Kaydet:</b>"
+
+#: src/ui/ghb.ui:4541
+msgid "Destination filename for your encode."
+msgstr "Kodlamanız için hedef dosya adı."
+
+#: src/ui/ghb.ui:4555
+msgid "<b>To:</b>"
+msgstr "<b>Şuraya:</b>"
+
+#: src/ui/ghb.ui:4566
+msgid "Destination directory for your encode."
+msgstr "Kodlamanız için hedef dizin."
+
+#: src/ui/ghb.ui:4568 src/title-add.c:480
+msgid "Destination Directory"
+msgstr "Hedef Dizin"
+
+#: src/ui/ghb.ui:4647
+msgid "Subtitle Selection Behavior"
+msgstr "Altyazı Seçim Davranışı"
+
+#: src/ui/ghb.ui:4673 src/ui/ghb.ui:4955
+msgid "Track Selection Behavior:"
+msgstr "Parça Seçim Davranışı:"
+
+#: src/ui/ghb.ui:4684
+msgid "Choose which subtitle tracks of the source media are used."
+msgstr "Kaynak medyanın hangi altyazı parçalarının kullanılacağını seçin."
+
+#: src/ui/ghb.ui:4734
+msgid ""
+"Create a list of languages you would like to select subtitles for.\n"
+"  Tracks matching these languages will be selected using the chosen Selection "
+"Behavior.\n"
+"\n"
+"  The first language in this list is your \"preferred\" language and will be used\n"
+"  for determining subtitle selection settings when there is foreign audio."
+msgstr ""
+"Altyazı seçmek istediğiniz dillerin bir listesini oluşturun.\n"
+"  Bu dillerle eşleşen parçalar, seçilen Seçim Davranışı kullanılarak seçilir.\n"
+"\n"
+"  Bu listedeki ilk dil \"tercih edilen\" dilinizdir ve yabancı ses olduğunda\n"
+"  altyazı seçim ayarlarını belirlemek için kullanılır."
+
+#: src/ui/ghb.ui:4752 src/ui/ghb.ui:5028 src/ui/ghb.ui:5440
+msgid "Add"
+msgstr "Ekle"
+
+#: src/ui/ghb.ui:4778 src/ui/ghb.ui:5054
+msgid "Available Languages"
+msgstr "Kullanılabilir Diller"
+
+#: src/ui/ghb.ui:4787 src/ui/ghb.ui:5063
+msgid "Selected Languages"
+msgstr "Seçili Diller"
+
+#: src/ui/ghb.ui:4797
+msgid "Preferred Language: None"
+msgstr "Tercih Edilen Dil: Yok"
+
+#: src/ui/ghb.ui:4814
+msgid "Add Foreign Audio Scan Pass"
+msgstr "Yabancı Ses Tarama Geçişi Ekle"
+
+#: src/ui/ghb.ui:4816
+msgid ""
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred "
+"language.\n"
+"  This search pass finds short sequences of foreign audio and provides subtitles "
+"for them.\n"
+"\n"
+"  This option requires a language to be set in the Selected Languages list."
+msgstr ""
+"Varsayılan ses parçası tercih edilen diliniz olduğunda \"Yabancı Ses Taraması\" "
+"ekle.\n"
+"  Bu arama geçişi kısa yabancı ses dizilerini bulur ve onlar için altyazı sağlar.\n"
+"\n"
+"  Bu seçenek, Seçili Diller listesinde bir dilin ayarlanmasını gerektirir."
+
+#: src/ui/ghb.ui:4827
+msgid "Add subtitle track if default audio is foreign"
+msgstr "Varsayılan ses yabancıysa altyazı parçası ekle"
+
+#: src/ui/ghb.ui:4829
+msgid ""
+"When the default audio track is not your preferred language, add a subtitle track.\n"
+"\n"
+"  This option requires a language to be set in the Selected Languages list."
+msgstr ""
+"Varsayılan ses parçası tercih edilen diliniz değilse, bir altyazı parçası ekle.\n"
+"\n"
+"  Bu seçenek, Seçili Diller listesinde bir dilin ayarlanmasını gerektirir."
+
+#: src/ui/ghb.ui:4839
+msgid "Add Closed Captions when available"
+msgstr "Mevcut olduğunda Kapalı Altyazıları Ekle"
+
+#: src/ui/ghb.ui:4841
+msgid ""
+"Closed captions are text subtitles that can be added to any container as a soft "
+"subtitle track"
+msgstr ""
+"Kapalı altyazılar, herhangi bir kapsayıcıya yumuşak altyazı parçası olarak "
+"eklenebilen metin altyazılarıdır"
+
+#: src/ui/ghb.ui:4848 src/ui/ghb.ui:5298
+msgid "Passthru track names"
+msgstr "Parça adlarını geçir"
+
+#: src/ui/ghb.ui:4850
+msgid "Preserve the source track names"
+msgstr "Kaynak parça adlarını koru"
+
+#: src/ui/ghb.ui:4861
+msgid "Burn-In Behavior*:"
+msgstr "Gömme Davranışı*:"
+
+#: src/ui/ghb.ui:4868
+msgid ""
+"Set the behavior of subtitle \"Burn-In\".\n"
+"\n"
+"  Burned-In subtitles are part of the video and can not be disabled during "
+"playback.\n"
+"  Only one subtitle track can be burned! Since conflicts can occur, the first "
+"chosen wins."
+msgstr ""
+"Altyazı \"Gömme\" davranışını ayarla.\n"
+"\n"
+"  Gömülü altyazılar videonun bir parçasıdır ve oynatma sırasında devre dışı "
+"bırakılamaz.\n"
+"  Yalnızca bir altyazı parçası gömülebilir! Çakışmalar oluşabileceğinden, ilk "
+"seçilen kazanır."
+
+#: src/ui/ghb.ui:4883
+msgid "Burn-In for deficient players*:"
+msgstr "Yetersiz oynatıcılar için gömme*:"
+
+#: src/ui/ghb.ui:4889
+msgid "DVD Subtitles"
+msgstr "DVD Altyazıları"
+
+#: src/ui/ghb.ui:4891
+msgid ""
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be "
+"discarded.\n"
+"  Use this option if your player software or device does not support DVD "
+"subtitles.\n"
+"\n"
+"  Only one subtitle track can be burned! Since conflicts can occur, the first "
+"chosen wins."
+msgstr ""
+"Seçilen ilk DVD altyazı parçasını göm. Diğer tüm DVD altyazı parçaları atılacak.\n"
+"  Oynatıcı yazılımınız veya cihazınız DVD altyazılarını desteklemiyorsa bu seçeneği "
+"kullanın.\n"
+"\n"
+"  Yalnızca bir altyazı parçası gömülebilir! Çakışmalar oluşabileceğinden, ilk "
+"seçilen kazanır."
+
+#: src/ui/ghb.ui:4901
+msgid "Blu-ray Subtitles"
+msgstr "Blu-ray Altyazıları"
+
+#: src/ui/ghb.ui:4903
+msgid ""
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks "
+"will be discarded.\n"
+"  Use this option if your player software or device does not support Blu-ray "
+"subtitles.\n"
+"\n"
+"  Only one subtitle track can be burned! Since conflicts can occur, the first "
+"chosen wins."
+msgstr ""
+"Seçilen ilk Blu-ray altyazı parçasını göm. Diğer tüm Blu-ray altyazı parçaları "
+"atılacak.\n"
+"  Oynatıcı yazılımınız veya cihazınız Blu-ray altyazılarını desteklemiyorsa bu "
+"seçeneği kullanın.\n"
+"\n"
+"  Yalnızca bir altyazı parçası gömülebilir! Çakışmalar oluşabileceğinden, ilk "
+"seçilen kazanır."
+
+#: src/ui/ghb.ui:4916
+msgid ""
+"<small>* Only one of the above subtitle burn options will be applied, starting with "
+"the top.</small>"
+msgstr ""
+"<small>* Yukarıdaki altyazı gömme seçeneklerinden yalnızca biri, en üstten "
+"başlanarak uygulanır.</small>"
+
+#: src/ui/ghb.ui:4917
+msgid ""
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen "
+"wins."
+msgstr ""
+"Yalnızca bir altyazı parçası gömülebilir! Çakışmalar oluşabileceğinden, ilk seçilen "
+"kazanır."
+
+#: src/ui/ghb.ui:4925
+msgid "Audio Selection Behavior"
+msgstr "Ses Seçim Davranışı"
+
+#: src/ui/ghb.ui:4966
+msgid "Choose which audio tracks of the source media are used."
+msgstr "Kaynak medyanın hangi ses parçalarının kullanılacağını seçin."
+
+#: src/ui/ghb.ui:5014
+msgid ""
+"Create a list of languages you would like to select audio for.\n"
+"Tracks matching these languages will be selected using the chosen Selection "
+"Behavior."
+msgstr ""
+"Ses seçmek istediğiniz dillerin bir listesini oluşturun.\n"
+"Bu dillerle eşleşen parçalar, seçilen Seçim Davranışı kullanılarak seçilir."
+
+#: src/ui/ghb.ui:5087
+msgid "Auto Passthru:"
+msgstr "Otomatik Geçiş:"
+
+#: src/ui/ghb.ui:5096
+msgid "MP2"
+msgstr "MP2"
+
+#: src/ui/ghb.ui:5098
+msgid ""
+"Enable this if your playback device supports MP2.\n"
+"This permits MP2 passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız MP2 destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde MP2 geçişinin seçilmesine izin verir."
+
+#: src/ui/ghb.ui:5111
+msgid "MP3"
+msgstr "MP3"
+
+#: src/ui/ghb.ui:5113
+msgid ""
+"Enable this if your playback device supports MP3.\n"
+"This permits MP3 passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız MP3 destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde MP3 geçişinin seçilmesine izin verir."
+
+#: src/ui/ghb.ui:5126
+msgid "AC-3"
+msgstr "AC-3"
+
+#: src/ui/ghb.ui:5128
+msgid ""
+"Enable this if your playback device supports AC-3.\n"
+"This permits AC-3 passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız AC-3 destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde AC-3 geçişinin seçilmesine izin "
+"verir."
+
+#: src/ui/ghb.ui:5141
+msgid "EAC-3"
+msgstr "EAC-3"
+
+#: src/ui/ghb.ui:5143
+msgid ""
+"Enable this if your playback device supports EAC-3.\n"
+"This permits EAC-3 passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız EAC-3 destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde EAC-3 geçişinin seçilmesine izin "
+"verir."
+
+#: src/ui/ghb.ui:5156
+msgid "DTS"
+msgstr "DTS"
+
+#: src/ui/ghb.ui:5158
+msgid ""
+"Enable this if your playback device supports DTS.\n"
+"This permits DTS passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız DTS destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde DTS geçişinin seçilmesine izin verir."
+
+#: src/ui/ghb.ui:5171
+msgid "DTS-HD"
+msgstr "DTS-HD"
+
+#: src/ui/ghb.ui:5173
+msgid ""
+"Enable this if your playback device supports DTS-HD.\n"
+"This permits DTS-HD passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız DTS-HD destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde DTS-HD geçişinin seçilmesine izin "
+"verir."
+
+#: src/ui/ghb.ui:5186
+msgid "TrueHD"
+msgstr "TrueHD"
+
+#: src/ui/ghb.ui:5188
+msgid ""
+"Enable this if your playback device supports TrueHD.\n"
+"This permits TrueHD passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız TrueHD destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde TrueHD geçişinin seçilmesine izin "
+"verir."
+
+#: src/ui/ghb.ui:5201
+msgid "ALAC"
+msgstr "ALAC"
+
+#: src/ui/ghb.ui:5203
+msgid ""
+"Enable this if your playback device supports ALAC.\n"
+"This permits ALAC passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız ALAC destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde ALAC geçişinin seçilmesine izin "
+"verir."
+
+#: src/ui/ghb.ui:5216
+msgid "FLAC"
+msgstr "FLAC"
+
+#: src/ui/ghb.ui:5218
+msgid ""
+"Enable this if your playback device supports FLAC.\n"
+"This permits FLAC passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız FLAC destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde FLAC geçişinin seçilmesine izin "
+"verir."
+
+#: src/ui/ghb.ui:5231
+msgid "AAC"
+msgstr "AAC"
+
+#: src/ui/ghb.ui:5233
+msgid ""
+"Enable this if your playback device supports AAC.\n"
+"This permits AAC passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız AAC destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde AAC geçişinin seçilmesine izin verir."
+
+#: src/ui/ghb.ui:5246
+msgid "Vorbis"
+msgstr "Vorbis"
+
+#: src/ui/ghb.ui:5248
+msgid ""
+"Enable this if your playback device supports Vorbis.\n"
+"This permits Vorbis passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız Vorbis destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde Vorbis geçişinin seçilmesine izin "
+"verir."
+
+#: src/ui/ghb.ui:5261
+msgid "Opus"
+msgstr "Opus"
+
+#: src/ui/ghb.ui:5263
+msgid ""
+"Enable this if your playback device supports Opus.\n"
+"This permits Opus passthru to be selected when automatic passthru selection is "
+"enabled."
+msgstr ""
+"Oynatma cihazınız Opus destekliyorsa bunu etkinleştirin.\n"
+"Bu, otomatik geçiş seçimi etkinleştirildiğinde Opus geçişinin seçilmesine izin "
+"verir."
+
+#: src/ui/ghb.ui:5284
+msgid "Passthru Fallback:"
+msgstr "Geçiş Yedeği:"
+
+#: src/ui/ghb.ui:5290
+msgid ""
+"Set the audio codec to encode with when a suitable track can not be found for audio "
+"passthru."
+msgstr ""
+"Ses geçişi için uygun bir parça bulunamadığında kodlanacak ses kodeğini ayarla."
+
+#: src/ui/ghb.ui:5300
+msgid "Preserve the source track names."
+msgstr "Kaynak parça adlarını koru."
+
+#: src/ui/ghb.ui:5314
+msgid "Autonaming:"
+msgstr "Otomatik Adlandırma:"
+
+#: src/ui/ghb.ui:5320
+msgid "Set the automatic naming behaviour."
+msgstr "Otomatik adlandırma davranışını ayarla."
+
+#: src/ui/ghb.ui:5336
+msgid "Audio encoder settings for each selected track:"
+msgstr "Her seçili parça için ses kodlayıcı ayarları:"
+
+#: src/ui/ghb.ui:5337
+msgid "Each selected source track will be encoded with all selected encoders"
+msgstr "Her seçili kaynak parça, seçilen tüm kodlayıcılarla kodlanır"
+
+#: src/ui/ghb.ui:5347 src/ui/ghb.ui:6984
+msgid "Encoder"
+msgstr "Kodlayıcı"
+
+#: src/ui/ghb.ui:5353 src/ui/ghb.ui:6993
+msgid "Bitrate/Quality"
+msgstr "Bit Hızı/Kalite"
+
+#: src/ui/ghb.ui:5359
+msgid "Mixdown"
+msgstr "Karışım"
+
+#: src/ui/ghb.ui:5365
+msgid "Samplerate"
+msgstr "Örnekleme Hızı"
+
+#: src/ui/ghb.ui:5371 src/ui/ghb.ui:7024 src/queuehandler.c:550
+msgid "Gain"
+msgstr "Kazanç"
+
+#: src/ui/ghb.ui:5377 src/ui/ghb.ui:7039
+msgid "DRC"
+msgstr "DRC"
+
+#: src/ui/ghb.ui:5405
+msgid "Add Track"
+msgstr "Parça Ekle"
+
+#: src/ui/ghb.ui:5406
+msgid ""
+"Add an audio encoder.\n"
+"Each selected source track will be encoded with all selected encoders."
+msgstr ""
+"Bir ses kodlayıcı ekle.\n"
+"Her seçili kaynak parça, seçilen tüm kodlayıcılarla kodlanır."
+
+#: src/ui/ghb.ui:5413
+msgid "Use only first encoder for secondary audio"
+msgstr "İkincil ses için yalnızca ilk kodlayıcıyı kullan"
+
+#: src/ui/ghb.ui:5415
+msgid ""
+"Only the primary audio track will be encoded with the full encoder list.\n"
+"  All other secondary audio output tracks will be encoded with first encoder only."
+msgstr ""
+"Yalnızca birincil ses parçası tam kodlayıcı listesiyle kodlanır.\n"
+"  Diğer tüm ikincil ses çıktı parçaları yalnızca ilk kodlayıcıyla kodlanır."
+
+#: src/ui/ghb.ui:5428
+msgid "Add Multiple Titles"
+msgstr "Birden Fazla Başlık Ekle"
+
+#: src/ui/ghb.ui:5434 src/ui/ghb.ui:6193 src/ui/ghb.ui:6283 src/ui/ghb.ui:6623
+#: src/ui/ghb.ui:6895 src/hb-backend.c:4590 src/hb-backend.c:4640
+#: src/hb-backend.c:4657 src/hb-backend.c:4674 src/hb-backend.c:4731
+#: src/hb-backend.c:4784 src/presets.c:2161 src/presets.c:2543 src/presets.c:2768
+#: src/title-add.c:124 src/title-add.c:134
+msgid "Cancel"
+msgstr "İptal"
+
+#: src/ui/ghb.ui:5458
+msgid "Select All"
+msgstr "Tümünü Seç"
+
+#: src/ui/ghb.ui:5460
+msgid "Mark all titles for adding to the queue"
+msgstr "Tüm başlıkları kuyruğa eklemek için işaretle"
+
+#: src/ui/ghb.ui:5469
+msgid "Clear All"
+msgstr "Tümünü Temizle"
+
+#: src/ui/ghb.ui:5471
+msgid "Unmark all titles"
+msgstr "Tüm başlıkların işaretini kaldır"
+
+#: src/ui/ghb.ui:5480
+msgid "Invert Selection"
+msgstr "Seçimi Ters Çevir"
+
+#: src/ui/ghb.ui:5513 src/title-add.c:357
+msgid "Destination files OK.  No duplicates detected."
+msgstr "Hedef dosyalar tamam. Yinelenen algılanmadı."
+
+#: src/ui/ghb.ui:5525
+msgid "Preferences"
+msgstr "Tercihler"
+
+#: src/ui/ghb.ui:5570
+msgid "General"
+msgstr "Genel"
+
+#: src/ui/ghb.ui:5577
+msgid "Use automatic naming (uses modified source name)"
+msgstr "Otomatik adlandırmayı kullan (değiştirilmiş kaynak adını kullanır)"
+
+#: src/ui/ghb.ui:5579
+msgid "Create destination filename from source filename or volume label"
+msgstr "Kaynak dosya adından veya birim etiketinden hedef dosya adı oluştur"
+
+#: src/ui/ghb.ui:5594
+msgid "Auto-Name Template"
+msgstr "Otomatik Ad Şablonu"
+
+#: src/ui/ghb.ui:5602
+msgid ""
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date} {time} "
+"{creation-date} {creation-time} {modification-date} {modification-time} {codec} "
+"{bit-depth} {quality} {bitrate} {width} {height}"
+msgstr ""
+"Kullanılabilir Seçenekler: {source-path} {source} {title} {preset} {chapters} "
+"{date} {time} {creation-date} {creation-time} {modification-date} {modification-"
+"time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
+
+#: src/ui/ghb.ui:5616
+msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
+msgstr "MP4 için iPod/iTunes uyumlu (.m4v) dosya uzantısını kullan"
+
+#: src/ui/ghb.ui:5627
+msgid "Number of previews"
+msgstr "Önizleme sayısı"
+
+#: src/ui/ghb.ui:5650
+msgid "Minimum DVD/Blu-ray title duration (seconds)"
+msgstr "Minimum DVD/Blu-ray başlık süresi (saniye)"
+
+#: src/ui/ghb.ui:5673
+msgid "Maximum DVD/Blu-ray title duration (seconds)"
+msgstr "Maksimum DVD/Blu-ray başlık süresi (saniye)"
+
+#: src/ui/ghb.ui:5693
+msgid "Keep duplicate titles"
+msgstr "Yinelenen başlıkları tut"
+
+#: src/ui/ghb.ui:5699
+msgid "Use the same settings for all titles in a batch"
+msgstr "Bir toplu işlemdeki tüm başlıklar için aynı ayarları kullan"
+
+#: src/ui/ghb.ui:5701
+msgid ""
+"When checked, every title will use the same settings when adding a\n"
+"batch of titles to the queue.\n"
+"\n"
+"Uncheck this if you want to allow changing each title's settings independently."
+msgstr ""
+"İşaretlendiğinde, bir başlık topluluğu kuyruğa eklenirken her başlık\n"
+"aynı ayarları kullanır.\n"
+"\n"
+"Her başlığın ayarlarını bağımsız olarak değiştirmeye izin vermek istiyorsanız\n"
+"bu işareti kaldırın."
+
+#: src/ui/ghb.ui:5711
+msgid "Show preview image in Summary tab"
+msgstr "Özet sekmesinde önizleme görüntüsünü göster"
+
+#: src/ui/ghb.ui:5714
+msgid ""
+"Uncheck this if you want to hide the video preview image on the Summary tab for "
+"privacy reasons."
+msgstr ""
+"Gizlilik nedenleriyle Özet sekmesinde video önizleme görüntüsünü gizlemek "
+"istiyorsanız bu işareti kaldırın."
+
+#: src/ui/ghb.ui:5723
+msgid "Excluded File Extensions:"
+msgstr "Hariç Tutulan Dosya Uzantıları:"
+
+#: src/ui/ghb.ui:5732
+msgid ""
+"The following file extensions will be ignored when scanning a folder. The list is "
+"case insensitive."
+msgstr ""
+"Bir klasör taranırken aşağıdaki dosya uzantıları yok sayılır. Liste büyük/küçük "
+"harfe duyarsızdır."
+
+#: src/ui/ghb.ui:5742
+msgctxt "Queue tab in Preferences window"
+msgid "Queue"
+msgstr "Kuyruk"
+
+#: src/ui/ghb.ui:5755
+msgid "Pause queue if disk space is lower than:"
+msgstr "Disk alanı şundan düşükse kuyruğu duraklat:"
+
+#: src/ui/ghb.ui:5771
+msgid "Disk Free Space Limit"
+msgstr "Disk Boş Alan Sınırı"
+
+#: src/ui/ghb.ui:5779 src/queuehandler.c:798 src/queuehandler.c:1288
+msgid "GB"
+msgstr "GB"
+
+#: src/ui/ghb.ui:5789
+msgid "Clear completed jobs after an encode completes"
+msgstr "Kodlama tamamlandıktan sonra tamamlanan işleri temizle"
+
+#: src/ui/ghb.ui:5791
+msgid ""
+"By default, completed jobs remain in the queue and are marked as complete.\n"
+"  Check this if you want the queue to clean itself up by deleting completed jobs."
+msgstr ""
+"Varsayılan olarak, tamamlanan işler kuyrukta kalır ve tamamlandı olarak "
+"işaretlenir.\n"
+"  Kuyruğun tamamlanan işleri silerek kendini temizlemesini istiyorsanız bunu "
+"işaretleyin."
+
+#: src/ui/ghb.ui:5799
+msgid "Power Saving"
+msgstr "Güç Tasarrufu"
+
+#: src/ui/ghb.ui:5813
+msgid "Pause encoding when in Power Saver mode"
+msgstr "Güç Tasarrufu modundayken kodlamayı duraklat"
+
+#: src/ui/ghb.ui:5817
+msgid ""
+"If checked, encoding will be paused when the device\n"
+"enters Power Saver mode. Encoding will resume when\n"
+"Power Saver mode is disabled."
+msgstr ""
+"İşaretlenirse, cihaz Güç Tasarrufu moduna girdiğinde\n"
+"kodlama duraklatılır. Güç Tasarrufu modu devre dışı\n"
+"bırakıldığında kodlama devam eder."
+
+#: src/ui/ghb.ui:5825
+msgid "Pause encoding when on battery power"
+msgstr "Pil gücündeyken kodlamayı duraklat"
+
+#: src/ui/ghb.ui:5829
+msgid ""
+"If checked, encoding will be paused when charger is\n"
+"unplugged. Encoding will resume when reconnected to\n"
+"a mains power source."
+msgstr ""
+"İşaretlenirse, şarj cihazı çıkarıldığında kodlama\n"
+"duraklatılır. Ana güç kaynağına yeniden bağlandığında\n"
+"kodlama devam eder."
+
+#: src/ui/ghb.ui:5837
+msgid "Pause encoding when battery is low"
+msgstr "Pil düşük olduğunda kodlamayı duraklat"
+
+#: src/ui/ghb.ui:5841
+msgid ""
+"If checked, encoding will be paused when the battery\n"
+"level is low. Encoding will resume when the\n"
+"battery is charged."
+msgstr ""
+"İşaretlenirse, pil seviyesi düşük olduğunda kodlama\n"
+"duraklatılır. Pil şarj edildiğinde kodlama devam eder."
+
+#: src/ui/ghb.ui:5853
+msgid "When Done"
+msgstr "Bittiğinde"
+
+#: src/ui/ghb.ui:5865
+msgid "Default action when queue is completed:"
+msgstr "Kuyruk tamamlandığında varsayılan eylem:"
+
+#: src/ui/ghb.ui:5878
+msgid "Show notification when queue is completed"
+msgstr "Kuyruk tamamlandığında bildirim göster"
+
+#: src/ui/ghb.ui:5886
+msgid "Show notification when each item is completed"
+msgstr "Her öğe tamamlandığında bildirim göster"
+
+#: src/ui/ghb.ui:5897
+msgid "Send file to:"
+msgstr "Dosyayı şuraya gönder:"
+
+#: src/ui/ghb.ui:5920
+msgid "Advanced"
+msgstr "Gelişmiş"
+
+#: src/ui/ghb.ui:5933
+msgid "Select the language to use for the HandBrake user interface."
+msgstr "HandBrake kullanıcı arayüzü için kullanılacak dili seçin."
+
+#: src/ui/ghb.ui:5936
+msgid "Display Language:"
+msgstr "Görüntüleme Dili:"
+
+#: src/ui/ghb.ui:5956
+msgid "Set a custom directory for Handbrake temporary files"
+msgstr "HandBrake geçici dosyaları için özel bir dizin ayarla"
+
+#: src/ui/ghb.ui:5958 src/ui/ghb.ui:5974
+msgid ""
+"Temporary files that HandBrake creates will be placed under this directory.\n"
+"\n"
+"  Changing this setting will require restarting HandBrake.\n"
+"\n"
+"  This setting overrides the TEMP environment variable that is normally used to "
+"define this directory.\n"
+"\n"
+"  Flatpak users may need to set this for certain workflows to work properly. The "
+"default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size "
+"and may be too small for things like the 2-pass stats file."
+msgstr ""
+"HandBrake'in oluşturduğu geçici dosyalar bu dizin altına yerleştirilir.\n"
+"\n"
+"  Bu ayarın değiştirilmesi HandBrake'in yeniden başlatılmasını gerektirir.\n"
+"\n"
+"  Bu ayar, normalde bu dizini tanımlamak için kullanılan TEMP ortam değişkenini "
+"geçersiz kılar.\n"
+"\n"
+"  Flatpak kullanıcılarının belirli iş akışlarının düzgün çalışması için bunu "
+"ayarlaması gerekebilir. Bir flatpak korumalı alanında TEMP dizininin varsayılan "
+"boyutu fiziksel belleğin 1/2'si kadardır ve 2 geçişli istatistik dosyası gibi "
+"şeyler için çok küçük olabilir."
+
+#: src/ui/ghb.ui:5983
+msgid "Temp Directory"
+msgstr "Geçici Dizin"
+
+#: src/ui/ghb.ui:6007
+msgid "Constant Quality fractional granularity"
+msgstr "Sabit Kalite kesirli ayrıntı düzeyi"
+
+#: src/ui/ghb.ui:6019
+msgid "Use dvdnav (instead of libdvdread)"
+msgstr "Dvdnav kullan (libdvdread yerine)"
+
+#: src/ui/ghb.ui:6037
+msgid "Put individual encode logs in same location as movie"
+msgstr "Bireysel kodlama günlüklerini filmle aynı konuma koy"
+
+#: src/ui/ghb.ui:6057
+msgid "Activity Log Verbosity Level"
+msgstr "Etkinlik Günlüğü Ayrıntı Düzeyi"
+
+#: src/ui/ghb.ui:6076
+msgid "Activity Log Longevity"
+msgstr "Etkinlik Günlüğü Ömrü"
+
+#: src/ui/ghb.ui:6089
+msgid "Scale down High Definition previews"
+msgstr "Yüksek Çözünürlüklü önizlemeleri küçült"
+
+#: src/ui/ghb.ui:6101
+msgid "Automatically Scan DVD when loaded"
+msgstr "Yüklendiğinde DVD'yi otomatik olarak tara"
+
+#: src/ui/ghb.ui:6103
+msgid "Scans the DVD whenever a new disc is loaded"
+msgstr "Yeni bir disk yüklendiğinde DVD'yi tarar"
+
+#: src/ui/ghb.ui:6130
+msgid "Activity Window Font Size"
+msgstr "Etkinlik Penceresi Yazı Tipi Boyutu"
+
+#: src/ui/ghb.ui:6148
+msgid "Allow Tweaks"
+msgstr "İnce Ayarlara İzin Ver"
+
+#: src/ui/ghb.ui:6161
+msgid "Allow HandBrake For Dummies"
+msgstr "Acemiler İçin HandBrake'e İzin Ver"
+
+#: src/ui/ghb.ui:6185
+msgid "Rename Preset"
+msgstr "Ön Ayarı Yeniden Adlandır"
+
+#: src/ui/ghb.ui:6229 src/ui/ghb.ui:6363
+msgid "Preset Name:"
+msgstr "Ön Ayar Adı:"
+
+#: src/ui/ghb.ui:6275
+msgid "New Preset"
+msgstr "Yeni Ön Ayar"
+
+#: src/ui/ghb.ui:6318
+msgid "Category:"
+msgstr "Kategori:"
+
+#: src/ui/ghb.ui:6328
+msgid "Set the category that this preset will be shown under."
+msgstr "Bu ön ayarın altında gösterileceği kategoriyi ayarla."
+
+#: src/ui/ghb.ui:6339
+msgid "Category Name:"
+msgstr "Kategori Adı:"
+
+#: src/ui/ghb.ui:6388
+msgid "Default Preset"
+msgstr "Varsayılan Ön Ayar"
+
+#: src/ui/ghb.ui:6390
+msgid "Make this the default Preset when HandBrake starts"
+msgstr "HandBrake başladığında bunu varsayılan Ön Ayar yap"
+
+#: src/ui/ghb.ui:6429
+msgid "HandBrake Preview"
+msgstr "HandBrake Önizleme"
+
+#: src/ui/ghb.ui:6499
+msgid "Select preview frames."
+msgstr "Önizleme karelerini seçin."
+
+#: src/ui/ghb.ui:6514 src/preview.c:167
+msgid ""
+"Encode and play a short sequence of video starting from the current preview "
+"position."
+msgstr "Geçerli önizleme konumundan başlayarak kısa bir video dizisi kodla ve oynat."
+
+#: src/ui/ghb.ui:6527
+msgid "Preview Video Position"
+msgstr "Önizleme Video Konumu"
+
+#: src/ui/ghb.ui:6540
+msgid "Preview Encode Progress"
+msgstr "Önizleme Kodlama İlerlemesi"
+
+#: src/ui/ghb.ui:6549
+msgid "Click to toggle full screen mode"
+msgstr "Tam ekran modunu açıp kapatmak için tıklayın"
+
+#: src/ui/ghb.ui:6564
+msgid "<b>Duration:</b>"
+msgstr "<b>Süre:</b>"
+
+#: src/ui/ghb.ui:6572
+msgid "Set the duration of the live preview in seconds."
+msgstr "Canlı önizlemenin süresini saniye cinsinden ayarla."
+
+#: src/ui/ghb.ui:6582
+msgid "Source Resolution"
+msgstr "Kaynak Çözünürlüğü"
+
+#: src/ui/ghb.ui:6585
+msgid "Reset preview window to the source video's resolution"
+msgstr "Önizleme penceresini kaynak videonun çözünürlüğüne sıfırla"
+
+#: src/ui/ghb.ui:6615 src/subtitlehandler.c:1811
+msgid "Edit Subtitles"
+msgstr "Altyazıları Düzenle"
+
+#: src/ui/ghb.ui:6653
+msgid "Import SRT"
+msgstr "SRT İçe Aktar"
+
+#: src/ui/ghb.ui:6654
+msgid "Enable settings to import an SRT subtitle file"
+msgstr "Bir SRT altyazı dosyasını içe aktarmak için ayarları etkinleştir"
+
+#: src/ui/ghb.ui:6661
+msgid "Import SSA"
+msgstr "SSA İçe Aktar"
+
+#: src/ui/ghb.ui:6662
+msgid "Enable settings to import an SSA subtitle file"
+msgstr "Bir SSA altyazı dosyasını içe aktarmak için ayarları etkinleştir"
+
+#: src/ui/ghb.ui:6670
+msgid "Embedded Subtitle List"
+msgstr "Gömülü Altyazı Listesi"
+
+#: src/ui/ghb.ui:6671
+msgid "Enable settings to select embedded subtitles"
+msgstr "Gömülü altyazıları seçmek için ayarları etkinleştir"
+
+#: src/ui/ghb.ui:6686 src/ui/ghb.ui:6927
+msgid "Source Track"
+msgstr "Kaynak Parça"
+
+#: src/ui/ghb.ui:6696
+msgid "List of subtitle tracks available from your source."
+msgstr "Kaynağınızdan kullanılabilir altyazı parçalarının listesi."
+
+#: src/ui/ghb.ui:6706 src/ui/ghb.ui:6948
+msgid "Track Name:"
+msgstr "Parça Adı:"
+
+#: src/ui/ghb.ui:6718
+msgid ""
+"Set the subtitle track name.\n"
+"\n"
+"Players may use this in the subtitle selection list."
+msgstr ""
+"Altyazı parçası adını ayarla.\n"
+"\n"
+"Oynatıcılar bunu altyazı seçim listesinde kullanabilir."
+
+#: src/ui/ghb.ui:6740
+msgid "Language"
+msgstr "Dil"
+
+#: src/ui/ghb.ui:6749
+msgid "Character Code"
+msgstr "Karakter Kodu"
+
+#: src/ui/ghb.ui:6758
+msgid "File:"
+msgstr "Dosya:"
+
+#: src/ui/ghb.ui:6768
+msgid "Offset (ms)"
+msgstr "Ofset (ms)"
+
+#: src/ui/ghb.ui:6778
+msgid ""
+"Set the language of this subtitle.\n"
+"This value will be used by players in subtitle menus."
+msgstr ""
+"Bu altyazının dilini ayarla.\n"
+"Bu değer oynatıcılar tarafından altyazı menülerinde kullanılır."
+
+#: src/ui/ghb.ui:6790
+msgid ""
+"Set the character code used by the SRT file you are importing.\n"
+"\n"
+"SRTs come in all flavours of character sets.\n"
+"We translate the character set to UTF-8.\n"
+"The source's character code is needed in order to perform this translation."
+msgstr ""
+"İçe aktardığınız SRT dosyasının kullandığı karakter kodunu ayarla.\n"
+"\n"
+"SRT'ler her türlü karakter setinde gelir.\n"
+"Karakter setini UTF-8'e çeviririz.\n"
+"Bu çeviriyi gerçekleştirmek için kaynağın karakter kodu gereklidir."
+
+#: src/ui/ghb.ui:6811
+msgid "Select the SRT file to import."
+msgstr "İçe aktarılacak SRT dosyasını seçin."
+
+#: src/ui/ghb.ui:6813
+msgid "Import File"
+msgstr "Dosya İçe Aktar"
+
+#: src/ui/ghb.ui:6827
+msgid "Adjust the offset in milliseconds between video and SRT timestamps"
+msgstr "Video ve SRT zaman damgaları arasındaki ofseti milisaniye cinsinden ayarla"
+
+#: src/ui/ghb.ui:6844 src/subtitlehandler.c:116
+msgid "Forced Subtitles Only"
+msgstr "Yalnızca Zorunlu Altyazılar"
+
+#: src/ui/ghb.ui:6858
+msgid "Burn into video"
+msgstr "Videoya göm"
+
+#: src/ui/ghb.ui:6860
+msgid ""
+"Render the subtitle over the video.\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr ""
+"Altyazıyı videonun üzerine yerleştir.\n"
+"Altyazı videonun bir parçası olur ve devre dışı bırakılamaz."
+
+#: src/ui/ghb.ui:6868
+msgid "Set Default Track"
+msgstr "Varsayılan Parçayı Ayarla"
+
+#: src/ui/ghb.ui:6887 src/audiohandler.c:1508
+msgid "Edit Audio Track"
+msgstr "Ses Parçasını Düzenle"
+
+#: src/ui/ghb.ui:6938
+msgid "List of audio tracks available from your source."
+msgstr "Kaynağınızdan kullanılabilir ses parçalarının listesi."
+
+#: src/ui/ghb.ui:6960
+msgid ""
+"Set the audio track name.\n"
+"\n"
+"Players may use this in the audio selection list."
+msgstr ""
+"Ses parçası adını ayarla.\n"
+"\n"
+"Oynatıcılar bunu ses seçim listesinde kullanabilir."
+
+#: src/ui/ghb.ui:7004
+msgid "Mix"
+msgstr "Karışım"
+
+#: src/ui/ghb.ui:7013
+msgid "Sample Rate"
+msgstr "Örnekleme Hızı"
+
+#: src/ui/ghb.ui:7035 src/ui/ghb.ui:7183 src/audiohandler.c:1922
+msgid ""
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio "
+"track.\n"
+"\n"
+"For source audio that has a wide dynamic range (very loud and very soft "
+"sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds "
+"louder."
+msgstr ""
+"<b>Dinamik Aralık Sıkıştırma:</b> Çıktı ses parçasının dinamik aralığını ayarlar.\n"
+"\n"
+"Geniş dinamik aralığa sahip kaynak sesler için (çok yüksek ve çok yumuşak "
+"diziler),\n"
+"DRC, yüksek sesleri daha yumuşak ve yumuşak sesleri daha yüksek yaparak aralığı "
+"'sıkıştırmanıza' olanak tanır."
+
+#: src/ui/ghb.ui:7051 src/audiohandler.c:1773
+msgid "Set the audio codec to encode this track with."
+msgstr "Bu parçanın kodlanacağı ses kodeğini ayarla."
+
+#: src/ui/ghb.ui:7066 src/audiohandler.c:1787
+msgid "Bitrate"
+msgstr "Bit Hızı"
+
+#: src/ui/ghb.ui:7067
+msgid "Enable bitrate setting"
+msgstr "Bit hızı ayarını etkinleştir"
+
+#: src/ui/ghb.ui:7074
+msgid "Enable quality setting"
+msgstr "Kalite ayarını etkinleştir"
+
+#: src/ui/ghb.ui:7085 src/audiohandler.c:1805
+msgid "Set the bitrate to encode this track with."
+msgstr "Bu parçanın kodlanacağı bit hızını ayarla."
+
+#: src/ui/ghb.ui:7095
+msgid ""
+"<b>Quality:</b> For output codec's that support it, adjust the quality of the "
+"output."
+msgstr "<b>Kalite:</b> Destekleyen çıktı kodekleri için çıktının kalitesini ayarlar."
+
+#: src/ui/ghb.ui:7112
+msgid "00.0"
+msgstr "00.0"
+
+#: src/ui/ghb.ui:7128 src/audiohandler.c:1857
+msgid "Set the mixdown of the output audio track."
+msgstr "Çıktı ses parçasının karışımını ayarla."
+
+#: src/ui/ghb.ui:7139 src/audiohandler.c:1870
+msgid "Set the sample rate of the output audio track."
+msgstr "Çıktı ses parçasının örnekleme hızını ayarla."
+
+#: src/ui/ghb.ui:7153 src/audiohandler.c:1891
+msgid ""
+"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output audio "
+"track."
+msgstr ""
+"<b>Ses Kazancı:</b> Çıktı ses parçasının yükseltmesini veya zayıflatmasını ayarlar."
+
+#. Audio Gain Label
+#: src/ui/ghb.ui:7166 src/audiohandler.c:1902
+msgid "0dB"
+msgstr "0dB"
+
+#. Audio DRC Label
+#: src/ui/ghb.ui:7196 src/audiohandler.c:427 src/audiohandler.c:779
+#: src/audiohandler.c:1190 src/audiohandler.c:1936 src/callbacks.c:5687
+#: src/hb-backend.c:192 src/hb-backend.c:205 src/hb-backend.c:217 src/hb-backend.c:242
+#: src/hb-backend.c:325 src/hb-backend.c:337 src/hb-backend.c:349 src/hb-backend.c:410
+#, c-format
+msgid "Off"
+msgstr "Kapalı"
+
+#: src/ui/ghb-chapter-row.ui:38
+msgid "Chapter Title"
+msgstr "Bölüm Başlığı"
+
+#: src/ui/ghb-file-button.ui:23 src/ghb-file-button.c:293
+msgid "(None)"
+msgstr "(Yok)"
+
+#: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:272 src/ghb-queue-row.c:288
+msgid "Pending Queue Item"
+msgstr "Bekleyen Kuyruk Öğesi"
+
+#: src/ui/ghb-queue-row.ui:31
+msgid "Delete this item"
+msgstr "Bu öğeyi sil"
+
+#: src/ui/ghb-queue-row.ui:52
+msgid "Encode Progress"
+msgstr "Kodlama İlerlemesi"
+
+#: src/audiohandler.c:439 src/audiohandler.c:775 src/audiohandler.c:1260
+#, c-format
+msgid "%ddB"
+msgstr "%ddB"
+
+#: src/audiohandler.c:751
+msgid "Quality: "
+msgstr "Kalite: "
+
+#: src/audiohandler.c:758
+#, c-format
+msgid "Bitrate: %dkbps\n"
+msgstr "Bit Hızı: %dkbps\n"
+
+#: src/audiohandler.c:770
+#, c-format
+msgid "%.4gkHz"
+msgstr "%.4gkHz"
+
+#: src/audiohandler.c:785
+#, c-format
+msgid "<small>%d - %s (%.4gkHz)</small>"
+msgstr "<small>%d - %s (%.4gkHz)</small>"
+
+#: src/audiohandler.c:790
+#, c-format
+msgid "Bitrate: %.4gkbps"
+msgstr "Bit Hızı: %.4gkbps"
+
+#: src/audiohandler.c:796
+#, c-format
+msgid "<small>Passthru</small>"
+msgstr "<small>Geçiş</small>"
+
+#: src/audiohandler.c:805
+#, c-format
+msgid ""
+"%sGain: %s\n"
+"DRC: %s\n"
+"Track Name: %s"
+msgstr ""
+"%sKazanç: %s\n"
+"DRC: %s\n"
+"Parça Adı: %s"
+
+#: src/audiohandler.c:810
+#, c-format
+msgid ""
+"%sGain: %s\n"
+"DRC: %s"
+msgstr ""
+"%sKazanç: %s\n"
+"DRC: %s"
+
+#: src/audiohandler.c:1416
+msgid "Add Audio Track"
+msgstr "Ses Parçası Ekle"
+
+#: src/audiohandler.c:1830
+msgid ""
+"<b>Audio Quality:</b>\n"
+"For encoders that support it, adjust the quality of the output."
+msgstr ""
+"<b>Ses Kalitesi:</b>\n"
+"Destekleyen kodlayıcılar için çıktının kalitesini ayarlayın."
+
+#: src/audiohandler.c:1953
+msgid "Remove this audio encoder"
+msgstr "Bu ses kodlayıcıyı kaldır"
+
+#: src/callbacks.c:279
+msgid "An encode is in progress."
+msgstr "Bir kodlama sürüyor."
+
+#: src/callbacks.c:1107 src/callbacks.c:1118 src/callbacks.c:1774
+msgid "Not Selected"
+msgstr "Seçilmedi"
+
+#: src/callbacks.c:1116
+msgid "Detected DVD devices:"
+msgstr "Algılanan DVD aygıtları:"
+
+#. This needs to be in scanning and working since scanning
+#. happens fast enough that it can be missed
+#: src/callbacks.c:1443 src/callbacks.c:4687
+msgid "Scanning ..."
+msgstr "Taranıyor ..."
+
+#: src/callbacks.c:1475 src/callbacks.c:1476 src/callbacks.c:1498 src/callbacks.c:1499
+msgid "Stop Scan"
+msgstr "Taramayı Durdur"
+
+#: src/callbacks.c:1855
+msgid "Open Source Directory"
+msgstr "Kaynak Dizinini Aç"
+
+#: src/callbacks.c:1858 src/chapters.c:483 src/ghb-file-button.c:222
+#: src/presets.c:2254 src/queuehandler.c:1469
+msgid "_Open"
+msgstr "_Aç"
+
+#: src/callbacks.c:1859 src/callbacks.c:2124 src/chapters.c:456 src/chapters.c:484
+#: src/ghb-file-button.c:355 src/presets.c:2255 src/presets.c:2370
+#: src/queuehandler.c:1387 src/queuehandler.c:1470
+msgid "_Cancel"
+msgstr "_İptal"
+
+#: src/callbacks.c:1866
+msgid "Recursively scan directories"
+msgstr "Dizinleri özyinelemeli tara"
+
+#: src/callbacks.c:1878
+msgid "Single Title"
+msgstr "Tek Başlık"
+
+#: src/callbacks.c:2235 src/callbacks.c:2379
+msgid "FPS"
+msgstr "FPS"
+
+#: src/callbacks.c:2239
+#, c-format
+msgid "Dolby Vision %d.%d"
+msgstr "Dolby Vision %d.%d"
+
+#: src/callbacks.c:2243 src/callbacks.c:2246
+msgid "HDR10+"
+msgstr "HDR10+"
+
+#: src/callbacks.c:2248
+msgid "HDR10"
+msgstr "HDR10"
+
+#: src/callbacks.c:2250
+msgid "HDR"
+msgstr "HDR"
+
+#: src/callbacks.c:2252
+msgid "SDR"
+msgstr "SDR"
+
+#. TRANSLATORS: This is the bit depth of the video
+#: src/callbacks.c:2260
+#, c-format
+msgid "%d-bit"
+msgstr "%d-bit"
+
+#: src/callbacks.c:2282
+msgid "Audio Track"
+msgid_plural "Audio Tracks"
+msgstr[0] "Ses Parçası"
+msgstr[1] "Ses Parçası"
+
+#: src/callbacks.c:2285
+msgid "Subtitle Track"
+msgid_plural "Subtitle Tracks"
+msgstr[0] "Altyazı Parçası"
+msgstr[1] "Altyazı Parçası"
+
+#: src/callbacks.c:2383
+msgid "CFR"
+msgstr "CFR"
+
+#: src/callbacks.c:2387
+msgid "PFR"
+msgstr "PFR"
+
+#: src/callbacks.c:2391
+msgid "VFR"
+msgstr "VFR"
+
+#: src/callbacks.c:2433
+#, c-format
+msgid "+ %d more audio track"
+msgid_plural "+ %d more audio tracks"
+msgstr[0] "+ %d ses parçası daha"
+msgstr[1] "+ %d ses parçası daha"
+
+#: src/callbacks.c:2464 src/queuehandler.c:587 src/queuehandler.c:1022
+#: src/subtitlehandler.c:415 src/subtitlehandler.c:1297
+msgid "Foreign Audio Scan"
+msgstr "Yabancı Ses Taraması"
+
+#: src/callbacks.c:2467 src/callbacks.c:2499 src/queuehandler.c:590
+#: src/queuehandler.c:627
+#, c-format
+msgid ", Forced Only"
+msgstr ", Yalnızca Zorunlu"
+
+#: src/callbacks.c:2471 src/callbacks.c:2503 src/queuehandler.c:594
+#: src/queuehandler.c:631
+#, c-format
+msgid ", Burned"
+msgstr ", Gömülü"
+
+#: src/callbacks.c:2475 src/callbacks.c:2507 src/queuehandler.c:598
+#: src/queuehandler.c:635
+#, c-format
+msgid ", Default"
+msgstr ", Varsayılan"
+
+#: src/callbacks.c:2513
+#, c-format
+msgid "+ %d more subtitle track"
+msgid_plural "+ %d more subtitle tracks"
+msgstr[0] "+ %d altyazı parçası daha"
+msgstr[1] "+ %d altyazı parçası daha"
+
+#: src/callbacks.c:2668
+msgid "storage"
+msgstr "depolama"
+
+#: src/callbacks.c:2669
+msgid "display"
+msgstr "görüntüleme"
+
+#: src/callbacks.c:2670
+msgid "Pixel Aspect Ratio"
+msgstr "Piksel En-Boy Oranı"
+
+#: src/callbacks.c:2671
+msgid "Display Aspect Ratio"
+msgstr "Görüntüleme En-Boy Oranı"
+
+#: src/callbacks.c:2806 src/hb-backend.c:2315 src/hb-backend.c:2436
+#: src/hb-backend.c:2448
+msgid "No Title Found"
+msgstr "Başlık Bulunamadı"
+
+#: src/callbacks.c:2807
+msgid "New Video"
+msgstr "Yeni Video"
+
+#: src/callbacks.c:3803
+msgid "Settings Changed"
+msgstr "Ayarlar Değişti"
+
+#: src/callbacks.c:3804
+msgid "You must restart HandBrake now."
+msgstr "HandBrake'i şimdi yeniden başlatmalısınız."
+
+#: src/callbacks.c:3831 src/callbacks.c:3841 src/callbacks.c:3859 src/callbacks.c:3908
+#, c-format
+msgid "%s in %d seconds…"
+msgstr "%s %d saniye içinde…"
+
+#: src/callbacks.c:4114
+msgid "Stop Encoding?"
+msgstr "Kodlama Durdurulsun mu?"
+
+#: src/callbacks.c:4115 src/callbacks.c:4140 src/queuehandler.c:1701
+msgid "Your movie will be lost if you don't continue encoding."
+msgstr "Kodlamaya devam etmezseniz filminiz kaybolacak."
+
+#: src/callbacks.c:4116 src/queuehandler.c:1626
+msgid "Cancel Current and Stop"
+msgstr "Mevcutu İptal Et ve Durdur"
+
+#: src/callbacks.c:4116
+msgid "Cancel Current, Start Next"
+msgstr "Mevcutu İptal Et, Sonrakini Başlat"
+
+#: src/callbacks.c:4117
+msgid "Finish Current and Stop"
+msgstr "Mevcutu Bitir ve Durdur"
+
+#: src/callbacks.c:4117 src/callbacks.c:4141 src/queuehandler.c:1702
+msgid "Continue Encoding"
+msgstr "Kodlamaya Devam Et"
+
+#: src/callbacks.c:4139
+msgid "Quit HandBrake?"
+msgstr "HandBrake'ten Çıkılsın mı?"
+
+#: src/callbacks.c:4141
+msgid "Cancel All and Quit"
+msgstr "Tümünü İptal Et ve Çık"
+
+#: src/callbacks.c:4307
+#, c-format
+msgid "%d encode pending"
+msgid_plural "%d encodes pending"
+msgstr[0] "%d kodlama bekliyor"
+msgstr[1] "%d kodlama bekliyor"
+
+#: src/callbacks.c:4366 src/callbacks.c:4434
+#, c-format
+msgid "job %d of %d, "
+msgstr "iş %d / %d, "
+
+#: src/callbacks.c:4376
+#, c-format
+msgid "pass %d (subtitle scan) of %d, "
+msgstr "geçiş %d (altyazı taraması) / %d, "
+
+#: src/callbacks.c:4381
+#, c-format
+msgid "pass %d of %d, "
+msgstr "geçiş %d / %d, "
+
+#: src/callbacks.c:4394
+#, c-format
+msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
+msgstr ""
+"Kodlanıyor: %s%s%.2f %% (%.2f fps, ort. %.2f fps, Tahmini Süre %02dsa%02ddk%02dsn)"
+
+#: src/callbacks.c:4404 src/callbacks.c:4444
+#, c-format
+msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
+msgstr "Kodlanıyor: %s%s%.2f %% (Tahmini Süre %02dsa%02ddk%02dsn)"
+
+#: src/callbacks.c:4414 src/callbacks.c:4453
+#, c-format
+msgid "Encoding: %s%s%.2f %%"
+msgstr "Kodlanıyor: %s%s%.2f %%"
+
+#: src/callbacks.c:4440
+#, c-format
+msgid "Searching for start time, "
+msgstr "Başlangıç zamanı aranıyor, "
+
+#: src/callbacks.c:4607
+#, c-format
+msgid "Scanning title %d of %d..."
+msgstr "Başlık %d / %d taranıyor..."
+
+#: src/callbacks.c:4611
+#, c-format
+msgid "Scanning title %d of %d preview %d..."
+msgstr "Başlık %d / %d önizleme %d taranıyor..."
+
+#: src/callbacks.c:4698
+msgid "Paused"
+msgstr "Duraklatıldı"
+
+#: src/callbacks.c:4725
+msgid "Encode Done!"
+msgstr "Kodlama Tamamlandı!"
+
+#: src/callbacks.c:4731
+msgid "Encode Canceled."
+msgstr "Kodlama İptal Edildi."
+
+#: src/callbacks.c:4736
+msgid "Encode Failed."
+msgstr "Kodlama Başarısız."
+
+#: src/callbacks.c:4778
+msgid "Muxing: This may take a while..."
+msgstr "Çoklanıyor: Bu biraz zaman alabilir..."
+
+#: src/callbacks.c:5700 src/callbacks.c:5707 src/callbacks.c:5715
+msgid "Your encode is complete."
+msgstr "Kodlamanız tamamlandı."
+
+#: src/callbacks.c:5701
+msgid "Quitting HandBrake"
+msgstr "HandBrake'ten çıkılıyor"
+
+#: src/callbacks.c:5708
+msgid "Putting computer to sleep"
+msgstr "Bilgisayar uyku moduna alınıyor"
+
+#: src/callbacks.c:5716
+msgid "Shutting down the computer"
+msgstr "Bilgisayar kapatılıyor"
+
+#. Add filters
+#: src/callbacks.c:5830 src/chapters.c:458 src/chapters.c:486 src/presets.c:2257
+#: src/queuehandler.c:1473
+msgid "All Files"
+msgstr "Tüm Dosyalar"
+
+#: src/chapters.c:459 src/chapters.c:487
+msgid "Chapters (*.xml)"
+msgstr "Bölümler (*.xml)"
+
+#: src/ghb-file-button.c:72
+msgid "Select a File"
+msgstr "Bir Dosya Seç"
+
+#: src/ghb-file-button.c:217
+msgid "_Select"
+msgstr "_Seç"
+
+#: src/ghb-queue-row.c:267
+msgid "Running Queue Item"
+msgstr "Çalışan Kuyruk Öğesi"
+
+#: src/ghb-queue-row.c:276
+msgid "Failed Queue Item"
+msgstr "Başarısız Kuyruk Öğesi"
+
+#: src/ghb-queue-row.c:280
+msgid "Cancelled Queue Item"
+msgstr "İptal Edilen Kuyruk Öğesi"
+
+#: src/ghb-queue-row.c:284
+msgid "Completed Queue Item"
+msgstr "Tamamlanan Kuyruk Öğesi"
+
+#: src/hb-backend.c:55
+msgid "Unnamed"
+msgstr "Adsız"
+
+#: src/hb-backend.c:56 src/hb-backend.c:399
+msgid "All"
+msgstr "Tümü"
+
+#: src/hb-backend.c:67 src/hb-backend.c:92
+msgid "First Matching Selected Languages"
+msgstr "Seçili Dillerle Eşleşen İlk"
+
+#: src/hb-backend.c:68 src/hb-backend.c:93
+msgid "All Matching Selected Languages"
+msgstr "Seçili Dillerle Eşleşen Tümü"
+
+#: src/hb-backend.c:79
+msgid "Foreign Audio Subtitle Track"
+msgstr "Yabancı Ses Altyazı Parçası"
+
+#: src/hb-backend.c:80
+msgid "First Selected Track"
+msgstr "İlk Seçili Parça"
+
+#: src/hb-backend.c:81
+msgid "Foreign Audio, then First Selected Track"
+msgstr "Yabancı Ses, ardından İlk Seçili Parça"
+
+#: src/hb-backend.c:103 src/queuehandler.c:162
+msgid "Chapters:"
+msgstr "Bölümler:"
+
+#: src/hb-backend.c:104
+msgid "Seconds:"
+msgstr "Saniyeler:"
+
+#: src/hb-backend.c:105 src/queuehandler.c:183
+msgid "Frames:"
+msgstr "Kareler:"
+
+#: src/hb-backend.c:115
+msgid "Do Nothing"
+msgstr "Hiçbir Şey Yapma"
+
+#: src/hb-backend.c:116
+msgid "Quit Handbrake"
+msgstr "HandBrake'ten Çık"
+
+#: src/hb-backend.c:117
+msgid "Put Computer To Sleep"
+msgstr "Bilgisayarı Uyku Moduna Al"
+
+#: src/hb-backend.c:118
+msgid "Shutdown Computer"
+msgstr "Bilgisayarı Kapat"
+
+#: src/hb-backend.c:130 src/hb-backend.c:232 src/hb-backend.c:275 src/hb-backend.c:289
+#: src/hb-backend.c:400
+msgid "Custom"
+msgstr "Özel"
+
+#: src/hb-backend.c:166
+msgid "Week"
+msgstr "Hafta"
+
+#: src/hb-backend.c:167
+msgid "Month"
+msgstr "Ay"
+
+#: src/hb-backend.c:168
+msgid "Year"
+msgstr "Yıl"
+
+#: src/hb-backend.c:169
+msgid "Immortal"
+msgstr "Sınırsız"
+
+#: src/hb-backend.c:193 src/hb-backend.c:4975
+msgid "Decomb"
+msgstr "Decomb"
+
+#: src/hb-backend.c:194
+msgid "Yadif"
+msgstr "Yadif"
+
+#: src/hb-backend.c:195
+msgid "Bwdif"
+msgstr "Bwdif"
+
+#: src/hb-backend.c:206
+msgid "NLMeans"
+msgstr "NLMeans"
+
+#: src/hb-backend.c:207
+msgid "HQDN3D"
+msgstr "HQDN3D"
+
+#: src/hb-backend.c:218
+msgid "Unsharp"
+msgstr "Unsharp"
+
+#: src/hb-backend.c:219
+msgid "Lapsharp"
+msgstr "Lapsharp"
+
+#: src/hb-backend.c:230
+msgid "Conservative"
+msgstr "Muhafazakâr"
+
+#: src/hb-backend.c:243
+msgid "90°"
+msgstr "90°"
+
+#: src/hb-backend.c:244
+msgid "180°"
+msgstr "180°"
+
+#: src/hb-backend.c:245
+msgid "270°"
+msgstr "270°"
+
+#: src/hb-backend.c:255 src/hb-backend.c:1575 src/hb-backend.c:1635
+#: src/hb-backend.c:1714
+msgid "Same as source"
+msgstr "Kaynakla aynı"
+
+#: src/hb-backend.c:256
+msgid "Limited"
+msgstr "Sınırlı"
+
+#: src/hb-backend.c:257
+msgid "Full"
+msgstr "Tam"
+
+#: src/hb-backend.c:267
+msgid "4320p 8K Ultra HD"
+msgstr "4320p 8K Ultra HD"
+
+#: src/hb-backend.c:268
+msgid "2160p 4K Ultra HD"
+msgstr "2160p 4K Ultra HD"
+
+#: src/hb-backend.c:269
+msgid "1440p 2.5K Quad HD"
+msgstr "1440p 2.5K Quad HD"
+
+#: src/hb-backend.c:270
+msgid "1080p Full HD"
+msgstr "1080p Full HD"
+
+#: src/hb-backend.c:271
+msgid "720p HD"
+msgstr "720p HD"
+
+#: src/hb-backend.c:272
+msgid "576p PAL"
+msgstr "576p PAL"
+
+#: src/hb-backend.c:273
+msgid "480p NTSC"
+msgstr "480p NTSC"
+
+#: src/hb-backend.c:286
+msgid "Height (Letterbox)"
+msgstr "Yükseklik (Letterbox)"
+
+#: src/hb-backend.c:287
+msgid "Width (Pillarbox)"
+msgstr "Genişlik (Pillarbox)"
+
+#: src/hb-backend.c:288
+msgid "Width &amp; Height"
+msgstr "Genişlik ve Yükseklik"
+
+#: src/hb-backend.c:299
+msgid "Black"
+msgstr "Siyah"
+
+#: src/hb-backend.c:300
+msgid "Dark Gray"
+msgstr "Koyu Gri"
+
+#: src/hb-backend.c:301
+msgid "Gray"
+msgstr "Gri"
+
+#: src/hb-backend.c:302
+msgid "White"
+msgstr "Beyaz"
+
+#: src/hb-backend.c:313
+msgid "Spatial"
+msgstr "Uzamsal"
+
+#: src/hb-backend.c:314
+msgid "Temporal"
+msgstr "Zamansal"
+
+#: src/hb-backend.c:326
+msgid "Fast"
+msgstr "Hızlı"
+
+#: src/hb-backend.c:327
+msgid "Optimal"
+msgstr "Optimal"
+
+#: src/hb-backend.c:338
+msgid "Strict"
+msgstr "Katı"
+
+#: src/hb-backend.c:339
+msgid "Normal"
+msgstr "Normal"
+
+#: src/hb-backend.c:350
+msgid "Simple"
+msgstr "Basit"
+
+#: src/hb-backend.c:351
+msgid "Smart"
+msgstr "Akıllı"
+
+#: src/hb-backend.c:361
+msgid "Diamond"
+msgstr "Elmas"
+
+#: src/hb-backend.c:362
+msgid "Hexagon"
+msgstr "Altıgen"
+
+#: src/hb-backend.c:363
+msgid "Uneven Multi-Hexagon"
+msgstr "Düzensiz Çoklu Altıgen"
+
+#: src/hb-backend.c:364
+msgid "Exhaustive"
+msgstr "Kapsamlı"
+
+#: src/hb-backend.c:365
+msgid "Hadamard Exhaustive"
+msgstr "Hadamard Kapsamlı"
+
+#: src/hb-backend.c:375
+msgid "0: SAD, no subpel"
+msgstr "0: SAD, alt piksel yok"
+
+#: src/hb-backend.c:376
+msgid "1: SAD, qpel"
+msgstr "1: SAD, qpel"
+
+#: src/hb-backend.c:377
+msgid "2: SATD, qpel"
+msgstr "2: SATD, qpel"
+
+#: src/hb-backend.c:378
+msgid "3: SATD: multi-qpel"
+msgstr "3: SATD: çoklu qpel"
+
+#: src/hb-backend.c:379
+msgid "4: SATD, qpel on all"
+msgstr "4: SATD, tümünde qpel"
+
+#: src/hb-backend.c:380
+msgid "5: SATD, multi-qpel on all"
+msgstr "5: SATD, tümünde çoklu qpel"
+
+#: src/hb-backend.c:381
+msgid "6: RD in I/P-frames"
+msgstr "6: I/P karelerinde RD"
+
+#: src/hb-backend.c:382
+msgid "7: RD in all frames"
+msgstr "7: Tüm karelerde RD"
+
+#: src/hb-backend.c:383
+msgid "8: RD refine in I/P-frames"
+msgstr "8: I/P karelerinde RD iyileştirme"
+
+#: src/hb-backend.c:384
+msgid "9: RD refine in all frames"
+msgstr "9: Tüm karelerde RD iyileştirme"
+
+#: src/hb-backend.c:385
+msgid "10: QPRD in all frames"
+msgstr "10: Tüm karelerde QPRD"
+
+#: src/hb-backend.c:386
+msgid "11: No early terminations in analysis"
+msgstr "11: Analizde erken sonlandırma yok"
+
+#: src/hb-backend.c:396
+msgid "Most"
+msgstr "Çoğu"
+
+#: src/hb-backend.c:398
+msgid "Some"
+msgstr "Bazı"
+
+#: src/hb-backend.c:411
+msgid "Encode only"
+msgstr "Yalnızca kodlamada"
+
+#: src/hb-backend.c:412
+msgid "Always"
+msgstr "Her zaman"
+
+#: src/hb-backend.c:425
+msgid "Use System Language"
+msgstr "Sistem Dilini Kullan"
+
+#: src/hb-backend.c:1728
+msgid "(NTSC Film)"
+msgstr "(NTSC Film)"
+
+#: src/hb-backend.c:1732
+msgid "(PAL Film/Video)"
+msgstr "(PAL Film/Video)"
+
+#: src/hb-backend.c:1736
+msgid "(NTSC Video)"
+msgstr "(NTSC Video)"
+
+#: src/hb-backend.c:2304
+#, c-format
+msgid "%s - (%05d.MPLS)"
+msgstr "%s - (%05d.MPLS)"
+
+#: src/hb-backend.c:2455
+#, c-format
+msgid "%3d - %02dh%02dm%02ds - %s"
+msgstr "%3d - %02dsa%02ddk%02dsn - %s"
+
+#: src/hb-backend.c:2474
+#, c-format
+msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
+msgstr "%3d - %02dsa%02ddk%02dsn - (%05d.MPLS)"
+
+#: src/hb-backend.c:2480
+#, c-format
+msgid "%3d - (%05d.MPLS)"
+msgstr "%3d - (%05d.MPLS)"
+
+#: src/hb-backend.c:2486
+#, c-format
+msgid "%3d - %02dh%02dm%02ds"
+msgstr "%3d - %02dsa%02ddk%02dsn"
+
+#: src/hb-backend.c:2519
+msgid "No Titles"
+msgstr "Başlık Yok"
+
+#. No audio. set some default
+#: src/hb-backend.c:2791
+msgid "No Audio"
+msgstr "Ses Yok"
+
+#: src/hb-backend.c:4416 src/hb-backend.c:4424
+msgid "Invalid Detelecine Settings"
+msgstr "Geçersiz Telecine Giderme Ayarları"
+
+#: src/hb-backend.c:4419 src/hb-backend.c:4450 src/hb-backend.c:4486
+#: src/hb-backend.c:4523 src/hb-backend.c:4548
+msgid "Custom:"
+msgstr "Özel:"
+
+#: src/hb-backend.c:4447 src/hb-backend.c:4455
+msgid "Invalid Comb Detect Settings"
+msgstr "Geçersiz Tarak Algılama Ayarları"
+
+#: src/hb-backend.c:4482 src/hb-backend.c:4491
+msgid "Invalid Deinterlace Settings"
+msgstr "Geçersiz Tarama Giderme Ayarları"
+
+#: src/hb-backend.c:4484 src/hb-backend.c:4493 src/hb-backend.c:4520
+#: src/hb-backend.c:4545
+msgid "Filter:"
+msgstr "Filtre:"
+
+#: src/hb-backend.c:4518
+msgid "Invalid Denoise Settings"
+msgstr "Geçersiz Gürültü Giderme Ayarları"
+
+#: src/hb-backend.c:4543
+msgid "Invalid Sharpen Settings"
+msgstr "Geçersiz Keskinleştirme Ayarları"
+
+#. mp4/theora combination is not supported.
+#: src/hb-backend.c:4572
+msgid ""
+"Theora is not supported in the MP4 container.\n"
+"\n"
+"You should choose a different video codec or container.\n"
+"If you continue, FFMPEG will be chosen for you."
+msgstr ""
+"Theora, MP4 kapsayıcısında desteklenmez.\n"
+"\n"
+"Farklı bir video kodeği veya kapsayıcı seçmelisiniz.\n"
+"Devam ederseniz, sizin için FFMPEG seçilecektir."
+
+#. webm only supports vp8, vp9 and av1.
+#: src/hb-backend.c:4581
+msgid ""
+"Only VP8, VP9 and AV1 is supported in the WebM container.\n"
+"\n"
+"You should choose a different video codec or container.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"WebM kapsayıcısında yalnızca VP8, VP9 ve AV1 desteklenir.\n"
+"\n"
+"Farklı bir video kodeği veya kapsayıcı seçmelisiniz.\n"
+"Devam ederseniz, sizin için biri seçilecektir."
+
+#: src/hb-backend.c:4589 src/hb-backend.c:4640 src/hb-backend.c:4657
+#: src/hb-backend.c:4674 src/hb-backend.c:4731 src/hb-backend.c:4784
+msgid "Continue"
+msgstr "Devam Et"
+
+#: src/hb-backend.c:4590
+msgid "Invalid Video Codec"
+msgstr "Geçersiz Video Kodeği"
+
+#. No valid title, stop right there
+#: src/hb-backend.c:4613 src/hb-backend.c:4699
+msgid "No title found.\n"
+msgstr "Başlık bulunamadı.\n"
+
+#: src/hb-backend.c:4640 src/hb-backend.c:4657
+msgid "Invalid Subtitle Selection"
+msgstr "Geçersiz Altyazı Seçimi"
+
+#: src/hb-backend.c:4641
+msgid ""
+"Only one subtitle may be burned into the video.\n"
+"\n"
+"You should change your subtitle selections.\n"
+"If you continue, some subtitles will be lost."
+msgstr ""
+"Videoya yalnızca bir altyazı gömülebilir.\n"
+"\n"
+"Altyazı seçimlerinizi değiştirmelisiniz.\n"
+"Devam ederseniz, bazı altyazılar kaybolacak."
+
+#: src/hb-backend.c:4658
+msgid ""
+"WebM in HandBrake only supports burned subtitles.\n"
+"\n"
+"You should change your subtitle selections.\n"
+"If you continue, some subtitles will be lost."
+msgstr ""
+"HandBrake'te WebM yalnızca gömülü altyazıları destekler.\n"
+"\n"
+"Altyazı seçimlerinizi değiştirmelisiniz.\n"
+"Devam ederseniz, bazı altyazılar kaybolacak."
+
+#: src/hb-backend.c:4674
+msgid "Subtitle File Not Found"
+msgstr "Altyazı Dosyası Bulunamadı"
+
+#: src/hb-backend.c:4675
+msgid ""
+"SRT file does not exist or not a regular file.\n"
+"\n"
+"You should choose a valid file.\n"
+"If you continue, this subtitle will be ignored."
+msgstr ""
+"SRT dosyası mevcut değil veya normal bir dosya değil.\n"
+"\n"
+"Geçerli bir dosya seçmelisiniz.\n"
+"Devam ederseniz, bu altyazı yok sayılacak."
+
+#: src/hb-backend.c:4731 src/hb-backend.c:4784
+msgid "Invalid Audio Selection"
+msgstr "Geçersiz Ses Seçimi"
+
+#: src/hb-backend.c:4732
+msgid ""
+"The source does not support Pass-Thru.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"Kaynak Geçiş'i desteklemiyor.\n"
+"\n"
+"Farklı bir ses kodeği seçmelisiniz.\n"
+"Devam ederseniz, sizin için biri seçilecektir."
+
+#: src/hb-backend.c:4785
+#, c-format
+msgid ""
+"%s is not supported in the %s container.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"%s, %s kapsayıcısında desteklenmez.\n"
+"\n"
+"Farklı bir ses kodeği seçmelisiniz.\n"
+"Devam ederseniz, sizin için biri seçilecektir."
+
+#: src/hb-backend.c:4967
+msgid "Comb Detect"
+msgstr "Tarak Algılama"
+
+#: src/hb-backend.c:4969
+msgid "Detelecine"
+msgstr "Telecine Giderme"
+
+#: src/hb-backend.c:4971
+msgid "Deinterlace (Yadif)"
+msgstr "Tarama Giderme (Yadif)"
+
+#: src/hb-backend.c:4973
+msgid "Deinterlace (Bwdif)"
+msgstr "Tarama Giderme (Bwdif)"
+
+#: src/hb-backend.c:4977
+msgid "Deblock"
+msgstr "Blok Giderme"
+
+#: src/hb-backend.c:4979
+msgid "Denoise (NLMeans)"
+msgstr "Gürültü Giderme (NLMeans)"
+
+#: src/hb-backend.c:4981
+msgid "Denoise (HQDN3D)"
+msgstr "Gürültü Giderme (HQDN3D)"
+
+#: src/hb-backend.c:4983
+msgid "Chroma Smooth"
+msgstr "Kroma Yumuşatma"
+
+#: src/hb-backend.c:4985
+msgid "Sharpen (Unsharp)"
+msgstr "Keskinleştirme (Unsharp)"
+
+#: src/hb-backend.c:4987
+msgid "Rotate"
+msgstr "Döndür"
+
+#: src/hb-backend.c:4989
+msgid "Sharpen (lapsharp)"
+msgstr "Keskinleştirme (lapsharp)"
+
+#: src/hb-backend.c:4993
+msgid "Colorspace"
+msgstr "Renk Uzayı"
+
+#: src/notifications.c:55
+#, c-format
+msgid "%d item complete, %d failed"
+msgid_plural "%d items complete, %d failed"
+msgstr[0] "%d öğe tamamlandı, %d başarısız"
+msgstr[1] "%d öğe tamamlandı, %d başarısız"
+
+#: src/notifications.c:61
+#, c-format
+msgid "%d item has finished encoding"
+msgid_plural "%d items have finished encoding"
+msgstr[0] "%d öğenin kodlaması tamamlandı"
+msgstr[1] "%d öğenin kodlaması tamamlandı"
+
+#: src/notifications.c:107
+msgid "Put down that cocktail…"
+msgstr "O kokteyli bırak…"
+
+#: src/notifications.c:117
+msgid "Encode Complete"
+msgstr "Kodlama Tamamlandı"
+
+#: src/notifications.c:117
+msgid "Encode Failed"
+msgstr "Kodlama Başarısız"
+
+#: src/notifications.c:140
+msgid "Battery level is low."
+msgstr "Pil seviyesi düşük."
+
+#: src/notifications.c:143
+msgid "Charger has been disconnected."
+msgstr "Şarj cihazı bağlantısı kesildi."
+
+#: src/notifications.c:146
+msgid "Power Saver mode has been activated."
+msgstr "Güç Tasarrufu modu etkinleştirildi."
+
+#: src/notifications.c:151
+#, c-format
+msgid "%s free space remaining."
+msgstr "%s boş alan kaldı."
+
+#: src/notifications.c:158 src/queuehandler.c:1171
+msgid "Encoding Paused"
+msgstr "Kodlama Duraklatıldı"
+
+#: src/presets.c:52
+msgid "My Presets"
+msgstr "Ön Ayarlarım"
+
+#: src/presets.c:87
+msgid "Preset Name"
+msgstr "Ön Ayar Adı"
+
+#: src/presets.c:1318
+msgid "ghb_presets_menu_init: Failed to find presets folder."
+msgstr "ghb_presets_menu_init: Ön ayarlar klasörü bulunamadı."
+
+#: src/presets.c:1493
+msgid "Failed to find parent folder when adding child."
+msgstr "Alt öğe eklenirken üst klasör bulunamadı."
+
+#: src/presets.c:1980
+msgid "Load backup presets"
+msgstr "Yedek ön ayarları yükle"
+
+#: src/presets.c:1980
+msgid "Get me out of here!"
+msgstr "Beni buradan çıkar!"
+
+#: src/presets.c:1981
+msgid ""
+"Presets found are newer than what is supported by this version of HandBrake!\n"
+"\n"
+"Would you like to continue?"
+msgstr ""
+"Bulunan ön ayarlar, HandBrake'in bu sürümünün desteklediğinden daha yeni!\n"
+"\n"
+"Devam etmek istiyor musunuz?"
+
+#: src/presets.c:2161 src/presets.c:2543 src/title-add.c:124 src/title-add.c:134
+msgid "Overwrite"
+msgstr "Üzerine Yaz"
+
+#: src/presets.c:2162 src/presets.c:2544
+msgid "Overwrite Preset?"
+msgstr "Ön Ayarın Üzerine Yazılsın mı?"
+
+#: src/presets.c:2163 src/presets.c:2545
+#, c-format
+msgid "The preset “%s” already exists. Do you want to overwrite it?"
+msgstr "“%s” ön ayarı zaten mevcut. Üzerine yazmak istiyor musunuz?"
+
+#: src/presets.c:2252
+msgid "Import Preset"
+msgstr "Ön Ayar İçe Aktar"
+
+#: src/presets.c:2258
+msgid "Presets (*.json)"
+msgstr "Ön Ayarlar (*.json)"
+
+#: src/presets.c:2367
+msgid "Export Preset"
+msgstr "Ön Ayar Dışa Aktar"
+
+#: src/presets.c:2768
+msgid "_Delete"
+msgstr "_Sil"
+
+#: src/presets.c:2769
+msgid "Delete Folder?"
+msgstr "Klasör Silinsin mi?"
+
+#: src/presets.c:2769
+msgid "Delete Preset?"
+msgstr "Ön Ayar Silinsin mi?"
+
+#: src/presets.c:2770
+#, c-format
+msgid ""
+"Are you sure you want to delete “%s”?\n"
+"Deleted items cannot be recovered."
+msgstr ""
+"“%s” öğesini silmek istediğinizden emin misiniz?\n"
+"Silinen öğeler geri alınamaz."
+
+#: src/preview.c:154
+msgid "Pause Preview"
+msgstr "Önizlemeyi Duraklat"
+
+#: src/preview.c:158
+msgid "Stop Encoding Preview"
+msgstr "Kodlama Önizlemesini Durdur"
+
+#: src/preview.c:162
+msgid "Play Preview"
+msgstr "Önizlemeyi Oynat"
+
+#: src/preview.c:288
+msgid "Playback Error"
+msgstr "Oynatma Hatası"
+
+#: src/preview.c:291
+msgid "The video could not be played. For more details, see the Activity Log."
+msgstr "Video oynatılamadı. Daha fazla ayrıntı için Etkinlik Günlüğü'ne bakın."
+
+#: src/queuehandler.c:128
+#, c-format
+msgid "%s (Modified)"
+msgstr "%s (Değiştirildi)"
+
+#: src/queuehandler.c:176
+msgid "Time:"
+msgstr "Zaman:"
+
+#: src/queuehandler.c:220
+msgid "Align A/V"
+msgstr "Ses/Video Hizala"
+
+#: src/queuehandler.c:230
+msgid "iPod 5G"
+msgstr "iPod 5G"
+
+#: src/queuehandler.c:262
+#, c-format
+msgid ""
+"%d:%d:%d:%d Crop\n"
+"%dx%d storage, %dx%d display\n"
+"%d:%d Pixel Aspect Ratio\n"
+"%s Display Aspect Ratio"
+msgstr ""
+"%d:%d:%d:%d Kırpma\n"
+"%dx%d depolama, %dx%d görüntüleme\n"
+"%d:%d Piksel En-Boy Oranı\n"
+"%s Görüntüleme En-Boy Oranı"
+
+#: src/queuehandler.c:291
+#, c-format
+msgid "%s, Bitrate %dkbps"
+msgstr "%s, Bit Hızı %dkbps"
+
+#: src/queuehandler.c:297
+#, c-format
+msgid "%s, Constant Quality %.4g(%s)"
+msgstr "%s, Sabit Kalite %.4g(%s)"
+
+#: src/queuehandler.c:304
+#, c-format
+msgid " (Multi Pass)"
+msgstr " (Çok Geçişli)"
+
+#: src/queuehandler.c:336
+#, c-format
+msgid "%sPreset %s"
+msgstr "%sÖn Ayar %s"
+
+#: src/queuehandler.c:341
+#, c-format
+msgid "%sTune %s"
+msgstr "%sAyar %s"
+
+#: src/queuehandler.c:346
+#, c-format
+msgid "%sProfile %s"
+msgstr "%sProfil %s"
+
+#: src/queuehandler.c:351
+#, c-format
+msgid "%sLevel %s"
+msgstr "%sSeviye %s"
+
+#: src/queuehandler.c:368
+#, c-format
+msgid ""
+"\n"
+"Constant Framerate %s fps"
+msgstr ""
+"\n"
+"Sabit Kare Hızı %s fps"
+
+#: src/queuehandler.c:372
+#, c-format
+msgid ""
+"\n"
+"Peak Framerate %s fps (may be lower)"
+msgstr ""
+"\n"
+"Tepe Kare Hızı %s fps (daha düşük olabilir)"
+
+#: src/queuehandler.c:377
+#, c-format
+msgid ""
+"\n"
+"Variable Framerate %s fps"
+msgstr ""
+"\n"
+"Değişken Kare Hızı %s fps"
+
+#: src/queuehandler.c:545
+msgid "kbps"
+msgstr "kbps"
+
+#: src/queuehandler.c:679 src/queuehandler.c:704
+msgid "Pending"
+msgstr "Beklemede"
+
+#: src/queuehandler.c:691 src/queuehandler.c:1182
+msgid "Completed"
+msgstr "Tamamlandı"
+
+#: src/queuehandler.c:695 src/queuehandler.c:1186
+msgid "Canceled"
+msgstr "İptal Edildi"
+
+#: src/queuehandler.c:699 src/queuehandler.c:1190
+msgid "Failed"
+msgstr "Başarısız"
+
+#: src/queuehandler.c:740 src/queuehandler.c:768 src/queuehandler.c:1230
+#: src/queuehandler.c:1258
+#, c-format
+msgid "%d Day %02d:%02d:%02d"
+msgstr "%d Gün %02d:%02d:%02d"
+
+#: src/queuehandler.c:743 src/queuehandler.c:771 src/queuehandler.c:1233
+#: src/queuehandler.c:1261
+#, c-format
+msgid "%d Days %02d:%02d:%02d"
+msgstr "%d Gün %02d:%02d:%02d"
+
+#: src/queuehandler.c:784 src/queuehandler.c:1274
+msgid "B"
+msgstr "B"
+
+#: src/queuehandler.c:788 src/queuehandler.c:1278
+msgid "KB"
+msgstr "KB"
+
+#: src/queuehandler.c:793 src/queuehandler.c:1283
+msgid "MB"
+msgstr "MB"
+
+#: src/queuehandler.c:809 src/queuehandler.c:1299
+msgid "Not Available"
+msgstr "Kullanılamıyor"
+
+#: src/queuehandler.c:1134
+msgid "Foreign Audio Search"
+msgstr "Yabancı Ses Arama"
+
+#: src/queuehandler.c:1138
+msgid "Encode"
+msgstr "Kodla"
+
+#: src/queuehandler.c:1142
+msgid "Encode Analysis Pass"
+msgstr "Kodlama Analiz Geçişi"
+
+#: src/queuehandler.c:1146
+msgid "Encode Final Pass"
+msgstr "Kodlama Son Geçişi"
+
+#. Should never happen
+#: src/queuehandler.c:1151
+msgid "Error"
+msgstr "Hata"
+
+#: src/queuehandler.c:1155
+#, c-format
+msgid ""
+"pass %d of %d\n"
+"%s"
+msgstr ""
+"geçiş %d / %d\n"
+"%s"
+
+#: src/queuehandler.c:1167
+msgid "Scanning Title"
+msgstr "Başlık Taranıyor"
+
+#: src/queuehandler.c:1175
+msgid "Encoding In Progress"
+msgstr "Kodlama Sürüyor"
+
+#. Should never happen
+#: src/queuehandler.c:1195
+msgid "Unknown"
+msgstr "Bilinmiyor"
+
+#: src/queuehandler.c:1383
+msgid "Export Queue"
+msgstr "Kuyruğu Dışa Aktar"
+
+#: src/queuehandler.c:1466
+msgid "Import Queue"
+msgstr "Kuyruğu İçe Aktar"
+
+#: src/queuehandler.c:1616
+msgid "Low Disk Space: Encoding Paused"
+msgstr "Düşük Disk Alanı: Kodlama Duraklatıldı"
+
+#: src/queuehandler.c:1619
+#, c-format
+msgid ""
+"The destination filesystem is almost full: %s free.\n"
+"Destination: %s\n"
+"Encode may be incomplete if you proceed."
+msgstr ""
+"Hedef dosya sistemi neredeyse dolu: %s boş.\n"
+"Hedef: %s\n"
+"Devam ederseniz kodlama eksik olabilir."
+
+#: src/queuehandler.c:1624
+msgid "Resume, I've fixed the problem"
+msgstr "Devam et, sorunu düzelttim"
+
+#: src/queuehandler.c:1625
+msgid "Resume, Don't tell me again"
+msgstr "Devam et, bir daha söyleme"
+
+#: src/queuehandler.c:1700
+msgid "Remove Item in Progress?"
+msgstr "Sürmekte Olan Öğe Kaldırılsın mı?"
+
+#: src/queuehandler.c:1702
+msgid "Cancel and Remove"
+msgstr "İptal Et ve Kaldır"
+
+#: src/queuehandler.c:1842 src/queuehandler.c:1855
+msgid "Stop"
+msgstr "Durdur"
+
+#: src/queuehandler.c:1843 src/queuehandler.c:1856
+msgid "Stop Encoding"
+msgstr "Kodlamayı Durdur"
+
+#: src/queuehandler.c:1868
+msgid "S_top Encoding"
+msgstr "Kodlamayı D_urdur"
+
+#: src/queuehandler.c:1886 src/queuehandler.c:1899
+msgid "Resume"
+msgstr "Devam Et"
+
+#: src/queuehandler.c:1887 src/queuehandler.c:1900
+msgid "Resume Encoding"
+msgstr "Kodlamaya Devam Et"
+
+#: src/queuehandler.c:1911
+msgid "_Resume Encoding"
+msgstr "_Kodlamaya Devam Et"
+
+#: src/subtitlehandler.c:107
+#, c-format
+msgid "Offset: %dms"
+msgstr "Ofset: %dms"
+
+#: src/subtitlehandler.c:112
+msgid "Burned Into Video"
+msgstr "Videoya Gömülü"
+
+#: src/subtitlehandler.c:113
+msgid "Passthru"
+msgstr "Geçiş"
+
+#: src/subtitlehandler.c:120
+msgid "Default"
+msgstr "Varsayılan"
+
+#: src/subtitlehandler.c:1235
+msgid "Add Subtitles"
+msgstr "Altyazı Ekle"
+
+#: src/subtitlehandler.c:1453
+#, c-format
+msgid "Preferred Language: %s"
+msgstr "Tercih Edilen Dil: %s"
+
+#: src/subtitlehandler.c:1466
+#, c-format
+msgid "Add %s subtitle track if default audio is not %s"
+msgstr "Varsayılan ses %s değilse %s altyazı parçası ekle"
+
+#: src/subtitlehandler.c:1471
+#, c-format
+msgid "Add subtitle track if default audio is not your preferred language"
+msgstr "Varsayılan ses tercih edilen diliniz değilse altyazı parçası ekle"
+
+#: src/title-add.c:103 src/title-add.c:112
+msgid "Invalid Destination"
+msgstr "Geçersiz Hedef"
+
+#: src/title-add.c:104
+#, c-format
+msgid "“%s” is is not a valid directory."
+msgstr "“%s” geçerli bir dizin değil."
+
+#: src/title-add.c:113
+#, c-format
+msgid "“%s” is not a writable directory."
+msgstr "“%s” yazılabilir bir dizin değil."
+
+#: src/title-add.c:124 src/title-add.c:134
+msgid "Overwrite File?"
+msgstr "Dosyanın Üzerine Yazılsın mı?"
+
+#: src/title-add.c:125
+#, c-format
+msgid ""
+"The file “%s” already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"“%s” dosyası zaten mevcut.\n"
+"Üzerine yazmak istiyor musunuz?"
+
+#: src/title-add.c:135
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"Another queued job has specified the same destination.\n"
+"Do you want to overwrite?"
+msgstr ""
+"Hedef: %s\n"
+"\n"
+"Kuyruktaki başka bir iş aynı hedefi belirtmiş.\n"
+"Üzerine yazmak istiyor musunuz?"
+
+#: src/title-add.c:352
+msgid ""
+"Duplicate destination files detected. Duplicates will not be added to the queue."
+msgstr "Yinelenen hedef dosyalar algılandı. Yinelenenler kuyruğa eklenmeyecek."
+
+#: src/title-add.c:445
+msgid "Select this title for adding to the queue.\n"
+msgstr "Bu başlığı kuyruğa eklemek için seç.\n"
+
+#. Title label
+#: src/title-add.c:453
+msgid "No Title"
+msgstr "Başlık Yok"
+
+#: src/title-add.c:463
+msgid ""
+"There is another title with the same destination file name.\n"
+"This title will not be added to the queue unless you change\n"
+"the output file name.\n"
+msgstr ""
+"Aynı hedef dosya adına sahip başka bir başlık var.\n"
+"Çıktı dosyası adını değiştirmediğiniz sürece bu başlık\n"
+"kuyruğa eklenmeyecek.\n"
+
+#: src/title-add.c:832
+msgid "OK"
+msgstr "Tamam"
+
+#: src/title-add.c:832
+msgid "Cannot Add Titles"
+msgstr "Başlıklar Eklenemiyor"
+
+#: src/title-add.c:833
+msgid ""
+"The filenames are not unique. Please choose\n"
+"a unique destination filename for each title."
+msgstr ""
+"Dosya adları benzersiz değil. Lütfen her başlık için\n"
+"benzersiz bir hedef dosya adı seçin."
+
+#: src/videohandler.c:154
+msgid "Additional advanced arguments that can be passed to the video encoder."
+msgstr "Video kodlayıcıya aktarılabilecek ek gelişmiş bağımsız değişkenler."
+
+#: src/videohandler.c:227
+msgid "The full list of encoder parameters:"
+msgstr "Kodlayıcı parametrelerinin tam listesi:"
+
+#: src/videohandler.c:345
+msgid "Warning: lossless"
+msgstr "Uyarı: kayıpsız"
+
+#: data/fr.handbrake.ghb.desktop.in:3
+msgid "Media Transcoder"
+msgstr "Medya Dönüştürücü"
+
+#: data/fr.handbrake.ghb.desktop.in:4
+msgid "Transcodes DVD, Blu-ray, and other media"
+msgstr "DVD, Blu-ray ve diğer medyayı dönüştürür"
+
+#: data/fr.handbrake.ghb.desktop.in:10
+msgid "Format Converter;Video Encoder;"
+msgstr "Biçim Dönüştürücü;Video Kodlayıcı;"
