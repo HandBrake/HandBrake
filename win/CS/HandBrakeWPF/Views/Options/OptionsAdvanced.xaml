@@ -88,7 +88,7 @@
                     <ListBox ItemsSource="{Binding ExcludedFileExtensions}" Width="150" HorizontalAlignment="Left" Height="100" >
 
                         <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource ModernListBoxItemStyle}">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 <Setter Property="Margin" Value="0,0,0,1" />
                             </Style>

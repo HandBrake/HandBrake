@@ -20,7 +20,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             this.Annotation = annotation;
             this.Value = value;
-            this.Enabled = true; // Default passthru
         }
 
         public string Annotation { get; set; }
@@ -37,21 +36,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
                 this.value = value;
                 this.NotifyOfPropertyChange(() => this.Value);
-            }
-        }
-
-        public bool Enabled
-        {
-            get => this.enabled;
-            set
-            {
-                if (value == this.enabled)
-                {
-                    return;
-                }
-
-                this.enabled = value;
-                this.NotifyOfPropertyChange(() => this.Enabled);
             }
         }
 

@@ -2976,23 +2976,20 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="MetaData_Field" xml:space="preserve">
     <value>Metadata field</value>
   </data>
-  <data name="MetaData_CheckAll" xml:space="preserve">
-    <value>Check All</value>
-  </data>
-  <data name="MetaData_UncheckAll" xml:space="preserve">
-    <value>Uncheck All</value>
-  </data>
   <data name="MetaData_ClearAddedFields" xml:space="preserve">
     <value>Clear Added Fields</value>
   </data>
-  <data name="MetaData_Import" xml:space="preserve">
-    <value>Import Metadata...</value>
+  <data name="MetaData_Reset" xml:space="preserve">
+    <value>Reset Metadata</value>
+  </data>
+  <data name="MetaData_ResetPrompt" xml:space="preserve">
+    <value>Reset metadata to the selected title? All metadata changes will be lost.</value>
   </data>
   <data name="MetaData_Export" xml:space="preserve">
     <value>Export Metadata...</value>
   </data>
   <data name="MetaData_OverwritePrompt" xml:space="preserve">
-    <value>The file &quot;{0}&quot; already exists. Do you want to overwrite it?</value>
+    <value>The file "{0}" already exists. Do you want to overwrite it?</value>
   </data>
   <data name="MetaData_ImportSkippedTags" xml:space="preserve">
     <value>The following tags were not imported because they are unsupported for this output format:{0}{1}</value>
@@ -3256,5 +3253,8 @@ Do you wish to proceed?</value>
   </data>
   <data name="LogView_Search" xml:space="preserve">
     <value>Search ...</value>
+  </data>
+  <data name="MetaData_Import" xml:space="preserve">
+    <value>Import Metadata...</value>
   </data>
 </root>

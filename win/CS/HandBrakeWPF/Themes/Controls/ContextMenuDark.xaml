@@ -16,11 +16,11 @@
     <SolidColorBrush x:Key="MenuItem.Selected.Background" Color="#3D26A0DA" />
     <SolidColorBrush x:Key="MenuItem.Selected.Border" Color="#FF26A0DA" />
 
-    <SolidColorBrush x:Key="MenuItem.Highlight.Background" Color="#3D26A0DA" />
-    <SolidColorBrush x:Key="MenuItem.Highlight.Border" Color="#FF26A0DA" />
+    <SolidColorBrush x:Key="MenuItem.Highlight.Background" Color="#B860666E" />
+    <SolidColorBrush x:Key="MenuItem.Highlight.Border" Color="Transparent" />
 
-    <SolidColorBrush x:Key="MenuItem.Highlight.Disabled.Background" Color="#0A000000" />
-    <SolidColorBrush x:Key="MenuItem.Highlight.Disabled.Border" Color="#21000000" />
+    <SolidColorBrush x:Key="MenuItem.Highlight.Disabled.Background" Color="#3D4146" />
+    <SolidColorBrush x:Key="MenuItem.Highlight.Disabled.Border" Color="Transparent" />
 
 
     <MenuScrollingVisibilityConverter x:Key="MenuScrollingVisibilityConverter" />
@@ -252,6 +252,7 @@
 
     <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type MenuItem}, ResourceId=SubmenuItemTemplateKey}" TargetType="{x:Type MenuItem}">
         <Border x:Name="templateRoot"
+            CornerRadius="3"
             SnapsToDevicePixels="true"
             Height="22"
             BorderThickness="{TemplateBinding BorderThickness}"
@@ -337,6 +338,7 @@
 
     <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type MenuItem}, ResourceId=SubmenuHeaderTemplateKey}" TargetType="{x:Type MenuItem}">
         <Border x:Name="templateRoot"
+            CornerRadius="3"
             SnapsToDevicePixels="true"
             Height="22"
             BorderThickness="{TemplateBinding BorderThickness}"
@@ -366,8 +368,8 @@
                     Visibility="Hidden"
                     VerticalAlignment="Center"
                     Margin="-1,0,0,0"
-                    BorderBrush="{StaticResource MenuItem.Highlight.Border}"
-                    Background="{StaticResource MenuItem.Highlight.Background}">
+                    BorderBrush="{StaticResource MenuItem.Selected.Border}"
+                    Background="{StaticResource MenuItem.Selected.Background}">
                     <Path x:Name="Glyph"
                         Data="{DynamicResource Checkmark}"
                         FlowDirection="LeftToRight"
@@ -446,7 +448,7 @@
                 <Setter TargetName="Icon" Property="Visibility" Value="Collapsed"/>
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
-                <Setter TargetName="templateRoot" Property="Background" Value="Transparent" />
+                <Setter TargetName="templateRoot" Property="Background" Value="{StaticResource MenuItem.Highlight.Background}" />
                 <Setter TargetName="templateRoot" Property="BorderBrush" Value="{StaticResource MenuItem.Highlight.Border}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
@@ -454,6 +456,14 @@
                 <Setter TargetName="Glyph" Property="Fill" Value="{StaticResource Menu.Disabled.Foreground}" />
                 <Setter TargetName="RightArrow" Property="Fill" Value="{StaticResource Menu.Disabled.Foreground}" />
             </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsHighlighted" Value="True"/>
+                    <Condition Property="IsEnabled" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="templateRoot" Property="Background" Value="{StaticResource MenuItem.Highlight.Disabled.Background}" />
+                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{StaticResource MenuItem.Highlight.Disabled.Border}" />
+            </MultiTrigger>
             <Trigger SourceName="SubMenuScrollViewer" Property="ScrollViewer.CanContentScroll" Value="false" >
                 <Setter TargetName="OpaqueRect" Property="Canvas.Top" Value="{Binding ElementName=SubMenuScrollViewer, Path=VerticalOffset}" />
                 <Setter TargetName="OpaqueRect" Property="Canvas.Left" Value="{Binding ElementName=SubMenuScrollViewer, Path=HorizontalOffset}" />
@@ -463,6 +473,7 @@
 
     <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type MenuItem}, ResourceId=TopLevelItemTemplateKey}" TargetType="{x:Type MenuItem}">
         <Border x:Name="templateRoot"
+            CornerRadius="3"
             SnapsToDevicePixels="true"
             BorderThickness="{TemplateBinding BorderThickness}"
             Background="{TemplateBinding Background}"
@@ -524,6 +535,7 @@
 
     <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type MenuItem}, ResourceId=TopLevelHeaderTemplateKey}" TargetType="{x:Type MenuItem}">
         <Border x:Name="templateRoot"
+            CornerRadius="3"
             SnapsToDevicePixels="true"
             BorderThickness="{TemplateBinding BorderThickness}"
             Background="{TemplateBinding Background}"

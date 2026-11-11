@@ -27,7 +27,7 @@
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
 
-        <Style TargetType="MenuItem">
+        <Style TargetType="MenuItem" BasedOn="{StaticResource LocalMenuItemBaseStyle}">
             <Setter Property="ToolTipService.InitialShowDelay" Value="1000"/>
         </Style>
 
