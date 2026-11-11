@@ -3793,15 +3793,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check All.
-        /// </summary>
-        public static string MetaData_CheckAll {
-            get {
-                return ResourceManager.GetString("MetaData_CheckAll", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Clear Added Fields.
         /// </summary>
         public static string MetaData_ClearAddedFields {
@@ -3811,20 +3802,14 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Metadata.
+        ///   Looks up a localized string similar to Export Metadata....
         /// </summary>
         public static string MetaData_Export {
             get {
                 return ResourceManager.GetString("MetaData_Export", resourceCulture);
             }
         }
-
-        public static string MetaData_OverwritePrompt {
-            get {
-                return ResourceManager.GetString("MetaData_OverwritePrompt", resourceCulture);
-            }
-        }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Unable to export metadata: {0}.
         /// </summary>
@@ -3880,41 +3865,32 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to JSON.
+        ///   Looks up a localized string similar to The file &quot;{0}&quot; already exists. Do you want to overwrite it?.
         /// </summary>
-        public static string MetaData_Json {
+        public static string MetaData_OverwritePrompt {
             get {
-                return ResourceManager.GetString("MetaData_Json", resourceCulture);
+                return ResourceManager.GetString("MetaData_OverwritePrompt", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to Text (key=value).
+        ///   Looks up a localized string similar to Reset Metadata.
         /// </summary>
-        public static string MetaData_Txt {
+        public static string MetaData_Reset {
             get {
-                return ResourceManager.GetString("MetaData_Txt", resourceCulture);
+                return ResourceManager.GetString("MetaData_Reset", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to Uncheck All.
+        ///   Looks up a localized string similar to Reset metadata to the selected title? All metadata changes will be lost..
         /// </summary>
-        public static string MetaData_UncheckAll {
+        public static string MetaData_ResetPrompt {
             get {
-                return ResourceManager.GetString("MetaData_UncheckAll", resourceCulture);
+                return ResourceManager.GetString("MetaData_ResetPrompt", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to XML.
-        /// </summary>
-        public static string MetaData_Xml {
-            get {
-                return ResourceManager.GetString("MetaData_Xml", resourceCulture);
-            }
-        }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Actors:.
         /// </summary>

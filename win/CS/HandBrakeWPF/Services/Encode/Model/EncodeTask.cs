@@ -143,8 +143,7 @@ namespace HandBrakeWPF.Services.Encode.Model
 
             /* Other */
             this.PassthruMetadataEnabled = task.PassthruMetadataEnabled;
-            this.MetaData = new ObservableCollection<MetaDataValue>(task.MetaData.Select(item =>
-                new MetaDataValue(item.Annotation, item.Value) { Enabled = item.Enabled, IsNew = item.IsNew }));
+            this.MetaData = new ObservableCollection<MetaDataValue>(task.MetaData.Select(item => new MetaDataValue(item.Annotation, item.Value) { IsNew = item.IsNew }));
             this.CoverArts = new ObservableCollection<CoverArt>(task.CoverArts);
         }
         

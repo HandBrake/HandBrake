@@ -92,6 +92,8 @@ namespace HandBrakeWPF.ViewModels
 
         public bool HasAvailableMetadataKeys => this.AvailableMetadataKeys.Any();
 
+        public bool HasSelectedTitle => this.currentTitle != null;
+
         public ObservableCollection<MetaDataValue> SourceMetadata
         {
             get => this.task.MetaData;
@@ -203,26 +205,10 @@ namespace HandBrakeWPF.ViewModels
 
         public void Delete(MetaDataValue row)
         {
-            if (this.SourceMetadata.Contains(row) && row.IsNew)
+            if (this.SourceMetadata.Contains(row))
             {
                 this.SourceMetadata.Remove(row);
                 this.UpdateMetadataChoices();
-            }
-        }
-
-        public void CheckAll()
-        {
-            foreach (MetaDataValue metadata in this.SourceMetadata)
-            {
-                metadata.Enabled = true;
-            }
-        }
-
-        public void UncheckAll()
-        {
-            foreach (MetaDataValue metadata in this.SourceMetadata)
-            {
-                metadata.Enabled = false;
             }
         }
 
@@ -233,6 +219,21 @@ namespace HandBrakeWPF.ViewModels
                 this.SourceMetadata.Remove(metadata);
             }
 
+            this.UpdateMetadataChoices();
+        }
+
+        public void ResetMetadata()
+        {
+            if (!this.HasSelectedTitle || this.errorService.ShowMessageBox(
+                    Properties.Resources.MetaData_ResetPrompt,
+                    Properties.Resources.AreYouSure,
+                    System.Windows.MessageBoxButton.YesNo,
+                    System.Windows.MessageBoxImage.Warning) != System.Windows.MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            this.LoadTitleMetadata();
             this.UpdateMetadataChoices();
         }
 
@@ -365,7 +366,6 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 Dictionary<string, string> metadata = this.SourceMetadata
-                    .Where(item => item.Enabled)
                     .ToDictionary(item => item.Annotation, item => item.Value ?? string.Empty);
                 writeMetadata(filename, metadata);
             }
@@ -504,15 +504,9 @@ namespace HandBrakeWPF.ViewModels
         {
             this.task = encodeTask;
             this.currentTitle = selectedTitle;
+            this.NotifyOfPropertyChange(() => this.HasSelectedTitle);
 
-            this.SourceMetadata.Clear();
-            if (selectedTitle.Metadata != null)
-            {
-                foreach (var item in selectedTitle.Metadata)
-                {
-                    this.SourceMetadata.Add(new MetaDataValue(item.Key, item.Value));
-                }
-            }
+            this.LoadTitleMetadata();
 
             this.SourceCoverArts.Clear();
             if (selectedTitle.CoverArts != null)
@@ -568,6 +562,18 @@ namespace HandBrakeWPF.ViewModels
         public bool MatchesPreset(Preset preset)
         {
             return true;
+        }
+
+        private void LoadTitleMetadata()
+        {
+            this.SourceMetadata.Clear();
+            if (this.currentTitle.Metadata != null)
+            {
+                foreach (var item in this.currentTitle.Metadata)
+                {
+                    this.SourceMetadata.Add(new MetaDataValue(item.Key, item.Value));
+                }
+            }
         }
 
         private CoverArtImage CreateCoverArtImage(CoverArt covertArt, Title selectedTitle)
