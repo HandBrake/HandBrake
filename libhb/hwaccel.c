@@ -258,9 +258,26 @@ int hb_hwaccel_hw_device_ctx_init(enum AVHWDeviceType device_type, int device_in
 
     if (device_index > -1)
     {
-        char device[32];
-        snprintf(device, 32, "%u", device_index);
-        av_dict_set(&dict, "child_device", device, 0);
+        char device[32] = "";
+#if HB_PROJECT_FEATURE_QSV && (defined(SYS_LINUX) || defined(SYS_FREEBSD))
+        // The VAAPI child device wants a DRM node path, not an index
+        if (device_type == AV_HWDEVICE_TYPE_QSV)
+        {
+            int render_node = hb_qsv_get_adapter_render_node(device_index);
+            if (render_node > 0)
+            {
+                snprintf(device, 32, "/dev/dri/renderD%d", render_node);
+            }
+        }
+        else
+#endif
+        {
+            snprintf(device, 32, "%u", device_index);
+        }
+        if (device[0])
+        {
+            av_dict_set(&dict, "child_device", device, 0);
+        }
     }
 
 #if defined(_WIN32) || defined(__MINGW32__)

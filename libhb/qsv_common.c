@@ -236,7 +236,7 @@ static hb_qsv_adapter_details_t* hb_qsv_get_adapters_details_by_index(int adapte
 int hb_qsv_get_adapter_render_node(int adapter_index)
 {
     const hb_qsv_adapter_details_t *details = hb_qsv_get_adapters_details_by_index(adapter_index);
-    return details->extended_device_id.DRMRenderNodeNum;
+    return details ? details->extended_device_id.DRMRenderNodeNum : 0;
 }
 
 int hb_qsv_set_adapter_index(int adapter_index)
@@ -1455,12 +1455,13 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
     return 0;
 }
 
-const char * DRM_INTEL_DRIVER_NAME = "i915";
+// i915 for older GPUs, xe for Battlemage and newer
+const char * DRM_INTEL_DRIVER_NAMES[] = { "i915", "xe", NULL};
 const char * VA_INTEL_DRIVER_NAMES[] = { "iHD", "i965", NULL};
 
 hb_display_t * hb_qsv_display_init(const uint32_t dri_render_node)
 {
-    return hb_display_init(DRM_INTEL_DRIVER_NAME, dri_render_node, VA_INTEL_DRIVER_NAMES);
+    return hb_display_init(DRM_INTEL_DRIVER_NAMES, dri_render_node, VA_INTEL_DRIVER_NAMES);
 }
 
 #if defined(_WIN32) || defined(__MINGW32__)
