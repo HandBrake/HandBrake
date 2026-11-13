@@ -64,9 +64,15 @@ static const uint64_t hdr2layout[] =
     AV_CH_LAYOUT_6POINT1,      AV_CH_LAYOUT_7POINT1,
 };
 
-static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
+static int lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
 {
     hb_work_private_t * pv = w->private_data;
+
+    if (in->size < 6)
+    {
+        hb_log("declpcm: packet too small (%d bytes)", in->size);
+        return -1;
+    }
 
     /*
      * LPCM packets have a 7 byte header (the substream id is stripped off
@@ -103,6 +109,12 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
     {
         hb_log( "declpcm: illegal frame offset %d", pv->offset );
         pv->offset = 2; /*XXX*/
+    }
+    if (pv->offset > in->size)
+    {
+        hb_log("declpcm: frame offset %d exceeds packet size %d",
+               pv->offset, in->size);
+        return -1;
     }
     pv->nchannels   = ( in->data[4] & 7 ) + 1;
     pv->samplerate  = hdr2samplerate[ ( in->data[4] >> 4 ) & 0x3 ];
@@ -157,6 +169,7 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
         pv->next_pts     = in->s.start;
     }
     pv->scr_sequence = in->s.scr_sequence;
+    return 0;
 }
 
 static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
@@ -213,21 +226,65 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
+    if (in->size < 6 || in->size > (int)sizeof(pv->frame) + 6)
+    {
+        hb_log("declpcm: invalid packet size %d", in->size);
+        pv->size = 0;
+        pv->pos = 0;
+        *buf_out = NULL;
+        return HB_WORK_OK;
+    }
+
     // if we have a frame to finish, add enough data from this buf
     // to finish it
     if (pv->size)
     {
-        memcpy(pv->frame + pv->pos, in->data + 6, pv->size - pv->pos);
-        buf = Decode( w );
-        hb_buffer_list_append(&list, buf);
+        if (pv->size > sizeof(pv->frame) || pv->pos > pv->size)
+        {
+            hb_log("declpcm: invalid frame state (%u/%u)",
+                   pv->pos, pv->size);
+            pv->size = 0;
+            pv->pos = 0;
+        }
+        else
+        {
+            int available = in->size - 6;
+            int needed = pv->size - pv->pos;
+            int copy = MIN(available, needed);
+
+            memcpy(pv->frame + pv->pos, in->data + 6, copy);
+            pv->pos += copy;
+            if (pv->pos < pv->size)
+            {
+                *buf_out = NULL;
+                return HB_WORK_OK;
+            }
+            buf = Decode( w );
+            hb_buffer_list_append(&list, buf);
+        }
     }
 
     /* save the (rest of) data from this buf in our frame buffer */
-    lpcmInfo( w, in );
+    if (lpcmInfo(w, in))
+    {
+        pv->size = 0;
+        pv->pos = 0;
+        *buf_out = hb_buffer_list_clear(&list);
+        return HB_WORK_OK;
+    }
+    if (pv->size > sizeof(pv->frame))
+    {
+        hb_log("declpcm: frame size %u exceeds buffer size %zu",
+               pv->size, sizeof(pv->frame));
+        pv->size = 0;
+        pv->pos = 0;
+        *buf_out = hb_buffer_list_clear(&list);
+        return HB_WORK_OK;
+    }
     int off = pv->offset;
     int amt = in->size - off;
-    pv->pos = amt;
-    memcpy( pv->frame, in->data + off, amt );
+    pv->pos = MIN(amt, (int)pv->size);
+    memcpy( pv->frame, in->data + off, pv->pos );
     if (amt >= pv->size)
     {
         buf = Decode( w );
