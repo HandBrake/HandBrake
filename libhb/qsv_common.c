@@ -236,7 +236,7 @@ static hb_qsv_adapter_details_t* hb_qsv_get_adapters_details_by_index(int adapte
 int hb_qsv_get_adapter_render_node(int adapter_index)
 {
     const hb_qsv_adapter_details_t *details = hb_qsv_get_adapters_details_by_index(adapter_index);
-    return details->extended_device_id.DRMRenderNodeNum;
+    return details ? details->extended_device_id.DRMRenderNodeNum : 0;
 }
 
 int hb_qsv_set_adapter_index(int adapter_index)
