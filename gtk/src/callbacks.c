@@ -429,6 +429,7 @@ static GhbBinding widget_bindings[] =
     {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|nvenc_av1|nvenc_av1_10bit|nvenc_h264|nvenc_h264_10bit|nvenc_h265|nvenc_h265_10bit|VP8|VP9|VP9_10bit|qsv_av1|qsv_av1_10bit|qsv_h264|qsv_h265|qsv_h265_10bit|vce_av1|vce_av1_10bit|vce_h264|vce_h265|vce_h265_10bit|vaapi_h264|vaapi_hevc|vaapi_av1|vaapi_vp8|vaapi_vp9", "VideoOptionExtraWindow", "visible"},
     {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|nvenc_av1|nvenc_av1_10bit|nvenc_h264|nvenc_h264_10bit|nvenc_h265|nvenc_h265_10bit|VP8|VP9|VP9_10bit|qsv_av1|qsv_av1_10bit|qsv_h264|qsv_h265|qsv_h265_10bit|vce_av1|vce_av1_10bit|vce_h264|vce_h265|vce_h265_10bit|vaapi_h264|vaapi_hevc|vaapi_av1|vaapi_vp8|vaapi_vp9", "VideoOptionExtraLabel", "visible"},
     {"auto_name", "active", NULL, "autoname_box", "sensitive"},
+    {"auto_name", "active", NULL, "auto_increment_box", "sensitive"},
     {"CustomTmpEnable", "active", NULL, "CustomTmpDir", "sensitive"},
     {"PresetCategory", "active-id", "new", "PresetCategoryName", "visible"},
     {"PresetCategory", "active-id", "new", "PresetCategoryEntryLabel", "visible"},
@@ -786,6 +787,223 @@ get_creation_date(const char *pattern, const char *metaValue, const char *file)
     return strdup(date);
 }
 
+#define AUTO_INCREMENT_PAD_MIN 2
+#define AUTO_INCREMENT_PAD_MAX 5
+
+// Marks where {auto-increment} goes while the template is rendered.
+// A control character is not expected in templates or source names.
+#define AUTO_INCREMENT_MARK "\x1f"
+
+// While the add-multiple-titles list is numbered, earlier rows reserve
+// their numbers so that the rows are numbered consecutively
+static GhbValue *auto_increment_batch = NULL;
+// Set while the add-multiple-titles dialog is showing, so that queue
+// changes do not renumber titles that the dialog is displaying
+static gboolean auto_increment_hold = FALSE;
+
+static int
+auto_increment_padding (signal_user_data_t *ud)
+{
+    int padding = ghb_dict_get_int(ud->prefs, "AutoIncrementPadding");
+    return CLAMP(padding, AUTO_INCREMENT_PAD_MIN, AUTO_INCREMENT_PAD_MAX);
+}
+
+static gboolean
+auto_increment_in_template (signal_user_data_t *ud)
+{
+    return ghb_check_name_template(ud, "{auto-increment}") ||
+           ghb_check_name_template(ud, "{auto_increment}");
+}
+
+// Builds a regex matching a file name rendered from template, with any
+// run of digits in place of the marker. Group 1 holds the number.
+static GRegex *
+auto_increment_regex (const char *template, const char *extension)
+{
+    gchar  **parts = g_strsplit(template, AUTO_INCREMENT_MARK, -1);
+    GString *pattern = g_string_new("^");
+    GRegex  *regex;
+    gint     ii;
+
+    for (ii = 0; parts[ii] != NULL; ii++)
+    {
+        gchar *escaped = g_regex_escape_string(parts[ii], -1);
+        if (ii == 1)
+            g_string_append(pattern, "([0-9]{1,9})");
+        else if (ii > 1)
+            // Repeated tokens always render the same number
+            g_string_append(pattern, "\\1");
+        g_string_append(pattern, escaped);
+        g_free(escaped);
+    }
+    gchar *escaped = g_regex_escape_string(extension, -1);
+    g_string_append_printf(pattern, "\\.%s$", escaped);
+    g_free(escaped);
+    g_strfreev(parts);
+
+    GRegexCompileFlags flags = G_REGEX_DEFAULT;
+#if defined(_WIN32) || defined(__APPLE__)
+    // These file systems are case-insensitive by default
+    flags |= G_REGEX_CASELESS;
+#endif
+    regex = g_regex_new(pattern->str, flags, G_REGEX_MATCH_DEFAULT, NULL);
+    g_string_free(pattern, TRUE);
+    return regex;
+}
+
+// The {auto-increment} number in file_name, or 0 if it does not match
+static int
+auto_increment_match (GRegex *regex, const char *file_name)
+{
+    gchar      *normalized;
+    GMatchInfo *match_info;
+    int         number = 0;
+
+    if (file_name == NULL)
+        return 0;
+    normalized = g_utf8_normalize(file_name, -1, G_NORMALIZE_NFC);
+    if (normalized == NULL)
+        return 0;
+    if (g_regex_match(regex, normalized, 0, &match_info))
+    {
+        gchar *digits = g_match_info_fetch(match_info, 1);
+        number = atoi(digits);
+        g_free(digits);
+    }
+    g_match_info_free(match_info);
+    g_free(normalized);
+    return number;
+}
+
+// Records the number in path if it is a file in dir that matches
+static void
+auto_increment_reserve (GRegex *regex, const char *dir, const char *path,
+                        int *highest, GHashTable *used)
+{
+    if (path == NULL)
+        return;
+
+    gchar *parent = g_path_get_dirname(path);
+    gchar *canonical = g_canonicalize_filename(parent, NULL);
+    if (!g_strcmp0(canonical, dir))
+    {
+        gchar *base = g_path_get_basename(path);
+        int number = auto_increment_match(regex, base);
+        if (number > 0)
+        {
+            g_hash_table_add(used, GINT_TO_POINTER(number));
+            *highest = MAX(*highest, number);
+        }
+        g_free(base);
+    }
+    g_free(canonical);
+    g_free(parent);
+}
+
+// Picks the {auto-increment} value for a file name rendered from
+// template: one past the highest number used by a matching file in
+// dest_dir, by a queued job, or by an earlier row of a batch.
+// A free number already in the current name is kept if it is not
+// past that value, so editing a job does not renumber it.
+static int
+auto_increment_next (signal_user_data_t *ud, GhbValue *settings,
+                     const char *template, const char *dest_dir,
+                     const char *extension)
+{
+    gchar *template_nfc = g_utf8_normalize(template, -1, G_NORMALIZE_NFC);
+    GRegex *regex = auto_increment_regex(template_nfc ? template_nfc : template,
+                                         extension);
+    g_free(template_nfc);
+    if (regex == NULL || dest_dir == NULL)
+    {
+        if (regex != NULL)
+            g_regex_unref(regex);
+        return 1;
+    }
+
+    gchar *dir = g_canonicalize_filename(dest_dir, NULL);
+    GHashTable *used = g_hash_table_new(g_direct_hash, g_direct_equal);
+    int highest = 0;
+
+    GDir *gdir = g_dir_open(dir, 0, NULL);
+    if (gdir != NULL)
+    {
+        const gchar *entry;
+        while ((entry = g_dir_read_name(gdir)) != NULL)
+        {
+            gchar *utf8 = g_filename_to_utf8(entry, -1, NULL, NULL, NULL);
+            int number = auto_increment_match(regex, utf8);
+            if (number > 0)
+            {
+                g_hash_table_add(used, GINT_TO_POINTER(number));
+                highest = MAX(highest, number);
+            }
+            g_free(utf8);
+        }
+        g_dir_close(gdir);
+    }
+
+    // Queued jobs, except those that failed or were canceled
+    gint count = ghb_array_len(ud->queue);
+    for (gint ii = 0; ii < count; ii++)
+    {
+        GhbValue *queueDict = ghb_array_get(ud->queue, ii);
+        GhbValue *uiDict = ghb_dict_get(queueDict, "uiSettings");
+        int status = ghb_dict_get_int(uiDict, "job_status");
+        if (status != GHB_QUEUE_CANCELED && status != GHB_QUEUE_FAIL)
+        {
+            auto_increment_reserve(regex, dir,
+                ghb_dict_get_string(uiDict, "destination"), &highest, used);
+        }
+    }
+
+    // Earlier rows of the add-multiple-titles list
+    count = ghb_array_len(auto_increment_batch);
+    for (gint ii = 0; ii < count; ii++)
+    {
+        GhbValue *row = ghb_array_get(auto_increment_batch, ii);
+        if (row == settings)
+            break;
+        auto_increment_reserve(regex, dir,
+            ghb_dict_get_string(row, "destination"), &highest, used);
+    }
+
+    int next = highest + 1;
+    if (auto_increment_batch == NULL)
+    {
+        int current = auto_increment_match(regex,
+                                ghb_dict_get_string(settings, "dest_file"));
+        if (current > 0 && current <= next &&
+            !g_hash_table_contains(used, GINT_TO_POINTER(current)))
+        {
+            next = current;
+        }
+    }
+
+    g_hash_table_destroy(used);
+    g_free(dir);
+    g_regex_unref(regex);
+    return next;
+}
+
+// Renders the {auto-increment} number in place of the markers in str
+static void
+auto_increment_render (signal_user_data_t *ud, GhbValue *settings,
+                       GString *str, const char *dest_dir,
+                       const char *extension)
+{
+    int   value  = auto_increment_next(ud, settings, str->str,
+                                       dest_dir, extension);
+    gchar *number = g_strdup_printf("%0*d", auto_increment_padding(ud), value);
+    gchar **parts = g_strsplit(str->str, AUTO_INCREMENT_MARK, -1);
+    gchar *name   = g_strjoinv(number, parts);
+
+    g_string_assign(str, name);
+    g_free(name);
+    g_strfreev(parts);
+    g_free(number);
+}
+
 static void
 make_unique_dest(const gchar *dest_dir, GString *str, const gchar * extension)
 {
@@ -885,6 +1103,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
     {
         GString *str = g_string_new("");
         const gchar *p;
+        gboolean auto_increment_used = FALSE;
 
         p = ghb_dict_get_string(ud->prefs, "auto_name_template");
         // {source-path} is only allowed as the first element of the
@@ -1067,6 +1286,13 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
 
                 p += strlen("{bit-depth}");
             }
+            else if (!strncasecmp(p, "{auto-increment}", strlen("{auto-increment}")) ||
+                     !strncasecmp(p, "{auto_increment}", strlen("{auto_increment}")))
+            {
+                g_string_append(str, AUTO_INCREMENT_MARK);
+                auto_increment_used = TRUE;
+                p += strlen("{auto-increment}");
+            }
             else
             {
                 g_string_append_printf(str, "%c", *p);
@@ -1074,6 +1300,10 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
             }
         }
         dest_dir = ghb_dict_get_string(settings, "dest_dir");
+        if (auto_increment_used)
+        {
+            auto_increment_render(ud, settings, str, dest_dir, extension);
+        }
         make_unique_dest(dest_dir, str, extension);
         g_string_append_printf(str, ".%s", extension);
         filename = g_string_free(str, FALSE);
@@ -1087,6 +1317,66 @@ ghb_set_destination (signal_user_data_t *ud)
 {
     set_destination_settings(ud, ud->settings);
     ghb_ui_update("dest_file", ghb_dict_get_value(ud->settings, "dest_file"));
+}
+
+void
+ghb_update_title_destination (signal_user_data_t *ud, GhbValue *settings)
+{
+    const char *dest_file, *dest_dir;
+    char *dest;
+
+    set_destination_settings(ud, settings);
+
+    dest_file = ghb_dict_get_string(settings, "dest_file");
+    dest_dir  = ghb_dict_get_string(settings, "dest_dir");
+    dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
+    ghb_dict_set_string(settings, "destination", dest);
+    GhbValue *dest_dict = ghb_get_job_dest_settings(settings);
+    ghb_dict_set_string(dest_dict, "File", dest);
+    g_free(dest);
+}
+
+// Numbers the titles of the add-multiple-titles list consecutively,
+// and holds off renumbering the main window's title (which is one of
+// them) until ghb_auto_increment_batch_end
+void
+ghb_auto_increment_batch_begin (signal_user_data_t *ud, GhbValue *settings_array)
+{
+    auto_increment_hold = TRUE;
+    if (!auto_increment_in_template(ud))
+        return;
+
+    auto_increment_batch = settings_array;
+    gint count = ghb_array_len(settings_array);
+    for (gint ii = 0; ii < count; ii++)
+    {
+        ghb_update_title_destination(ud, ghb_array_get(settings_array, ii));
+    }
+    auto_increment_batch = NULL;
+}
+
+void
+ghb_auto_increment_batch_end (signal_user_data_t *ud)
+{
+    auto_increment_hold = FALSE;
+    ghb_auto_increment_refresh(ud);
+}
+
+// Renumbers the destination when the files or queued jobs that
+// {auto-increment} counts may have changed
+void
+ghb_auto_increment_refresh (signal_user_data_t *ud)
+{
+    int titleindex;
+
+    if (auto_increment_hold || ud->settings == NULL ||
+        !auto_increment_in_template(ud) ||
+        ghb_lookup_title(ghb_dict_get_int(ud->settings, "title"),
+                         &titleindex) == NULL)
+    {
+        return;
+    }
+    ghb_set_destination(ud);
 }
 
 static void
@@ -2064,6 +2354,8 @@ dest_dir_set_cb (GhbFileButton *dest_chooser, GParamSpec *pspec, gpointer data)
     ghb_dict_set_string(dest_dict, "File", dest);
     g_free(dest);
     update_default_destination(ud);
+    // {auto-increment} counts the files in the destination folder
+    ghb_auto_increment_refresh(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2173,6 +2465,8 @@ container_changed_cb(GtkWidget *widget, gpointer data)
     ghb_show_container_options(ud);
     update_acodec(ud);
     ghb_update_destination_extension(ud);
+    // {auto-increment} only counts files with the same extension
+    ghb_auto_increment_refresh(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     ghb_subtitle_prune(ud);
@@ -2809,17 +3103,7 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         ghb_set_scale_settings(ud, settings, GHB_PIC_USE_MAX);
     }
 
-    set_destination_settings(ud, settings);
-
-    const char *dest_file, *dest_dir;
-    char *dest;
-    dest_file = ghb_dict_get_string(settings, "dest_file");
-    dest_dir = ghb_dict_get_string(settings, "dest_dir");
-    dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
-    ghb_dict_set_string(settings, "destination", dest);
-    GhbValue *dest_dict = ghb_get_job_dest_settings(settings);
-    ghb_dict_set_string(dest_dict, "File", dest);
-    g_free(dest);
+    ghb_update_title_destination(ud, settings);
 
     ghb_dict_set_int(settings, "preview_frame", 2);
 }
@@ -2902,6 +3186,9 @@ title_changed_cb (GtkWidget *widget, gpointer data)
     }
     ud->settings = ghb_array_get(ud->settings_array, idx);
     ghb_load_settings(ud);
+    // The title's name was numbered when the source was scanned; titles
+    // queued since then may have taken that {auto-increment} number
+    ghb_auto_increment_refresh(ud);
 
     ghb_audio_set_actions_enabled(ud, title != NULL);
     ghb_subtitle_set_actions_enabled(ud, title != NULL);
@@ -4315,6 +4602,8 @@ ghb_update_pending(signal_user_data_t *ud)
     g_free(str);
 
     update_queue_labels(ud);
+    // Queued jobs reserve their {auto-increment} numbers
+    ghb_auto_increment_refresh(ud);
 }
 
 void
@@ -5282,6 +5571,33 @@ log_level_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 G_MODULE_EXPORT void
+auto_name_template_changed_cb (GtkWidget *widget, gpointer data)
+{
+    signal_user_data_t *ud = ghb_ud();
+    GhbValue *value = ghb_widget_value(widget);
+    const char *new_template = ghb_value_get_string(value);
+    const char *old_template = ghb_dict_get_string(ud->prefs,
+                                                   "auto_name_template");
+    gboolean changed = g_strcmp0(new_template, old_template) != 0;
+    ghb_value_free(&value);
+
+    pref_changed_cb(widget, data);
+    if (changed)
+    {
+        ghb_auto_increment_refresh(ud);
+    }
+}
+
+G_MODULE_EXPORT void
+auto_increment_padding_changed_cb (GtkWidget *widget, gpointer data)
+{
+    signal_user_data_t *ud = ghb_ud();
+
+    pref_changed_cb(widget, data);
+    ghb_auto_increment_refresh(ud);
+}
+
+G_MODULE_EXPORT void
 use_m4v_changed_cb (GtkWidget *widget, gpointer data)
 {
     signal_user_data_t *ud = ghb_ud();
@@ -5290,6 +5606,8 @@ use_m4v_changed_cb (GtkWidget *widget, gpointer data)
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
     ghb_update_destination_extension(ud);
+    // {auto-increment} only counts files with the same extension
+    ghb_auto_increment_refresh(ud);
 }
 
 G_MODULE_EXPORT void

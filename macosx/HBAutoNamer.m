@@ -8,6 +8,7 @@
 
 #import "HBJob+HBAdditions.h"
 #import "HBPreferencesKeys.h"
+#import "HBQueue.h"
 
 static void *HBAutoNamerPrefsContext = &HBAutoNamerPrefsContext;
 static void *HBAutoNamerContext = &HBAutoNamerContext;
@@ -15,28 +16,33 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
 @interface HBAutoNamer ()
 
 @property (nonatomic) HBJob *job;
+@property (nonatomic, nullable) HBQueue *queue;
 @property (nonatomic) NSArray<NSString *> *format;
+@property (nonatomic) BOOL queueUpdatePending;
 
 @end
 
 @implementation HBAutoNamer
 
-- (instancetype)initWithJob:(HBJob *)job
+- (instancetype)initWithJob:(HBJob *)job queue:(nullable HBQueue *)queue
 {
     self = [super init];
     if (self)
     {
         _job = job;
+        _queue = queue;
         _format = [NSUserDefaults.standardUserDefaults objectForKey:HBAutoNamingFormat];
         [self addFormatObservers];
         [self addJobObservers];
         [self addPrefsObservers];
+        [self addQueueObservers];
     }
     return self;
 }
 
 - (void)dealloc
 {
+    [self removeQueueObservers];
     [self removeFormatObservers];
     [self removeJobObservers];
     [self removePrefsObservers];
@@ -72,6 +78,8 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
     [ud addObserver:self forKeyPath:@"values.HBAutoNamingRemovePunctuation" options:0 context:HBAutoNamerPrefsContext];
     [ud addObserver:self forKeyPath:@"values.HBAutoNamingTitleCase" options:0 context:HBAutoNamerPrefsContext];
     [ud addObserver:self forKeyPath:@"values.HBAutoNamingISODateFormat" options:0 context:HBAutoNamerPrefsContext];
+    [ud addObserver:self forKeyPath:@"values.HBAutoNamingAutoIncrementPadding" options:0 context:HBAutoNamerPrefsContext];
+    [ud addObserver:self forKeyPath:@"values.DefaultMpegExtension" options:0 context:HBAutoNamerPrefsContext];
 }
 
 - (void)removePrefsObservers
@@ -82,6 +90,52 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
     [ud removeObserver:self forKeyPath:@"values.HBAutoNamingRemovePunctuation" context:HBAutoNamerPrefsContext];
     [ud removeObserver:self forKeyPath:@"values.HBAutoNamingTitleCase" context:HBAutoNamerPrefsContext];
     [ud removeObserver:self forKeyPath:@"values.HBAutoNamingISODateFormat" context:HBAutoNamerPrefsContext];
+    [ud removeObserver:self forKeyPath:@"values.HBAutoNamingAutoIncrementPadding" context:HBAutoNamerPrefsContext];
+    [ud removeObserver:self forKeyPath:@"values.DefaultMpegExtension" context:HBAutoNamerPrefsContext];
+}
+
+#pragma mark - Queue
+
+- (void)addQueueObservers
+{
+    if (self.queue)
+    {
+        NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+        [center addObserver:self selector:@selector(queueDidChange:) name:HBQueueDidAddItemNotification object:self.queue];
+        [center addObserver:self selector:@selector(queueDidChange:) name:HBQueueDidRemoveItemNotification object:self.queue];
+        [center addObserver:self selector:@selector(queueDidChange:) name:HBQueueDidChangeItemNotification object:self.queue];
+    }
+}
+
+- (void)removeQueueObservers
+{
+    if (self.queue)
+    {
+        NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+        [center removeObserver:self name:HBQueueDidAddItemNotification object:self.queue];
+        [center removeObserver:self name:HBQueueDidRemoveItemNotification object:self.queue];
+        [center removeObserver:self name:HBQueueDidChangeItemNotification object:self.queue];
+    }
+}
+
+- (void)queueDidChange:(NSNotification *)notification
+{
+    // Only {Auto-Increment} depends on the queue; leave other names alone
+    if (![self.format containsObject:@"{Auto-Increment}"] || self.queueUpdatePending)
+    {
+        return;
+    }
+
+    // Coalesce the notifications of one queue operation into a single
+    // update. Editing a queued job resets the item and then removes it;
+    // updating in between would see the job's own number as taken.
+    self.queueUpdatePending = YES;
+    __weak HBAutoNamer *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        HBAutoNamer *strongSelf = weakSelf;
+        strongSelf.queueUpdatePending = NO;
+        [strongSelf updateFileName];
+    });
 }
 
 #pragma mark - File extension
@@ -112,6 +166,12 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
         if (![extension isEqualTo:self.job.destinationFileName.pathExtension])
         {
             self.job.destinationFileName = [[self.job.destinationFileName stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
+
+            // {Auto-Increment} only counts files with a matching extension
+            if ([self.format containsObject:@"{Auto-Increment}"])
+            {
+                [self updateFileName];
+            }
         }
     }
 }
@@ -161,6 +221,11 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
         {
             [self.job addObserver:self forKeyPath:@"angle" options:0 context:HBAutoNamerContext];
         }
+        else if ([formatKey isEqualToString:@"{Auto-Increment}"])
+        {
+            // The number depends on the files already in the destination folder
+            [self.job addObserver:self forKeyPath:@"destinationFolderURL" options:0 context:HBAutoNamerContext];
+        }
 
     }
 }
@@ -203,6 +268,10 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
         {
             [self.job removeObserver:self forKeyPath:@"angle" context:HBAutoNamerContext];
         }
+        else if ([formatKey isEqualToString:@"{Auto-Increment}"])
+        {
+            [self.job removeObserver:self forKeyPath:@"destinationFolderURL" context:HBAutoNamerContext];
+        }
     }
 }
 
@@ -213,7 +282,8 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
     if ([NSUserDefaults.standardUserDefaults boolForKey:HBDefaultAutoNaming] && self.job && !(undo.isUndoing || undo.isRedoing))
     {
         // Generate a new file name
-        NSString *fileName = self.job.automaticName;
+        NSString *fileName = [self.job automaticNameReservingURLs:self.queue.reservedDestinationURLs
+                                                      currentName:self.job.destinationFileName];
 
         // Swap the old one with the new one
         self.job.destinationFileName = [NSString stringWithFormat:@"%@.%@", fileName, self.job.destinationFileName.pathExtension];

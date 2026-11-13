@@ -2057,6 +2057,18 @@ namespace HandBrakeWPF.ViewModels
             optionsViewModel.UpdateSettings();
         }
 
+        /// <summary>
+        /// Queued jobs reserve their {auto-increment} numbers, so show the next free
+        /// number when the queue changes.
+        /// </summary>
+        private void RefreshAutoIncrement()
+        {
+            if (AutoNameHelper.IsAutoIncrementUsed())
+            {
+                this.ReGenerateAutoName();
+            }
+        }
+
         public void ReGenerateAutoName()
         {
             if (this.ScannedSource != null)
@@ -2226,6 +2238,13 @@ namespace HandBrakeWPF.ViewModels
             bool is_execute = false;
             
             if ((autonameFormat.Contains(Constants.Source) || autonameFormat.Contains(Constants.SourcePath) || autonameFormat.Contains(Constants.SourceFolderName) || autonameFormat.Contains(Constants.Title)) && option == ChangedOption.Source)
+            {
+                is_execute = true;
+            }
+
+            // A new source or title needs its own {auto-increment} number, and an empty
+            // destination has nothing to preserve, whatever the format contains.
+            if (option == ChangedOption.Source && (autonameFormat.Contains(Constants.AutoIncrement) || string.IsNullOrEmpty(this.Destination)))
             {
                 is_execute = true;
             }
@@ -2459,6 +2478,7 @@ namespace HandBrakeWPF.ViewModels
                   this.NotifyOfPropertyChange(() => this.QueueCount);
                   this.NotifyOfPropertyChange(() => this.StartLabel);
                   this.NotifyOfPropertyChange(() => this.IsEncoding);
+                  this.RefreshAutoIncrement();
 
                   if (!this.queueProcessor.IsEncoding && this.IsMultiProcess)
                   {
@@ -2491,6 +2511,9 @@ namespace HandBrakeWPF.ViewModels
 
             ThreadHelper.OnUIThread(() =>
             {
+                // Failed or cancelled jobs free their {auto-increment} numbers
+                this.RefreshAutoIncrement();
+
                 if (queueJobStatuses.Count == 0)
                 {
                     this.ProgramStatusLabel = Resources.Main_QueueFinished;
@@ -2568,6 +2591,18 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.ShowAddSelectionToQueue);
                     this.NotifyOfPropertyChange(() => this.ShowAddAllMenuName);
                     this.NotifyOfPropertyChange(() => this.ShowAddSelectionMenuName);
+                    break;
+
+                case UserSettingConstants.AutoNameFormat:
+                case UserSettingConstants.AutoNameAutoIncrementPadding:
+                    // Show the {auto-increment} number for the new format or padding.
+                    // Without this, the first job queued after the token is added to
+                    // the format would keep the previous destination.
+                    if (AutoNameHelper.IsAutoIncrementUsed())
+                    {
+                        this.ReGenerateAutoName();
+                    }
+
                     break;
 
                 case UserSettingConstants.PresetUiType:
