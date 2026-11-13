@@ -80,15 +80,16 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
 
     while ( buf )
     {
+        pos = 0;
         save_chap( state, buf );
 
 #define d (buf->data)
         /* pack_header */
-        if( d[pos] != 0 || d[pos+1] != 0 ||
+        if( buf->size < 14 ||
+            d[pos] != 0 || d[pos+1] != 0 ||
             d[pos+2] != 0x1 || d[pos+3] != 0xBA )
         {
-            hb_log( "demux_dvd_ps: not a PS packet (%02x%02x%02x%02x)",
-                    d[pos], d[pos+1], d[pos+2], d[pos+3] );
+            hb_log( "demux_dvd_ps: not a PS packet" );
             hb_buffer_t *tmp = buf->next;
             buf->next = NULL;
             hb_buffer_close( &buf );
@@ -110,22 +111,39 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
             check_mpeg_scr( state, scr, 700 );
         }
 
-        pos += 9;                    /* pack_header */
-        pos += 1 + ( d[pos] & 0x7 ); /* stuffing bytes */
+        pos = 14 + (d[13] & 0x7); /* pack header and stuffing bytes */
+        if (pos > buf->size)
+        {
+            pos = buf->size;
+        }
 
         /* system_header */
-        if( d[pos] == 0 && d[pos+1] == 0 &&
+        if( buf->size - pos >= 4 &&
+            d[pos] == 0 && d[pos+1] == 0 &&
             d[pos+2] == 0x1 && d[pos+3] == 0xBB )
         {
             int header_length;
 
-            pos           += 4; /* system_header_start_code */
-            header_length  = ( d[pos] << 8 ) + d[pos+1];
-            pos           += 2 + header_length;
+            if (buf->size - pos < 6)
+            {
+                pos = buf->size;
+            }
+            else
+            {
+                header_length = (d[pos+4] << 8) + d[pos+5];
+                if (header_length > buf->size - pos - 6)
+                {
+                    pos = buf->size;
+                }
+                else
+                {
+                    pos += 6 + header_length;
+                }
+            }
         }
 
         /* pes */
-        while( pos + 6 < buf->size &&
+        while( buf->size - pos >= 6 &&
                d[pos] == 0 && d[pos+1] == 0 && d[pos+2] == 0x1 )
         {
             int      id;
@@ -143,7 +161,18 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
             /* pack_header */
             if( id == 0xBA)
             {
-                pos += 10 + (d[pos+9] & 7);
+                if (buf->size - pos < 10)
+                {
+                    pos = buf->size;
+                    break;
+                }
+                int header_length = 10 + (d[pos+9] & 7);
+                if (header_length > buf->size - pos)
+                {
+                    pos = buf->size;
+                    break;
+                }
+                pos += header_length;
                 continue;
             }
 
@@ -152,13 +181,28 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
             {
                 int header_length;
 
+                if (buf->size - pos < 2)
+                {
+                    pos = buf->size;
+                    break;
+                }
                 header_length  = ( d[pos] << 8 ) + d[pos+1];
-                pos           += 2 + header_length;
+                if (header_length > buf->size - pos - 2)
+                {
+                    pos = buf->size;
+                    break;
+                }
+                pos += 2 + header_length;
                 continue;
             }
 
             pes_packet_length  = ( d[pos] << 8 ) + d[pos+1];
             pos               += 2;               /* pes_packet_length */
+            if (pes_packet_length > buf->size - pos)
+            {
+                pos = buf->size;
+                break;
+            }
             pes_packet_end     = pos + pes_packet_length;
 
             if( id != 0xE0 && id != 0xBD &&
@@ -169,15 +213,31 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
                 continue;
             }
 
+            if (pes_packet_end - pos < 3)
+            {
+                pos = pes_packet_end;
+                continue;
+            }
             has_pts            = d[pos+1] >> 6;
             pos               += 2;               /* Required headers */
 
             pes_header_d_length  = d[pos];
             pos                    += 1;
+            if (pes_header_d_length > pes_packet_end - pos)
+            {
+                pos = pes_packet_end;
+                continue;
+            }
             pes_header_end          = pos + pes_header_d_length;
 
             if( has_pts )
             {
+                int timestamp_length = has_pts == 3 ? 10 : 5;
+                if (has_pts == 1 || pes_header_d_length < timestamp_length)
+                {
+                    pos = pes_packet_end;
+                    continue;
+                }
                 pts = ( (uint64_t)(d[pos] & 0xe ) << 29 ) +
                       ( d[pos+1] << 22 ) +
                       ( ( d[pos+2] >> 1 ) << 15 ) +
@@ -201,9 +261,19 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
 
             if( id == 0xBD )
             {
+                if (pos >= pes_packet_end)
+                {
+                    pos = pes_packet_end;
+                    continue;
+                }
                 id |= ( d[pos] << 8 );
                 if( ( id & 0xF0FF ) == 0x80BD ) /* A52 */
                 {
+                    if (pes_packet_end - pos < 4)
+                    {
+                        pos = pes_packet_end;
+                        continue;
+                    }
                     pos += 4;
                 }
                 else if( ( id & 0xE0FF ) == 0x20BD || /* SPU */
@@ -222,6 +292,11 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
 
             /* Here we hit we ES payload */
             buf_es = hb_buffer_init( pes_packet_end - pos );
+            if (buf_es == NULL)
+            {
+                pos = pes_packet_end;
+                continue;
+            }
 
             buf_es->s.id           = id;
             buf_es->s.start        = pts;
