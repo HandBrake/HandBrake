@@ -1569,16 +1569,11 @@ const char* DRI_PATH = "/dev/dri/";
 const char* DRI_NODE_RENDER = "renderD";
 const char* DRI_NODE_CARD = "card";
 
-static int try_adapter(const char * name, const char * dir,
+static int try_adapter(const char * const * names, const char * dir,
                 const char * prefix, int node_start, int node_last)
 {
-    int             node;
-    int             len        = strlen(name);
-    char          * driverName = malloc(len + 1);
-    drm_version_t   version = {};
+    int node, ii;
 
-    version.name_len = len + 1;
-    version.name     = driverName;
     for (node = node_start; node <= node_last; node++)
     {
         char * adapter = hb_strdup_printf("%s%s%d", dir, prefix, node);
@@ -1590,36 +1585,46 @@ static int try_adapter(const char * name, const char * dir,
             continue;
         }
 
+        // name_len is in/out, reset it for every node
+        char          driverName[32] = "";
+        drm_version_t version        = {};
+        version.name_len = sizeof(driverName) - 1;
+        version.name     = driverName;
         if (!ioctl(fd, DRM_IOCTL_VERSION, &version) &&
-            version.name_len == len && !strncmp(driverName, name, len))
+            version.name_len < sizeof(driverName))
         {
-            free(driverName);
-            return fd;
+            driverName[version.name_len] = '\0';
+            for (ii = 0; names[ii] != NULL; ii++)
+            {
+                if (!strcmp(driverName, names[ii]))
+                {
+                    return fd;
+                }
+            }
         }
         close(fd);
     }
 
-    free(driverName);
     return -1;
 }
 
-static int open_adapter(const char * name, const uint dri_render_node)
+static int open_adapter(const char * const * names, const uint dri_render_node)
 {
     int fd;
     // If dri_render_node is unknown enumerate across the predefined range of renders
     if (dri_render_node == 0)
     {
-        fd = try_adapter(name, DRI_PATH, DRI_NODE_RENDER,
+        fd = try_adapter(names, DRI_PATH, DRI_NODE_RENDER,
                             DRI_RENDER_NODE_START, DRI_RENDER_NODE_LAST);
     }
     else
     {
-        fd = try_adapter(name, DRI_PATH, DRI_NODE_RENDER,
+        fd = try_adapter(names, DRI_PATH, DRI_NODE_RENDER,
                             dri_render_node, dri_render_node);
     }
     if (fd < 0)
     {
-        fd = try_adapter(name, DRI_PATH, DRI_NODE_CARD,
+        fd = try_adapter(names, DRI_PATH, DRI_NODE_CARD,
                          DRI_CARD_NODE_START, DRI_CARD_NODE_LAST);
     }
     return fd;
@@ -1652,7 +1657,7 @@ static int try_va_interface(hb_display_t * hbDisplay,
     return 0;
 }
 
-hb_display_t * hb_display_init(const char         * driver_name,
+hb_display_t * hb_display_init(const char * const * driver_names,
                                const uint32_t       dri_render_node,
                                const char * const * interface_names)
 {
@@ -1661,7 +1666,7 @@ hb_display_t * hb_display_init(const char         * driver_name,
     int            ii;
 
     hbDisplay->vaDisplay = NULL;
-    hbDisplay->vaFd      = open_adapter(driver_name, dri_render_node);
+    hbDisplay->vaFd      = open_adapter(driver_names, dri_render_node);
     if (hbDisplay->vaFd < 0)
     {
         hb_deep_log( 3, "hb_va_display_init: no display found" );
@@ -1726,7 +1731,7 @@ void hb_display_close(hb_display_t ** _d)
 
 #else // !SYS_LINUX && !SYS_FREEBSD
 
-hb_display_t * hb_display_init(const char         * driver_name,
+hb_display_t * hb_display_init(const char * const * driver_names,
                                const uint32_t       dri_render_node,
                                const char * const * interface_names)
 {
@@ -1741,7 +1746,7 @@ void hb_display_close(hb_display_t ** _d)
 #endif // SYS_LINUX || SYS_FREEBSD
 #else // !HB_PROJECT_FEATURE_QSV
 
-hb_display_t * hb_display_init(const char         * driver_name,
+hb_display_t * hb_display_init(const char * const * driver_names,
                                const uint32_t       dri_render_node,
                                const char * const * interface_names)
 {
