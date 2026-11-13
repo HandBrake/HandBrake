@@ -205,6 +205,7 @@ hb_qsv_info_t* hb_qsv_encoder_info_get(int adapter_index, int encoder);
 int            hb_qsv_hardware_generation(int cpu_platform);
 int            hb_qsv_get_platform(int adapter_index);
 int            hb_qsv_get_adapter_index();
+int            hb_qsv_get_adapter_render_node(int adapter_index);
 int            hb_qsv_implementation_is_hardware(mfxIMPL implementation);
 
 /* Intel Quick Sync Video DECODE utilities */
