@@ -35,6 +35,7 @@ void ghb_prefs_load(signal_user_data_t *ud);
 void ghb_pref_save(GhbValue *settings, const gchar *key);
 void ghb_pref_set(GhbValue *settings, const gchar *key);
 void ghb_prefs_store(void);
+void ghb_prefs_store_now(void);
 void ghb_save_queue(GhbValue *queue);
 GhbValue* ghb_load_old_queue(int pid);
 void ghb_remove_old_queue_file(int pid);

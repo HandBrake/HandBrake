@@ -714,6 +714,16 @@ ghb_application_constructed (GObject *object)
                                                  G_APPLICATION_NON_UNIQUE);
 }
 
+static gboolean
+check_custom_temp_dir_idle(gpointer data)
+{
+    signal_user_data_t *ud = data;
+
+    if (ghb_dict_get_bool(ud->prefs, "CustomTmpEnable"))
+        ghb_check_custom_temp_dir(ghb_dict_get_string(ud->prefs, "CustomTmpDir"));
+    return G_SOURCE_REMOVE;
+}
+
 static void
 ghb_application_activate (GApplication *app)
 {
@@ -895,6 +905,7 @@ ghb_application_activate (GApplication *app)
     gtk_application_set_menubar(GTK_APPLICATION(app), menu);
 
     gtk_window_present(hb_window);
+    g_idle_add(check_custom_temp_dir_idle, ud);
 }
 
 static GOptionEntry option_entries[] =
