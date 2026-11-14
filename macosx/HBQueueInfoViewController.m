@@ -41,6 +41,7 @@ static void *HBQueueInfoViewControllerContext = &HBQueueInfoViewControllerContex
     [super viewDidLoad];
     [self updateUI];
     [self addObserver:self forKeyPath:@"item.state" options:0 context:HBQueueInfoViewControllerContext];
+    [self addObserver:self forKeyPath:@"item.attributedDescription" options:0 context:HBQueueInfoViewControllerContext];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

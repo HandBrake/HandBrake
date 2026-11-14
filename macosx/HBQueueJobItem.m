@@ -94,6 +94,15 @@ static NSDictionary     *shortHeightAttr;
 
 #pragma mark - Properties
 
+- (void)replaceJob:(HBJob *)job
+{
+    NSParameterAssert(job);
+    [self willChangeValueForKey:@"attributedDescription"];
+    _job = job;
+    _attributedDescription = nil;
+    [self didChangeValueForKey:@"attributedDescription"];
+}
+
 - (void)setState:(HBQueueItemState)state
 {
     _state = state;
