@@ -60,6 +60,7 @@ namespace HandBrakeWPF.ViewModels
         private bool useExternalPlayer;
         private bool showPictureSettingControls;
         private bool showCropBoundaries;
+        private bool isPlaying;
 
         private bool isMediaPlayerVisible;
 
@@ -170,6 +171,11 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.ShowPictureSettingControls = false;
                 }
+                else
+                {
+                    this.IsPlaying = false;
+                }
+
                 this.NotifyOfPropertyChange(() => this.IsMediaPlayerVisible);
             }
         }
@@ -314,6 +320,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.isEncoding = value;
                 this.CanPlay = !value;
+                if (value)
+                {
+                    this.IsPlaying = false;
+                }
+
                 this.NotifyOfPropertyChange(() => this.CanPlay);
                 this.NotifyOfPropertyChange(() => this.IsEncoding);
                 this.NotifyOfPropertyChange(() => this.IsMediaPlayerVisible);
@@ -323,6 +334,21 @@ namespace HandBrakeWPF.ViewModels
         public string CurrentlyPlaying { get; set; }
 
         public bool CanPlay { get; set; }
+
+        public bool IsPlaying
+        {
+            get => this.isPlaying;
+            set
+            {
+                if (value == this.isPlaying)
+                {
+                    return;
+                }
+
+                this.isPlaying = value;
+                this.NotifyOfPropertyChange(() => this.IsPlaying);
+            }
+        }
 
         public bool IsOpen { get; set; }
 
@@ -576,13 +602,14 @@ namespace HandBrakeWPF.ViewModels
 
         public void ClosePlayer()
         {
+            this.IsPlaying = false;
             this.IsMediaPlayerVisible = false;
             this.MediaPlayerSource = null;
         }
 
         public void CancelEncode()
         {
-            if (this.encodeService.IsEncoding)
+            if (this.encodeService != null && this.encodeService.IsEncoding)
             {
                 this.encodeService.Stop();
             }
@@ -681,13 +708,15 @@ namespace HandBrakeWPF.ViewModels
             this.Percentage = "0.00%";
             this.PercentageValue = 0;
             this.IsEncoding = false;
+            this.IsPlaying = false;
 
-            this.IsMediaPlayerVisible = !this.UseExternalPlayer;
+            bool shouldPlayPreview = e.Successful && e.ErrorInformation != "1";
+            this.IsMediaPlayerVisible = shouldPlayPreview && !this.UseExternalPlayer;
 
             this.encodeService.EncodeCompleted -= this.encodeService_EncodeCompleted;
             this.encodeService.EncodeStatusChanged -= this.encodeService_EncodeStatusChanged;
 
-            if (e.ErrorInformation != "1")
+            if (shouldPlayPreview)
             {
                 ThreadHelper.OnUIThread(() => this.PlayFile());
             }
