@@ -299,17 +299,18 @@ live_preview_error_cb (GtkMediaStream *video, GParamSpec *spec, signal_user_data
         // Display an error dialog
         GtkWindow *window = GTK_WINDOW(ghb_builder_widget("preview_window"));
         GtkWidget *dialog = gtk_message_dialog_new(window, GTK_DIALOG_MODAL,
-            GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, _("Playback Error"));
+            GTK_MESSAGE_WARNING, GTK_BUTTONS_CANCEL, _("HandBrake can't open the preview."));
         GFile *file = gtk_media_file_get_file(GTK_MEDIA_FILE(video));
         if (file != NULL)
         {
             g_object_set_data_full(G_OBJECT(dialog), "preview-file",
                                    g_object_ref(file), g_object_unref);
             gtk_dialog_add_button(GTK_DIALOG(dialog),
-                                  _("_Open in External Player"), GTK_RESPONSE_ACCEPT);
+                                  _("_Open in external player"), GTK_RESPONSE_ACCEPT);
+            gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
         }
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-            _("The video could not be played. Try opening it in an external player. For more details, see the Activity Log."));
+            _("HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?"));
 
         g_signal_connect(dialog, "response", G_CALLBACK(live_preview_error_response_cb), NULL);
         gtk_widget_set_visible(dialog, TRUE);
