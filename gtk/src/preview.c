@@ -64,6 +64,7 @@ struct preview_s
 };
 
 static void live_preview_progress_cb(GtkMediaStream *video, GParamSpec *spec, signal_user_data_t *ud);
+static void set_preview_image_static(signal_user_data_t *ud, GdkPixbuf *pix);
 
 static void
 get_display_size (GtkWidget *widget, int *w, int *h)
@@ -280,6 +281,16 @@ live_preview_ended_cb (GtkMediaStream *video, GParamSpec *spec, signal_user_data
 }
 
 static void
+live_preview_error_response_cb (GtkDialog *dialog, int response, gpointer data)
+{
+    GFile *file = g_object_get_data(G_OBJECT(dialog), "preview-file");
+
+    if (response == GTK_RESPONSE_ACCEPT && file != NULL)
+        ghb_file_open(file);
+    gtk_window_destroy(GTK_WINDOW(dialog));
+}
+
+static void
 live_preview_error_cb (GtkMediaStream *video, GParamSpec *spec, signal_user_data_t *ud)
 {
     const GError *error = gtk_media_stream_get_error(video);
@@ -288,16 +299,44 @@ live_preview_error_cb (GtkMediaStream *video, GParamSpec *spec, signal_user_data
         // Display an error dialog
         GtkWindow *window = GTK_WINDOW(ghb_builder_widget("preview_window"));
         GtkWidget *dialog = gtk_message_dialog_new(window, GTK_DIALOG_MODAL,
-            GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, _("Playback Error"));
-        // TODO: Make this message more useful
+            GTK_MESSAGE_WARNING, GTK_BUTTONS_CANCEL, _("HandBrake can't open the preview."));
+        GFile *file = gtk_media_file_get_file(GTK_MEDIA_FILE(video));
+        if (file != NULL)
+        {
+            g_object_set_data_full(G_OBJECT(dialog), "preview-file",
+                                   g_object_ref(file), g_object_unref);
+            gtk_dialog_add_button(GTK_DIALOG(dialog),
+                                  _("_Open in external player"), GTK_RESPONSE_ACCEPT);
+            gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+        }
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-            _("The video could not be played. For more details, see the Activity Log."));
+            _("HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?"));
 
-        g_signal_connect(dialog, "response", G_CALLBACK(gtk_window_destroy), NULL);
+        g_signal_connect(dialog, "response", G_CALLBACK(live_preview_error_response_cb), NULL);
         gtk_widget_set_visible(dialog, TRUE);
         // Also log the error to the activity log
         g_warning("%s", error->message);
+
+        gtk_media_stream_pause(video);
+        live_preview_set_state(PREVIEW_STATE_STOPPED);
+        set_preview_image_static(ud, ud->preview->pix);
+        gtk_widget_set_visible(ghb_builder_widget("live_preview_progress"), FALSE);
     }
+}
+
+static void
+live_preview_init_video(signal_user_data_t *ud)
+{
+    if (ud->preview->video != NULL)
+    {
+        g_signal_handlers_disconnect_by_data(ud->preview->video, ud);
+        g_clear_object(&ud->preview->video);
+    }
+
+    ud->preview->video = gtk_media_file_new();
+    g_signal_connect(ud->preview->video, "notify::timestamp", G_CALLBACK(live_preview_progress_cb), ud);
+    g_signal_connect(ud->preview->video, "notify::ended", G_CALLBACK(live_preview_ended_cb), ud);
+    g_signal_connect(ud->preview->video, "notify::error", G_CALLBACK(live_preview_error_cb), ud);
 }
 
 void
@@ -307,10 +346,7 @@ ghb_preview_init(signal_user_data_t *ud)
     ud->preview->encode_frame = -1;
     ud->preview->live_id      = -1;
 
-    ud->preview->video = gtk_media_file_new();
-    g_signal_connect(ud->preview->video, "notify::timestamp", G_CALLBACK(live_preview_progress_cb), ud);
-    g_signal_connect(ud->preview->video, "notify::ended", G_CALLBACK(live_preview_ended_cb), ud);
-    g_signal_connect(ud->preview->video, "notify::error", G_CALLBACK(live_preview_error_cb), ud);
+    live_preview_init_video(ud);
     ud->preview->live_enabled = 1;
 }
 
@@ -336,8 +372,12 @@ live_preview_start_new (signal_user_data_t *ud)
     }
     else
     {
+        live_preview_init_video(ud);
         GtkPicture *preview_image = GTK_PICTURE(ghb_builder_widget("preview_image"));
+        gtk_widget_set_visible(ghb_builder_widget("live_preview_progress"), TRUE);
         gtk_media_file_set_filename(GTK_MEDIA_FILE(ud->preview->video), ud->preview->current);
+        if (gtk_media_stream_get_error(ud->preview->video) != NULL)
+            return;
         gtk_picture_set_paintable(preview_image, GDK_PAINTABLE(ud->preview->video));
         live_preview_play(ud);
     }
@@ -349,7 +389,8 @@ live_preview_toggle_playback (signal_user_data_t *ud)
     if (!ud->preview->live_enabled)
         return;
 
-    if (!gtk_media_file_get_file(GTK_MEDIA_FILE(ud->preview->video)))
+    if (!gtk_media_file_get_file(GTK_MEDIA_FILE(ud->preview->video)) ||
+        gtk_media_stream_get_error(ud->preview->video) != NULL)
     {
         live_preview_start_new(ud);
     }
@@ -470,11 +511,11 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(prog), "Done");
         gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(prog), 1);
         ud->preview->encoded[ud->preview->encode_frame] = TRUE;
-        live_preview_start_new(ud);
         widget = ghb_builder_widget("live_encode_progress");
         gtk_widget_set_visible(widget, FALSE);
         widget = ghb_builder_widget("live_preview_progress");
         gtk_widget_set_visible(widget, TRUE);
+        live_preview_start_new(ud);
     }
     else
     {
