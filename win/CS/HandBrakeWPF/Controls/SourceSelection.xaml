@@ -150,45 +150,66 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <Border Background="{StaticResource Ui.UltraLight2}" CornerRadius="4" Grid.Row="7" Margin="20,10,0,20" HorizontalAlignment="Stretch" 
+            <Border Grid.Row="7"
+                    Background="{StaticResource Ui.Ultralight}"
+                    BorderBrush="{StaticResource Ui.Light}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Margin="20,10,0,20"
+                    Padding="10"
+                    HorizontalAlignment="Stretch"
                     Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Grid Margin="8" >
-                    <Grid.ColumnDefinitions >
-                        <ColumnDefinition  Width="Auto"/>
-                        <ColumnDefinition  Width="*"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Image Source="../Views/Images/information64.png" Width="48" Grid.Column="0" />
+                    <Image Grid.Column="0" Source="../Views/Images/information64.png" Width="40" VerticalAlignment="Top" />
 
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock HorizontalAlignment="Center" Margin="2,0,0,0" TextWrapping="Wrap" Style="{StaticResource subHeader}"
-                                   TextAlignment="Center"
-                                   Text="{x:Static Properties:Resources.SourceSelection_UpdateAvailable}" />
+                    <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
+                        <TextBlock Style="{StaticResource subHeader}"
+                                   Text="{x:Static Properties:Resources.SourceSelection_UpdateAvailable}"
+                                   TextWrapping="Wrap" />
 
-                        <Button Content="{x:Static Properties:Resources.SourceSelection_UpdateNow}" Margin="0,5,0,0" 
-                                Command="{Binding RelayCommand}" CommandParameter="CheckForUpdates" HorizontalAlignment="Center" />
+                        <Button Content="{x:Static Properties:Resources.SourceSelection_UpdateNow}"
+                                Margin="0,8,0,0"
+                                Padding="10,2"
+                                Command="{Binding RelayCommand}"
+                                CommandParameter="CheckForUpdates"
+                                HorizontalAlignment="Left" />
                     </StackPanel>
-               
                 </Grid>
             </Border>
 
-            <Border Background="{StaticResource Ui.UltraLight2}" CornerRadius="4" Grid.Row="7" Margin="20,10,0,20" HorizontalAlignment="Stretch" 
+            <Border Grid.Row="7"
+                    Background="{StaticResource Ui.Ultralight}"
+                    BorderBrush="{StaticResource Ui.Light}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Margin="20,10,0,20"
+                    Padding="10"
+                    HorizontalAlignment="Stretch"
                     Visibility="{Binding IsOldNightly, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Grid Margin="8" >
-                    <Grid.ColumnDefinitions >
-                        <ColumnDefinition  Width="Auto"/>
-                        <ColumnDefinition  Width="*"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Image Source="../Views/Images/information.png" Width="32" Grid.Column="0" />
+                    <Image Grid.Column="0" Source="../Views/Images/information.png" Width="28" VerticalAlignment="Top" />
 
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock HorizontalAlignment="Center" Margin="2,0,0,0" TextWrapping="Wrap" Style="{StaticResource subText}"
-                                   TextAlignment="Center"
-                                   Text="{x:Static Properties:Resources.SourceSelection_NightlyUpdate}" />
+                    <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
+                        <TextBlock Style="{StaticResource subText}"
+                                   Text="{x:Static Properties:Resources.SourceSelection_NightlyUpdate}"
+                                   TextWrapping="Wrap" />
 
-                        <Button Content="{x:Static Properties:Resources.SourceSelection_NightlyUpdateUrl}" Margin="0,5,0,0" 
-                                Command="{Binding RelayCommand}" CommandParameter="NightlyUpdate" HorizontalAlignment="Center" />
+                        <Button Content="{x:Static Properties:Resources.SourceSelection_NightlyUpdateUrl}"
+                                Margin="0,8,0,0"
+                                Padding="10,2"
+                                Command="{Binding RelayCommand}"
+                                CommandParameter="NightlyUpdate"
+                                HorizontalAlignment="Left" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -200,15 +221,15 @@
 
             <WrapPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
                 <TextBlock>           
-                    <Hyperlink x:Name="Preferences" NavigateUri="/"  RequestNavigate="OpenOptions_OnRequestNavigate" ><TextBlock Text="{x:Static Properties:Resources.Preferences}"/></Hyperlink>
+                    <Hyperlink x:Name="Preferences" NavigateUri="/"  RequestNavigate="OpenOptions_OnRequestNavigate" ><TextBlock FontSize="12" Text="{x:Static Properties:Resources.Preferences}"/></Hyperlink>
                 </TextBlock>
                 <TextBlock Text="|"  Margin="5,0,5,0"/>
                 <TextBlock>           
-                    <Hyperlink x:Name="help" NavigateUri="/" RequestNavigate="Help_OnRequestNavigate" ><TextBlock Text="{x:Static Properties:Resources.SourceSelection_Help}"/></Hyperlink>
+                    <Hyperlink x:Name="help" NavigateUri="/" RequestNavigate="Help_OnRequestNavigate" ><TextBlock FontSize="12" Text="{x:Static Properties:Resources.SourceSelection_Help}"/></Hyperlink>
                 </TextBlock>
                 <TextBlock Text="|"  Margin="5,0,5,0"/>
                 <TextBlock>           
-                    <Hyperlink x:Name="AboutHandBrake" NavigateUri="/" RequestNavigate="AboutHandBrake_OnRequestNavigate"> <TextBlock Text="{x:Static Properties:Resources.SourceSelection_AboutHandBrake}" /></Hyperlink>
+                    <Hyperlink x:Name="AboutHandBrake" NavigateUri="/" RequestNavigate="AboutHandBrake_OnRequestNavigate"> <TextBlock FontSize="12" Text="{x:Static Properties:Resources.SourceSelection_AboutHandBrake}" /></Hyperlink>
                 </TextBlock>
             </WrapPanel>
         </Grid>
@@ -218,9 +239,25 @@
               Opacity="{Binding Source={x:Static themes:ThemeLoader.ThemeOpacity}}"
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch">
-            <Border BorderThickness="4" CornerRadius="4" BorderBrush="{StaticResource Ui.Light}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_DropFileHere}" TextWrapping="WrapWithOverflow" Foreground="White" 
-                           Margin="100,150,100,150"  FontSize="22"   />
+            <Border Margin="100,150"
+                    Padding="20"
+                    CornerRadius="10"
+                    BorderThickness="2"
+                    BorderBrush="{StaticResource Ui.ContrastLight}"
+                    Background="#24000000"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch">
+                <Grid>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_DropFileHere}"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"
+                                   Foreground="White"
+                                   FontSize="22"
+                                   FontWeight="SemiBold"
+                                   Margin="24" />
+                    </StackPanel>
+                </Grid>
             </Border>
         </Grid>
     </Grid>
