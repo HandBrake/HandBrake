@@ -24,7 +24,7 @@
     
     <Grid>
 
-        <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource Ui.Background}"
+        <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
                 Visibility="{Binding PreviewNotAvailable, Converter={StaticResource booleanToVisibilityConverter}}">
             <TextBlock Text="No Preview Available" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="60"
                        Style="{StaticResource pageHeader}" Opacity="0.75" />
@@ -44,7 +44,7 @@
         <Canvas x:Name="dragCanvas" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="True"
                 SizeChanged="DragCanvas_OnSizeChanged">
             <Border x:Name="cropSettingsBorder" BorderBrush="{DynamicResource Ui.ContrastLight}" BorderThickness="1" CornerRadius="10"
-                    Padding="8" MinWidth="220" Background="{DynamicResource Ui.Dark}" Opacity="0.95"
+                    Padding="8" MinWidth="220" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Opacity="0.95"
                     Visibility="{Binding ShowPictureSettingControls, Converter={StaticResource booleanToVisibilityConverter}}"
                     MouseLeftButtonDown="CropSettingsBorder_OnMouseLeftButtonDown"
                     MouseLeftButtonUp="CropSettingsBorder_OnMouseLeftButtonUp"
@@ -58,7 +58,7 @@
 
         <Border BorderBrush="{DynamicResource Ui.ContrastLight}" BorderThickness="1" CornerRadius="12" Padding="12"
                 VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="16" MinWidth="560" MaxWidth="920"
-                Background="{DynamicResource Ui.Dark}" Opacity="0.94">
+                Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Opacity="0.94">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
