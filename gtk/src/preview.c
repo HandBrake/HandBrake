@@ -324,6 +324,21 @@ live_preview_error_cb (GtkMediaStream *video, GParamSpec *spec, signal_user_data
     }
 }
 
+static void
+live_preview_init_video(signal_user_data_t *ud)
+{
+    if (ud->preview->video != NULL)
+    {
+        g_signal_handlers_disconnect_by_data(ud->preview->video, ud);
+        g_clear_object(&ud->preview->video);
+    }
+
+    ud->preview->video = gtk_media_file_new();
+    g_signal_connect(ud->preview->video, "notify::timestamp", G_CALLBACK(live_preview_progress_cb), ud);
+    g_signal_connect(ud->preview->video, "notify::ended", G_CALLBACK(live_preview_ended_cb), ud);
+    g_signal_connect(ud->preview->video, "notify::error", G_CALLBACK(live_preview_error_cb), ud);
+}
+
 void
 ghb_preview_init(signal_user_data_t *ud)
 {
@@ -331,10 +346,7 @@ ghb_preview_init(signal_user_data_t *ud)
     ud->preview->encode_frame = -1;
     ud->preview->live_id      = -1;
 
-    ud->preview->video = gtk_media_file_new();
-    g_signal_connect(ud->preview->video, "notify::timestamp", G_CALLBACK(live_preview_progress_cb), ud);
-    g_signal_connect(ud->preview->video, "notify::ended", G_CALLBACK(live_preview_ended_cb), ud);
-    g_signal_connect(ud->preview->video, "notify::error", G_CALLBACK(live_preview_error_cb), ud);
+    live_preview_init_video(ud);
     ud->preview->live_enabled = 1;
 }
 
@@ -360,7 +372,9 @@ live_preview_start_new (signal_user_data_t *ud)
     }
     else
     {
+        live_preview_init_video(ud);
         GtkPicture *preview_image = GTK_PICTURE(ghb_builder_widget("preview_image"));
+        gtk_widget_set_visible(ghb_builder_widget("live_preview_progress"), TRUE);
         gtk_media_file_set_filename(GTK_MEDIA_FILE(ud->preview->video), ud->preview->current);
         if (gtk_media_stream_get_error(ud->preview->video) != NULL)
             return;
@@ -375,7 +389,8 @@ live_preview_toggle_playback (signal_user_data_t *ud)
     if (!ud->preview->live_enabled)
         return;
 
-    if (!gtk_media_file_get_file(GTK_MEDIA_FILE(ud->preview->video)))
+    if (!gtk_media_file_get_file(GTK_MEDIA_FILE(ud->preview->video)) ||
+        gtk_media_stream_get_error(ud->preview->video) != NULL)
     {
         live_preview_start_new(ud);
     }
