@@ -64,6 +64,7 @@ struct preview_s
 };
 
 static void live_preview_progress_cb(GtkMediaStream *video, GParamSpec *spec, signal_user_data_t *ud);
+static void set_preview_image_static(signal_user_data_t *ud, GdkPixbuf *pix);
 
 static void
 get_display_size (GtkWidget *widget, int *w, int *h)
@@ -314,6 +315,11 @@ live_preview_error_cb (GtkMediaStream *video, GParamSpec *spec, signal_user_data
         gtk_widget_set_visible(dialog, TRUE);
         // Also log the error to the activity log
         g_warning("%s", error->message);
+
+        gtk_media_stream_pause(video);
+        live_preview_set_state(PREVIEW_STATE_STOPPED);
+        set_preview_image_static(ud, ud->preview->pix);
+        gtk_widget_set_visible(ghb_builder_widget("live_preview_progress"), FALSE);
     }
 }
 
@@ -355,6 +361,8 @@ live_preview_start_new (signal_user_data_t *ud)
     {
         GtkPicture *preview_image = GTK_PICTURE(ghb_builder_widget("preview_image"));
         gtk_media_file_set_filename(GTK_MEDIA_FILE(ud->preview->video), ud->preview->current);
+        if (gtk_media_stream_get_error(ud->preview->video) != NULL)
+            return;
         gtk_picture_set_paintable(preview_image, GDK_PAINTABLE(ud->preview->video));
         live_preview_play(ud);
     }
@@ -487,11 +495,11 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(prog), "Done");
         gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(prog), 1);
         ud->preview->encoded[ud->preview->encode_frame] = TRUE;
-        live_preview_start_new(ud);
         widget = ghb_builder_widget("live_encode_progress");
         gtk_widget_set_visible(widget, FALSE);
         widget = ghb_builder_widget("live_preview_progress");
         gtk_widget_set_visible(widget, TRUE);
+        live_preview_start_new(ud);
     }
     else
     {
