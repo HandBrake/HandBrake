@@ -36,6 +36,7 @@ typedef enum {
     GHB_ACTION_DESTRUCTIVE,
 } GhbActionStyle;
 
+const gchar *get_extension(signal_user_data_t *ud, GhbValue *settings);
 gboolean ghb_timer_cb(gpointer data);
 gboolean ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data);
 void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
