@@ -15,6 +15,7 @@ LIBVPX.CONFIGURE.extra =     \
     --disable-vp8-decoder       \
     --enable-vp9-encoder        \
     --disable-vp9-decoder       \
+	--enable-vp9-highbitdepth   \
     --disable-examples          \
     --disable-tools             \
     --disable-docs              \
