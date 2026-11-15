@@ -5325,7 +5325,7 @@ custom_temp_dir_response_cb (GtkDialog *dialog, int response, gpointer data)
     {
         gtk_check_button_set_active(
             GTK_CHECK_BUTTON(ghb_builder_widget("CustomTmpEnable")), FALSE);
-        ghb_prefs_store_now();
+        ghb_prefs_store();
         g_action_group_activate_action(G_ACTION_GROUP(g_application_get_default()),
                                        "quit", NULL);
     }
