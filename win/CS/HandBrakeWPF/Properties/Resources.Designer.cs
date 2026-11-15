@@ -6860,7 +6860,43 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("QueueView_Destination", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Status:.
+        /// </summary>
+        public static string QueueView_Status {
+            get {
+                return ResourceManager.GetString("QueueView_Status", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to to.
+        /// </summary>
+        public static string QueueView_PointToPointTo {
+            get {
+                return ResourceManager.GetString("QueueView_PointToPointTo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Job.
+        /// </summary>
+        public static string QueueView_JobStats {
+            get {
+                return ResourceManager.GetString("QueueView_JobStats", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Content.
+        /// </summary>
+        public static string QueueView_ContentStats {
+            get {
+                return ResourceManager.GetString("QueueView_ContentStats", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Encode Duration:.
         /// </summary>

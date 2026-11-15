@@ -1407,6 +1407,18 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="QueueView_Destination" xml:space="preserve">
     <value>Destination:</value>
   </data>
+  <data name="QueueView_Status" xml:space="preserve">
+    <value>Status:</value>
+  </data>
+  <data name="QueueView_PointToPointTo" xml:space="preserve">
+    <value>to</value>
+  </data>
+  <data name="QueueView_JobStats" xml:space="preserve">
+    <value>Job</value>
+  </data>
+  <data name="QueueView_ContentStats" xml:space="preserve">
+    <value>Content</value>
+  </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
     <value>Do nothing</value>
   </data>

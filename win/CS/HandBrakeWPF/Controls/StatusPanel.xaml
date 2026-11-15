@@ -1,60 +1,83 @@
 ﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:themes="clr-namespace:HandBrakeWPF.Themes"
-             x:Class="HandBrakeWPF.Controls.StatusPanel"
-             >
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:themes="clr-namespace:HandBrakeWPF.Themes"
+			 x:Class="HandBrakeWPF.Controls.StatusPanel">
 
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="boolTovisibility" />
-    </UserControl.Resources>
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+	<UserControl.Resources>
+		<BooleanToVisibilityConverter x:Key="boolTovisibility" />
+	</UserControl.Resources>
 
-        <StackPanel Grid.Row="0" Background="{DynamicResource Ui.BackgroundDark}" Opacity="{Binding Source={x:Static themes:ThemeLoader.ThemeOpacity}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+	<Grid>
+		<Border Background="{DynamicResource Ui.BackgroundDark}"
+				Opacity="{Binding Source={x:Static themes:ThemeLoader.ThemeOpacity}}"
+				VerticalAlignment="Stretch"
+				HorizontalAlignment="Stretch" />
 
-        <Border VerticalAlignment="Center" Grid.Row="0" Width="400" CornerRadius="4" Height="150"
-                BorderBrush="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
-                Background="{StaticResource Ui.Light}" BorderThickness="1">
-            <Grid VerticalAlignment="Center"  HorizontalAlignment="Stretch">
+		<Border VerticalAlignment="Center"
+				HorizontalAlignment="Center"
+				MinWidth="420"
+				MaxWidth="560"
+				Padding="20"
+				CornerRadius="8"
+				BorderBrush="{DynamicResource Ui.BackgroundDark}"
+				Background="{DynamicResource Ui.Light}"
+				BorderThickness="1">
+			<Grid MinWidth="320">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+				<TextBlock Grid.Row="0"
+						   SnapsToDevicePixels="True"
+						   VerticalAlignment="Top"
+						   HorizontalAlignment="Left"
+						   Style="{StaticResource pageHeader}"
+						   Margin="0,0,0,6"
+						   TextWrapping="Wrap"
+						   Text="{Binding Message, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" MaxHeight="260" MinHeight="220">
-                    <StackPanel VerticalAlignment="Center" Orientation="Vertical" >
-                        <StackPanel VerticalAlignment="Center" MinWidth="300">
-                            <TextBlock SnapsToDevicePixels="True" VerticalAlignment="Top" Style="{StaticResource pageHeader}" Margin="0,11,0,0" HorizontalAlignment="Left"
-                                       TextWrapping="WrapWithOverflow" Text="{Binding Message, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+				<TextBlock Grid.Row="1"
+						   SnapsToDevicePixels="True"
+						   VerticalAlignment="Top"
+						   HorizontalAlignment="Left"
+						   Margin="0,0,0,14"
+						   FontSize="15"
+						   FontFamily="Segoe UI"
+						   TextWrapping="Wrap"
+						   Text="{Binding SubMessage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
 
-                            <TextBlock SnapsToDevicePixels="True" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="0,5" HorizontalAlignment="Left"
-						               Text="{Binding SubMessage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" TextWrapping="WrapWithOverflow" />
-                        </StackPanel>
+				<ProgressBar Grid.Row="2"
+							 x:Name="progressBar"
+							 Height="12"
+							 VerticalAlignment="Center"
+							 AutomationProperties.Name="Scan progress"
+							 Value="{Binding ProgressPercentage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+							 IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
 
-                        <ProgressBar x:Name="progressBar" Value="{Binding ProgressPercentage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  
-                                     VerticalAlignment="Center" Height="10" 
-                                     IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  />
+				<StackPanel Grid.Row="3"
+							Orientation="Horizontal"
+							HorizontalAlignment="Right"
+							Margin="0,14,0,0">
+					<Button x:Name="SecondaryActionCtl"
+							Content="{Binding SecondaryActionText, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+							Click="PerformSecondaryAction"
+							Margin="0,0,8,0"
+							Padding="12,4"
+							AutomationProperties.Name="Secondary action"
+							Visibility="{Binding IsActionButton2Visible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource boolTovisibility}}" />
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-
-                            <Button Content="{Binding SecondaryActionText, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="0,10,5,0"
-                                x:Name="SecondaryActionCtl" Click="PerformSecondaryAction" Padding="8,2" Visibility="{Binding IsActionButton2Visible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource boolTovisibility}}" />
-
-                            <Button Content="{Binding ActionText, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="0,10,0,0"
-                                x:Name="StatusActionButton" Click="StatusActionButton_OnClick" Padding="8,2" IsCancel="True"
-                                Visibility="{Binding IsActionButtonVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource boolTovisibility}}" />
-
-                        </StackPanel>
-
-                    </StackPanel>
-                </StackPanel>
-
-
-            </Grid>
-        </Border>
-    </Grid>
+					<Button x:Name="StatusActionButton"
+							Content="{Binding ActionText, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+							Click="StatusActionButton_OnClick"
+							Padding="14,4"
+							IsCancel="True"
+							AutomationProperties.Name="Primary action"
+							Visibility="{Binding IsActionButtonVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource boolTovisibility}}" />
+				</StackPanel>
+			</Grid>
+		</Border>
+	</Grid>
 </UserControl>
