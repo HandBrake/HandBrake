@@ -5323,12 +5323,8 @@ custom_temp_dir_response_cb (GtkDialog *dialog, int response, gpointer data)
     }
     else if (response == GTK_RESPONSE_REJECT)
     {
-        signal_user_data_t *ud = ghb_ud();
-
         gtk_check_button_set_active(
             GTK_CHECK_BUTTON(ghb_builder_widget("CustomTmpEnable")), FALSE);
-        ghb_dict_set_bool(ud->prefs, "CustomTmpEnable", FALSE);
-        ghb_pref_set(ud->prefs, "CustomTmpEnable");
         ghb_prefs_store_now();
         g_action_group_activate_action(G_ACTION_GROUP(g_application_get_default()),
                                        "quit", NULL);
