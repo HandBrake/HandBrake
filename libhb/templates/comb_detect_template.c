@@ -134,7 +134,325 @@ static void FUNC(apply_mask)(hb_filter_private_t *pv, hb_buffer_t *b)
     }
 }
 
-#if defined (__aarch64__) && !defined(__APPLE__)
+#if defined(__aarch64__) && defined(SYS_MINGW)
+#ifndef HB_COMB_WINDOWS
+#define HB_COMB_WINDOWS 2
+#define HB_COMB_WINDOWS_DEFAULT
+#endif
+#if HB_COMB_WINDOWS < 1
+#error HB_COMB_WINDOWS must be positive
+#endif
+
+#if defined(__clang__)
+#define HB_COMB_UNROLL_GROUPS _Pragma("clang loop unroll(full)")
+#elif defined(__GNUC__)
+#define HB_COMB_PRAGMA_IMPL(value) _Pragma(#value)
+#define HB_COMB_PRAGMA(value) HB_COMB_PRAGMA_IMPL(value)
+#define HB_COMB_UNROLL_GROUPS HB_COMB_PRAGMA(GCC unroll HB_COMB_WINDOWS)
+#else
+#define HB_COMB_UNROLL_GROUPS
+#endif
+
+static inline float32x4_t FUNC(load_gamma4)(const float *lut, const pixel *source)
+{
+    return (float32x4_t){lut[source[0]], lut[source[1]], lut[source[2]], lut[source[3]]};
+}
+
+static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
+                                              int segment_start, int segment_stop)
+{
+    // A mishmash of various comb detection tricks
+    // picked up from neuron2's Decomb plugin for
+    // AviSynth and tritical's IsCombedT and
+    // IsCombedTIVTC plugins.
+
+    // Comb scoring algorithm
+    const float mthresh  = pv->gamma_motion_threshold;
+    const float athresh  = pv->gamma_spatial_threshold;
+    const float athresh6 = pv->gamma_spatial_threshold6;
+
+    // One pass for Y
+    const int stride_prev  = pv->ref[0]->plane[0].stride / pv->bps;
+    const int stride_cur   = pv->ref[1]->plane[0].stride / pv->bps;
+    const int stride_next  = pv->ref[2]->plane[0].stride / pv->bps;
+    const int width   = pv->ref[0]->plane[0].width;
+    const int height  = pv->ref[0]->plane[0].height;
+    const int mask_stride = pv->mask->plane[0].stride;
+
+    // Comb detection has to start at y = 2 and end at
+    // y = height - 2, because it needs to examine
+    // 2 pixels above and 2 below the current pixel.
+    if (segment_start < 2)
+    {
+        segment_start = 2;
+    }
+    if (segment_stop > height - 2)
+    {
+        segment_stop = height - 2;
+    }
+    if (segment_start >= segment_stop)
+    {
+        return;
+    }
+
+    // These are just to make the buffer locations easier to read.
+    const int up_1_prev    = -1 * stride_prev;
+    const int down_1_prev  =      stride_prev;
+
+    const int up_2    = -2 * stride_cur;
+    const int up_1    = -1 * stride_cur;
+    const int down_1  =      stride_cur;
+    const int down_2  =  2 * stride_cur;
+
+    const int up_1_next    = -1 * stride_next;
+    const int down_1_next =       stride_next;
+
+
+    for (int y = segment_start; y < segment_stop; y++)
+    {
+        memset(&pv->mask->plane[0].data[y * mask_stride], 0, mask_stride);
+    }
+    int tail_start = 0;
+    const float32x4_t v_athresh = vdupq_n_f32(athresh);
+    const float32x4_t v_athresh_neg = vdupq_n_f32(-athresh);
+    const float32x4_t v_mthresh = vdupq_n_f32(mthresh);
+    const float32x4_t v_athresh6 = vdupq_n_f32(athresh6);
+    const float32x4_t v_four = vdupq_n_f32(4.0f);
+    const float32x4_t v_three = vdupq_n_f32(3.0f);
+    const uint32x4_t v_one = vdupq_n_u32(1);
+    const uint32x4_t v_exhaustive_check = vdupq_n_u32(pv->force_exaustive_check);
+
+
+    // Each SIMD vector spans four adjacent columns; process HB_COMB_WINDOWS side by side.
+    for (; tail_start <= width - 4 * HB_COMB_WINDOWS; tail_start += 4 * HB_COMB_WINDOWS)
+    {
+        float32x4_t up2_rows[HB_COMB_WINDOWS], up1_rows[HB_COMB_WINDOWS];
+        float32x4_t center_rows[HB_COMB_WINDOWS], down1_rows[HB_COMB_WINDOWS];
+        const pixel *bottom_rows[HB_COMB_WINDOWS], *prev_rows[HB_COMB_WINDOWS], *next_rows[HB_COMB_WINDOWS];
+        uint8_t *mask_rows[HB_COMB_WINDOWS];
+        float32x4_t prev_center_rows[HB_COMB_WINDOWS], prev_down_rows[HB_COMB_WINDOWS];
+        float32x4_t next_center_rows[HB_COMB_WINDOWS], next_down_rows[HB_COMB_WINDOWS];
+        int temporal_rows[HB_COMB_WINDOWS];
+HB_COMB_UNROLL_GROUPS
+
+        // Seed each window's rolling current-frame rows and invalidate its temporal cache.
+        for (int group = 0; group < HB_COMB_WINDOWS; group++)
+        {
+            int column = tail_start + group * 4;
+            const pixel *source = (const pixel *)pv->ref[1]->plane[0].data +
+                                  (segment_start - 2) * stride_cur + column;
+            up2_rows[group] = FUNC(load_gamma4)(pv->gamma_lut, source);
+            up1_rows[group] = FUNC(load_gamma4)(pv->gamma_lut, source + stride_cur);
+            center_rows[group] = FUNC(load_gamma4)(pv->gamma_lut, source + 2 * stride_cur);
+            down1_rows[group] = FUNC(load_gamma4)(pv->gamma_lut, source + 3 * stride_cur);
+            bottom_rows[group] = source + 4 * stride_cur;
+            prev_rows[group] = (const pixel *)pv->ref[0]->plane[0].data + segment_start * stride_prev + column;
+            next_rows[group] = (const pixel *)pv->ref[2]->plane[0].data + segment_start * stride_next + column;
+            mask_rows[group] = &pv->mask->plane[0].data[segment_start * mask_stride + column];
+            temporal_rows[group] = -3;
+        }
+
+        // Walk down the segment, reusing the spatial rows for each window.
+        for (int y = segment_start; y < segment_stop; y++)
+        {
+HB_COMB_UNROLL_GROUPS
+            for (int group = 0; group < HB_COMB_WINDOWS; group++)
+            {
+                float32x4_t cur_up2_vec = up2_rows[group];
+                float32x4_t cur_up1_vec = up1_rows[group];
+                float32x4_t cur_vec = center_rows[group];
+                float32x4_t cur_down1_vec = down1_rows[group];
+                const pixel *bottom = bottom_rows[group];
+                const pixel *prev = prev_rows[group];
+                const pixel *next = next_rows[group];
+                uint8_t *mask = mask_rows[group];
+                float32x4_t prev_up_cache, prev_cache, prev_down_cache;
+                float32x4_t next_up_cache, next_cache, next_down_cache;
+                int temporal_y = temporal_rows[group];
+            float32x4_t cur_down2_vec = FUNC(load_gamma4)(pv->gamma_lut, bottom);
+            uint32_t mask32[4];
+            uint32x4_t mask_vec = vdupq_n_u32(0);
+
+            float32x4_t up_diff1 = vsubq_f32(cur_vec, cur_up1_vec);
+            float32x4_t down_diff1 = vsubq_f32(cur_vec, cur_down1_vec);
+
+            uint32x4_t cond1 = vcgtq_f32(up_diff1, v_athresh);
+            uint32x4_t cond2 = vcgtq_f32(down_diff1, v_athresh);
+            uint32x4_t cond3 = vcltq_f32(up_diff1, v_athresh_neg);
+            uint32x4_t cond4 = vcltq_f32(down_diff1, v_athresh_neg);
+
+            uint32x4_t condition1 = vandq_u32(cond1, cond2);
+            uint32x4_t condition2 = vandq_u32(cond3, cond4);
+            uint32x4_t condition = vorrq_u32(condition1, condition2);
+
+            if(vmaxvq_u32(condition) > 0)
+            {
+                uint32x4_t motion = vdupq_n_u32(0);
+                uint32x4_t motion1 = vdupq_n_u32(0);
+                if (mthresh > 0)
+                {
+                    // Load temporal rows only when a spatial candidate needs motion checking.
+                    // Consecutive checks reuse cached center/down rows as up/center;
+                    // after a skipped row, reload up/center before loading the new down rows.
+                    if (temporal_y + 1 == y)
+                    {
+                        prev_up_cache = prev_center_rows[group];
+                        prev_cache = prev_down_rows[group];
+                        next_up_cache = next_center_rows[group];
+                        next_cache = next_down_rows[group];
+                    }
+                    else
+                    {
+                        prev_up_cache = FUNC(load_gamma4)(pv->gamma_lut, prev + up_1_prev);
+                        prev_cache = FUNC(load_gamma4)(pv->gamma_lut, prev);
+                        next_up_cache = FUNC(load_gamma4)(pv->gamma_lut, next + up_1_next);
+                        next_cache = FUNC(load_gamma4)(pv->gamma_lut, next);
+                    }
+                    prev_down_cache = FUNC(load_gamma4)(pv->gamma_lut, prev + down_1_prev);
+                    next_down_cache = FUNC(load_gamma4)(pv->gamma_lut, next + down_1_next);
+                    temporal_y = y;
+                    prev_center_rows[group] = prev_cache;
+                    prev_down_rows[group] = prev_down_cache;
+                    next_center_rows[group] = next_cache;
+                    next_down_rows[group] = next_down_cache;
+                    temporal_rows[group] = temporal_y;
+                    float32x4_t prev_vec = prev_cache;
+                    float32x4_t next_vec = next_cache;
+                    float32x4_t next_up_1_vec = next_up_cache;
+                    float32x4_t next_down_1_vec = next_down_cache;
+                    float32x4_t prev_up_1_vec = prev_up_cache;
+                    float32x4_t prev_down_1_vec = prev_down_cache;
+                    float32x4_t abs_diff1 = vabsq_f32(vsubq_f32(prev_vec, cur_vec));
+                    float32x4_t abs_diff2 = vabsq_f32(vsubq_f32(cur_up1_vec, next_up_1_vec));
+                    float32x4_t abs_diff3 = vabsq_f32(vsubq_f32(cur_down1_vec,next_down_1_vec));
+
+                    uint32x4_t motion_cond1 = vcgtq_f32(abs_diff1, v_mthresh);
+                    uint32x4_t motion_cond2 = vcgtq_f32(abs_diff2, v_mthresh);
+                    uint32x4_t motion_cond3 = vcgtq_f32(abs_diff3, v_mthresh);
+
+                    motion = vandq_u32(vandq_u32(motion_cond1, motion_cond2), motion_cond3);
+
+                    float32x4_t abs_diff4 = vabsq_f32(vsubq_f32(next_vec, cur_vec));
+                    float32x4_t abs_diff5 = vabsq_f32(vsubq_f32(prev_up_1_vec, cur_up1_vec));
+                    float32x4_t abs_diff6 = vabsq_f32(vsubq_f32(prev_down_1_vec, cur_down1_vec));
+
+                    uint32x4_t motion_cond4 = vcgtq_f32(abs_diff4, v_mthresh);
+                    uint32x4_t motion_cond5 = vcgtq_f32(abs_diff5, v_mthresh);
+                    uint32x4_t motion_cond6 = vcgtq_f32(abs_diff6, v_mthresh);
+                    motion1 = vandq_u32(vandq_u32(motion_cond4, motion_cond5), motion_cond6);
+                    motion = vorrq_u32(motion, motion1);
+                }
+                else
+                {
+                    motion = vdupq_n_u32(1);
+                }
+
+                uint32x4_t motion_check = vorrq_u32(motion, v_exhaustive_check);
+                motion_check = vcgtq_u32(motion_check, mask_vec);
+
+                if (vmaxvq_u32(vandq_u32(motion_check, condition)) > 0)
+                {
+                    float32x4_t combing1 = vabsq_f32(vsubq_f32(vaddq_f32(vaddq_f32(cur_up2_vec, vmulq_f32(cur_vec, v_four)),cur_down2_vec), vmulq_f32(vaddq_f32(cur_up1_vec, cur_down1_vec), v_three)));
+
+                    uint32x4_t combing_cond = vcgtq_f32(combing1, v_athresh6);
+                    mask_vec = vandq_u32(combing_cond, motion_check);
+                    mask_vec = vandq_u32(mask_vec, condition);
+                    mask_vec = vandq_u32(mask_vec, v_one);
+
+                    vst1q_u32(mask32, mask_vec);
+
+                    mask[0] = mask32[0];
+                    mask[1] = mask32[1];
+                    mask[2] = mask32[2];
+                    mask[3] = mask32[3];
+                }
+            }
+            cur_up2_vec = cur_up1_vec;
+            cur_up1_vec = cur_vec;
+            cur_vec = cur_down1_vec;
+            cur_down1_vec = cur_down2_vec;
+            if (y + 1 < segment_stop)
+            {
+                bottom += stride_cur;
+                prev += stride_prev;
+                next += stride_next;
+                mask += mask_stride;
+            }
+                up2_rows[group] = cur_up2_vec;
+                up1_rows[group] = cur_up1_vec;
+                center_rows[group] = cur_vec;
+                down1_rows[group] = cur_down1_vec;
+                bottom_rows[group] = bottom;
+                prev_rows[group] = prev;
+                next_rows[group] = next;
+                mask_rows[group] = mask;
+            }
+        }
+    }
+
+    // Handle columns left over from the batches of 4 * HB_COMB_WINDOWS pixels.
+    for (int y = segment_start; tail_start < width && y < segment_stop; y++)
+    {
+        const pixel *const prev_row = &((const pixel *)pv->ref[0]->plane[0].data)[y * stride_prev];
+        const pixel *const cur_row = &((const pixel *)pv->ref[1]->plane[0].data)[y * stride_cur];
+        const pixel *const next_row = &((const pixel *)pv->ref[2]->plane[0].data)[y * stride_next];
+        uint8_t *const mask_row = &pv->mask->plane[0].data[y * mask_stride];
+        int x = tail_start;
+        for (; x < width; x++)
+        {
+            const pixel *const prev = prev_row + x;
+            const pixel *const cur = cur_row + x;
+            const pixel *const next = next_row + x;
+            uint8_t *const mask = mask_row + x;
+            const float up_diff = pv->gamma_lut[cur[0]] - pv->gamma_lut[cur[up_1]];
+            const float down_diff = pv->gamma_lut[cur[0]] - pv->gamma_lut[cur[down_1]];
+            if ((up_diff > athresh && down_diff > athresh) ||
+                (up_diff < -athresh && down_diff < -athresh))
+            {
+                int motion = 0;
+                if (mthresh > 0)
+                {
+                    if (fabs(pv->gamma_lut[prev[0]] - pv->gamma_lut[cur[0]] ) > mthresh &&
+                        fabs(pv->gamma_lut[cur[up_1]] - pv->gamma_lut[next[up_1_next]] ) > mthresh &&
+                        fabs(pv->gamma_lut[cur[down_1]] - pv->gamma_lut[next[down_1_next]]) > mthresh)
+                    {
+                        motion++;
+                    }
+                    if (fabs(pv->gamma_lut[next[0]] - pv->gamma_lut[cur[0]] ) > mthresh &&
+                        fabs(pv->gamma_lut[prev[up_1_prev]] - pv->gamma_lut[cur[up_1]] ) > mthresh &&
+                        fabs(pv->gamma_lut[prev[down_1_prev]] - pv->gamma_lut[cur[down_1]]) > mthresh)
+                    {
+                        motion++;
+                    }
+                }
+                else
+                {
+                    motion = 1;
+                }
+                if (motion || pv->force_exaustive_check)
+                {
+                    float combing = fabs(pv->gamma_lut[cur[up_2]] +
+                                         (4 * pv->gamma_lut[cur[0]]) +
+                                         pv->gamma_lut[cur[down_2]] -
+                                         (3 * (pv->gamma_lut[cur[up_1]] +
+                                               pv->gamma_lut[cur[down_1]])));
+                    if (combing > athresh6)
+                    {
+                        mask[0] = 1;
+                    }
+                }
+            }
+        }
+    }
+}
+#undef HB_COMB_UNROLL_GROUPS
+#undef HB_COMB_PRAGMA
+#undef HB_COMB_PRAGMA_IMPL
+#ifdef HB_COMB_WINDOWS_DEFAULT
+#undef HB_COMB_WINDOWS
+#undef HB_COMB_WINDOWS_DEFAULT
+#endif
+#elif defined (__aarch64__) && !defined(__APPLE__)
 static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                                               int segment_start, int segment_stop)
 {
