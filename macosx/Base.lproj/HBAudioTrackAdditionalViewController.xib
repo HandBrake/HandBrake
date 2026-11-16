@@ -281,6 +281,7 @@ DQ
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="presetsPopUpButton" destination="sBt-Ym-8Ek" id="n4b-7Q-myR"/>
+                                                    <outlet property="removeButton" destination="QBU-us-C2Z" id="EW4-tu-NQx"/>
                                                     <outlet property="textField" destination="IBX-d3-4Oi" id="o49-wY-IWd"/>
                                                     <outlet property="tunesPopUpButton" destination="umN-YL-zGv" id="59g-pl-rAA"/>
                                                 </connections>

@@ -250,6 +250,7 @@
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="presetsPopUpButton" destination="Cp6-ai-Atw" id="IIb-is-VyG"/>
+                                                    <outlet property="removeButton" destination="5wL-wE-M3G" id="F88-Eh-a6B"/>
                                                     <outlet property="textField" destination="xUL-FP-bVw" id="8nV-cc-Lbx"/>
                                                     <outlet property="tunesPopUpButton" destination="ujC-lR-S3N" id="HK4-hc-Ub7"/>
                                                 </connections>

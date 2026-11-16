@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) IBOutlet NSPopUpButton *presetsPopUpButton;
 @property (nonatomic, weak) IBOutlet NSPopUpButton *tunesPopUpButton;
+@property (nonatomic, weak) IBOutlet NSButton *removeButton;
 
 - (IBAction)remove:(id)sender;
 

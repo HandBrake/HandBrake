@@ -42,5 +42,36 @@
     }
 }
 
+- (void)HB_updateUI
+{
+    BOOL darkAqua = NO;
+
+    if (@available(macOS 10.14, *))
+    {
+        darkAqua = [self.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameDarkAqua]] == NSAppearanceNameDarkAqua ? YES : NO;
+    }
+
+    if (self.backgroundStyle == NSBackgroundStyleEmphasized)
+    {
+        [_removeButton setImage:[NSImage imageNamed:@"DeleteHighlight"]];
+        [_removeButton setAlternateImage:[NSImage imageNamed:@"DeleteHighlightPressed"]];
+    }
+    else
+    {
+        [_removeButton setImage:[NSImage imageNamed:darkAqua ? @"DeleteHighlight" : @"Delete"]];
+    }
+}
+
+- (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle
+{
+    [super setBackgroundStyle:backgroundStyle];
+    [self HB_updateUI];
+}
+
+- (void)viewDidChangeEffectiveAppearance
+{
+    [self HB_updateUI];
+}
+
 @end
 
