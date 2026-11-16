@@ -1346,6 +1346,17 @@ queue_update_all_status (signal_user_data_t *ud, int status)
 }
 
 static void
+queue_filter_selected (GhbValue *queue, GtkListBox *listbox)
+{
+    for (int i = ghb_array_len(queue) - 1; i >= 0; i--)
+    {
+        GtkListBoxRow *row = gtk_list_box_get_row_at_index(listbox, i);
+        if (row == NULL || !gtk_list_box_row_is_selected(row))
+            ghb_array_remove(queue, i);
+    }
+}
+
+static void
 save_queue_file_cb (GtkFileChooser *chooser, gint response,
                     signal_user_data_t *ud)
 {
@@ -1355,6 +1366,8 @@ save_queue_file_cb (GtkFileChooser *chooser, gint response,
  
         int ii, count;
         GhbValue *queue = ghb_value_dup(ud->queue);
+        if (GPOINTER_TO_INT(g_object_get_data(G_OBJECT(chooser), "selected-only")))
+            queue_filter_selected(queue, GTK_LIST_BOX(ghb_builder_widget("queue_list")));
         count = ghb_array_len(queue);
         for (ii = 0; ii < count; ii++)
         {
@@ -1389,6 +1402,8 @@ static void save_queue_file (signal_user_data_t *ud, gboolean selected_only)
     ghb_file_chooser_set_initial_file(chooser,
                                       ghb_dict_get_string(ud->prefs, "ExportDirectory"));
 
+    g_object_set_data(G_OBJECT(chooser), "selected-only",
+                      GINT_TO_POINTER(selected_only));
     ghb_file_chooser_set_modal(chooser, TRUE);
     g_signal_connect(G_OBJECT(chooser), "response", G_CALLBACK(save_queue_file_cb), ud);
     ghb_file_chooser_show(chooser);
