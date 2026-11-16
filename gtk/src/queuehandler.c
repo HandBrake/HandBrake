@@ -1374,7 +1374,7 @@ save_queue_file_cb (GtkFileChooser *chooser, gint response,
     ghb_file_chooser_destroy(chooser);
 }
 
-static void save_queue_file (signal_user_data_t *ud)
+static void save_queue_file (signal_user_data_t *ud, gboolean selected_only)
 {
     GtkFileChooser *chooser;
     GtkWindow *hb_window;
@@ -2124,7 +2124,14 @@ G_MODULE_EXPORT void
 queue_export_action_cb (GSimpleAction *action, GVariant *param,
                         signal_user_data_t *ud)
 {
-    save_queue_file(ud);
+    save_queue_file(ud, FALSE);
+}
+
+G_MODULE_EXPORT void
+queue_export_selected_action_cb (GSimpleAction *action, GVariant *param,
+                                 signal_user_data_t *ud)
+{
+    save_queue_file(ud, TRUE);
 }
 
 G_MODULE_EXPORT void
