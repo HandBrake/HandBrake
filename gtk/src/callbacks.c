@@ -5335,14 +5335,10 @@ ghb_check_custom_temp_dir(const char *directory)
             _("_Open Preferences"), _("_Reset and Quit"),
             _("Custom Temporary Directory Unavailable"), message, directory))
     {
-        GtkWidget *preferences = ghb_builder_widget("prefs_dialog");
-
-        if (!gtk_widget_get_visible(preferences))
-            g_action_group_activate_action(G_ACTION_GROUP(g_application_get_default()),
-                                           "preferences", NULL);
+        g_action_group_activate_action(G_ACTION_GROUP(g_application_get_default()),
+                                       "preferences", NULL);
         gtk_stack_set_visible_child(GTK_STACK(ghb_builder_widget("prefs_stack")),
                                    ghb_builder_widget("vbox1"));
-        gtk_window_present(GTK_WINDOW(preferences));
     }
     else
     {
@@ -5378,8 +5374,6 @@ temp_dir_changed_cb (GhbFileButton *dest_chooser, GParamSpec *pspec, gpointer da
     {
         ghb_pref_set(ud->prefs, "CustomTmpDir");
         prefs_require_restart = TRUE;
-        if (ghb_dict_get_bool(ud->prefs, "CustomTmpEnable"))
-            ghb_check_custom_temp_dir(tmp_dir);
     }
 }
 
