@@ -132,7 +132,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Name="Start" AutomationProperties.Name="Start Queue" Grid.Column="0"
-                                IsEnabled="{Binding IsQueueRunning, Converter={StaticResource notBooleanConverter}}" ContextMenuService.IsEnabled="False" PreviewMouseLeftButtonDown="Start_OnPreviewMouseLeftButtonDown"
+                                PreviewMouseLeftButtonDown="Start_OnPreviewMouseLeftButtonDown" PreviewKeyDown="Start_OnPreviewKeyDown"
                                 Visibility="{Binding IsQueueRunning, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
 
                         <StackPanel Orientation="Horizontal">
@@ -432,7 +432,7 @@
             <TabControl x:Name="summaryTabControl"  Grid.Column="1"  Margin="5,0,10,10" SelectedIndex="{Binding SelectedTabIndex}" 
                         MinWidth="550" Width="550"
                         Visibility="{Binding IsSimpleView, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
-                <TabItem Header="{x:Static Properties:Resources.QueueView_Summary}" IsEnabled="{Binding JobInfoVisible}" >
+                <TabItem Header="{x:Static Properties:Resources.QueueView_Summary}">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5,5,0,5">
 
                         <StackPanel>
@@ -532,7 +532,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock FontWeight="Bold" Text="Status:" VerticalAlignment="Top"  Grid.Row="0" />
+                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Status}" VerticalAlignment="Top"  Grid.Row="0" />
                                     <TextBlock Text="{Binding SelectedTask.JobProgress.JobStatus}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis" Grid.Row="0" Grid.Column="1" />
 
                                     <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Source}" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
@@ -544,7 +544,7 @@
                                         <TextBlock Text="{Binding SelectedTask.Task.PointToPointMode, Converter={StaticResource PointToPointConverter}}" TextWrapping="Wrap" Margin="10,0,0,0" FontWeight="Bold"/>
                                         <TextBlock Text=":" FontWeight="Bold" />
                                         <TextBlock Text="{Binding SelectedTask.Task.StartPoint}" TextWrapping="Wrap" Margin="5,0,0,0"/>
-                                        <TextBlock Text="to" TextWrapping="Wrap" Margin="5,0,5,0"/>
+                                        <TextBlock Text="{x:Static Properties:Resources.QueueView_PointToPointTo}" TextWrapping="Wrap" Margin="5,0,5,0"/>
                                         <TextBlock Text="{Binding SelectedTask.Task.EndPoint}" TextWrapping="Wrap"/>
                                     </StackPanel>
 
@@ -581,12 +581,12 @@
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Header="{x:Static Properties:Resources.QueueView_Statistics}" IsEnabled="{Binding JobInfoVisible}" >
+                <TabItem Header="{x:Static Properties:Resources.QueueView_Statistics}">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,0,0,5">
                         <StackPanel>
 
                             <!-- Job Stats -->
-                            <TextBlock Text="Job" FontWeight="Bold" Margin="0,10,0,5" />
+                            <TextBlock Text="{x:Static Properties:Resources.QueueView_JobStats}" FontWeight="Bold" Margin="0,10,0,5" />
                             <Grid Style="{StaticResource LongToolTipHolder}" Margin="10,5,0,0" >
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
@@ -627,7 +627,7 @@
                             </Grid>
 
                             <!-- Content Stats -->
-                            <TextBlock Text="Content" FontWeight="Bold" Margin="0,10,0,5" />
+                            <TextBlock Text="{x:Static Properties:Resources.QueueView_ContentStats}" FontWeight="Bold" Margin="0,10,0,5" />
                             <Grid Style="{StaticResource LongToolTipHolder}" Margin="10,5,0,0">
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
@@ -664,7 +664,7 @@
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Header="{x:Static Properties:Resources.MainView_ActivityLog}" IsEnabled="{Binding JobInfoVisible}">
+                <TabItem Header="{x:Static Properties:Resources.MainView_ActivityLog}">
                     <TextBox ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding ActivityLog, Mode=OneWay}" TextWrapping="Wrap" x:Name="logText">
                         <TextBox.ContextMenu>
                             <ContextMenu>

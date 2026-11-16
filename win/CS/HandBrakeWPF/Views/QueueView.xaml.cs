@@ -298,6 +298,29 @@ namespace HandBrakeWPF.Views
             ((IQueueViewModel)this.DataContext).StartQueue();
         }
 
+        private void Start_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            Button button = sender as Button;
+            if (button == null)
+            {
+                return;
+            }
+
+            if (e.Key == Key.Space || e.Key == Key.Enter)
+            {
+                ((IQueueViewModel)this.DataContext).StartQueue();
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Down && button.ContextMenu != null)
+            {
+                button.ContextMenu.IsEnabled = true;
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                button.ContextMenu.IsOpen = true;
+                e.Handled = true;
+            }
+        }
+
         private void QueueView_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)

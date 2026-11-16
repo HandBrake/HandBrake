@@ -148,9 +148,11 @@ namespace HandBrakeWPF.Views
 
         private void NotifyIconClick()
         {
+            // The window is hidden while in the tray, so it must be shown again before restoring.
+            this.Show();
             this.WindowState = WindowState.Normal;
 
-            // Bit of a hack but does work
+            // Bit of a hack
             this.Topmost = true; 
             this.Topmost = false;
         }
@@ -161,6 +163,9 @@ namespace HandBrakeWPF.Views
             {
                 this.ShowInTaskbar = false;
                 this.notifyIconService?.SetVisibility(true);
+
+                // Hiding the window removes it from Alt+Tab.
+                this.Hide();
             }
             else if (this.WindowState == WindowState.Normal)
             {

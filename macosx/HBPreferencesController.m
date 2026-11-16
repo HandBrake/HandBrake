@@ -6,11 +6,13 @@
 #import "HBPreferencesController.h"
 
 @import HandBrakeKit.HBUtilities;
+@import HandBrakeKit.HBRange;
 
 NSString * const HBShowOpenPanelAtLaunch              = @"HBShowOpenPanelAtLaunch";
 NSString * const HBShowSummaryPreview                 = @"HBShowSummaryPreview";
 NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
 NSString * const HBUseSourceFolderDestination    = @"HBUseSourceFolderDestination";
+NSString * const HBDefaultRangeType              = @"HBDefaultRangeType";
 
 NSString * const HBRecursiveScan                      = @"HBRecursiveScan";
 NSString * const HBExcludedFileExtensions             = @"HBExcludedFileExtensions";
@@ -205,6 +207,7 @@ static BOOL _hardwareDecoderSupported = NO;
         HBShowOpenPanelAtLaunch:            @YES,
         HBShowSummaryPreview:               @YES,
         HBKeepPresetEdits:                  @YES,
+        HBDefaultRangeType:                 @(HBRangeTypeChapters),
         HBDefaultMpegExtension:             @".mp4",
         HBUseDvdNav:                        @YES,
         HBUseHardwareDecoder:               @NO,

@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CoverArtPreviewView_SaveAs" xml:space="preserve">
+    <value>Save Image As...</value>
+  </data>
+  <data name="CoverArtPreviewView_SaveError" xml:space="preserve">
+    <value>Unable to save the cover art: {0}</value>
+  </data>
+  <data name="CoverArtPreviewView_SaveUnavailable" xml:space="preserve">
+    <value>The original cover art is no longer available to save.</value>
+  </data>
+  <data name="CoverArtPreviewView_ScaledTitle" xml:space="preserve">
+    <value>{0} (Scale: {1}%)</value>
+  </data>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>The full list of encoder parameters: 
 {0}</value>
@@ -1356,6 +1368,15 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
     <value>Choose titles:</value>
   </data>
+  <data name="QueueSelectionView_MaxDuration" xml:space="preserve">
+    <value>Max Duration:</value>
+  </data>
+  <data name="QueueSelectionView_MinDuration" xml:space="preserve">
+    <value>Min Duration:</value>
+  </data>
+  <data name="QueueSelectionView_TitleCountDisplay" xml:space="preserve">
+    <value>(Displaying {0} of {1})</value>
+  </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
     <value>Add to Queue</value>
   </data>
@@ -1385,6 +1406,18 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
     <value>Destination:</value>
+  </data>
+  <data name="QueueView_Status" xml:space="preserve">
+    <value>Status:</value>
+  </data>
+  <data name="QueueView_PointToPointTo" xml:space="preserve">
+    <value>to</value>
+  </data>
+  <data name="QueueView_JobStats" xml:space="preserve">
+    <value>Job</value>
+  </data>
+  <data name="QueueView_ContentStats" xml:space="preserve">
+    <value>Content</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
     <value>Do nothing</value>
@@ -1699,7 +1732,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Or drop a file, set of files or folder here ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
-    <value>Help</value>
+    <value>User Guide</value>
   </data>
   <data name="Preferences" xml:space="preserve">
     <value>Preferences</value>
@@ -1741,7 +1774,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>_File</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>_HandBrake Documentation (HTTPS)</value>
+    <value>_HandBrake User Guide (Online)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
     <value>_Help</value>
@@ -2333,6 +2366,12 @@ Please choose a different preset.</value>
   <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
     <value>Show crop adjustment controls.</value>
   </data>
+  <data name="StaticPreviewView_ShowCropBoundaries" xml:space="preserve">
+    <value>Show Crop Boundaries</value>
+  </data>
+  <data name="StaticPreviewView_ErrorUnableToGenerateImage" xml:space="preserve">
+    <value>Error: Unable to Generate Image</value>
+  </data>
   <data name="DarkTheme_dark" xml:space="preserve">
     <value>Use Dark</value>
   </data>
@@ -2344,6 +2383,15 @@ Please choose a different preset.</value>
   </data>
   <data name="OptionsView_DarkThemeMode" xml:space="preserve">
     <value>Theme:</value>
+  </data>
+  <data name="OptionsView_ThemeImageType" xml:space="preserve">
+    <value>Icons:</value>
+  </data>
+  <data name="ThemeImageType_Theme" xml:space="preserve">
+    <value>Match Theme</value>
+  </data>
+  <data name="ThemeImageType_Colour" xml:space="preserve">
+    <value>Colour</value>
   </data>
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
     <value>(Requires Restart)</value>
@@ -2596,7 +2644,7 @@ Only queue files from the current version are supported.</value>
     <value>Download via Github</value>
   </data>
   <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
-    <value>Download Development Builds (HTTPS)</value>
+    <value>Download Development Builds (Online)</value>
   </data>
   <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
     <value>Enable QuickSync Deep Link Hyper Encode</value>
@@ -2827,7 +2875,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Range Limits:</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
-    <value>Limit the length of the titles added to the queue.</value>
+    <value>Apply the following Limits when adding titles to the queue.</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
     <value>Enable Range Limits</value>
@@ -2945,6 +2993,36 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="MetaData_Add" xml:space="preserve">
     <value>Add Row</value>
+  </data>
+  <data name="MetaData_Field" xml:space="preserve">
+    <value>Metadata field</value>
+  </data>
+  <data name="MetaData_ClearAddedFields" xml:space="preserve">
+    <value>Clear Added Fields</value>
+  </data>
+  <data name="MetaData_Reset" xml:space="preserve">
+    <value>Reset Metadata</value>
+  </data>
+  <data name="MetaData_ResetPrompt" xml:space="preserve">
+    <value>Reset metadata to the selected title? All metadata changes will be lost.</value>
+  </data>
+  <data name="MetaData_Export" xml:space="preserve">
+    <value>Export Metadata...</value>
+  </data>
+  <data name="MetaData_OverwritePrompt" xml:space="preserve">
+    <value>The file "{0}" already exists. Do you want to overwrite it?</value>
+  </data>
+  <data name="MetaData_ImportSkippedTags" xml:space="preserve">
+    <value>The following tags were not imported because they are unsupported for this output format:{0}{1}</value>
+  </data>
+  <data name="MetaData_ImportFailed" xml:space="preserve">
+    <value>Unable to import metadata: {0}</value>
+  </data>
+  <data name="MetaData_ExportFailed" xml:space="preserve">
+    <value>Unable to export metadata: {0}</value>
+  </data>
+  <data name="MetaData_InvalidTxtLine" xml:space="preserve">
+    <value>Invalid text metadata on line {0}. Expected key=value.</value>
   </data>
   <data name="MainView_DebugMenu" xml:space="preserve">
     <value>Debug Menu</value>
@@ -3196,5 +3274,8 @@ Do you wish to proceed?</value>
   </data>
   <data name="LogView_Search" xml:space="preserve">
     <value>Search ...</value>
+  </data>
+  <data name="MetaData_Import" xml:space="preserve">
+    <value>Import Metadata...</value>
   </data>
 </root>

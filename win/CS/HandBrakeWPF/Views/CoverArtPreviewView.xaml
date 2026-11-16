@@ -1,0 +1,19 @@
+<Window x:Class="HandBrakeWPF.Views.CoverArtPreviewView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+        Title="{x:Static Properties:Resources.MainView_Preview}"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
+        PreviewKeyDown="CoverArtPreviewView_OnPreviewKeyDown">
+    <Grid>
+        <Image x:Name="coverArtImage" Stretch="Uniform" StretchDirection="DownOnly"
+               HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand"
+               SizeChanged="CoverArtImage_OnSizeChanged" MouseLeftButtonUp="CoverArtImage_OnMouseLeftButtonUp">
+            <Image.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{x:Static Properties:Resources.CoverArtPreviewView_SaveAs}" Click="SaveImage_OnClick" />
+                </ContextMenu>
+            </Image.ContextMenu>
+        </Image>
+    </Grid>
+</Window>

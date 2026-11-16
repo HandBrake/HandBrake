@@ -2588,6 +2588,7 @@ namespace HandBrakeWPF.ViewModels
             this.VideoViewModel.RefreshTask();
             this.AudioViewModel.RefreshTask(this.CurrentTask.OutputFormat);
             this.SubtitleViewModel.RefreshTask();
+            this.MetaDataViewModel.RefreshMetadataKeys();
         }
     }
 }

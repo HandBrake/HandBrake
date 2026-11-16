@@ -34,6 +34,7 @@ namespace HandBrakeWPF.Views
             this.Title = Properties.Resources.Preview;
 
             this.videoPlayer.MediaFailed += this.VideoPlayer_MediaFailed;
+            this.videoPlayer.MediaEnded += this.VideoPlayer_MediaEnded;
 
             this.InputBindings.Add(new InputBinding(new CloseWindowCommand(this), new KeyGesture(Key.W, ModifierKeys.Control))); // Close Window
         }
@@ -210,14 +211,33 @@ namespace HandBrakeWPF.Views
         private void PlayVideo_OnClick(object sender, RoutedEventArgs e)
         {
             this.UpdateWindowTitle();
+
+            StaticPreviewViewModel viewModel = (StaticPreviewViewModel)this.DataContext;
+            if (viewModel.IsPlaying)
+            {
+                this.videoPlayer.Stop();
+                viewModel.IsPlaying = false;
+                return;
+            }
+
             this.videoPlayer.Stop();
             this.videoPlayer.Close();
-            ((StaticPreviewViewModel)this.DataContext).Play();
+            viewModel.Play();
 
-            if (!((StaticPreviewViewModel)this.DataContext).UseExternalPlayer)
+            if (!viewModel.UseExternalPlayer)
             {
                 this.videoPlayer.Play();
+                viewModel.IsPlaying = true;
             }
+            else
+            {
+                viewModel.IsPlaying = false;
+            }
+        }
+
+        private void VideoPlayer_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            ((StaticPreviewViewModel)this.DataContext).IsPlaying = false;
         }
 
         private void ChangeMediaVolume(object sender, RoutedPropertyChangedEventArgs<double> e)

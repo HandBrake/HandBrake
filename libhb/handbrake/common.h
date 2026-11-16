@@ -198,6 +198,7 @@ hb_metadata_t * hb_metadata_copy(const hb_metadata_t *src);
 void hb_metadata_close(hb_metadata_t **metadata);
 void hb_update_meta_dict(hb_dict_t * dict, const char * key, const char * value);
 const char * hb_lookup_meta_key(const char * mux_key);
+const char * hb_metadata_key_get_next(int mux, int *index);
 void hb_metadata_add_coverart( hb_metadata_t *metadata,
                                const uint8_t *data, int size,
                                int type, const char *name );
@@ -246,6 +247,7 @@ struct hb_encoder_s
 #define HB_HWACCEL_CAP_ROTATE               0x02
 #define HB_HWACCEL_CAP_FORMAT_REQUIRED      0x04
 #define HB_HWACCEL_CAP_COLOR_RANGE          0x08
+#define HB_HWACCEL_CAP_SYSTEM_MEMORY        0x10
 
 
 struct hb_hwaccel_s
@@ -1410,6 +1412,12 @@ struct hb_title_s
 
     hb_spherical_mapping_t spherical_mapping;
     hb_stereo_3d_t stereo_3d;
+
+    // Multiview coding of the source video, only the base view is decoded
+    int             multiview;
+#define HB_MULTIVIEW_NONE                    0
+#define HB_MULTIVIEW_MVC                     1
+#define HB_MULTIVIEW_MVHEVC                  2
 
     hb_rational_t   vrate;
     int             crop[4];

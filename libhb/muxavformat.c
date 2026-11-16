@@ -154,6 +154,29 @@ static const char * lookup_meta_mux_key(int meta_mux, const char * hb_key)
     return NULL;
 }
 
+const char * hb_metadata_key_get_next(int mux, int *index)
+{
+    int meta_mux;
+    switch (mux)
+    {
+        case HB_MUX_AV_MP4:  meta_mux = META_MUX_MP4; break;
+        case HB_MUX_AV_MOV:  meta_mux = META_MUX_MOV; break;
+        case HB_MUX_AV_MKV:  meta_mux = META_MUX_MKV; break;
+        case HB_MUX_AV_WEBM: meta_mux = META_MUX_WEBM; break;
+        default: return NULL;
+    }
+
+    while (metadata_keys[*index][META_HB] != NULL)
+    {
+        int current = (*index)++;
+        if (metadata_keys[current][meta_mux] != NULL)
+        {
+            return metadata_keys[current][META_HB];
+        }
+    }
+    return NULL;
+}
+
 const char * hb_lookup_meta_key(const char * mux_key)
 {
     int ii, jj;

@@ -18,6 +18,7 @@ extern NSString * const HBShowOpenPanelAtLaunch;
 extern NSString * const HBShowSummaryPreview;
 extern NSString * const HBKeepPresetEdits;
 extern NSString * const HBUseSourceFolderDestination;
+extern NSString * const HBDefaultRangeType;
 
 extern NSString * const HBRecursiveScan;
 extern NSString * const HBExcludedFileExtensions;

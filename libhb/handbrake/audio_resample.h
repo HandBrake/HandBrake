@@ -29,8 +29,7 @@
 
 typedef struct
 {
-    int dual_mono_downmix;
-    int dual_mono_right_only;
+    enum AVChannel mono_source_channel;
 
     int resample_needed;
     SwrContext *swresample;

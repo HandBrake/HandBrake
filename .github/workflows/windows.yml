@@ -141,8 +141,6 @@ jobs:
     name: Windows UI
     runs-on: windows-2022
     needs: [build_mingw]
-    env:
-      SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
     - uses: actions/checkout@v7
@@ -152,18 +150,6 @@ jobs:
       with:
        name: LibHandBrake
        path: win/CS/HandBrakeWPF/bin/publish
-
-    - name: Import the Signing Cert
-      run: |
-        $ErrorView = "NormalView"
-        if (-NOT ($env:SigningCertificate -eq '')) {
-          $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.HandBrakeTeam_Pfx }}")
-          $currentDirectory = Get-Location
-          $certificatePath = Join-Path -Path $currentDirectory -ChildPath $env:SigningCertificate
-          $certPassword = ConvertTo-SecureString -String ${{ secrets.HandBrakeTeam_pfx_pwd }} -Force –AsPlainText
-          [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
-          cp $certificatePath win\cs\
-        }
 
     - name: Setup .NET 10
       uses: actions/setup-dotnet@v6
@@ -177,7 +163,7 @@ jobs:
     - name: Build Windows GUI
       shell: pwsh
       run: |
-        dotnet msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
+        dotnet msbuild win\cs\build.xml /t:x64
 
     - name: Prepare Package
       run: |
@@ -208,21 +194,19 @@ jobs:
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v7
       with:
-        name: HandBrake-Win_GUI-x64
-        path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake*.exe
+        path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake-*-x64-Win_GUI.exe
+        archive: false
 
     - name: Upload HandBrake ZIP
       uses: actions/upload-artifact@v7
       with:
-        name: HandBrake-Win_GUI-x64-Zip
-        path: win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
+        path: win/CS/HandBrakeWPF/bin/HandBrake-*-x64-Win_GUI.zip
+        archive: false
 
   build_gui_arm:
     name: Windows UI ARM
     runs-on: windows-2022
     needs: [build_mingw_arm]
-    env:
-      SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
     - uses: actions/checkout@v7
@@ -232,18 +216,6 @@ jobs:
       with:
        name: LibHandBrake_ARM64
        path: win/CS/HandBrakeWPF/bin/publish
-
-    - name: Import the Signing Cert
-      run: |
-        $ErrorView = "NormalView"
-        if (-NOT ($env:SigningCertificate -eq '')) {
-          $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.HandBrakeTeam_Pfx }}")
-          $currentDirectory = Get-Location
-          $certificatePath = Join-Path -Path $currentDirectory -ChildPath $env:SigningCertificate
-          $certPassword = ConvertTo-SecureString -String ${{ secrets.HandBrakeTeam_pfx_pwd }} -Force –AsPlainText
-          [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
-          cp $certificatePath win\cs\
-        }
 
     - name: Setup .NET 10
       uses: actions/setup-dotnet@v6
@@ -257,7 +229,7 @@ jobs:
     - name: Build Windows GUI
       shell: pwsh
       run: |
-        dotnet msbuild win\cs\build.xml /t:arm64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
+        dotnet msbuild win\cs\build.xml /t:arm64
 
     - name: Prepare Package
       run: |
@@ -288,12 +260,12 @@ jobs:
     - name: Upload HandBrake Installer
       uses: actions/upload-artifact@v7
       with:
-        name: HandBrake-Win_GUI-ARM64
-        path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake*.exe
+        path: win/CS/HandBrakeWPF/bin/HandBrake/HandBrake-*-arm64-Win_GUI.exe
+        archive: false
 
     - name: Upload HandBrake ZIP
       uses: actions/upload-artifact@v7
       with:
-        name: HandBrake-Win_GUI-ARM64-Zip
-        path: win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
+        path: win/CS/HandBrakeWPF/bin/HandBrake-*-arm64-Win_GUI.zip
+        archive: false
 

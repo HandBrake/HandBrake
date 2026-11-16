@@ -191,7 +191,7 @@ static NSString * FormattedDisplayAspect(double disp_width, double disp_height)
 {
     NSMutableString *summary = [NSMutableString stringWithString:@""];
     [summary appendString:self.info];
-    if (self.cropMode != HBPictureCropModeNone && (self.cropTop && self.cropBottom && self.cropLeft && self.cropRight))
+    if (self.cropMode != HBPictureCropModeNone && (self.cropTop || self.cropBottom || self.cropLeft || self.cropRight))
     {
         [summary appendFormat:HBKitLocalizedString(@", Crop: %@ %d/%d/%d/%d", @"HBPicture -> summary"),
          self.cropMode ? HBKitLocalizedString(@"Automatic", @"HBPicture -> summary") : HBKitLocalizedString(@"Custom", @"HBPicture -> summary"),

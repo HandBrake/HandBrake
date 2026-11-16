@@ -27,11 +27,16 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{x:Static Properties:Resources.MetaDataView_Title}" FontWeight="Bold" Margin="0,5,0,0" Grid.Row="0" />
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="{x:Static Properties:Resources.MetaDataView_Title}" FontWeight="Bold" Margin="0,5,0,0" />
+   
+
+        </StackPanel>
 
         <!-- Metadata Input Area -->
-        <Grid Grid.Row="1"  Margin="0,10,10,10">
+        <Grid Grid.Row="1"  Margin="0,0,10,10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -40,18 +45,46 @@
                 <ColumnDefinition Width="250" />
             </Grid.ColumnDefinitions>
 
+            <Grid Margin="0,5,0,5"
+                  Visibility="{Binding HasAvailableMetadataKeys, Converter={StaticResource boolToVisConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{x:Static Properties:Resources.MetaData_Field}" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Column="0" />
+                <ComboBox Width="170" ItemsSource="{Binding AvailableMetadataKeys}" SelectedItem="{Binding SelectedMetadataKey}"
+                          AutomationProperties.Name="{x:Static Properties:Resources.MetaData_Field}" Grid.Column="1" />
+                <Button Margin="5,0,0,0" Content="{x:Static Properties:Resources.MetaData_Add}" Command="{Binding RelayCommand}"
+                        CommandParameter="Add" IsEnabled="{Binding CanAddMetadata}" Grid.Column="2" />
 
-            <ListView Grid.Row="0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="metadataList"
+                <Button  HorizontalAlignment="Left" Content="{x:Static Properties:Resources.MetaData_Reset}"
+                        Command="{Binding RelayCommand}" CommandParameter="ResetMetadata" IsEnabled="{Binding HasSelectedTitle}" Grid.Column="4" />
+            </Grid>
+
+
+            <ListView Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="metadataList"
                       Background="Transparent"
                       ItemsSource="{Binding SourceMetadata}" 
                       BorderBrush="{StaticResource Ui.ContrastLight}"
                       KeyboardNavigation.TabNavigation="Continue"
                       KeyDown="MetadataList_OnKeyDown"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      SelectionMode="Single"
-                      Grid.IsSharedSizeScope="true">
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             SelectionMode="Single"
+                             Grid.IsSharedSizeScope="true">
 
-                <ListView.Resources>
+                      <ListView.ContextMenu>
+                          <ContextMenu>
+                              <MenuItem Header="{x:Static Properties:Resources.MetaData_Import}" Command="{Binding RelayCommand}" CommandParameter="ImportMetadata" />
+                              <MenuItem Header="{x:Static Properties:Resources.MetaData_Export}" Command="{Binding RelayCommand}" CommandParameter="ExportMetadataFile" />
+                              <Separator />
+                              <MenuItem Header="{x:Static Properties:Resources.MetaData_ClearAddedFields}" Command="{Binding RelayCommand}" CommandParameter="ClearAddedFields" />
+                          </ContextMenu>
+                      </ListView.ContextMenu>
+
+                      <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}" >
                         <Setter Property="Template" >
                             <Setter.Value>
@@ -66,13 +99,6 @@
                     </Style>
                 </ListView.Resources>
 
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <!-- Maybe Later -->
-                        <!--<MenuItem Header="{x:Static Properties:Resources.MetaData_Add}" Command="{Binding RelayCommand}" CommandParameter="Add" />-->
-                    </ContextMenu>
-                </ListView.ContextMenu>
-
                 <ListView.View>
                     <GridView AllowsColumnReorder="False">
                         <GridViewColumn Header="" Width="10" />
@@ -85,12 +111,12 @@
                 </ListView.View>
 
                 <ListView.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                    <Style TargetType="ListBoxItem"  BasedOn="{StaticResource ModernListBoxItemStyle}">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         <Setter Property="Margin" Value="0,0,0,1" />
                     </Style>
                 </ListView.ItemContainerStyle>
-
+                
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -101,31 +127,20 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="60" />
                                 <ColumnDefinition Width="170" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="50" />
                             </Grid.ColumnDefinitions>
 
-                            <CheckBox Grid.Column="1" IsChecked="{Binding Enabled}" VerticalAlignment="Center" HorizontalAlignment="Left" />
-
                             <!-- Annotation -->
-                            <TextBlock Grid.Column="2" Text="{Binding Annotation}" HorizontalAlignment="Left" Margin="0,0,0,0"
-                                       Visibility="{Binding IsNew, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
-                                       />
-
-                            <TextBox Grid.Column="2" Text="{Binding Annotation}"  behaviours:TextBoxBehavior.TripleClickSelectAll="True" 
-                                     Visibility="{Binding IsNew, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center"
-                                     TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="0,2,0,2" Margin="1,1,10,1"  />
-
+                            <TextBlock Grid.Column="1" Text="{Binding Annotation}" HorizontalAlignment="Left" Margin="0,0,0,0" />
 
                             <!-- Value -->
-                            <TextBox Grid.Column="3" Text="{Binding Value}" x:Name="metadataValue" behaviours:TextBoxBehavior.TripleClickSelectAll="True" MaxHeight="100"
+                            <TextBox Grid.Column="2" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" x:Name="metadataValue" behaviours:TextBoxBehavior.TripleClickSelectAll="True" MaxHeight="100"
                                      TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="0,2,0,2" Margin="1" PreviewMouseDown="MetadataValue_OnPreviewMouseDown" />
 
-
                             <!--  Delete  -->
-                            <StackPanel Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" Visibility="{Binding IsNew, Converter={StaticResource boolToVisConverter}}">
+                            <StackPanel Grid.Column="3" Grid.Row="0" VerticalAlignment="Center">
 
                                 <Button Style="{StaticResource TransparentButtonStyle}" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"          
                                         CommandParameter="{Binding}">
@@ -142,7 +157,7 @@
 
             </ListView>
 
-            <Grid Margin="5,0,5,0" Grid.Column="1">
+            <Grid Margin="5,0,5,0" Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -162,8 +177,26 @@
                     </Border>
                    
 
-                    <Image Source="{Binding CoverArtImage.Image}" Canvas.ZIndex="0">
-                    </Image>
+                    <Button Canvas.ZIndex="0" Click="CoverArtPreview_OnClick"
+                            Cursor="Hand" ToolTip="{x:Static Properties:Resources.PictureSettingsView_SeePreview}"
+                            AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_SeePreview}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="IsEnabled" Value="{Binding CoverArtImage.Enabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CoverArtImage.Image}" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Image Source="{Binding CoverArtImage.Image}" />
+                    </Button>
 
                     <TextBlock Text="No Cover Art" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding CoverArtImage.IsNoCoverArt, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
                            FontWeight="SemiBold" FontSize="16" />
@@ -176,8 +209,6 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-
-
                     
                     <Button Grid.Column="1" Margin="0,0,0,10" Command="{Binding RelayCommand}" CommandParameter="PreviousCoverArt" Content="&lt; Previous" Padding="8,2"
                             IsEnabled="{Binding IsNextAvailable}" Opacity="0.9" FontWeight="Bold"

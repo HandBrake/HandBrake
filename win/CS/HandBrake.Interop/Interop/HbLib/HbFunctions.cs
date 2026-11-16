@@ -315,6 +315,9 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_get_title_coverarts", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_get_title_coverarts(IntPtr hbHandle, int title_index);
 
+        [DllImport("hb", EntryPoint = "hb_metadata_key_get_next", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_metadata_key_get_next(int mux, ref int index);
+
         [DllImport("hb", EntryPoint = "hb_presets_builtin_init", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_presets_builtin_init();
 

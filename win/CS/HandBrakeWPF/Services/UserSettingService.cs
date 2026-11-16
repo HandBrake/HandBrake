@@ -281,6 +281,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.LastUpdateCheckDate, DateTime.Now.Date.AddDays(-30));
             defaults.Add(UserSettingConstants.DaysBetweenUpdateCheck, 1);
             defaults.Add(UserSettingConstants.DarkThemeMode, AppThemeMode.System);
+            defaults.Add(UserSettingConstants.ThemeImageType, ThemeImageType.Theme);
             defaults.Add(UserSettingConstants.ShowPreviewOnSummaryTab, true);
             defaults.Add(UserSettingConstants.MainWindowMinimize, false);
             defaults.Add(UserSettingConstants.ClearCompletedFromQueue, false);
@@ -316,8 +317,10 @@ namespace HandBrakeWPF.Services
 
             // Video
             bool intelDefaultSetting = HandBrakeHardwareEncoderHelper.IsQsvAvailable;
-            bool nvidiaDefaultSetting = HandBrakeHardwareEncoderHelper.IsNVEncH264Available;
-            bool amfDefaultSetting = HandBrakeHardwareEncoderHelper.IsAMFDecAvailable;
+
+            // Note: These are set to false at the moment due to user complaints. Until we deem them more stable, this feature will be opt-in. Users can enable them in the settings if they wish to use them.
+            bool nvidiaDefaultSetting = false; // HandBrakeHardwareEncoderHelper.IsNVEncH264Available;
+            bool amfDefaultSetting = false; //  HandBrakeHardwareEncoderHelper.IsAMFDecAvailable;
 
             defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, intelDefaultSetting);
             defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, false);

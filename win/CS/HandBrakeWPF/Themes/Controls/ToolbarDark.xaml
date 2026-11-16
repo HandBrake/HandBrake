@@ -3,6 +3,41 @@
 
     <converters:BooleanToVisibilityConverter x:Key="darkThemeVisConverter" />
 
+    <Style x:Key="ToolBarButtonBaseStyle" TargetType="{x:Type ButtonBase}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ButtonBase}">
+                    <Border x:Name="Border" BorderThickness="1" BorderBrush="Transparent" Background="Transparent" CornerRadius="4">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Ui.ControlHover}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Ui.ControlHover}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <ContentPresenter Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" BasedOn="{StaticResource ToolBarButtonBaseStyle}" TargetType="{x:Type Button}" />
+
     <Style x:Key="ToolBarThumbStyle" TargetType="{x:Type Thumb}">
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Cursor" Value="SizeAll" />
@@ -38,13 +73,13 @@
                                 <Setter Property="Border.Background" Value="{DynamicResource Ui.Light}"/>
                                 <Style.Triggers>
                                     <Trigger Property="Border.IsMouseOver" Value="True">
-                                        <Setter Property="Border.Background" Value="{DynamicResource Ui.ContrastLight}" />
+                                        <Setter Property="Border.Background" Value="{DynamicResource Ui.ControlHover}" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
                         <Grid Visibility="{Binding ElementName=Border, Path=IsEnabled, Converter={StaticResource darkThemeVisConverter}, ConverterParameter=false}">
-                            <Path x:Name="Arrow" Fill="White" VerticalAlignment="Bottom" Margin="2,3" Data="M -0.5 3 L 5.5 3 L 2.5 6 Z" HorizontalAlignment="Center" />
+                            <Path x:Name="Arrow" Fill="#E6E8EB" VerticalAlignment="Bottom" Margin="2,3" Data="M -0.5 3 L 5.5 3 L 2.5 6 Z" HorizontalAlignment="Center" />
                             <ContentPresenter />
                         </Grid>
                     </Border>
@@ -59,7 +94,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToolBar}">
-                    <Border x:Name="Border" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Ui.UltraLight2}" Background="{DynamicResource Ui.Light}">
+                    <Border x:Name="Border" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Ui.Ultralight}" Background="{DynamicResource Ui.Light}">
                         <DockPanel>
                             <ToggleButton DockPanel.Dock="Right" IsEnabled="{TemplateBinding HasOverflowItems}" Style="{StaticResource ToolBarOverflowButtonStyle}" ClickMode="Press" IsChecked="{Binding IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                                 <Popup x:Name="OverflowPopup" AllowsTransparency="true" Placement="Bottom" StaysOpen="false" Focusable="false" PopupAnimation="Slide" IsOpen="{Binding IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}">

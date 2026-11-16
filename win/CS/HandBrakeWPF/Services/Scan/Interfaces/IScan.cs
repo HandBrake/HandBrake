@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
     using System.Collections.Generic;
     using System.Windows.Media.Imaging;
 
+    using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Shared;
 
     using HandBrakeWPF.Services.Encode.Model;
@@ -102,6 +103,8 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
         BitmapImage GetPreview(EncodeTask task, int preview, bool showCropBoundaries);
 
         BitmapImage GetCoverArt(CoverArt artwork, int title);
+
+        RawCoverArtData GetCoverArtRaw(CoverArt artwork, int title);
 
         /// <summary>
         /// Kill the scan

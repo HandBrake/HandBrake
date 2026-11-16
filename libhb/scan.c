@@ -1530,6 +1530,15 @@ skip_preview:
                    av_stereo3d_type_name(title->stereo_3d.type));
         }
 
+        if (title->multiview == HB_MULTIVIEW_MVC)
+        {
+            hb_log("scan: multiview: H.264 MVC, only the base view will be decoded (2D)");
+        }
+        else if (title->multiview == HB_MULTIVIEW_MVHEVC)
+        {
+            hb_log("scan: multiview: MV-HEVC, only the base view will be decoded (2D)");
+        }
+
         if (title->video_decode_support != HB_DECODE_SW)
         {
             hb_log("scan: supported video decoders:%s%s%s%s%s",

@@ -257,3 +257,95 @@ int hb_parse_h265_extradata(hb_data_t *extradata, int *level_idc, int *high_tier
     *level_idc = general_level_idc / 3;
     return 0;
 }
+
+static int skip_h264_parameter_sets(hb_bitstream_t *bs, int count)
+{
+    for (int ii = 0; ii < count; ii++)
+    {
+        if (hb_bitstream_get_remaining_bits(bs) < 16)
+        {
+            return 1;
+        }
+        uint32_t length = hb_bitstream_get_bits(bs, 16);
+        if (hb_bitstream_get_remaining_bits(bs) < length * 8)
+        {
+            return 1;
+        }
+        hb_bitstream_skip_bytes(bs, length);
+    }
+    return 0;
+}
+
+/*
+ * Detect H.264 Multiview Video Coding (e.g. Blu-ray 3D) from the extradata.
+ * In ISO/IEC 14496-15 extradata the MVC configuration is stored in a
+ * 'mvcC' box after the avcC record, in Annex B extradata it is signaled
+ * by a subset sequence parameter set (NAL type 15) or a coded slice
+ * extension (NAL type 20).
+ */
+int hb_h264_extradata_has_mvc(uint8_t *data, size_t size)
+{
+    hb_bitstream_t bs;
+
+    if (data == NULL || size < 7 || size > UINT32_MAX >> 3)
+    {
+        return 0;
+    }
+
+    hb_bitstream_init(&bs, data, size, 0);
+
+    if (hb_bitstream_peak_bits(&bs, 8) == 1)
+    {
+        hb_bitstream_skip_bits(&bs, 8);  // configurationVersion
+        hb_bitstream_skip_bits(&bs, 8);  // AVCProfileIndication
+        hb_bitstream_skip_bits(&bs, 8);  // profile_compatibility
+        hb_bitstream_skip_bits(&bs, 8);  // AVCLevelIndication
+        hb_bitstream_skip_bits(&bs, 6);  // reserved
+        hb_bitstream_skip_bits(&bs, 2);  // lengthSizeMinusOne
+        hb_bitstream_skip_bits(&bs, 3);  // reserved
+        int num_sps = hb_bitstream_get_bits(&bs, 5);
+        if (skip_h264_parameter_sets(&bs, num_sps))
+        {
+            return 0;
+        }
+        if (hb_bitstream_get_remaining_bits(&bs) < 8)
+        {
+            return 0;
+        }
+        int num_pps = hb_bitstream_get_bits(&bs, 8);
+        if (skip_h264_parameter_sets(&bs, num_pps))
+        {
+            return 0;
+        }
+
+        // The mvcC box follows the avcC record
+        while (hb_bitstream_get_remaining_bits(&bs) >= 32)
+        {
+            if (hb_bitstream_peak_bits(&bs, 32) == AV_RB32("mvcC"))
+            {
+                return 1;
+            }
+            hb_bitstream_skip_bytes(&bs, 1);
+        }
+        return 0;
+    }
+
+    while (hb_bitstream_get_remaining_bits(&bs) >= 32)
+    {
+        if (hb_bitstream_peak_bits(&bs, 24) == 0x000001)
+        {
+            hb_bitstream_skip_bits(&bs, 24); // start_code_prefix_one_3bytes
+            // Peek at the NAL unit header, it may begin the next start code
+            int nal_unit_type = hb_bitstream_peak_bits(&bs, 8) & 0x1f;
+            if (nal_unit_type == 15 || nal_unit_type == 20)
+            {
+                return 1;
+            }
+        }
+        else
+        {
+            hb_bitstream_skip_bytes(&bs, 1);
+        }
+    }
+    return 0;
+}

@@ -57,7 +57,7 @@
                     <Button.ContextMenu>
                         <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}" ItemsSource="{Binding AvailableFiltersMenu}">
                             <ContextMenu.ItemContainerStyle>
-                                <Style TargetType="MenuItem">
+                                <Style TargetType="MenuItem" BasedOn="{StaticResource LocalMenuItemBaseStyle}">
                                     <Setter Property="Header" Value="{Binding Header}" />
                                     <Setter Property="ItemsSource" Value="{Binding Children}" />
                                     <Setter Property="Command" Value="{Binding DataContext.RelayCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
@@ -104,7 +104,7 @@
 
                     <MenuItem Header="{x:Static Properties:Resources.FilterView_AddFilter}" ItemsSource="{Binding AvailableFiltersMenu}">
                         <MenuItem.ItemContainerStyle>
-                            <Style TargetType="MenuItem">
+                            <Style TargetType="MenuItem" BasedOn="{StaticResource LocalMenuItemBaseStyle}">
                                 <Setter Property="Header" Value="{Binding Header}" />
                                 <Setter Property="ItemsSource" Value="{Binding Children}" />
                                 <Setter Property="Command" Value="{Binding DataContext.RelayCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
@@ -181,7 +181,7 @@
                                       ItemsSource="{Binding AvailableTunes}" SelectedItem="{Binding Tune}" Visibility="{Binding CanSetTune, Converter={StaticResource boolToVisConverter}}"
                                       AutomationProperties.Name="{x:Static Properties:Resources.FilterView_Tune}" />
 
-                            <TextBox Text="{Binding CustomOptions}" Grid.Column="4" Margin="5,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" ToolTip="{x:Static Properties:Resources.AVFilterView_CustomOptionsTooltip}"
+                            <TextBox Text="{Binding CustomOptions, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Margin="5,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" ToolTip="{x:Static Properties:Resources.AVFilterView_CustomOptionsTooltip}"
                                      Visibility="{Binding AllowsCustomOptions, Converter={StaticResource boolToVisConverter}}"
                                      AutomationProperties.Name="{x:Static Properties:Resources.FilterView_Custom}" />
                         </Grid>

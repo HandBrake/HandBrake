@@ -2,45 +2,45 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!--
-        #252525 - Dark
-        #363636 - Mid 
-    
-        #414141 - Light
-        #606060 - Ultralight
+        #2B2D30 - Dark
+        #33363A - Mid
+        #3D4146 - Light
+        #4A4F55 - Ultralight
     -->
 
-    <SolidColorBrush x:Key="Ui.Dark" Color="#252525" />
-    <SolidColorBrush x:Key="Ui.Mid" Color="#363636" />
-    <SolidColorBrush x:Key="Ui.Light" Color="#464646" />
-    <SolidColorBrush x:Key="Ui.Light2" Color="#464646" />
-    <SolidColorBrush x:Key="Ui.Ultralight" Color="#606060" />
+    <SolidColorBrush x:Key="Ui.Dark" Color="#2B2D30" />
+    <SolidColorBrush x:Key="Ui.Mid" Color="#33363A" />
+    <SolidColorBrush x:Key="Ui.Light" Color="#3D4146" />
+    <SolidColorBrush x:Key="Ui.Light2" Color="#3D4146" />
+    <SolidColorBrush x:Key="Ui.Ultralight" Color="#4A4F55" />
     <SolidColorBrush x:Key="Ui.UltraLight2" Color="#acacac" />
     <SolidColorBrush x:Key="Ui.UltraLight3" Color="#E3E3E3" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
-    <SolidColorBrush x:Key="Ui.WhiteSmoke" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="Ui.ControlHover" Color="#50565D" />
+    <SolidColorBrush x:Key="Ui.WhiteSmoke" Color="#E6E8EB" />
     <SolidColorBrush x:Key="Ui.ListBoxSelect" Color="#606060" />
-    <SolidColorBrush x:Key="Ui.ToolbarHover" Color="#acacac" />
+    <SolidColorBrush x:Key="Ui.ToolbarHover" Color="#50565D" />
 
     <SolidColorBrush x:Key="Ui.Blue" Color="#00579f" />
     <SolidColorBrush x:Key="Ui.BlueBright" Color="#006cc5" />
 
-    <SolidColorBrush x:Key="Ui.Background" Color="#464646" />
+    <SolidColorBrush x:Key="Ui.Background" Color="#3D4146" />
     <SolidColorBrush x:Key="Ui.BackgroundLight" Color="#C0C0C0" />
     <SolidColorBrush x:Key="Ui.BackgroundDark" Color="Black" />
 
 
     <!-- General -->
-    <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#252525" />
-    <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="White" />
-    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#2B2D30" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#E6E8EB" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#E6E8EB" />
     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#4089C4" />
-    <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="WhiteSmoke" />
-    <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkBrushKey}" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="#E6E8EB" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkBrushKey}" Color="#E6E8EB" />
 
     <!-- Listbox -->
     <Style TargetType="ListBox">
         <Setter Property="Background" Value="{DynamicResource Ui.Dark}" />
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="#E6E8EB" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
@@ -58,7 +58,7 @@
     <!-- ListView -->
     <Style TargetType="ListView">
         <Setter Property="Background" Value="{DynamicResource Ui.Dark}" />
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="#E6E8EB" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListView}">
@@ -82,7 +82,7 @@
     <!-- StatusBar -->
     <Style TargetType="StatusBar">
         <Setter Property="Background" Value="{DynamicResource Ui.Mid}" />
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="#E6E8EB" />
     </Style>
 
     <!-- Text Entry Controls -->
@@ -100,12 +100,12 @@
     </Style>
 
     <Style TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="#E6E8EB"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
     <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="#E6E8EB"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
@@ -177,7 +177,7 @@
                 <Setter Property="Foreground" Value="Black" />
             </Trigger>
             <Trigger Property="IsSelected" Value="False">
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Foreground" Value="#E6E8EB" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -190,14 +190,13 @@
     </Style>
 
     <!-- Glyph -->
-    <SolidColorBrush x:Key="ButtonGlyphBrush" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="ButtonGlyphBrush" Color="#E6E8EB"/>
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Controls/ComboBoxDark.xaml" />
         <ResourceDictionary Source="Controls/ButtonDark.xaml" />
         <ResourceDictionary Source="Controls/ContextMenuDark.xaml" />
         <ResourceDictionary Source="Controls/ToolbarDark.xaml" />
-        <ResourceDictionary Source="Controls/GroupBoxDark.xaml" />
         <ResourceDictionary Source="Controls/ProgressBarBoth.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

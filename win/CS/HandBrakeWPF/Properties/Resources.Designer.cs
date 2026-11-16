@@ -1159,6 +1159,42 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Image As....
+        /// </summary>
+        public static string CoverArtPreviewView_SaveAs {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to save the cover art: {0}.
+        /// </summary>
+        public static string CoverArtPreviewView_SaveError {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_SaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The original cover art is no longer available to save..
+        /// </summary>
+        public static string CoverArtPreviewView_SaveUnavailable {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_SaveUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (Scale: {1}%).
+        /// </summary>
+        public static string CoverArtPreviewView_ScaledTitle {
+            get {
+                return ResourceManager.GetString("CoverArtPreviewView_ScaledTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Automatic.
         /// </summary>
         public static string CropMode_Auto {
@@ -2206,6 +2242,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search ....
+        /// </summary>
+        public static string LogView_Search {
+            get {
+                return ResourceManager.GetString("LogView_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [Finished].
         /// </summary>
         public static string LogViewModel_Complete {
@@ -2971,7 +3016,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _HandBrake Documentation (HTTPS).
+        ///   Looks up a localized string similar to _HandBrake User Guide (Online).
         /// </summary>
         public static string MainView_HandBrakeDocs {
             get {
@@ -3061,7 +3106,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download Development Builds (HTTPS).
+        ///   Looks up a localized string similar to Download Development Builds (Online).
         /// </summary>
         public static string MainView_NightlyBuildsUpdate {
             get {
@@ -3744,6 +3789,105 @@ namespace HandBrakeWPF.Properties {
         public static string MetaData_Add {
             get {
                 return ResourceManager.GetString("MetaData_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Added Fields.
+        /// </summary>
+        public static string MetaData_ClearAddedFields {
+            get {
+                return ResourceManager.GetString("MetaData_ClearAddedFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Metadata....
+        /// </summary>
+        public static string MetaData_Export {
+            get {
+                return ResourceManager.GetString("MetaData_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to export metadata: {0}.
+        /// </summary>
+        public static string MetaData_ExportFailed {
+            get {
+                return ResourceManager.GetString("MetaData_ExportFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metadata field.
+        /// </summary>
+        public static string MetaData_Field {
+            get {
+                return ResourceManager.GetString("MetaData_Field", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Metadata....
+        /// </summary>
+        public static string MetaData_Import {
+            get {
+                return ResourceManager.GetString("MetaData_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to import metadata: {0}.
+        /// </summary>
+        public static string MetaData_ImportFailed {
+            get {
+                return ResourceManager.GetString("MetaData_ImportFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following tags were not imported because they are unsupported for this output format:{0}{1}.
+        /// </summary>
+        public static string MetaData_ImportSkippedTags {
+            get {
+                return ResourceManager.GetString("MetaData_ImportSkippedTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid text metadata on line {0}. Expected key=value..
+        /// </summary>
+        public static string MetaData_InvalidTxtLine {
+            get {
+                return ResourceManager.GetString("MetaData_InvalidTxtLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file &quot;{0}&quot; already exists. Do you want to overwrite it?.
+        /// </summary>
+        public static string MetaData_OverwritePrompt {
+            get {
+                return ResourceManager.GetString("MetaData_OverwritePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Metadata.
+        /// </summary>
+        public static string MetaData_Reset {
+            get {
+                return ResourceManager.GetString("MetaData_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset metadata to the selected title? All metadata changes will be lost..
+        /// </summary>
+        public static string MetaData_ResetPrompt {
+            get {
+                return ResourceManager.GetString("MetaData_ResetPrompt", resourceCulture);
             }
         }
         
@@ -5228,6 +5372,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Icons:.
+        /// </summary>
+        public static string OptionsView_ThemeImageType {
+            get {
+                return ResourceManager.GetString("OptionsView_ThemeImageType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uninstalled.
         /// </summary>
         public static string OptionsView_UninstallMessageBoxHeader {
@@ -6474,6 +6627,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Displaying {0} of {1}).
+        /// </summary>
+        public static string QueueSelectionView_TitleCountDisplay {
+            get {
+                return ResourceManager.GetString("QueueSelectionView_TitleCountDisplay", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Max Duration:.
+        /// </summary>
+        public static string QueueSelectionView_MaxDuration {
+            get {
+                return ResourceManager.GetString("QueueSelectionView_MaxDuration", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Min Duration:.
+        /// </summary>
+        public static string QueueSelectionView_MinDuration {
+            get {
+                return ResourceManager.GetString("QueueSelectionView_MinDuration", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Choose titles:.
         /// </summary>
         public static string QueueSelectionView_ChooseTitles {
@@ -6492,7 +6672,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Limit the length of the titles added to the queue..
+        ///   Looks up a localized string similar to Apply the following Limits when adding titles to the queue..
         /// </summary>
         public static string QueueSelectionView_RangeLimitsDesc {
             get {
@@ -6680,7 +6860,43 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("QueueView_Destination", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Status:.
+        /// </summary>
+        public static string QueueView_Status {
+            get {
+                return ResourceManager.GetString("QueueView_Status", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to to.
+        /// </summary>
+        public static string QueueView_PointToPointTo {
+            get {
+                return ResourceManager.GetString("QueueView_PointToPointTo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Job.
+        /// </summary>
+        public static string QueueView_JobStats {
+            get {
+                return ResourceManager.GetString("QueueView_JobStats", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Content.
+        /// </summary>
+        public static string QueueView_ContentStats {
+            get {
+                return ResourceManager.GetString("QueueView_ContentStats", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Encode Duration:.
         /// </summary>
@@ -7678,7 +7894,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Help.
+        ///   Looks up a localized string similar to User Guide.
         /// </summary>
         public static string SourceSelection_Help {
             get {
@@ -7880,6 +8096,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error: Unable to Generate Image.
+        /// </summary>
+        public static string StaticPreviewView_ErrorUnableToGenerateImage {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_ErrorUnableToGenerateImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fine Tune Picture Settings.
         /// </summary>
         public static string StaticPreviewView_FineTuning {
@@ -7912,6 +8137,15 @@ namespace HandBrakeWPF.Properties {
         public static string StaticPreviewView_SelectPreviewImage {
             get {
                 return ResourceManager.GetString("StaticPreviewView_SelectPreviewImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Crop Boundaries.
+        /// </summary>
+        public static string StaticPreviewView_ShowCropBoundaries {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_ShowCropBoundaries", resourceCulture);
             }
         }
         
@@ -8598,6 +8832,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Colour.
+        /// </summary>
+        public static string ThemeImageType_Colour {
+            get {
+                return ResourceManager.GetString("ThemeImageType_Colour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Match Theme.
+        /// </summary>
+        public static string ThemeImageType_Theme {
+            get {
+                return ResourceManager.GetString("ThemeImageType_Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown Error.
         /// </summary>
         public static string UnknownError {
@@ -9070,15 +9322,6 @@ namespace HandBrakeWPF.Properties {
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
-            }
-        }
-		
-        /// <summary>
-        ///   Looks up a localized string similar to Activity Log Search ....
-        /// </summary>
-        public static string LogView_Search {
-            get {
-                return ResourceManager.GetString("LogView_Search", resourceCulture);
             }
         }
     }

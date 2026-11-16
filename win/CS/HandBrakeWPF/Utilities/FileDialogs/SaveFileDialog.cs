@@ -48,6 +48,7 @@ namespace HandBrakeWPF.Utilities.FileDialogs
                 bool? result = saveDialog.ShowDialog();
 
                 this.FileName = result == true ? saveDialog.FileName : null;
+                this.FilterIndex = saveDialog.FilterIndex;
 
                 return result;
             }
@@ -72,6 +73,7 @@ namespace HandBrakeWPF.Utilities.FileDialogs
                 if (result != DialogResult.Cancel)
                 {
                     this.FileName = dialog.FileName;
+                    this.FilterIndex = dialog.FilterIndex;
                     return true;
                 }
                 else

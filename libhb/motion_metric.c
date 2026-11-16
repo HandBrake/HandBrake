@@ -9,16 +9,13 @@
 
 #include "handbrake/handbrake.h"
 
-#if defined (__aarch64__) && !defined(__APPLE__)
-    #include <arm_neon.h>
-#endif
-
 struct hb_motion_metric_private_s
 {
     unsigned *gamma_lut;
     int       depth;
     int       bps;
     int       max_value;
+    int       sample_shift;
 
     float (*motion_metric)(hb_motion_metric_private_t *pv,
                            int width, int height,
@@ -41,79 +38,19 @@ static void build_gamma_lut(hb_motion_metric_private_t *pv)
 // Compute the sum of squared errors for a 16x16 block
 // Gamma adjusts pixel values so that less visible differences
 // count less.
-#if defined (__aarch64__) && !defined(__APPLE__)
 
-#define DEF_MOTION_METRIC(nbits)                                                           \
-static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,                       \
-                                     int width, int height,                                \
-                                     int stride_a, int stride_b,                           \
-                                     const uint8_t *a, const uint8_t *b)                   \
-{                                                                                          \
-    int bw, bh;                                                                            \
-    uint##nbits##_t *buf_a, *buf_b;                                                        \
-                                                                                           \
-    buf_a     = (uint##nbits##_t *)a;                                                      \
-    buf_b     = (uint##nbits##_t *)b;                                                      \
-    bw        = width / 16;                                                                \
-    bh        = height / 16;                                                               \
-                                                                                           \
-    uint64_t sum = 0;                                                                      \
-    for (int y = 0; y < bh; y++)                                                           \
-    {                                                                                      \
-        for (int x = 0; x < bw; x++)                                                       \
-        {                                                                                  \
-            const uint##nbits##_t *ra = buf_a + y * 16 * stride_a + x * 16;                \
-            const uint##nbits##_t *rb = buf_b + y * 16 * stride_b + x * 16;                \
-            for (int yy = 0; yy < 16; yy++)                                                \
-            {                                                                              \
-                uint32_t arrga[16];                                                        \
-                uint32_t arrgb[16];                                                        \
-                for (int xx = 0; xx < 16; xx++)                                            \
-                {                                                                          \
-                    arrga[xx] = pv->gamma_lut[ra[xx]];                                     \
-                    arrgb[xx] = pv->gamma_lut[rb[xx]];                                     \
-                }                                                                          \
-                uint32x4_t vga0 = vld1q_u32(arrga);                                        \
-                uint32x4_t vga1 = vld1q_u32(arrga + 4);                                    \
-                uint32x4_t vga2 = vld1q_u32(arrga + 8);                                    \
-                uint32x4_t vga3 = vld1q_u32(arrga + 12);                                   \
-                uint32x4_t vgb0 = vld1q_u32(arrgb);                                        \
-                uint32x4_t vgb1 = vld1q_u32(arrgb + 4);                                    \
-                uint32x4_t vgb2 = vld1q_u32(arrgb + 8);                                    \
-                uint32x4_t vgb3 = vld1q_u32(arrgb + 12);                                   \
-                uint32x4_t vdf0 = vsubq_u32(vga0, vgb0);                                   \
-                uint32x4_t vdf1 = vsubq_u32(vga1, vgb1);                                   \
-                uint32x4_t vdf2 = vsubq_u32(vga2, vgb2);                                   \
-                uint32x4_t vdf3 = vsubq_u32(vga3, vgb3);                                   \
-                uint32x4_t vsq0 = vmulq_u32(vdf0, vdf0);                                   \
-                uint32x4_t vsq1 = vmulq_u32(vdf1, vdf1);                                   \
-                uint32x4_t vsq2 = vmulq_u32(vdf2, vdf2);                                   \
-                uint32x4_t vsq3 = vmulq_u32(vdf3, vdf3);                                   \
-                sum += vaddvq_u32(vsq0);                                                   \
-                sum += vaddvq_u32(vsq1);                                                   \
-                sum += vaddvq_u32(vsq2);                                                   \
-                sum += vaddvq_u32(vsq3);                                                   \
-                ra += stride_a;                                                            \
-                rb += stride_b;                                                            \
-            }                                                                              \
-        }                                                                                  \
-    }                                                                                      \
-    return (float)sum / (width * height);                                                  \
-}                                                                                          \
-
-#else
-
-#define DEF_SSE_BLOCK16(nbits)                                                         \
-static inline unsigned sse_block16##_##nbits(unsigned *gamma_lut,                      \
-                                   const uint##nbits##_t *a, const uint##nbits##_t *b, \
-                                   int stride_a, int stride_b)                         \
+#define DEF_SSE_BLOCK16(nbits, suffix, shift)                                          \
+static inline unsigned sse_block16##_##nbits##suffix(                                  \
+                       hb_motion_metric_private_t *pv,                                 \
+                       const uint##nbits##_t *a, const uint##nbits##_t *b,             \
+                       int stride_a, int stride_b)                                     \
 {                                                                                      \
     unsigned sum = 0;                                                                  \
     for (int y = 0; y < 16; y++)                                                       \
     {                                                                                  \
         for (int x = 0; x < 16; x++)                                                   \
         {                                                                              \
-            int diff = gamma_lut[a[x]] - gamma_lut[b[x]];                              \
+            int diff = pv->gamma_lut[a[x] >> (shift)] - pv->gamma_lut[b[x] >> (shift)];\
             sum += diff * diff;                                                        \
         }                                                                              \
         a += stride_a;                                                                 \
@@ -122,13 +59,14 @@ static inline unsigned sse_block16##_##nbits(unsigned *gamma_lut,               
     return sum;                                                                        \
 }                                                                                      \
 
-DEF_SSE_BLOCK16(8)
-DEF_SSE_BLOCK16(16)
+DEF_SSE_BLOCK16(8, , 0)
+DEF_SSE_BLOCK16(16, , 0)
+DEF_SSE_BLOCK16(16, _shift, pv->sample_shift)
 
 // Sum of squared errors.  Computes and sums the SSEs for all
 // 16x16 blocks in the images.  Only checks the Y component.
-#define DEF_MOTION_METRIC(nbits)                                                            \
-static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,                        \
+#define DEF_MOTION_METRIC(nbits, suffix)                                                    \
+static float motion_metric##_##nbits##suffix(hb_motion_metric_private_t *pv,                \
                                      int width, int height,                                 \
                                      int stride_a, int stride_b,                            \
                                      const uint8_t *a, const uint8_t *b)                    \
@@ -149,7 +87,7 @@ static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,            
     {                                                                                       \
         for (int x = 0; x < bw; x++)                                                        \
         {                                                                                   \
-            sum += sse_block16##_##nbits(pv->gamma_lut,                                     \
+            sum += sse_block16##_##nbits##suffix(pv,                                        \
                         buf_a + y * 16 * stride_a + x * 16,                                 \
                         buf_b + y * 16 * stride_b + x * 16,                                 \
                         stride_a, stride_b);                                                \
@@ -158,10 +96,9 @@ static float motion_metric##_##nbits(hb_motion_metric_private_t *pv,            
     return (float)sum / (width * height);                                                   \
 }                                                                                           \
 
-#endif
-
-DEF_MOTION_METRIC(8)
-DEF_MOTION_METRIC(16)
+DEF_MOTION_METRIC(8, )
+DEF_MOTION_METRIC(16, )
+DEF_MOTION_METRIC(16, _shift)
 
 static int hb_motion_metric_init(hb_motion_metric_object_t *metric,
                                  hb_filter_init_t *init)
@@ -178,6 +115,7 @@ static int hb_motion_metric_init(hb_motion_metric_object_t *metric,
     pv->depth     = desc->comp[0].depth;
     pv->bps       = pv->depth > 8 ? 2 : 1;
     pv->max_value = (1 << pv->depth) - 1;
+    pv->sample_shift = desc->comp[0].shift;
 
     pv->gamma_lut = malloc(sizeof(unsigned) * (pv->max_value + 1));
     if (pv->gamma_lut == NULL)
@@ -193,7 +131,8 @@ static int hb_motion_metric_init(hb_motion_metric_object_t *metric,
             pv->motion_metric = motion_metric_8;
             break;
         default:
-            pv->motion_metric = motion_metric_16;
+            pv->motion_metric = pv->sample_shift ? motion_metric_16_shift
+                                                 : motion_metric_16;
     }
 
     return 0;

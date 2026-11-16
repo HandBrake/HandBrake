@@ -291,11 +291,6 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     }
     else if (audio->config.out.quality >= 0)
     {
-        if (mode != AAC_MODE_LC)
-        {
-            hb_error("encCoreAudioInit: internal error, VBR set but not applicable");
-            return 1;
-        }
         // set encoder bitrate control mode to variable
         tmp = kAudioCodecBitRateControlMode_Variable;
         AudioConverterSetProperty(pv->converter,

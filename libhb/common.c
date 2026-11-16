@@ -2525,6 +2525,7 @@ void hb_audio_quality_get_limits(uint32_t codec, float *low, float *high,
             break;
 
         case HB_ACODEC_CA_AAC:
+        case HB_ACODEC_CA_HAAC:
             *direction   = 0;
             *granularity = 9.;
             *low         = 1.;
@@ -5048,7 +5049,16 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->passthru_dynamic_hdr_metadata |= title->hdr_10_plus ? HB_HDR_DYNAMIC_METADATA_HDR10PLUS : HB_HDR_DYNAMIC_METADATA_NONE;
 
     job->spherical_mapping = title->spherical_mapping;
-    job->stereo_3d = title->stereo_3d;
+    // The stereo 3d metadata of a multiview source describes both views,
+    // but only the base view is decoded, so the output is 2D
+    if (title->multiview == HB_MULTIVIEW_NONE)
+    {
+        job->stereo_3d = title->stereo_3d;
+    }
+    else
+    {
+        job->stereo_3d.type = HB_STEREO3D_UNSET;
+    }
 
     job->mux = HB_MUX_MP4;
 
@@ -6422,9 +6432,9 @@ hb_list_t *hb_subtitle_list_copy(const hb_list_t *src)
  *********************************************************************/
 void hb_subtitle_close( hb_subtitle_t **_sub )
 {
-    hb_subtitle_t * sub = *_sub;
-    if ( _sub && sub )
+    if (_sub && *_sub)
     {
+        hb_subtitle_t *sub = *_sub;
         free((char*)sub->name);
         free((char*)sub->config.name);
         free((char*)sub->config.src_filename);

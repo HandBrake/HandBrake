@@ -16,27 +16,31 @@ jobs:
       - uses: actions/first-interaction@v3
         with:
           issue_message: |-
-            Hello,
+            Hello, and welcome to the HandBrake repository.
+            
+            This is an automated message from the HandBrake Bot.
+            
+            > [!IMPORTANT]
+            > Please make sure you have completed the issue template and provide all the requested information.
 
-            Welcome to the HandBrake repository.
+            > [!WARNING]
+            > Be cautious of replies asking you to download DLLs or other files from third-party websites, particularly from users who are not members of the HandBrake team. These downloads may be malicious.
+            > HandBrake team members have a “Member” label beside their comments.
 
-            >[!WARNING]
-            >Please be cautious of any non-members suggesting that you download a "DLL" or any other files from 3rd party websites.
-            >These are likely malicious!
-            >Members of the HandBrake team can be identified by the "(Member)" label in the top right of any response from them.
+            > [!TIP]
+            > See the [HandBrake documentation](https://handbrake.fr/docs) for guidance and troubleshooting. Please also follow our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md).
 
-            >[!TIP]
-            > For HandBrake documentation, please see https://handbrake.fr/docs
-
-            Thank You,
+            Thank you,
             The HandBrake Bot
           pr_message: |
-            Hello,
+            Hello, and welcome to the HandBrake repository.
 
-            Welcome to the HandBrake repository. Thank you for your submission. Please be patient while we review your submission. 
+            This is an automated message from the HandBrake Bot.
 
-            >[!TIP]
-            > For HandBrake documentation, please see https://handbrake.fr/docs
+            Thank you for your submission. Maintainer availability is limited. You can help us by completing all sections of the pull request template and providing relevant details about your changes and testing.
 
-            Thank You,
+            > [!TIP]
+            > Please read the [contributing guide](https://handbrake.fr/docs/en/latest/contributing/contribute.html) and follow the [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md).
+
+            Thank you,
             The HandBrake Bot

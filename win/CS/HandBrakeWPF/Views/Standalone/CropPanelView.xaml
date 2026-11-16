@@ -25,18 +25,17 @@
 
         <!-- Crop Panel -->
        
-        <Grid>
+        <Grid Margin="0,0,0,8">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_FineTuning}" Style="{StaticResource sectionHeader}" Margin="0,5,0,5" Foreground="White" />
-            <Image Source="../Images/close_no_ring.png" Grid.Column="1" Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center"
+            <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_FineTuning}" Style="{StaticResource sectionHeader}" Margin="0,0,8,0" />
+            <Image Source="../Images/close_no_ring.png" Grid.Column="1" Width="12" Height="12" Cursor="Hand" HorizontalAlignment="Right" VerticalAlignment="Center"
                    PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown" />
-
         </Grid>
 
-        <Grid Name="CropPanel" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="1">
+        <Grid Name="CropPanel" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -57,16 +56,17 @@
                       ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Flip}" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"  />-->
 
 
-            <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Cropping}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="White"  />
+            <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Cropping}" Grid.Row="1" Grid.Column="0" Margin="0,0,10,0" />
 
-            <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" >
-                <ComboBox Width="110" ItemsSource="{Binding CropModes, Converter={StaticResource cropModeConverter}}" SelectedItem="{Binding SelectedCropMode, Converter={StaticResource cropModeConverter}}" HorizontalAlignment="Left" 
+            <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <ComboBox Width="130" ItemsSource="{Binding CropModes, Converter={StaticResource cropModeConverter}}"
+                          SelectedItem="{Binding SelectedCropMode, Converter={StaticResource cropModeConverter}}" HorizontalAlignment="Left"
                           ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutoCrop}"
                           AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Cropping}" />
             </StackPanel>
 
 
-            <Grid Margin="0,0,0,0" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Right">
+            <Grid Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="0,8,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -83,27 +83,27 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Top}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Foreground="White"  />
-                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Bottom}" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Foreground="White"  />
-                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Left}" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Foreground="White"  />
-                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Right}" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" Foreground="White"  />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Top}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalContentAlignment="Center" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Bottom}" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" HorizontalContentAlignment="Center" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Left}" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Right}" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,0" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2"
+                <controls:NumberBox Width="64" HorizontalAlignment="Center" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2"
                                     Minimum="0" Maximum="{Binding MaxCropTB}" Modulus="2" Number="{Binding CropTop, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                     ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropTop}"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Top}" />
 
-                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,0" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2"
+                <controls:NumberBox Width="64" HorizontalAlignment="Center" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2"
                                     Minimum="0" Maximum="{Binding MaxCropTB}"  Modulus="2" Number="{Binding CropBottom, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                     ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropBottom}"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Bottom}" />
 
-                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,0" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1"
+                <controls:NumberBox Width="64" HorizontalAlignment="Center" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1"
                                     Minimum="0" Maximum="{Binding MaxCropLR}"  Modulus="2" Number="{Binding CropLeft, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                     ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropLeft}"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Left}"/>
 
-                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,0" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
+                <controls:NumberBox Width="64" HorizontalAlignment="Center" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
                                     Minimum="0" Maximum="{Binding MaxCropLR}"  Modulus="2" Number="{Binding CropRight, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                     ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropRight}"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Right}"/>

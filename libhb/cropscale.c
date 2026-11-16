@@ -77,7 +77,8 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_extract_int(&right, settings, "crop-right");
     cropped_width  = init->geometry.width - left - right;
     cropped_height = init->geometry.height - top - bottom;
-    if (top > 0 || bottom > 0 || left > 0 || right > 0)
+    if ((top > 0 || bottom > 0 || left > 0 || right > 0) &&
+        init->hw_pix_fmt != AV_PIX_FMT_QSV)
     {
         hb_dict_t * avfilter   = hb_dict_init();
         hb_dict_t * avsettings = hb_dict_init();

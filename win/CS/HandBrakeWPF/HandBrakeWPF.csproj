@@ -15,8 +15,8 @@
     <PackageProjectUrl>https://handbrake.fr</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HandBrake/HandBrake</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>1.11.0.0</AssemblyVersion>
-    <Version>1.11.0</Version>
+    <AssemblyVersion>1.12.0.0</AssemblyVersion>
+    <Version>1.12.0</Version>
     <Platforms>AnyCPU</Platforms>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
@@ -61,11 +61,11 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Autofac" Version="9.3.2" />
+	<PackageReference Include="Autofac" Version="9.3.4" />
     <PackageReference Include="gong-wpf-dragdrop" Version="4.0.0" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.161" />
-    <PackageReference Include="System.Management" Version="10.0.12" />
+    <PackageReference Include="System.Management" Version="10.0.14" />
   </ItemGroup>
 
   <ItemGroup>
@@ -172,9 +172,6 @@
   <ItemGroup>
     <Page Update="Themes\Controls\ContextMenuLight.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Themes\Controls\GroupBoxDark.xaml">
-      <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\Controls\ToolbarLight.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>

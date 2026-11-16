@@ -971,6 +971,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [job setDestinationFolderURL:self.destinationFolderURL
                         sameAsSource:[NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination]];
 
+        job.range.type = [NSUserDefaults.standardUserDefaults integerForKey:HBDefaultRangeType];
+
         // If the source is not a stream, and autonaming is disabled,
         // keep the existing file name.
         if (self.job.destinationFileName.length == 0 || title.isStream || [NSUserDefaults.standardUserDefaults boolForKey:HBDefaultAutoNaming])

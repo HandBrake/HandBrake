@@ -40,6 +40,19 @@ namespace HandBrake.Interop.Interop
             }
         }
 
+        public static List<string> GetMetadataKeys(int mux)
+        {
+            List<string> keys = new List<string>();
+            int index = 0;
+            IntPtr key;
+            while ((key = HBFunctions.hb_metadata_key_get_next(mux, ref index)) != IntPtr.Zero)
+            {
+                keys.Add(InteropUtilities.ToStringFromUtf8Ptr(key));
+            }
+
+            return keys;
+        }
+
         /// <summary>
         /// Gets a list of supported audio encoders.
         /// </summary>

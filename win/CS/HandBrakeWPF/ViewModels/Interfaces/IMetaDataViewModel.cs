@@ -14,5 +14,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface IMetaDataViewModel : ITabInterface
     {
+        void RefreshMetadataKeys();
     }
 }
