@@ -338,6 +338,10 @@
         <attribute name="label" translatable="yes">_Export Queue…</attribute>
         <attribute name="action">app.queue-export</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">Export _Selected…</attribute>
+        <attribute name="action">app.queue-export-selected</attribute>
+      </item>
     </section>
   </menu>
   <menu id="subtitle-add-menu-model">
