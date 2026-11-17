@@ -201,7 +201,7 @@ static hb_qsv_adapter_details_t* hb_qsv_get_adapters_details_by_index(int adapte
 {
     for (int i = 0; i < hb_list_count(g_qsv_adapters_details_list); i++)
     {
-        const hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
+        hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
         if (details->index == adapter_index || adapter_index == -1)
         {
             return details;
@@ -2971,7 +2971,7 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         fvalue = hb_qsv_atof(value, &error);
         if (!error)
         {
-            param->rc.vbv_buffer_init = HB_QSV_CLIP3(0, INT32_MAX, fvalue);
+            param->rc.vbv_buffer_init = HB_QSV_CLIP3(0, (float)INT32_MAX, fvalue);
         }
     }
     else if (!strcasecmp(key, "vbv-bufsize"))
