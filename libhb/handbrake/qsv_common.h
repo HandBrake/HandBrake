@@ -41,7 +41,6 @@ typedef struct hb_qsv_context_s
 #define HB_QSV_MINVERSION_MAJOR HB_QSV_MSDK_VERSION_MAJOR
 #define HB_QSV_MINVERSION_MINOR HB_QSV_MSDK_VERSION_MINOR
 
-#define HB_QSV_FFMPEG_INITIAL_POOL_SIZE (0)
 #define HB_QSV_FFMPEG_EXTRA_HW_FRAMES (60)
 
 static const char * const hb_qsv_h264_level_names[] =
