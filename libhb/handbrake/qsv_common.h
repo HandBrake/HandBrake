@@ -308,11 +308,7 @@ typedef struct
 {
     hb_qsv_info_t      * qsv_info;
     hb_qsv_param_t       param;
-    int                  async_depth;
-    int                  max_async_depth;
     int                  is_sys_mem;
-    const AVCodec      * codec;
-    AVDictionary       * av_opts;
 } qsv_data_t;
 
 hb_triplet_t* hb_triplet4key  (hb_triplet_t *triplets, const char *key);
