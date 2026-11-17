@@ -170,16 +170,6 @@ static hb_triplet_t hb_qsv_hyper_encode_modes[] =
     { NULL,                                                             },
 };
 
-static const enum AVPixelFormat hb_qsv_pix_fmts[] =
-{
-    AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
-};
-
-static const enum AVPixelFormat hb_qsv_10bit_pix_fmts[] =
-{
-    AV_PIX_FMT_P010LE, AV_PIX_FMT_NONE
-};
-
 #define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
 
 // check available Intel Media SDK version against a minimum
@@ -218,12 +208,6 @@ static hb_qsv_adapter_details_t* hb_qsv_get_adapters_details_by_index(int adapte
         }
     }
     return NULL;
-}
-
-int hb_qsv_get_adapter_render_node(int adapter_index)
-{
-    const hb_qsv_adapter_details_t *details = hb_qsv_get_adapters_details_by_index(adapter_index);
-    return details->extended_device_id.DRMRenderNodeNum;
 }
 
 int hb_qsv_set_adapter_index(int adapter_index)
@@ -430,37 +414,6 @@ int hb_qsv_info_init()
         return -1;
     }
     return 0;
-}
-
-#if defined(_WIN32) || defined(__MINGW32__)
-static void hb_qsv_free_adapters_details(hb_list_t *qsv_adapters_details_list)
-{
-    for (int i = 0; i < hb_list_count(qsv_adapters_details_list); i++)
-    {
-        hb_qsv_adapter_details_t *details = hb_list_item(qsv_adapters_details_list, i);
-        if (details)
-        {
-            av_free(details);
-        }
-    }
-}
-#endif
-
-void hb_qsv_info_close()
-{
-    if (g_qsv_adapters_details_list)
-    {
-#if defined(_WIN32) || defined(__MINGW32__)
-        hb_qsv_free_adapters_details(g_qsv_adapters_details_list);
-#endif
-        hb_list_close(&g_qsv_adapters_details_list);
-        g_qsv_adapters_details_list = NULL;
-    }
-    if (g_qsv_adapters_list)
-    {
-        hb_list_close(&g_qsv_adapters_list);
-        g_qsv_adapters_list = NULL;
-    }
 }
 
 static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **qsv_adapters_details_list)
@@ -3513,23 +3466,6 @@ const char* const* hb_qsv_level_get_names(int encoder)
     }
 }
 
-const int* hb_qsv_get_pix_fmts(int encoder)
-{
-    switch (encoder)
-    {
-    case HB_VCODEC_FFMPEG_QSV_H264:
-    case HB_VCODEC_FFMPEG_QSV_H265:
-    case HB_VCODEC_FFMPEG_QSV_AV1:
-        return hb_qsv_pix_fmts;
-    case HB_VCODEC_FFMPEG_QSV_H265_10BIT:
-    case HB_VCODEC_FFMPEG_QSV_AV1_10BIT:
-        return hb_qsv_10bit_pix_fmts;
-
-    default:
-        return hb_qsv_pix_fmts;
-    }
-}
-
 const char* hb_qsv_video_quality_get_name(uint32_t codec)
 {
     uint64_t caps = 0;
@@ -3687,30 +3623,6 @@ int hb_qsv_param_default(hb_qsv_param_t *param, hb_qsv_info_t *info)
     return 0;
 }
 
-hb_triplet_t* hb_triplet4value(hb_triplet_t *triplets, const int value)
-{
-    for (int i = 0; triplets[i].name != NULL; i++)
-    {
-        if (triplets[i].value == value)
-        {
-            return &triplets[i];
-        }
-    }
-    return NULL;
-}
-
-hb_triplet_t* hb_triplet4name(hb_triplet_t *triplets, const char *name)
-{
-    for (int i = 0; triplets[i].name != NULL; i++)
-    {
-        if (!strcasecmp(triplets[i].name, name))
-        {
-            return &triplets[i];
-        }
-    }
-    return NULL;
-}
-
 hb_triplet_t* hb_triplet4key(hb_triplet_t *triplets, const char *key)
 {
     for (int i = 0; triplets[i].name != NULL; i++)
@@ -3721,47 +3633,6 @@ hb_triplet_t* hb_triplet4key(hb_triplet_t *triplets, const char *key)
         }
     }
     return NULL;
-}
-
-const char* hb_qsv_codec_name(uint32_t codec_id)
-{
-    switch (codec_id)
-    {
-        case MFX_CODEC_AVC:
-            return "H.264/AVC";
-
-        case MFX_CODEC_HEVC:
-            return "H.265/HEVC";
-
-        case MFX_CODEC_AV1:
-            return "AV1";
-
-        default:
-            return NULL;
-    }
-}
-
-const char* hb_qsv_profile_name(uint32_t codec_id, uint16_t profile_id)
-{
-    hb_triplet_t *profile = NULL;
-    switch (codec_id)
-    {
-        case MFX_CODEC_AVC:
-            profile = hb_triplet4value(hb_qsv_h264_profiles, profile_id);
-            break;
-
-        case MFX_CODEC_HEVC:
-            profile = hb_triplet4value(hb_qsv_h265_profiles, profile_id);
-            break;
-
-        case MFX_CODEC_AV1:
-            profile = hb_triplet4value(hb_qsv_av1_profiles, profile_id);
-            break;
-
-        default:
-            break;
-    }
-    return profile != NULL ? profile->name : NULL;
 }
 
 const char* hb_qsv_impl_get_name(int impl)

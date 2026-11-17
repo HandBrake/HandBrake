@@ -203,7 +203,6 @@ hb_display_t * hb_qsv_display_init(const uint32_t dri_render_node);
 int            hb_qsv_video_encoder_is_available(int encoder);
 int            hb_qsv_adapter_video_encoder_is_available(int adapter_index, int encoder);
 int            hb_qsv_info_init();
-void           hb_qsv_info_close();
 void           hb_qsv_info_print();
 hb_list_t*     hb_qsv_adapters_list();
 int            hb_qsv_hyper_encode_available(int adapter_index);
@@ -211,7 +210,6 @@ hb_qsv_info_t* hb_qsv_encoder_info_get(int adapter_index, int encoder);
 int            hb_qsv_hardware_generation(int cpu_platform);
 int            hb_qsv_get_platform(int adapter_index);
 int            hb_qsv_get_adapter_index();
-int            hb_qsv_get_adapter_render_node(int adapter_index);
 int            hb_qsv_implementation_is_hardware(mfxIMPL implementation);
 
 /* Intel Quick Sync Video DECODE utilities */
@@ -289,7 +287,6 @@ static const char* const hb_qsv_preset_names2[] = { "speed", "balanced", "qualit
 const char* const* hb_qsv_preset_get_names();
 const char* const* hb_qsv_profile_get_names(int encoder);
 const char* const* hb_qsv_level_get_names(int encoder);
-const int* hb_qsv_get_pix_fmts(int encoder);
 
 const char* hb_qsv_video_quality_get_name(uint32_t codec);
 void hb_qsv_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
@@ -302,7 +299,6 @@ int   hb_qsv_atoi    (const char *str, int *err);
 float hb_qsv_atof    (const char *str, int *err);
 
 int hb_qsv_param_default_async_depth();
-int hb_qsv_param_default_preset     (AVDictionary* av_opts, hb_qsv_param_t *param, mfxVideoParam *videoParam, hb_qsv_info_t *info, const char *preset);
 int hb_qsv_param_default            (hb_qsv_param_t *param, hb_qsv_info_t *info);
 int hb_qsv_param_parse              (AVDictionary  **av_opts, hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job,  const char *key, const char *value);
 int hb_qsv_profile_parse            (hb_qsv_param_t *param,                            hb_qsv_info_t *info, const char *profile_key, const int codec);
@@ -319,12 +315,7 @@ typedef struct
     AVDictionary       * av_opts;
 } qsv_data_t;
 
-hb_triplet_t* hb_triplet4value(hb_triplet_t *triplets, const int  value);
-hb_triplet_t* hb_triplet4name (hb_triplet_t *triplets, const char *name);
 hb_triplet_t* hb_triplet4key  (hb_triplet_t *triplets, const char *key);
-
-const char* hb_qsv_codec_name    (uint32_t codec_id);
-const char* hb_qsv_profile_name  (uint32_t codec_id, uint16_t profile_id);
 
 const char* hb_qsv_impl_get_name(int impl);
 int         hb_qsv_impl_get_num(int impl);
