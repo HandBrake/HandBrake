@@ -719,7 +719,6 @@ struct hb_job_s
 #define HB_VCODEC_QSV_MASK           0x00040000
 #define HB_VCODEC_FFMPEG_MASK        0x00010000
 
-#define HB_VCODEC_QSV_AV1_MASK       (HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_VAAPI_MASK         0x00008000
 
 #define HB_VCODEC_THEORA             0x00000001
@@ -1618,7 +1617,6 @@ extern hb_work_object_t hb_decssasub;
 extern hb_work_object_t hb_decavsub;
 extern hb_work_object_t hb_encavsub;
 extern hb_work_object_t hb_encavcodec;
-extern hb_work_object_t hb_encqsv;
 extern hb_work_object_t hb_encvt;
 extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
