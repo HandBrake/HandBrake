@@ -33,13 +33,9 @@ typedef struct hb_qsv_context_s
     const char *vpp_scale_mode;
 } hb_qsv_context_t;
 
-// version of MSDK/QSV API currently used
-#define HB_QSV_MSDK_VERSION_MAJOR  1
-#define HB_QSV_MSDK_VERSION_MINOR  3
-
 /* Minimum Intel Media SDK version (currently 1.3, for Sandy Bridge support) */
-#define HB_QSV_MINVERSION_MAJOR HB_QSV_MSDK_VERSION_MAJOR
-#define HB_QSV_MINVERSION_MINOR HB_QSV_MSDK_VERSION_MINOR
+#define HB_QSV_MINVERSION_MAJOR 1
+#define HB_QSV_MINVERSION_MINOR 3
 
 #define HB_QSV_FFMPEG_EXTRA_HW_FRAMES (60)
 
