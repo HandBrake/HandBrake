@@ -28,19 +28,6 @@
 #include "handbrake/av1_common.h"
 #include "handbrake/hbffmpeg.h"
 
-#ifndef HB_QSV_PRINT_RET_MSG
-#define HB_QSV_PRINT_RET_MSG(ERR)              { fprintf(stderr, "Error code %d,\t%s\t%d\n", ERR, __FUNCTION__, __LINE__); }
-#endif
-
-#ifndef HB_QSV_DEBUG_ASSERT
-#define HB_QSV_DEBUG_ASSERT(x,y)               { if ((x)) { fprintf(stderr, "\nASSERT: %s\n", y); } }
-#endif
-
-#define HB_QSV_CHECK_RET(P, X, ERR)                {if ((X) > (P)) {HB_QSV_PRINT_RET_MSG(ERR); return;}}
-#define HB_QSV_CHECK_RESULT(P, X, ERR)             {if ((X) > (P)) {HB_QSV_PRINT_RET_MSG(ERR); return ERR;}}
-#define HB_QSV_CHECK_POINTER(P, ERR)               {if (!(P)) {HB_QSV_PRINT_RET_MSG(ERR); return ERR;}}
-#define HB_QSV_IGNORE_MFX_STS(P, X)                {if ((X) == (P)) {P = MFX_ERR_NONE;}}
-
 #define HB_QSV_ASYNC_DEPTH_DEFAULT     4
 
 #define HB_QSV_AVC_DECODER_WIDTH_MAX   4096
