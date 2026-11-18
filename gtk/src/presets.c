@@ -1086,13 +1086,6 @@ ghb_settings_init(GhbValue *settings, const char *name)
     ghb_dict_copy(settings, internal);
 }
 
-void
-ghb_settings_close (void)
-{
-    if (prefsDict)
-        ghb_value_free(&prefsDict);
-}
-
 #if defined(_WIN32)
 gchar*
 FindFirstCDROM(void)
@@ -1942,6 +1935,18 @@ delayed_store_prefs(gpointer data)
     write_config_file("preferences.json", prefsDict);
     prefs_timeout_id = 0;
     return FALSE;
+}
+
+void
+ghb_settings_close (void)
+{
+    if (prefs_timeout_id != 0)
+    {
+        g_source_remove(prefs_timeout_id);
+        delayed_store_prefs(NULL);
+    }
+    if (prefsDict)
+        ghb_value_free(&prefsDict);
 }
 
 static void

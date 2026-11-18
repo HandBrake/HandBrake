@@ -5306,6 +5306,50 @@ ui_language_changed_cb (GtkWidget *widget, gpointer data)
     prefs_require_restart = TRUE;
 }
 
+void
+ghb_check_custom_temp_dir(const char *directory)
+{
+    const char *message;
+
+    if (directory == NULL || directory[0] == '\0')
+        return;
+
+    if (!g_file_test(directory, G_FILE_TEST_IS_DIR))
+    {
+        message = _("“%s” is not a valid directory.\n\n"
+                    "Open Preferences to select another directory, or choose Reset and Quit "
+                    "to use the default temporary directory on the next launch.");
+    }
+    else if (g_access(directory, R_OK|W_OK) != 0)
+    {
+        message = _("“%s” is not a writable directory.\n\n"
+                    "Open Preferences to select another directory, or choose Reset and Quit "
+                    "to use the default temporary directory on the next launch.");
+    }
+    else
+    {
+        return;
+    }
+
+    if (ghb_question_dialog_run(NULL, GHB_ACTION_SUGGESTED,
+            _("_Open Preferences"), _("_Reset and Quit"),
+            _("Custom Temporary Directory Unavailable"), message, directory))
+    {
+        g_action_group_activate_action(G_ACTION_GROUP(g_application_get_default()),
+                                       "preferences", NULL);
+        gtk_stack_set_visible_child(GTK_STACK(ghb_builder_widget("prefs_stack")),
+                                   ghb_builder_widget("vbox1"));
+    }
+    else
+    {
+        gtk_check_button_set_active(
+            GTK_CHECK_BUTTON(ghb_builder_widget("CustomTmpEnable")), FALSE);
+        ghb_prefs_store();
+        g_action_group_activate_action(G_ACTION_GROUP(g_application_get_default()),
+                                       "quit", NULL);
+    }
+}
+
 G_MODULE_EXPORT void
 temp_dir_changed_cb (GhbFileButton *dest_chooser, GParamSpec *pspec, gpointer data)
 {

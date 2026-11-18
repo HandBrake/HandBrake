@@ -50,6 +50,7 @@ GtkMessageDialog *ghb_question_dialog_new(GtkWindow *parent, GhbActionStyle acce
      const char *title, const char *format, ...) G_GNUC_PRINTF(6, 7);
 void ghb_alert_dialog_show(GtkMessageType type, const char *title,
                            const char *format, ...) G_GNUC_PRINTF(3, 4);
+void ghb_check_custom_temp_dir(const char *directory);
 GtkWidget *ghb_cancel_dialog_new(GtkWindow *parent,
     const char *title, const char *message, const char *cancel_all_button,
     const char *cancel_current_button, const char *finish_button,
