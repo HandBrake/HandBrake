@@ -228,6 +228,15 @@
     }
 }
 
+- (IBAction)exportSelectedQueueItems:(id)sender
+{
+    NSIndexSet *targetedRows = self.tableView.targetedRowIndexes;
+    if (targetedRows.count)
+    {
+        [self.delegate tableViewExportItemsAtIndexes:targetedRows];
+    }
+}
+
 - (IBAction)removeAll:(id)sender
 {
     [self.queue removeNotWorkingItems];
@@ -259,7 +268,8 @@
 
     if (action == @selector(removeSelectedQueueItem:) ||
         action == @selector(moveSelectedQueueItemsToBottom:) ||
-        action == @selector(moveSelectedQueueItemsToTop:))
+        action == @selector(moveSelectedQueueItemsToTop:) ||
+        action == @selector(exportSelectedQueueItems:))
     {
         return self.tableView.targetedRowIndexes.count > 0;
     }
