@@ -57,25 +57,25 @@ static int qsv_rotate_init(hb_filter_private_t * pv, hb_filter_init_t * init, in
     int           width  = init->geometry.width;
     int           height = init->geometry.height;
     const char *  trans  = NULL;
-    int           hflip = 0, vflip = 0;
 
+    // vpp_qsv flips before rotating, the software filter after
     switch (angle)
     {
         case 0:
-            hflip = flip;
+            trans = flip ? "hflip" : NULL;
             break;
         case 90:
-            trans   = "clock";
+            trans   = flip ? "cclock_hflip" : "clock";
             width   = init->geometry.height;
             height  = init->geometry.width;
             par.num = init->geometry.par.den;
             par.den = init->geometry.par.num;
             break;
         case 180:
-            trans = "reversal";
+            trans = flip ? "vflip" : "reversal";
             break;
         case 270:
-            trans  = "cclock";
+            trans   = flip ? "clock_hflip" : "cclock";
             width   = init->geometry.height;
             height  = init->geometry.width;
             par.num = init->geometry.par.den;
@@ -90,44 +90,10 @@ static int qsv_rotate_init(hb_filter_private_t * pv, hb_filter_init_t * init, in
         hb_dict_t * avfilter = hb_dict_init();
         hb_dict_t * avsettings = hb_dict_init();
 
-        if(hflip)
-        {
-            char *s = hb_strdup_printf("%s_hflip", trans);
-            hb_dict_set(avsettings, "transpose", hb_value_string(s));
-            free(s);
-        }
-        else
-        {
-            hb_dict_set(avsettings, "transpose", hb_value_string(trans));
-        }
+        hb_dict_set(avsettings, "transpose", hb_value_string(trans));
         hb_dict_set_int(avsettings, "async_depth", init->job->hw_device_async_depth);
         hb_dict_set(avfilter, "vpp_qsv", avsettings);
         pv->avfilters = avfilter;
-    }
-    else if (hflip || vflip)
-    {
-        hb_value_array_t * avfilters = hb_value_array_init();
-        hb_dict_t        * avfilter;
-        hb_dict_t * avsettings = hb_dict_init();
-        if (vflip)
-        {
-            avfilter = hb_dict_init();
-
-            hb_dict_set(avsettings, "transpose", hb_value_string("vflip"));
-            hb_dict_set_int(avsettings, "async_depth", init->job->hw_device_async_depth);
-            hb_dict_set(avfilter, "vpp_qsv", avsettings);
-            pv->avfilters = avfilter;
-        }
-        if (hflip)
-        {
-            avfilter = hb_dict_init();
-
-            hb_dict_set(avsettings, "transpose", hb_value_string("hflip"));
-            hb_dict_set_int(avsettings, "async_depth", init->job->hw_device_async_depth);
-            hb_dict_set(avfilter, "vpp_qsv", avsettings);
-            pv->avfilters = avfilter;
-        }
-        pv->avfilters = avfilters;
     }
     else
     {
