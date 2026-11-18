@@ -3111,8 +3111,10 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         }
         if (!error)
         {
-            ivalue = ivalue ? MFX_PICSTRUCT_FIELD_TFF : MFX_PICSTRUCT_PROGRESSIVE;
-            av_dict_set_int(av_opts, "flags", ivalue, AV_DICT_APPEND);
+            if (ivalue)
+            {
+                av_dict_set(av_opts, "flags", "+ildct", AV_DICT_APPEND);
+            }
         }
     }
     else if (!strcasecmp(key, "bff"))
@@ -3127,8 +3129,11 @@ int hb_qsv_param_parse(AVDictionary** av_opts, hb_qsv_param_t *param, hb_qsv_inf
         }
         if (!error)
         {
-            ivalue = ivalue ? MFX_PICSTRUCT_FIELD_BFF : MFX_PICSTRUCT_PROGRESSIVE;
-            av_dict_set_int(av_opts, "flags", ivalue, AV_DICT_APPEND);
+            // qsvenc only supports top field first
+            if (ivalue)
+            {
+                return HB_QSV_PARAM_UNSUPPORTED;
+            }
         }
     }
     else if (!strcasecmp(key, "mbbrc"))
