@@ -1,0 +1,41 @@
+From 2a1c6383faf67bbad4d69c5ce6e9a526dbe5fca7 Mon Sep 17 00:00:00 2001
+From: Araz Iusubov <Primeadvice@gmail.com>
+Date: Thu, 19 Nov 2026 15:12:50 +0100
+Subject: [PATCH] avutil/hwcontext_amf: fix transfer format selection
+
+---
+ libavutil/hwcontext_amf.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/libavutil/hwcontext_amf.c b/libavutil/hwcontext_amf.c
+index 7f47df5b59..88d496edd9 100644
+--- a/libavutil/hwcontext_amf.c
++++ b/libavutil/hwcontext_amf.c
+@@ -426,11 +426,21 @@ static int amf_transfer_get_formats(AVHWFramesContext *ctx,
+     enum AVPixelFormat *fmts;
+     int i;
+ 
+-    fmts = av_malloc_array(FF_ARRAY_ELEMS(supported_transfer_formats), sizeof(*fmts));
++    for (i = 0; supported_transfer_formats[i] != AV_PIX_FMT_NONE; i++) {
++        if (ctx->sw_format == supported_transfer_formats[i])
++            break;
++    }
++    if (supported_transfer_formats[i] == AV_PIX_FMT_NONE) {
++        av_log(ctx, AV_LOG_ERROR, "Pixel format '%s' is not supported for AMF transfers\n", av_get_pix_fmt_name(ctx->sw_format));
++        return AVERROR(ENOSYS);
++    }
++
++    fmts = av_malloc_array(2, sizeof(*fmts));
+     if (!fmts)
+         return AVERROR(ENOMEM);
+-    for (i = 0; i < FF_ARRAY_ELEMS(supported_transfer_formats); i++)
+-        fmts[i] = supported_transfer_formats[i];
++
++    fmts[0] = ctx->sw_format;
++    fmts[1] = AV_PIX_FMT_NONE;
+ 
+     *formats = fmts;
+ 
+-- 
+2.33.1.windows.1
+
