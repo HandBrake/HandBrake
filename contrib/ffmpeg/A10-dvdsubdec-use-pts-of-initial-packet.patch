@@ -1,7 +1,7 @@
-From db4b955628b0f98a4189a4d4367e36658b49efbd Mon Sep 17 00:00:00 2001
+From a58687ef53ae44d09a1bfbc18a44b5e256ea69b4 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 20 Mar 2024 09:12:27 +0100
-Subject: [PATCH 09/20] dvdsubdec: use pts of initial packet
+Subject: [PATCH 10/20] dvdsubdec: use pts of initial packet
 
 When the source is DVD, only the initial packet of a subtitle that spans multiple packets will have a pts value.
 ---
@@ -68,5 +68,5 @@ index 31772b5542..0622f7461b 100644
      return 0;
  }
 -- 
-2.50.1 (Apple Git-155)
+2.54.0 (Apple Git-157)
 
