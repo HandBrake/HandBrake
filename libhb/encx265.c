@@ -93,6 +93,58 @@ static int param_parse(hb_work_private_t *pv, x265_param *param,
     return ret;
 }
 
+static int encoder_option_name_is(const char *key, const char *name)
+{
+    if (key[0] == '-' && key[1] == '-')
+    {
+        key += 2;
+    }
+    while (*key != '\0' && *name != '\0')
+    {
+        char key_char = *key == '_' ? '-' : *key;
+        if (key_char != *name)
+        {
+            return 0;
+        }
+        key++;
+        name++;
+    }
+    return *key == '\0' && *name == '\0';
+}
+
+static int unsafe_encoder_option(const char *key, const char *value)
+{
+    /*
+     * Encoder options may originate in imported presets and queues. Keep
+     * them from creating files outside HandBrake's selected destination.
+     * HandBrake applies its own pass and stats options below.
+     */
+    static const char * const file_options[] =
+    {
+        "analysis-reuse-file",
+        "analysis-save",
+        "csv",
+        "pass",
+        "stats",
+        NULL,
+    };
+
+    if (strpbrk(key, "\r\n") != NULL ||
+        (value != NULL && strpbrk(value, "\r\n") != NULL))
+    {
+        return 1;
+    }
+
+    for (int ii = 0; file_options[ii] != NULL; ii++)
+    {
+        if (encoder_option_name_is(key, file_options[ii]))
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 int apply_h265_level(hb_work_private_t *pv,  x265_param *param,
                      const char *h265_level)
 {
@@ -306,6 +358,13 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         const char *key = hb_dict_iter_key(iter);
         hb_value_t *value = hb_dict_iter_value(iter);
         char *str = hb_value_get_string_xform(value);
+
+        if (unsafe_encoder_option(key, str))
+        {
+            hb_log("encx265: ignoring unsafe option '%s'", key);
+            free(str);
+            continue;
+        }
 
         if (!strcmp(key, "master-display"))
         {
