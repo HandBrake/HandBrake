@@ -3689,8 +3689,23 @@ static int update_ps_streams( hb_stream_t * stream, int stream_id, int stream_id
                 // to the end of the list.  we want to keep it for
                 // debug and informational purposes.
                 int jj = new_pes( stream );
-                memcpy( &stream->pes.list[jj], &stream->pes.list[ii],
-                        sizeof( hb_pes_stream_t ) );
+                hb_pes_stream_t *src = &stream->pes.list[ii];
+                hb_pes_stream_t *dst = &stream->pes.list[jj];
+
+                memcpy(dst, src, sizeof(hb_pes_stream_t));
+                if (src->extradata != NULL && src->extradata_size > 0)
+                {
+                    dst->extradata = malloc(src->extradata_size);
+                    if (dst->extradata != NULL)
+                    {
+                        memcpy(dst->extradata, src->extradata, src->extradata_size);
+                    }
+                    else
+                    {
+                        dst->extradata = NULL;
+                        dst->extradata_size = 0;
+                    }
+                }
                 break;
             }
         }
