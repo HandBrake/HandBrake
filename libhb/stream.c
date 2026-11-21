@@ -2768,6 +2768,13 @@ int decode_program_map(hb_stream_t* stream)
     stream->pmt_info.PCR_PID = bits_get(&bb, 13);
     bits_get(&bb, 4);
     int program_info_length = bits_get(&bb, 12);
+
+    // Program info length must not exceed remaining section bytes
+    if (program_info_length > (int)(section_length) - 13)
+    {
+        return 0;
+    }
+
     int i;
     for (i = 0; i < program_info_length - 2; )
     {
@@ -2803,11 +2810,24 @@ int decode_program_map(hb_stream_t* stream)
     int ii = 0;
     while (!done_reading_stream_types)
     {
+        // Ensure we do not read past the available bytes remaining
+        if (bits_bytes_left(&bb) < 5 /* stream header */ + 4 /* read-ahead */)
+        {
+            break;
+        }
+
         unsigned char stream_type = bits_get(&bb, 8);
         bits_get(&bb, 3);
         unsigned int elementary_PID = bits_get(&bb, 13);
         bits_get(&bb, 4);
         unsigned int info_len = bits_get(&bb, 12);
+
+        // Stream info length must not exceed remaining section bytes
+        if ((int)(info_len) > (int)(section_length) - cur_pos - 5 /* stream header */ - 4 /* CRC */)
+        {
+            info_len = 0; // ignore truncated descriptor list
+        }
+
         // Defined audio stream types are 0x81 for AC-3/A52 audio
         // and 0x03 for mpeg audio. But content producers seem to
         // use other values (0x04 and 0x06 have both been observed)
