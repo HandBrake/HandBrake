@@ -1,7 +1,7 @@
-From 7cc6336aa23c427bbbab0cdc2586aaa13cfc38c9 Mon Sep 17 00:00:00 2001
+From b4e26bb469f514e9722e72f8f5ce0f43357192cb Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Fri, 22 Aug 2025 16:51:18 +0200
-Subject: [PATCH] Expose the unmodified Dolby Vision RPU T35 buffers
+Subject: [PATCH 14/20] Expose the unmodified Dolby Vision RPU T35 buffers
 
 ---
  libavcodec/itut35.c   | 19 +++++++++++++++++++
@@ -47,7 +47,7 @@ index b41d41406d..d5ec27ea15 100644
  
      if (metadata.hdr_smpte2094_app5) {
 diff --git a/libavutil/frame.h b/libavutil/frame.h
-index 52adbc6288..7cfecba455 100644
+index 1fd296aa83..aacc80c6e1 100644
 --- a/libavutil/frame.h
 +++ b/libavutil/frame.h
 @@ -200,6 +200,12 @@ enum AVFrameSideDataType {
@@ -64,7 +64,7 @@ index 52adbc6288..7cfecba455 100644
       * Parsed Dolby Vision metadata, suitable for passing to a software
       * implementation. The payload is the AVDOVIMetadata struct defined in
 diff --git a/libavutil/side_data.c b/libavutil/side_data.c
-index 762bc59d53..9f649abff0 100644
+index 0d0289a9b6..8f8e6d1b90 100644
 --- a/libavutil/side_data.c
 +++ b/libavutil/side_data.c
 @@ -42,6 +42,7 @@ static const AVSideDataDescriptor sd_props[] = {
@@ -76,5 +76,5 @@ index 762bc59d53..9f649abff0 100644
      [AV_FRAME_DATA_LCEVC]                       = { "LCEVC NAL data",                               AV_SIDE_DATA_PROP_SIZE_DEPENDENT },
      [AV_FRAME_DATA_VIEW_ID]                     = { "View ID" },
 -- 
-2.50.1 (Apple Git-155)
+2.54.0 (Apple Git-157)
 

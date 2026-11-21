@@ -1,4 +1,4 @@
-From 03b80ad3e686fb5e5aaf5356b566406f573f924d Mon Sep 17 00:00:00 2001
+From 31e434d7e4b0b4f5388266d6ebb1abc0e0a0e3b3 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 20 Mar 2024 09:10:27 +0100
 Subject: [PATCH 04/20] movenc: write 3gpp track names tags for all available
@@ -10,10 +10,10 @@ Metadata keys can have a language suffix.  Iterate through all language variatio
  1 file changed, 23 insertions(+), 2 deletions(-)
 
 diff --git a/libavformat/movenc.c b/libavformat/movenc.c
-index 2470fde5c1..cc6da25814 100644
+index 5bc7a9c09e..d719790343 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -28,6 +28,7 @@
+@@ -29,6 +29,7 @@
  
  #include "movenc.h"
  #include "avformat.h"
@@ -21,7 +21,7 @@ index 2470fde5c1..cc6da25814 100644
  #include "avio_internal.h"
  #include "dovi_isom.h"
  #include "riff.h"
-@@ -4314,7 +4315,14 @@ static int mov_write_3gp_udta_tag(AVIOContext *pb, AVDictionary *metadata,
+@@ -4446,7 +4447,14 @@ static int mov_write_3gp_udta_tag(AVIOContext *pb, AVDictionary *metadata,
      if (!strcmp(tag, "yrrc"))
          avio_wb16(pb, atoi(t->value));
      else {
@@ -37,7 +37,7 @@ index 2470fde5c1..cc6da25814 100644
          avio_write(pb, t->value, strlen(t->value) + 1); /* UTF8 string value */
          if (!strcmp(tag, "albm") &&
              (t = av_dict_get(metadata, "track", NULL, 0)))
-@@ -4398,8 +4406,21 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -4530,8 +4538,21 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
          return ret;
  
      if (mov->mode & (MODE_MP4|MODE_MOV)) {
@@ -61,5 +61,5 @@ index 2470fde5c1..cc6da25814 100644
  
      if (mov->mode & MODE_MP4) {
 -- 
-2.50.1 (Apple Git-155)
+2.54.0 (Apple Git-157)
 

@@ -1,4 +1,4 @@
-From bf8e08fe23074844747febdb7bf919f1de426c6e Mon Sep 17 00:00:00 2001
+From 9a0b18b54dabca3b7b05d23cd12a7cd7e2346640 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Fri, 29 Aug 2025 09:52:13 +0200
 Subject: [PATCH 01/20] mov: read 'name' track tag written by movenc
@@ -8,10 +8,10 @@ Subject: [PATCH 01/20] mov: read 'name' track tag written by movenc
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index 5c4c33c60d..ee35861620 100644
+index 4aeb80a5ca..0612fc545c 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -393,7 +393,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -402,7 +402,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
          return mov_metadata_loci(c, pb, atom.size);
      case MKTAG( 'm','a','n','u'): key = "make"; break;
      case MKTAG( 'm','o','d','l'): key = "model"; break;
@@ -21,5 +21,5 @@ index 5c4c33c60d..ee35861620 100644
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'p','g','a','p'): key = "gapless_playback";
 -- 
-2.50.1 (Apple Git-155)
+2.54.0 (Apple Git-157)
 

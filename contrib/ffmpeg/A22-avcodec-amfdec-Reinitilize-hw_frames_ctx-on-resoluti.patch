@@ -1,4 +1,4 @@
-From fb1ab2591c2105435f1f307fdaeb8d61776f7c43 Mon Sep 17 00:00:00 2001
+From accbfbe06f69dcd18e5938a732158e07023c4507 Mon Sep 17 00:00:00 2001
 From: Araz Iusubov <Primeadvice@gmail.com>
 Date: Thu, 5 Nov 2026 12:47:43 +0100
 Subject: [PATCH] avcodec/amfdec: Reinitilize hw_frames_ctx on resolution or
@@ -103,5 +103,5 @@ index 00a17360f5..d8ca6abad3 100644
          // decoder has no output yet
          res = AMF_OK;
 -- 
-2.51.0.windows.2
+2.54.0 (Apple Git-157)
 

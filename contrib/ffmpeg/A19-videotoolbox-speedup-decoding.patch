@@ -1,4 +1,4 @@
-From ae5926bed0ca25ace3011cbc561991ca04626e62 Mon Sep 17 00:00:00 2001
+From 5b68bc3901c81b171bfcd58f4425dc37f336576b Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Sat, 15 Feb 2025 09:47:36 +0100
 Subject: [PATCH 19/20] videotoolbox: speedup decoding
@@ -72,5 +72,5 @@ index 5add4096c6..bb4195e644 100644
          NULL,
          NULL,
 -- 
-2.50.1 (Apple Git-155)
+2.54.0 (Apple Git-157)
 
