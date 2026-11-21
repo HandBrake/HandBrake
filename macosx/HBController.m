@@ -977,7 +977,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         // keep the existing file name.
         if (self.job.destinationFileName.length == 0 || title.isStream || [NSUserDefaults.standardUserDefaults boolForKey:HBDefaultAutoNaming])
         {
-            job.destinationFileName = job.defaultName;
+            job.destinationFileName = [job defaultNameReservingURLs:_queue.reservedDestinationURLs];
         }
         else
         {
@@ -1017,7 +1017,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [center addObserver:self selector:@selector(customSettingUsed) name:HBPictureChangedNotification object:_job.picture];
         [center addObserver:self selector:@selector(customSettingUsed) name:HBFiltersChangedNotification object:_job.filters];
         [center addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:_job.video];
-        self.autoNamer = [[HBAutoNamer alloc] initWithJob:self.job];
+        self.autoNamer = [[HBAutoNamer alloc] initWithJob:self.job queue:_queue];
     }
 }
 
@@ -1447,6 +1447,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     // Get the preset from the loaded job.
     HBPreset *preset = [self createPresetFromCurrentSettings];
+    NSMutableArray<NSURL *> *reservedURLs = [_queue.reservedDestinationURLs mutableCopy];
 
     for (HBTitle *title in titles)
     {
@@ -1457,7 +1458,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             [job applySelectionRange:range];
             [job setDestinationFolderURL:self.destinationFolderURL
                             sameAsSource:useSourceFolderDestination];
-            job.destinationFileName = job.defaultName;
+            // Reserve each title's destination so {Auto-Increment}
+            // numbers the batch consecutively
+            job.destinationFileName = [job defaultNameReservingURLs:reservedURLs];
+            [reservedURLs addObject:job.destinationURL];
             job.title = nil;
 
             [jobs addObject:job];

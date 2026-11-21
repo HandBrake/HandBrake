@@ -36,6 +36,20 @@ namespace HandBrakeWPF.Views.Options
             e.Effects = DragDropEffects.Copy;
         }
 
+        private void AutoIncrementPadding_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Only digits reach the auto-increment padding box; the view model
+            // clamps the committed value into the supported range.
+            foreach (char c in e.Text)
+            {
+                if (!char.IsDigit(c))
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
+
         private void AutoNameOutputPath_OnDragEnter(object sender, DragEventArgs e)
         {
             e.Effects = DragDropEffects.Copy;

@@ -693,6 +693,8 @@ title_add_multiple_response_cb (GtkDialog *dialog, int response,
     {
         add_multiple_titles(ud);
     }
+    // The main window's title shows the next free number again
+    ghb_auto_increment_batch_end(ud);
 }
 
 G_MODULE_EXPORT void
@@ -714,8 +716,21 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
         preset = ghb_settings_to_preset(ud->settings);
     }
 
-    // Set up the list of titles
     count = ghb_array_len(ud->settings_array);
+    if (preset != NULL)
+    {
+        for (ii = 0; ii < count; ii++)
+        {
+            GhbValue *settings = ghb_array_get(ud->settings_array, ii);
+            ghb_preset_to_settings(settings, preset);
+            ghb_set_title_settings(ud, settings);
+        }
+    }
+    // Number the titles consecutively when {auto-increment} is used.
+    // Ended by title_add_multiple_response_cb.
+    ghb_auto_increment_batch_begin(ud, ud->settings_array);
+
+    // Set up the list of titles
     for (ii = 0; ii < count; ii++)
     {
         GhbValue *settings;
@@ -733,11 +748,6 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
         button = GHB_FILE_BUTTON(find_widget(row, "title_dir"));
 
         settings = ghb_array_get(ud->settings_array, ii);
-        if (preset != NULL)
-        {
-            ghb_preset_to_settings(settings, preset);
-            ghb_set_title_settings(ud, settings);
-        }
         title_id = ghb_dict_get_int(settings, "title");
         title = ghb_lookup_title(title_id, &titleindex);
         if (title != NULL)
@@ -824,6 +834,9 @@ title_add_all_action_cb (GSimpleAction *action, GVariant *param,
         ghb_value_free(&preset);
     }
 
+    // Number the titles consecutively when {auto-increment} is used
+    ghb_auto_increment_batch_begin(ud, ud->settings_array);
+
     for (ii = 0; ii < count; ii++)
     {
         if (!title_destination_is_unique(ud->settings_array, ii))
@@ -832,9 +845,11 @@ title_add_all_action_cb (GSimpleAction *action, GVariant *param,
                 GHB_ACTION_NORMAL, _("OK"), NULL, _("Cannot Add Titles"),
                 _("The filenames are not unique. Please choose\n"
                   "a unique destination filename for each title."));
+            // The dialog's response ends the batch
             title_add_multiple_action_cb(action, param, ud);
             return;
         }
     }
     add_multiple_titles(ud);
+    ghb_auto_increment_batch_end(ud);
 }
