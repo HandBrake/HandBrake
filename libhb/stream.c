@@ -2745,6 +2745,19 @@ int decode_program_map(hb_stream_t* stream)
     bits_get(&bb, 4);
     unsigned int section_length = bits_get(&bb, 12);
 
+    // Section length must accommodate the sum of
+    // fixed fields + one elementary stream + CRC
+    if (section_length < 18)
+    {
+        return 0;
+    }
+
+    // Bytes read plus section length must not exceed buffer size
+    if (3 + section_length > stream->pmt_info.tablepos)
+    {
+        return 0;
+    }
+
     bits_get(&bb, 16); // program number
     bits_get(&bb, 2);
     bits_get(&bb, 5);  // version_number
@@ -2818,7 +2831,7 @@ int decode_program_map(hb_stream_t* stream)
 
         cur_pos += 5 /* stream header */ + info_len;
 
-        if (cur_pos >= section_length - 4 /* stop before the CRC */)
+        if (cur_pos >= (int)(section_length) - 4 /* stop before the CRC */)
             done_reading_stream_types = 1;
         ii++;
     }
