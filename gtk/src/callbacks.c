@@ -708,7 +708,7 @@ ghb_cache_volnames(signal_user_data_t *ud)
     return NULL;
 }
 
-static const gchar*
+const gchar*
 get_extension(signal_user_data_t *ud, GhbValue *settings)
 {
     const char *mux_id;
