@@ -116,11 +116,11 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 
     filter_args = hb_strdup_printf(
                     "width=%d:height=%d:pix_fmt=%d:sar=%d/%d:"
-                    "colorspace=%d:range=%d:"
+                    "colorspace=%d:range=%d:chroma_location=%d:"
                     "time_base=%d/%d:frame_rate=%d/%d",
                     init->geometry.width, init->geometry.height, init->pix_fmt,
                     init->geometry.par.num, init->geometry.par.den,
-                    init->color_matrix, init->color_range,
+                    init->color_matrix, init->color_range, init->chroma_location,
                     init->time_base.num, init->time_base.den,
                     init->vrate.num, init->vrate.den);
 
