@@ -69,13 +69,6 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     avfilter_graph_set_auto_convert(graph->avgraph, AVFILTER_AUTO_CONVERT_NONE);
 #endif
 
-    // FIXME: AVCOL_SPC_IPT_C2 is not well supported
-    // by filter graph link negotiation yet
-    if (init->color_matrix == AVCOL_SPC_IPT_C2)
-    {
-        init->color_matrix = AVCOL_SPC_UNSPECIFIED;
-    }
-
     // Build filter input
     if (init->hw_pix_fmt != AV_PIX_FMT_NONE)
     {
