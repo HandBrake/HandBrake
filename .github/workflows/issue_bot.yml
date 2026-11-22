@@ -4,13 +4,18 @@ on:
   issues:
     types:
       - opened
+  discussion:
+    types:
+      - created
 
 permissions:
   issues: write
   pull-requests: write
+  discussions: write
   
 jobs:
   greeting:
+    if: github.event_name == 'issues'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/first-interaction@v3
@@ -44,3 +49,40 @@ jobs:
 
             Thank you,
             The HandBrake Bot
+
+  discussion-greeting:
+    if: github.event_name == 'discussion'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v9
+        with:
+          script: |
+            await github.graphql(
+              `mutation($discussionId: ID!, $body: String!) {
+                addDiscussionComment(input: {
+                  discussionId: $discussionId,
+                  body: $body
+                }) {
+                  comment { id }
+                }
+              }`,
+              {
+                discussionId: context.payload.discussion.node_id,
+                body: `Hello
+            
+            This is an automated message from the HandBrake Bot.
+            
+            > [!WARNING]
+            > Be cautious of replies asking you to download DLLs or other files from third-party websites, particularly from users who are not members of the HandBrake team. These downloads may be malicious.
+            > HandBrake team members have a “Maintainer” label beside their username.
+
+            > [!TIP]
+            > See the [HandBrake documentation](https://handbrake.fr/docs) for guidance and troubleshooting. Please also follow our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md).
+            
+            > [!TIP]
+            > If you find an answer useful and you are in the "Q and A" forum, you can "Mark as Answer" to help other users find solutions.
+
+            Thank you,
+            The HandBrake Bot`
+              }
+            );
