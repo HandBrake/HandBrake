@@ -2983,8 +2983,14 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
 
     if (start && reading)
     {
-            memcpy(tablebuf + tablepos, buf + 4 + adapt_len + 1, pointer_len - 1);
+            // Buffer must accommodate the sum of fixed fields + read-ahead
+            if (tablepos < 8 /* fixed fields */ + 4 /* read-ahead */)
+            {
+                hb_log("decode_PAT - Buffer too small for program section");
+                return 0;
+            }
 
+            memcpy(tablebuf + tablepos, buf + 4 + adapt_len + 1, pointer_len - 1);
 
             unsigned int pos = 0;
             //while (pos < tablepos)
@@ -2998,6 +3004,11 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
                     if (section_len < 5 /* header */ + 4 /* CRC */)
                     {
                         hb_log("decode_PAT - Bad program section length (too short)");
+                        return 0;
+                    }
+                    if (3 + section_len > tablepos)
+                    {
+                        hb_log("decode_PAT - Bad program section length (exceeds buffer)");
                         return 0;
                     }
                     bits_get(&bb, 16); // transport_id
