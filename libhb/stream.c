@@ -3028,6 +3028,12 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
                           stream->ts_number_pat_entries = 0;
                           while ((curr_pos < pat_data_len) && (stream->ts_number_pat_entries < kMaxNumberPMTStreams))
                           {
+                            // Ensure we do not read past the available bytes remaining
+                            if (bits_bytes_left(&bb) < 4 /* entry */ + 4 /* read-ahead */)
+                            {
+                                break;
+                            }
+
                             unsigned int pkt_program_num = bits_get(&bb, 16);
                             stream->pat_info[stream->ts_number_pat_entries].program_number = pkt_program_num;
 
