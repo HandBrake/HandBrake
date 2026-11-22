@@ -1,7 +1,7 @@
-From a2cbe0b07728a028d720d34fca4a7682e754ec97 Mon Sep 17 00:00:00 2001
+From 0bf6dee6d2b2b12aa485eef993464258f560d4e7 Mon Sep 17 00:00:00 2001
 From: galinart <artem.galin@intel.com>
 Date: Fri, 21 Feb 2025 09:41:34 +0000
-Subject: [PATCH 16/20] fixed BT2020 -> BT709 conversion via VPP
+Subject: [PATCH 17/20] fixed BT2020 -> BT709 conversion via VPP
 
 ---
  libavfilter/vf_vpp_qsv.c | 6 +++---
@@ -25,5 +25,5 @@ index 4de99d6490..182bbf709f 100644
  
      if (memcmp(&vpp->invsi_conf, &invsi_conf, sizeof(mfxExtVideoSignalInfo)) ||
 -- 
-2.50.1 (Apple Git-155)
+2.54.0 (Apple Git-157)
 

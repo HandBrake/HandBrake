@@ -1,7 +1,7 @@
-From df8b177ccb14a408b90b559f7482298916d5607c Mon Sep 17 00:00:00 2001
+From 60529b128d464fe77f778aa3c723b528b8bc1276 Mon Sep 17 00:00:00 2001
 From: galinart <artem.galin@intel.com>
 Date: Tue, 12 Nov 2024 15:50:06 +0000
-Subject: [PATCH 15/20] qsv: enable av1 scc
+Subject: [PATCH 16/20] qsv: enable av1 scc
 
 ---
  libavcodec/qsvenc.c     | 42 +++++++++++++++++++++++++++++++++++++++++
@@ -140,5 +140,5 @@ index c7aa6e58d5..5edb5f3112 100644
  };
  
 -- 
-2.50.1 (Apple Git-155)
+2.54.0 (Apple Git-157)
 

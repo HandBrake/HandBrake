@@ -1,7 +1,7 @@
-From c6d37557cf6627da75c392582f011d9fafe5c6a3 Mon Sep 17 00:00:00 2001
+From 93602c7d02b296bf1e356d25f5f2b166d67320b7 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
 Date: Wed, 20 Mar 2024 09:14:19 +0100
-Subject: [PATCH 10/20] dvdsubdec: add an option to output subtitles with empty
+Subject: [PATCH 11/20] dvdsubdec: add an option to output subtitles with empty
  or fully transparent rects.
 
 ---
@@ -38,5 +38,5 @@ index 0622f7461b..1beb1fc268 100644
  };
  static const AVClass dvdsub_class = {
 -- 
-2.50.1 (Apple Git-155)
+2.54.0 (Apple Git-157)
 
