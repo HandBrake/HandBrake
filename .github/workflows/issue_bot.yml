@@ -77,10 +77,13 @@ jobs:
             > HandBrake team members have a “Maintainer” label beside their username.
 
             > [!TIP]
-            > See the [HandBrake documentation](https://handbrake.fr/docs) for guidance and troubleshooting. Please also follow our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md).
-            
-            > [!TIP]
-            > If you find an answer useful and you are in the "Q and A" forum, you can "Mark as Answer" to help other users find solutions.
+            > **Need help with HandBrake?**
+            > Check the [HandBrake documentation](https://handbrake.fr/docs) for guides, troubleshooting advice, and answers to common questions.
+            > When participating in discussions, please follow our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md) to help keep the community welcoming and respectful.
+                        
+            > [!NOTE]
+            > **Found a solution? Help others find it!**
+            > If your question is in the Q&A category and a reply resolves your issue, please use "Mark as Answer" on the helpful response. This makes it easier for others with the same question to find a solution.
 
             Thank you,
             The HandBrake Bot`
