@@ -2970,6 +2970,8 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
     }
 
     // Add the payload for this packet to the current buffer
+    // Single-packet PAT sections only; sections larger than a single TS packet
+    // are truncated at kMaxNumberPMTStreams entries
     if (reading && (184 - adapt_len) > 0)
     {
             if (tablepos + 184 - adapt_len - pointer_len > 1024)
@@ -2990,11 +2992,7 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
                 return 0;
             }
 
-            memcpy(tablebuf + tablepos, buf + 4 + adapt_len + 1, pointer_len - 1);
-
             unsigned int pos = 0;
-            //while (pos < tablepos)
-            {
                     bitbuf_t bb;
                     bits_init(&bb, tablebuf + pos, tablepos - pos, 0);
 
@@ -3061,11 +3059,6 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
                                     break;
                             }
                     }
-
-//                    pos += 3 + section_len;
-            }
-
-//            tablepos = 0;
     }
     return 1;
 }
