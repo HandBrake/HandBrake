@@ -112,7 +112,7 @@ typedef enum {
 } hb_stream_type_t;
 
 #define MAX_PS_PROBE_SIZE (32*1024*1024)
-#define kMaxNumberPMTStreams 32
+#define MAX_PAT_PROGRAM_ENTRIES 42
 
 typedef struct
 {
@@ -233,7 +233,7 @@ struct hb_stream_s
     {
         unsigned short program_number;
         unsigned short program_map_PID;
-    } pat_info[kMaxNumberPMTStreams];
+    } pat_info[MAX_PAT_PROGRAM_ENTRIES];
     int     ts_number_pat_entries;
 
     struct
@@ -2971,7 +2971,7 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
 
     // Add the payload for this packet to the current buffer
     // Single-packet PAT sections only; sections larger than a single TS packet
-    // are truncated at kMaxNumberPMTStreams entries
+    // are truncated at MAX_PAT_PROGRAM_ENTRIES entries
     if (reading && (184 - adapt_len) > 0)
     {
             if (tablepos + 184 - adapt_len - pointer_len > 1024)
@@ -3024,7 +3024,7 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
                           // Program Association Section
                           int curr_pos = 0;
                           stream->ts_number_pat_entries = 0;
-                          while ((curr_pos < pat_data_len) && (stream->ts_number_pat_entries < kMaxNumberPMTStreams))
+                          while ((curr_pos < pat_data_len) && (stream->ts_number_pat_entries < MAX_PAT_PROGRAM_ENTRIES))
                           {
                             // Ensure we do not read past the available bytes remaining
                             if (bits_bytes_left(&bb) < 4 /* entry */ + 4 /* read-ahead */)
