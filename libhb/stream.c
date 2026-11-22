@@ -2995,23 +2995,27 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
                     unsigned char section_id    = bits_get(&bb, 8);
                     bits_get(&bb, 4);
                     unsigned int section_len    = bits_get(&bb, 12);
+                    if (section_len < 5 /* header */ + 4 /* CRC */)
+                    {
+                        hb_log("decode_PAT - Bad program section length (too short)");
+                        return 0;
+                    }
                     bits_get(&bb, 16); // transport_id
                     bits_get(&bb, 2);
                     bits_get(&bb, 5);  // version_num
                     bits_get(&bb, 1);  // current_next
                     bits_get(&bb, 8);  // section_num
                     bits_get(&bb, 8);  // last_section
+                    int pat_data_len = (int)(section_len) - 5 /* header */ - 4 /* CRC */;
 
                     switch (section_id)
                     {
                       case 0x00:
                         {
                           // Program Association Section
-                          section_len -= 5;    // Already read transport stream ID, version num, section num, and last section num
-                          section_len -= 4;   // Ignore the CRC
                           int curr_pos = 0;
                           stream->ts_number_pat_entries = 0;
-                          while ((curr_pos < section_len) && (stream->ts_number_pat_entries < kMaxNumberPMTStreams))
+                          while ((curr_pos < pat_data_len) && (stream->ts_number_pat_entries < kMaxNumberPMTStreams))
                           {
                             unsigned int pkt_program_num = bits_get(&bb, 16);
                             stream->pat_info[stream->ts_number_pat_entries].program_number = pkt_program_num;
