@@ -2,6 +2,7 @@
 
 - [ ] I have read the [contributing guide](https://handbrake.fr/docs/en/latest/contributing/contribute.html) and agree to follow the [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md).
 - [ ] I have linked an issue and the discussion confirming the HandBrake team's acceptance of the proposed change. An open issue does not imply acceptance.
+- [ ] I have verified that every commit in this pull request is signed with a GPG key linked to my GitHub account.
 - [ ] I have reviewed and understand all changes, including any AI-generated content, and can explain, test, and revise them myself.
 
 ### Description of Change
