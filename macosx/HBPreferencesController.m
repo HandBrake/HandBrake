@@ -4,6 +4,7 @@
  */
 
 #import "HBPreferencesController.h"
+#import "HBJob+HBAdditions.h"
 
 @import HandBrakeKit.HBUtilities;
 @import HandBrakeKit.HBRange;
@@ -26,6 +27,7 @@ NSString * const HBAutoNamingRemoveUnderscore    = @"HBAutoNamingRemoveUnderscor
 NSString * const HBAutoNamingRemovePunctuation   = @"HBAutoNamingRemovePunctuation";
 NSString * const HBAutoNamingTitleCase           = @"HBAutoNamingTitleCase";
 NSString * const HBAutoNamingISODateFormat       = @"HBAutoNamingISODateFormat";
+NSString * const HBAutoNamingAutoIncrementPadding = @"HBAutoNamingAutoIncrementPadding";
 
 NSString * const HBDefaultMpegExtension          = @"DefaultMpegExtension";
 
@@ -150,6 +152,43 @@ static void *HBPreferencesControllerContext = &HBPreferencesControllerContext;
  * preference settings are added that cannot be handled with Cocoa bindings).
  */
 
+/**
+ * Formatter for the Auto-Increment padding field. Rejects any keystroke
+ * that would not produce an in-range digit, and clamps the committed
+ * value into range so a blank field never triggers a validation alert.
+ */
+@interface HBBoundedIntegerFormatter : NSNumberFormatter
+@end
+
+@implementation HBBoundedIntegerFormatter
+
+- (BOOL)isPartialStringValid:(NSString *)partialString newEditingString:(NSString * _Nullable *)newString errorDescription:(NSString * _Nullable *)error
+{
+    if (partialString.length == 0)
+    {
+        return YES;
+    }
+    if (partialString.length > 1)
+    {
+        return NO;
+    }
+    unichar digit = [partialString characterAtIndex:0];
+    return digit >= '0' + self.minimum.integerValue && digit <= '0' + self.maximum.integerValue;
+}
+
+- (BOOL)getObjectValue:(out id _Nullable *)obj forString:(NSString *)string errorDescription:(out NSString * _Nullable *)error
+{
+    NSInteger value = string.integerValue;
+    value = MAX(self.minimum.integerValue, MIN(self.maximum.integerValue, value));
+    if (obj)
+    {
+        *obj = @(value);
+    }
+    return YES;
+}
+
+@end
+
 @interface HBPreferencesController () <NSTokenFieldDelegate, NSToolbarDelegate, HBFileExtensionDelegate>
 
 @property (nonatomic, weak) IBOutlet NSView *generalView;
@@ -159,6 +198,7 @@ static void *HBPreferencesControllerContext = &HBPreferencesControllerContext;
 
 @property (nonatomic, weak) IBOutlet NSTokenField *formatTokenField;
 @property (nonatomic, weak) IBOutlet NSTokenField *builtInTokenField;
+@property (nonatomic, weak) IBOutlet NSTextField *autoIncrementPaddingField;
 @property (nonatomic, readonly, strong) NSArray *buildInFormatTokens;
 @property (nonatomic, strong) NSArray *matches;
 
@@ -220,6 +260,7 @@ static BOOL _hardwareDecoderSupported = NO;
         HBDefaultAutoNaming:                @NO,
         HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],
         HBAutoNamingISODateFormat:          @NO,
+        HBAutoNamingAutoIncrementPadding:   @2,
         HBResetWhenDoneOnLaunch:            @NO,
         HBLoggingLevel:                     @1,
         HBClearOldLogs:                     @YES,
@@ -293,9 +334,15 @@ static BOOL _hardwareDecoderSupported = NO;
                              @"{Width}", @"{Height}", @"{Codec}",
                              @"{Encoder}", @"{Bit-Depth}", @"{Quality/Bitrate}", @"{Quality-Type}",
                              @"{Date}", @"{Time}", @"{Creation-Date}", @"{Creation-Time}",
-                             @"{Modification-Date}", @"{Modification-Time}"];
+                             @"{Modification-Date}", @"{Modification-Time}", @"{Auto-Increment}"];
     [self.builtInTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
     [self.builtInTokenField setStringValue:[self.buildInFormatTokens componentsJoinedByString:@"%%"]];
+
+    // Auto-Increment padding field initialization
+    HBBoundedIntegerFormatter *paddingFormatter = [[HBBoundedIntegerFormatter alloc] init];
+    paddingFormatter.minimum = @(HB_AUTO_INCREMENT_PAD_MIN);
+    paddingFormatter.maximum = @(HB_AUTO_INCREMENT_PAD_MAX);
+    self.autoIncrementPaddingField.formatter = paddingFormatter;
 
     // Excluded file extension initialization
     self.excludedExtensions = [[NSMutableArray alloc] init];
@@ -530,6 +577,10 @@ static BOOL _hardwareDecoderSupported = NO;
     else if ([tokenString isEqualToString:@"{Modification-Time}"])
     {
         return NSLocalizedString(@"Modification-Time", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Auto-Increment}"])
+    {
+        return NSLocalizedString(@"Auto-Increment", "Preferences -> Output Name Token");
     }
 
     return tokenString;

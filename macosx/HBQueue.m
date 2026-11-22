@@ -263,6 +263,20 @@ static void powerSourceCallback(void *context)
     }
 }
 
+- (NSArray<NSURL *> *)reservedDestinationURLs
+{
+    NSMutableArray<NSURL *> *urls = [NSMutableArray array];
+    for (id<HBQueueItem> item in self.itemsInternal)
+    {
+        if ([item isKindOfClass:[HBQueueJobItem class]] && item.destinationURL &&
+            item.state != HBQueueItemStateCanceled && item.state != HBQueueItemStateFailed)
+        {
+            [urls addObject:item.destinationURL];
+        }
+    }
+    return urls;
+}
+
 - (BOOL)itemExistAtURL:(NSURL *)url
 {
     NSParameterAssert(url);
