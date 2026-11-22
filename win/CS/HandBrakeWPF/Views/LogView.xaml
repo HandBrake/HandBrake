@@ -14,6 +14,7 @@
 
     <Window.Resources>
         <converters:ThemeImageConverter x:Key="themeConverter" />
+        <BooleanToVisibilityConverter x:Key="boolToVisibilityConverter" />
     </Window.Resources>
 
     <Grid>
@@ -27,7 +28,19 @@
             <StackPanel Orientation="Horizontal" Margin="0,5,5,5">
                 <StackPanel Orientation="Horizontal" >
                     <TextBlock Text="{x:Static Properties:Resources.LogView_ChooseLogFile}" Margin="5,0,5,0" Style="{StaticResource subHeader}" />
-                    <ComboBox ItemsSource="{Binding LogFiles}" SelectedItem="{Binding SelectedLogFile}" DisplayMemberPath="FileDisplayName" Width="250" MaxWidth="300" />
+                    <ComboBox ItemsSource="{Binding LogFiles}" SelectedItem="{Binding SelectedLogFile}" Width="250" MaxWidth="300">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Background="{StaticResource Ui.Blue}" CornerRadius="3" Padding="6,1" Margin="0,0,5,0" VerticalAlignment="Center"
+                                            Visibility="{Binding IsComplete, Converter={StaticResource boolToVisibilityConverter}}">
+                                        <TextBlock Text="{Binding CompleteLabel}" Foreground="{StaticResource Ui.UltraLight3}" />
+                                    </Border>
+                                    <TextBlock Text="{Binding FileDisplayName}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
 
                 <Grid Width="160" MaxHeight="24" Margin="10,0,0,0" VerticalAlignment="Center">

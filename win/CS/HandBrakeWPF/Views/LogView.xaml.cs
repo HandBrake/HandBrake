@@ -100,13 +100,14 @@ namespace HandBrakeWPF.Views
         {
             try
             { 
-                if (!this.viewModel.MatchesFilter(e.Log.Content))
+                string text = this.viewModel.FilterMessage(e.Log.Content);
+                if (text == null)
                 {
                     return;
                 }
 
                 // This works better than Data Binding because of the scroll.
-                this.logText.AppendText(e.Log.Content + Environment.NewLine);
+                this.logText.AppendText(text + Environment.NewLine);
 
                 if (this.AutoScroll.IsChecked)
                 {

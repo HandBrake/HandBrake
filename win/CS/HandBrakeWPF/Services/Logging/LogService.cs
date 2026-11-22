@@ -78,9 +78,16 @@ namespace HandBrakeWPF.Services.Logging
                 content = String.Format("[{0}] {1}", time, content);
             }
 
-            LogMessage msg = new LogMessage(content, this.messageIndex);
+            LogMessage msg;
             lock (this.lockObject)
             {
+                if (!this.isLoggingEnabled)
+                {
+                    return;
+                }
+
+                // The index must be assigned inside the lock so concurrent writers can't get duplicate / out of order indexes.
+                msg = new LogMessage(content, this.messageIndex);
                 this.messageIndex = this.messageIndex + 1;
                 this.logMessages.Add(msg);
                 this.logBuilder.AppendLine(msg.Content);
@@ -167,9 +174,9 @@ namespace HandBrakeWPF.Services.Logging
 
                 this.logHeader = GeneralUtilities.CreateLogHeader(true).ToString();
                 this.SetupLogHeader(this.logHeader);
-
-                this.OnLogReset();
             }
+
+            this.OnLogReset(); 
         }
 
         public void SetId(int id)

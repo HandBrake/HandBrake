@@ -22,18 +22,9 @@ namespace HandBrakeWPF.Services.Logging.Model
 
         public bool IsComplete { get; private set; }
 
-        public string FileDisplayName
-        {
-            get
-            {
-                if (this.IsComplete)
-                {
-                    return string.Format("{0} {1}", Resources.LogViewModel_Complete, this.LogFileName);
-                }
+        public string FileDisplayName => this.LogFileName;
 
-                return this.LogFileName;
-            }
-        }
+        public string CompleteLabel => Resources.LogViewModel_Complete;
 
         protected bool Equals(LogFile other)
         {
