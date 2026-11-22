@@ -2946,18 +2946,23 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
             adapt_len = 184;
     else if (adaption == 0x3)
             adapt_len = buf[4] + 1;
-    if (adapt_len > 184)
+    if (adapt_len >= 184)
             return 0;
 
-    // Get pointer length
-    int pointer_len = buf[4 + adapt_len] + 1;
-
     // Get payload start indicator
+    int pointer_len = 0;
     int start;
     start = (buf[1] & 0x40) != 0;
-
     if (start)
+    {
+            pointer_len = buf[4 + adapt_len] + 1;
+            if (pointer_len > 184 - adapt_len)
+            {
+                hb_log("decode_PAT - Bad pointer length (> payload)");
+                return 0;
+            }
             reading = 1;
+    }
 
     // Add the payload for this packet to the current buffer
     if (reading && (184 - adapt_len) > 0)
