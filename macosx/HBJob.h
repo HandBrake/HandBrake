@@ -59,6 +59,9 @@ typedef NS_ENUM(NSUInteger, HBJobHardwareDecoderUsage) {
 /// The URL at which the new file will be created.
 @property (nonatomic, readonly, nullable) NSURL *destinationURL;
 
+/// Changes an inactive job's source URL. Save while access to the new URL is held.
+- (void)relinkSourceToURL:(NSURL *)sourceURL;
+
 // Job settings
 @property (nonatomic, readwrite) int container;
 @property (nonatomic, readwrite) int angle;

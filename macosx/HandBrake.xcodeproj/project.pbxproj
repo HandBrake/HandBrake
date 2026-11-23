@@ -229,6 +229,12 @@
 		A958EAC522E24D6800D83AF4 /* HBQueueInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A958EAC722E24D6800D83AF4 /* HBQueueInfoViewController.xib */; };
 		A95967382D26A1E900EDF58D /* HBOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = A95967372D26A1E900EDF58D /* HBOutlineView.m */; };
 		A95BA15D220C968500A2F9F9 /* HBQueueJobItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A95BA15C220C968500A2F9F9 /* HBQueueJobItem.m */; };
+		826347A184714C3EB141D061 /* HBQueueRelinkWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DB23982D3EE4DAF8341633E /* HBQueueRelinkWindowController.m */; };
+		40DA918F3132493FAD74E7D5 /* HBQueueImportWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B4F3B56D67C4BDE81B58B23 /* HBQueueImportWindowController.m */; };
+		826347A184714C3EB141D062 /* HBQueueRelinkResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DB23982D3EE4DAF83416340 /* HBQueueRelinkResource.m */; };
+		930D38433C8342CAA4BAEE3F /* HBQueueArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 855D91A9C0294FBC9566FF48 /* HBQueueArchive.m */; };
+		826347A184714C3EB141D063 /* HBQueueRelinkWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DB23982D3EE4DAF83416341 /* HBQueueRelinkWindowController.xib */; };
+		E4BD45AD17CA4A1F8FE63909 /* HBQueueImportWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14AD2C6E1B9F4C2B8FA07F70 /* HBQueueImportWindowController.xib */; };
 		A95BC1E71CD2548A008D6A33 /* volHighTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */; };
 		A95BC1E81CD2548A008D6A33 /* volLowTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E61CD2548A008D6A33 /* volLowTemplate.pdf */; };
 		A95DD9FC2FB85FDD006F0B01 /* HBFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A95DD9FB2FB85FDD006F0B01 /* HBFilter.m */; };
@@ -727,6 +733,16 @@
 		A9597A291A49749D00007771 /* HBRange+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBRange+UIAdditions.m"; sourceTree = "<group>"; };
 		A95BA15B220C968500A2F9F9 /* HBQueueJobItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueJobItem.h; sourceTree = "<group>"; };
 		A95BA15C220C968500A2F9F9 /* HBQueueJobItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueJobItem.m; sourceTree = "<group>"; };
+		A2EE6D2321CB489B9B61FDB8 /* HBQueueRelinkWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueRelinkWindowController.h; sourceTree = "<group>"; };
+		B43C578D164349B28014E106 /* HBQueueImportWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueImportWindowController.h; sourceTree = "<group>"; };
+		1DB23982D3EE4DAF8341633E /* HBQueueRelinkWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueRelinkWindowController.m; sourceTree = "<group>"; };
+		9B4F3B56D67C4BDE81B58B23 /* HBQueueImportWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueImportWindowController.m; sourceTree = "<group>"; };
+		1DB23982D3EE4DAF8341633F /* HBQueueRelinkResource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueRelinkResource.h; sourceTree = "<group>"; };
+		C752734B63354FA984062557 /* HBQueueArchive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueArchive.h; sourceTree = "<group>"; };
+		1DB23982D3EE4DAF83416340 /* HBQueueRelinkResource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueRelinkResource.m; sourceTree = "<group>"; };
+		855D91A9C0294FBC9566FF48 /* HBQueueArchive.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueArchive.m; sourceTree = "<group>"; };
+		1DB23982D3EE4DAF83416342 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBQueueRelinkWindowController.xib; sourceTree = "<group>"; };
+		F3EB9EDC6BAB4487AF667A4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBQueueImportWindowController.xib; sourceTree = "<group>"; };
 		A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = volHighTemplate.pdf; sourceTree = "<group>"; };
 		A95BC1E61CD2548A008D6A33 /* volLowTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = volLowTemplate.pdf; sourceTree = "<group>"; };
 		A95CB2FB217B6D07001E9F51 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1723,6 +1739,16 @@
 				A942B66C250BB1FE00049203 /* HBQueueActionItem.m */,
 				A95BA15B220C968500A2F9F9 /* HBQueueJobItem.h */,
 				A95BA15C220C968500A2F9F9 /* HBQueueJobItem.m */,
+				A2EE6D2321CB489B9B61FDB8 /* HBQueueRelinkWindowController.h */,
+				B43C578D164349B28014E106 /* HBQueueImportWindowController.h */,
+				1DB23982D3EE4DAF8341633E /* HBQueueRelinkWindowController.m */,
+				9B4F3B56D67C4BDE81B58B23 /* HBQueueImportWindowController.m */,
+				1DB23982D3EE4DAF83416341 /* HBQueueRelinkWindowController.xib */,
+				14AD2C6E1B9F4C2B8FA07F70 /* HBQueueImportWindowController.xib */,
+				1DB23982D3EE4DAF8341633F /* HBQueueRelinkResource.h */,
+				C752734B63354FA984062557 /* HBQueueArchive.h */,
+				1DB23982D3EE4DAF83416340 /* HBQueueRelinkResource.m */,
+				855D91A9C0294FBC9566FF48 /* HBQueueArchive.m */,
 				A9A5F7D3243DD90100C82EC8 /* HBQueueWorker.h */,
 				A9A5F7D4243DD90100C82EC8 /* HBQueueWorker.m */,
 				A95140972B8F7BD100B446C1 /* HBQueueToolbarDelegate.h */,
@@ -2500,6 +2526,8 @@
 				A9A96BB920CAD5EE00A39AFB /* HBPictureViewController.xib in Resources */,
 				A91943111FB5E39E001E9BB0 /* HBSummaryViewController.xib in Resources */,
 				A958EAC522E24D6800D83AF4 /* HBQueueInfoViewController.xib in Resources */,
+				826347A184714C3EB141D063 /* HBQueueRelinkWindowController.xib in Resources */,
+				E4BD45AD17CA4A1F8FE63909 /* HBQueueImportWindowController.xib in Resources */,
 				A9A96BBF20CAD5F800A39AFB /* Video.xib in Resources */,
 				A9E1468316BC2AD800C307BC /* PrevTemplate.pdf in Resources */,
 				A9A96BE320CAD6CD00A39AFB /* HBPreviewViewController.xib in Resources */,
@@ -2660,6 +2688,10 @@
 				A9C61F9E22E31CDB00C28E7C /* HBFlippedClipView.m in Sources */,
 				273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */,
 				A95BA15D220C968500A2F9F9 /* HBQueueJobItem.m in Sources */,
+				826347A184714C3EB141D061 /* HBQueueRelinkWindowController.m in Sources */,
+				40DA918F3132493FAD74E7D5 /* HBQueueImportWindowController.m in Sources */,
+				826347A184714C3EB141D062 /* HBQueueRelinkResource.m in Sources */,
+				930D38433C8342CAA4BAEE3F /* HBQueueArchive.m in Sources */,
 				A964D3A822FDE91B00DFCAEA /* HBRemoteCore.m in Sources */,
 				A9C1722E2B8F5F540047C49D /* NSToolbar+HBAdditions.m in Sources */,
 				A9D0FA771C1C284D0003F2A9 /* HBFocusRingView.m in Sources */,
@@ -3093,6 +3125,22 @@
 				D012B4912CE100D000748C2F /* sv */,
 			);
 			name = HBQueueTableViewController.xib;
+			sourceTree = "<group>";
+		};
+		1DB23982D3EE4DAF83416341 /* HBQueueRelinkWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DB23982D3EE4DAF83416342 /* Base */,
+			);
+			name = HBQueueRelinkWindowController.xib;
+			sourceTree = "<group>";
+		};
+		14AD2C6E1B9F4C2B8FA07F70 /* HBQueueImportWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F3EB9EDC6BAB4487AF667A4C /* Base */,
+			);
+			name = HBQueueImportWindowController.xib;
 			sourceTree = "<group>";
 		};
 		A958EAC722E24D6800D83AF4 /* HBQueueInfoViewController.xib */ = {
