@@ -2870,7 +2870,7 @@ static int build_program_map(const uint8_t *buf, hb_stream_t *stream)
             adapt_len = 184;
     else if (adaption == 0x3)
             adapt_len = buf[4] + 1;
-    if (adapt_len > 184)
+    if (adapt_len >= 184)
             return 0;
 
     // Get payload start indicator
