@@ -3784,8 +3784,23 @@ static int update_ps_streams( hb_stream_t * stream, int stream_id, int stream_id
         ii = new_pes( stream );
         if ( same_stream >= 0 )
         {
-            memcpy( &stream->pes.list[ii], &stream->pes.list[same_stream],
-                    sizeof( hb_pes_stream_t ) );
+            hb_pes_stream_t *src = &stream->pes.list[same_stream];
+            hb_pes_stream_t *dst = &stream->pes.list[ii];
+
+            memcpy(dst, src, sizeof(hb_pes_stream_t));
+            if (src->extradata != NULL && src->extradata_size > 0)
+            {
+                dst->extradata = malloc(src->extradata_size);
+                if (dst->extradata != NULL)
+                {
+                    memcpy(dst->extradata, src->extradata, src->extradata_size);
+                }
+                else
+                {
+                    dst->extradata = NULL;
+                    dst->extradata_size = 0;
+                }
+            }
         }
         else
         {
@@ -3858,6 +3873,8 @@ static int update_ts_streams( hb_stream_t * stream, int pid, int stream_id_ext, 
             int jj = new_pid( stream );
             memcpy( &stream->ts.list[jj], &stream->ts.list[ii],
                     sizeof( hb_ts_stream_t ) );
+            // Move ownership with copy to avoid later double free
+            stream->ts.list[ii].buf = NULL;
             break;
         }
     }
