@@ -2905,6 +2905,15 @@ static int build_program_map(const uint8_t *buf, hb_stream_t *stream)
     if (stream->pmt_info.reading && (amount_to_copy > 0))
     {
             stream->pmt_info.tablebuf = realloc(stream->pmt_info.tablebuf, stream->pmt_info.tablepos + amount_to_copy);
+            if (stream->pmt_info.tablebuf == NULL)
+            {
+                hb_log("build_program_map - Failed to allocate memory for program map table buffer");
+                free(stream->pmt_info.tablebuf);
+                stream->pmt_info.tablebuf = NULL;
+                stream->pmt_info.tablepos = 0;
+                stream->pmt_info.reading = 0;
+                return 0;
+            }
 
             memcpy(stream->pmt_info.tablebuf + stream->pmt_info.tablepos, buf + 4 + adapt_len + pointer_len, amount_to_copy);
             stream->pmt_info.tablepos += amount_to_copy;
