@@ -1457,7 +1457,7 @@ static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid,
 
             case 0x30: // adaptation
                 adapt_len = buf[4] + 1;
-                if (adapt_len > 184)
+                if (adapt_len + 4 /* TS header */ + 3 /* PES start code */ > stream->packetsize)
                 {
                     hb_log("hb_ts_stream_getPEStype: invalid adaptation field length %d for PID 0x%x", buf[4], pid);
                     continue;
@@ -1574,6 +1574,11 @@ static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
             return pp;
         }
         const uint8_t *pes = buf + 4 + adapt_len;
+        if (adapt_len + 4 /* TS header */ + 9 /* PES header prefix */ + 5 /* PTS fields */ > stream->packetsize)
+        {
+            hb_log("hb_sample_pts: video packet too short for PTS near %"PRIu64, fpos);
+            return pp;
+        }
         if ( ( pes[7] >> 7 ) != 1 )
         {
             hb_log("hb_sample_pts: no PTS in video packet near %"PRIu64, fpos);
