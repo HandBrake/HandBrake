@@ -131,12 +131,12 @@ static const char * const h264_nvenc_tune_names[] =
 
 static const char * const h265_nvenc_tune_names[] =
 {
-    "none", "hq", "ll", NULL
+    "none", "lossless", "uhq", "hq", "ll", "ull", NULL
 };
 
 static const char * const av1_nvenc_tune_names[] =
 {
-    "none", "uhq", "hq", "ll", NULL
+    "none", "uhq", "hq", "ll", "ull", NULL
 };
 
 static const char * const ffv1_preset_names[] =
