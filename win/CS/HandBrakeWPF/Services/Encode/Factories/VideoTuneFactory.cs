@@ -50,6 +50,16 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     return "Fast Decode";
                 case "zerolatency":
                     return "Zero Latency";
+                case "hq":
+                    return "HQ";
+                case "uhq":
+                    return "UHQ";
+                case "ll":
+                    return "Low Latency";
+                case "ull":
+                    return "Ultra Low Latency";
+                case "lossless":
+                    return "Lossless";
             }
 
             return shortName;
