@@ -2653,6 +2653,8 @@ static void decode_element_descriptors(
     {
         uint8_t tag = bits_get(bb, 8);
         uint8_t len = bits_get(bb, 8);
+        if (bits_bytes_left(bb) < len)
+            break;
         switch ( tag )
         {
             case 5:    // Registration descriptor
