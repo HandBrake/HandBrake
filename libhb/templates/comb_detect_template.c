@@ -134,7 +134,7 @@ static void FUNC(apply_mask)(hb_filter_private_t *pv, hb_buffer_t *b)
     }
 }
 
-#if defined(__aarch64__) && defined(SYS_MINGW)
+#if defined(__aarch64__) && defined(_WIN32)
 #ifndef HB_COMB_WINDOWS
 #define HB_COMB_WINDOWS 2
 #define HB_COMB_WINDOWS_DEFAULT

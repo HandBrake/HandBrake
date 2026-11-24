@@ -1162,7 +1162,7 @@ static int comb_detect_init(hb_filter_object_t *filter,
     pv->comb32detect_max = pv->depth >= 8 ? 15 << (pv->depth - 8) : 15;
 
     pv->cpu_count = hb_get_cpu_count();
-#if defined(__aarch64__) && defined(SYS_MINGW)
+#if defined(__aarch64__) && defined(_WIN32)
     if (pv->mode & MODE_GAMMA)
     {
         pv->cpu_count = FFMAX(1, pv->cpu_count / 2);
