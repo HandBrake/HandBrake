@@ -143,16 +143,6 @@ static void FUNC(apply_mask)(hb_filter_private_t *pv, hb_buffer_t *b)
 #error HB_COMB_WINDOWS must be positive
 #endif
 
-#if defined(__clang__)
-#define HB_COMB_UNROLL_GROUPS _Pragma("clang loop unroll(full)")
-#elif defined(__GNUC__)
-#define HB_COMB_PRAGMA_IMPL(value) _Pragma(#value)
-#define HB_COMB_PRAGMA(value) HB_COMB_PRAGMA_IMPL(value)
-#define HB_COMB_UNROLL_GROUPS HB_COMB_PRAGMA(GCC unroll HB_COMB_WINDOWS)
-#else
-#define HB_COMB_UNROLL_GROUPS
-#endif
-
 static inline float32x4_t FUNC(load_gamma4)(const float *lut, const pixel *source)
 {
     return (float32x4_t){lut[source[0]], lut[source[1]], lut[source[2]], lut[source[3]]};
@@ -233,7 +223,6 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
         float32x4_t prev_center_rows[HB_COMB_WINDOWS], prev_down_rows[HB_COMB_WINDOWS];
         float32x4_t next_center_rows[HB_COMB_WINDOWS], next_down_rows[HB_COMB_WINDOWS];
         int temporal_rows[HB_COMB_WINDOWS];
-HB_COMB_UNROLL_GROUPS
 
         // Seed each window's rolling current-frame rows and invalidate its temporal cache.
         for (int group = 0; group < HB_COMB_WINDOWS; group++)
@@ -255,7 +244,6 @@ HB_COMB_UNROLL_GROUPS
         // Walk down the segment, reusing the spatial rows for each window.
         for (int y = segment_start; y < segment_stop; y++)
         {
-HB_COMB_UNROLL_GROUPS
             for (int group = 0; group < HB_COMB_WINDOWS; group++)
             {
                 float32x4_t cur_up2_vec = up2_rows[group];
@@ -445,9 +433,6 @@ HB_COMB_UNROLL_GROUPS
         }
     }
 }
-#undef HB_COMB_UNROLL_GROUPS
-#undef HB_COMB_PRAGMA
-#undef HB_COMB_PRAGMA_IMPL
 #ifdef HB_COMB_WINDOWS_DEFAULT
 #undef HB_COMB_WINDOWS
 #undef HB_COMB_WINDOWS_DEFAULT
