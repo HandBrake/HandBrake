@@ -257,115 +257,115 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                 float32x4_t prev_up_cache, prev_cache, prev_down_cache;
                 float32x4_t next_up_cache, next_cache, next_down_cache;
                 int temporal_y = temporal_rows[group];
-            float32x4_t cur_down2_vec = FUNC(load_gamma4)(pv->gamma_lut, bottom);
-            uint32_t mask32[4];
-            uint32x4_t mask_vec = vdupq_n_u32(0);
+                float32x4_t cur_down2_vec = FUNC(load_gamma4)(pv->gamma_lut, bottom);
+                uint32_t mask32[4];
+                uint32x4_t mask_vec = vdupq_n_u32(0);
 
-            float32x4_t up_diff1 = vsubq_f32(cur_vec, cur_up1_vec);
-            float32x4_t down_diff1 = vsubq_f32(cur_vec, cur_down1_vec);
+                float32x4_t up_diff1 = vsubq_f32(cur_vec, cur_up1_vec);
+                float32x4_t down_diff1 = vsubq_f32(cur_vec, cur_down1_vec);
 
-            uint32x4_t cond1 = vcgtq_f32(up_diff1, v_athresh);
-            uint32x4_t cond2 = vcgtq_f32(down_diff1, v_athresh);
-            uint32x4_t cond3 = vcltq_f32(up_diff1, v_athresh_neg);
-            uint32x4_t cond4 = vcltq_f32(down_diff1, v_athresh_neg);
+                uint32x4_t cond1 = vcgtq_f32(up_diff1, v_athresh);
+                uint32x4_t cond2 = vcgtq_f32(down_diff1, v_athresh);
+                uint32x4_t cond3 = vcltq_f32(up_diff1, v_athresh_neg);
+                uint32x4_t cond4 = vcltq_f32(down_diff1, v_athresh_neg);
 
-            uint32x4_t condition1 = vandq_u32(cond1, cond2);
-            uint32x4_t condition2 = vandq_u32(cond3, cond4);
-            uint32x4_t condition = vorrq_u32(condition1, condition2);
+                uint32x4_t condition1 = vandq_u32(cond1, cond2);
+                uint32x4_t condition2 = vandq_u32(cond3, cond4);
+                uint32x4_t condition = vorrq_u32(condition1, condition2);
 
-            if(vmaxvq_u32(condition) > 0)
-            {
-                uint32x4_t motion = vdupq_n_u32(0);
-                uint32x4_t motion1 = vdupq_n_u32(0);
-                if (mthresh > 0)
+                if(vmaxvq_u32(condition) > 0)
                 {
-                    // Load temporal rows only when a spatial candidate needs motion checking.
-                    // Consecutive checks reuse cached center/down rows as up/center;
-                    // after a skipped row, reload up/center before loading the new down rows.
-                    if (temporal_y + 1 == y)
+                    uint32x4_t motion = vdupq_n_u32(0);
+                    uint32x4_t motion1 = vdupq_n_u32(0);
+                    if (mthresh > 0)
                     {
-                        prev_up_cache = prev_center_rows[group];
-                        prev_cache = prev_down_rows[group];
-                        next_up_cache = next_center_rows[group];
-                        next_cache = next_down_rows[group];
+                        // Load temporal rows only when a spatial candidate needs motion checking.
+                        // Consecutive checks reuse cached center/down rows as up/center;
+                        // after a skipped row, reload up/center before loading the new down rows.
+                        if (temporal_y + 1 == y)
+                        {
+                            prev_up_cache = prev_center_rows[group];
+                            prev_cache = prev_down_rows[group];
+                            next_up_cache = next_center_rows[group];
+                            next_cache = next_down_rows[group];
+                        }
+                        else
+                        {
+                            prev_up_cache = FUNC(load_gamma4)(pv->gamma_lut, prev + up_1_prev);
+                            prev_cache = FUNC(load_gamma4)(pv->gamma_lut, prev);
+                            next_up_cache = FUNC(load_gamma4)(pv->gamma_lut, next + up_1_next);
+                            next_cache = FUNC(load_gamma4)(pv->gamma_lut, next);
+                        }
+                        prev_down_cache = FUNC(load_gamma4)(pv->gamma_lut, prev + down_1_prev);
+                        next_down_cache = FUNC(load_gamma4)(pv->gamma_lut, next + down_1_next);
+                        temporal_y = y;
+                        prev_center_rows[group] = prev_cache;
+                        prev_down_rows[group] = prev_down_cache;
+                        next_center_rows[group] = next_cache;
+                        next_down_rows[group] = next_down_cache;
+                        temporal_rows[group] = temporal_y;
+                        float32x4_t prev_vec = prev_cache;
+                        float32x4_t next_vec = next_cache;
+                        float32x4_t next_up_1_vec = next_up_cache;
+                        float32x4_t next_down_1_vec = next_down_cache;
+                        float32x4_t prev_up_1_vec = prev_up_cache;
+                        float32x4_t prev_down_1_vec = prev_down_cache;
+                        float32x4_t abs_diff1 = vabsq_f32(vsubq_f32(prev_vec, cur_vec));
+                        float32x4_t abs_diff2 = vabsq_f32(vsubq_f32(cur_up1_vec, next_up_1_vec));
+                        float32x4_t abs_diff3 = vabsq_f32(vsubq_f32(cur_down1_vec,next_down_1_vec));
+
+                        uint32x4_t motion_cond1 = vcgtq_f32(abs_diff1, v_mthresh);
+                        uint32x4_t motion_cond2 = vcgtq_f32(abs_diff2, v_mthresh);
+                        uint32x4_t motion_cond3 = vcgtq_f32(abs_diff3, v_mthresh);
+
+                        motion = vandq_u32(vandq_u32(motion_cond1, motion_cond2), motion_cond3);
+
+                        float32x4_t abs_diff4 = vabsq_f32(vsubq_f32(next_vec, cur_vec));
+                        float32x4_t abs_diff5 = vabsq_f32(vsubq_f32(prev_up_1_vec, cur_up1_vec));
+                        float32x4_t abs_diff6 = vabsq_f32(vsubq_f32(prev_down_1_vec, cur_down1_vec));
+
+                        uint32x4_t motion_cond4 = vcgtq_f32(abs_diff4, v_mthresh);
+                        uint32x4_t motion_cond5 = vcgtq_f32(abs_diff5, v_mthresh);
+                        uint32x4_t motion_cond6 = vcgtq_f32(abs_diff6, v_mthresh);
+                        motion1 = vandq_u32(vandq_u32(motion_cond4, motion_cond5), motion_cond6);
+                        motion = vorrq_u32(motion, motion1);
                     }
                     else
                     {
-                        prev_up_cache = FUNC(load_gamma4)(pv->gamma_lut, prev + up_1_prev);
-                        prev_cache = FUNC(load_gamma4)(pv->gamma_lut, prev);
-                        next_up_cache = FUNC(load_gamma4)(pv->gamma_lut, next + up_1_next);
-                        next_cache = FUNC(load_gamma4)(pv->gamma_lut, next);
+                        motion = vdupq_n_u32(1);
                     }
-                    prev_down_cache = FUNC(load_gamma4)(pv->gamma_lut, prev + down_1_prev);
-                    next_down_cache = FUNC(load_gamma4)(pv->gamma_lut, next + down_1_next);
-                    temporal_y = y;
-                    prev_center_rows[group] = prev_cache;
-                    prev_down_rows[group] = prev_down_cache;
-                    next_center_rows[group] = next_cache;
-                    next_down_rows[group] = next_down_cache;
-                    temporal_rows[group] = temporal_y;
-                    float32x4_t prev_vec = prev_cache;
-                    float32x4_t next_vec = next_cache;
-                    float32x4_t next_up_1_vec = next_up_cache;
-                    float32x4_t next_down_1_vec = next_down_cache;
-                    float32x4_t prev_up_1_vec = prev_up_cache;
-                    float32x4_t prev_down_1_vec = prev_down_cache;
-                    float32x4_t abs_diff1 = vabsq_f32(vsubq_f32(prev_vec, cur_vec));
-                    float32x4_t abs_diff2 = vabsq_f32(vsubq_f32(cur_up1_vec, next_up_1_vec));
-                    float32x4_t abs_diff3 = vabsq_f32(vsubq_f32(cur_down1_vec,next_down_1_vec));
 
-                    uint32x4_t motion_cond1 = vcgtq_f32(abs_diff1, v_mthresh);
-                    uint32x4_t motion_cond2 = vcgtq_f32(abs_diff2, v_mthresh);
-                    uint32x4_t motion_cond3 = vcgtq_f32(abs_diff3, v_mthresh);
+                    uint32x4_t motion_check = vorrq_u32(motion, v_exhaustive_check);
+                    motion_check = vcgtq_u32(motion_check, mask_vec);
 
-                    motion = vandq_u32(vandq_u32(motion_cond1, motion_cond2), motion_cond3);
+                    if (vmaxvq_u32(vandq_u32(motion_check, condition)) > 0)
+                    {
+                        float32x4_t combing1 = vabsq_f32(vsubq_f32(vaddq_f32(vaddq_f32(cur_up2_vec, vmulq_f32(cur_vec, v_four)),cur_down2_vec), vmulq_f32(vaddq_f32(cur_up1_vec, cur_down1_vec), v_three)));
 
-                    float32x4_t abs_diff4 = vabsq_f32(vsubq_f32(next_vec, cur_vec));
-                    float32x4_t abs_diff5 = vabsq_f32(vsubq_f32(prev_up_1_vec, cur_up1_vec));
-                    float32x4_t abs_diff6 = vabsq_f32(vsubq_f32(prev_down_1_vec, cur_down1_vec));
+                        uint32x4_t combing_cond = vcgtq_f32(combing1, v_athresh6);
+                        mask_vec = vandq_u32(combing_cond, motion_check);
+                        mask_vec = vandq_u32(mask_vec, condition);
+                        mask_vec = vandq_u32(mask_vec, v_one);
 
-                    uint32x4_t motion_cond4 = vcgtq_f32(abs_diff4, v_mthresh);
-                    uint32x4_t motion_cond5 = vcgtq_f32(abs_diff5, v_mthresh);
-                    uint32x4_t motion_cond6 = vcgtq_f32(abs_diff6, v_mthresh);
-                    motion1 = vandq_u32(vandq_u32(motion_cond4, motion_cond5), motion_cond6);
-                    motion = vorrq_u32(motion, motion1);
+                        vst1q_u32(mask32, mask_vec);
+
+                        mask[0] = mask32[0];
+                        mask[1] = mask32[1];
+                        mask[2] = mask32[2];
+                        mask[3] = mask32[3];
+                    }
                 }
-                else
+                cur_up2_vec = cur_up1_vec;
+                cur_up1_vec = cur_vec;
+                cur_vec = cur_down1_vec;
+                cur_down1_vec = cur_down2_vec;
+                if (y + 1 < segment_stop)
                 {
-                    motion = vdupq_n_u32(1);
+                    bottom += stride_cur;
+                    prev += stride_prev;
+                    next += stride_next;
+                    mask += mask_stride;
                 }
-
-                uint32x4_t motion_check = vorrq_u32(motion, v_exhaustive_check);
-                motion_check = vcgtq_u32(motion_check, mask_vec);
-
-                if (vmaxvq_u32(vandq_u32(motion_check, condition)) > 0)
-                {
-                    float32x4_t combing1 = vabsq_f32(vsubq_f32(vaddq_f32(vaddq_f32(cur_up2_vec, vmulq_f32(cur_vec, v_four)),cur_down2_vec), vmulq_f32(vaddq_f32(cur_up1_vec, cur_down1_vec), v_three)));
-
-                    uint32x4_t combing_cond = vcgtq_f32(combing1, v_athresh6);
-                    mask_vec = vandq_u32(combing_cond, motion_check);
-                    mask_vec = vandq_u32(mask_vec, condition);
-                    mask_vec = vandq_u32(mask_vec, v_one);
-
-                    vst1q_u32(mask32, mask_vec);
-
-                    mask[0] = mask32[0];
-                    mask[1] = mask32[1];
-                    mask[2] = mask32[2];
-                    mask[3] = mask32[3];
-                }
-            }
-            cur_up2_vec = cur_up1_vec;
-            cur_up1_vec = cur_vec;
-            cur_vec = cur_down1_vec;
-            cur_down1_vec = cur_down2_vec;
-            if (y + 1 < segment_stop)
-            {
-                bottom += stride_cur;
-                prev += stride_prev;
-                next += stride_next;
-                mask += mask_stride;
-            }
                 up2_rows[group] = cur_up2_vec;
                 up1_rows[group] = cur_up1_vec;
                 center_rows[group] = cur_vec;
