@@ -28,8 +28,6 @@ Original "Faster" settings:
 #define FILTER_CLASSIC 1
 #define FILTER_ERODE_DILATE 2
 
-#define DETECT_GAMMA_COMB_MAX_THREADS 10
-
 #include "handbrake/handbrake.h"
 #include "handbrake/taskset.h"
 
@@ -1167,7 +1165,7 @@ static int comb_detect_init(hb_filter_object_t *filter,
 #if defined(__aarch64__) && defined(SYS_MINGW)
     if (pv->mode & MODE_GAMMA)
     {
-        pv->cpu_count = FFMIN(pv->cpu_count, DETECT_GAMMA_COMB_MAX_THREADS);
+        pv->cpu_count = FFMAX(1, pv->cpu_count / 2);
     }
 #endif
 
