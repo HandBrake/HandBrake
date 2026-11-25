@@ -380,6 +380,7 @@ GHB_DECLARE_ACTION_CB(title_add_action_cb);
 GHB_DECLARE_ACTION_CB(title_add_multiple_action_cb);
 GHB_DECLARE_ACTION_CB(title_add_all_action_cb);
 GHB_DECLARE_ACTION_CB(queue_start_action_cb);
+GHB_DECLARE_ACTION_CB(queue_start_later_action_cb);
 GHB_DECLARE_ACTION_CB(queue_pause_action_cb);
 GHB_DECLARE_ACTION_CB(queue_play_file_action_cb);
 GHB_DECLARE_ACTION_CB(queue_export_action_cb);
@@ -457,6 +458,7 @@ map_actions (GtkApplication *app, signal_user_data_t *ud)
         { "add-multiple",          title_add_multiple_action_cb    },
         { "add-all",               title_add_all_action_cb         },
         { "queue-start",           queue_start_action_cb           },
+        { "queue-start-later",     queue_start_later_action_cb     },
         { "queue-pause",           queue_pause_action_cb           },
         { "queue-play-file",       queue_play_file_action_cb       },
         { "queue-move-top",        queue_move_top_action_cb        },
