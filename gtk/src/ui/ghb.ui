@@ -217,6 +217,12 @@ conjunction with the &quot;Forced&quot; option.</property>
           </object>
         </child>
         <child>
+          <object class="GtkMenuButton">
+            <property name="icon-name">pan-down-symbolic</property>
+            <property name="menu-model">queue-start-menu-model</property>
+          </object>
+        </child>
+        <child>
           <object class="GhbButton" id="queue_list_pause">
             <property name="tooltip-text" translatable="yes">Pause Encoding</property>
             <property name="label" translatable="yes">Pause</property>
