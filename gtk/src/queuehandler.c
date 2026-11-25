@@ -2418,9 +2418,13 @@ ghb_queue_remove_row (GhbQueueRow *row)
     ghb_queue_buttons_grey(ud);
 }
 
+static gint64 queue_start_time;
+
 static gboolean
 queue_start_delayed_cb (signal_user_data_t *ud)
 {
+    if (g_get_real_time() < queue_start_time)
+        return G_SOURCE_CONTINUE;
     queue_start_action_cb(NULL, NULL, ud);
     return G_SOURCE_REMOVE;
 }
@@ -2445,7 +2449,8 @@ queue_start_action_cb (GSimpleAction *action, GVariant *param,
     }
     if (action != NULL)
     {
-        g_timeout_add_seconds(10, (GSourceFunc)queue_start_delayed_cb, ud);
+        queue_start_time = g_get_real_time() + 10 * G_USEC_PER_SEC;
+        g_timeout_add_seconds(1, (GSourceFunc)queue_start_delayed_cb, ud);
         return;
     }
 
