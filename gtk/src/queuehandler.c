@@ -2430,6 +2430,14 @@ queue_start_delayed_cb (signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+queue_start_later_action_cb (GSimpleAction *action, GVariant *param,
+                             signal_user_data_t *ud)
+{
+    queue_start_time = g_get_real_time() + 10 * G_USEC_PER_SEC;
+    g_timeout_add_seconds(1, (GSourceFunc)queue_start_delayed_cb, ud);
+}
+
+G_MODULE_EXPORT void
 queue_start_action_cb (GSimpleAction *action, GVariant *param,
                        signal_user_data_t *ud)
 {
@@ -2445,12 +2453,6 @@ queue_start_action_cb (GSimpleAction *action, GVariant *param,
                  GHB_STATE_SCANNING | GHB_STATE_MUXING))
     {
         ghb_stop_encode_dialog_show(ud);
-        return;
-    }
-    if (action != NULL)
-    {
-        queue_start_time = g_get_real_time() + 10 * G_USEC_PER_SEC;
-        g_timeout_add_seconds(1, (GSourceFunc)queue_start_delayed_cb, ud);
         return;
     }
 
