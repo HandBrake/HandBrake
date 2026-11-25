@@ -2418,6 +2418,13 @@ ghb_queue_remove_row (GhbQueueRow *row)
     ghb_queue_buttons_grey(ud);
 }
 
+static gboolean
+queue_start_delayed_cb (signal_user_data_t *ud)
+{
+    queue_start_action_cb(NULL, NULL, ud);
+    return G_SOURCE_REMOVE;
+}
+
 G_MODULE_EXPORT void
 queue_start_action_cb (GSimpleAction *action, GVariant *param,
                        signal_user_data_t *ud)
@@ -2436,6 +2443,8 @@ queue_start_action_cb (GSimpleAction *action, GVariant *param,
         ghb_stop_encode_dialog_show(ud);
         return;
     }
+    g_timeout_add_seconds(10, (GSourceFunc)queue_start_delayed_cb, ud);
+    return;
 
     count = ghb_array_len(ud->queue);
     for (ii = 0; ii < count; ii++)
