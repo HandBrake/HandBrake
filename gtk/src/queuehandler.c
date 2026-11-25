@@ -2452,6 +2452,9 @@ queue_start_later_action_cb (GSimpleAction *action, GVariant *param,
         g_object_unref(hours);
         g_object_unref(minutes);
     }
+    g_autoptr(GDateTime) now = g_date_time_new_now_local();
+    gtk_drop_down_set_selected(hour, (g_date_time_get_hour(now) + 1) % 24);
+    gtk_drop_down_set_selected(minute, g_date_time_get_minute(now));
     gtk_widget_set_visible(ghb_builder_widget("queue_start_later_bar"), TRUE);
     queue_start_time = g_get_real_time() + 10 * G_USEC_PER_SEC;
     g_timeout_add_seconds(1, (GSourceFunc)queue_start_delayed_cb, ud);
