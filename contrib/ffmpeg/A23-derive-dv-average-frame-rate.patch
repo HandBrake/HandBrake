@@ -1,0 +1,220 @@
+From 6919cd2027b77862f3ff1abbada9f79fcf62d9cd Mon Sep 17 00:00:00 2001
+From: florianmodel <taschmahal@gmail.com>
+Date: Sun, 1 Nov 2026 17:30:42 +0000
+Subject: [PATCH 1/2] avformat/dv: derive average frame rate from the DV
+ profile
+
+Since c7a852b638b88f129790af31fc47c870c329eaaa, the DV demuxer uses a
+fixed 1/60000 video time base. Inverting that time base therefore sets
+avg_frame_rate to 60000/1 for every DV profile, rather than the actual
+frame rate. This also affects Type 1 DV in AVI and leads to incorrect
+frame counts and progress estimates in applications such as HandBrake.
+
+Use the profile time base to derive avg_frame_rate, as is already done
+for packet duration and bitrate. Keep the stream time base unchanged.
+
+Add sample-free FATE tests for PAL, NTSC, 720p50 and 720p60 DV. Check the
+average frame rate, stream time base, packet timestamps and durations.
+All four tests fail before this change and pass with it.
+
+Fixes: c7a852b638b88f129790af31fc47c870c329eaaa
+Fixes: ticket #11339
+Reported-by: Dave Rice
+Signed-off-by: FModel <mail@florianmodel.com>
+---
+ libavformat/dv.c                   |  2 +-
+ tests/fate/dvvideo.mak             | 21 ++++++++++++++++++++-
+ tests/ref/fate/dv-framerate-720p50 |  4 ++++
+ tests/ref/fate/dv-framerate-720p60 |  4 ++++
+ tests/ref/fate/dv-framerate-ntsc   |  4 ++++
+ tests/ref/fate/dv-framerate-pal    |  4 ++++
+ 6 files changed, 37 insertions(+), 2 deletions(-)
+ create mode 100644 tests/ref/fate/dv-framerate-720p50
+ create mode 100644 tests/ref/fate/dv-framerate-720p60
+ create mode 100644 tests/ref/fate/dv-framerate-ntsc
+ create mode 100644 tests/ref/fate/dv-framerate-pal
+
+diff --git a/libavformat/dv.c b/libavformat/dv.c
+index 84677284bdf..733e7093a10 100644
+--- a/libavformat/dv.c
++++ b/libavformat/dv.c
+@@ -319,7 +319,7 @@ static int dv_extract_video_info(DVDemuxContext *c, const uint8_t *frame)
+ 
+     par = c->vst->codecpar;
+ 
+-    c->vst->avg_frame_rate = av_inv_q(c->vst->time_base);
++    c->vst->avg_frame_rate = av_inv_q(c->sys->time_base);
+ 
+     /* finding out SAR is a little bit messy */
+     vsc_pack = dv_extract_pack(frame, DV_VIDEO_CONTROL);
+diff --git a/tests/fate/dvvideo.mak b/tests/fate/dvvideo.mak
+index 33686d7762b..5656cfa21f8 100644
+--- a/tests/fate/dvvideo.mak
++++ b/tests/fate/dvvideo.mak
+@@ -5,4 +5,23 @@ fate-bsf-dv-error-marker: REF = 3190a334b1ceef2d9fd050a1590da7c6
+ FATE_DVVIDEO-$(call ALLYES, MOV_DEMUXER DV_ERROR_MARKER_BSF NOISE_BSF AVI_MUXER) += fate-bsf-dv-error-marker
+ 
+ FATE_SAMPLES_FFMPEG += $(FATE_DVVIDEO-yes)
+-fate-dvvideo: $(FATE_DVVIDEO-yes)
++
++FATE_DVVIDEO_PROBE-$(call ENCDEC, DVVIDEO, DV, LAVFI_INDEV TESTSRC2_FILTER SCALE_FILTER \
++                                           FORMAT_FILTER WRAPPED_AVFRAME_DECODER) += fate-dv-framerate-pal   \
++                                                                                    fate-dv-framerate-ntsc  \
++                                                                                    fate-dv-framerate-720p50 \
++                                                                                    fate-dv-framerate-720p60
++
++fate-dv-framerate-pal:    DV_OPTS = -s 720x576 -r 25 -pix_fmt yuv420p
++fate-dv-framerate-ntsc:   DV_OPTS = -s 720x480 -r 30000/1001 -pix_fmt yuv411p
++fate-dv-framerate-720p50: DV_OPTS = -s 960x720 -r 50 -pix_fmt yuv422p
++fate-dv-framerate-720p60: DV_OPTS = -s 960x720 -r 60000/1001 -pix_fmt yuv422p
++
++$(FATE_DVVIDEO_PROBE-yes): CMD = run_with_temp \
++    "$(FFMPEG) -nostdin -hide_banner -loglevel error -f lavfi -i testsrc2 -frames:v 3 \
++    -c:v dvvideo $(DV_OPTS) -threads 1 -flags +bitexact -fflags +bitexact -f dv -y" \
++    "ffprobe$(PROGSSUF)$(EXESUF) -v error -bitexact -select_streams v \
++    -show_entries stream=avg_frame_rate,time_base:packet=pts,duration -of compact" dv
++
++FATE_FFMPEG_FFPROBE += $(FATE_DVVIDEO_PROBE-yes)
++fate-dvvideo: $(FATE_DVVIDEO-yes) $(FATE_DVVIDEO_PROBE-yes)
+diff --git a/tests/ref/fate/dv-framerate-720p50 b/tests/ref/fate/dv-framerate-720p50
+new file mode 100644
+index 00000000000..a91ae11921b
+--- /dev/null
++++ b/tests/ref/fate/dv-framerate-720p50
+@@ -0,0 +1,4 @@
++packet|pts=0|duration=1200
++packet|pts=1200|duration=1200
++packet|pts=2400|duration=1200
++stream|avg_frame_rate=50/1|time_base=1/60000
+diff --git a/tests/ref/fate/dv-framerate-720p60 b/tests/ref/fate/dv-framerate-720p60
+new file mode 100644
+index 00000000000..36309615f15
+--- /dev/null
++++ b/tests/ref/fate/dv-framerate-720p60
+@@ -0,0 +1,4 @@
++packet|pts=0|duration=1001
++packet|pts=1001|duration=1001
++packet|pts=2002|duration=1001
++stream|avg_frame_rate=60000/1001|time_base=1/60000
+diff --git a/tests/ref/fate/dv-framerate-ntsc b/tests/ref/fate/dv-framerate-ntsc
+new file mode 100644
+index 00000000000..273f1020902
+--- /dev/null
++++ b/tests/ref/fate/dv-framerate-ntsc
+@@ -0,0 +1,4 @@
++packet|pts=0|duration=2002
++packet|pts=2002|duration=2002
++packet|pts=4004|duration=2002
++stream|avg_frame_rate=30000/1001|time_base=1/60000
+diff --git a/tests/ref/fate/dv-framerate-pal b/tests/ref/fate/dv-framerate-pal
+new file mode 100644
+index 00000000000..8273a819718
+--- /dev/null
++++ b/tests/ref/fate/dv-framerate-pal
+@@ -0,0 +1,4 @@
++packet|pts=0|duration=2400
++packet|pts=2400|duration=2400
++packet|pts=4800|duration=2400
++stream|avg_frame_rate=25/1|time_base=1/60000
+-- 
+2.54.1
+
+
+From 915fd46687609db9d85d5e53b7c9c7cdd8d14ff0 Mon Sep 17 00:00:00 2001
+From: florianmodel <taschmahal@gmail.com>
+Date: Fri, 6 Nov 2026 07:20:55 +0000
+Subject: [PATCH 2/2] tests/fate/dvvideo: keep one frame-rate regression case
+
+Retain one generated NTSC case for the incorrect average frame rate and fixed stream time base. Drop the three redundant profile cases and packet timing output.
+
+List the actual prerequisites explicitly so the test remains available without the DV decoder. Verified with CONFIG_DVVIDEO_DECODER=0 and with the original faulty assignment restored as a negative control.
+
+Signed-off-by: FModel <mail@florianmodel.com>
+---
+ tests/fate/dvvideo.mak             | 22 ++++++++--------------
+ tests/ref/fate/dv-framerate-720p50 |  4 ----
+ tests/ref/fate/dv-framerate-720p60 |  4 ----
+ tests/ref/fate/dv-framerate-ntsc   |  3 ---
+ tests/ref/fate/dv-framerate-pal    |  4 ----
+ 5 files changed, 8 insertions(+), 29 deletions(-)
+ delete mode 100644 tests/ref/fate/dv-framerate-720p50
+ delete mode 100644 tests/ref/fate/dv-framerate-720p60
+ delete mode 100644 tests/ref/fate/dv-framerate-pal
+
+diff --git a/tests/fate/dvvideo.mak b/tests/fate/dvvideo.mak
+index 5656cfa21f8..f53c2dc110f 100644
+--- a/tests/fate/dvvideo.mak
++++ b/tests/fate/dvvideo.mak
+@@ -6,22 +6,16 @@ FATE_DVVIDEO-$(call ALLYES, MOV_DEMUXER DV_ERROR_MARKER_BSF NOISE_BSF AVI_MUXER)
+ 
+ FATE_SAMPLES_FFMPEG += $(FATE_DVVIDEO-yes)
+ 
+-FATE_DVVIDEO_PROBE-$(call ENCDEC, DVVIDEO, DV, LAVFI_INDEV TESTSRC2_FILTER SCALE_FILTER \
+-                                           FORMAT_FILTER WRAPPED_AVFRAME_DECODER) += fate-dv-framerate-pal   \
+-                                                                                    fate-dv-framerate-ntsc  \
+-                                                                                    fate-dv-framerate-720p50 \
+-                                                                                    fate-dv-framerate-720p60
++FATE_DVVIDEO_PROBE-$(call ALLYES, DVVIDEO_ENCODER DV_MUXER DV_DEMUXER LAVFI_INDEV \
++                                TESTSRC2_FILTER SCALE_FILTER FORMAT_FILTER \
++                                WRAPPED_AVFRAME_DECODER FILE_PROTOCOL) += fate-dv-framerate-ntsc
+ 
+-fate-dv-framerate-pal:    DV_OPTS = -s 720x576 -r 25 -pix_fmt yuv420p
+-fate-dv-framerate-ntsc:   DV_OPTS = -s 720x480 -r 30000/1001 -pix_fmt yuv411p
+-fate-dv-framerate-720p50: DV_OPTS = -s 960x720 -r 50 -pix_fmt yuv422p
+-fate-dv-framerate-720p60: DV_OPTS = -s 960x720 -r 60000/1001 -pix_fmt yuv422p
+-
+-$(FATE_DVVIDEO_PROBE-yes): CMD = run_with_temp \
+-    "$(FFMPEG) -nostdin -hide_banner -loglevel error -f lavfi -i testsrc2 -frames:v 3 \
+-    -c:v dvvideo $(DV_OPTS) -threads 1 -flags +bitexact -fflags +bitexact -f dv -y" \
++fate-dv-framerate-ntsc: CMD = run_with_temp \
++    "$(FFMPEG) -nostdin -hide_banner -loglevel error -f lavfi \
++    -i testsrc2=size=720x480:rate=30000/1001 -frames:v 3 -c:v dvvideo \
++    -pix_fmt yuv411p -threads 1 -flags +bitexact -fflags +bitexact -f dv -y" \
+     "ffprobe$(PROGSSUF)$(EXESUF) -v error -bitexact -select_streams v \
+-    -show_entries stream=avg_frame_rate,time_base:packet=pts,duration -of compact" dv
++    -show_entries stream=avg_frame_rate,time_base -of compact" dv
+ 
+ FATE_FFMPEG_FFPROBE += $(FATE_DVVIDEO_PROBE-yes)
+ fate-dvvideo: $(FATE_DVVIDEO-yes) $(FATE_DVVIDEO_PROBE-yes)
+diff --git a/tests/ref/fate/dv-framerate-720p50 b/tests/ref/fate/dv-framerate-720p50
+deleted file mode 100644
+index a91ae11921b..00000000000
+--- a/tests/ref/fate/dv-framerate-720p50
++++ /dev/null
+@@ -1,4 +0,0 @@
+-packet|pts=0|duration=1200
+-packet|pts=1200|duration=1200
+-packet|pts=2400|duration=1200
+-stream|avg_frame_rate=50/1|time_base=1/60000
+diff --git a/tests/ref/fate/dv-framerate-720p60 b/tests/ref/fate/dv-framerate-720p60
+deleted file mode 100644
+index 36309615f15..00000000000
+--- a/tests/ref/fate/dv-framerate-720p60
++++ /dev/null
+@@ -1,4 +0,0 @@
+-packet|pts=0|duration=1001
+-packet|pts=1001|duration=1001
+-packet|pts=2002|duration=1001
+-stream|avg_frame_rate=60000/1001|time_base=1/60000
+diff --git a/tests/ref/fate/dv-framerate-ntsc b/tests/ref/fate/dv-framerate-ntsc
+index 273f1020902..04343cd54fe 100644
+--- a/tests/ref/fate/dv-framerate-ntsc
++++ b/tests/ref/fate/dv-framerate-ntsc
+@@ -1,4 +1 @@
+-packet|pts=0|duration=2002
+-packet|pts=2002|duration=2002
+-packet|pts=4004|duration=2002
+ stream|avg_frame_rate=30000/1001|time_base=1/60000
+diff --git a/tests/ref/fate/dv-framerate-pal b/tests/ref/fate/dv-framerate-pal
+deleted file mode 100644
+index 8273a819718..00000000000
+--- a/tests/ref/fate/dv-framerate-pal
++++ /dev/null
+@@ -1,4 +0,0 @@
+-packet|pts=0|duration=2400
+-packet|pts=2400|duration=2400
+-packet|pts=4800|duration=2400
+-stream|avg_frame_rate=25/1|time_base=1/60000
+-- 
+2.54.1
+
