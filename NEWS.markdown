@@ -62,7 +62,7 @@ Download available from Microsoft:
 
 - Updated libraries
   - AMF 1.5.3 (AMD VCN video encoding)
-  - FFmpeg 9.0.2 (decoding and filters)
+  - FFmpeg 9.1 (decoding and filters)
   - FreeType 2.15.0 (subtitles)
   - Fribidi 1.0.18 (subtitles)
   - HarfBuzz 15.0.0 (subtitles)
@@ -70,7 +70,7 @@ Download available from Microsoft:
   - LAME 4.0 (MP3 audio encoding)
   - libass 0.17.5 (subtitles)
   - libbluray 1.5.1 (Blu-ray decoding)
-  - libdav1d 1.5.4 (AV1 decoding)
+  - libdav1d 1.5.5 (AV1 decoding)
   - libdovi 3.4.0 (Dolby Vision dynamic metadata)
   - libdvdread 7.1.1 (DVD decoding)
   - libiconv 1.19 (character encoding support)
@@ -80,7 +80,7 @@ Download available from Microsoft:
   - libvpx 1.17.0 (VP8/VP9 video encoding)
   - nv-codec-headers 13.1.15.0 (Nvidia NVENC encoding)
   - oneVPL 2.17.0 (Intel QSV video encoding/decoding)
-  - SVT-AV1 4.3.0 (AV1 video encoding)
+  - SVT-AV1 4.3.1 (AV1 video encoding)
   - x265 4.3 (H.265/HEVC video encoding)
 
 ### Linux
@@ -93,8 +93,8 @@ Download available from Microsoft:
   - Added audio encoder quality base rate control UI
   - Added a preference to set the default range selection in the UI
   - Added a way to manually add a "Stop" action to the queue
-  - Added support for selecting audio filters per track.
-  - Redesigned Filters Tab to accomondate new and future filters. 
+  - Added support for selecting audio filters per track
+  - Redesigned Filters Tab to accomondate new and future filters
   - Enabled proper VideoToolbox VBV options on macOS 27 and later
   - Enabled a new VideoToolbox "Constant Quality Factor" rate control mode on macOS 27
   - Enabled Core audio HE-AAC encoder quality based rate control
@@ -103,11 +103,11 @@ Download available from Microsoft:
 
 ### Windows
 
-  - Minor UI visual refresh including usability and accessibility changes throughout the entire UI.
-  - Redesigned Filters Tab to accomondate new and future filters. 
-  - Added option for showing crop boundaries on the Preview Window.
+  - Minor UI visual refresh including usability and accessibility changes throughout the entire UI
+  - Redesigned Filters Tab to accomondate new and future filters
+  - Added option for showing crop boundaries on the Preview Window
   - Added support for NVEnc and NVDEC on Nvidia ARM devices
-  - Added support for selecting audio filters per track.
+  - Added support for selecting audio filters per track
   - Minor miscellaneous fixes
   - Updated existing and maintained locales
 
