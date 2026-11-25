@@ -20,6 +20,11 @@ It may be used under the terms of the GNU General Public License. */
 
 - (void)viewDidLoad
 {
+    if (@available(macOS 26, *)) {} else
+    {
+        self.tableView.rowHeight = 50;
+    }
+
     HBFilters *filters = [[HBAudioFilters alloc] init];
 
     for (NSNumber *filterID in filters.availableFilters.reverseObjectEnumerator)

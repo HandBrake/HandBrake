@@ -41,6 +41,11 @@
 
 - (void)viewDidLoad
 {
+    if (@available(macOS 26, *)) {} else
+    {
+        self.tableView.rowHeight = 50;
+    }
+
     HBFilters *filters = [[HBVideoFilters alloc] init];
 
     for (HBFilterGroup *group in filters.availableFilterGroups.reverseObjectEnumerator)
