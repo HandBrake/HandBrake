@@ -293,6 +293,36 @@ conjunction with the &quot;Forced&quot; option.</property>
                       </object>
                     </child>
                     <child>
+                      <object class="GtkBox" id="queue_start_later_bar">
+                        <property name="visible">0</property>
+                        <property name="halign">center</property>
+                        <property name="spacing">6</property>
+                        <property name="margin-top">6</property>
+                        <property name="margin-bottom">6</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Queue Start Time:</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkDropDown" id="queue_start_hour"/>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">:</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkDropDown" id="queue_start_minute"/>
+                        </child>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="label" translatable="yes">Cancel</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkScrolledWindow" id="queue_list_window">
                         <property name="hexpand">1</property>
                         <property name="hscrollbar-policy">never</property>

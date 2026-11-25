@@ -2433,6 +2433,26 @@ G_MODULE_EXPORT void
 queue_start_later_action_cb (GSimpleAction *action, GVariant *param,
                              signal_user_data_t *ud)
 {
+    GtkDropDown *hour = GTK_DROP_DOWN(ghb_builder_widget("queue_start_hour"));
+    GtkDropDown *minute = GTK_DROP_DOWN(ghb_builder_widget("queue_start_minute"));
+
+    if (gtk_drop_down_get_model(hour) == NULL)
+    {
+        GtkStringList *hours = gtk_string_list_new(NULL);
+        GtkStringList *minutes = gtk_string_list_new(NULL);
+        for (int ii = 0; ii < 60; ii++)
+        {
+            g_autofree char *str = g_strdup_printf("%02d", ii);
+            if (ii < 24)
+                gtk_string_list_append(hours, str);
+            gtk_string_list_append(minutes, str);
+        }
+        gtk_drop_down_set_model(hour, G_LIST_MODEL(hours));
+        gtk_drop_down_set_model(minute, G_LIST_MODEL(minutes));
+        g_object_unref(hours);
+        g_object_unref(minutes);
+    }
+    gtk_widget_set_visible(ghb_builder_widget("queue_start_later_bar"), TRUE);
     queue_start_time = g_get_real_time() + 10 * G_USEC_PER_SEC;
     g_timeout_add_seconds(1, (GSourceFunc)queue_start_delayed_cb, ud);
 }
