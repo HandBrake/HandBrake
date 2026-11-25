@@ -5902,7 +5902,7 @@
 			repositoryURL = "https://github.com/HandBrake/Sparkle";
 			requirement = {
 				kind = exactVersion;
-				version = "2.9.2-handbrake";
+				version = "2.9.6-handbrake";
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
