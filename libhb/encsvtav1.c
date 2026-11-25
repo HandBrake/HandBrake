@@ -486,6 +486,7 @@ static int send(hb_work_object_t *w, hb_buffer_t *in)
     }
 
     headerPtr->flags         = 0;
+    headerPtr->pic_type      = EB_AV1_INVALID_PICTURE;
     headerPtr->p_app_private = NULL;
     headerPtr->pts           = in->s.start;
     save_frame_duration(pv, in);
@@ -531,10 +532,6 @@ static int send(hb_work_object_t *w, hb_buffer_t *in)
             headerPtr->pic_type = EB_AV1_KEY_PICTURE;
         }
         hb_chapter_enqueue(pv->chapter_queue, in);
-    }
-    else
-    {
-        headerPtr->pic_type = EB_AV1_INVALID_PICTURE;
     }
 
     svt_av1_enc_send_picture(pv->svt_handle, headerPtr);
