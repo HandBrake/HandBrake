@@ -12,8 +12,14 @@
 
 - (void)setObjectValue:(id)objectValue
 {
-    [super setObjectValue:objectValue];
+    if (self.objectValue)
+    {
+        [self.presetsPopUpButton unbind:@"selectedValue"];
+        [self.tunesPopUpButton unbind:@"selectedValue"];
+    }
 
+    [self willChangeValueForKey:@"objectValue"];
+    [super setObjectValue:objectValue];
     [self didChangeValueForKey:@"objectValue"];
 
     if ([objectValue isKindOfClass:[HBFilter class]])
