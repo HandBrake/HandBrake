@@ -2443,8 +2443,11 @@ queue_start_action_cb (GSimpleAction *action, GVariant *param,
         ghb_stop_encode_dialog_show(ud);
         return;
     }
-    g_timeout_add_seconds(10, (GSourceFunc)queue_start_delayed_cb, ud);
-    return;
+    if (action != NULL)
+    {
+        g_timeout_add_seconds(10, (GSourceFunc)queue_start_delayed_cb, ud);
+        return;
+    }
 
     count = ghb_array_len(ud->queue);
     for (ii = 0; ii < count; ii++)
