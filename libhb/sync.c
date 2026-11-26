@@ -3272,10 +3272,19 @@ static void UpdateState( sync_common_t * common, int frame_count )
     state.state = HB_STATE_WORKING;
 
 #define p state.param.working
-    p.progress  = (float)frame_count / common->est_frame_count;
-    if (p.progress > 1.0)
+    if (common->est_frame_count > 0)
     {
-        p.progress = 1.0;
+        p.progress  = (float)frame_count / common->est_frame_count;
+        if (p.progress > 1.0)
+        {
+            p.progress = 1.0;
+        }
+    }
+    else
+    {
+        // Source duration is unknown (e.g. ffconcat input), so the
+        // total frame count can not be estimated.
+        p.progress = 0;
     }
     p.rate_cur   = 1000.0 * (common->st_counts[3] - common->st_counts[0]) /
                             (common->st_dates[3]  - common->st_dates[0]);
@@ -3283,7 +3292,8 @@ static void UpdateState( sync_common_t * common, int frame_count )
     {
         p.rate_avg = 1000.0 * common->st_counts[3] /
                      (common->st_dates[3] - common->st_first - job->st_paused);
-        if (common->est_frame_count >= common->st_counts[3])
+        if (common->est_frame_count > 0 &&
+            common->est_frame_count >= common->st_counts[3])
         {
             int eta = (common->est_frame_count - common->st_counts[3]) / p.rate_avg;
             p.eta_seconds = eta;
