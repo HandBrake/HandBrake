@@ -2431,7 +2431,11 @@ queue_start_later_cb (signal_user_data_t *ud)
         g_date_time_get_minute(now) != gtk_drop_down_get_selected(minute))
         return G_SOURCE_CONTINUE;
     queue_start_id = 0;
-    queue_start_action_cb(NULL, NULL, ud);
+    if (ghb_get_queue_state() == GHB_STATE_IDLE)
+        queue_start_action_cb(NULL, NULL, ud);
+    else
+        g_action_change_state(GHB_ACTION("queue-start-later"),
+                              g_variant_new_boolean(FALSE));
     return G_SOURCE_REMOVE;
 }
 
