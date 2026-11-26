@@ -1800,6 +1800,8 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
     g_simple_action_set_enabled(action, allow_add);
     action = GHB_APPLICATION_ACTION("queue-start");
     g_simple_action_set_enabled(action, allow_start || show_stop);
+    action = GHB_APPLICATION_ACTION("queue-start-later");
+    g_simple_action_set_enabled(action, (allow_start && !show_stop) || queue_start_id);
     action = GHB_APPLICATION_ACTION("queue-pause");
     g_simple_action_set_enabled(action, show_stop);
 
