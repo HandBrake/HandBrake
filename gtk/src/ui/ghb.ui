@@ -318,6 +318,7 @@ conjunction with the &quot;Forced&quot; option.</property>
                         <child>
                           <object class="GtkButton">
                             <property name="label" translatable="yes">Cancel</property>
+                            <property name="action-name">app.queue-start-later</property>
                           </object>
                         </child>
                       </object>
