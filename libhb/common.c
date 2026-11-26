@@ -7686,6 +7686,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
             case HB_FILTER_DECOMB:
             case HB_FILTER_YADIF:
             case HB_FILTER_BWDIF:
+            case HB_FILTER_DEBLOCK:
             case HB_FILTER_DENOISE:
             case HB_FILTER_BM3D:
             case HB_FILTER_NLMEANS:
