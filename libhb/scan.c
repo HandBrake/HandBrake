@@ -1065,8 +1065,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
             continue;
         }
 
-        int buf_width  = vid_buf->f.width;
-        int buf_height = vid_buf->f.height;
+        int buf_width  = vid_buf->f.width & ~1;
+        int buf_height = vid_buf->f.height & ~1;
         if (title->rotation == HB_ROTATION_90 ||
             title->rotation == HB_ROTATION_270)
         {
