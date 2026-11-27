@@ -2433,11 +2433,11 @@ queue_start_later_cb (signal_user_data_t *ud)
         g_date_time_get_minute(now) != gtk_drop_down_get_selected(minute))
         return G_SOURCE_CONTINUE;
     queue_start_id = 0;
-    if (ghb_get_queue_state() == GHB_STATE_IDLE)
+    g_action_change_state(GHB_ACTION("queue-start-later"),
+                          g_variant_new_boolean(FALSE));
+    if (ghb_get_queue_state() == GHB_STATE_IDLE &&
+        !(ghb_get_scan_state() & GHB_STATE_SCANNING))
         queue_start_action_cb(NULL, NULL, ud);
-    else
-        g_action_change_state(GHB_ACTION("queue-start-later"),
-                              g_variant_new_boolean(FALSE));
     return G_SOURCE_REMOVE;
 }
 
@@ -2489,8 +2489,9 @@ queue_start_action_cb (GSimpleAction *action, GVariant *param,
     gint state;
 
     ghb_power_manager_reset();
-    g_action_change_state(GHB_ACTION("queue-start-later"),
-                          g_variant_new_boolean(FALSE));
+    if (queue_start_id)
+        g_action_change_state(GHB_ACTION("queue-start-later"),
+                              g_variant_new_boolean(FALSE));
     state = ghb_get_queue_state();
     if (state & (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
                  GHB_STATE_SCANNING | GHB_STATE_MUXING))
