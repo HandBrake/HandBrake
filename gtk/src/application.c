@@ -383,6 +383,7 @@ GHB_DECLARE_ACTION_CB(queue_start_action_cb);
 GHB_DECLARE_ACTION_CB(queue_pause_action_cb);
 GHB_DECLARE_ACTION_CB(queue_play_file_action_cb);
 GHB_DECLARE_ACTION_CB(queue_export_action_cb);
+GHB_DECLARE_ACTION_CB(queue_export_selected_action_cb);
 GHB_DECLARE_ACTION_CB(queue_import_action_cb);
 GHB_DECLARE_ACTION_CB(queue_move_top_action_cb);
 GHB_DECLARE_ACTION_CB(queue_move_bottom_action_cb);
@@ -471,6 +472,7 @@ map_actions (GtkApplication *app, signal_user_data_t *ud)
         { "queue-delete-complete", queue_delete_complete_action_cb },
         { "queue-delete-all",      queue_delete_all_action_cb      },
         { "queue-export",          queue_export_action_cb          },
+        { "queue-export-selected", queue_export_selected_action_cb },
         { "queue-import",          queue_import_action_cb          },
         { "queue-edit",            queue_edit_action_cb            },
         { "queue-show-sidebar",    NULL,
