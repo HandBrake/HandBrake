@@ -1097,6 +1097,11 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
                          "%02dh%02dm%02ds)", p.rate_cur, p.rate_avg,
                          p.hours, p.minutes, p.seconds );
             }
+            else if( p.rate_avg > 0 )
+            {
+                fprintf( stdout, " (%.2f fps, avg %.2f fps)",
+                        p.rate_cur, p.rate_avg);
+            }
             fflush(stdout);
             break;
 #undef p
