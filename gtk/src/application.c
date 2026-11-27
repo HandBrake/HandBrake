@@ -380,6 +380,7 @@ GHB_DECLARE_ACTION_CB(title_add_action_cb);
 GHB_DECLARE_ACTION_CB(title_add_multiple_action_cb);
 GHB_DECLARE_ACTION_CB(title_add_all_action_cb);
 GHB_DECLARE_ACTION_CB(queue_start_action_cb);
+GHB_DECLARE_ACTION_CB(queue_start_later_action_cb);
 GHB_DECLARE_ACTION_CB(queue_pause_action_cb);
 GHB_DECLARE_ACTION_CB(queue_play_file_action_cb);
 GHB_DECLARE_ACTION_CB(queue_export_action_cb);
@@ -475,6 +476,8 @@ map_actions (GtkApplication *app, signal_user_data_t *ud)
         { "queue-edit",            queue_edit_action_cb            },
         { "queue-show-sidebar",    NULL,
           NULL, "false",           queue_show_sidebar_action_cb    },
+        { "queue-start-later",     NULL,
+          NULL, "false",           queue_start_later_action_cb     },
         { "dvd-open",              dvd_source_activate_cb, "s"     },
         { "hbfd",                  NULL,
           NULL, "false",           hbfd_action_cb                  },

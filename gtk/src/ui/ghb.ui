@@ -217,6 +217,12 @@ conjunction with the &quot;Forced&quot; option.</property>
           </object>
         </child>
         <child>
+          <object class="GtkMenuButton">
+            <property name="icon-name">pan-down-symbolic</property>
+            <property name="menu-model">queue-start-menu-model</property>
+          </object>
+        </child>
+        <child>
           <object class="GhbButton" id="queue_list_pause">
             <property name="tooltip-text" translatable="yes">Pause Encoding</property>
             <property name="label" translatable="yes">Pause</property>
@@ -284,6 +290,37 @@ conjunction with the &quot;Forced&quot; option.</property>
                         <property name="valign">end</property>
                         <property name="visible">false</property>
                         <property name="menu-model">queue-context-menu-model</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="queue_start_later_bar">
+                        <property name="visible">0</property>
+                        <property name="halign">center</property>
+                        <property name="spacing">6</property>
+                        <property name="margin-top">6</property>
+                        <property name="margin-bottom">6</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Queue Start Time:</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkDropDown" id="queue_start_hour"/>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">:</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkDropDown" id="queue_start_minute"/>
+                        </child>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="label" translatable="yes">Cancel</property>
+                            <property name="action-name">app.queue-start-later</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>

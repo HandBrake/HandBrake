@@ -436,6 +436,14 @@
       </item>
     </section>
   </menu>
+  <menu id="queue-start-menu-model">
+    <section>
+      <item>
+        <attribute name="action">app.queue-start-later</attribute>
+        <attribute name="label" translatable="yes">Start _Later</attribute>
+      </item>
+    </section>
+  </menu>
   <menu id="queue-add-menu-model">
     <section>
       <item>

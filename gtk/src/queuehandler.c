@@ -36,6 +36,7 @@
 #include "values.h"
 
 static gboolean skip_disk_space_check = FALSE;
+static guint queue_start_id;
 
 static void queue_window_show(signal_user_data_t *ud);
 
@@ -1799,6 +1800,8 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
     g_simple_action_set_enabled(action, allow_add);
     action = GHB_APPLICATION_ACTION("queue-start");
     g_simple_action_set_enabled(action, allow_start || show_stop);
+    action = GHB_APPLICATION_ACTION("queue-start-later");
+    g_simple_action_set_enabled(action, (allow_start && !show_stop) || queue_start_id);
     action = GHB_APPLICATION_ACTION("queue-pause");
     g_simple_action_set_enabled(action, show_stop);
 
@@ -1858,7 +1861,8 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
     else
     {
         ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-start-symbolic");
-        ghb_button_set_label(GHB_BUTTON(widget), _("Start"));
+        ghb_button_set_label(GHB_BUTTON(widget),
+                             queue_start_id ? _("Start Now") : _("Start"));
         gtk_widget_set_tooltip_text(widget, _("Start Encoding"));
     }
     menu = G_MENU(ghb_builder_object("queue-encoding-actions"));
@@ -2418,6 +2422,62 @@ ghb_queue_remove_row (GhbQueueRow *row)
     ghb_queue_buttons_grey(ud);
 }
 
+static gboolean
+queue_start_later_cb (signal_user_data_t *ud)
+{
+    GtkDropDown *hour = GTK_DROP_DOWN(ghb_builder_widget("queue_start_hour"));
+    GtkDropDown *minute = GTK_DROP_DOWN(ghb_builder_widget("queue_start_minute"));
+    g_autoptr(GDateTime) now = g_date_time_new_now_local();
+
+    if (g_date_time_get_hour(now) != gtk_drop_down_get_selected(hour) ||
+        g_date_time_get_minute(now) != gtk_drop_down_get_selected(minute))
+        return G_SOURCE_CONTINUE;
+    queue_start_id = 0;
+    g_action_change_state(GHB_ACTION("queue-start-later"),
+                          g_variant_new_boolean(FALSE));
+    if (ghb_get_queue_state() == GHB_STATE_IDLE &&
+        !(ghb_get_scan_state() & GHB_STATE_SCANNING))
+        queue_start_action_cb(NULL, NULL, ud);
+    return G_SOURCE_REMOVE;
+}
+
+G_MODULE_EXPORT void
+queue_start_later_action_cb (GSimpleAction *action, GVariant *param,
+                             signal_user_data_t *ud)
+{
+    gboolean state = g_variant_get_boolean(param);
+    GtkDropDown *hour = GTK_DROP_DOWN(ghb_builder_widget("queue_start_hour"));
+    GtkDropDown *minute = GTK_DROP_DOWN(ghb_builder_widget("queue_start_minute"));
+    g_autoptr(GDateTime) now = g_date_time_new_now_local();
+
+    g_clear_handle_id(&queue_start_id, g_source_remove);
+    gtk_widget_set_visible(ghb_builder_widget("queue_start_later_bar"), state);
+    g_simple_action_set_state(action, param);
+    if (!state)
+    {
+        ghb_queue_buttons_grey(ud);
+        return;
+    }
+    if (gtk_drop_down_get_model(minute) == NULL)
+    {
+        g_autoptr(GtkStringList) minutes = gtk_string_list_new(NULL);
+        for (int ii = 0; ii < 60; ii++)
+        {
+            char str[3];
+            g_snprintf(str, sizeof(str), "%02d", ii);
+            gtk_string_list_append(minutes, str);
+        }
+        g_autoptr(GtkSliceListModel) hours =
+            gtk_slice_list_model_new(g_object_ref(G_LIST_MODEL(minutes)), 0, 24);
+        gtk_drop_down_set_model(minute, G_LIST_MODEL(minutes));
+        gtk_drop_down_set_model(hour, G_LIST_MODEL(hours));
+    }
+    gtk_drop_down_set_selected(hour, (g_date_time_get_hour(now) + 1) % 24);
+    gtk_drop_down_set_selected(minute, g_date_time_get_minute(now));
+    queue_start_id = g_timeout_add_seconds(1, (GSourceFunc)queue_start_later_cb, ud);
+    ghb_queue_buttons_grey(ud);
+}
+
 G_MODULE_EXPORT void
 queue_start_action_cb (GSimpleAction *action, GVariant *param,
                        signal_user_data_t *ud)
@@ -2429,6 +2489,9 @@ queue_start_action_cb (GSimpleAction *action, GVariant *param,
     gint state;
 
     ghb_power_manager_reset();
+    if (queue_start_id)
+        g_action_change_state(GHB_ACTION("queue-start-later"),
+                              g_variant_new_boolean(FALSE));
     state = ghb_get_queue_state();
     if (state & (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
                  GHB_STATE_SCANNING | GHB_STATE_MUXING))
