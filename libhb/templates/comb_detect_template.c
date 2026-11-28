@@ -1,6 +1,7 @@
 /* comb_detect_template.c
 
    Copyright (c) 2003-2026 HandBrake Team
+   Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -135,6 +136,36 @@ static void FUNC(apply_mask)(hb_filter_private_t *pv, hb_buffer_t *b)
 }
 
 #if defined (__aarch64__) && !defined(__APPLE__)
+static inline void FUNC(gamma_expand_row)(float *dst, const pixel *src,
+                                          const float *lut, int width, int fstride)
+{
+    int x = 0;
+    const int w4 = width & ~3;
+    for (; x < w4; x += 4)
+    {
+        const float32x4_t v = {
+            lut[src[x + 0]],
+            lut[src[x + 1]],
+            lut[src[x + 2]],
+            lut[src[x + 3]]
+        };
+        vst1q_f32(dst + x, v);
+    }
+    for (; x < width; x++)
+    {
+        dst[x] = lut[src[x]];
+    }
+    if (fstride > width)
+    {
+        memset(dst + width, 0, (size_t)(fstride - width) * sizeof(float));
+    }
+}
+
+static inline float *FUNC(gamma_ring_row)(float *ring, int n, int row, int base, int fstride)
+{
+    return ring + (size_t)((row - base) % n) * fstride;
+}
+
 static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                                               int segment_start, int segment_stop)
 {
@@ -168,18 +199,6 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
         segment_stop = height - 2;
     }
 
-    // These are just to make the buffer locations easier to read.
-    const int up_1_prev    = -1 * stride_prev;
-    const int down_1_prev  =      stride_prev;
-
-    const int up_2    = -2 * stride_cur;
-    const int up_1    = -1 * stride_cur;
-    const int down_1  =      stride_cur;
-    const int down_2  =  2 * stride_cur;
-
-    const int up_1_next    = -1 * stride_next;
-    const int down_1_next =       stride_next;
-
     float32x4_t v_athresh = vdupq_n_f32(athresh);
     float32x4_t v_athresh_neg = vdupq_n_f32(-athresh);
     float32x4_t v_mthresh = vdupq_n_f32(mthresh);
@@ -189,36 +208,75 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
     uint32x4_t v_one = vdupq_n_u32(1);
     uint32x4_t v_exhaustive_check = vdupq_n_u32(pv->force_exaustive_check);
 
+    if (segment_start >= segment_stop)
+    {
+        return;
+    }
+
+    if (width <= 0)
+    {
+        for (int y = segment_start; y < segment_stop; y++)
+        {
+            memset(&pv->mask->plane[0].data[y * mask_stride], 0, mask_stride);
+        }
+        return;
+    }
+
+    // Sliding gamma rows for cur only (always path: y-2..y+2).
+    // prev/next are only used under if (mthresh > 0); LUT-gather on hit.
+    const int fstride = (width + 3) & ~3;
+    const int cur_base = segment_start - 2;
+    float *cur_ring = malloc(sizeof(float) * (size_t)fstride * 5);
+    if (cur_ring == NULL)
+    {
+        return;
+    }
+
+    const float *lut = pv->gamma_lut;
+    const pixel *prev_base = (const pixel *)pv->ref[0]->plane[0].data;
+    const pixel *cur_basep = (const pixel *)pv->ref[1]->plane[0].data;
+    const pixel *next_base = (const pixel *)pv->ref[2]->plane[0].data;
+    const int up_1_prev   = -stride_prev;
+    const int down_1_prev =  stride_prev;
+    const int up_1_next   = -stride_next;
+    const int down_1_next =  stride_next;
+
+    for (int i = 0; i < 5; i++)
+    {
+        const int ry = cur_base + i;
+        FUNC(gamma_expand_row)(FUNC(gamma_ring_row)(cur_ring, 5, ry, cur_base, fstride),
+                               cur_basep + (size_t)ry * stride_cur, lut, width, fstride);
+    }
+
     for (int y = segment_start; y < segment_stop; y++)
     {
-        // We need to examine a column of 5 pixels
-        // in the prev, cur, and next frames.
-        const pixel *prev = &((const pixel *)pv->ref[0]->plane[0].data)[y * stride_prev];
-        const pixel *cur  = &((const pixel *)pv->ref[1]->plane[0].data)[y * stride_cur];
-        const pixel *next = &((const pixel *)pv->ref[2]->plane[0].data)[y * stride_next];
         uint8_t *mask = &pv->mask->plane[0].data[y * mask_stride];
         memset(mask, 0, mask_stride);
         uint32_t mask32[4];
+
+        const float *gcur        = FUNC(gamma_ring_row)(cur_ring, 5, y,     cur_base, fstride);
+        const float *gcur_up1    = FUNC(gamma_ring_row)(cur_ring, 5, y - 1, cur_base, fstride);
+        const float *gcur_up2    = FUNC(gamma_ring_row)(cur_ring, 5, y - 2, cur_base, fstride);
+        const float *gcur_down1  = FUNC(gamma_ring_row)(cur_ring, 5, y + 1, cur_base, fstride);
+        const float *gcur_down2  = FUNC(gamma_ring_row)(cur_ring, 5, y + 2, cur_base, fstride);
+        const pixel *prev = prev_base + (size_t)y * stride_prev;
+        const pixel *next = next_base + (size_t)y * stride_next;
 
         for (int x = 0; x < width; x += 4)
         {
             uint32x4_t mask_vec = vdupq_n_u32(0);
 
-            float32x4_t cur_vec = {pv->gamma_lut[cur[0]], pv->gamma_lut[cur[1]], pv->gamma_lut[cur[2]], pv->gamma_lut[cur[3]]};
-            float32x4_t cur_up1_vec = {pv->gamma_lut[cur[up_1 + 0]], pv->gamma_lut[cur[up_1 + 1]], pv->gamma_lut[cur[up_1 + 2]], pv->gamma_lut[cur[up_1 + 3]]};
-            float32x4_t cur_down1_vec = {pv->gamma_lut[cur[down_1 + 0]], pv->gamma_lut[cur[down_1 + 1]], pv->gamma_lut[cur[down_1 + 2]], pv->gamma_lut[cur[down_1 + 3]]};
+            float32x4_t cur_vec = vld1q_f32(gcur + x);
+            float32x4_t cur_up1_vec = vld1q_f32(gcur_up1 + x);
+            float32x4_t cur_down1_vec = vld1q_f32(gcur_down1 + x);
 
             float32x4_t up_diff1 = vsubq_f32(cur_vec, cur_up1_vec);
             float32x4_t down_diff1 = vsubq_f32(cur_vec, cur_down1_vec);
 
-            uint32x4_t cond1 = vcgtq_f32(up_diff1, v_athresh);
-            uint32x4_t cond2 = vcgtq_f32(down_diff1, v_athresh);
-            uint32x4_t cond3 = vcltq_f32(up_diff1, v_athresh_neg);
-            uint32x4_t cond4 = vcltq_f32(down_diff1, v_athresh_neg);
-
-            uint32x4_t condition1 = vandq_u32(cond1, cond2);
-            uint32x4_t condition2 = vandq_u32(cond3, cond4);
-            uint32x4_t condition = vorrq_u32(condition1, condition2);
+            // both > athresh  <=>  min > athresh; both < -athresh <=> max < -athresh
+            uint32x4_t condition = vorrq_u32(
+                vcgtq_f32(vminq_f32(up_diff1, down_diff1), v_athresh),
+                vcltq_f32(vmaxq_f32(up_diff1, down_diff1), v_athresh_neg));
 
             if(vmaxvq_u32(condition) > 0)
             {
@@ -230,26 +288,19 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                     float32x4_t next_vec = {pv->gamma_lut[next[0]], pv->gamma_lut[next[1]], pv->gamma_lut[next[2]], pv->gamma_lut[next[3]]};
                     float32x4_t next_up_1_vec =  {pv->gamma_lut[next[up_1_next + 0]], pv->gamma_lut[next[up_1_next + 1]], pv->gamma_lut[next[up_1_next + 2]], pv->gamma_lut[next[up_1_next + 3]]};
                     float32x4_t next_down_1_vec =  {pv->gamma_lut[next[down_1_next + 0]], pv->gamma_lut[next[down_1_next + 1]], pv->gamma_lut[next[down_1_next + 2]], pv->gamma_lut[next[down_1_next + 3]]};
-                    float32x4_t abs_diff1 = vabsq_f32(vsubq_f32(prev_vec, cur_vec));
-                    float32x4_t abs_diff2 = vabsq_f32(vsubq_f32(cur_up1_vec, next_up_1_vec));
-                    float32x4_t abs_diff3 = vabsq_f32(vsubq_f32(cur_down1_vec,next_down_1_vec));
+                    float32x4_t abs_diff1 = vabdq_f32(prev_vec, cur_vec);
+                    float32x4_t abs_diff2 = vabdq_f32(cur_up1_vec, next_up_1_vec);
+                    float32x4_t abs_diff3 = vabdq_f32(cur_down1_vec, next_down_1_vec);
 
-                    uint32x4_t motion_cond1 = vcgtq_f32(abs_diff1, v_mthresh);
-                    uint32x4_t motion_cond2 = vcgtq_f32(abs_diff2, v_mthresh);
-                    uint32x4_t motion_cond3 = vcgtq_f32(abs_diff3, v_mthresh);
-
-                    motion = vandq_u32(vandq_u32(motion_cond1, motion_cond2), motion_cond3);
+                    motion = vcgtq_f32(vminq_f32(vminq_f32(abs_diff1, abs_diff2), abs_diff3), v_mthresh);
 
                     float32x4_t prev_up_1_vec =  {pv->gamma_lut[prev[up_1_prev + 0]], pv->gamma_lut[prev[up_1_prev + 1]], pv->gamma_lut[prev[up_1_prev + 2]], pv->gamma_lut[prev[up_1_prev + 3]]};
                     float32x4_t prev_down_1_vec =  {pv->gamma_lut[prev[down_1_prev + 0]], pv->gamma_lut[prev[down_1_prev + 1]], pv->gamma_lut[prev[down_1_prev + 2]], pv->gamma_lut[prev[down_1_prev + 3]]};
-                    float32x4_t abs_diff4 = vabsq_f32(vsubq_f32(next_vec, cur_vec));
-                    float32x4_t abs_diff5 = vabsq_f32(vsubq_f32(prev_up_1_vec, cur_up1_vec));
-                    float32x4_t abs_diff6 = vabsq_f32(vsubq_f32(prev_down_1_vec, cur_down1_vec));
+                    float32x4_t abs_diff4 = vabdq_f32(next_vec, cur_vec);
+                    float32x4_t abs_diff5 = vabdq_f32(prev_up_1_vec, cur_up1_vec);
+                    float32x4_t abs_diff6 = vabdq_f32(prev_down_1_vec, cur_down1_vec);
 
-                    uint32x4_t motion_cond4 = vcgtq_f32(abs_diff4, v_mthresh);
-                    uint32x4_t motion_cond5 = vcgtq_f32(abs_diff5, v_mthresh);
-                    uint32x4_t motion_cond6 = vcgtq_f32(abs_diff6, v_mthresh);
-                    motion1 = vandq_u32(vandq_u32(motion_cond4, motion_cond5), motion_cond6);
+                    motion1 = vcgtq_f32(vminq_f32(vminq_f32(abs_diff4, abs_diff5), abs_diff6), v_mthresh);
                     motion = vorrq_u32(motion, motion1);
                 }
                 else
@@ -260,10 +311,13 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                 uint32x4_t motion_check = vorrq_u32(motion, v_exhaustive_check);
                 motion_check = vcgtq_u32(motion_check, mask_vec);
 
-                float32x4_t cur_up2_vec = {pv->gamma_lut[cur[up_2 + 0]], pv->gamma_lut[cur[up_2 + 1]], pv->gamma_lut[cur[up_2 + 2]], pv->gamma_lut[cur[up_2 + 3]]};
-                float32x4_t cur_down2_vec = {pv->gamma_lut[cur[down_2 + 0]], pv->gamma_lut[cur[down_2 + 1]], pv->gamma_lut[cur[down_2 + 2]], pv->gamma_lut[cur[down_2 + 3]]};
+                float32x4_t cur_up2_vec = vld1q_f32(gcur_up2 + x);
+                float32x4_t cur_down2_vec = vld1q_f32(gcur_down2 + x);
 
-                float32x4_t combing1 = vabsq_f32(vsubq_f32(vaddq_f32(vaddq_f32(cur_up2_vec, vmulq_f32(cur_vec, v_four)),cur_down2_vec), vmulq_f32(vaddq_f32(cur_up1_vec, cur_down1_vec), v_three)));
+                // |up2 + 4*cur + down2 - 3*(up1+down1)|; *4 is exact so FMLA == mul+add
+                float32x4_t combing1 = vabdq_f32(
+                    vaddq_f32(vfmaq_f32(cur_up2_vec, cur_vec, v_four), cur_down2_vec),
+                    vmulq_f32(vaddq_f32(cur_up1_vec, cur_down1_vec), v_three));
 
                 uint32x4_t combing_cond = vcgtq_f32(combing1, v_athresh6);
                 mask_vec = vandq_u32(combing_cond, motion_check);
@@ -277,13 +331,22 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                 mask[2] = mask32[2];
                 mask[3] = mask32[3];
             }
-            cur+=4;
-            prev+=4;
-            next+=4;
-            mask+=4;
+            prev += 4;
+            next += 4;
+            mask += 4;
+        }
+
+        const int fill_cur = y + 3;
+        if (fill_cur <= segment_stop + 1)
+        {
+            FUNC(gamma_expand_row)(FUNC(gamma_ring_row)(cur_ring, 5, fill_cur, cur_base, fstride),
+                                   cur_basep + (size_t)fill_cur * stride_cur, lut, width, fstride);
         }
     }
+
+    free(cur_ring);
 }
+
 #else
 static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                                               int segment_start, int segment_stop)
